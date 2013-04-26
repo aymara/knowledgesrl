@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import unittest
+
 class MstInvalidPositionError(Exception):
     """
     Exception raised when trying to build a subtree
@@ -31,7 +33,7 @@ class SyntacticTreeNode:
         return "("+self.label+" "+self.word+" "+";".join([str(t) for t in self.children])+")"
 
 
-class SyntacticTreeBuilder:
+class SyntacticTreeBuilder():
     """
     Wrapper class for the building of a syntactic tree
     from one output of the MST parser
@@ -72,3 +74,24 @@ class SyntacticTreeBuilder:
             next_child_pos = self.find_child_after(root, next_child_pos + 1)
 
         return result
+
+class TreeBuilderTest(unittest.TestCase):
+    def test_tree_builiding(self):
+        mst_input = \
+        "the	sec	will	probably	vote	on	the	proposal	early	next"+\
+        "	year	,	he	said	.\n\
+        DEP	NP-SBJ	S	ADVP	VP	PP	DEP	NP	DEP	DEP	NP	DEP	NP-SBJ	ROOT	"+\
+        "DEP\n\
+        2	3	14	3	3	5	8	6	11	11	5	14	14	0	14"
+
+        expected_result = "(ROOT said (S will (NP-SBJ sec (        DEP the ));(A"+\
+        "DVP probably );(VP vote (PP on (NP proposal (DEP the )));(NP year (DEP "+\
+        "early );(DEP next ))));(DEP , );(NP-SBJ he );(DEP . ))"
+
+        treeBuilder = SyntacticTreeBuilder(mst_input)
+        tree = treeBuilder.build_syntactic_tree()
+        
+        self.assertEqual(str(tree), expected_result)
+        
+if __name__ == '__main__':
+    unittest.main()
