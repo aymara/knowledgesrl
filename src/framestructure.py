@@ -23,6 +23,7 @@ class Frame:
         self.sentence = sentence
         self.predicate = predicate
         self.args = args
+        self.args.sort()
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
@@ -55,6 +56,17 @@ class Arg:
             ((self.begin == other.begin and self.end == other.end) or
                 (self.instanciated == False and other.instanciated == False)) and
             self.role == other.role)
+            
+    def __cmp__(self, other):
+        if not self.instanciated:
+            if other.instanciated: return 1
+            if self.role < other.role: return -1
+            if self.role > other.role: return 1
+            return 0
+        if not other.instanciated: return -1
+        if self.begin < other.begin: return -1
+        if self.begin > other.begin: return 1
+        return 0
         
 class Predicate:
 

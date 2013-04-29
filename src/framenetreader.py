@@ -224,7 +224,7 @@ class FulltextReaderTest(unittest.TestCase):
 
         basepath = "../data/fndata-1.5/fulltext/"
 
-        for filename in os.listdir(basepath):
+        for filename in self.expected_values.keys():
             print("Parsing "+filename)
             reader = FulltextReader(basepath+filename)
 
@@ -235,17 +235,33 @@ class FulltextReaderTest(unittest.TestCase):
                 self.assertEquals(
                     frame.predicate.text, 
                     frame.sentence[frame.predicate.begin:(frame.predicate.end + 1)])
+                    
                 arg_num += len(frame.args)
+                last_arg = None
                 for arg in frame.args:
+                    # Instanciated arguments must contain something
                     self.assertTrue(arg.text != "" or arg.instanciated == False)
+                    # Begin, end and text must be coherent
                     self.assertEquals(
                         arg.text, 
-                        frame.sentence[arg.begin:(arg.end + 1)])     
+                        frame.sentence[arg.begin:(arg.end + 1)])
+                    # The argument order must be correct (uninstanciated args last)
+                    self.assertTrue(
+                        last_arg == None or # Nothing to test or
+                        (
+                            # begin after the previous arg's begin (or not instanciated) and
+                            (last_arg.begin <= arg.begin or arg.instanciated == False) and
+                            # no instanciated args allowed after an uninstanciated arg
+                            (arg.instanciated == False or last_arg.instanciated == True)
+                        )
+                    )  
+                    last_arg = arg   
                             
             # The total number of frames and args is correct
             (good_frame_num, good_arg_num) = self.expected_values[filename]
             self.assertEquals(len(reader.frames), good_frame_num)
             self.assertEquals(arg_num, good_arg_num)
+            
             print("Found "+repr(len(reader.frames))+" frames and "+
                 repr(arg_num)+" arguments : ok")
 

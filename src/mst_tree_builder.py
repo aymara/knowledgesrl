@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+..module:: mst_tree_builder
+    synopsis: Build syntactic trees from MST parser output
+    
+"""
+
 import unittest
 
 class MstInvalidPositionError(Exception):
-    """
-    Exception raised when trying to build a subtree
+    """Exception raised when trying to build a subtree
     from a node that does not exist
+    
+    Members:
+    bad_root -- integer, the position from which we attempted to build a subtree
+    max_root -- integer, the last valid position
+    
     """
     
     def __init__(self, bad_root, max_root):
@@ -18,10 +28,13 @@ class MstInvalidPositionError(Exception):
                 " while parsing MST output (last valid position was "+format(self.max_root)+")"
  
 class SyntacticTreeNode:
-    """
-    A node (internal or terminal) of a syntactic tree
-    which contain a word of a sentence, its syntactic label
-    and the list of the node's children
+    """A node (internal or terminal) of a syntactic tree
+    
+    Members:
+    word -- string, the word contained by the node
+    label -- string, function attributed by the parser to this word
+    children -- SyntacticTreeNode list, the children of this node
+    
     """
     
     def __init__(self, word, label):
@@ -34,13 +47,21 @@ class SyntacticTreeNode:
 
 
 class SyntacticTreeBuilder():
-    """
-    Wrapper class for the building of a syntactic tree
-    from one output of the MST parser
+    """Wrapper class for the building of a syntactic tree
+
+    Members:
+    words -- first line of the MST output, list of words
+    labels -- second line of the MST output, list of labels
+    parents -- third line of the MST output, position of each word's parent
     """
     
     def __init__(self, mst_output):
-        """ Extract the data provided in :mst_output """
+        """Extract the data provided 
+        
+        :param mst_output: The output of the MST parser
+        :type mst_output: str
+        
+        """
         (words_line, labels_line, parents_line) = mst_output.split("\n")
         self.words = words_line.split("\t")
         self.labels = labels_line.split("\t")
@@ -51,9 +72,13 @@ class SyntacticTreeBuilder():
         return self.build_tree_from(0).children[0]
 
     def find_child_after(self, father, min_pos):
-        """
-        Return the position (real offset + 1) of the first children of :father
-        which position is greater than or equal to :minPos
+        """Search the position (real offset + 1) of a node's child after a given position
+        
+        :param father: The node of which we are looking for a child
+        :type father: int
+        :param min_pos: The position at or after which we are looking for a child
+        :type min_pos: int
+        :returns:  int -- the position of the child or None if no child was found
         """
         for i in range(min_pos - 1, len(self.parents)):
             if father == self.parents[i]:
@@ -62,7 +87,13 @@ class SyntacticTreeBuilder():
         return None
 
     def build_tree_from(self, root):
-        """ Return the subtree which root is at position :root """
+        """Builds a subtree rooted at a given node
+        
+        :param root: The position of the node used as the subtree root
+        :type root: int
+        :returns: SyntacticTreeNode -- the subtree
+        
+        """
         if root < 0 or root > len(self.words):
             raise MstInvalidPositionError(root, len(self.words) - 1)
 
