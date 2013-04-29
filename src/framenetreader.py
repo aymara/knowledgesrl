@@ -11,6 +11,7 @@ argument, and store a list of every verbal frame read in its
 
 import unittest
 import xml.etree.ElementTree as ET
+import os
 
 class Frame:
     """ A frame extracted from the corpus """
@@ -83,9 +84,6 @@ class FulltextReader:
     def __init__(self, filename):
         """ Fills :frames by reading and parsing the corpus file :filename """
         root = ET.parse(filename).getroot()
-        
-        """ list of itype attribute values that marks non-instanciated arguments """
-        self.ni_itypes = ["DNI", "CNI", "INI", "INC"]
                 
         """ string that etree will put before every tag name """
         self._xmlns = root.tag.split("}")[0]+"}"
@@ -143,7 +141,7 @@ class FulltextReader:
         args = []    
         for arg_data in frame.findall(self._xmlns+"layer[@name='FE']/*"):
             """ Checks wether the argument is instanciated """
-            if "itype" in arg_data.attrib and arg_data.attrib["itype"] in self.ni_itypes:
+            if "itype" in arg_data.attrib:
                 (arg_start, arg_end, arg_instanciated) = (0, -1, False)
             else:
                 (arg_start, arg_end, arg_instanciated) = (
@@ -160,8 +158,6 @@ class FulltextReader:
                 
         """ Frame creation """
         self.frames.append(Frame(sentence_text, predicate, args))
-         
-import os
 
 class FulltextReaderTest(unittest.TestCase):
     """ Unit test class """
