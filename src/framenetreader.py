@@ -144,7 +144,7 @@ class FulltextReader:
         for arg_data in frame.findall(self._xmlns+"layer[@name='FE']/*"):
             """ Checks wether the argument is instanciated """
             if "itype" in arg_data.attrib and arg_data.attrib["itype"] in self.ni_itypes:
-                (arg_start, arg_end, arg_instanciated) = (0, 0, False)
+                (arg_start, arg_end, arg_instanciated) = (0, -1, False)
             else:
                 (arg_start, arg_end, arg_instanciated) = (
                     int(arg_data.attrib["start"]),
@@ -263,7 +263,7 @@ class FulltextReaderTest(unittest.TestCase):
 
     def test_global(self):
         """
-        Checks that exception are raised and that
+        Checks that no exception is raised and that
         no obvious errors occurs while parsing the whole corpus
         """
         
@@ -285,7 +285,7 @@ class FulltextReaderTest(unittest.TestCase):
                     frame.sentence[frame.predicate.begin:(frame.predicate.end + 1)])
                 arg_num += len(frame.args)
                 for arg in frame.args:
-                    self.assertNotEquals(arg.text, "")
+                    self.assertTrue(arg.text != "" or arg.instanciated == False)
                     self.assertEquals(
                         arg.text, 
                         frame.sentence[arg.begin:(arg.end + 1)])     
