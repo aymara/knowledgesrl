@@ -2,152 +2,97 @@
 # -*- coding: utf-8 -*-
 
 """
-This modules transorm the XML of the FrameNet fulltext corpus
-in more usable Frame, Arg and Predicate objects.
-The FulltextReader class is instanciated with a file name as 
-argument, and store a list of every verbal frame read in its 
-:frame_list member
+..module:: framenetreader
+    synopsis: This modules transform the XML of the FrameNet fulltext corpus
+        in more usable Frame, Arg and Predicate objects.
 """
 
 import unittest
 import xml.etree.ElementTree as ET
 import os
+import sys
+from framestructure import *
 
-class Frame:
-    """ A frame extracted from the corpus """
-    def __init__(self, sentence, predicate, args):
-        """ string containing the sentence in which the frame appears """
-        self.sentence = sentence
-        
-        """ Predicate object representing the frame's predicate """
-        self.predicate = predicate
-        
-        """ Arg list containing the predicate's arguments """
-        self.args = args
-        
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return (self.sentence == other.sentence
-                and self.predicate == other.predicate
-                and self.args == other.args)
-        else:
-            return False
-        
-class Arg:
-    """ An argument of a frame """
-    def __init__(self, begin, end, text, role, instanciated):
-        """ integers giving the first and last characters positions in the sentence """
-        self.begin = begin
-        self.end = end
-        
-        """ string containing the argument's text """
-        self.text = text
-        
-        """ string containing the argument's role read form FrameNet """
-        self.role = role
-        
-        """ boolean used to differenciate instanciated from non-instanciated arguments """
-        self.instanciated = instanciated
-        
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return (self.begin == other.begin
-                and self.end == other.end
-                and self.role == other.role)
-        else:
-            return False
-        
-class Predicate:
-    """ A frame's predicate """
-    def __init__(self, begin, end, text):
-        """ integers giving the first and last characters positions in the sentence """
-        self.begin = begin
-        self.end = end
-        
-        """ string containing the predicate's text """
-        self.text = text
-        
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return (self.begin == other.begin
-                and self.end == other.end)
-        else:
-            return False
-    
 class FulltextReader:
-    """
-    This class is used to parse one file of the FrameNet fulltext corpus.
-    The constructor takes a path to one file as argument and fills the
-    frame list with the verbal frames encoutered in the file.
+
+    """Class used to parse one file of the FrameNet fulltext corpus
+
+    Members:
+    frames -- Frame list of every frame collected
+    
     """
     
     def __init__(self, filename):
-        """ Fills :frames by reading and parsing the corpus file :filename """
+        """Read a file and update the collected frames list.
+        
+        :param filename: Path to the file to read.
+        :type filename: str.
+        
+        """
         root = ET.parse(filename).getroot()
                 
-        """ string that etree will put before every tag name """
-        self._xmlns = root.tag.split("}")[0]+"}"
-        
-        """ Frame list containing the frame collected while reading the file """
+        # etree will add the xmlns string before every tag name
+        self._xmlns = "{http://framenet.icsi.berkeley.edu}"
+
         self.frames = []
         
         for sentence in root.findall(self._xmlns+"sentence"):
             self._parse_sentence(sentence)
             
     def _parse_sentence(self, sentence):
-        """
-        Takes the XML representation :sentence of one sentence and fills
-        the frame list with the verbal frames it contains
+        """ Handles the parsing of one sentence.
+        
+        :param sentence: XML representation of the sentence.
+        :type sentence: str.
+        
         """
         
         text = sentence.findall(self._xmlns+"text")[0].text
         for potential_frame in sentence.findall(self._xmlns+"annotationSet[@luName]"):
             frame_type = potential_frame.attrib["luName"].split(".")[1]
-            annoted = potential_frame.attrib["status"]
+            annotated = potential_frame.attrib["status"]
             
-            """ We keep only annotated verbal frames """
-            if frame_type == "v" and annoted != "UNANN":
+            """We keep only annotated verbal frames"""
+            if frame_type == "v" and annotated != "UNANN":
                 self._parse_frame(text, potential_frame)
                 
     def _parse_frame(self, sentence_text, frame):
-        """
-        Takes the XML representation :frame of one frame, builds the
-        appropriate Frame object and adds it to the frame list.
-        :sentence_text is used in the Frame objects initialization.
+        """ Handle the parsing of one frame.
+        
+        :param sentence_text: Sentence in which the frame occurs.
+        :type sentence_text: str.
+        :param frame: XML representation of the frame
+        :type frame: str.
+        
         """
         
-        """ Predicate object creation """
+        # Predicate object creation
         predicate_data = frame.findall(self._xmlns+"layer[@name='Target']")[0]
         
-        """
-        One predicate in the corpus is a self-closed <layer> with no
-        <label> child. We do not want to handle this particular case.
-        """
+        # This test handles the only self-closed layer tag that exists in the corpus
         if len(predicate_data) == 0:
-            print("WARNING : frame ignored in \""+sentence_text+"\"")
+            sys.stderr.write("WARNING : frame ignored in \""+sentence_text+"\"\n")
             return
         else:
             predicate_data = predicate_data[0]
         
-        (predicate_start, predicate_end) = (
-            int(predicate_data.attrib["start"]),
-            int(predicate_data.attrib["end"]))
+        predicate_start = int(predicate_data.attrib["start"])
+        predicate_end = int(predicate_data.attrib["end"])
         predicate = Predicate(
             predicate_start, 
             predicate_end,
             sentence_text[predicate_start:(predicate_end + 1)])
             
-        """ Argument list creation """
+        # Argument list creation
         args = []    
         for arg_data in frame.findall(self._xmlns+"layer[@name='FE']/*"):
-            """ Checks wether the argument is instanciated """
+            # Checks wether the argument is instanciated
             if "itype" in arg_data.attrib:
-                (arg_start, arg_end, arg_instanciated) = (0, -1, False)
+                arg_start, arg_end, arg_instanciated = 0, -1, False
             else:
-                (arg_start, arg_end, arg_instanciated) = (
-                    int(arg_data.attrib["start"]),
-                    int(arg_data.attrib["end"]),
-                    True)
+                arg_start = int(arg_data.attrib["start"])
+                arg_end = int(arg_data.attrib["end"])
+                arg_instanciated = True
                     
             args.append(Arg(
                 arg_start, 
@@ -156,11 +101,12 @@ class FulltextReader:
                 arg_data.attrib["name"],
                 arg_instanciated))
                 
-        """ Frame creation """
+        # Frame creation
         self.frames.append(Frame(sentence_text, predicate, args))
 
 class FulltextReaderTest(unittest.TestCase):
-    """ Unit test class """
+
+    """Unit test class"""
     
     def setUp(self):
         self.expected_values = {
@@ -243,36 +189,46 @@ class FulltextReaderTest(unittest.TestCase):
             "NTI__Iran_Chemical.xml":(229,657),
             "KBEval__cycorp.xml":(12,32),
             "LUCorpus-v0.3__20000416_xin_eng-NEW.xml":(40,108)}
-            
-        self.tested_frame = Frame(
-            "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
-            " a freer flow of food and medicine into Iraq .", 
-            Predicate(28, 32, "urges"),
-            [
-                Arg(34, 51, "the United Nations", "Addressee", True),
-                Arg(53, 104,
-                    "to allow a freer flow of food and medicine into Iraq", 
-                    "Content", True),
-                Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True)
-            ] )
+        """Total : 18224 arguments in 6828 frames"""
+    
+        self.tested_frames = [
+            Frame(
+                "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
+                " a freer flow of food and medicine into Iraq .", 
+                Predicate(28, 32, "urges"),
+                [
+                    Arg(34, 51, "the United Nations", "Addressee", True),
+                    Arg(53, 104,
+                        "to allow a freer flow of food and medicine into Iraq", 
+                        "Content", True),
+                    Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True)
+                ] ),
+            Frame(
+                "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
+                " a freer flow of food and medicine into Iraq .", 
+                 Predicate(56, 60, "allow"),
+                 [
+                    Arg(62, 104, 
+                        "a freer flow of food and medicine into Iraq",
+                        "Action", True),
+                    Arg(34, 51, "the United Nations", "Grantee", True),
+                    Arg(0, -1, "", "Grantor", False)
+                 ] ) ]
             
 
     def test_global(self):
-        """
-        Checks that no exception is raised and that
+        """Checks that no exception is raised and that
         no obvious errors occurs while parsing the whole corpus
-        """
         
-        basepath = "../data/framenet_fulltext/"
+        """
+
+        basepath = "../data/fndata-1.5/fulltext/"
 
         for filename in os.listdir(basepath):
             print("Parsing "+filename)
             reader = FulltextReader(basepath+filename)
 
-            """ 
-            Checks that nothing is empty 
-            and that begins and ends are coherents
-            """
+            # Nothing is empty and begins/ends are coherents
             arg_num = 0
             for frame in reader.frames:
                 self.assertNotEquals(frame.predicate.text, "")
@@ -286,19 +242,19 @@ class FulltextReaderTest(unittest.TestCase):
                         arg.text, 
                         frame.sentence[arg.begin:(arg.end + 1)])     
                             
-            """ Checks that the total number of frames and args is correct """
+            # The total number of frames and args is correct
             (good_frame_num, good_arg_num) = self.expected_values[filename]
             self.assertEquals(len(reader.frames), good_frame_num)
             self.assertEquals(arg_num, good_arg_num)
             print("Found "+repr(len(reader.frames))+" frames and "+
                 repr(arg_num)+" arguments : ok")
-        
-    def test_one_frame(self):
-        """ Checks that a particular frame is correctly parsed """
-        
-        path = "../data/framenet_fulltext/LUCorpus-v0.3__20000424_nyt-NEW.xml"
+
+    def test_specific_frames(self):
+        """Checks that some particular frames are correctly parsed"""
+        path = "../data/fndata-1.5/fulltext/LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
-        self.assertEquals(reader.frames[0], self.tested_frame)
+        self.assertEquals(reader.frames[0], self.tested_frames[0])
+        self.assertEquals(reader.frames[1], self.tested_frames[1])
         
 if __name__ == "__main__":
     unittest.main()
