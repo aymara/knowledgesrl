@@ -24,7 +24,7 @@ class FulltextReader:
         :type filename: str.
         
         """
-        root = ET.parse(filename).getroot()
+        root = ET.ElementTree(file=filename)
                 
         # etree will add the xmlns string before every tag name
         self._xmlns = "{http://framenet.icsi.berkeley.edu}"
