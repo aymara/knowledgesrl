@@ -40,7 +40,7 @@ class FulltextReader:
             self._parse_sentence(sentence)
             
     def _parse_sentence(self, sentence):
-        """ Handles the parsing of one sentence.
+        """Handle the parsing of one sentence.
         
         :param sentence: XML representation of the sentence.
         :type sentence: str.
@@ -52,12 +52,12 @@ class FulltextReader:
             frame_type = potential_frame.attrib["luName"].split(".")[1]
             annotated = potential_frame.attrib["status"]
             
-            """We keep only annotated verbal frames"""
+            # We keep only annotated verbal frames
             if frame_type == "v" and annotated != "UNANN":
                 self._parse_frame(text, potential_frame)
                 
     def _parse_frame(self, sentence_text, frame):
-        """ Handle the parsing of one frame.
+        """Handle the parsing of one frame.
         
         :param sentence_text: Sentence in which the frame occurs.
         :type sentence_text: str.
@@ -71,7 +71,7 @@ class FulltextReader:
         
         # This test handles the only self-closed layer tag that exists in the corpus
         if len(predicate_data) == 0:
-            sys.stderr.write("WARNING : frame ignored in \""+sentence_text+"\"\n")
+            print("WARNING: frame ignored in {}".format(sentence_text), file=sys.stderr)
             return
         else:
             predicate_data = predicate_data[0]
@@ -262,8 +262,8 @@ class FulltextReaderTest(unittest.TestCase):
             self.assertEquals(len(reader.frames), good_frame_num)
             self.assertEquals(arg_num, good_arg_num)
             
-            print("Found "+repr(len(reader.frames))+" frames and "+
-                repr(arg_num)+" arguments : ok")
+            print("Found {} frames and {} arguments: ok".format(
+                len(reader.frames), arg_num))
 
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""

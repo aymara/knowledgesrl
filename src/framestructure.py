@@ -68,6 +68,18 @@ class Arg:
         if self.begin > other.begin: return 1
         return 0
         
+    def __lt__(self, other):
+        return self.__cmp__(other) < 0
+        
+    def __le__(self, other):
+        return self.__cmp__(other) <= 0
+
+    def __ge__(self, other):
+        return self.__cmp__(other) >= 0
+
+    def __gt__(self, other):
+        return self.__cmp__(other) > 0
+    
 class Predicate:
 
     """A frame's predicate 

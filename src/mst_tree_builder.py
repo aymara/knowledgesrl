@@ -24,8 +24,9 @@ class MstInvalidPositionError(Exception):
         self.max_root = max_root
         
     def __str__(self):
-        return "Error : tried to build a subtree from position "+format(self.bad_root)+\
-                " while parsing MST output (last valid position was "+format(self.max_root)+")"
+        return "Error : tried to build a subtree from position {} while"\
+               " parsing MST output (last valid position was {})".format(
+                self.bad_root, self.max_root)
  
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
@@ -43,7 +44,9 @@ class SyntacticTreeNode:
         self.children = [] 
 
     def __str__(self):
-        return "("+self.label+" "+self.word+" "+";".join([str(t) for t in self.children])+")"
+        return "({} {} {})".format(
+            self.label, self.word, 
+            ";".join([str(t) for t in self.children]))
 
 
 class SyntacticTreeBuilder():
@@ -53,6 +56,7 @@ class SyntacticTreeBuilder():
     words -- first line of the MST output, list of words
     labels -- second line of the MST output, list of labels
     parents -- third line of the MST output, position of each word's parent
+    
     """
     
     def __init__(self, mst_output):
@@ -79,6 +83,7 @@ class SyntacticTreeBuilder():
         :param min_pos: The position at or after which we are looking for a child
         :type min_pos: int
         :returns:  int -- the position of the child or None if no child was found
+        
         """
         for i in range(min_pos - 1, len(self.parents)):
             if father == self.parents[i]:
