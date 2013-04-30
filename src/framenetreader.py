@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-..module:: framenetreader
-    synopsis: This modules transform the XML of the FrameNet fulltext corpus
-        in more usable Frame, Arg and Predicate objects.
-"""
+"""Parse FrameNet fulltext annotation into Frame, Arg and Predicate objects."""
 
 import unittest
 import xml.etree.ElementTree as ET
@@ -17,8 +13,7 @@ class FulltextReader:
 
     """Class used to parse one file of the FrameNet fulltext corpus
 
-    Members:
-    frames -- Frame list of every frame collected
+    :var frames: Frame list of every frame collected
     
     """
     

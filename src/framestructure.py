@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-..module:: framestructure
-    synopsis: This modules define the class used to represent
-        frames, arguments and predicates
-        
-"""
+"""Frames, arguments and predicates."""
 
 class Frame:
-
     """A frame extracted from the corpus 
     
-    Members :
-    sentence -- string containing the sentence in which the frame appears
-    predicate -- Predicate object representing the frame's predicate
-    args -- Arg list containing the predicate's arguments
+    :var sentence: Sentence in which the frame appears
+    :var predicate: Predicate object representing the frame's predicate
+    :var args: Arg list containing the predicate's arguments
     
     """
     
@@ -34,13 +27,12 @@ class Frame:
 class Arg:
 
     """An argument of a frame 
-    
-    Members:
-    begin -- integer, position of the argument's first character in the sentence
-    end -- integer, position of the argument's last character in the sentence
-    text -- string containing the argument's text
-    role -- string containing the argument's role
-    instanciated -- boolean that marks wether the argument is instanciated
+
+    :var begin: integer, position of the argument's first character in the sentence
+    :var end: integer, position of the argument's last character in the sentence
+    :var text: string containing the argument's text
+    :var role: string containing the argument's role
+    :var instanciated: boolean that marks wether the argument is instanciated
     
     """
     
@@ -84,10 +76,9 @@ class Predicate:
 
     """A frame's predicate 
     
-    Members:
-    begin -- integer, position of the predicate's first character in the sentence
-    end -- integer, position of the predicate's last character in the sentence
-    text -- string containing the predicate's text
+    :var begin: integer, position of the predicate's first character in the sentence
+    :var end: integer, position of the predicate's last character in the sentence
+    :var text: string containing the predicate's text
     
     """
     

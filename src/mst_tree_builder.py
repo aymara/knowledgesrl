@@ -1,21 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-..module:: mst_tree_builder
-    synopsis: Build syntactic trees from MST parser output
-    
-"""
+"""Build syntactic trees from MST parser output"""
 
 import unittest
 
 class MstInvalidPositionError(Exception):
-    """Exception raised when trying to build a subtree
-    from a node that does not exist
+    """Trying to build a subtree from a node that does not exist
     
-    Members:
-    bad_root -- integer, the position from which we attempted to build a subtree
-    max_root -- integer, the last valid position
+    :var bad_root: integer, the position from which we attempted to build a subtree
+    :var max_root: integer, the last valid position
     
     """
     
@@ -31,10 +25,9 @@ class MstInvalidPositionError(Exception):
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
     
-    Members:
-    word -- string, the word contained by the node
-    label -- string, function attributed by the parser to this word
-    children -- SyntacticTreeNode list, the children of this node
+    :var word: string, the word contained by the node
+    :var label: string, function attributed by the parser to this word
+    :var children: -- SyntacticTreeNode list, the children of this node
     
     """
     
@@ -52,10 +45,9 @@ class SyntacticTreeNode:
 class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree
 
-    Members:
-    words -- first line of the MST output, list of words
-    labels -- second line of the MST output, list of labels
-    parents -- third line of the MST output, position of each word's parent
+    :var words: first line of the MST output, list of words
+    :var labels: second line of the MST output, list of labels
+    :var parents: third line of the MST output, position of each word's parent
     
     """
     
