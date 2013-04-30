@@ -30,6 +30,12 @@ class FulltextReader:
         self._xmlns = "{http://framenet.icsi.berkeley.edu}"
 
         self.frames = []
+        #DEBUG
+        self.num_ignored_layer = 0
+        #DEBUG
+        self.num_self_args = 0
+        #DEBUG
+        self.num_not_found = 0
         
         for sentence in root.findall(self._xmlns+"sentence"):
             self._parse_sentence(sentence)
@@ -38,7 +44,7 @@ class FulltextReader:
         """Handle the parsing of one sentence.
         
         :param sentence: XML representation of the sentence.
-        :type sentence: str.
+        :type sentence: xml.etree.ElementTree.Element.
         
         """
         
@@ -50,18 +56,126 @@ class FulltextReader:
             # We keep only annotated verbal frames
             if frame_type == "v" and annotated != "UNANN":
                 self._parse_frame(text, potential_frame)
-                
+                  
     def _parse_frame(self, sentence_text, frame):
         """Handle the parsing of one frame.
         
         :param sentence_text: Sentence in which the frame occurs.
         :type sentence_text: str.
         :param frame: XML representation of the frame
-        :type frame: str.
+        :type frame: xml.etree.ElementTree.Element.
         
         """
+
+        predicate = self._build_predicate(sentence_text, frame)
+        if predicate == None: return
         
-        # Predicate object creation
+        args = self._build_args_list(sentence_text, frame, predicate)
+
+        self.frames.append(Frame(sentence_text, predicate, args))
+    
+    def _build_args_list(self, sentence_text, frame, predicate):
+        """Handle the collection of argument list.
+        
+        :param sentence_text: Sentence in which the frame occurs.
+        :type sentence_text: str.
+        :param frame: XML representation of the frame
+        :type frame: xml.etree.ElementTree.Element.
+        :param predicate: The predicate of the frame
+        :type predicate: Predicate
+        :returns: Argument list -- the built argument list
+        """
+        
+        args = []
+        rank = 1
+        stop = False
+        while not stop:
+            arg_search_str = "{}layer[@name='FE'][@rank='{}']/*".format(
+                self._xmlns, rank)
+            phrase_search_str = "{}layer[@name='PT'][@rank='{}']/*".format(
+                self._xmlns, rank)
+            arg_data = frame.findall(arg_search_str)
+            phrase_data = frame.findall(phrase_search_str)
+            
+            # Stop if we have reached a non argument-annotated layer
+            if len(arg_data) == 0: break
+
+            for arg in arg_data:
+                stop,new_arg = self._build_arg(
+                    sentence_text, frame, predicate, arg, phrase_data, rank)
+                if new_arg != None:
+                    args.append(new_arg)
+                
+            rank += 1
+        return args
+    
+    def _build_arg(self, sentence_text, frame, predicate, arg, phrase_data, rank):
+        # Checks wether the argument is instanciated
+        if "itype" in arg.attrib:
+            return False,Arg(0, -1, "", arg.attrib["name"], False, "")
+        else:
+            # Stop if we have reached a non phrase-type-annotated layer
+            # with at least one instanciated argument
+            if len(phrase_data) == 0:
+                print("WARNING: ignored layer {} of frame {} in {}".format(
+                    rank, predicate.lemma, sentence_text), file=sys.stderr)
+                #DEBUG
+                self.num_ignored_layer += 1
+                return True,None
+                           
+            arg_start = int(arg.attrib["start"])
+            arg_end = int(arg.attrib["end"])
+            
+            phrase_found = False
+            phrase_type = ""
+            for phrase in phrase_data:
+                phrase_found = (
+                    int(phrase.attrib["start"]) == arg_start and
+                    int(phrase.attrib["end"]) == arg_end)
+                if phrase_found:
+                    phrase_type = phrase.attrib["name"]
+                    break
+                    
+            if phrase_found:
+                return False,Arg(
+                    arg_start, arg_end,
+                    sentence_text[arg_start:(arg_end + 1)],
+                    arg.attrib["name"], True, phrase_type)
+            else:
+                # Check wether this is some strange case where 
+                # the predicate is also an argument
+                phrase_found = (
+                    arg_start == predicate.begin and
+                    arg_end == predicate.end)
+                if phrase_found:
+                    #DEBUG
+                    self.num_self_args += 1
+                    print("WARNING: at layer {} of frame {} in {}"\
+                        " marked {} as NI".format(
+                            rank, predicate.lemma, sentence_text, 
+                            sentence_text[arg_start:(arg_end + 1)]), 
+                        file=sys.stderr)
+                    return False,Arg(0, -1, "",  arg.attrib["name"], False, "")
+                else:
+                    print("WARNING: at layer {} of frame {} in {}"\
+                        " could not find phrase type of {}".format(
+                            rank, predicate.lemma, sentence_text, 
+                            sentence_text[arg_start:(arg_end + 1)]), 
+                        file=sys.stderr)
+                    #DEBUG
+                    self.num_not_found += 1
+                    return False,None
+    
+    def _build_predicate(self, sentence_text, frame):
+        """Handle the collection of the predicate data.
+        
+        :param sentence_text: Sentence in which the frame occurs.
+        :type sentence_text: str.
+        :param frame: XML representation of the frame
+        :type frame: xml.etree.ElementTree.Element.
+        :returns: Predicate -- the built predicate
+        """
+        predicate_lemma = frame.attrib["luName"].split(".")[0]
         predicate_data = frame.findall(self._xmlns+"layer[@name='Target']")[0]
         
         # This test handles the only self-closed layer tag that exists in the corpus
@@ -73,32 +187,13 @@ class FulltextReader:
         
         predicate_start = int(predicate_data.attrib["start"])
         predicate_end = int(predicate_data.attrib["end"])
-        predicate = Predicate(
+        return Predicate(
             predicate_start, 
             predicate_end,
-            sentence_text[predicate_start:(predicate_end + 1)])
+            sentence_text[predicate_start:(predicate_end + 1)],
+            predicate_lemma)
             
-        # Argument list creation
-        args = []    
-        for arg_data in frame.findall(self._xmlns+"layer[@name='FE']/*"):
-            # Checks wether the argument is instanciated
-            if "itype" in arg_data.attrib:
-                arg_start, arg_end, arg_instanciated = 0, -1, False
-            else:
-                arg_start = int(arg_data.attrib["start"])
-                arg_end = int(arg_data.attrib["end"])
-                arg_instanciated = True
-                    
-            args.append(Arg(
-                arg_start, 
-                arg_end,
-                sentence_text[arg_start:(arg_end + 1)],
-                arg_data.attrib["name"],
-                arg_instanciated))
-                
-        # Frame creation
-        self.frames.append(Frame(sentence_text, predicate, args))
-
+            
 class FulltextReaderTest(unittest.TestCase):
 
     """Unit test class"""
@@ -190,24 +285,24 @@ class FulltextReaderTest(unittest.TestCase):
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
                 " a freer flow of food and medicine into Iraq .", 
-                Predicate(28, 32, "urges"),
+                Predicate(28, 32, "urges", "urge"),
                 [
-                    Arg(34, 51, "the United Nations", "Addressee", True),
+                    Arg(34, 51, "the United Nations", "Addressee", True, "NP"),
                     Arg(53, 104,
                         "to allow a freer flow of food and medicine into Iraq", 
-                        "Content", True),
-                    Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True)
+                        "Content", True, "VPto"),
+                    Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True, "NP")
                 ] ),
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
                 " a freer flow of food and medicine into Iraq .", 
-                 Predicate(56, 60, "allow"),
+                 Predicate(56, 60, "allow", "allow"),
                  [
                     Arg(62, 104, 
                         "a freer flow of food and medicine into Iraq",
-                        "Action", True),
-                    Arg(34, 51, "the United Nations", "Grantee", True),
-                    Arg(0, -1, "", "Grantor", False)
+                        "Action", True, "NP"),
+                    Arg(34, 51, "the United Nations", "Grantee", True, "NP"),
+                    Arg(0, -1, "", "Grantor", False, "")
                  ] ) ]
             
 
@@ -218,7 +313,14 @@ class FulltextReaderTest(unittest.TestCase):
         """
 
         basepath = "../data/fndata-1.5/fulltext/"
-
+        
+        #DEBUG
+        total_num_ignored_layer = 0
+        #DEBUG
+        total_num_self_args = 0
+        #DEBUG
+        total_num_not_found = 0
+        
         for filename in self.expected_values.keys():
             print("Parsing "+filename)
             reader = FulltextReader(basepath+filename)
@@ -256,9 +358,13 @@ class FulltextReaderTest(unittest.TestCase):
             (good_frame_num, good_arg_num) = self.expected_values[filename]
             self.assertEqual(len(reader.frames), good_frame_num)
             self.assertEqual(arg_num, good_arg_num)
-            
+        
             print("Found {} frames and {} arguments: ok".format(
                 len(reader.frames), arg_num))
+        
+        #DEBUG        
+        print(total_num_ignored_layer, total_num_self_args, total_num_not_found)
+        #138 5 14
 
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""

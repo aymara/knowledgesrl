@@ -36,18 +36,20 @@ class Arg:
     
     """
     
-    def __init__(self, begin, end, text, role, instanciated):
+    def __init__(self, begin, end, text, role, instanciated, phrase_type):
         self.begin = begin
         self.end = end
         self.text = text
         self.role = role
         self.instanciated = instanciated
+        self.phrase_type = phrase_type
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__)  and
             ((self.begin == other.begin and self.end == other.end) or
                 (self.instanciated == False and other.instanciated == False)) and
-            self.role == other.role)
+            self.role == other.role and
+            self.phrase_type == other.phrase_type)
             
     def __cmp__(self, other):
         if not self.instanciated:
@@ -82,13 +84,15 @@ class Predicate:
     
     """
     
-    def __init__(self, begin, end, text):
+    def __init__(self, begin, end, text, lemma):
         self.begin = begin
         self.end = end
         self.text = text
+        self.lemma = lemma
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
             self.begin == other.begin and
-            self.end == other.end)
+            self.end == other.end and
+            self.lemma == other.lemma)
 
