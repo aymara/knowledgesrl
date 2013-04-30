@@ -231,8 +231,8 @@ class FulltextReaderTest(unittest.TestCase):
             # Nothing is empty and begins/ends are coherents
             arg_num = 0
             for frame in reader.frames:
-                self.assertNotEquals(frame.predicate.text, "")
-                self.assertEquals(
+                self.assertNotEqual(frame.predicate.text, "")
+                self.assertEqual(
                     frame.predicate.text, 
                     frame.sentence[frame.predicate.begin:(frame.predicate.end + 1)])
                     
@@ -242,7 +242,7 @@ class FulltextReaderTest(unittest.TestCase):
                     # Instanciated arguments must contain something
                     self.assertTrue(arg.text != "" or arg.instanciated == False)
                     # Begin, end and text must be coherent
-                    self.assertEquals(
+                    self.assertEqual(
                         arg.text, 
                         frame.sentence[arg.begin:(arg.end + 1)])
                     # The argument order must be correct (uninstanciated args last)
@@ -259,8 +259,8 @@ class FulltextReaderTest(unittest.TestCase):
                             
             # The total number of frames and args is correct
             (good_frame_num, good_arg_num) = self.expected_values[filename]
-            self.assertEquals(len(reader.frames), good_frame_num)
-            self.assertEquals(arg_num, good_arg_num)
+            self.assertEqual(len(reader.frames), good_frame_num)
+            self.assertEqual(arg_num, good_arg_num)
             
             print("Found {} frames and {} arguments: ok".format(
                 len(reader.frames), arg_num))
@@ -269,8 +269,8 @@ class FulltextReaderTest(unittest.TestCase):
         """Checks that some particular frames are correctly parsed"""
         path = "../data/fndata-1.5/fulltext/LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
-        self.assertEquals(reader.frames[0], self.tested_frames[0])
-        self.assertEquals(reader.frames[1], self.tested_frames[1])
+        self.assertEqual(reader.frames[0], self.tested_frames[0])
+        self.assertEqual(reader.frames[1], self.tested_frames[1])
         
 if __name__ == "__main__":
     unittest.main()
