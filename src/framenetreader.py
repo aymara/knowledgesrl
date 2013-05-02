@@ -294,7 +294,6 @@ class FulltextReaderTest(unittest.TestCase):
                         "Content", True, "VPto"),
                     Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True, "NP")
                 ],
-
                 [
                     Word(0, 2, "NN"), Word(4, 4, "."), Word(6, 9, "NP"),
                     Word(11, 14, "NP"), Word(16, 16, ","), Word(18, 19, "NN"),

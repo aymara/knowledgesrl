@@ -252,6 +252,16 @@ class VerbnetFrameTest(unittest.TestCase):
                         "to allow a freer flow of food and medicine into Iraq", 
                         "Content", True, "VPto"),
                     Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True, "NP")
+                ],
+                [
+                    Word(0, 2, "NN"), Word(4, 4, "."), Word(6, 9, "NP"),
+                    Word(11, 14, "NP"), Word(16, 16, ","), Word(18, 19, "NN"),
+                    Word(21, 24, "NP"), Word(26, 26, ","), Word(28, 32, "VVZ"),
+                    Word(34, 36, "DT"), Word(38, 43, "NP"), Word(45, 51, "NPS"),
+                    Word(53, 54, "TO"), Word(56, 60, "VV"), Word(62, 62, "DT"),
+                    Word(64, 68, "JJR"), Word(70, 73, "NN"), Word(75, 76, "IN"),
+                    Word(78, 81, "NN"), Word(83, 85, "CC"), Word(87, 94, "NN"),
+                    Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
                 ] ),
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
@@ -263,6 +273,16 @@ class VerbnetFrameTest(unittest.TestCase):
                         "Action", True, "NP"),
                     Arg(34, 51, "the United Nations", "Grantee", True, "NP"),
                     Arg(0, -1, "", "Grantor", False, "")
+                 ],
+                 [
+                    Word(0, 2, "NN"), Word(4, 4, "."), Word(6, 9, "NP"),
+                    Word(11, 14, "NP"), Word(16, 16, ","), Word(18, 19, "NN"),
+                    Word(21, 24, "NP"), Word(26, 26, ","), Word(28, 32, "VVZ"),
+                    Word(34, 36, "DT"), Word(38, 43, "NP"), Word(45, 51, "NPS"),
+                    Word(53, 54, "TO"), Word(56, 60, "VV"), Word(62, 62, "DT"),
+                    Word(64, 68, "JJR"), Word(70, 73, "NN"), Word(75, 76, "IN"),
+                    Word(78, 81, "NN"), Word(83, 85, "CC"), Word(87, 94, "NN"),
+                    Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
                  ] ) ]
         
         expected_results = [
