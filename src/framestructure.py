@@ -49,7 +49,10 @@ class VerbnetFrame:
         return (isinstance(other, self.__class__) and
             self.structure == other.structure and
             self.roles == other.roles)
-    
+            
+    def __repr__(self):
+        return "VerbnetFrame({}, {})".format(self.structure, self.roles)
+        
     @staticmethod    
     def build_from_frame(frame):
         """Build a VerbNet frame from a Frame object
@@ -77,7 +80,7 @@ class VerbnetFrame:
         # And delete everything else, except some keywords
         structure = VerbnetFrame._keep_only_keywords(structure)
         
-        return VerbnetFrame(structure, [])
+        return VerbnetFrame(structure.split(" "), [])
     
     @staticmethod    
     def _reduce_args(frame, structure, new_begin):
@@ -289,8 +292,8 @@ class VerbnetFrameTest(unittest.TestCase):
                  ] ) ]
         
         expected_results = [
-            VerbnetFrame("NP V NP VPto", []),
-            VerbnetFrame("NP to V NP", [])
+            VerbnetFrame(["NP", "V", "NP", "VPto"], []),
+            VerbnetFrame(["NP", "to", "V", "NP"], [])
         ]
             
         verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[0])
