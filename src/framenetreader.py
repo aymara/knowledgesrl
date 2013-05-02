@@ -30,12 +30,6 @@ class FulltextReader:
         self._xmlns = "{http://framenet.icsi.berkeley.edu}"
 
         self.frames = []
-        #DEBUG
-        self.num_ignored_layer = 0
-        #DEBUG
-        self.num_self_args = 0
-        #DEBUG
-        self.num_not_found = 0
         
         for sentence in root.findall(self._xmlns+"sentence"):
             self._parse_sentence(sentence)
@@ -119,8 +113,6 @@ class FulltextReader:
             if len(phrase_data) == 0:
                 print("WARNING: ignored layer {} of frame {} in {}".format(
                     rank, predicate.lemma, sentence_text), file=sys.stderr)
-                #DEBUG
-                self.num_ignored_layer += 1
                 return True,None
                            
             arg_start = int(arg.attrib["start"])
@@ -148,8 +140,6 @@ class FulltextReader:
                     arg_start == predicate.begin and
                     arg_end == predicate.end)
                 if phrase_found:
-                    #DEBUG
-                    self.num_self_args += 1
                     print("WARNING: at layer {} of frame {} in {}"\
                         " marked {} as NI".format(
                             rank, predicate.lemma, sentence_text, 
@@ -162,8 +152,6 @@ class FulltextReader:
                             rank, predicate.lemma, sentence_text, 
                             sentence_text[arg_start:(arg_end + 1)]), 
                         file=sys.stderr)
-                    #DEBUG
-                    self.num_not_found += 1
                     return False,None
     
     def _build_predicate(self, sentence_text, frame):
@@ -314,16 +302,9 @@ class FulltextReaderTest(unittest.TestCase):
         """
 
         basepath = "../data/fndata-1.5/fulltext/"
-        
-        #DEBUG
-        total_num_ignored_layer = 0
-        #DEBUG
-        total_num_self_args = 0
-        #DEBUG
-        total_num_not_found = 0
-        
+
         for filename in self.expected_values.keys():
-            #print("Parsing "+filename)
+            print("Parsing "+filename)
             reader = FulltextReader(basepath+filename)
 
             # Nothing is empty and begins/ends are coherents
@@ -362,10 +343,6 @@ class FulltextReaderTest(unittest.TestCase):
         
             print("Found {} frames and {} arguments: ok".format(
                 len(reader.frames), arg_num))
-        
-        #DEBUG        
-        print(total_num_ignored_layer, total_num_self_args, total_num_not_found)
-        #138 5 14
 
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""
