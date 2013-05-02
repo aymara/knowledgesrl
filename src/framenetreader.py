@@ -42,8 +42,8 @@ class FulltextReader:
         
         """
         
-        text = sentence.findall(self._xmlns+"text")[0].text
-        for potential_frame in sentence.findall(self._xmlns+"annotationSet[@luName]"):
+        text = sentence.findall(self._xmlns + "text")[0].text
+        for potential_frame in sentence.findall(self._xmlns + "annotationSet[@luName]"):
             frame_type = potential_frame.attrib["luName"].split(".")[1]
             annotated = potential_frame.attrib["status"]
             
@@ -95,7 +95,7 @@ class FulltextReader:
             if len(arg_data) == 0: break
 
             for arg in arg_data:
-                stop,new_arg = self._build_arg(
+                stop, new_arg = self._build_arg(
                     sentence_text, frame, predicate, arg, phrase_data, rank)
                 if new_arg != None:
                     args.append(new_arg)
@@ -106,14 +106,14 @@ class FulltextReader:
     def _build_arg(self, sentence_text, frame, predicate, arg, phrase_data, rank):
         # Checks wether the argument is instanciated
         if "itype" in arg.attrib:
-            return False,Arg(0, -1, "", arg.attrib["name"], False, "")
+            return False, Arg(0, -1, "", arg.attrib["name"], False, "")
         else:
             # Stop if we have reached a non phrase-type-annotated layer
             # with at least one instanciated argument
             if len(phrase_data) == 0:
                 print("WARNING: ignored layer {} of frame {} in {}".format(
-                    rank, predicate.lemma, sentence_text), file=sys.stderr)
-                return True,None
+                    rank, predicate.lemma, sentence_text), file = sys.stderr)
+                return True, None
                            
             arg_start = int(arg.attrib["start"])
             arg_end = int(arg.attrib["end"])
@@ -232,7 +232,6 @@ class FulltextReaderTest(unittest.TestCase):
             "LUCorpus-v0.3__artb_004_A1_E2_NEW.xml":(16,42),
             "LUCorpus-v0.3__CNN_AARONBROWN_ENG_20051101_215800.partial-NEW.xml":(93,238),
             "C-4__C-4Text.xml":(24,67),
-            "fullText.xsl":(0,0),
             "LUCorpus-v0.3__602CZL285-1.xml":(24,64),
             "NTI__Taiwan_Introduction.xml":(50,136),
             "KBEval__Brandeis.xml":(23,56),
@@ -303,9 +302,9 @@ class FulltextReaderTest(unittest.TestCase):
 
         basepath = "../data/fndata-1.5/fulltext/"
 
-        for filename in self.expected_values.keys():
-            print("Parsing "+filename)
-            reader = FulltextReader(basepath+filename)
+        for filename in self.expected_values:
+            print("Parsing " + filename)
+            reader = FulltextReader(basepath + filename)
 
             # Nothing is empty and begins/ends are coherents
             arg_num = 0
@@ -337,7 +336,7 @@ class FulltextReaderTest(unittest.TestCase):
                     last_arg = arg   
                             
             # The total number of frames and args is correct
-            (good_frame_num, good_arg_num) = self.expected_values[filename]
+            good_frame_num, good_arg_num = self.expected_values[filename]
             self.assertEqual(len(reader.frames), good_frame_num)
             self.assertEqual(arg_num, good_arg_num)
         
