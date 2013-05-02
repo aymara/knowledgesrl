@@ -419,6 +419,17 @@ class FulltextReaderTest(unittest.TestCase):
                 'NP', ',', 'VVZ', 'DT', 'NP', 'NPS', 'TO', 'VV', 'DT', 'JJR',
                 'NN', 'IN', 'NN', 'CC', 'NN', 'IN', 'NP', '.'])
         
+import glob
+import os
+import sys
+
 if __name__ == "__main__":
-    unittest.main()
+    if 'mst' in sys.argv:
+        for p in glob.glob(FN_BASEPATH + "*.xml"):
+            name = os.path.basename(p)[:-4]
+            with open('framenet_mst/{}.mst'.format(name), 'w') as mst_file:
+                for mst_sentence in FulltextReader(p).to_mst_format():
+                    mst_file.write(mst_sentence)
+    else:
+        unittest.main()
 
