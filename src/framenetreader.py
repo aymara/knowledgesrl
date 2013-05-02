@@ -31,8 +31,9 @@ class FulltextReader:
 
         self.frames = []
         
-        for sentence in root.findall(self._xmlns+"sentence"):
-            self._parse_sentence(sentence)
+        for sentence in root.findall(self._xmlns + "sentence"):
+            for frame in self._parse_sentence(sentence):
+                self.frames.append(frame)
             
     def _parse_sentence(self, sentence):
         """Handle the parsing of one sentence.
@@ -41,17 +42,27 @@ class FulltextReader:
         :type sentence: xml.etree.ElementTree.Element.
         
         """
-        
-        text = sentence.findall(self._xmlns + "text")[0].text
+ 
+        text = sentence.find(self._xmlns + "text").text
+
+        words = []
+        pos_annotation = "{0}annotationSet/{0}layer[@name='PENN']/" \
+                         "{0}label".format(self._xmlns)
+        for label in sentence.findall(pos_annotation):
+            words.append(Word(int(label.attrib["start"]),
+                              int(label.attrib["end"]),
+                              label.attrib["name"]))
+
         for potential_frame in sentence.findall(self._xmlns + "annotationSet[@luName]"):
             frame_type = potential_frame.attrib["luName"].split(".")[1]
             annotated = potential_frame.attrib["status"]
             
             # We keep only annotated verbal frames
             if frame_type == "v" and annotated != "UNANN":
-                self._parse_frame(text, potential_frame)
+                frame = self._parse_frame(text, words, potential_frame)
+                if frame: yield frame
                   
-    def _parse_frame(self, sentence_text, frame):
+    def _parse_frame(self, sentence_text, words, frame):
         """Handle the parsing of one frame.
         
         :param sentence_text: Sentence in which the frame occurs.
@@ -66,7 +77,7 @@ class FulltextReader:
         
         args = self._build_args_list(sentence_text, frame, predicate)
 
-        self.frames.append(Frame(sentence_text, predicate, args))
+        return Frame(sentence_text, predicate, args, words)
     
     def _build_args_list(self, sentence_text, frame, predicate):
         """Handle the collection of argument list.
@@ -129,7 +140,7 @@ class FulltextReader:
                     break
                     
             if phrase_found:
-                return False,Arg(
+                return False, Arg(
                     arg_start, arg_end,
                     sentence_text[arg_start:(arg_end + 1)],
                     arg.attrib["name"], True, phrase_type)
@@ -144,15 +155,15 @@ class FulltextReader:
                         " marked {} as NI".format(
                             rank, predicate.lemma, sentence_text, 
                             sentence_text[arg_start:(arg_end + 1)]), 
-                        file=sys.stderr)
-                    return False,Arg(0, -1, "",  arg.attrib["name"], False, "")
+                        file = sys.stderr)
+                    return False, Arg(0, -1, "",  arg.attrib["name"], False, "")
                 else:
                     print("WARNING: at layer {} of frame {} in {}"\
                         " could not find phrase type of {}".format(
                             rank, predicate.lemma, sentence_text, 
                             sentence_text[arg_start:(arg_end + 1)]), 
-                        file=sys.stderr)
-                    return False,None
+                        file = sys.stderr)
+                    return False, None
     
     def _build_predicate(self, sentence_text, frame):
         """Handle the collection of the predicate data.
@@ -187,6 +198,8 @@ class FulltextReaderTest(unittest.TestCase):
     """Unit test class"""
     
     def setUp(self):
+        self.basepath = "../data/fndata-1.5/fulltext/"
+
         self.expected_values = {
             "LUCorpus-v0.3__AFGP-2002-602187-Trans.xml":(50,133),
             "LUCorpus-v0.3__AFGP-2002-600045-Trans.xml":(82,205),
@@ -280,6 +293,17 @@ class FulltextReaderTest(unittest.TestCase):
                         "to allow a freer flow of food and medicine into Iraq", 
                         "Content", True, "VPto"),
                     Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True, "NP")
+                ],
+
+                [
+                    Word(0, 2, "NN"), Word(4, 4, "."), Word(6, 9, "NP"),
+                    Word(11, 14, "NP"), Word(16, 16, ","), Word(18, 19, "NN"),
+                    Word(21, 24, "NP"), Word(26, 26, ","), Word(28, 32, "VVZ"),
+                    Word(34, 36, "DT"), Word(38, 43, "NP"), Word(45, 51, "NPS"),
+                    Word(53, 54, "TO"), Word(56, 60, "VV"), Word(62, 62, "DT"),
+                    Word(64, 68, "JJR"), Word(70, 73, "NN"), Word(75, 76, "IN"),
+                    Word(78, 81, "NN"), Word(83, 85, "CC"), Word(87, 94, "NN"),
+                    Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
                 ] ),
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
@@ -291,6 +315,18 @@ class FulltextReaderTest(unittest.TestCase):
                         "Action", True, "NP"),
                     Arg(34, 51, "the United Nations", "Grantee", True, "NP"),
                     Arg(0, -1, "", "Grantor", False, "")
+                 ],
+                 [
+                    Word(0, 2, "NN"), Word(4, 4, "."), Word(6, 9, "NP"),
+                    Word(11, 14, "NP"), Word(16, 16, ","), Word(18, 19, "NN"),
+                    Word(21, 24, "NP"), Word(26, 26, ","), Word(28, 32, "VVZ"),
+                    Word(34, 36, "DT"), Word(38, 43, "NP"),
+                    Word(45, 51, "NPS"), Word(53, 54, "TO"),
+                    Word(56, 60, "VV"), Word(62, 62, "DT"),
+                    Word(64, 68, "JJR"), Word(70, 73, "NN"),
+                    Word(75, 76, "IN"), Word(78, 81, "NN"), Word(83, 85, "CC"),
+                    Word(87, 94, "NN"), Word(96, 99, "IN"),
+                    Word(101, 104, "NP"), Word(106, 106, ".")
                  ] ) ]
             
 
@@ -300,11 +336,9 @@ class FulltextReaderTest(unittest.TestCase):
         
         """
 
-        basepath = "../data/fndata-1.5/fulltext/"
-
         for filename in self.expected_values:
             print("Parsing " + filename)
-            reader = FulltextReader(basepath + filename)
+            reader = FulltextReader(self.basepath + filename)
 
             # Nothing is empty and begins/ends are coherents
             arg_num = 0
@@ -345,7 +379,7 @@ class FulltextReaderTest(unittest.TestCase):
 
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""
-        path = "../data/fndata-1.5/fulltext/LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = self.basepath + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         self.assertEqual(reader.frames[0], self.tested_frames[0])
         self.assertEqual(reader.frames[1], self.tested_frames[1])

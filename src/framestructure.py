@@ -12,17 +12,18 @@ class Frame:
     
     """
     
-    def __init__(self, sentence, predicate, args):
+    def __init__(self, sentence, predicate, args, words):
         self.sentence = sentence
         self.predicate = predicate
-        self.args = args
-        self.args.sort()
+        self.args = sorted(args)
+        self.words = words
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
             self.sentence == other.sentence and
             self.predicate == other.predicate and
-            self.args == other.args)
+            self.args == other.args and
+            self.words == other.words)
         
 class Arg:
 
@@ -81,6 +82,7 @@ class Predicate:
     :var begin: integer, position of the predicate's first character in the sentence
     :var end: integer, position of the predicate's last character in the sentence
     :var text: string containing the predicate's text
+    :var lemma: string containing the predicate's lemma
     
     """
     
@@ -95,4 +97,30 @@ class Predicate:
             self.begin == other.begin and
             self.end == other.end and
             self.lemma == other.lemma)
+
+class Word:
+    """A frame's word
+    
+    :var begin: integer, position of the predicate's first character in the sentence
+    :var end: integer, position of the predicate's last character in the sentence
+    :var text: string containing the predicate's text
+    :var pos: string containing the predicate's part-of-speech
+    
+    """
+    
+    def __init__(self, begin, end, pos):
+        self.begin = begin
+        self.end = end
+        if pos == 'sent': pos = '.'
+        self.pos = pos.upper()
+        
+        
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+            self.begin == other.begin and
+            self.end == other.end and
+            self.pos == other.pos)
+
+    def __repr__(self):
+        return "Word({}, {}, \"{}\")".format(self.begin, self.end, self.pos)
 
