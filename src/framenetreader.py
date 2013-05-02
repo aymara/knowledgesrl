@@ -9,6 +9,8 @@ import os
 import sys
 from framestructure import *
 
+FN_BASEPATH = "../data/fndata-1.5/fulltext/"
+
 class FulltextReader:
 
     """Class used to parse one file of the FrameNet fulltext corpus
@@ -212,7 +214,6 @@ class FulltextReaderTest(unittest.TestCase):
     """Unit test class"""
     
     def setUp(self):
-        self.basepath = "../data/fndata-1.5/fulltext/"
 
         self.expected_values = {
             "LUCorpus-v0.3__AFGP-2002-602187-Trans.xml":(50,133),
@@ -351,7 +352,7 @@ class FulltextReaderTest(unittest.TestCase):
 
         for filename in self.expected_values:
             print("Parsing " + filename)
-            reader = FulltextReader(self.basepath + filename)
+            reader = FulltextReader(FN_BASEPATH + filename)
 
             # Nothing is empty and begins/ends are coherents
             arg_num = 0
@@ -392,13 +393,13 @@ class FulltextReaderTest(unittest.TestCase):
 
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""
-        path = self.basepath + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         self.assertEqual(reader.frames[0], self.tested_frames[0])
         self.assertEqual(reader.frames[1], self.tested_frames[1])
 
     def test_mst_output(self):
-        path = self.basepath + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         first_sentence_mst = next(reader.to_mst_format())
         words, pos, *junk = first_sentence_mst.split("\n")
