@@ -19,6 +19,9 @@ class Frame:
         self.predicate = predicate
         self.args = sorted(args)
         self.words = words
+
+    def get_word(self, word):
+        return self.sentence[word.begin:word.end + 1]
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and

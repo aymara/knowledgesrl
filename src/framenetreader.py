@@ -191,7 +191,21 @@ class FulltextReader:
             predicate_end,
             sentence_text[predicate_start:(predicate_end + 1)],
             predicate_lemma)
-            
+
+    def to_mst_format(self):
+        """Outputs all frames to the MST format"""
+
+        for frame in self.frames:
+
+            frame_mst = ""
+            # print words and their parts-of-speech
+            frame_mst += "\t".join(frame.get_word(w) for w in frame.words) + "\n"
+            frame_mst += "\t".join(w.pos for w in frame.words) + "\n"
+            # dummy values for labels and edges parents
+            frame_mst += "\t".join(["_"]*len(frame.words)) + "\n"
+            frame_mst += "\t".join(["0"]*len(frame.words)) + "\n"
+
+            yield frame_mst
             
 class FulltextReaderTest(unittest.TestCase):
 
@@ -382,6 +396,19 @@ class FulltextReaderTest(unittest.TestCase):
         reader = FulltextReader(path)
         self.assertEqual(reader.frames[0], self.tested_frames[0])
         self.assertEqual(reader.frames[1], self.tested_frames[1])
+
+    def test_mst_output(self):
+        path = self.basepath + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        reader = FulltextReader(path)
+        first_sentence_mst = next(reader.to_mst_format())
+        words, pos, *junk = first_sentence_mst.split("\n")
+        self.assertEqual(words.split("\t"), ['Rep', '.', 'Tony', 'Hall', ',',
+                'D-', 'Ohio', ',', 'urges', 'the', 'United', 'Nations', 'to',
+                'allow', 'a', 'freer', 'flow', 'of', 'food', 'and', 'medicine',
+                'into', 'Iraq', '.'])
+        self.assertEqual(pos.split("\t"), ['NN', '.', 'NP', 'NP', ',', 'NN',
+                'NP', ',', 'VVZ', 'DT', 'NP', 'NPS', 'TO', 'VV', 'DT', 'JJR',
+                'NN', 'IN', 'NN', 'CC', 'NN', 'IN', 'NP', '.'])
         
 if __name__ == "__main__":
     unittest.main()
