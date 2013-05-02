@@ -195,19 +195,27 @@ class FulltextReader:
             predicate_lemma)
 
     def to_mst_format(self):
-        """Outputs all frames to the MST format"""
+        """Outputs all frames to the MST format
+
+        :returns: string, the content of the MST file
+        """
+
+        last_sentence = ""
 
         for frame in self.frames:
+            if frame.sentence != last_sentence:
+                frame_mst = ""
+                # print words and their parts-of-speech
+                frame_mst += "\t".join(frame.get_word(w) for w in frame.words) + "\n"
+                frame_mst += "\t".join(w.pos for w in frame.words) + "\n"
+                # dummy values for labels and edges parents
+                frame_mst += "\t".join(["_"]*len(frame.words)) + "\n"
+                frame_mst += "\t".join(["0"]*len(frame.words)) + "\n"
 
-            frame_mst = ""
-            # print words and their parts-of-speech
-            frame_mst += "\t".join(frame.get_word(w) for w in frame.words) + "\n"
-            frame_mst += "\t".join(w.pos for w in frame.words) + "\n"
-            # dummy values for labels and edges parents
-            frame_mst += "\t".join(["_"]*len(frame.words)) + "\n"
-            frame_mst += "\t".join(["0"]*len(frame.words)) + "\n"
+                frame_mst += "\n"
+                yield frame_mst
 
-            yield frame_mst
+            last_sentence = frame.sentence
             
 class FulltextReaderTest(unittest.TestCase):
 
