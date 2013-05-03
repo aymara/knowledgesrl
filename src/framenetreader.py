@@ -227,8 +227,8 @@ class FulltextReader:
             sentence_text[predicate_start:(predicate_end + 1)],
             predicate_lemma)
 
-    def to_mst_format(self):
-        """Outputs all frames to the MST format
+    def to_conll_format(self):
+        """Outputs all frames to the CoNLL format
 
         :returns: string, the content of the MST file
         """
@@ -237,16 +237,14 @@ class FulltextReader:
 
         for frame in self.frames:
             if frame.sentence != last_sentence:
-                frame_mst = ""
-                # print words and their parts-of-speech
-                frame_mst += "\t".join(frame.get_word(w) for w in frame.words) + "\n"
-                frame_mst += "\t".join(w.pos for w in frame.words) + "\n"
-                # dummy values for labels and edges parents
-                frame_mst += "\t".join(["_"]*len(frame.words)) + "\n"
-                frame_mst += "\t".join(["0"]*len(frame.words)) + "\n"
+                frame_conll = ""
+                i = 0
+                for w in frame.words:
+                    i += 1
+                    frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\n".format(
+                            i, frame.get_word(w), w.pos)
 
-                frame_mst += "\n"
-                yield frame_mst
+                yield frame_conll + "\n"
 
             last_sentence = frame.sentence
             
@@ -439,30 +437,24 @@ class FulltextReaderTest(unittest.TestCase):
         self.assertEqual(reader.frames[0], self.tested_frames[0])
         self.assertEqual(reader.frames[1], self.tested_frames[1])
 
-    def test_mst_output(self):
+    def test_conll_output(self):
         path = FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
-        first_sentence_mst = next(reader.to_mst_format())
-        words, pos, *junk = first_sentence_mst.split("\n")
-        self.assertEqual(words.split("\t"), ['Rep', '.', 'Tony', 'Hall', ',',
-                'D-', 'Ohio', ',', 'urges', 'the', 'United', 'Nations', 'to',
-                'allow', 'a', 'freer', 'flow', 'of', 'food', 'and', 'medicine',
-                'into', 'Iraq', '.'])
-        self.assertEqual(pos.split("\t"), ['NN', '.', 'NP', 'NP', ',', 'NN',
-                'NP', ',', 'VVZ', 'DT', 'NP', 'NPS', 'TO', 'VV', 'DT', 'JJR',
-                'NN', 'IN', 'NN', 'CC', 'NN', 'IN', 'NP', '.'])
+        conll_sentence = next(reader.to_conll_format()).splitlines()
+        self.assertEqual(conll_sentence[2], "3\tTony\tTony\tNP\tNP\t_\t0")
+        self.assertEqual(conll_sentence[23], "24\t.\t.\t.\t.\t_\t0")
         
 import glob
 import os
 import sys
 
 if __name__ == "__main__":
-    if 'mst' in sys.argv:
+    if 'conll' in sys.argv:
         for p in glob.glob(FN_BASEPATH + "*.xml"):
             name = os.path.basename(p)[:-4]
-            with open('framenet_mst/{}.mst'.format(name), 'w') as mst_file:
-                for mst_sentence in FulltextReader(p).to_mst_format():
-                    mst_file.write(mst_sentence)
+            with open('framenet_conll/{}.conll'.format(name), 'w') as conll_file:
+                for conll_sentence in FulltextReader(p).to_conll_format():
+                    conll_file.write(conll_sentence)
     else:
         unittest.main()
 
