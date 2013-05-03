@@ -43,6 +43,7 @@ class FrameMatcher():
         self.frame = frame
         self.frame_size = 0
         self.best_score = 0
+        self.best_frames = []
         self.roles_distribs = []
         
         for i,elem in enumerate(self.frame.structure):
@@ -77,9 +78,12 @@ class FrameMatcher():
         num_match = len(distrib)
         score = int(100 * (num_match / self.frame_size + num_match / model_size))
         
-        if score > self.best_score: self.roles_distribs = []    
+        if score > self.best_score:
+            self.roles_distribs = []  
+            self.best_frames = []
         if score >= self.best_score:
             self.roles_distribs.append(distrib)
+            self.best_frames.append(test_frame)
             self.best_score = score
     
     def possible_distribs(self):

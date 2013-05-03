@@ -6,6 +6,7 @@ from framestructure import *
 import verbnetreader
 import framematcher
 import os
+import random
 from collections import Counter
 
 corpus_path = "../data/fndata-1.5/fulltext/"
@@ -28,6 +29,7 @@ ignored_layers = []
 ignored_predicate_args = []
 phrase_not_found = []
 missing_predicate_data = []
+debug_data = []
 
 verbnet_reader = verbnetreader.VerbnetReader(verbnet_path)
 verbnet = verbnet_reader.verbs
@@ -84,14 +86,26 @@ for filename in os.listdir(corpus_path):
         distrib = matcher.possible_distribs()
         for role_list in distrib:
             if len(role_list) == 1: num_resolved += 1
-        
-        num_discarded += len(frame.args) - len(distrib)     
-        num_good_args += len(frame.args)        
+            
+        """if len(frame.args) > len(distrib):
+            debug_data.append({
+                "sentence":frame.sentence,
+                "predicate":frame.predicate.lemma,
+                "args":[x.text for x in frame.args],
+                "vbclass":verbnet[frame.predicate.lemma],
+                "structure":converted_frame.structure,
+                "chosen_frames":matcher.best_frames,
+                "result":distrib
+            })"""
+
+        num_instanciated = sum([1 if x.instanciated else 0 for x in frame.args])
+        num_discarded += num_instanciated - len(distrib)     
+        num_good_args += num_instanciated        
         num_good_frames += 1
         
 print("\nDone !\n\n")
 print("Found {} args and {} frames in {} files".format(num_args, num_frames, num_files))
-print("{} args and {} frames were kept".format(num_good_args, num_good_frames))
+print("{} instanciated args and {} frames were kept".format(num_good_args, num_good_frames))
 print("{} args were discarded by frame matching".format(num_discarded))
 print("{} roles were directly attributed after frame matching".format(num_resolved))
 print("\nProblems :\n")
@@ -112,4 +126,22 @@ print("Ignored {} empty FrameNet frames".format(len(empty_framenet_frames)))
 #for frame_data in empty_framenet_frames: print(frame_data)
 print("Ignored {} empty VerbNet frames".format(len(empty_verbnet_frames)))
 #for frame_data in empty_verbnet_frames: print(frame_data)
+
+"""random.shuffle(debug_data)
+for i in range(0,20):
+    print(debug_data[i]["sentence"])
+    print("Predicate : "+debug_data[i]["predicate"])
+    print("Structure : "+" ".join(debug_data[i]["structure"]))
+    print("Arguments :")
+    for arg in debug_data[i]["args"]:
+        print(arg)
+    print("VerbNet data : ")
+    for vbframe in debug_data[i]["vbclass"]:
+        print(vbframe)
+    print("Chosen frames : ")
+    for vbframe in debug_data[i]["chosen_frames"]:
+        print(vbframe)
+    print("Result : ")
+    print(debug_data[i]["result"])
+    print("\n\n")"""
 
