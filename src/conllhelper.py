@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Build syntactic trees from MST parser output"""
+"""Build syntactic trees from CoNLL parser output"""
 
 import unittest
 
-class MstInvalidPositionError(Exception):
+class ConllInvalidPositionError(Exception):
     """Trying to build a subtree from a node that does not exist
     
     :var bad_root: integer, the position from which we attempted to build a subtree
@@ -19,7 +19,7 @@ class MstInvalidPositionError(Exception):
         
     def __str__(self):
         return "Error : tried to build a subtree from position {} while"\
-               " parsing MST output (last valid position was {})".format(
+               " parsing CoNLL output (last valid position was {})".format(
                 self.bad_root, self.max_root)
  
 class SyntacticTreeNode:
@@ -37,31 +37,36 @@ class SyntacticTreeNode:
         self.children = [] 
 
     def __str__(self):
-        return "({} {} {})".format(
-            self.label, self.word, 
-            ";".join([str(t) for t in self.children]))
+        if self.children:
+            children = " " + "; ".join([str(t) for t in self.children])
+        else:
+            children = ""
+        return "({} {}{})".format(self.label, self.word, children)
 
 
 class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree
 
-    :var words: first line of the MST output, list of words
-    :var labels: second line of the MST output, list of labels
-    :var parents: third line of the MST output, position of each word's parent
+    :var words: second column of the CoNLL output, list of words
+    :var labels: second line of the CoNLL output, list of labels
+    :var parents: third line of the CoNLL output, position of each word's parent
     
     """
     
-    def __init__(self, mst_output):
+    def __init__(self, conll_tree):
         """Extract the data provided 
         
-        :param mst_output: The output of the MST parser
-        :type mst_output: str
+        :param conll_tree: The output of the CoNLL parser
+        :type conll_tree: str
         
         """
-        (words_line, labels_line, parents_line) = mst_output.split("\n")
-        self.words = words_line.split("\t")
-        self.labels = labels_line.split("\t")
-        self.parents = [int(n) for n in parents_line.split("\t")]
+        self.words, self.labels, self.parents = [], [], []
+
+        for l in conll_tree.splitlines():
+            line_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
+            self.words.append(form)
+            self.labels.append(deprel)
+            self.parents.append(int(head))
     
     def build_syntactic_tree(self):
         """ Build and return a the syntactic tree """
@@ -92,7 +97,7 @@ class SyntacticTreeBuilder():
         
         """
         if root < 0 or root > len(self.words):
-            raise MstInvalidPositionError(root, len(self.words) - 1)
+            raise ConllInvalidPositionError(root, len(self.words) - 1)
 
         result = SyntacticTreeNode(self.words[root - 1], self.labels[root - 1])
 
@@ -105,18 +110,17 @@ class SyntacticTreeBuilder():
 
 class TreeBuilderTest(unittest.TestCase):
     def test_tree_builiding(self):
-        mst_input = \
-        "the	sec	will	probably	vote	on	the	proposal	early	next"+\
-        "	year	,	he	said	.\n\
-        DEP	NP-SBJ	S	ADVP	VP	PP	DEP	NP	DEP	DEP	NP	DEP	NP-SBJ	ROOT	"+\
-        "DEP\n\
-        2	3	14	3	3	5	8	6	11	11	5	14	14	0	14"
+        conll_tree = """1	The	The	DT	DT	-	2	NMOD	-	-
+2	others	others	NNS	NNS	-	5	SBJ	-	-
+3	here	here	RB	RB	-	2	LOC	-	-
+4	today	today	RB	RB	-	3	TMP	-	-
+5	live	live	VV	VV	-	0	ROOT	-	-
+6	elsewhere	elsewhere	RB	RB	-	5	LOC	-	-
+7	.	.	.	.	-	5	P	-	-"""
 
-        expected_result = "(ROOT said (S will (NP-SBJ sec (        DEP the ));(A"+\
-        "DVP probably );(VP vote (PP on (NP proposal (DEP the )));(NP year (DEP "+\
-        "early );(DEP next ))));(DEP , );(NP-SBJ he );(DEP . ))"
+        expected_result = "(ROOT live (SBJ others (NMOD The); (LOC here (TMP today))); (LOC elsewhere); (P .))"
 
-        treeBuilder = SyntacticTreeBuilder(mst_input)
+        treeBuilder = SyntacticTreeBuilder(conll_tree)
         tree = treeBuilder.build_syntactic_tree()
         
         self.assertEqual(str(tree), expected_result)
