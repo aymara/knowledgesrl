@@ -79,8 +79,11 @@ class VerbnetFrame:
         structure = VerbnetFrame._reduce_args(frame, structure, begin)
         # And delete everything else, except some keywords
         structure = VerbnetFrame._keep_only_keywords(structure)
-        
-        return VerbnetFrame(structure.split(" "), [])
+        # Transform the structure into a list
+        structure = structure.split(" ")
+        # Delete every keyword before the verb
+        structure = VerbnetFrame._strip_leftpart_keywords(structure)
+        return VerbnetFrame(structure, [])
     
     @staticmethod    
     def _reduce_args(frame, structure, new_begin):
@@ -100,6 +103,7 @@ class VerbnetFrame:
         for argument in reversed(frame.args):
             if not argument.instanciated: continue
 
+            # Replace every "PP" by "prep NP"
             if argument.phrase_type == "PP":
                 prep = argument.text.split(" ")[0].lower()
                 added_length = 6 + len(prep)
@@ -152,6 +156,17 @@ class VerbnetFrame:
         if result[0] == " ": result = result[1:]
         if result[-1] == " ": result = result[:-1]
             
+        return result
+    
+    @staticmethod    
+    def _strip_leftpart_keywords(sentence):
+        result = []
+        found_verb = False
+        for elem in sentence:
+            if elem == "V": found_verb = True
+            if found_verb or elem[0].isupper():
+                result.append(elem)
+                
         return result
         
 class Arg:
@@ -302,7 +317,7 @@ class VerbnetFrameTest(unittest.TestCase):
         
         expected_results = [
             VerbnetFrame(["NP", "V", "NP", "VPto"], []),
-            VerbnetFrame(["NP", "to", "V", "NP"], [])
+            VerbnetFrame(["NP", "V", "NP"], [])
         ]
             
         verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[0])
