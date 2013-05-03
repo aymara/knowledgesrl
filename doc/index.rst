@@ -21,7 +21,7 @@ Documentation:
    framenetreader
    verbnetreader
    framematcher
-   mst_tree_builder
+   conllreader
 
 
 Indices and tables
