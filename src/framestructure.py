@@ -4,6 +4,7 @@
 """Frames, arguments and predicates."""
 
 import unittest
+import verbnetprepclasses
 
 class Frame:
     """A frame extracted from the corpus 
@@ -38,8 +39,7 @@ class VerbnetFrame:
     
     """
     
-    #TODO : complete this list
-    keywords = ["to be", "how", "to", "what", "whether"]
+    #keywords = ["to be", "how", "to", "what", "whether"]
     
     def __init__(self, structure, roles):
         self.structure = structure
@@ -100,13 +100,22 @@ class VerbnetFrame:
         for argument in reversed(frame.args):
             if not argument.instanciated: continue
 
-            structure = "{}< {}>{}".format(
-                structure[0:argument.begin - new_begin], 
-                argument.phrase_type, 
-                structure[1 + argument.end - new_begin:])
+            if argument.phrase_type == "PP":
+                prep = argument.text.split(" ")[0].lower()
+                added_length = 6 + len(prep)
+                structure = "{}{} < NP>{}".format(
+                    structure[0:argument.begin - new_begin],
+                    prep,  
+                    structure[1 + argument.end - new_begin:])
+            else:
+                added_length = 3 + len(argument.phrase_type)
+                structure = "{}< {}>{}".format(
+                    structure[0:argument.begin - new_begin], 
+                    argument.phrase_type, 
+                    structure[1 + argument.end - new_begin:])
                 
             if argument.begin - new_begin < predicate_begin:
-                offset = (argument.end - argument.begin + 1) - (3 + len(argument.phrase_type))
+                offset = (argument.end - argument.begin + 1) - added_length
                 predicate_begin -= offset
                 predicate_end -= offset
 
@@ -133,7 +142,7 @@ class VerbnetFrame:
             if inside_tag: result += sentence[pos]
             if sentence[pos] == "<": inside_tag = True
             
-            for search in VerbnetFrame.keywords:
+            for search in verbnetprepclasses.keywords:
                 if " "+search == sentence[pos:pos + len(search) + 1].lower():
                     pos += len(search) + 1
                     result += " "+search

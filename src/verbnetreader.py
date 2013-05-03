@@ -30,7 +30,7 @@ class VerbnetReader:
         # Debug data
         self.filename = ""
         self.unhandled = []
-        
+
         for filename in os.listdir(path):
             if not filename[-4:] == ".xml": continue
             print(filename)
@@ -81,6 +81,8 @@ class VerbnetReader:
                 to_add = self._handle_np(element)
             elif element.tag == "ADV":
                 to_add = self._handle_adv(element)
+            elif element.tag == "LEX":
+                to_add = self._handle_lex(element)
             else:
                 self.unhandled.append({
                     "file":self.filename,
@@ -98,17 +100,36 @@ class VerbnetReader:
                     role.append(element.attrib["value"])
                     
         return VerbnetFrame(structure, role)
-    
+        
     def _handle_adv(self, xml):
         if len(xml) != 0:
             self.unhandled.append({
                 "file":self.filename,
                 "elem":"ADV",
-                "data":"Adverb was not empty"
+                "data":"Adverb had restrictions"
             })
         
         return ""
+     
+    def _handle_lex(self, xml):
+        if len(xml) != 0:
+            self.unhandled.append({
+                "file":self.filename,
+                "elem":"LEX",
+                "data":"Lexeme had restrictions"
+            })
         
+        for group in verbnetprepclasses.keywords:
+            if xml.attrib["value"] in group:
+                return xml.attrib["value"]
+                
+        self.unhandled.append({
+            "file":self.filename,
+            "elem":"LEX",
+            "data":"Unhandled lexeme : {}".format(xml.attrib["value"])
+        })
+        return ""
+           
     def _handle_np(self, xml):
         for restr_group in xml:
             if restr_group.tag == "SYNRESTRS":
@@ -144,7 +165,7 @@ class VerbnetReader:
                     if (restr.attrib["Value"] == "+" 
                         and restr.attrib["type"] in verbnetprepclasses.prep
                     ):
-                        return verbnetprepclasses.prep[restr.attrib["type"]]
+                        return list(verbnetprepclasses.prep[restr.attrib["type"]])
                     else:
                         self.unhandled.append({
                             "file":self.filename,
@@ -159,7 +180,7 @@ class VerbnetReader:
                     "data":"Unknown restriction : {}".format(restr_group.tag)
                 })                         
         if "value" in xml.attrib:
-            return xml.attrib["value"]
+            return xml.attrib["value"].split(" ")
         else:
             return ""
             
@@ -168,7 +189,7 @@ class VerbnetReader:
             self.unhandled.append({
                 "file":self.filename,
                 "elem":"V",
-                "data":"Verb was not empty"
+                "data":"Verb had restrictions"
             })
         
         return "V"
@@ -186,102 +207,103 @@ class VerbnetReaderTest(unittest.TestCase):
         reader.verbs = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
         reader._handle_class(root, [])
+        
         expected_result = {
             'dissociate': [  
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']),  
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),  
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
                 VerbnetFrame(['NP', 'V'], ['Patient']),
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']),           
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),           
                 VerbnetFrame(['NP', 'V'], ['Patient']),           
-                VerbnetFrame(['NP', 'V', 'with', 'NP'], ['Patient', 'Co-Patient'])],
+                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])],
             'disconnect': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
                 VerbnetFrame(['NP', 'V'], ['Patient']),  
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']),  
-                VerbnetFrame(['NP', 'V', 'with', 'NP'], ['Patient', 'Co-Patient'])],
+                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])],
             'divide': [ 
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']),
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']),
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),
                 VerbnetFrame(['NP', 'V'], ['Patient']),
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient'])],
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])],
             'disassociate': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']),
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']),
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),
                 VerbnetFrame(['NP', 'V'], ['Patient'])],
             'disentangle': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient'])], 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
             'divorce': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient'])], 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
             'separate': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'with', 'NP'], ['Patient', 'Co-Patient'])], 
+                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])], 
             'segregate': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient'])], 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
             'part': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'with', 'NP'], ['Patient', 'Co-Patient'])], 
+                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])], 
             'differentiate': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient'])], 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
             'uncoil': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient'])], 
             'decouple': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient'])], 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
             'sever': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient'])], 
             'dissimilate': [
-                VerbnetFrame(['NP', 'V', 'NP', 'from', 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient']), 
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', 'from', 'NP'], ['Patient', 'Co-Patient'])]
+                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])]
         }
 
         self.assertEqual(reader.verbs, expected_result)

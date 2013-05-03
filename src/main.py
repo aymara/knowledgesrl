@@ -45,7 +45,7 @@ for filename in os.listdir(corpus_path):
     phrase_not_found += reader.phrase_not_found
     missing_predicate_data += reader.missing_predicate_data
     
-    for frame in reader.frames:
+    for frame in reader.frames:      
         num_frames += 1
         num_args += len(frame.args)
         
@@ -69,7 +69,7 @@ for filename in os.listdir(corpus_path):
                 "structure":converted_frame.structure
             })
             continue
-        
+
         for test_frame in verbnet[frame.predicate.lemma]:
             try:
                 matcher.new_match(test_frame) 
@@ -79,11 +79,13 @@ for filename in os.listdir(corpus_path):
                     "predicate":frame.predicate.lemma,
                     "vbframe":test_frame
                 })
-        
-        for role_list in matcher.possible_distribs():
+                
+
+        distrib = matcher.possible_distribs()
+        for role_list in distrib:
             if len(role_list) == 1: num_resolved += 1
         
-        num_discarded += len(frame.args) - len(role_list)     
+        num_discarded += len(frame.args) - len(distrib)     
         num_good_args += len(frame.args)        
         num_good_frames += 1
         
@@ -93,7 +95,7 @@ print("{} args and {} frames were kept".format(num_good_args, num_good_frames))
 print("{} args were discarded by frame matching".format(num_discarded))
 print("{} roles were directly attributed after frame matching".format(num_resolved))
 print("\nProblems :\n")
-#685
+
 print("{} unhandled case were encoutered while parsing VerbNet".format(len(verbnet_errors)))
 #for frame_data in verbnet_errors: print(frame_data) 
 print("Ignored {} frame for which predicate data was missing".format(len(missing_predicate_data)))

@@ -121,7 +121,7 @@ class FrameMatcher():
             elem1 == elem2)
         
 class frameMatcherTest(unittest.TestCase):
-     def test_1(self):
+    def test_1(self):
         frame1 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], [])
         frame2 = VerbnetFrame(["NP", "V", "NP", "for", "NP"], ["Agent", "Patient", "Role1"])
         frame3 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role2"])
@@ -135,7 +135,7 @@ class frameMatcherTest(unittest.TestCase):
         self.assertEqual(matcher.best_score, 200)
         self.assertEqual(matcher.possible_distribs(), [["Agent"], ["Patient"], ["Role2", "Role3"]])
         
-     def test_2(self):
+    def test_2(self):
         frame1 = VerbnetFrame(["to", "be"], [])
         frame2 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
 
@@ -143,13 +143,31 @@ class frameMatcherTest(unittest.TestCase):
             matcher = FrameMatcher("predicate", frame1)
             matcher.new_match(frame2)
             
-     def test_3(self):
+    def test_3(self):
         frame1 = VerbnetFrame(["NP", "V", "with", "NP"], [])
         frame2 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
 
         matcher = FrameMatcher("predicate", frame1)
         matcher.new_match(frame2)
         self.assertEqual(matcher.best_score, int(100 / 2 + 100 / 3))
+        
+    def test_4(self):
+        frame = VerbnetFrame(['NP', 'V', 'NP'], [])
+        matcher = FrameMatcher("begin", frame)
+        test_frames = [
+            VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
+            VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
+            VerbnetFrame(['NP', 'V'], ['Theme']),
+            VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
+            VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Theme', 'Instrument']),
+            VerbnetFrame(['NP', 'V', 'NP', ['with'], 'NP'], ['Agent', 'Theme', 'Instrument']),
+            VerbnetFrame(['NP', 'V', 'NP'], ['Instrument', 'Theme'])
+        ]
+        for test_frame in test_frames:
+            matcher.new_match(test_frame)
+        print(matcher.best_score)
+        print(matcher.possible_distribs())
+
             
 if __name__ == "__main__":
     unittest.main()
