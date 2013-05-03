@@ -47,7 +47,7 @@ for filename in os.listdir(corpus_path):
     phrase_not_found += reader.phrase_not_found
     missing_predicate_data += reader.missing_predicate_data
     
-    for frame in reader.frames:      
+    for frame in reader.frames:
         num_frames += 1
         num_args += len(frame.args)
         
@@ -61,7 +61,7 @@ for filename in os.listdir(corpus_path):
             continue
         
         converted_frame = VerbnetFrame.build_from_frame(frame)
-
+        
         try:
             matcher = framematcher.FrameMatcher(frame.predicate.lemma, converted_frame)
         except framematcher.EmptyFrameError:

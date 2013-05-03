@@ -27,9 +27,14 @@ encoutered_lexemes = {
     "to", "together", "up"
 }
 
+sub = {
+    "how", "that", "where"
+}
+
 keywords = set()
 for group in prep.values(): keywords = keywords | group
 keywords = keywords | encoutered_preps
 keywords = keywords | encoutered_lexemes
+keywords = keywords | sub
 
 

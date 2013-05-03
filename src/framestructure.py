@@ -103,20 +103,24 @@ class VerbnetFrame:
         for argument in reversed(frame.args):
             if not argument.instanciated: continue
 
+            before = structure[0:argument.begin - new_begin]
+            after = structure[1 + argument.end - new_begin:]
             # Replace every "PP" by "prep NP"
             if argument.phrase_type == "PP":
                 prep = argument.text.split(" ")[0].lower()
                 added_length = 6 + len(prep)
-                structure = "{}{} < NP>{}".format(
-                    structure[0:argument.begin - new_begin],
-                    prep,  
-                    structure[1 + argument.end - new_begin:])
+                structure = "{}{} < NP>{}".format(before, prep, after)
+            # Replace "Sfin" by "S"
+            elif argument.phrase_type == "Sfin":
+                added_length = 4
+                structure = "{} < S>{}".format(before, after)
+            # Replace "VPto" by "to S"
+            elif argument.phrase_type == "VPto":
+                added_length = 7
+                structure = "{} < to S>{}".format(before, after)
             else:
                 added_length = 3 + len(argument.phrase_type)
-                structure = "{}< {}>{}".format(
-                    structure[0:argument.begin - new_begin], 
-                    argument.phrase_type, 
-                    structure[1 + argument.end - new_begin:])
+                structure = "{}< {}>{}".format(before, argument.phrase_type, after)
                 
             if argument.begin - new_begin < predicate_begin:
                 offset = (argument.end - argument.begin + 1) - added_length
@@ -143,12 +147,19 @@ class VerbnetFrame:
         
         while pos < last_pos:
             if sentence[pos] == ">": inside_tag = False
-            if inside_tag: result += sentence[pos]
+            if inside_tag: 
+                result += sentence[pos]
+                pos += 1
+                continue
             if sentence[pos] == "<": inside_tag = True
             
             for search in verbnetprepclasses.keywords:
-                if " "+search+" " == sentence[pos:pos + len(search) + 2].lower():
-                    pos += len(search) + 1
+                if (search == sentence[pos:pos + len(search)].lower() and
+                    (pos == 0 or sentence[pos - 1] == " ") and
+                    (pos + len(search) == len(sentence) or
+                        sentence[pos + len(search)] == " ")
+                ):
+                    pos += len(search) - 1
                     result += " "+search
             
             pos += 1
@@ -316,7 +327,7 @@ class VerbnetFrameTest(unittest.TestCase):
                  ] ) ]
         
         expected_results = [
-            VerbnetFrame(["NP", "V", "NP", "VPto"], []),
+            VerbnetFrame(["NP", "V", "NP", "to", "S"], []),
             VerbnetFrame(["NP", "V", "NP"], [])
         ]
             
