@@ -1,7 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Parse FrameNet fulltext annotation into Frame, Arg and Predicate objects."""
+"""Parse FrameNet fulltext annotation into Frame, Arg and Predicate objects.
+
+Notes:
+
+ * Currently, when a role is not instantiated in FrameNet, we simply store it
+   as empty arg in framenetreader. Should we take advantage of the fact that we
+   know the type of non instanciation?
+ * Argument of a trigger can be the trigger itself, which doesn't allow to
+   represent our frame as "NP V NP...". Currently, it's considered as a case of
+   null instanciation, but this could change if needed.
+ * FrameNet sometimes has two layers of annotations, with the second layer
+   having roles that overlap with the first one, but without PT (Phrase Type).
+   Those layers are ignored.
+ * Fourteen other cases (out of 18000+) of an argument (or predicate ?) not
+   matching with any word in the sentence. Also ignored right now.
+
+
+"""
 
 import unittest
 import xml.etree.ElementTree as ET

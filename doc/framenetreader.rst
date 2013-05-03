@@ -1,5 +1,5 @@
-framenetreader Module
-=====================
+framenetreader
+==============
 
 .. automodule:: framenetreader
     :members:

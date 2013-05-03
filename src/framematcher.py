@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Match Frame to appropriate VerbNet structures"""
+"""Match Frame to appropriate VerbNet structures
+
+Based on the 2004 Swier & Stevenson paper: Unsupervised Semantic Role Labeling.
+
+The way frame matching works in Swier&Stevenson 2004 paper is not completely
+specified: what happens when VerbNet frame is longer than FrameNet's frame?
+
+Currently, we don't extract any slot when a non-match appears: while it can
+make sense to omit objects at the end, it doesn't to omit at the beginning and
+take at the end: this could result in a totally different syntactic
+construction. But I could be wrong!
+
+For example, if you have in FrameNet "NP V with NP", and VerbNet contains "NP V
+NP with NP", what do you do? We decided, for now, to only match the syntactic
+subject.
+"""
 
 from framestructure import *
 import unittest

@@ -10,14 +10,17 @@ Our objective is to reproduce (Swier & Stevenson, 2005) results for recent
 versions of resources and NLP tools (MST Parser, latest VerbNet, FrameNet and
 VN-FN mappings).
 
-Modules:
+Documentation:
 
 .. toctree::
    :maxdepth: 4
 
-   framenetreader
    framestructure
+   framenetreader
+   verbnetreader
+   framematcher
    mst_tree_builder
+   verbcoverage
 
 
 Indices and tables
@@ -32,3 +35,9 @@ References
 ==========
 
 Robert Swier and Suzanne Stevenson. Exploiting a Verb Lexicon in Automatic Semantic Role Labelling. In Proceedings of HLT/EMNLP, 2005.
+
+VerbNet Annotation Guidelines http://verbs.colorado.edu/verb-index/VerbNet_Guidelines.pdf
+
+VerbNet documentation http://verbs.colorado.edu/verb-index/Documentation.php
+
+VerbNet presentation http://verbs.colorado.edu/~mpalmer/projects/verbnet.html

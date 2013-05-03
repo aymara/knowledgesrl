@@ -1,5 +1,5 @@
-mst_tree_builder Module
-=======================
+mst_tree_builder
+================
 
 .. automodule:: mst_tree_builder
     :members:
