@@ -86,8 +86,10 @@ for filename in os.listdir(corpus_path):
         distrib = matcher.possible_distribs()
         for role_list in distrib:
             if len(role_list) == 1: num_resolved += 1
-            
-        """if len(frame.args) > len(distrib):
+  
+        num_instanciated = sum([1 if x.instanciated else 0 for x in frame.args])
+                  
+        """if num_instanciated > len(distrib):
             debug_data.append({
                 "sentence":frame.sentence,
                 "predicate":frame.predicate.lemma,
@@ -98,7 +100,6 @@ for filename in os.listdir(corpus_path):
                 "result":distrib
             })"""
 
-        num_instanciated = sum([1 if x.instanciated else 0 for x in frame.args])
         num_discarded += num_instanciated - len(distrib)     
         num_good_args += num_instanciated        
         num_good_frames += 1
