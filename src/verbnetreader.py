@@ -26,10 +26,16 @@ class VerbnetReader:
         """
         self.verbs = {}
         
+        # Debug data
+        self.filename = ""
+        self.unhandled = []
+        
         for filename in os.listdir(path):
             if not filename[-4:] == ".xml": continue
             print(filename)
-            root = ET.ElementTree(file=path+filename)
+            
+            self.filename = filename
+            root = ET.ElementTree(file=path+self.filename)
             self._handle_class(root, [])
 
     
@@ -39,8 +45,7 @@ class VerbnetReader:
         :param xml_class: XML representation of the class of verbs.
         :type xml_class: xml.etree.ElementTree.Element.
         :param parent_frames: the frame inherited from the parent class.
-        :type parent_frames: 
-            VerbnetFrame list.
+        :type parent_frames: VerbnetFrame list.
         
         """
         frames = parent_frames[:]
@@ -66,37 +71,89 @@ class VerbnetReader:
         role = [] 
               
         for element in xml_frame.find("SYNTAX"):
+            to_add = ""
             if element.tag == "PREP":
-                for restr in element.find("SELRESTRS"):
-                    print("Unhandled restriction for PREP : {} {}".format(
-                            restr.attrib["type"], restr.attrib["Value"]))
-                            
-                if "value" in element.attrib:
-                    structure.append(element.attrib["value"])
-            elif element.tag == "VERB" and len(element) == 0:
-                structure.append("V")
+                to_add = self._handle_prep(element)
+            elif element.tag == "VERB":
+                to_add = self._handle_verb(element)
             elif element.tag == "NP":
-                if element.find("SYNRESTRS") != None:
-                    for restr in element.find("SYNRESTRS"):
-                        if not (restr.attrib["Value"] == "+" and
-                            restr.attrib["type"] == "plural"):
-                               print("Unhandled restriction for NP : {} {}".format(
-                                restr.attrib["type"], restr.attrib["Value"]))
-                            
-                structure.append("NP")
-            elif element.tag == "ADV" and len(element) == 0:
-                continue
+                to_add = self._handle_np(element)
+            elif element.tag == "ADV":
+                to_add = self._handle_adv(element)
             else:
-                print("Unhandled element : {}".format(
-                    element.tag), file=sys.stderr)
+                self.unhandled.append({
+                    "file":self.filename,
+                    "elem":element.tag,
+                    "data":"Unknown element"
+                })
+                #print("Unhandled element : {}".format(
+                #    element.tag), file=sys.stderr)
             
-            # If the element has a role, add it to the role list   
-            if ((not (element.tag == "VERB" or element.tag == "PREP")) and
-                "value" in element.attrib
-            ): 
-                role.append(element.attrib["value"])
+            if to_add != "": 
+                if to_add == None:
+                    print("????????????????????")
+                    
+                structure.append(to_add)
 
+                # If the element has a role, add it to the role list   
+                if ((not (element.tag == "VERB" or element.tag == "PREP")) and
+                    "value" in element.attrib
+                ): 
+                    role.append(element.attrib["value"])
+                    
         return VerbnetFrame(structure, role)
+    
+    def _handle_adv(self, xml):
+        if len(xml) != 0:
+            self.unhandled.append({
+                "file":self.filename,
+                "elem":"ADV",
+                "data":"Adverb was not empty"
+            })
+        
+        return ""
+        
+    def _handle_np(self, xml):
+        if xml.find("SYNRESTRS") != None:
+            for restr in xml.find("SYNRESTRS"):
+                # The NP should be plural- > ignored
+                if restr.attrib["Value"] == "+" and restr.attrib["type"] == "plural":
+                    continue
+                else:
+                    self.unhandled.append({
+                        "file":self.filename,
+                        "elem":"NP",
+                        "data":"SYNRESTR {}={}".format(restr.attrib["type"], restr.attrib["Value"])
+                    })
+                #print("Unhandled restriction for NP : {} {}".format(
+                #restr.attrib["type"], restr.attrib["Value"]))
+        return "NP"
+                            
+    def _handle_prep(self, xml):
+        for restr in xml.find("SELRESTRS"):
+            self.unhandled.append({
+                "file":self.filename,
+                "elem":"PREP",
+                "data":"SELRESTR {}={}".format(restr.attrib["type"], restr.attrib["Value"])
+            })
+            #print("Unhandled restriction for PREP : {} {}".format(
+            #                restr.attrib["type"], restr.attrib["Value"]))
+                            
+        if "value" in xml.attrib:
+            return xml.attrib["value"]
+        else:
+            return ""
+            
+    def _handle_verb(self, xml):
+        if len(xml) != 0:
+            self.unhandled.append({
+                "file":self.filename,
+                "elem":"V",
+                "data":"Verb was not empty"
+            })
+        
+        return "V"
+
         
 class VerbnetReaderTest(unittest.TestCase):
 

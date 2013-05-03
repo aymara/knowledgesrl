@@ -12,8 +12,6 @@ corpus_path = "../data/fndata-1.5/fulltext/"
 verbnet_path = "../data/verbnet-3.2/"
 debug = False
 
-verbnet = verbnetreader.VerbnetReader(verbnet_path).verbs
-
 num_files = 0
 num_frames = 0
 num_good_frames = 0
@@ -22,6 +20,7 @@ num_good_args = 0
 num_resolved = 0
 num_discarded = 0
 
+verbnet_errors = []
 not_found = []
 empty_framenet_frames = []
 empty_verbnet_frames = []
@@ -29,6 +28,10 @@ ignored_layers = []
 ignored_predicate_args = []
 phrase_not_found = []
 missing_predicate_data = []
+
+verbnet_reader = verbnetreader.VerbnetReader(verbnet_path)
+verbnet = verbnet_reader.verbs
+verbnet_errors = verbnet_reader.unhandled
 
 for filename in os.listdir(corpus_path):
     if not filename[-4:] == ".xml": continue
@@ -84,12 +87,14 @@ for filename in os.listdir(corpus_path):
         num_good_args += len(frame.args)        
         num_good_frames += 1
         
-print("Done !")
+print("\nDone !\n\n")
 print("Found {} args and {} frames in {} files".format(num_args, num_frames, num_files))
 print("{} args and {} frames were kept".format(num_good_args, num_good_frames))
 print("{} args were discarded by frame matching".format(num_discarded))
 print("{} roles were directly attributed after frame matching".format(num_resolved))
-
+print("\nProblems :\n")
+print("{} unhandled case were encoutered while parsing VerbNet".format(len(verbnet_errors)))
+#for frame_data in verbnet_errors: print(frame_data) 
 print("Ignored {} frame for which predicate data was missing".format(len(missing_predicate_data)))
 #for frame_data in missing_predicate_data: print(frame_data) 
 print("Ignored {} non-annotated layers in FrameNet".format(len(ignored_layers)))
