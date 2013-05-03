@@ -50,6 +50,13 @@ class FulltextReader:
 
         self.frames = []
         
+        # Debug data
+        self.filename = filename
+        self.ignored_layers = []
+        self.predicate_is_arg = []
+        self.phrase_not_found = []
+        self.missing_predicate_data = []
+        
         for sentence in root.findall(self._xmlns + "sentence"):
             for frame in self._parse_sentence(sentence):
                 self.frames.append(frame)
@@ -141,8 +148,12 @@ class FulltextReader:
             # Stop if we have reached a non phrase-type-annotated layer
             # with at least one instanciated argument
             if len(phrase_data) == 0:
-                print("WARNING: ignored layer {} of frame {} in {}".format(
-                    rank, predicate.lemma, sentence_text), file = sys.stderr)
+                self.ignored_layers.append({
+                    "file":self.filename,
+                    "predicate":predicate.lemma,
+                    "sentence": sentence_text,
+                    "layer":rank
+                })
                 return True, None
                            
             arg_start = int(arg.attrib["start"])
@@ -170,18 +181,19 @@ class FulltextReader:
                     arg_start == predicate.begin and
                     arg_end == predicate.end)
                 if phrase_found:
-                    print("WARNING: at layer {} of frame {} in {}"\
-                        " marked {} as NI".format(
-                            rank, predicate.lemma, sentence_text, 
-                            sentence_text[arg_start:(arg_end + 1)]), 
-                        file = sys.stderr)
+                    self.predicate_is_arg.append({
+                        "file":self.filename,
+                        "predicate":predicate.lemma,
+                        "sentence": sentence_text
+                    })
                     return False, Arg(0, -1, "",  arg.attrib["name"], False, "")
                 else:
-                    print("WARNING: at layer {} of frame {} in {}"\
-                        " could not find phrase type of {}".format(
-                            rank, predicate.lemma, sentence_text, 
-                            sentence_text[arg_start:(arg_end + 1)]), 
-                        file = sys.stderr)
+                    self.phrase_not_found.append({
+                        "file":self.filename,
+                        "predicate":predicate.lemma,
+                        "argument":sentence_text[arg_start:(arg_end + 1)],
+                        "sentence": sentence_text
+                    })
                     return False, None
     
     def _build_predicate(self, sentence_text, frame):
@@ -198,7 +210,11 @@ class FulltextReader:
         
         # This test handles the only self-closed layer tag that exists in the corpus
         if len(predicate_data) == 0:
-            print("WARNING: frame ignored in {}".format(sentence_text), file=sys.stderr)
+            self.missing_predicate_data.append({
+                "file":self.filename,
+                "predicate":predicate_lemma,
+                "sentence":sentence_text
+            })
             return
         else:
             predicate_data = predicate_data[0]

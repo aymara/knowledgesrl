@@ -72,11 +72,7 @@ class FrameMatcher():
             if FrameMatcher._is_a_slot(elem): model_size += 1
            
         if model_size == 0:
-            print("Warning : tried to use a frame without any slot in frame matching\n"
-                  "predicate : {}\nframe 1 : {}\nframe 2 : {}".format(
-                    self.predicate, self.frame, test_frame),
-                  sys.stderr)
-            return
+            raise EmptyFrameError(test_frame, self.predicate)
         
         num_match = len(distrib)
         score = int(100 * (num_match / self.frame_size + num_match / model_size))
