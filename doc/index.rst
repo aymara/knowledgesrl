@@ -15,12 +15,13 @@ Documentation:
 .. toctree::
    :maxdepth: 4
 
+   verbcoverage
+   ideas
    framestructure
    framenetreader
    verbnetreader
    framematcher
    mst_tree_builder
-   verbcoverage
 
 
 Indices and tables
