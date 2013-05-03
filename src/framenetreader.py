@@ -241,7 +241,7 @@ class FulltextReader:
                 i = 0
                 for w in frame.words:
                     i += 1
-                    frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\n".format(
+                    frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\t \t\n".format(
                             i, frame.get_word(w), w.pos)
 
                 yield frame_conll + "\n"
@@ -441,8 +441,8 @@ class FulltextReaderTest(unittest.TestCase):
         path = FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         conll_sentence = next(reader.to_conll_format()).splitlines()
-        self.assertEqual(conll_sentence[2], "3\tTony\tTony\tNP\tNP\t_\t0")
-        self.assertEqual(conll_sentence[23], "24\t.\t.\t.\t.\t_\t0")
+        self.assertEqual(conll_sentence[2], "3\tTony\tTony\tNP\tNP\t_\t0\t \t")
+        self.assertEqual(conll_sentence[23], "24\t.\t.\t.\t.\t_\t0\t \t")
         
 import glob
 import os
