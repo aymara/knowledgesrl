@@ -93,6 +93,7 @@ print("{} args and {} frames were kept".format(num_good_args, num_good_frames))
 print("{} args were discarded by frame matching".format(num_discarded))
 print("{} roles were directly attributed after frame matching".format(num_resolved))
 print("\nProblems :\n")
+#685
 print("{} unhandled case were encoutered while parsing VerbNet".format(len(verbnet_errors)))
 #for frame_data in verbnet_errors: print(frame_data) 
 print("Ignored {} frame for which predicate data was missing".format(len(missing_predicate_data)))

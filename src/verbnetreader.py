@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 import os
 import sys
 from framestructure import *
+import verbnetprepclasses
 
 class VerbnetReader:
 
@@ -86,13 +87,8 @@ class VerbnetReader:
                     "elem":element.tag,
                     "data":"Unknown element"
                 })
-                #print("Unhandled element : {}".format(
-                #    element.tag), file=sys.stderr)
             
-            if to_add != "": 
-                if to_add == None:
-                    print("????????????????????")
-                    
+            if to_add != "":                     
                 structure.append(to_add)
 
                 # If the element has a role, add it to the role list   
@@ -114,31 +110,54 @@ class VerbnetReader:
         return ""
         
     def _handle_np(self, xml):
-        if xml.find("SYNRESTRS") != None:
-            for restr in xml.find("SYNRESTRS"):
-                # The NP should be plural- > ignored
-                if restr.attrib["Value"] == "+" and restr.attrib["type"] == "plural":
-                    continue
-                else:
+        for restr_group in xml:
+            if restr_group.tag == "SYNRESTRS":
+                for restr in restr_group:
+                    # The NP should be plural- > ignored
+                    if restr.attrib["Value"] == "+" and restr.attrib["type"] == "plural":
+                        continue
+                    else:
+                        self.unhandled.append({
+                            "file":self.filename,
+                            "elem":"NP",
+                            "data":"SYNRESTR {}={}".format(restr.attrib["type"], restr.attrib["Value"])
+                        })
+            elif restr_group.tag == "SELRESTRS":
+                for restr in restr_group:
                     self.unhandled.append({
                         "file":self.filename,
                         "elem":"NP",
-                        "data":"SYNRESTR {}={}".format(restr.attrib["type"], restr.attrib["Value"])
+                        "data":"SELRESTRS {}={}".format(restr.attrib["type"], restr.attrib["Value"])
                     })
-                #print("Unhandled restriction for NP : {} {}".format(
-                #restr.attrib["type"], restr.attrib["Value"]))
+            else:
+                self.unhandled.append({
+                    "file":self.filename,
+                    "elem":"NP",
+                    "data":"Unknown restriction : {}".format(restr_group.tag)
+                }) 
         return "NP"
                             
     def _handle_prep(self, xml):
-        for restr in xml.find("SELRESTRS"):
-            self.unhandled.append({
-                "file":self.filename,
-                "elem":"PREP",
-                "data":"SELRESTR {}={}".format(restr.attrib["type"], restr.attrib["Value"])
-            })
-            #print("Unhandled restriction for PREP : {} {}".format(
-            #                restr.attrib["type"], restr.attrib["Value"]))
-                            
+        for restr_group in xml:
+            if restr_group.tag == "SELRESTRS":
+                for restr in restr_group:
+                    if (restr.attrib["Value"] == "+" 
+                        and restr.attrib["type"] in verbnetprepclasses.prep
+                    ):
+                        return verbnetprepclasses.prep[restr.attrib["type"]]
+                    else:
+                        self.unhandled.append({
+                            "file":self.filename,
+                            "elem":"PREP",
+                            "data":"SELRESTR {}={}".format(
+                                restr.attrib["type"], restr.attrib["Value"])
+                        })
+            else:
+                self.unhandled.append({
+                    "file":self.filename,
+                    "elem":"PREP",
+                    "data":"Unknown restriction : {}".format(restr_group.tag)
+                })                         
         if "value" in xml.attrib:
             return xml.attrib["value"]
         else:
@@ -163,7 +182,7 @@ class VerbnetReaderTest(unittest.TestCase):
         path = "../data/verbnet-3.2/"
         reader = VerbnetReader(path)
         self.assertEqual(len(reader.verbs), 4154)
-        
+
         reader.verbs = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
         reader._handle_class(root, [])

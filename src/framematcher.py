@@ -117,7 +117,8 @@ class FrameMatcher():
         :returns: bool -- True if this is a match, False otherwise
         """
         
-        return elem1 in elem2.split("/")
+        return ((isinstance(elem2, list) and elem1 in elem2) or
+            elem1 == elem2)
         
 class frameMatcherTest(unittest.TestCase):
      def test_1(self):
