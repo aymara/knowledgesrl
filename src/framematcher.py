@@ -59,7 +59,7 @@ class FrameMatcher():
         if model_size == 0:
             print("Warning : tried to use a frame without any slot in frame matching\n"
                   "predicate : {}\nframe 1 : {}\nframe 2 : {}".format(
-                    self.predicate, frame, model),
+                    self.predicate, self.frame, test_frame),
                   sys.stderr)
             return
         
