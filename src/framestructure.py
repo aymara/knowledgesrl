@@ -134,7 +134,7 @@ class VerbnetFrame:
             if sentence[pos] == "<": inside_tag = True
             
             for search in VerbnetFrame.keywords:
-                if " "+search == sentence[pos:pos + len(search) + 1]:
+                if " "+search == sentence[pos:pos + len(search) + 1].lower():
                     pos += len(search) + 1
                     result += " "+search
             
