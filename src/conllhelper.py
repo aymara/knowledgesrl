@@ -26,29 +26,30 @@ class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
     
     :var word: string, the word contained by the node
-    :var label: string, function attributed by the parser to this word
+    :var deprel: string, function attributed by the parser to this word
     :var children: -- SyntacticTreeNode list, the children of this node
     
     """
     
-    def __init__(self, word, label):
+    def __init__(self, word, pos, deprel):
         self.word = word
-        self.label = label
+        self.pos = pos
+        self.deprel = deprel
         self.children = [] 
 
     def __str__(self):
         if self.children:
-            children = " " + "; ".join([str(t) for t in self.children])
+            children = " " + " ".join([str(t) for t in self.children])
         else:
             children = ""
-        return "({} {}{})".format(self.label, self.word, children)
+        return "({}/{} {}{})".format(self.pos, self.deprel, self.word, children)
 
 
 class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree
 
     :var words: second column of the CoNLL output, list of words
-    :var labels: second line of the CoNLL output, list of labels
+    :var deprels: second line of the CoNLL output, list of deprels
     :var parents: third line of the CoNLL output, position of each word's parent
     
     """
@@ -60,12 +61,13 @@ class SyntacticTreeBuilder():
         :type conll_tree: str
         
         """
-        self.words, self.labels, self.parents = [], [], []
+        self.words, self.deprels, self.pos, self.parents = [], [], [], []
 
         for l in conll_tree.splitlines():
             line_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
             self.words.append(form)
-            self.labels.append(deprel)
+            self.deprels.append(deprel)
+            self.pos.append(pos)
             self.parents.append(int(head))
     
     def build_syntactic_tree(self):
@@ -99,7 +101,8 @@ class SyntacticTreeBuilder():
         if root < 0 or root > len(self.words):
             raise ConllInvalidPositionError(root, len(self.words) - 1)
 
-        result = SyntacticTreeNode(self.words[root - 1], self.labels[root - 1])
+        result = SyntacticTreeNode(self.words[root - 1], self.pos[root - 1],
+                                   self.deprels[root - 1])
 
         next_child_pos = self.find_child_after(root, 1)
         while next_child_pos != None:
@@ -118,7 +121,7 @@ class TreeBuilderTest(unittest.TestCase):
 6	elsewhere	elsewhere	RB	RB	-	5	LOC	-	-
 7	.	.	.	.	-	5	P	-	-"""
 
-        expected_result = "(ROOT live (SBJ others (NMOD The); (LOC here (TMP today))); (LOC elsewhere); (P .))"
+        expected_result = "(VV/ROOT live (NNS/SBJ others (DT/NMOD The) (RB/LOC here (RB/TMP today))) (RB/LOC elsewhere) (./P .))"
 
         treeBuilder = SyntacticTreeBuilder(conll_tree)
         tree = treeBuilder.build_syntactic_tree()
