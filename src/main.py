@@ -10,9 +10,9 @@ import sys
 import random
 from collections import Counter
 
-corpus_path = "../data/fndata-1.5/fulltext/"
+corpus_path = "../data/fndata-1.5/lu/"
 verbnet_path = "../data/verbnet-3.2/"
-debug = False
+debug = True
 
 num_files = 0
 num_frames = 0
@@ -35,14 +35,12 @@ debug_data = []
 verbnet_reader = verbnetreader.VerbnetReader(verbnet_path)
 verbnet = verbnet_reader.verbs
 verbnet_errors = verbnet_reader.unhandled
-i = 0
 
 for filename in os.listdir(corpus_path):
     if not filename[-4:] == ".xml": continue
 
-    i += 1
-    if i % 100 == 0:
-        print("{} {} {} {}".format(i, num_files, num_frames, num_args), sys.stderr)   
+    if num_files % 100 == 0:
+        print("{} {} {}".format(num_files, num_frames, num_args), file=sys.stderr)   
      
     reader = framenetreader.FulltextReader(corpus_path+filename)
     ignored_layers += reader.ignored_layers
@@ -50,15 +48,12 @@ for filename in os.listdir(corpus_path):
     phrase_not_found += reader.phrase_not_found
     missing_predicate_data += reader.missing_predicate_data
  
-    if len(reader.frames) > 0:
-        num_files += 1
+    num_files += 1
        
     for frame in reader.frames:
         num_frames += 1
         num_args += len(frame.args)
-        
-        if debug: print(frame.predicate.text)
-        
+
         if not frame.predicate.lemma in verbnet:
             not_found.append({
                 "file":filename,"sentence":frame.sentence,
@@ -95,8 +90,7 @@ for filename in os.listdir(corpus_path):
   
         num_instanciated = sum([1 if x.instanciated else 0 for x in frame.args])
                   
-        """
-        if num_instanciated > len(distrib):
+        if debug and num_instanciated > len(distrib):
             debug_data.append({
                 "sentence":frame.sentence,
                 "predicate":frame.predicate.lemma,
@@ -106,7 +100,6 @@ for filename in os.listdir(corpus_path):
                 "chosen_frames":matcher.best_frames,
                 "result":distrib
             })
-        """
 
         num_discarded += num_instanciated - len(distrib)     
         num_good_args += num_instanciated        
@@ -136,23 +129,22 @@ print("Ignored {} empty FrameNet frames".format(len(empty_framenet_frames)))
 print("Ignored {} empty VerbNet frames".format(len(empty_verbnet_frames)))
 #for frame_data in empty_verbnet_frames: print(frame_data)
 
-"""
-random.shuffle(debug_data)
-for i in range(0,20):
-    print(debug_data[i]["sentence"])
-    print("Predicate : "+debug_data[i]["predicate"])
-    print("Structure : "+" ".join(debug_data[i]["structure"]))
-    print("Arguments :")
-    for arg in debug_data[i]["args"]:
-        print(arg)
-    print("VerbNet data : ")
-    for vbframe in debug_data[i]["vbclass"]:
-        print(vbframe)
-    print("Chosen frames : ")
-    for vbframe in debug_data[i]["chosen_frames"]:
-        print(vbframe)
-    print("Result : ")
-    print(debug_data[i]["result"])
-    print("\n\n")
-"""
+if debug:
+    random.shuffle(debug_data)
+    for i in range(0,20):
+        print(debug_data[i]["sentence"])
+        print("Predicate : "+debug_data[i]["predicate"])
+        print("Structure : "+" ".join(debug_data[i]["structure"]))
+        print("Arguments :")
+        for arg in debug_data[i]["args"]:
+            print(arg)
+        print("VerbNet data : ")
+        for vbframe in debug_data[i]["vbclass"]:
+            print(vbframe)
+        print("Chosen frames : ")
+        for vbframe in debug_data[i]["chosen_frames"]:
+            print(vbframe)
+        print("Result : ")
+        print(debug_data[i]["result"])
+        print("\n\n")
 

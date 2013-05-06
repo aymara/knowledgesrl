@@ -51,6 +51,7 @@ class FulltextReader:
         self.frames = []
         self.fulltext_corpus = False
         self.constant_predicate = ""
+        self.core_args = []
         
         # Debug data
         self.filename = filename
@@ -73,6 +74,12 @@ class FulltextReader:
             if predicate_data[1] != "v":
                 return
             self.constant_predicate = predicate_data[0]
+            
+            # Remember which arguments are core aguments
+            arg_pattern = "{0}header/{0}frame/{0}FE".format(self._xmlns)
+            for arg in root.findall(arg_pattern):
+                if arg.attrib["type"] == "Core":
+                    self.core_args.append(arg.attrib["name"])
                        
         for sentence in root.findall(self.sentence_pattern):
             for frame in self._parse_sentence(sentence):
@@ -155,7 +162,9 @@ class FulltextReader:
             for arg in arg_data:
                 stop, new_arg = self._build_arg(
                     sentence_text, frame, predicate, arg, phrase_data, rank)
-                if new_arg != None:
+                if new_arg != None and (
+                    self.fulltext_corpus or arg.attrib["name"] in self.core_args
+                ):
                     args.append(new_arg)
                 
             rank += 1
