@@ -26,23 +26,26 @@ class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
     
     :var word: string, the word contained by the node
+    :var position: position of the root among the children (0 is before)
+    :var pos: part-of-speech of the node
     :var deprel: string, function attributed by the parser to this word
     :var children: -- SyntacticTreeNode list, the children of this node
     
     """
     
-    def __init__(self, word, pos, deprel):
+    def __init__(self, word, position, pos, deprel, children):
         self.word = word
+        self.position = position
         self.pos = pos
         self.deprel = deprel
-        self.children = [] 
+        self.children = children
 
     def __str__(self):
         if self.children:
             children = " " + " ".join([str(t) for t in self.children])
         else:
             children = ""
-        return "({}/{} {}{})".format(self.pos, self.deprel, self.word, children)
+        return "({}/{}/{} {}{})".format(self.pos, self.deprel, self.position, self.word, children)
 
 
 class SyntacticTreeBuilder():
@@ -101,15 +104,19 @@ class SyntacticTreeBuilder():
         if root < 0 or root > len(self.words):
             raise ConllInvalidPositionError(root, len(self.words) - 1)
 
-        result = SyntacticTreeNode(self.words[root - 1], self.pos[root - 1],
-                                   self.deprels[root - 1])
+        root_position = 0
+        children = []
 
         next_child_pos = self.find_child_after(root, 1)
         while next_child_pos != None:
-            result.children.append(self.build_tree_from(next_child_pos))
+            if next_child_pos < root:
+                root_position += 1
+            children.append(self.build_tree_from(next_child_pos))
             next_child_pos = self.find_child_after(root, next_child_pos + 1)
 
-        return result
+        return SyntacticTreeNode(self.words[root - 1], root_position,
+                                 self.pos[root - 1], self.deprels[root - 1],
+                                 children)
 
 class TreeBuilderTest(unittest.TestCase):
     def test_tree_builiding(self):
@@ -121,7 +128,7 @@ class TreeBuilderTest(unittest.TestCase):
 6	elsewhere	elsewhere	RB	RB	-	5	LOC	-	-
 7	.	.	.	.	-	5	P	-	-"""
 
-        expected_result = "(VV/ROOT live (NNS/SBJ others (DT/NMOD The) (RB/LOC here (RB/TMP today))) (RB/LOC elsewhere) (./P .))"
+        expected_result = "(VV/ROOT/1 live (NNS/SBJ/1 others (DT/NMOD/0 The) (RB/LOC/0 here (RB/TMP/0 today))) (RB/LOC/0 elsewhere) (./P/0 .))"
 
         treeBuilder = SyntacticTreeBuilder(conll_tree)
         tree = treeBuilder.build_syntactic_tree()
