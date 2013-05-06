@@ -21,7 +21,22 @@ class ConllInvalidPositionError(Exception):
         return "Error : tried to build a subtree from position {} while"\
                " parsing CoNLL output (last valid position was {})".format(
                 self.bad_root, self.max_root)
- 
+
+# http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Longest_common_substring#Python
+def LongestCommonSubstring(S1, S2):
+    M = [[0]*(1+len(S2)) for i in range(1+len(S1))]
+    longest, x_longest = 0, 0
+    for x in range(1,1+len(S1)):
+        for y in range(1,1+len(S2)):
+            if S1[x-1] == S2[y-1]:
+                M[x][y] = M[x-1][y-1] + 1
+                if M[x][y]>longest:
+                    longest = M[x][y]
+                    x_longest  = x
+            else:
+                M[x][y] = 0
+    return S1[x_longest-longest: x_longest]
+
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
     
@@ -41,13 +56,26 @@ class SyntacticTreeNode:
         self.children = children
 
     def flat(self):
+        """Return the tokenized sentence from the parse tree."""
         elements = [c.flat() for c in self.children]
         elements.insert(self.position, self.word)
         return " ".join(elements)
 
     def contains(self, arg):
+        """Search an exact argument in all subtrees"""
         return (self.flat() == arg or
             any((c.contains(arg) for c in self.children)))
+
+    def closest_match(self, arg):
+        """Search the closest match to arg"""
+        return self._closest_match_lcs(arg)[1]
+    
+    def _closest_match_lcs(self, arg):
+        root_match = self.flat().split()
+        root_match_len = (len(LongestCommonSubstring(root_match, arg.split())) /
+                (len(root_match) + len(arg.split())))
+        children_matches_len = [c._closest_match_lcs(arg) for c in self.children]
+        return max([(root_match_len, root_match)] + children_matches_len)
 
     def __str__(self):
         if self.children:
@@ -128,7 +156,8 @@ class SyntacticTreeBuilder():
                                  children)
 
 class TreeBuilderTest(unittest.TestCase):
-    def test_tree_building(self):
+
+    def setUp(self):
         conll_tree = """1	The	The	DT	DT	-	2	NMOD	-	-
 2	others	others	NNS	NNS	-	5	SBJ	-	-
 3	here	here	RB	RB	-	2	LOC	-	-
@@ -136,16 +165,22 @@ class TreeBuilderTest(unittest.TestCase):
 5	live	live	VV	VV	-	0	ROOT	-	-
 6	elsewhere	elsewhere	RB	RB	-	5	LOC	-	-
 7	.	.	.	.	-	5	P	-	-"""
-
-        expected_result = "(VV/ROOT/1 live (NNS/SBJ/1 others (DT/NMOD/0 The) (RB/LOC/0 here (RB/TMP/0 today))) (RB/LOC/0 elsewhere) (./P/0 .))"
-
         treeBuilder = SyntacticTreeBuilder(conll_tree)
-        tree = treeBuilder.build_syntactic_tree()
+        self.tree = treeBuilder.build_syntactic_tree()
+    
+    def test_tree_str(self):
+        expected_str = "(VV/ROOT/1 live (NNS/SBJ/1 others (DT/NMOD/0 The) (RB/LOC/0 here (RB/TMP/0 today))) (RB/LOC/0 elsewhere) (./P/0 .))"
         
-        self.assertEqual(str(tree), expected_result)
-        self.assertEqual(tree.flat(), "The others here today live elsewhere .")
-        self.assertTrue(tree.contains("here today"))
-        self.assertFalse(tree.contains("others here today"))
+        self.assertEqual(str(self.tree), expected_str)
+        self.assertEqual(self.tree.flat(), "The others here today live elsewhere .")
+
+    def test_tree_contains(self):
+        self.assertTrue(self.tree.contains("here today"))
+        self.assertFalse(self.tree.contains("others here today"))
+
+    def test_tree_match(self):
+        self.assertEqual(self.tree.closest_match("others here today"), 
+                ['The', 'others', 'here', 'today'])
         
 import sys
 
