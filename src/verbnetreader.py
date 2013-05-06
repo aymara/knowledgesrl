@@ -98,6 +98,9 @@ class VerbnetReader:
             # Replace "S_INF" by "to S"
             elif element == "S_INF":
                 structure += ["to", "S"]
+            # Replace "v" by "V" (intransitive, snooze-40.4 for instance)
+            elif element == "v":
+                structure += ["V"]
             # Handle the "a/b" syntax (which means "a" or "b")
             elif "/" in element:
                 structure.append(element.split("/"))
