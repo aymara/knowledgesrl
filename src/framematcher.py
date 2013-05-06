@@ -62,7 +62,36 @@ class FrameMatcher():
         num_match = 0
         model_size = 0
         distrib = []
-  
+        
+        i = 0
+        j = 0
+        index_v_1 = self.frame.structure.index("V")
+        index_v_2 = test_frame.structure.index("V")
+
+        while i < len(self.frame.structure) and j < len(test_frame.structure):
+            elem1 = self.frame.structure[i]
+            elem2 = test_frame.structure[j]
+
+            if FrameMatcher._is_a_match(elem1, elem2): 
+                if FrameMatcher._is_a_slot(elem1):  
+                    # test_frame.roles can be too short. This will for instance
+                    # happen in the "NP V NP S_INF" structure of want-32.1,
+                    # where S_INF is given no role
+                    if len(distrib) < len(test_frame.roles):
+                        distrib.append(test_frame.roles[len(distrib)])
+            elif i < index_v_1 or j < index_v_2:
+                # If we have not encountered the verb yet, we continue the matching
+                # with everything that follows the verb
+                # This is for instance to prevent a "NP NP V" construct 
+                # from interrupting the matching early
+                i = index_v_1
+                j = index_v_2
+            else: break
+               
+            i += 1
+            j += 1
+            
+        """ Former less permissive algorithm
         for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
             if FrameMatcher._is_a_match(elem1, elem2): 
                 if FrameMatcher._is_a_slot(elem1):
@@ -72,6 +101,7 @@ class FrameMatcher():
                     if len(distrib) < len(test_frame.roles):
                         distrib.append(test_frame.roles[len(distrib)])
             else: break
+        """
 
         for elem in test_frame.structure:
             if FrameMatcher._is_a_slot(elem): model_size += 1
