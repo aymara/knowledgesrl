@@ -39,7 +39,11 @@ class VerbnetFrame:
     
     """
     
-    #keywords = ["to be", "how", "to", "what", "whether"]
+    phrase_replacements = {
+        "Poss":"NP", "QUO":"S",
+        "Sinterrog":"S", "Sfin":"S",
+        "VPbrst":"S", "VPing":"S_ING", "VPto":"to S"
+    }
     
     def __init__(self, structure, roles):
         self.structure = structure
@@ -110,18 +114,18 @@ class VerbnetFrame:
                 prep = argument.text.split(" ")[0].lower()
                 added_length = 6 + len(prep)
                 structure = "{}{} < NP>{}".format(before, prep, after)
-            # Replace "Sfin" by "S"
-            elif argument.phrase_type == "Sfin":
-                added_length = 4
-                structure = "{} < S>{}".format(before, after)
-            # Replace "VPto" by "to S"
-            elif argument.phrase_type == "VPto":
-                added_length = 7
-                structure = "{} < to S>{}".format(before, after)
-            # Replace "VPing" by "S_ING"
-            elif argument.phrase_type == "VPing":
-                added_length = 8
-                structure = "{} < S_ING>{}".format(before, after)
+            # Replace every "Swhether" by "if S" or "whether S"
+            elif argument.phrase_type == "Swhether":
+                #print(structure)
+                sub = argument.text.split(" ")[0].lower()
+                added_length = 5 + len(sub)
+                structure = "{}{} < S>{}".format(before, sub, after)
+                #print(structure)
+            # Handle simple phrase replacements
+            elif argument.phrase_type in VerbnetFrame.phrase_replacements:
+                phrase = VerbnetFrame.phrase_replacements[argument.phrase_type]
+                added_length = len(phrase)
+                structure = "{} < {}>{}".format(before, phrase, after)
             else:
                 added_length = 3 + len(argument.phrase_type)
                 structure = "{}< {}>{}".format(before, argument.phrase_type, after)
