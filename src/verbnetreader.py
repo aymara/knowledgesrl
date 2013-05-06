@@ -72,6 +72,12 @@ class VerbnetReader:
         # Transform it into a list and replace "NP.xxx" by "NP"
         base_structure = [x.split(".")[0] for x in base_structure.split(" ")]
         
+        # Lexeme at the beginning of a structure are capitalized.
+        # We need to them to be completely lowercase to match them against syntax item.
+        element = base_structure[0]
+        if element[0].isupper and element.upper() != element:
+            base_structure[0] = element.lower()
+        
         structure = []
         role = [] 
         
@@ -109,11 +115,11 @@ class VerbnetReader:
                     if syntax_data[index_xml].tag == "PREP":
                         to_add = self._handle_prep(syntax_data[index_xml])
                     if syntax_data[index_xml].tag == "LEX":
-                        to_add = self._handle_lex(syntax_data[index_xml])
+                        to_add = self._handle_lex(syntax_data[index_xml], base_structure)
                     index_xml += 1
                 if to_add != "":
                     structure += [to_add, "NP"]
-            # Everything else (NP, V, ...) is un modified
+            # Everything else (NP, V, ...) is unmodified
             else:
                 structure.append(element)
             
@@ -126,13 +132,18 @@ class VerbnetReader:
 
         return VerbnetFrame(structure, role)
      
-    def _handle_lex(self, xml):
+    def _handle_lex(self, xml, base_structure):
         """Choose wether or not to keep a <LEX> entry
         
         :param xml: The <LEX> entry.
         :type xml:xml.etree.ElementTree.Element.
+        :param base_structure: The VerbNet primary structure.
+        :type base_structure: str List.
         :returns: String -- the lexeme value if accepted, "" otherwise
         """
+        
+        if xml.attrib["value"] in base_structure:
+            return ""
         
         for group in verbnetprepclasses.keywords:
             if xml.attrib["value"] in group:
@@ -187,7 +198,7 @@ class VerbnetReaderTest(unittest.TestCase):
         path = "../data/verbnet-3.2/"
         reader = VerbnetReader(path)
         self.assertEqual(len(reader.verbs), 4154)
-
+        
         reader.verbs = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
         reader._handle_class(root, [])

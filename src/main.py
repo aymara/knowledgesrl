@@ -10,9 +10,9 @@ import sys
 import random
 from collections import Counter
 
-corpus_path = "../data/fndata-1.5/lu/"
+corpus_path = "../data/fndata-1.5/fulltext/"
 verbnet_path = "../data/verbnet-3.2/"
-debug = True
+debug = False
 
 num_files = 0
 num_frames = 0
