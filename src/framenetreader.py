@@ -26,9 +26,9 @@ import os
 import sys
 from framestructure import *
 
-FN_BASEPATH = "../data/fndata-1.5/fulltext/"
 
 class FulltextReader:
+    FN_BASEPATH = "../data/fndata-1.5/fulltext/"
 
     """Class used to parse one file of the FrameNet fulltext corpus
 
@@ -391,7 +391,7 @@ class FulltextReaderTest(unittest.TestCase):
 
         for filename in self.expected_values:
             print("Parsing " + filename)
-            reader = FulltextReader(FN_BASEPATH + filename)
+            reader = FulltextReader(FulltextReader.FN_BASEPATH + filename)
 
             # Nothing is empty and begins/ends are coherents
             arg_num = 0
@@ -432,13 +432,13 @@ class FulltextReaderTest(unittest.TestCase):
 
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""
-        path = FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = FulltextReader.FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         self.assertEqual(reader.frames[0], self.tested_frames[0])
         self.assertEqual(reader.frames[1], self.tested_frames[1])
 
     def test_conll_output(self):
-        path = FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = FulltextReader.FN_BASEPATH + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         conll_sentence = next(reader.to_conll_format()).splitlines()
         self.assertEqual(conll_sentence[2], "3\tTony\tTony\tNP\tNP\t_\t0\t \t")
@@ -450,7 +450,7 @@ import sys
 
 if __name__ == "__main__":
     if 'conll' in sys.argv:
-        for p in glob.glob(FN_BASEPATH + "*.xml"):
+        for p in glob.glob(FulltextReader.FN_BASEPATH + "*.xml"):
             name = os.path.basename(p)[:-4]
             with open('framenet_conll/{}.conll'.format(name), 'w') as conll_file:
                 for conll_sentence in FulltextReader(p).to_conll_format():
