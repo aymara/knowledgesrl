@@ -40,6 +40,15 @@ class SyntacticTreeNode:
         self.deprel = deprel
         self.children = children
 
+    def flat(self):
+        elements = [c.flat() for c in self.children]
+        elements.insert(self.position, self.word)
+        return " ".join(elements)
+
+    def contains(self, arg):
+        return (self.flat() == arg or
+            any((c.contains(arg) for c in self.children)))
+
     def __str__(self):
         if self.children:
             children = " " + " ".join([str(t) for t in self.children])
@@ -119,7 +128,7 @@ class SyntacticTreeBuilder():
                                  children)
 
 class TreeBuilderTest(unittest.TestCase):
-    def test_tree_builiding(self):
+    def test_tree_building(self):
         conll_tree = """1	The	The	DT	DT	-	2	NMOD	-	-
 2	others	others	NNS	NNS	-	5	SBJ	-	-
 3	here	here	RB	RB	-	2	LOC	-	-
@@ -134,6 +143,9 @@ class TreeBuilderTest(unittest.TestCase):
         tree = treeBuilder.build_syntactic_tree()
         
         self.assertEqual(str(tree), expected_result)
+        self.assertEqual(tree.flat(), "The others here today live elsewhere .")
+        self.assertTrue(tree.contains("here today"))
+        self.assertFalse(tree.contains("others here today"))
         
 import sys
 
