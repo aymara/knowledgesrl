@@ -49,6 +49,8 @@ class FulltextReader:
         self._xmlns = "{http://framenet.icsi.berkeley.edu}"
 
         self.frames = []
+        self.fulltext_corpus = False
+        self.constant_predicate = ""
         
         # Debug data
         self.filename = filename
@@ -57,10 +59,25 @@ class FulltextReader:
         self.phrase_not_found = []
         self.missing_predicate_data = []
         
-        for sentence in root.findall(self._xmlns + "sentence"):
+        if root.find(self._xmlns+"valences") == None:
+            # This is a frameNet fulltext annotation file
+            self.fulltext_corpus = True
+            self.sentence_pattern = self._xmlns + "sentence"
+            self.frame_pattern = self._xmlns + "annotationSet[@luName]"
+        else:
+            # This is a lexical unit annotation file
+            self.sentence_pattern = self._xmlns + "subCorpus/" + self._xmlns + "sentence"
+            self.frame_pattern = self._xmlns + "annotationSet"
+            
+            predicate_data = root.getroot().attrib["name"].split(".")
+            if predicate_data[1] != "v":
+                return
+            self.constant_predicate = predicate_data[0]
+                       
+        for sentence in root.findall(self.sentence_pattern):
             for frame in self._parse_sentence(sentence):
                 self.frames.append(frame)
-            
+
     def _parse_sentence(self, sentence):
         """Handle the parsing of one sentence.
         
@@ -79,8 +96,12 @@ class FulltextReader:
                               int(label.attrib["end"]),
                               label.attrib["name"]))
 
-        for potential_frame in sentence.findall(self._xmlns + "annotationSet[@luName]"):
-            frame_type = potential_frame.attrib["luName"].split(".")[1]
+        for potential_frame in sentence.findall(self.frame_pattern):
+            if self.fulltext_corpus:
+                frame_type = potential_frame.attrib["luName"].split(".")[1]
+            else:
+                frame_type = "v"
+            
             annotated = potential_frame.attrib["status"]
             
             # We keep only annotated verbal frames
@@ -205,7 +226,11 @@ class FulltextReader:
         :type frame: xml.etree.ElementTree.Element.
         :returns: Predicate -- the built predicate
         """
-        predicate_lemma = frame.attrib["luName"].split(".")[0]
+        if self.constant_predicate == "":
+            predicate_lemma = frame.attrib["luName"].split(".")[0]
+        else:
+            predicate_lemma = self.constant_predicate
+            
         predicate_data = frame.findall(self._xmlns+"layer[@name='Target']")[0]
         
         # This test handles the only self-closed layer tag that exists in the corpus

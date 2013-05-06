@@ -6,6 +6,7 @@ from framestructure import *
 import verbnetreader
 import framematcher
 import os
+import sys
 import random
 from collections import Counter
 
@@ -34,19 +35,24 @@ debug_data = []
 verbnet_reader = verbnetreader.VerbnetReader(verbnet_path)
 verbnet = verbnet_reader.verbs
 verbnet_errors = verbnet_reader.unhandled
+i = 0
 
 for filename in os.listdir(corpus_path):
     if not filename[-4:] == ".xml": continue
-    print(filename)   
-     
-    num_files += 1
 
+    i += 1
+    if i % 100 == 0:
+        print("{} {} {} {}".format(i, num_files, num_frames, num_args), sys.stderr)   
+     
     reader = framenetreader.FulltextReader(corpus_path+filename)
     ignored_layers += reader.ignored_layers
     ignored_predicate_args += reader.predicate_is_arg
     phrase_not_found += reader.phrase_not_found
     missing_predicate_data += reader.missing_predicate_data
-    
+ 
+    if len(reader.frames) > 0:
+        num_files += 1
+       
     for frame in reader.frames:
         num_frames += 1
         num_args += len(frame.args)
@@ -89,7 +95,8 @@ for filename in os.listdir(corpus_path):
   
         num_instanciated = sum([1 if x.instanciated else 0 for x in frame.args])
                   
-        """if num_instanciated > len(distrib):
+        """
+        if num_instanciated > len(distrib):
             debug_data.append({
                 "sentence":frame.sentence,
                 "predicate":frame.predicate.lemma,
@@ -98,7 +105,8 @@ for filename in os.listdir(corpus_path):
                 "structure":converted_frame.structure,
                 "chosen_frames":matcher.best_frames,
                 "result":distrib
-            })"""
+            })
+        """
 
         num_discarded += num_instanciated - len(distrib)     
         num_good_args += num_instanciated        
@@ -128,7 +136,8 @@ print("Ignored {} empty FrameNet frames".format(len(empty_framenet_frames)))
 print("Ignored {} empty VerbNet frames".format(len(empty_verbnet_frames)))
 #for frame_data in empty_verbnet_frames: print(frame_data)
 
-"""random.shuffle(debug_data)
+"""
+random.shuffle(debug_data)
 for i in range(0,20):
     print(debug_data[i]["sentence"])
     print("Predicate : "+debug_data[i]["predicate"])
@@ -144,5 +153,6 @@ for i in range(0,20):
         print(vbframe)
     print("Result : ")
     print(debug_data[i]["result"])
-    print("\n\n")"""
+    print("\n\n")
+"""
 
