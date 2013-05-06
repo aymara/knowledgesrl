@@ -118,6 +118,10 @@ class VerbnetFrame:
             elif argument.phrase_type == "VPto":
                 added_length = 7
                 structure = "{} < to S>{}".format(before, after)
+            # Replace "VPing" by "S_ING"
+            elif argument.phrase_type == "VPing":
+                added_length = 8
+                structure = "{} < S_ING>{}".format(before, after)
             else:
                 added_length = 3 + len(argument.phrase_type)
                 structure = "{}< {}>{}".format(before, argument.phrase_type, after)

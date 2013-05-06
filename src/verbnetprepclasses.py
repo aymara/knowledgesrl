@@ -28,7 +28,7 @@ encoutered_lexemes = {
 }
 
 sub = {
-    "how", "that", "where"
+    "how", "if", "that", "where", "whether"
 }
 
 keywords = set()

@@ -66,9 +66,13 @@ class FrameMatcher():
         for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
             if FrameMatcher._is_a_match(elem1, elem2): 
                 if FrameMatcher._is_a_slot(elem1):
-                    distrib.append(test_frame.roles[len(distrib)])
+                    # test_frame.roles can be too short. This will for instance
+                    # happen in the "NP V NP S_INF" structure of want-32.1,
+                    # where S_INF is given no role
+                    if len(distrib) < len(test_frame.roles):
+                        distrib.append(test_frame.roles[len(distrib)])
             else: break
-      
+
         for elem in test_frame.structure:
             if FrameMatcher._is_a_slot(elem): model_size += 1
            

@@ -33,8 +33,7 @@ class VerbnetReader:
 
         for filename in os.listdir(path):
             if not filename[-4:] == ".xml": continue
-            print(filename)
-            
+
             self.filename = filename
             root = ET.ElementTree(file=path+self.filename)
             self._handle_class(root, [])
@@ -68,56 +67,72 @@ class VerbnetReader:
         :type xml_frame: xml.etree.ElementTree.Element.
         
         """
+        # Extract the structure
+        base_structure = xml_frame.find("DESCRIPTION").attrib["primary"]
+        # Transform it into a list and replace "NP.xxx" by "NP"
+        base_structure = [x.split(".")[0] for x in base_structure.split(" ")]
+        
         structure = []
         role = [] 
-              
-        for element in xml_frame.find("SYNTAX"):
-            to_add = ""
-            if element.tag == "PREP":
-                to_add = self._handle_prep(element)
-            elif element.tag == "VERB":
-                to_add = self._handle_verb(element)
-            elif element.tag == "NP":
-                to_add = self._handle_np(element)
-            elif element.tag == "ADV":
-                to_add = self._handle_adv(element)
-            elif element.tag == "LEX":
-                to_add = self._handle_lex(element)
+        
+        index_xml = 0
+        syntax_data = xml_frame.find("SYNTAX")
+        
+        # Build the final structure from base_structure
+        for element in base_structure:
+            # Handle some syntax issues : see last entry of steal-10.5
+            if element == "" or "\n" in element:
+                continue
+            # Discard most adverbs
+            if element == "ADVP-Middle":
+                continue
+            # Replace "S-Quote" by "S"
+            elif element == "S-Quote":
+                structure.append("S")
+            # Replace "S_INF" by "to S"
+            elif element == "S_INF":
+                structure += ["to", "S"]
+            # Handle the "a/b" syntax (which means "a" or "b")
+            elif "/" in element:
+                structure.append(element.split("/"))
+            # Replace PP by "[preposition list] + NP"
+            elif element == "PP":
+                to_add = ""
+                while to_add == "":
+                    if index_xml >= len(syntax_data):
+                        self.unhandled.append({
+                            "file":self.filename,
+                            "elem":"PP",
+                            "data":"No syntax data found"
+                        })
+                        break
+                    if syntax_data[index_xml].tag == "PREP":
+                        to_add = self._handle_prep(syntax_data[index_xml])
+                    if syntax_data[index_xml].tag == "LEX":
+                        to_add = self._handle_lex(syntax_data[index_xml])
+                    index_xml += 1
+                if to_add != "":
+                    structure += [to_add, "NP"]
+            # Everything else (NP, V, ...) is un modified
             else:
-                self.unhandled.append({
-                    "file":self.filename,
-                    "elem":element.tag,
-                    "data":"Unknown element"
-                })
+                structure.append(element)
             
-            if to_add != "":                     
-                structure.append(to_add)
+        # Fill the role list           
+        for element in syntax_data:
+            if ((not (element.tag == "VERB" or element.tag == "PREP")) and
+                "value" in element.attrib
+            ): 
+                role.append(element.attrib["value"])
 
-                # If the element has a role, add it to the role list   
-                if ((not (element.tag == "VERB" or element.tag == "PREP")) and
-                    "value" in element.attrib
-                ): 
-                    role.append(element.attrib["value"])
-                    
         return VerbnetFrame(structure, role)
-        
-    def _handle_adv(self, xml):
-        if len(xml) != 0:
-            self.unhandled.append({
-                "file":self.filename,
-                "elem":"ADV",
-                "data":"Adverb had restrictions"
-            })
-        
-        return ""
      
     def _handle_lex(self, xml):
-        if len(xml) != 0:
-            self.unhandled.append({
-                "file":self.filename,
-                "elem":"LEX",
-                "data":"Lexeme had restrictions"
-            })
+        """Choose wether or not to keep a <LEX> entry
+        
+        :param xml: The <LEX> entry.
+        :type xml:xml.etree.ElementTree.Element.
+        :returns: String -- the lexeme value if accepted, "" otherwise
+        """
         
         for group in verbnetprepclasses.keywords:
             if xml.attrib["value"] in group:
@@ -128,37 +143,16 @@ class VerbnetReader:
             "elem":"LEX",
             "data":"Unhandled lexeme : {}".format(xml.attrib["value"])
         })
+        
         return ""
-           
-    def _handle_np(self, xml):
-        for restr_group in xml:
-            if restr_group.tag == "SYNRESTRS":
-                for restr in restr_group:
-                    # The NP should be plural- > ignored
-                    if restr.attrib["Value"] == "+" and restr.attrib["type"] == "plural":
-                        continue
-                    else:
-                        self.unhandled.append({
-                            "file":self.filename,
-                            "elem":"NP",
-                            "data":"SYNRESTR {}={}".format(restr.attrib["type"], restr.attrib["Value"])
-                        })
-            elif restr_group.tag == "SELRESTRS":
-                for restr in restr_group:
-                    self.unhandled.append({
-                        "file":self.filename,
-                        "elem":"NP",
-                        "data":"SELRESTRS {}={}".format(restr.attrib["type"], restr.attrib["Value"])
-                    })
-            else:
-                self.unhandled.append({
-                    "file":self.filename,
-                    "elem":"NP",
-                    "data":"Unknown restriction : {}".format(restr_group.tag)
-                }) 
-        return "NP"
                             
     def _handle_prep(self, xml):
+        """Generate the list of acceptable preposition from a <PREP> entry
+        
+        :param xml: The <PREP> entry.
+        :type xml:xml.etree.ElementTree.Element.
+        :returns: String List -- the list of acceptable prepositions
+        """
         for restr_group in xml:
             if restr_group.tag == "SELRESTRS":
                 for restr in restr_group:
@@ -183,16 +177,6 @@ class VerbnetReader:
             return xml.attrib["value"].split(" ")
         else:
             return ""
-            
-    def _handle_verb(self, xml):
-        if len(xml) != 0:
-            self.unhandled.append({
-                "file":self.filename,
-                "elem":"V",
-                "data":"Verb had restrictions"
-            })
-        
-        return "V"
 
         
 class VerbnetReaderTest(unittest.TestCase):
@@ -305,7 +289,18 @@ class VerbnetReaderTest(unittest.TestCase):
                 VerbnetFrame(['NP', 'V'], ['Patient']), 
                 VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])]
         }
-
+        
+        for verb in expected_result:
+            if expected_result[verb] != reader.verbs[verb]:
+                print("Error :")
+                print(verb)
+                for data in expected_result[verb]:
+                    print(data)
+                print("\n")
+                for data in reader.verbs[verb]:
+                    print(data)
+                print("\n")
+            
         self.assertEqual(reader.verbs, expected_result)
         
         
