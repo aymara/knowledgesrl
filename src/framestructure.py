@@ -15,7 +15,8 @@ class Frame:
     
     """
     
-    def __init__(self, sentence, predicate, args, words):
+    def __init__(self, sentence, predicate, args, words, frame_name):
+        self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
         self.args = sorted(args)

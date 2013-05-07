@@ -51,6 +51,7 @@ class FulltextReader:
         self.frames = []
         self.fulltext_corpus = False
         self.constant_predicate = ""
+        self.constant_frame = ""
         self.core_args = []
         
         # Debug data
@@ -74,6 +75,7 @@ class FulltextReader:
             if predicate_data[1] != "v":
                 return
             self.constant_predicate = predicate_data[0]
+            self.constant_frame = root.getroot().attrib["frame"]
             
             # Remember which arguments are core aguments
             arg_pattern = "{0}header/{0}frame/{0}FE".format(self._xmlns)
@@ -130,8 +132,13 @@ class FulltextReader:
         if predicate == None: return
         
         args = self._build_args_list(sentence_text, frame, predicate)
+        
+        if self.constant_frame == "":
+            frame_name = frame.attrib["frameName"]
+        else:
+            frame_name = self.constant_frame
 
-        return Frame(sentence_text, predicate, args, words)
+        return Frame(sentence_text, predicate, args, words, frame_name)
     
     def _build_args_list(self, sentence_text, frame, predicate):
         """Handle the collection of argument list.
