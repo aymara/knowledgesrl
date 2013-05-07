@@ -114,13 +114,17 @@ class VnFnRoleMatcher():
         if vn_classes == None:
             return vn_role in self.fn_roles[fn_role][fn_frame]["all"]
 
+        can_conclude = False
         for vn_class in vn_classes:
-            if not vn_class in self.fn_roles[fn_role][fn_frame]:
-                raise RoleMatchingError(
-                    "No correspondance between VerbNet class {} and "\
-                    "role {} of frame {}".format(vn_class, fn_role, fn_frame))
-            if vn_role in self.fn_roles[fn_role][fn_frame][vn_class]:
-                return True      
+            if vn_class in self.fn_roles[fn_role][fn_frame]:
+                can_conclude = True
+                if vn_role in self.fn_roles[fn_role][fn_frame][vn_class]:
+                    return True      
+                    
+        if not can_conclude:
+            raise RoleMatchingError(
+                "None of the given VerbNet classes ({}) were corresponding to"\
+                " {} role and frame {}".format(vn_class, fn_role, fn_frame))
         return False  
 
 class VnFnRoleMatcherTest(unittest.TestCase):
