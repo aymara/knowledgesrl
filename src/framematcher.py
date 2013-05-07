@@ -43,7 +43,7 @@ class FrameMatcher():
         self.frame = frame
         self.best_score = 0
         self.best_frames = []
-        self.roles_distribs = []
+        self.possible_roles = [{} for x in range(self.frame.num_slots)] 
         
         if self.frame.num_slots == 0:
             raise EmptyFrameError(frame, predicate)
@@ -55,10 +55,10 @@ class FrameMatcher():
         :type test_frame: VerbnetFrame.
             
         """
-        num_match = 0
-        distrib = [set()] * self.frame.num_slots
+        distrib = [None for x in range(self.frame.num_slots)] 
         
         """ New algorithm """
+        num_match = 0
         i = 0
         j = 0
         index_v_1 = self.frame.structure.index("V")
@@ -88,7 +88,7 @@ class FrameMatcher():
                     # happen in the "NP V NP S_INF" structure of want-32.1,
                     # where S_INF is given no role
                     if slot_2 < len(test_frame.roles):
-                        distrib[slot_1] = test_frame.roles[slot_2]
+                        distrib[slot_1] = list(test_frame.roles[slot_2])[0]
                         slot_1, slot_2 = slot_1 + 1, slot_2 + 1
             elif i < index_v_1 or j < index_v_2:
                 # If we have not encountered the verb yet, we continue the matching
@@ -119,25 +119,23 @@ class FrameMatcher():
                     + num_match / test_frame.num_slots))
         
         if score > self.best_score:
-            self.roles_distribs = []  
+            self.possible_roles = [{} for x in range(self.frame.num_slots)] 
             self.best_frames = []
         if score >= self.best_score:
-            self.roles_distribs.append(distrib)
+            for slot, role in enumerate(distrib):
+                if role != None:
+                    self.possible_roles[slot][test_frame.vnclass] = role
+            
             self.best_frames.append(test_frame)
             self.best_score = score
     
     def possible_distribs(self):
         """Compute the lists of possible roles for each slots
         
-        :returns: str lists list -- The lists of possible roles for each slot
+        :returns: str set list -- The lists of possible roles for each slot
         """
-        result = []
         
-        for i in range(self.frame.num_slots):
-            possibilities = [x[i] for x in self.roles_distribs]
-            result.append(set.union(*possibilities))
-        
-        return result
+        return [set(x.values()) for x in self.possible_roles]
             
     @staticmethod
     def _is_a_slot(elem):
@@ -167,9 +165,9 @@ class FrameMatcher():
 class frameMatcherTest(unittest.TestCase):
     def test_1(self):
         frame1 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], [None, None, None])
-        frame2 = VerbnetFrame(["NP", "V", "NP", "for", "NP"], ["Agent", "Patient", "Role1"])
-        frame3 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role2"])
-        frame4 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
+        frame2 = VerbnetFrame(["NP", "V", "NP", "for", "NP"], ["Agent", "Patient", "Role1"], "a")
+        frame3 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role2"], "b")
+        frame4 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"], "c")
 
         matcher = FrameMatcher("predicate", frame1)
         matcher.new_match(frame2)

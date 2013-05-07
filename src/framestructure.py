@@ -56,7 +56,7 @@ class VerbnetFrame:
         self.num_slots = len(self.roles)
         
         # Used to retrieve vnclass and map roles to framenet roles
-        self.verbnet_class = vnclass
+        self.vnclass = vnclass
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
@@ -66,7 +66,7 @@ class VerbnetFrame:
             
     def __repr__(self):
         return "VerbnetFrame({}, {}, {})".format(
-                self.structure, self.roles, self.verbnet_class)
+                self.structure, self.roles, self.vnclass)
         
     @staticmethod    
     def build_from_frame(frame):

@@ -54,8 +54,7 @@ class VerbnetReader:
         vnclass = "-".join(xml_class.attrib["ID"].split('-')[1:])
         
         for xml_frame in xml_class.find("FRAMES"):
-            new_frame = self._build_frame(xml_frame, vnclass)
-            frames.append(new_frame)
+            frames.append(self._build_frame(xml_frame, vnclass))
         
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
