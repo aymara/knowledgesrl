@@ -39,6 +39,8 @@ verbnet_errors = verbnet_reader.unhandled
 for filename in os.listdir(corpus_path):
     if not filename[-4:] == ".xml": continue
 
+    print(filename)
+
     if num_files % 100 == 0:
         print("{} {} {}".format(num_files, num_frames, num_args), file=sys.stderr)   
      
@@ -101,7 +103,7 @@ for filename in os.listdir(corpus_path):
                 "result":distrib
             })
 
-        num_discarded += num_instanciated - len(distrib)     
+        num_discarded += num_instanciated - sum([0 if x == set() else 1 for x in distrib])     
         num_good_args += num_instanciated        
         num_good_frames += 1
         

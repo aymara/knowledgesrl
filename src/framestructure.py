@@ -35,7 +35,7 @@ class VerbnetFrame:
     """A representation of a frame syntaxic structure
     
     :var structure: String containing a VerbNet-style representation of the structure
-    :var roles: List of the VerbNet of the element of the structure empty for prepositions
+    :var roles: List of the possible VerbNet roles for each structure's slot
     
     """
     
@@ -47,12 +47,17 @@ class VerbnetFrame:
     
     def __init__(self, structure, roles):
         self.structure = structure
-        self.roles = roles
+        
+        # Transform "a" in {"a"} and keep everything else unchanged
+        self.roles = [{x} if isinstance(x, str) else x for x in roles]
+        
+        self.num_slots = len(self.roles)
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
             self.structure == other.structure and
-            self.roles == other.roles)
+            self.roles == other.roles and
+            self.num_slots == other.num_slots)
             
     def __repr__(self):
         return "VerbnetFrame({}, {})".format(self.structure, self.roles)
@@ -69,12 +74,15 @@ class VerbnetFrame:
         # The main job is to build the VerbNet structure representation
         # from the Frame object data
         
+        num_slots = 0
+        
         # First, delete everything that is before or after the frame
         begin = frame.predicate.begin
         end = frame.predicate.end
         
         for argument in frame.args:
             if not argument.instanciated: continue
+            num_slots += 1
             if argument.begin < begin: begin = argument.begin
             if argument.end > end: end = argument.end
  
@@ -87,7 +95,14 @@ class VerbnetFrame:
         structure = structure.split(" ")
         # Delete every keyword before the verb
         structure = VerbnetFrame._strip_leftpart_keywords(structure)
-        return VerbnetFrame(structure, [])
+        
+        result = VerbnetFrame(structure, [])
+        result.num_slots = num_slots
+        
+        # Fill the role list with None value
+        result.roles = [None] * num_slots
+        
+        return result
     
     @staticmethod    
     def _reduce_args(frame, structure, new_begin):
@@ -127,7 +142,8 @@ class VerbnetFrame:
             else:
                 added_length = 3 + len(argument.phrase_type)
                 structure = "{}< {}>{}".format(before, argument.phrase_type, after)
-                
+            
+            # Compute the new position of the predicate if we reduced an argument before it    
             if argument.begin - new_begin < predicate_begin:
                 offset = (argument.end - argument.begin + 1) - added_length
                 predicate_begin -= offset
@@ -333,10 +349,10 @@ class VerbnetFrameTest(unittest.TestCase):
                  ] ) ]
         
         expected_results = [
-            VerbnetFrame(["NP", "V", "NP", "to", "S"], []),
-            VerbnetFrame(["NP", "V", "NP"], [])
+            VerbnetFrame(["NP", "V", "NP", "to", "S"], [None, None, None]),
+            VerbnetFrame(["NP", "V", "NP"], [None, None])
         ]
-            
+        
         verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[0])
         self.assertEqual(expected_results[0], verbnet_frame)
         verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[1])

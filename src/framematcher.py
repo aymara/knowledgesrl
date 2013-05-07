@@ -41,15 +41,11 @@ class FrameMatcher():
     def __init__(self, predicate, frame):
         self.predicate = predicate
         self.frame = frame
-        self.frame_size = 0
         self.best_score = 0
         self.best_frames = []
         self.roles_distribs = []
         
-        for i,elem in enumerate(self.frame.structure):
-            if FrameMatcher._is_a_slot(elem): self.frame_size += 1
-            
-        if self.frame_size == 0:
+        if self.frame.num_slots == 0:
             raise EmptyFrameError(frame, predicate)
     
     def new_match(self, test_frame):
@@ -60,57 +56,67 @@ class FrameMatcher():
             
         """
         num_match = 0
-        model_size = 0
-        distrib = []
+        distrib = [set()] * self.frame.num_slots
         
+        """ New algorithm """
         i = 0
         j = 0
         index_v_1 = self.frame.structure.index("V")
         index_v_2 = test_frame.structure.index("V")
+        slot_1 = 0
+        slot_2 = 0
+        num_slots_before_v_1 = 0
+        num_slots_before_v_2 = 0
+        
+        for elem in self.frame.structure:
+            if elem == "V": break
+            if FrameMatcher._is_a_slot(elem):
+                num_slots_before_v_1 += 1
+        for elem in test_frame.structure:
+            if elem == "V": break
+            if FrameMatcher._is_a_slot(elem):
+                num_slots_before_v_2 += 1
 
         while i < len(self.frame.structure) and j < len(test_frame.structure):
             elem1 = self.frame.structure[i]
             elem2 = test_frame.structure[j]
 
             if FrameMatcher._is_a_match(elem1, elem2): 
-                if FrameMatcher._is_a_slot(elem1):  
+                if FrameMatcher._is_a_slot(elem1):
+                    num_match += 1
                     # test_frame.roles can be too short. This will for instance
                     # happen in the "NP V NP S_INF" structure of want-32.1,
                     # where S_INF is given no role
-                    if len(distrib) < len(test_frame.roles):
-                        distrib.append(test_frame.roles[len(distrib)])
+                    if slot_2 < len(test_frame.roles):
+                        distrib[slot_1] = test_frame.roles[slot_2]
+                        slot_1, slot_2 = slot_1 + 1, slot_2 + 1
             elif i < index_v_1 or j < index_v_2:
                 # If we have not encountered the verb yet, we continue the matching
                 # with everything that follows the verb
                 # This is for instance to prevent a "NP NP V" construct 
                 # from interrupting the matching early
-                i = index_v_1
-                j = index_v_2
+                i, j = index_v_1, index_v_2
+                slot_1, slot_2 = num_slots_before_v_1, num_slots_before_v_2
             else: break
                
-            i += 1
-            j += 1
+            i, j = i + 1, j + 1
             
-        """ Former less permissive algorithm
+        """ Former less permissive algorithm """
+        """num_match = 0
         for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
             if FrameMatcher._is_a_match(elem1, elem2): 
                 if FrameMatcher._is_a_slot(elem1):
-                    # test_frame.roles can be too short. This will for instance
-                    # happen in the "NP V NP S_INF" structure of want-32.1,
-                    # where S_INF is given no role
+                    num_match += 1
                     if len(distrib) < len(test_frame.roles):
-                        distrib.append(test_frame.roles[len(distrib)])
-            else: break
-        """
+                        distrib[num_match - 1] = test_frame.roles[num_match - 1]
+            else: break"""
+        
 
-        for elem in test_frame.structure:
-            if FrameMatcher._is_a_slot(elem): model_size += 1
-           
-        if model_size == 0:
+        if test_frame.num_slots == 0:
             raise EmptyFrameError(test_frame, self.predicate)
         
-        num_match = len(distrib)
-        score = int(100 * (num_match / self.frame_size + num_match / model_size))
+        score = int(100 * (num_match / self.frame.num_slots 
+                    + num_match / test_frame.num_slots))
         
         if score > self.best_score:
             self.roles_distribs = []  
@@ -126,10 +132,10 @@ class FrameMatcher():
         :returns: str lists list -- The lists of possible roles for each slot
         """
         result = []
-        for distrib in self.roles_distribs:
-            for i,role in enumerate(distrib):
-                if len(result) <= i: result.append([])
-                if not role in result[i]: result[i].append(role)
+        
+        for i in range(self.frame.num_slots):
+            possibilities = [x[i] for x in self.roles_distribs]
+            result.append(set.union(*possibilities))
         
         return result
             
@@ -160,7 +166,7 @@ class FrameMatcher():
         
 class frameMatcherTest(unittest.TestCase):
     def test_1(self):
-        frame1 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], [])
+        frame1 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], [None, None, None])
         frame2 = VerbnetFrame(["NP", "V", "NP", "for", "NP"], ["Agent", "Patient", "Role1"])
         frame3 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role2"])
         frame4 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
@@ -171,7 +177,7 @@ class frameMatcherTest(unittest.TestCase):
         matcher.new_match(frame3)
         matcher.new_match(frame4)
         self.assertEqual(matcher.best_score, 200)
-        self.assertEqual(matcher.possible_distribs(), [["Agent"], ["Patient"], ["Role2", "Role3"]])
+        self.assertEqual(matcher.possible_distribs(), [{"Agent"}, {"Patient"}, {"Role2", "Role3"}])
         
     def test_2(self):
         frame1 = VerbnetFrame(["to", "be"], [])
@@ -182,7 +188,7 @@ class frameMatcherTest(unittest.TestCase):
             matcher.new_match(frame2)
             
     def test_3(self):
-        frame1 = VerbnetFrame(["NP", "V", "with", "NP"], [])
+        frame1 = VerbnetFrame(["NP", "V", "with", "NP"], [None, None])
         frame2 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
 
         matcher = FrameMatcher("predicate", frame1)
@@ -190,7 +196,7 @@ class frameMatcherTest(unittest.TestCase):
         self.assertEqual(matcher.best_score, int(100 / 2 + 100 / 3))
         
     def test_4(self):
-        frame = VerbnetFrame(['NP', 'V', 'NP'], [])
+        frame = VerbnetFrame(['NP', 'V', 'NP'], [None, None])
         matcher = FrameMatcher("begin", frame)
         test_frames = [
             VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
@@ -203,8 +209,6 @@ class frameMatcherTest(unittest.TestCase):
         ]
         for test_frame in test_frames:
             matcher.new_match(test_frame)
-        print(matcher.best_score)
-        print(matcher.possible_distribs())
 
             
 if __name__ == "__main__":
