@@ -26,6 +26,7 @@ class VerbnetReader:
         
         """
         self.verbs = {}
+        self.classes = {}
         
         # Debug data
         self.filename = ""
@@ -58,8 +59,12 @@ class VerbnetReader:
         
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
-            if not verb in self.verbs: self.verbs[verb] = []
+            if not verb in self.verbs:
+                self.verbs[verb] = []
+                self.classes[verb] = []
+                
             self.verbs[verb] += frames
+            self.classes[verb].append(vnclass)
             
         for subclass in xml_class.find("SUBCLASSES"):
             self._handle_class(subclass, frames)
