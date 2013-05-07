@@ -332,7 +332,8 @@ class VerbnetFrameTest(unittest.TestCase):
                     Word(64, 68, "JJR"), Word(70, 73, "NN"), Word(75, 76, "IN"),
                     Word(78, 81, "NN"), Word(83, 85, "CC"), Word(87, 94, "NN"),
                     Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
-                ] ),
+                ],
+                "Attempt_suasion" ),
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
                 " a freer flow of food and medicine into Iraq .", 
@@ -353,7 +354,8 @@ class VerbnetFrameTest(unittest.TestCase):
                     Word(64, 68, "JJR"), Word(70, 73, "NN"), Word(75, 76, "IN"),
                     Word(78, 81, "NN"), Word(83, 85, "CC"), Word(87, 94, "NN"),
                     Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
-                 ] ) ]
+                 ],
+                 "Grant_permission" ) ]
         
         expected_results = [
             VerbnetFrame(["NP", "V", "NP", "to", "S"], [None, None, None]),
