@@ -36,7 +36,7 @@ class VerbnetReader:
 
             self.filename = filename
             root = ET.ElementTree(file=path+self.filename)
-            self._handle_class(root, [])
+            self._handle_class(root.getroot(), [])
 
     
     def _handle_class(self, xml_class, parent_frames):
@@ -49,8 +49,13 @@ class VerbnetReader:
         
         """
         frames = parent_frames[:]
+        
+        # Use the format of the vn/fn mapping
+        vnclass = "-".join(xml_class.attrib["ID"].split('-')[1:])
+        
         for xml_frame in xml_class.find("FRAMES"):
-            frames.append(self._build_frame(xml_frame))
+            new_frame = self._build_frame(xml_frame, vnclass)
+            frames.append(new_frame)
         
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
@@ -60,11 +65,13 @@ class VerbnetReader:
         for subclass in xml_class.find("SUBCLASSES"):
             self._handle_class(subclass, frames)
         
-    def _build_frame(self, xml_frame):
+    def _build_frame(self, xml_frame, vnclass):
         """Parse one frame
         
-        :param xml_frame: XML representation of the frame..
+        :param xml_frame: XML representation of the frame.
         :type xml_frame: xml.etree.ElementTree.Element.
+        :param vnclass: The VerbNet class to which the frame belongs.
+        :type vnclass: str.
         
         """
         # Extract the structure
@@ -133,7 +140,7 @@ class VerbnetReader:
             ): 
                 role.append(element.attrib["value"])
 
-        return VerbnetFrame(structure, role)
+        return VerbnetFrame(structure, role, vnclass)
      
     def _handle_lex(self, xml, base_structure):
         """Choose wether or not to keep a <LEX> entry
@@ -201,10 +208,11 @@ class VerbnetReaderTest(unittest.TestCase):
         path = "../data/verbnet-3.2/"
         reader = VerbnetReader(path)
         self.assertEqual(len(reader.verbs), 4154)
-        
+    
         reader.verbs = {}
+
         root = ET.ElementTree(file=path+"separate-23.1.xml")
-        reader._handle_class(root, [])
+        reader._handle_class(root.getroot(), [])
         
         expected_result = {
             'dissociate': [  

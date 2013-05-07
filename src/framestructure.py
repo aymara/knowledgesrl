@@ -36,6 +36,8 @@ class VerbnetFrame:
     
     :var structure: String containing a VerbNet-style representation of the structure
     :var roles: List of the possible VerbNet roles for each structure's slot
+    :var num_slots: Number of argument slots in :structure
+    :var verbnet_class: For VerbNet-extracted frames, the vnclass
     
     """
     
@@ -45,13 +47,16 @@ class VerbnetFrame:
         "VPbrst":"S", "VPing":"S_ING", "VPto":"to S"
     }
     
-    def __init__(self, structure, roles):
+    def __init__(self, structure, roles, vnclass = None):
         self.structure = structure
         
         # Transform "a" in {"a"} and keep everything else unchanged
         self.roles = [{x} if isinstance(x, str) else x for x in roles]
         
         self.num_slots = len(self.roles)
+        
+        # Used to retrieve vnclass and map roles to framenet roles
+        self.verbnet_class = vnclass
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
@@ -60,7 +65,8 @@ class VerbnetFrame:
             self.num_slots == other.num_slots)
             
     def __repr__(self):
-        return "VerbnetFrame({}, {})".format(self.structure, self.roles)
+        return "VerbnetFrame({}, {}, {})".format(
+                self.structure, self.roles, self.verbnet_class)
         
     @staticmethod    
     def build_from_frame(frame):
