@@ -12,12 +12,13 @@ role_matching_file = "../data/vn-fn-roles.xml"
 # VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [
     "Actor", "Agent", "Asset", "Attribute", "Beneficiary", "Cause",
+    "Co-Actor", "Co-Patient", "Co-Theme", # Not in the original list
     "Location", "Destination", "Source", "Experiencer", "Extent",
     "Instrument", "Material", "Product", "Patient", "Predicate",
     "Recipient", "Stimulus", "Theme", "Time", "Topic"]
     
 # Added roles
-vn_roles_additionnal = [
+vn_roles_additionnal = [  
     "Concept", "Eclipsed", "Event", 
     "Oblique", "Proposition", "Value"]
     
@@ -91,6 +92,7 @@ class VnFnRoleMatcher():
                     continue
 
                 vn_role, fn_role = self._correct_errors(vn_role, fn_role)
+                vn_role = self._handle_co_roles(vn_role)
                 
                 mapping_as_dict[fn_role] = vn_role
                   
@@ -99,6 +101,13 @@ class VnFnRoleMatcher():
                     fn_frame, vn_class)
             
             self._update_mapping_list(fn_frame, mapping_as_dict)
+
+    def _handle_co_roles(self, vn_role):
+        if vn_role[-1] == "1":
+            return vn_role[0:-1]
+        if vn_role[-1] == "2":
+            return "Co-"+vn_role[0:-1]
+        return vn_role
 
     def _correct_errors(self, vn_role, fn_role):
         if vn_role == "Eperiencer":
