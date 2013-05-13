@@ -137,6 +137,53 @@ class VnFnRoleMatcher():
         self.fn_roles[fn_role][fn_frame]["all"].add(vn_role)
         self.fn_roles[fn_role][fn_frame][vn_class].add(vn_role)
 
+    def possible_vn_roles(self, fn_role, fn_frame = None, vn_classes = None):
+        """Returns the list of VN roles that can be mapped to a FN role in a given context
+        
+        :param fn_role: The FrameNet role.
+        :type fn_role: str.
+        :parma vn_role: The VerbNet role.
+        :type vn_role: str.
+        :param fn_frame: The FrameNet frame in which the roles have to be mapped.
+        :type fn_frame: str.
+        :param vn_classes: A list of VerbNet classes for which the roles have to be mapped.
+        :type vn_classes: str List.
+        :returns: str List -- The list of VN roles
+        """
+        if not fn_role in self.fn_roles:
+            raise RoleMatchingError(
+                "{} role does not seem"\
+                " to exist".format(fn_role))
+        if fn_frame == None and vn_classes == None:
+            return self.fn_roles[fn_role]["all"]
+        
+        if fn_frame != None and not fn_frame in self.fn_roles[fn_role]:
+            raise RoleMatchingError(
+                "{} role does not seem"\
+                " to belong to frame {}".format(fn_role, fn_frame))
+        if vn_classes == None:
+            return self.fn_roles[fn_role][fn_frame]["all"]
+        
+        if fn_frame == None:
+            frames = list(self.fn_roles[fn_role].keys())
+            frames.remove("all")
+        else:
+            frames = [fn_frame]
+        
+        vn_roles = set()
+        for vn_class in vn_classes:
+            for frame in frames:
+                if vn_class in self.fn_roles[fn_role][frame]:
+                    vn_roles = vn_roles.union(self.fn_roles[fn_role][frame][vn_class])
+        
+        if vn_roles == set(): 
+            # We don't have the mapping for any of the VN class provided in vn_classes
+            raise RoleMatchingError(
+                "None of the given VerbNet classes ({}) were corresponding to"\
+                " {} role and frame {}".format(vn_class, fn_role, fn_frame))
+        
+        return vn_roles
+
     def match(self, fn_role, vn_role, fn_frame = None, vn_classes = None):
         """Tell wether fn_role can be mapped to vn_role in a given context
         
@@ -148,35 +195,10 @@ class VnFnRoleMatcher():
         :type fn_frame: str.
         :param vn_classes: A list of VerbNet classes for which the roles have to be mapped.
         :type vn_classes: str List.
+        :returns: bool -- True if the two roles can be mapped, False otherwise
         """
         
-        if not fn_role in self.fn_roles:
-            raise RoleMatchingError(
-                "{} role does not seem"\
-                " to exist".format(fn_role))
-        if fn_frame == None:
-            return vn_role in self.fn_roles[fn_role]["all"]
-            
-        if not fn_frame in self.fn_roles[fn_role]:
-            raise RoleMatchingError(
-                "{} role does not seem"\
-                " to belong to frame {}".format(fn_role, fn_frame))
-        if vn_classes == None:
-            return vn_role in self.fn_roles[fn_role][fn_frame]["all"]
-
-        can_conclude = False
-        for vn_class in vn_classes:
-            if vn_class in self.fn_roles[fn_role][fn_frame]:
-                can_conclude = True
-                if vn_role in self.fn_roles[fn_role][fn_frame][vn_class]:
-                    return True      
-         
-        if not can_conclude: 
-            # We don't have the mapping for any of the VN class provided in vn_classes
-            raise RoleMatchingError(
-                "None of the given VerbNet classes ({}) were corresponding to"\
-                " {} role and frame {}".format(vn_class, fn_role, fn_frame))
-        return False  
+        return vn_role in self.possible_vn_roles(fn_role, fn_frame, vn_classes)
 
 class VnFnRoleMatcherTest(unittest.TestCase):
     def test_parsing(self):
@@ -218,7 +240,7 @@ class VnFnRoleMatcherTest(unittest.TestCase):
                 matcher.issues["vbclass_contradictory"] += 1           
                     
         print("Found {} fnrole-fnframe entries".format(num_role_frames))
-        print("{} different FrameNet frames".format(len(matcher.mappings)))
+        print("{} different Frameverbnet_classes[frame.predicate.lemma]Net frames".format(len(matcher.mappings)))
         
         print("{} frames have different possible mappings".format(matcher.issues["vbclass_dependent"]))
         print("{} frames have contradictory mappings".format(matcher.issues["vbclass_contradictory"]))
