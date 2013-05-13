@@ -31,8 +31,8 @@ for opt,value in options[0]:
 
 stats = {
     "files":0,
-    "frames":0,"frames_kept":0,
-    "args":0,"args_kept":0,
+    "frames":0, "frames_kept":0,
+    "args":0, "args_kept":0,
     "one_role":0, "no_role":0,
     "one_correct_role":0, "one_bad_role":0,
     "ambiguous_ok":0, "ambiguous_bad":0,

@@ -182,8 +182,13 @@ class VnFnRoleMatcher():
         vn_roles = set()
         for vn_class in vn_classes:
             for frame in frames:
-                if vn_class in self.fn_roles[fn_role][frame]:
-                    vn_roles = vn_roles.union(self.fn_roles[fn_role][frame][vn_class])
+                while True:
+                    if vn_class in self.fn_roles[fn_role][frame]:
+                        vn_roles = vn_roles.union(self.fn_roles[fn_role][frame][vn_class])
+                        break
+                    position = vn_class.rfind("-")
+                    if position == -1: break
+                    vn_class = vn_class[0:position]
         
         if vn_roles == set(): 
             # We don't have the mapping for any of the VN class provided in vn_classes
