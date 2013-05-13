@@ -8,12 +8,26 @@ import framematcher
 import rolematcher
 import os
 import sys
+import getopt
 import random
 from collections import Counter
 
+options = getopt.getopt(sys.argv[1:], "d:", "fmatching-algo=")
+    
 corpus_path = "../data/fndata-1.5/fulltext/"
 verbnet_path = "../data/verbnet-3.2/"
 debug = False
+n_debug = 20
+framematcher.matching_algorithm = 1
+
+for opt,value in options[0]:
+    if opt == "-d":
+        debug = True
+        value = 0 if value == "" else int(value)
+        if value > 0:
+            n_debug = value
+    if opt == "--fmatching-algo" and value == 0:
+        framematcher.matching_algorithm = 0
 
 stats = {
     "files":0,
@@ -315,6 +329,6 @@ for filename in os.listdir(corpus_path):
 display_stats()
 display_errors_num()
 display_error_details()
-if debug: display_debug(20)
+if debug: display_debug(n_debug)
 
 

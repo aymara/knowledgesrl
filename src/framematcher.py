@@ -22,6 +22,8 @@ from framestructure import *
 import unittest
 import sys
 
+matching_algorithm = 1
+
 class EmptyFrameError(Exception):
     """Trying to use an empty frame in a FrameMatcher
     
@@ -57,60 +59,61 @@ class FrameMatcher():
         """
         distrib = [None for x in range(self.frame.num_slots)] 
         
-        """ New algorithm """
-        num_match = 0
-        i = 0
-        j = 0
-        index_v_1 = self.frame.structure.index("V")
-        index_v_2 = test_frame.structure.index("V")
-        slot_1 = 0
-        slot_2 = 0
-        num_slots_before_v_1 = 0
-        num_slots_before_v_2 = 0
-        
-        for elem in self.frame.structure:
-            if elem == "V": break
-            if FrameMatcher._is_a_slot(elem):
-                num_slots_before_v_1 += 1
-        for elem in test_frame.structure:
-            if elem == "V": break
-            if FrameMatcher._is_a_slot(elem):
-                num_slots_before_v_2 += 1
-
-        while i < len(self.frame.structure) and j < len(test_frame.structure):
-            elem1 = self.frame.structure[i]
-            elem2 = test_frame.structure[j]
-
-            if FrameMatcher._is_a_match(elem1, elem2): 
-                if FrameMatcher._is_a_slot(elem1):
-                    num_match += 1
-                    # test_frame.roles can be too short. This will for instance
-                    # happen in the "NP V NP S_INF" structure of want-32.1,
-                    # where S_INF is given no role
-                    if slot_2 < len(test_frame.roles):
-                        distrib[slot_1] = list(test_frame.roles[slot_2])[0]
-                        slot_1, slot_2 = slot_1 + 1, slot_2 + 1
-            elif i < index_v_1 or j < index_v_2:
-                # If we have not encountered the verb yet, we continue the matching
-                # with everything that follows the verb
-                # This is for instance to prevent a "NP NP V" construct 
-                # from interrupting the matching early
-                i, j = index_v_1, index_v_2
-                slot_1, slot_2 = num_slots_before_v_1, num_slots_before_v_2
-            else: break
-               
-            i, j = i + 1, j + 1
+        if matching_algorithm == 1:
+            """ New algorithm """
+            num_match = 0
+            i = 0
+            j = 0
+            index_v_1 = self.frame.structure.index("V")
+            index_v_2 = test_frame.structure.index("V")
+            slot_1 = 0
+            slot_2 = 0
+            num_slots_before_v_1 = 0
+            num_slots_before_v_2 = 0
             
-        """ Former less permissive algorithm """
-        """num_match = 0
-        for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
-            if FrameMatcher._is_a_match(elem1, elem2): 
-                if FrameMatcher._is_a_slot(elem1):
-                    num_match += 1
-                    if len(distrib) < len(test_frame.roles):
-                        distrib[num_match - 1] = test_frame.roles[num_match - 1]
-            else: break"""
-        
+            for elem in self.frame.structure:
+                if elem == "V": break
+                if FrameMatcher._is_a_slot(elem):
+                    num_slots_before_v_1 += 1
+            for elem in test_frame.structure:
+                if elem == "V": break
+                if FrameMatcher._is_a_slot(elem):
+                    num_slots_before_v_2 += 1
+
+            while i < len(self.frame.structure) and j < len(test_frame.structure):
+                elem1 = self.frame.structure[i]
+                elem2 = test_frame.structure[j]
+
+                if FrameMatcher._is_a_match(elem1, elem2): 
+                    if FrameMatcher._is_a_slot(elem1):
+                        num_match += 1
+                        # test_frame.roles can be too short. This will for instance
+                        # happen in the "NP V NP S_INF" structure of want-32.1,
+                        # where S_INF is given no role
+                        if slot_2 < len(test_frame.roles):
+                            distrib[slot_1] = list(test_frame.roles[slot_2])[0]
+                            slot_1, slot_2 = slot_1 + 1, slot_2 + 1
+                elif i < index_v_1 or j < index_v_2:
+                    # If we have not encountered the verb yet, we continue the matching
+                    # with everything that follows the verb
+                    # This is for instance to prevent a "NP NP V" construct 
+                    # from interrupting the matching early
+                    i, j = index_v_1, index_v_2
+                    slot_1, slot_2 = num_slots_before_v_1, num_slots_before_v_2
+                else: break
+                   
+                i, j = i + 1, j + 1
+        else:
+            distrib = [None for x in range(self.frame.num_slots)]      
+            """ Former less permissive algorithm """
+            num_match = 0
+            for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
+                if FrameMatcher._is_a_match(elem1, elem2): 
+                    if FrameMatcher._is_a_slot(elem1):
+                        num_match += 1
+                        if num_match - 1 < len(test_frame.roles):
+                            distrib[num_match - 1] = list(test_frame.roles[num_match - 1])[0]
+                else: break
 
         if test_frame.num_slots == 0:
             raise EmptyFrameError(test_frame, self.predicate)
