@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+""" Map FrameNet and VerbNet roles """
+
 import unittest
 import xml.etree.ElementTree as ET
 import re
 
 role_matching_file = "../data/vn-fn-roles.xml"
 
+# VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [
     "Actor", "Agent", "Asset", "Attribute", "Beneficiary", "Cause",
     "Location", "Destination", "Source", "Experiencer", "Extent",
     "Instrument", "Material", "Product", "Patient", "Predicate",
     "Recipient", "Stimulus", "Theme", "Time", "Topic"]
+    
 # Added roles
 vn_roles_additionnal = [
     "Concept", "Eclipsed", "Event", 
     "Oblique", "Proposition", "Value"]
+    
+# List of VN roles that won't trigger an error in unit tests
 authorised_roles = vn_roles_list + vn_roles_additionnal
 
 class RoleMatchingError(Exception):
@@ -31,19 +37,43 @@ class RoleMatchingError(Exception):
         return ("Error : {}".format(self.msg))
 
 class VnFnRoleMatcher():
+    """This read the mapping between VN and FN roles, and can then be used to compare them
+    
+    :var fn_roles: data structure used to store the mapping between VN and FN roles
+    :var mappings: associate possible mapping (FN roles -> VN roles) to every FN frames
+    :var issues: used to store statistics about the problem encoutered
+    """
+    
     def __init__(self, path):
+        # 4-dimensions matrix :
+        # self.fn_roles[fn_role][fn_frame][vn_class][i] is the
+        # i-th possible VN roles associated to fn_role for the frame fn_frame
+        # and a verb in vn_class.
         self.fn_roles = {}
+        
+        # This is used to compute statistics, but plays no role in role matching
         self.mappings = {}
+        
         self.issues = {
+            # <role> elements with empty vnrole attributes
             "empty_vn_role":0,
+            # Errors in FN roles or VN roles spelling
             "typo":0,
+            # VN roles stored in vn_roles_additionnal
             "new_vn_roles":{},
+            # Frames to which are associated different FN/VN roles mappings
             "vbclass_dependent":0,
+            # Frames to which are associated contradictory FN/VN roles mappings
             "vbclass_contradictory":0,
+            # FN roles that can correspond to several VN roles for the same frame
             "ambiguities":0,
+            # FN roles that can correspond to several VN roles for the same frame and the same VN class
             "ambiguities2":0
         }
         
+        self._build_mapping(path)
+
+    def _build_mapping(self, path):
         root = ET.ElementTree(file=path)
 
         for mapping in root.getroot():
@@ -55,37 +85,45 @@ class VnFnRoleMatcher():
             for role in mapping.findall("roles/role"):
                 vn_role = role.attrib["vnrole"]
                 fn_role = role.attrib["fnrole"]
-                
+
                 if vn_role == "":
                     self.issues["empty_vn_role"] += 1
                     continue
-                if vn_role == "Eperiencer":
-                    self.issues["typo"] += 1
-                    vn_role = "Experiencer"
-                if vn_role == "Patients":
-                    self.issues["typo"] += 1
-                    vn_role = "Patient"
-                if fn_role == "Eperiencer":
-                    self.issues["typo"] += 1
-                    fn_role = "Experiencer"
+
+                vn_role, fn_role = self._correct_errors(vn_role, fn_role)
                 
                 mapping_as_dict[fn_role] = vn_role
                   
                 self._add_relation(
                     fn_role, vn_role,
                     fn_frame, vn_class)
-                    
-            if not fn_frame in self.mappings:
-                self.mappings[fn_frame] = []
+            
+            self._update_mapping_list(fn_frame, mapping_as_dict)
+
+    def _correct_errors(self, vn_role, fn_role):
+        if vn_role == "Eperiencer":
+            self.issues["typo"] += 1
+            vn_role = "Experiencer"
+        if vn_role == "Patients":
+            self.issues["typo"] += 1
+            vn_role = "Patient"
+        if fn_role == "Eperiencer":
+            self.issues["typo"] += 1
+            fn_role = "Experiencer"
+        return vn_role, fn_role
+    
+    def _update_mapping_list(self, fn_frame, new_mapping):
+        if not fn_frame in self.mappings:
+            self.mappings[fn_frame] = []
                 
-            found = False
-            for compare in self.mappings[fn_frame]:
-                if compare == mapping_as_dict:
-                       found = True
-                       break
-                       
-            if not found:
-                self.mappings[fn_frame].append(mapping_as_dict)
+        found = False
+        for compare in self.mappings[fn_frame]:
+            if compare == new_mapping:
+                   found = True
+                   break
+                   
+        if not found:
+            self.mappings[fn_frame].append(new_mapping)   
                 
     def _add_relation(self, fn_role, vn_role, fn_frame, vn_class):
         if not fn_role in self.fn_roles:
@@ -100,6 +138,18 @@ class VnFnRoleMatcher():
         self.fn_roles[fn_role][fn_frame][vn_class].add(vn_role)
 
     def match(self, fn_role, vn_role, fn_frame = None, vn_classes = None):
+        """Tell wether fn_role can be mapped to vn_role in a given context
+        
+        :param fn_role: The FrameNet role.
+        :type fn_role: str.
+        :parma vn_role: The VerbNet role.
+        :type vn_role: str.
+        :param fn_frame: The FrameNet frame in which the roles have to be mapped.
+        :type fn_frame: str.
+        :param vn_classes: A list of VerbNet classes for which the roles have to be mapped.
+        :type vn_classes: str List.
+        """
+        
         if not fn_role in self.fn_roles:
             raise RoleMatchingError(
                 "{} role does not seem"\
@@ -120,8 +170,9 @@ class VnFnRoleMatcher():
                 can_conclude = True
                 if vn_role in self.fn_roles[fn_role][fn_frame][vn_class]:
                     return True      
-                    
-        if not can_conclude:
+         
+        if not can_conclude: 
+            # We don't have the mapping for any of the VN class provided in vn_classes
             raise RoleMatchingError(
                 "None of the given VerbNet classes ({}) were corresponding to"\
                 " {} role and frame {}".format(vn_class, fn_role, fn_frame))
