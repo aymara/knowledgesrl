@@ -172,21 +172,26 @@ def log_debug_data(frame, converted_frame, matcher, distrib):
 def display_stats():
     stats["args_ambiguous"] = stats["args_kept"] - (stats["one_role"] + stats["no_role"])
     print(
-        "\n\nFound {} args and {} frames in {} files\n"
-        "{} instanciated args and {} frames were kept\n"
-        "{} args were discarded by frame matching\n\n"
+        "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
+        "Frames with predicate in VerbNet: {} frames ({} args) \n\n"
         
-        "{} roles were directly attributed after frame matching\n"
-        "{} of those where correctly attributed\n"
-        "{} of those where incorrectly attributed\n"
-        "We could not conclude for {} of those\n\n"
-        
-        "The role of {} args are still ambiguous\n"
-        "The good role is in the role list in {} cases\n"
-        "It was not in {} cases\n"
-        "We could not conclude for {} of those\n\n".format(
-            stats["args"], stats["frames"], stats["files"],
-            stats["args_kept"], stats["frames_kept"], stats["no_role"],
+        "Frame matching:\n"
+        "{} args without possible role\n"
+        "{} args with exactly one possible role\n"
+        "\t{} correct\n"
+        "\t{} not correct\n"
+        "\t{} cases where we cannot conclude (no role mapping for "
+        "any possible VerbNet class and this frame)\n"
+        "{} args with multiple possible roles\n"
+        "\t{} correct (correct role is in role list)\n"
+        "\t{} not correct (correct role is not in role list)\n"
+        "\t{} cases where we cannot conclude (no role mapping for "
+        "any possible VerbNet class and this frame)\n"
+        "\n".format(
+            stats["files"], stats["frames"], stats["args"],
+            stats["frames_kept"], stats["args_kept"],
+            
+            stats["no_role"],
             
             stats["one_role"], stats["one_correct_role"], stats["one_bad_role"],
             stats["one_role"] - (stats["one_bad_role"] + stats["one_correct_role"]),
@@ -208,6 +213,7 @@ def display_stats():
             ambiguous_mapping["args_total_with_frame"], ambiguous_mapping["args"],
             len(ambiguous_mapping["verbs"]), ambiguous_mapping["args_total"]
         )
+        
     )
     """count_with_frame = Counter(ambiguous_mapping["verbs_with_frame"])
     print(
