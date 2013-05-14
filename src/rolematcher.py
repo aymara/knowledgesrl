@@ -159,6 +159,7 @@ class VnFnRoleMatcher():
         :type vn_classes: str List.
         :returns: str List -- The list of VN roles
         """
+
         if not fn_role in self.fn_roles:
             raise RoleMatchingError(
                 "{} role does not seem"\
@@ -180,6 +181,7 @@ class VnFnRoleMatcher():
             frames = [fn_frame]
         
         vn_roles = set()
+
         for vn_class in vn_classes:
             for frame in frames:
                 while True:

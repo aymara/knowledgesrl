@@ -25,7 +25,11 @@ import xml.etree.ElementTree as ET
 import os
 import sys
 from framestructure import *
+import framenetcoreargs
 
+print("Loading core arguments list for FrameNet frames...")
+core_arg_finder = framenetcoreargs.CoreArgsFinder()
+core_arg_finder.load_data_from_xml(framenetcoreargs.frame_data_dir)
 
 class FulltextReader:
     FN_BASEPATH = "../data/fndata-1.5/fulltext/"
@@ -36,7 +40,7 @@ class FulltextReader:
     
     """
     
-    def __init__(self, filename):
+    def __init__(self, filename, core_args_only = False):
         """Read a file and update the collected frames list.
         
         :param filename: Path to the file to read.
@@ -44,6 +48,8 @@ class FulltextReader:
         
         """
         root = ET.ElementTree(file=filename)
+        
+        self.core_args_only = core_args_only
                 
         # etree will add the xmlns string before every tag name
         self._xmlns = "{http://framenet.icsi.berkeley.edu}"
@@ -60,6 +66,7 @@ class FulltextReader:
         self.predicate_is_arg = []
         self.phrase_not_found = []
         self.missing_predicate_data = []
+        self.non_existing_frame_name = []
         
         if root.find(self._xmlns+"valences") == None:
             # This is a frameNet fulltext annotation file
@@ -115,7 +122,7 @@ class FulltextReader:
             
             # We keep only annotated verbal frames
             if frame_type == "v" and annotated != "UNANN":
-                frame = self._parse_frame(text, words, potential_frame)
+                frame = self._parse_frame(text, words, potential_frame)                 
                 if frame: yield frame
                   
     def _parse_frame(self, sentence_text, words, frame):
@@ -130,23 +137,34 @@ class FulltextReader:
 
         predicate = self._build_predicate(sentence_text, frame)
         if predicate == None: return
-        
-        args = self._build_args_list(sentence_text, frame, predicate)
-        
+
         if self.constant_frame == "":
             frame_name = frame.attrib["frameName"]
         else:
             frame_name = self.constant_frame
-
+        
+                        
+        if frame_name == "Test35":
+            self.non_existing_frame_name.append({
+                "file":self.filename,
+                "frame_name":frame_name,
+                "sentence":sentence_text,
+            })
+            return
+        
+        args = self._build_args_list(sentence_text, frame, frame_name, predicate)
+        
         return Frame(sentence_text, predicate, args, words, frame_name)
     
-    def _build_args_list(self, sentence_text, frame, predicate):
+    def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.
         
         :param sentence_text: Sentence in which the frame occurs.
         :type sentence_text: str.
         :param frame: XML representation of the frame
         :type frame: xml.etree.ElementTree.Element.
+        :param frame_name: The name of the FrameNet frame.
+        :type frame_name: str.
         :param predicate: The predicate of the frame
         :type predicate: Predicate
         :returns: Argument list -- the built argument list
@@ -169,9 +187,16 @@ class FulltextReader:
             for arg in arg_data:
                 stop, new_arg = self._build_arg(
                     sentence_text, frame, predicate, arg, phrase_data, rank)
-                if new_arg != None and (
-                    self.fulltext_corpus or arg.attrib["name"] in self.core_args
-                ):
+                    
+                if new_arg != None: 
+                    if self.core_args_only:
+                        if self.fulltext_corpus:
+                            if not core_arg_finder.is_core_role(
+                                new_arg.role, frame_name):
+                                continue
+                        elif not arg.attrib["name"] in self.core_args:
+                            continue
+                       
                     args.append(new_arg)
                 
             rank += 1

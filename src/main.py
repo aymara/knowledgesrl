@@ -12,13 +12,14 @@ import getopt
 import random
 from collections import Counter
 
-options = getopt.getopt(sys.argv[1:], "d:", "fmatching-algo=")
-    
+options = getopt.getopt(sys.argv[1:], "d:", ["fmatching-algo=", "core-args-only"])
+
 corpus_path = "../data/fndata-1.5/fulltext/"
 verbnet_path = "../data/verbnet-3.2/"
 debug = False
 n_debug = 20
 framematcher.matching_algorithm = 1
+core_args_only = False
 
 for opt,value in options[0]:
     if opt == "-d":
@@ -28,6 +29,8 @@ for opt,value in options[0]:
             n_debug = value
     if opt == "--fmatching-algo" and value == 0:
         framematcher.matching_algorithm = 0
+    if opt == "--core-args-only":
+        core_args_only = True
 
 stats = {
     "files":0,
@@ -58,12 +61,13 @@ errors = {
 debug_data = []
 
 def init_verbnet(path):
+    print("Loading VerbNet data...")
     reader = verbnetreader.VerbnetReader(path)
     errors["vn_parsing"] = reader.unhandled
     return reader.verbs, reader.classes
 
 def init_fn_reader(path):
-    reader = framenetreader.FulltextReader(corpus_path+filename)
+    reader = framenetreader.FulltextReader(corpus_path+filename, core_args_only)
     
     errors["unannotated_layer"] += reader.ignored_layers
     errors["predicate_was_arg"] += reader.predicate_is_arg
@@ -89,7 +93,6 @@ def stats_frame(distrib, num_args):
     stats["frames_kept"] += 1
     stats["one_role"] += sum([1 if len(x) == 1 else 0 for x in distrib])
     stats["no_role"] += num_args - sum([0 if x == set() else 1 for x in distrib])  
-    stats["args_ambiguous"] = stats["args_kept"] - (stats["one_role"] + stats["no_role"])
     
 def stats_ambiguous_roles(frame, num_args):
     found_ambiguous_arg = False
@@ -167,20 +170,21 @@ def log_debug_data(frame, converted_frame, matcher, distrib):
     })
   
 def display_stats():
+    stats["args_ambiguous"] = stats["args_kept"] - (stats["one_role"] + stats["no_role"])
     print(
         "\n\nFound {} args and {} frames in {} files\n"
         "{} instanciated args and {} frames were kept\n"
         "{} args were discarded by frame matching\n\n"
         
         "{} roles were directly attributed after frame matching\n"
-        "{} of thoose where correctly attributed\n"
-        "{} of thoose where incorrectly attributed\n"
-        "We could not conclude for {} of thoose\n\n"
+        "{} of those where correctly attributed\n"
+        "{} of those where incorrectly attributed\n"
+        "We could not conclude for {} of those\n\n"
         
         "The role of {} args are still ambiguous\n"
         "The good role is in the role list in {} cases\n"
         "It was not in {} cases\n"
-        "We could not conclude for {} of thoose\n\n".format(
+        "We could not conclude for {} of those\n\n".format(
             stats["args"], stats["frames"], stats["files"],
             stats["args_kept"], stats["frames_kept"], stats["no_role"],
             
@@ -265,6 +269,7 @@ def display_debug(n):
         
 verbnet, verbnet_classes = init_verbnet(verbnet_path)
 
+print("Loading FrameNet and VerbNet roles associations...")
 role_matcher = rolematcher.VnFnRoleMatcher(rolematcher.role_matching_file)
 
 for filename in os.listdir(corpus_path):
