@@ -217,7 +217,7 @@ def display_stats():
     )
     for v, n1 in Counter(ambiguous_mapping["verbs"]).most_common():
         n2 = count_with_frame[v] if v in count_with_frame else 0
-        print("{} : {} - {}".format(v, n1, n2))"""
+        print("{:>12}: {:>3} - {:<3}".format(v, n1, n2))"""
 
 def display_errors_num():
     print(
