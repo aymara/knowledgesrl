@@ -38,7 +38,8 @@ stats = {
     "args":0, "args_kept":0,
     "one_role":0, "no_role":0,
     "one_correct_role":0, "one_bad_role":0,
-    "ambiguous_ok":0, "ambiguous_bad":0,
+    "several_roles_ok":0, "several_roles_bad":0,
+    "roles_conversion_impossible":0, "roles_conversion_ambiguous":0
 }
 
 ambiguous_mapping = {
@@ -75,18 +76,6 @@ def init_fn_reader(path):
     errors["missing_predicate_data"] += reader.missing_predicate_data
     
     return reader
-
-def stats_performance(good, can_conclude, num_slot):
-    if good:
-        if num_slot == 1:
-            stats["one_correct_role"] += 1
-        else:
-            stats["ambiguous_ok"] += 1
-    elif can_conclude:
-        if num_slot == 1:
-            stats["one_bad_role"] += 1
-        else:
-            stats["ambiguous_bad"] += 1    
                     
 def stats_frame(distrib, num_args):
     stats["args_kept"] += num_args
@@ -148,16 +137,15 @@ def log_frame_without_slot(filename, frame, converted_frame):
         "structure":converted_frame.structure
     })
 
-def log_impossible_role_matching(filename, frame, role, msg):
+def log_impossible_role_matching(filename, frame, msg):
     errors["impossible_role_matching"].append({
         "file":filename, "sentence":frame.sentence,
         "predicate":frame.predicate.lemma,
         "fn_role":frame.args[i].role,
-        "vn_role":role,
         "fn_frame":frame.frame_name,
         "msg":msg
     })
-    
+      
 def log_debug_data(frame, converted_frame, matcher, distrib):
     debug_data.append({
         "sentence":frame.sentence,
@@ -170,7 +158,7 @@ def log_debug_data(frame, converted_frame, matcher, distrib):
     })
   
 def display_stats():
-    stats["args_ambiguous"] = stats["args_kept"] - (stats["one_role"] + stats["no_role"])
+    stats["several_roles"] = stats["args_kept"] - (stats["one_role"] + stats["no_role"])
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
         "Frames with predicate in VerbNet: {} frames ({} args) \n\n"
@@ -181,13 +169,16 @@ def display_stats():
         "\t{} correct\n"
         "\t{} not correct\n"
         "\t{} cases where we cannot conclude (no role mapping for "
-        "any possible VerbNet class and this frame)\n"
+        "any possible VerbNet class and this frame or several possible roles)\n"
         "{} args with multiple possible roles\n"
         "\t{} correct (correct role is in role list)\n"
         "\t{} not correct (correct role is not in role list)\n"
         "\t{} cases where we cannot conclude (no role mapping for "
-        "any possible VerbNet class and this frame)\n"
-        "\n".format(
+        "any possible VerbNet class and this frame or several possible roles)\n\n"
+        "Role conversion issues:\n"
+        "\t{} args with several possible VerbNet roles\n"
+        "\t{} args for which no mapping between FrameNet and VerbNet roles was found"
+        "\n\n".format(
             stats["files"], stats["frames"], stats["args"],
             stats["frames_kept"], stats["args_kept"],
             
@@ -196,10 +187,12 @@ def display_stats():
             stats["one_role"], stats["one_correct_role"], stats["one_bad_role"],
             stats["one_role"] - (stats["one_bad_role"] + stats["one_correct_role"]),
             
-            stats["args_ambiguous"], stats["ambiguous_ok"], stats["ambiguous_bad"],
-            stats["args_ambiguous"] - (stats["ambiguous_ok"] + stats["ambiguous_bad"]))
+            stats["several_roles"], stats["several_roles_ok"], stats["several_roles_bad"],
+            stats["several_roles"] - (stats["several_roles_ok"] + stats["several_roles_bad"]),
+            stats["roles_conversion_ambiguous"],
+            stats["roles_conversion_impossible"])
     )
-    print(
+    """print(
         "Ambiguous VerbNet roles:\n"
         "With FrameNet frame indication:\n"
         "\tArguments: {}\n"
@@ -214,7 +207,7 @@ def display_stats():
             len(ambiguous_mapping["verbs"]), ambiguous_mapping["args_total"]
         )
         
-    )
+    )"""
     """count_with_frame = Counter(ambiguous_mapping["verbs_with_frame"])
     print(
         "Verbs list :\n"
@@ -314,23 +307,26 @@ for filename in os.listdir(corpus_path):
         distrib = matcher.possible_distribs()
 
         for i, slot in enumerate(distrib):
-            if len(slot) == 0: continue
-            good = False
-            can_conclude = True
-            for role in slot:
-                try:
-                    if role_matcher.match(
-                        frame.args[i].role, role,
-                        frame.frame_name, verbnet_classes[frame.predicate.lemma]
-                    ):
-                        good = True
-                        break
-                except rolematcher.RoleMatchingError as e:
-                    can_conclude = False
-                    log_impossible_role_matching(filename, frame, role, e.msg)
+            try:
+                possible_roles = role_matcher.possible_vn_roles(
+                    frame.args[i].role,
+                    fn_frame=frame.frame_name,
+                    vn_classes=verbnet_classes[frame.predicate.lemma]
+                )
+            except rolematcher.RoleMatchingError as e:
+                stats["roles_conversion_impossible"] += 1
+                log_impossible_role_matching(filename, frame, e.msg)
+                continue
             
-            stats_performance(good, can_conclude, len(slot))          
-
+            if len(possible_roles) > 1:
+                stats["roles_conversion_ambiguous"] += 1
+            elif list(possible_roles)[0] in slot:
+                if len(slot) == 1: stats["one_correct_role"] += 1
+                else: stats["several_roles_ok"] += 1
+            elif len(slot) > 1:
+                if len(slot) == 1: stats["one_bad_role"] += 1
+                else: stats["several_roles_bad"] += 1
+                
         if debug and set() in distrib:
             log_debug_data(frame, converted_frame, matcher, distrib)
         
