@@ -2910,7 +2910,7 @@
   </vncls>
   <vncls class='37.7' fnframe='Expressing_publicly'>
     <roles>
-      <role fnrole='Communucator' vnrole='Agent'/>
+      <role fnrole='Communicator' vnrole='Agent'/>
       <role fnrole='Content' vnrole='Topic'/>
       <role fnrole='Addressee' vnrole='Recipient'/>
     </roles>
