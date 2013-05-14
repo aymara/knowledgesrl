@@ -369,7 +369,7 @@ class FulltextReaderTest(unittest.TestCase):
             "NTI__Taiwan_Introduction.xml":(50,136),
             "KBEval__Brandeis.xml":(23,56),
             "NTI__NorthKorea_ChemicalOverview.xml":(109,285),
-            "PropBank__TicketSplitting.xml":(92,238),
+            "PropBank__TicketSplitting.xml":(91,234),
             "ANC__IntroHongKong.xml":(44,104),
             "ANC__WhereToHongKong.xml":(160,395),
             "ANC__HistoryOfLasVegas.xml":(191,524),
