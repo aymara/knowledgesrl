@@ -101,7 +101,7 @@ class VerbnetReader:
             if element == "" or "\n" in element:
                 continue
             # Discard most adverbs
-            if element == "ADVP-Middle":
+            if element == "ADVP-Middle" or element == "ADV-Middle":
                 continue
             # Replace "S-Quote" by "S"
             elif element == "S-Quote":
@@ -139,7 +139,7 @@ class VerbnetReader:
             
         # Fill the role list           
         for element in syntax_data:
-            if ((not (element.tag == "VERB" or element.tag == "PREP")) and
+            if ((not element.tag in ["VERB", "PREP", "LEX"]) and
                 "value" in element.attrib
             ): 
                 role.append(element.attrib["value"])
@@ -156,13 +156,15 @@ class VerbnetReader:
         :returns: String -- the lexeme value if accepted, "" otherwise
         """
         
+        # The lexeme is already mentionned in the primary structure
+        # We don't want to add it a second time
         if xml.attrib["value"] in base_structure:
             return ""
         
-        for group in verbnetprepclasses.keywords:
-            if xml.attrib["value"] in group:
-                return xml.attrib["value"]
-                
+        #for group in verbnetprepclasses.keywords:
+        if xml.attrib["value"] in verbnetprepclasses.keywords:
+            return xml.attrib["value"]
+
         self.unhandled.append({
             "file":self.filename,
             "elem":"LEX",
@@ -212,108 +214,41 @@ class VerbnetReaderTest(unittest.TestCase):
         path = "../data/verbnet-3.2/"
         reader = VerbnetReader(path)
         self.assertEqual(len(reader.verbs), 4154)
-    
-        reader.verbs = {}
 
+        expected_vb_frame = VerbnetFrame(
+            ['there', 'V', 'NP', list(verbnetprepclasses.prep["loc"]), 'NP'],
+            [{'Theme'}, {'Location'}],
+            43.1)
+        
+        self.assertIn(expected_vb_frame, reader.verbs["sparkle"])
+        
+        reader.verbs = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
         reader._handle_class(root.getroot(), [])
         
+        list1 = [  
+            VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),  
+            VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
+            VerbnetFrame(['NP', 'V'], ['Patient']),
+            VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),           
+            VerbnetFrame(['NP', 'V'], ['Patient'])]           
+        list2 = [VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])]
+        list3 = [VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])]
         expected_result = {
-            'dissociate': [  
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),  
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
-                VerbnetFrame(['NP', 'V'], ['Patient']),
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),           
-                VerbnetFrame(['NP', 'V'], ['Patient']),           
-                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])],
-            'disconnect': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
-                VerbnetFrame(['NP', 'V'], ['Patient']),  
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']),  
-                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])],
-            'divide': [ 
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),
-                VerbnetFrame(['NP', 'V'], ['Patient']),
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])],
-            'disassociate': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']),
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),
-                VerbnetFrame(['NP', 'V'], ['Patient'])],
-            'disentangle': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
-            'divorce': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
-            'separate': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])], 
-            'segregate': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
-            'part': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])], 
-            'differentiate': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
-            'uncoil': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient'])], 
-            'decouple': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])], 
-            'sever': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient'])], 
-            'dissimilate': [
-                VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']), 
-                VerbnetFrame(['NP', 'V'], ['Patient']), 
-                VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])]
+            'dissociate': list1+list2,
+            'disconnect': list1+list2,
+            'divide': list1+list3,
+            'disassociate': list1,
+            'disentangle': list1+list3, 
+            'divorce': list1+list3, 
+            'separate': list1+list2, 
+            'segregate': list1+list3, 
+            'part': list1+list2, 
+            'differentiate': list1+list3, 
+            'uncoil': list1, 
+            'decouple': list1+list3, 
+            'sever': list1, 
+            'dissimilate': list1+list3
         }
         
         for verb in expected_result:
@@ -328,7 +263,6 @@ class VerbnetReaderTest(unittest.TestCase):
                 print("\n")
             
         self.assertEqual(reader.verbs, expected_result)
-        
         
 if __name__ == "__main__":
     unittest.main()

@@ -115,11 +115,13 @@ class FrameMatcher():
                             distrib[num_match - 1] = list(test_frame.roles[num_match - 1])[0]
                 else: break
 
+        ratio_1 = num_match / self.frame.num_slots
         if test_frame.num_slots == 0:
-            raise EmptyFrameError(test_frame, self.predicate)
-        
-        score = int(100 * (num_match / self.frame.num_slots 
-                    + num_match / test_frame.num_slots))
+            ratio_2 = 1          
+        else:
+            ratio_2 = num_match / test_frame.num_slots
+
+        score = int(100 * (ratio_1 + ratio_2))
         
         if score > self.best_score:
             self.possible_roles = [{} for x in range(self.frame.num_slots)] 

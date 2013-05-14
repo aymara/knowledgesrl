@@ -100,9 +100,8 @@ class VerbnetFrame:
         structure = VerbnetFrame._keep_only_keywords(structure)
         # Transform the structure into a list
         structure = structure.split(" ")
-        # Delete every keyword before the verb
-        structure = VerbnetFrame._strip_leftpart_keywords(structure)
-        
+        #structure = VerbnetFrame._strip_leftpart_keywords(structure)
+                
         result = VerbnetFrame(structure, [])
         result.num_slots = num_slots
         
@@ -125,26 +124,34 @@ class VerbnetFrame:
         """
         predicate_begin = frame.predicate.begin - new_begin
         predicate_end = frame.predicate.end - new_begin
-
+        
         for argument in reversed(frame.args):
+                
             if not argument.instanciated: continue
 
             before = structure[0:argument.begin - new_begin]
             after = structure[1 + argument.end - new_begin:]
             # Replace every "PP" by "prep NP"
             if argument.phrase_type == "PP":
-                prep = argument.text.split(" ")[0].lower()
+                prep = ""
+                for word in argument.text.lower().split(" "):
+                    if word in verbnetprepclasses.keywords:
+                        prep = word
+                        break             
+                if prep == "":
+                    prep = argument.text.lower().split(" ")[0]
+                         
                 added_length = 6 + len(prep)
-                structure = "{}{} < NP>{}".format(before, prep, after)
+                structure = "{}< {} NP>{}".format(before, prep, after)
             # Replace every "Swhether" by "if S" or "whether S"
             elif argument.phrase_type == "Swhether":
                 sub = argument.text.split(" ")[0].lower()
                 added_length = 5 + len(sub)
-                structure = "{}{} < S>{}".format(before, sub, after)
+                structure = "{}< {} S>{}".format(before, sub, after)
             # Handle simple phrase replacements
             elif argument.phrase_type in VerbnetFrame.phrase_replacements:
                 phrase = VerbnetFrame.phrase_replacements[argument.phrase_type]
-                added_length = len(phrase)
+                added_length = 4 + len(phrase)
                 structure = "{} < {}>{}".format(before, phrase, after)
             else:
                 added_length = 3 + len(argument.phrase_type)
@@ -182,7 +189,7 @@ class VerbnetFrame:
                 continue
             if sentence[pos] == "<": inside_tag = True
             
-            for search in verbnetprepclasses.keywords:
+            for search in verbnetprepclasses.external_lexemes:
                 if (search == sentence[pos:pos + len(search)].lower() and
                     (pos == 0 or sentence[pos - 1] == " ") and
                     (pos + len(search) == len(sentence) or

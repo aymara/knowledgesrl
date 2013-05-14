@@ -19,22 +19,27 @@ prep["dest"] = prep["dest_conf"] | prep["dest_dir"]
 prep["path"] = prep["src"] | prep["dir"] | prep["dest"]
 prep["spatial"] = prep["path"] | prep["loc"]
 
-encoutered_preps = {
-'among', 'respecting', 'into', 'as', 'through', 'at', 'in', 'before', 'from', 'for', 'to', 'concerning', 'under', 'until', 'over', 'towards', 'out_of', 'between', 'upon', 'regarding', 'in_between', 'with', 'by', 'after', 'on', 'about', 'off', 'of', 'against', 'onto'}
+other_preps = {
+    "among", "respecting", "into", "as", "through", "at", "in", "before", "from",
+    "for", "to", "concerning", "under", "until", "over", "towards", "out_of",
+    "between", "upon", "regarding", "in_between", "with", "by", "after", "on",
+    "about", "off", "of", "against", "onto"
+}
 
-encoutered_lexemes = {
+tag_lexemes = {
     "as", "apart", "away", "be", "down", "like", "of", "there"
     "to", "together", "up"
 }
 
-sub = {
-    "how", "if", "that", "where", "whether"
+external_lexemes = {
+    "apart", "away", "be", "there", "together",
+    "how", "if", "that", "when", "where", "whether"
 }
 
 keywords = set()
 for group in prep.values(): keywords = keywords | group
-keywords = keywords | encoutered_preps
-keywords = keywords | encoutered_lexemes
-keywords = keywords | sub
+keywords = keywords | other_preps
+keywords = keywords | tag_lexemes
+keywords = keywords | external_lexemes
 
 
