@@ -188,7 +188,7 @@ class VnFnRoleMatcher():
                     if vn_class in self.fn_roles[fn_role][frame]:
                         vn_roles = vn_roles.union(self.fn_roles[fn_role][frame][vn_class])
                         break
-                    position = vn_class.rfind("-")
+                    position = max(vn_class.rfind("-"), vn_class.rfind("."))
                     if position == -1: break
                     vn_class = vn_class[0:position]
         
