@@ -580,12 +580,11 @@
       <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
-  <vncls class='11.5' fnframe='Sending'> <!-- added -->
+  <vncls class='11.5' fnframe='Sending'>
     <roles>
-      <role fnrole='Sender' vnrole='' fnframe='Earnings_and_losses'/> <!-- added for Earnings_and_losses.earn.v -->
-      <role fnrole='Earnings' vnrole='Theme'/>
-      <role fnrole='Earner' vnrole='Agent'/>
-      <!-- mapping for FE Buyer, VN role Initial_Location omitted because Buyer is non-core -->
+      <role fnrole='Sender' vnrole='Agent'/>
+      <role fnrole='Theme' vnrole='Theme'/>
+      <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
   <vncls class='13.2' fnframe='Giving'>
@@ -650,6 +649,14 @@
       <role fnrole='Message' vnrole='Theme'/>
       <role fnrole='Topic' vnrole='Theme'/>
       <role fnrole='Addressee' vnrole='Source'/>
+    </roles>
+  </vncls>
+  <vncls class='11.5' fnframe='Sending'> <!-- TODO fnframe should really be Earnings_and_losses and class around 13.5.1-1 -->
+    <roles>
+      <role fnrole='Sender' vnrole='' fnframe='Earnings_and_losses'/> <!-- added for Earnings_and_losses.earn.v -->
+      <role fnrole='Earnings' vnrole='Theme'/>
+      <role fnrole='Earner' vnrole='Agent'/>
+      <!-- mapping for FE Buyer, VN role Initial_Location omitted because Buyer is non-core -->
     </roles>
   </vncls>
   <vncls class='13.5.2' fnframe='Commerce_buy'>
