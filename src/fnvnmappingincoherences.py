@@ -5,19 +5,6 @@ import xml.etree.ElementTree as ET
 import re
 import os
 
-def handle_co_roles(vn_role):
-    if vn_role[-1] == "1":
-        return vn_role[0:-1]
-    if vn_role[-1] == "2":
-        return "Co-"+vn_role[0:-1]
-    return vn_role
-
-def correct_errors(vn_role, fn_role):
-    if vn_role == "Patients":
-        issues["typo"] += 1
-        vn_role = "Patient"
-    return vn_role, fn_role
-            
 role_matching_file = "../data/vn-fn-roles.xml"
 vb_dir = "../data/verbnet-3.2/"
 
@@ -45,12 +32,8 @@ class VerbnetRoleReader:
         
         parent_classes.append(vnclass)
 
-        for xml_frame in xml_class.find("FRAMES"):
-            for element in xml_frame.find("SYNTAX"):
-                if ((not element.tag in ["VERB", "PREP", "LEX"]) and
-                    "value" in element.attrib
-                ): 
-                    parent_roles.add(element.attrib["value"])
+        for role in xml_class.find("THEMROLES"):
+            parent_roles.add(role.attrib["type"])
 
         for vn_class in parent_classes:
             if not vn_class in self.classes:
