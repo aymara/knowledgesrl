@@ -461,7 +461,7 @@
   <vncls class='10.10' fnframe='Firing'>
     <roles>
       <role fnrole='Employer' vnrole='Agent'/>
-      <role fnrole='Position' vnrole='Predicate'/>
+      <role fnrole='Position' vnrole='Attribute'/>
       <role fnrole='Employee' vnrole='Theme'/>
       <role fnrole='Task' vnrole='Source'/> <!-- add correct FE to the frame -->
     </roles>
@@ -469,7 +469,7 @@
   <vncls class='10.10' fnframe='Change_of_leadership'>
     <roles>
       <role fnrole='Selector' vnrole='Agent'/>
-      <role fnrole='Role' vnrole='Predicate'/>
+      <role fnrole='Role' vnrole='Attribute'/>
       <role fnrole='Old_leader' vnrole='Theme'/>
       <role fnrole='Body' vnrole='Source'/>
     </roles>
