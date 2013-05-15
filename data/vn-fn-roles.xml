@@ -716,9 +716,8 @@
   <vncls class='13.6' fnframe='Replacing'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Old' vnrole='Theme'/> <!-- this seems wrong; and in fact the two words in the VN class can't even use the Theme role, which has to be plural: *She replaced the two shirts, in the sense of She switched the two shirts. -->
-      <role fnrole='Old' vnrole='Theme1'/>
-      <role fnrole='New' vnrole='Theme2'/>
+      <role fnrole='Old' vnrole='Theme'/> <!-- this seems wrong; and in fact the three verbs in the VN class can't even use the Theme role, which has to be plural: *She replaced the two shirts, in the sense of She switched the two shirts. -->
+      <role fnrole='New' vnrole='Co-Theme'/>
       <role fnrole='Purpose' vnrole='Beneficiary'/>
       <role fnrole='Reason' vnrole='Beneficiary'/>
     </roles>
@@ -728,15 +727,15 @@
       <role fnrole='Exchanger_1' vnrole='Agent' />
       <role fnrole='Exchanger_2' vnrole='Recipient' />
       <role fnrole='Exchangers' vnrole='Agent' />
-      <role fnrole='Theme_1' vnrole='Theme1' />
-      <role fnrole='Theme_2' vnrole='Theme2' />
+      <role fnrole='Theme_1' vnrole='Theme' />
+      <role fnrole='Theme_2' vnrole='Co-Theme' />
       <role fnrole='Themes' vnrole='Theme' />
     </roles>
   </vncls>
   <vncls class='13.6' fnframe='Take_place_of'> <!-- added for Take_place_of.substitute.v; not sure if this is right at all -->
     <roles>
-      <role fnrole='New' vnrole='Theme2' />
-      <role fnrole='Old' vnrole='Theme1' />
+      <role fnrole='New' vnrole='Co-Theme' />
+      <role fnrole='Old' vnrole='Theme' />
     </roles>
   </vncls>
   <vncls class='13.7' fnframe='Hunting'> <!-- added -->
@@ -1033,61 +1032,61 @@
   </vncls>
   <vncls class='22.1' fnframe='Amalgamation'> <!-- added 'parts' -->
     <roles>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
       <role fnrole='Parts' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.1' fnframe='Cause_to_amalgamate'> <!-- added 'parts' -->
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
       <role fnrole='Parts' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.1' fnframe='Make_cognitive_connection'> <!-- added 'concepts' -->
     <roles>
       <role fnrole='Cognizer' vnrole='Agent'/>
-      <role fnrole='Concept_1' vnrole='Patient1'/>
-      <role fnrole='Concept_2' vnrole='Patient2'/>
+      <role fnrole='Concept_1' vnrole='Patient'/>
+      <role fnrole='Concept_2' vnrole='Co-Patient'/>
       <role fnrole='Concepts' vnrole='Concept'/>
     </roles>
   </vncls>
   <vncls class='22.1' fnframe='Attaching'> <!-- added for Attaching.concatenate.v -->
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Item' vnrole='Patient1'/>
-      <role fnrole='Goal' vnrole='Patient2'/>
+      <role fnrole='Item' vnrole='Patient'/>
+      <role fnrole='Goal' vnrole='Co-Patient'/>
       <role fnrole='Items' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.2' fnframe='Compatibility'>
     <roles>
-      <role fnrole='Item_1' vnrole='Patient1'/>
-      <role fnrole='Item_2' vnrole='Patient2'/>
+      <role fnrole='Item_1' vnrole='Patient'/>
+      <role fnrole='Item_2' vnrole='Co-Patient'/>
       <role fnrole='Items' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.2' fnframe='Amalgamation'> <!-- added parts -->
     <roles>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
       <role fnrole='Parts' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.2' fnframe='Cause_to_amalgamate'> <!-- added parts -->
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
       <role fnrole='Parts' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.2' fnframe='Simultaneity'> <!-- added for Simultaneity.coincide.v; note that this mapping is only for the non-agentive verbs -->
     <roles>
-      <role fnrole='Profiled_event' vnrole='Patient1'/>
-      <role fnrole='Landmark_event' vnrole='Patient2'/>
+      <role fnrole='Profiled_event' vnrole='Patient'/>
+      <role fnrole='Landmark_event' vnrole='Co-Patient'/>
       <role fnrole='Events' vnrole='Patient'/>
     </roles>
   </vncls>
@@ -1095,38 +1094,38 @@
   <vncls class='22.3' fnframe='Cause_to_amalgamate'> <!-- added for Cause_to_amalgamate.pair.v; added Parts -->
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
       <role fnrole='Parts' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.3' fnframe='Amalgamation'> <!-- added Parts -->
     <roles>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
       <role fnrole='Parts' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.3' fnframe='Attaching'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Item' vnrole='Patient1'/>
-      <role fnrole='Goal' vnrole='Patient2'/>
+      <role fnrole='Item' vnrole='Patient'/>
+      <role fnrole='Goal' vnrole='Co-Patient'/>
       <role fnrole='Items' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.3' fnframe='Inchoative_attaching'>
     <roles>
-      <role fnrole='Item' vnrole='Patient1'/>
-      <role fnrole='Goal' vnrole='Patient2'/>
+      <role fnrole='Item' vnrole='Patient'/>
+      <role fnrole='Goal' vnrole='Co-Patient'/>
       <role fnrole='Items' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='22.3' fnframe='Gathering_up'> <!-- added -->
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Individuals' vnrole='Patient1'/>
-      <role fnrole='Aggregate' vnrole='Patient2'/>
+      <role fnrole='Individuals' vnrole='Patient'/>
+      <role fnrole='Aggregate' vnrole='Co-Patient'/>
       <role fnrole='Individuals' vnrole='Patient'/>
     </roles>
   </vncls>
@@ -1134,8 +1133,8 @@
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Connector' vnrole='Instrument'/>
-      <role fnrole='Goal' vnrole='Patient2'/>
-      <role fnrole='Item' vnrole='Patient1'/>
+      <role fnrole='Goal' vnrole='Co-Patient'/>
+      <role fnrole='Item' vnrole='Patient'/>
       <role fnrole='Items' vnrole='Patient'/>
     </roles>
   </vncls>
@@ -1150,56 +1149,56 @@
   <vncls class='23.1' fnframe='Separation'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
     </roles>
   </vncls>
   <vncls class='23.1' fnframe='Becoming_detached'>
     <roles>
-      <role fnrole='Source' vnrole='Patient2'/>
-      <role fnrole='Item' vnrole='Patient1'/>
+      <role fnrole='Source' vnrole='Co-Patient'/>
+      <role fnrole='Item' vnrole='Patient'/>
       <role fnrole='Items' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='23.2' fnframe='Cause_to_fragment'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Whole_patient' vnrole='Patient1'/>
+      <role fnrole='Whole_patient' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='23.2' fnframe='Separation'>
     <roles>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
     </roles>
   </vncls>
   <vncls class='23.2' fnframe='Cause_motion'> <!-- added for Cause_motion.draw.v, but very unsatisfactory; many vn split class verbs should really just be cause-motion with the possibility of the motion involving coming apart (pull apart, draw apart, pull across, draw across) -->
     <roles>
      <role fnrole='Agent' vnrole='Agent'/>
-     <role fnrole='Theme' vnrole='Patient1'/>
-     <role fnrole='Source' vnrole='Patient2'/>
+     <role fnrole='Theme' vnrole='Patient'/>
+     <role fnrole='Source' vnrole='Co-Patient'/>
      <role fnrole='Theme' vnrole='Patient'/>
     </roles>
   </vncls>
   <vncls class='23.3' fnframe='Attaching'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Item' vnrole='Patient1'/>
-      <role fnrole='Goal' vnrole='Patient2'/>
+      <role fnrole='Item' vnrole='Patient'/>
+      <role fnrole='Goal' vnrole='Co-Patient'/>
     </roles>
   </vncls>
   <vncls class='23.3' fnframe='Separation'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Part_1' vnrole='Patient1'/>
-      <role fnrole='Part_2' vnrole='Patient2'/>
+      <role fnrole='Part_1' vnrole='Patient'/>
+      <role fnrole='Part_2' vnrole='Co-Patient'/>
     </roles>
   </vncls>
   <vncls class='23.3' fnframe='Closure'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Fastener' vnrole='Patient1'/>
-      <role fnrole='Containing_object' vnrole='Patient2'/>
+      <role fnrole='Fastener' vnrole='Patient'/>
+      <role fnrole='Containing_object' vnrole='Co-Patient'/>
     </roles>
   </vncls>
   <vncls class='23.3' fnframe='Destroying'>
@@ -1212,15 +1211,15 @@
   <vncls class='23.3' fnframe='Detaching'> <!-- added -->
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Item' vnrole='Patient1'/>
+      <role fnrole='Item' vnrole='Patient'/>
       <role fnrole='Items' vnrole='Patient'/>
-      <role fnrole='Source' vnrole='Patient2'/>
+      <role fnrole='Source' vnrole='Co-Patient'/>
     </roles>
   </vncls>
   <vncls class='23.4' fnframe='Differentiation'>
     <roles>
-      <role fnrole='Phenomenon_1' vnrole='Theme1'/>
-      <role fnrole='Phenonemon_2' vnrole='Theme2'/>
+      <role fnrole='Phenomenon_1' vnrole='Theme'/>
+      <role fnrole='Phenonemon_2' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='24' fnframe='Filling'>
@@ -1569,21 +1568,21 @@
   </vncls>
   <vncls class='27' fnframe='Causation'>
     <roles>
-      <role fnrole='Cause' vnrole='Theme1'/>
-      <role fnrole='Effect' vnrole='Theme2'/>
+      <role fnrole='Cause' vnrole='Cause'/>
+      <role fnrole='Effect' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='27' fnframe='Cause_to_start'> <!-- added mapping for Prediate -->
     <roles>
-      <role fnrole='Cause' vnrole='Theme1'/>
-      <role fnrole='Effect' vnrole='Theme2'/>
+      <role fnrole='Cause' vnrole='Cause'/>
+      <role fnrole='Effect' vnrole='Theme'/>
       <role fnrole='Effect' vnrole='Predicate'/>
     </roles>
   </vncls>
   <vncls class='27' fnframe='Birth'>
     <roles>
-      <role fnrole='Mother' vnrole='Theme1'/>
-      <role fnrole='Child' vnrole='Theme2'/>
+      <role fnrole='Mother' vnrole='Cause'/>
+      <role fnrole='Child' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='28' fnframe='Birth'>
@@ -2505,124 +2504,124 @@
   </vncls>
   <vncls class='36.1' fnframe='Compatibility'>
     <roles>
-      <role fnrole='Item1' vnrole='Actor1'/>
-      <role fnrole='Item2' vnrole='Actor2'/>
+      <role fnrole='Item1' vnrole='Agent'/>
+      <role fnrole='Item2' vnrole='Co-Agent'/>
       <role fnrole='Parameter' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Collaboration'>
     <roles>
-      <role fnrole='Partner1' vnrole='Actor1'/>
-      <role fnrole='Partner2' vnrole='Actor2'/>
+      <role fnrole='Partner1' vnrole='Agent'/>
+      <role fnrole='Partner2' vnrole='Co-Agent'/>
       <role fnrole='Undertaking' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Discussion'>
     <roles>
-      <role fnrole='Interlocutor1' vnrole='Actor1'/>
-      <role fnrole='Interlocutor2' vnrole='Actor2'/>
+      <role fnrole='Interlocutor1' vnrole='Agent'/>
+      <role fnrole='Interlocutor2' vnrole='Co-Agent'/>
       <role fnrole='Topic' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Quarreling'>
     <roles>
-      <role fnrole='Arguer1' vnrole='Actor1'/>
-      <role fnrole='Arguer2' vnrole='Actor2'/>
+      <role fnrole='Arguer1' vnrole='Agent'/>
+      <role fnrole='Arguer2' vnrole='Co-Agent'/>
       <role fnrole='Issue' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Hostile_encounter'>
     <roles>
-      <role fnrole='Side1' vnrole='Actor1'/>
-      <role fnrole='Side2' vnrole='Actor2'/>
+      <role fnrole='Side1' vnrole='Agent'/>
+      <role fnrole='Side2' vnrole='Co-Agent'/>
       <role fnrole='Issue' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Competition'>
     <roles>
-      <role fnrole='Participant1' vnrole='Actor1'/>
-      <role fnrole='Participant2' vnrole='Actor2'/>
+      <role fnrole='Participant1' vnrole='Agent'/>
+      <role fnrole='Participant2' vnrole='Co-Agent'/>
       <role fnrole='Competition' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Amalgamation'>
     <roles>
-      <role fnrole='Parts' vnrole='Actor1'/>
-      <role fnrole='Part_1' vnrole='Actor1'/>
-      <role fnrole='Part_2' vnrole='Actor2'/>
+      <role fnrole='Parts' vnrole='Agent'/>
+      <role fnrole='Part_1' vnrole='Agent'/>
+      <role fnrole='Part_2' vnrole='Co-Agent'/>
       <role fnrole='Whole' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Be_in_agreement_on_assessment'> <!-- added for Be_in_agreement_on_assessment.concur.v; not sure what to do with FN roles Opinion (that-clause) and Issue (on-PP); seems like they should be mentioned in the vn valences but they're not -->
     <roles>
-      <role fnrole='Cognizer_1' vnrole='Actor1'/>
-      <role fnrole='Cognizers' vnrole='Actor1'/>
-      <role fnrole='Cognizer_2' vnrole='Actor2'/>
+      <role fnrole='Cognizer_1' vnrole='Agent'/>
+      <role fnrole='Cognizers' vnrole='Agent'/>
+      <role fnrole='Cognizer_2' vnrole='Co-Agent'/>
       <role fnrole='Topic' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.1' fnframe='Chatting'> <!-- added -->
     <roles>
-      <role fnrole='Interlocutor1' vnrole='Actor1'/>
-      <role fnrole='Interlocutor2' vnrole='Actor2'/>
+      <role fnrole='Interlocutor1' vnrole='Agent'/>
+      <role fnrole='Interlocutor2' vnrole='Co-Agent'/>
       <role fnrole='Interlocutors' vnrole='Actor'/>
       <role fnrole='Topic' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='36.2' fnframe='Personal_relationship'>
     <roles>
-      <role fnrole='Partner_1' vnrole='Actor1'/>
-      <role fnrole='Partner_2' vnrole='Actor2'/>
+      <role fnrole='Partner_1' vnrole='Agent'/>
+      <role fnrole='Partner_2' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='36.2' fnframe='Forming_relationships'>
     <roles>
-      <role fnrole='Partner_1' vnrole='Actor1'/>
-      <role fnrole='Partner_2' vnrole='Actor2'/>
+      <role fnrole='Partner_1' vnrole='Agent'/>
+      <role fnrole='Partner_2' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='36.3' fnframe='Quarreling'>
     <roles>
-      <role fnrole='Arguer_1' vnrole='Actor1'/>
-      <role fnrole='Arguer_2' vnrole='Actor2'/>
+      <role fnrole='Arguer_1' vnrole='Agent'/>
+      <role fnrole='Arguer_2' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='36.3' fnframe='Discussion'>
     <roles>
-      <role fnrole='Interlocutor_1' vnrole='Actor1'/>
-      <role fnrole='Interlocutor_2' vnrole='Actor2'/>
+      <role fnrole='Interlocutor_1' vnrole='Agent'/>
+      <role fnrole='Interlocutor_2' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='36.3' fnframe='Competition'>
     <roles>
-      <role fnrole='Participant_1' vnrole='Actor1'/>
-      <role fnrole='Participant_2' vnrole='Actor2'/>
+      <role fnrole='Participant_1' vnrole='Agent'/>
+      <role fnrole='Participant_2' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='36.3' fnframe='Hostile_encounter'>
     <roles>
-      <role fnrole='Side_1' vnrole='Actor1'/>
-      <role fnrole='Side_2' vnrole='Actor2'/>
+      <role fnrole='Side_1' vnrole='Agent'/>
+      <role fnrole='Side_2' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='36.3' fnframe='Congregating'> <!-- added for Congregating.meet.v -->
     <roles>
-      <role fnrole='Party_1' vnrole='Actor1'/>
-      <role fnrole='Party_2' vnrole='Actor2'/>
+      <role fnrole='Party_1' vnrole='Agent'/>
+      <role fnrole='Party_2' vnrole='Co-Agent'/>
       <role fnrole='Configuration' vnrole='Actor'/>
       <role fnrole='Individuals' vnrole='Actor'/>
     </roles>
   </vncls>
   <vncls class='36.3' fnframe='Visiting'> <!-- added; unclear if 'visit' actually undergoes all the alternations of the class -->
     <roles>
-      <role fnrole='Agent' vnrole='Actor1'/>
-      <role fnrole='Entity' vnrole='Actor2'/>
+      <role fnrole='Agent' vnrole='Agent'/>
+      <role fnrole='Entity' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='36.3' fnframe='Make_acquaintance'> <!-- added for Make_acquaintance.meet.v -->
     <roles>
-      <role fnrole='Individual_1' vnrole='Actor1'/>
-      <role fnrole='Individual_2' vnrole='Actor2'/>
+      <role fnrole='Individual_1' vnrole='Agent'/>
+      <role fnrole='Individual_2' vnrole='Co-Agent'/>
       <role fnrole='Individuals' vnrole='Actor'/>
     </roles>
   </vncls>
@@ -2634,8 +2633,8 @@
   <vncls class='36.4' fnframe='Communication'>
     <roles>
       <role fnrole='Communicator' vnrole='Actor'/>
-      <role fnrole='Communicator' vnrole='Actor1'/>
-      <role fnrole='Addressee' vnrole='Actor2'/>
+      <role fnrole='Communicator' vnrole='Agent'/>
+      <role fnrole='Addressee' vnrole='Co-Agent'/>
       <role fnrole='Message' vnrole='Topic'/>
       <role fnrole='Topic' vnrole='Topic'/>
     </roles>
@@ -2643,16 +2642,16 @@
   <vncls class='36.4' fnframe='Hostile_encounter'> <!-- added -->
     <roles>
       <role fnrole='Sides' vnrole='Actor'/>
-      <role fnrole='Side_1' vnrole='Actor1'/>
-      <role fnrole='Side_2' vnrole='Actor2'/>
+      <role fnrole='Side_1' vnrole='Agent'/>
+      <role fnrole='Side_2' vnrole='Co-Agent'/>
       <role fnrole='Issue' vnrole='Topic'/>
     </roles>
   </vncls>
   <vncls class='36.4' fnframe='Quarreling'> <!-- added for Quarreling.argue.v -->
     <roles>
       <role fnrole='Arguers' vnrole='Actor'/>
-      <role fnrole='Arguer1' vnrole='Actor1'/>
-      <role fnrole='Arguer2' vnrole='Actor2'/>
+      <role fnrole='Arguer1' vnrole='Agent'/>
+      <role fnrole='Arguer2' vnrole='Co-Agent'/>
       <role fnrole='Issue' vnrole='Topic'/>
     </roles>
   </vncls>
@@ -2866,30 +2865,30 @@
   </vncls>
   <vncls class='37.5' fnframe='Statement'>
     <roles>
-      <role fnrole='Speaker' vnrole='Actor1'/>
+      <role fnrole='Speaker' vnrole='Agent'/>
       <role fnrole='Message' vnrole='Topic'/>
       <role fnrole='Topic' vnrole='Topic'/>
-      <role fnrole='Addressee' vnrole='Actor2'/>
+      <role fnrole='Addressee' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='37.6' fnframe='Quarreling'>
     <roles>
-      <role fnrole='Arguer_1' vnrole='Actor1'/>
-      <role fnrole='Arguer_2' vnrole='Actor2'/>
+      <role fnrole='Arguer_1' vnrole='Agent'/>
+      <role fnrole='Arguer_2' vnrole='Co-Agent'/>
       <role fnrole='Issue' vnrole='Topic'/>
     </roles>
   </vncls>
   <vncls class='37.6' fnframe='Chatting'>
     <roles>
-      <role fnrole='Interlocutor_1' vnrole='Actor1'/>
-      <role fnrole='Interlocutor_2' vnrole='Actor2'/>
+      <role fnrole='Interlocutor_1' vnrole='Agent'/>
+      <role fnrole='Interlocutor_2' vnrole='Co-Agent'/>
       <role fnrole='Topic' vnrole='Topic'/>
     </roles>
   </vncls>
   <vncls class='37.6' fnframe='Discussion'>
     <roles>
-      <role fnrole='Interlocutor_1' vnrole='Actor1'/>
-      <role fnrole='Interlocutor_2' vnrole='Actor2'/>
+      <role fnrole='Interlocutor_1' vnrole='Agent'/>
+      <role fnrole='Interlocutor_2' vnrole='Co-Agent'/>
       <role fnrole='Interlocutors' vnrole='Actor'/>
       <role fnrole='Topic' vnrole='Topic'/>
     </roles>
@@ -4313,39 +4312,39 @@
   </vncls>
   <vncls class='47.8' fnframe='Adorning'>
     <roles>
-      <role fnrole='Theme' vnrole='Theme1'/>
-      <role fnrole='Location' vnrole='Theme2'/>
+      <role fnrole='Theme' vnrole='Theme'/>
+      <role fnrole='Location' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='47.8' fnframe='Closure'>
     <roles>
-      <role fnrole='Fastener' vnrole='Theme1'/>
-      <role fnrole='Containing_object' vnrole='Theme2'/>
+      <role fnrole='Fastener' vnrole='Theme'/>
+      <role fnrole='Containing_object' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='47.8' fnframe='Containing'>
     <roles>
-      <role fnrole='Container' vnrole='Theme1'/>
-      <role fnrole='Contents' vnrole='Theme2'/>
+      <role fnrole='Container' vnrole='Theme'/>
+      <role fnrole='Contents' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='47.8' fnframe='Cotheme'>
     <roles>
-      <role fnrole='Theme' vnrole='Theme1'/>
-      <role fnrole='Cotheme' vnrole='Theme2'/>
+      <role fnrole='Theme' vnrole='Theme'/>
+      <role fnrole='Cotheme' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='47.8' fnframe='Path_shape'>
     <roles>
-      <role fnrole='Theme' vnrole='Theme1'/>
-      <role fnrole='Road' vnrole='Theme2'/>
+      <role fnrole='Theme' vnrole='Theme'/>
+      <role fnrole='Road' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='47.8' fnframe='Locative_relation'> <!-- added for Locative_relation.border.v -->
     <roles>
-      <role fnrole='Figure' vnrole='Theme1'/>
-      <role fnrole='Figures' vnrole='Theme1'/>
-      <role fnrole='Ground' vnrole='Theme2'/>
+      <role fnrole='Figure' vnrole='Theme'/>
+      <role fnrole='Figures' vnrole='Theme'/>
+      <role fnrole='Ground' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='48.1.1' fnframe='Coming_to_be'>
@@ -5245,27 +5244,27 @@
   <vncls class='71' fnframe='Collaboration'>
     <roles>
       <role fnrole='Partners' vnrole='Actor'/>
-      <role fnrole='Partner_1' vnrole='Actor1'/>
-      <role fnrole='Partner_2' vnrole='Actor2'/>
+      <role fnrole='Partner_1' vnrole='Agent'/>
+      <role fnrole='Partner_2' vnrole='Co-Agent'/>
       <role fnrole='Undertaking' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='71' fnframe='Revenge'>
     <roles>
       <role fnrole='Avenger' vnrole='Actor'/>
-      <role fnrole='Avenger' vnrole='Actor1'/>
-      <role fnrole='Offender' vnrole='Actor2'/>
-      <role fnrole='Injury' vnrole='Actor2'/>
-      <role fnrole='Injured_Party' vnrole='Actor2'/>
-      <role fnrole='Instrument' vnrole='Actor2'/>
+      <role fnrole='Avenger' vnrole='Agent'/>
+      <role fnrole='Offender' vnrole='Co-Agent'/>
+      <role fnrole='Injury' vnrole='Co-Agent'/>
+      <role fnrole='Injured_Party' vnrole='Co-Agent'/>
+      <role fnrole='Instrument' vnrole='Co-Agent'/>
       <role fnrole='Punishment' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='71' fnframe='Misdeed'>
     <roles>
       <role fnrole='Wrongdoer' vnrole='Actor'/>
-      <role fnrole='Wrongdoer' vnrole='Actor1'/>
-      <role fnrole='Injured_party' vnrole='Actor2'/>
+      <role fnrole='Wrongdoer' vnrole='Agent'/>
+      <role fnrole='Injured_party' vnrole='Co-Agent'/>
       <role fnrole='Misdeed' vnrole='Theme'/>
     </roles>
   </vncls>
@@ -5280,8 +5279,8 @@
   <vncls class='73' fnframe='Participation'>
     <roles>
       <role fnrole='Participants' vnrole='Actor'/>
-      <role fnrole='Participant_1' vnrole='Actor1'/>
-      <role fnrole='Participant_2' vnrole='Actor2'/>
+      <role fnrole='Participant_1' vnrole='Agent'/>
+      <role fnrole='Participant_2' vnrole='Co-Agent'/>
       <role fnrole='Event' vnrole='Theme'/>
       <role fnrole='Institution' vnrole='Theme'/>
     </roles>
@@ -5289,7 +5288,7 @@
   <vncls class='73' fnframe='Working_on'> <!-- added; add FE co-worker to the frame (extrathematic)  -->
     <roles>
       <role fnrole='Agent' vnrole='Actor'/>
-      <role fnrole='Agent' vnrole='Actor1'/>
+      <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Goal' vnrole='Theme'/>
       <role fnrole='Salient_entity' vnrole='Theme'/>
     </roles>
@@ -5297,8 +5296,8 @@
   <vncls class='73' fnframe='Collaboration'>
     <roles>
       <role fnrole='Partners' vnrole='Actor'/>
-      <role fnrole='Partner_1' vnrole='Actor1'/>
-      <role fnrole='Partner_2' vnrole='Actor2'/>
+      <role fnrole='Partner_1' vnrole='Agent'/>
+      <role fnrole='Partner_2' vnrole='Co-Agent'/>
       <role fnrole='Undertaking' vnrole='Theme'/>
     </roles>
   </vncls>
@@ -5491,8 +5490,8 @@
   </vncls>
   <vncls class='86.1' fnframe='Simultaneity'>
     <roles>
-      <role fnrole='Profiled_event' vnrole='Theme1'/>
-      <role fnrole='Landmark_event' vnrole='Theme2'/>
+      <role fnrole='Profiled_event' vnrole='Theme'/>
+      <role fnrole='Landmark_event' vnrole='Co-Theme'/>
     </roles>
   </vncls>
   <vncls class='87.2' fnframe='Grasp'>
@@ -5538,8 +5537,8 @@
   </vncls>
   <vncls class='90' fnframe='Surpassing'>
     <roles>
-      <role fnrole='Profiled_item' vnrole='Theme1'/>
-      <role fnrole='Standard_item' vnrole='Theme2'/>
+      <role fnrole='Profiled_item' vnrole='Theme'/>
+      <role fnrole='Standard_item' vnrole='Co-Theme'/>
       <role fnrole='Attribute' vnrole='Attribute'/>
       <role fnrole='Extent' vnrole='Attribute'/>
       <role fnrole='Standard_attribute' vnrole='Attribute'/>
@@ -5597,8 +5596,8 @@
   </vncls>
   <vncls class='95' fnframe='Giving_in'> <!-- VN class seems to omit some options available in FN, such as "acquiesce to her request" -->
     <roles>
-      <role fnrole='Capitulator' vnrole='Actor1'/>
-      <role fnrole='Compeller' vnrole='Actor2'/>
+      <role fnrole='Capitulator' vnrole='Agent'/>
+      <role fnrole='Compeller' vnrole='Co-Agent'/>
     </roles>
   </vncls>
   <vncls class='97.2' fnframe='Coming_to_believe'>
