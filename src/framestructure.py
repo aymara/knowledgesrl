@@ -43,7 +43,7 @@ class VerbnetFrame:
     """
     
     phrase_replacements = {
-        "Poss":"NP", "QUO":"S",
+        "N":"NP", "Poss":"NP", "PPing":"S_ING", "QUO":"S",
         "Sinterrog":"S", "Sfin":"S",
         "VPbrst":"S", "VPing":"S_ING", "VPto":"to S"
     }
