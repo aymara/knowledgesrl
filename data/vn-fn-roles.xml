@@ -5500,33 +5500,21 @@
       <role fnrole='Phenomenon' vnrole='Proposition'/>  <!-- add Role FE to map to vnrole Predicate -->
     </roles>
   </vncls>
-  <vncls class='88' fnframe='Cogitation'>
-    <roles>
-      <role fnrole='Cognizer' vnrole='Eperiencer'/>
-      <role fnrole='Topic' vnrole='Cause'/>
-    </roles>
-  </vncls>
-  <vncls class='88' fnframe='Cogitation'>
-    <roles>
-      <role fnrole='Eperiencer' vnrole='Eperiencer'/>
-      <role fnrole='Topic' vnrole='Cause'/>
-    </roles>
-  </vncls>
   <vncls class='88.1' fnframe='Cogitation'>
     <roles>
-      <role fnrole='Eperiencer' vnrole='Eperiencer'/>
+      <role fnrole='Cognizer' vnrole='Experiencer'/>
       <role fnrole='Topic' vnrole='Cause'/>
     </roles>
   </vncls>
   <vncls class='88.1' fnframe='Emotion_active'>
     <roles>
-      <role fnrole='Experiencer' vnrole='Eperiencer'/>
+      <role fnrole='Experiencer' vnrole='Experiencer'/>
       <role fnrole='Topic' vnrole='Cause'/>
     </roles>
   </vncls>
   <vncls class='88.2' fnframe='Others_situation_as_stimulus'>
     <roles>
-      <role fnrole='Experiencer' vnrole='Eperiencer'/>
+      <role fnrole='Experiencer' vnrole='Experiencer'/>
       <role fnrole='Other' vnrole='Cause'/>
       <role fnrole='Situation' vnrole='Cause'/>
     </roles>

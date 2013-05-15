@@ -13,15 +13,9 @@ def handle_co_roles(vn_role):
     return vn_role
 
 def correct_errors(vn_role, fn_role):
-    if vn_role == "Eperiencer":
-        issues["typo"] += 1
-        vn_role = "Experiencer"
     if vn_role == "Patients":
         issues["typo"] += 1
         vn_role = "Patient"
-    if fn_role == "Eperiencer":
-        issues["typo"] += 1
-        fn_role = "Experiencer"
     return vn_role, fn_role
             
 role_matching_file = "../data/vn-fn-roles.xml"
@@ -79,8 +73,6 @@ vn_classes["37.1"] = vn_classes["37.1.1"]
 classes_names["37.1"] = classes_names["37.1.1"]
 vn_classes["58"] = vn_classes["58.1"]
 classes_names["58"] = classes_names["58.1"]
-vn_classes["88"] = vn_classes["88.1"]
-classes_names["88"] = classes_names["88.1"]
 
 root = ET.ElementTree(file=role_matching_file)
 
