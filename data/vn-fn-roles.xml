@@ -2254,20 +2254,20 @@
   </vncls>
   <vncls class='32.1' fnframe='Desiring'>
     <roles>
-      <role fnrole='Experiencer' vnrole='Experiencer'/>
-      <role fnrole='Theme' vnrole='Event'/>
+      <role fnrole='Experiencer' vnrole='Pivot'/>
+      <role fnrole='Theme' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='32.1' fnframe='Experiencer_focus'>
     <roles>
-      <role fnrole='Experiencer' vnrole='Experiencer'/>
-      <role fnrole='Content' vnrole='Event'/>
-      <role fnrole='Reason' vnrole='Attribute'/>
+      <role fnrole='Experiencer' vnrole='Pivot'/>
+      <role fnrole='Content' vnrole='Theme'/>
+      <role fnrole='Reason' vnrole='Attribute'/> <!-- improper; there is no Attribute role in vn -->
     </roles>
   </vncls>
   <vncls class='32.1' fnframe='Preference'>
     <roles>
-      <role fnrole='Experiencer' vnrole='Experiencer'/>
+      <role fnrole='Experiencer' vnrole='Pivot'/>
       <role fnrole='Event' vnrole='Theme'/>
       <role fnrole='Focal_participant' vnrole='Theme'/>
       <role fnrole='Location_of_event' vnrole='Predicate'/> <!-- improper; there is no Predicate role in vn -->
@@ -2276,31 +2276,32 @@
   </vncls>
   <vncls class='32.1' fnframe='Partiality'>
     <roles>
-      <role fnrole='Judge' vnrole='Experiencer'/>
+      <role fnrole='Judge' vnrole='Pivot'/>
       <role fnrole='Dispute' vnrole='Theme'/>
       <role fnrole='Sides' vnrole='Theme'/>
       <role fnrole='Side_1' vnrole='Theme'/>
-      <role fnrole='Side_2' vnrole='Attribute'/>
+      <role fnrole='Side_2' vnrole='Attribute'/> <!-- improper; there is no Attribute role in vn -->
       <role fnrole='Manifestation_of_bias' vnrole='Predicate'/> <!-- improper; there is no Predicate role in vn -->
     </roles>
   </vncls>
   <vncls class='32.1' fnframe='Needing'>
     <roles>
-      <role fnrole='Cognizer' vnrole='Experiencer'/>
+      <role fnrole='Cognizer' vnrole='Pivot'/>
       <role fnrole='Requirement' vnrole='Theme'/>
-      <role fnrole='Explanation' vnrole='Attribute'/>
+      <role fnrole='Explanation' vnrole='Attribute'/> <!-- improper; there is no Attribute role in vn -->
+
     </roles>
   </vncls>
   <vncls class='32.2' fnframe='Desiring'>
     <roles>
-      <role fnrole='Experiencer' vnrole='Experiencer'/>
-      <role fnrole='Theme' vnrole='Event'/>
+      <role fnrole='Experiencer' vnrole='Pivot'/>
+      <role fnrole='Theme' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='32.2' fnframe='Experiencer_focus'>
     <roles>
-      <role fnrole='Experiencer' vnrole='Experiencer'/>
-      <role fnrole='Content' vnrole='Event'/>
+      <role fnrole='Experiencer' vnrole='Pivot'/>
+      <role fnrole='Content' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='33' fnframe='Judgment_communication'>
