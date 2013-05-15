@@ -7,6 +7,7 @@ import os
 import sys
 import getopt
 import framenetreader
+from distutils.version import LooseVersion
 
 display_framenet = False
 display_verbnet = False
@@ -75,12 +76,12 @@ def load_fn_data():
     return fn_roles
     
 def display_vn_issues():
-    for vn_class, bad_roles_class in sorted(bad_vn_roles.items()):
+    for vn_class in sorted(bad_vn_roles, key=LooseVersion):
         print("VerbNet class : {}-{} ({})".format(
             vn_class, classes_names[vn_class], vn_classes[vn_class]))
         print("{:>30} {:>20} {:>25}".format(
             "FrameNet frame", "FrameNet Role", "Associated VerbNet Role"))
-        for bad_role in bad_roles_class:
+        for bad_role in bad_vn_roles[vn_class]:
             print("{:>30} {:>20} {:>25}".format(
                 bad_role["fn_frame"], bad_role["fn_role"],
                 bad_role["vn_role"]
