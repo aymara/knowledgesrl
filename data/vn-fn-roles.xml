@@ -318,7 +318,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Source' vnrole='Source'/>
+      <role fnrole='Source' vnrole='Location'/>
     </roles>
   </vncls>
   <vncls class='10.3' fnframe='Removing'>
@@ -326,7 +326,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Source' vnrole='Source'/>
+      <role fnrole='Source' vnrole='Location'/>
     </roles>
   </vncls>
   <vncls class='10.4.1' fnframe='Removing'>
