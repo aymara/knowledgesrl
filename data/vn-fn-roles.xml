@@ -3526,7 +3526,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
       <role fnrole='Whole' vnrole='Patient'/>
-      <role fnrole='Parts' vnrole='Oblique'/>
+      <role fnrole='Parts' vnrole='Result'/>
     </roles>
   </vncls>
   <vncls class='45.1' fnframe='Grinding'> <!-- added -->
@@ -4952,7 +4952,6 @@
       <role fnrole='Goal' vnrole='Theme'/>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Instrument' vnrole='Instrument'/>
-      <role fnrole='Means' vnrole='Oblique'/>
     </roles>
   </vncls>
   <vncls class='55.5' fnframe='Cause_to_start'>
@@ -4960,7 +4959,6 @@
       <role fnrole='Effect' vnrole='Theme'/>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Subevent' vnrole='Instrument'/>
-      <role fnrole='Means' vnrole='Oblique'/>
     </roles>
   </vncls>
   <vncls class='55.5' fnframe='Intentionally_create'>
@@ -4968,7 +4966,6 @@
       <role fnrole='Created_entity' vnrole='Theme'/>
       <role fnrole='Creator' vnrole='Agent'/>
       <role fnrole='Instrument' vnrole='Instrument'/>
-      <role fnrole='Means' vnrole='Oblique'/>
     </roles>
   </vncls>
   <vncls class='55.5' fnframe='Activity_start'>
@@ -4976,14 +4973,12 @@
       <role fnrole='Activity' vnrole='Theme'/>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Subevent' vnrole='Instrument'/>
-      <role fnrole='Means' vnrole='Oblique'/>
     </roles>
   </vncls>
   <vncls class='55.5' fnframe='Execute_plan'>
     <roles>
       <role fnrole='Plan' vnrole='Theme'/>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Means' vnrole='Oblique'/>
     </roles>
   </vncls>
   <vncls class='55.5' fnframe='Launch_process'>
@@ -4991,7 +4986,6 @@
       <role fnrole='Process' vnrole='Theme'/>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Subevent' vnrole='Instrument'/>
-      <role fnrole='Means' vnrole='Oblique'/>
     </roles>
   </vncls>
   <vncls class='56' fnframe='Temporary_stay'> <!-- added for Temporary_stay.overnight.v -->
