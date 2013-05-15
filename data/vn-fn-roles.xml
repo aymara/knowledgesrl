@@ -5634,15 +5634,15 @@
   </vncls>
   <vncls class='100' fnframe='Possession'>
     <roles>
-      <role fnrole='Owner' vnrole='Theme1'/>
-      <role fnrole='Possession' vnrole='Theme2'/>
+      <role fnrole='Owner' vnrole='Pivot'/>
+      <role fnrole='Possession' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='103' fnframe='Have_as_requirement'>
     <roles>
-      <role fnrole='Dependent' vnrole='Theme1'/>
-      <role fnrole='Requirement' vnrole='Theme2'/>
-      <role fnrole='Required_entity' vnrole='Theme2'/>
+      <role fnrole='Dependent' vnrole='Pivot'/>
+      <role fnrole='Requirement' vnrole='Theme'/>
+      <role fnrole='Required_entity' vnrole='Theme'/>
       <role fnrole='Required_individual' vnrole='Source'/>
     </roles>
   </vncls>
@@ -5659,12 +5659,12 @@
       <role fnrole='Numbers' vnrole='Theme'/>
     </roles>
   </vncls>
-  <vncls class='109' fnframe='Appearance'>
+  <vncls class='109' fnframe='Create_sensation'>
     <roles>
       <role fnrole='Phenomenon' vnrole='Theme'/>
-      <role fnrole='Appraisal' vnrole='Predicate'/>
-      <role fnrole='Characterization' vnrole='Predicate'/>
-      <role fnrole='Inference' vnrole='Predicate'/>
+      <role fnrole='Appraisal' vnrole='Attribute'/>
+      <role fnrole='Characterization' vnrole='Attribute'/>
+      <role fnrole='Inference' vnrole='Attribute'/>
     </roles>
   </vncls>
 </verbnetRoles-framenetFEs_RoleMappingData>
