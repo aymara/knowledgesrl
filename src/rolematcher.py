@@ -219,8 +219,6 @@ class VnFnRoleMatcher():
 class VnFnRoleMatcherTest(unittest.TestCase):
     def test_parsing(self):
         matcher = VnFnRoleMatcher(role_matching_file)
-        
-        self.assertEqual(len(matcher.fn_roles), 438)
 
         num_role_frames = 0
         for fnrole_name, fnrole_data in matcher.fn_roles.items():
