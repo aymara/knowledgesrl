@@ -11,7 +11,8 @@
   <!ATTLIST role  vnrole  CDATA #REQUIRED>
 ]>
 
-<!-- last updated by Russell on 2010.03.08 -->
+<!-- updated by Russell on 2010.03.08 -->
+<!-- further updates by Quentin Pradet and Guilhem Pujol (CEA LIST) on 2013.05.15 -->
 
 <verbnetRoles-framenetFEs_RoleMappingData  date='8-28-06'>
   <vncls class='9.1' fnframe='Placing'>
@@ -57,7 +58,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Goal' vnrole='Destination'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Cause' vnrole='Cause'/>
+      <role fnrole='Cause' vnrole='Agent'/>
     </roles>
   </vncls>
   <vncls class='9.3' fnframe='Motion_noise'> <!-- added -->
@@ -69,9 +70,9 @@
   <vncls class='9.5' fnframe='Fluidic_motion'>
     <roles>
       <role fnrole='Fluid' vnrole='Theme'/>
-      <role fnrole='Source' vnrole='Source'/>
-      <role fnrole='Goal' vnrole='Location'/>
-      <role fnrole='Area' vnrole='Location'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
+      <role fnrole='Goal' vnrole='Destination'/>
+      <role fnrole='Area' vnrole='Destination'/>
     </roles>
   </vncls>
   <vncls class='9.6' fnframe='Cause_to_move_in_place'>
@@ -175,7 +176,7 @@
   <vncls class='9.8' fnframe='Eclipse'>
     <roles>
       <role fnrole='Obstruction' vnrole='Agent'/>
-      <role fnrole='Goal' vnrole='Eclipsed'/>
+      <role fnrole='Eclipsed' vnrole='Destination'/>
     </roles>
   </vncls>
   <vncls class='9.8' fnframe='Placing'>
@@ -223,14 +224,14 @@
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
-      <role fnrole='Goal' vnrole='Location'/>
+      <role fnrole='Goal' vnrole='Destination'/>
       <role fnrole='Theme' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='9.10' fnframe='Preserving'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Medium' vnrole='Location'/>
+      <role fnrole='Medium' vnrole='Destination'/>
       <role fnrole='Undergoer' vnrole='Theme'/>
     </roles>
   </vncls>
@@ -238,21 +239,21 @@
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
-      <role fnrole='Goal' vnrole='Location'/>
+      <role fnrole='Holding_location' vnrole='Destination'/>
       <role fnrole='Theme' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='9.10' fnframe='Provide_lodging'> <!-- added for Provide_lodging.house.v -->
     <roles>
       <role fnrole='Host' vnrole='Agent'/>
-      <role fnrole='Residence' vnrole='Location'/>
+      <role fnrole='Residence' vnrole='Destination'/>
       <role fnrole='Lodger' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='9.10' fnframe='Imprisonment'> <!-- added for Imprisonment.jail.v -->
     <roles>
       <role fnrole='Authorities' vnrole='Agent'/>
-      <role fnrole='Prison' vnrole='Location'/>
+      <role fnrole='Prison' vnrole='Destination'/>
       <role fnrole='Prisoner' vnrole='Theme'/>
     </roles>
   </vncls>
@@ -493,7 +494,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Path_start' vnrole='Source'/>
+      <role fnrole='Path_start' vnrole='Initial_Location'/>
       <role fnrole='Path_end' vnrole='Destination'/>
     </roles>
   </vncls>
@@ -505,7 +506,7 @@
       <role fnrole='Recipient' vnrole='Destination'/>
     </roles>
   </vncls>
-  <vncls class='11.1' fnframe='Giving'> <!-- add FE for Source -->
+  <vncls class='11.1' fnframe='Giving'> <!-- no FE for Source, would be adjunct -->
     <roles>
       <role fnrole='Donor' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
@@ -530,7 +531,7 @@
   <vncls class='11.2' fnframe='Motion'> <!-- added -->
     <roles>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Source' vnrole='Source'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
       <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
@@ -539,7 +540,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Source' vnrole='Source'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
       <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
@@ -548,7 +549,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Path_start' vnrole='Source'/>
+      <role fnrole='Path_start' vnrole='Initial_Location'/>
       <role fnrole='Path_end' vnrole='Destination'/>
     </roles>
   </vncls>
@@ -557,7 +558,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Path_start' vnrole='Source'/>
+      <role fnrole='Path_start' vnrole='Initial_Location'/>
       <role fnrole='Path_end' vnrole='Destination'/>
     </roles>
   </vncls>
@@ -566,7 +567,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Source' vnrole='Source'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
       <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
@@ -575,7 +576,7 @@
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Source' vnrole='Source'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
       <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
@@ -584,7 +585,7 @@
       <role fnrole='Sender' vnrole='' fnframe='Earnings_and_losses'/> <!-- added for Earnings_and_losses.earn.v -->
       <role fnrole='Earnings' vnrole='Theme'/>
       <role fnrole='Earner' vnrole='Agent'/>
-      <!-- mapping for FE Buyer, VN role Source omitted because Buyer is non-core -->
+      <!-- mapping for FE Buyer, VN role Initial_Location omitted because Buyer is non-core -->
     </roles>
   </vncls>
   <vncls class='13.2' fnframe='Giving'>
