@@ -323,7 +323,7 @@ for filename in os.listdir(corpus_path):
             elif list(possible_roles)[0] in slot:
                 if len(slot) == 1: stats["one_correct_role"] += 1
                 else: stats["several_roles_ok"] += 1
-            elif len(slot) > 1:
+            elif len(slot) >= 1:
                 if len(slot) == 1: stats["one_bad_role"] += 1
                 else: stats["several_roles_bad"] += 1
                 
