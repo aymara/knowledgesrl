@@ -6,6 +6,7 @@ import re
 import os
 import sys
 import getopt
+import framenetreader
 
 display_framenet = False
 display_verbnet = False
@@ -22,6 +23,7 @@ if not display_framenet and not display_verbnet:
 role_matching_file = "../data/vn-fn-roles.xml"
 vb_dir = "../data/verbnet-3.2/"
 fn_frames_dir = "../data/fndata-1.5/frame/"
+corpus_dir = "../data/fndata-1.5/fulltext/"
 
 class VerbnetRoleReader:
     
@@ -86,21 +88,21 @@ def display_vn_issues():
         print("\n")
 
 def display_fn_issues():
-    print("Cannot find following FrameNet frame :")
-    print("{:>25} {:>75}".format("Frame", "Associated with"))
+    print("Cannot find following FrameNet frame :\n")
+
     for fn_frame, vn_classes_list in sorted(bad_fn_frames.items()):
-        print("{:>25} {:>75}".format(
-            fn_frame, ", ".join([x+"-"+classes_names[x] for x in vn_classes_list])
+        print("{}:\n{}\n".format(
+            fn_frame, "\n".join([x+"-"+classes_names[x] for x in vn_classes_list])
         ))
 
     for fn_frame, bad_roles_frame in sorted(bad_fn_roles.items()):
         print("\nFrameNet frame : {}".format(fn_frame))
         print("Allowed roles: {}".format(", ".join(fn_roles[fn_frame])))
-        print("{:>20} {:>40} {:>40}".format(
+        print("{:>20} {:>30} {:>30}".format(
             "FrameNet Role", "Associated VerbNet Role", "VerbNet class"))
             
         for bad_role in bad_roles_frame:
-            print("{:>20} {:>40} {:>40}".format(
+            print("{:>20} {:>30} {:>30}".format(
                 bad_role["fn_role"], bad_role["vn_role"],
                 bad_role["vn_class"]+"-"+classes_names[bad_role["vn_class"]]
             ))
