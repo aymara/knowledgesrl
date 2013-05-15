@@ -95,23 +95,22 @@ class VerbnetReader:
         index_xml = 0
         syntax_data = xml_frame.find("SYNTAX")
         
+        replacements = {
+            "ADVP-Middle":[], "ADV-Middle":[],
+            "NP-Fulfilling":["NP"],
+            "S-Quote":["S"], "S_INF":["to", "S"],
+            "v":["V"] # see snooze-40.4 for instance (intransitive verbs)
+        }
+        
         # Build the final structure from base_structure
         for element in base_structure:
             # Handle some syntax issues : see last entry of steal-10.5
             if element == "" or "\n" in element:
                 continue
-            # Discard most adverbs
-            if element == "ADVP-Middle" or element == "ADV-Middle":
+            # Handle simple replacements
+            if element in replacements:
+                structure = structure + replacements[element]
                 continue
-            # Replace "S-Quote" by "S"
-            elif element == "S-Quote":
-                structure.append("S")
-            # Replace "S_INF" by "to S"
-            elif element == "S_INF":
-                structure += ["to", "S"]
-            # Replace "v" by "V" (intransitive, snooze-40.4 for instance)
-            elif element == "v":
-                structure += ["V"]
             # Handle the "a/b" syntax (which means "a" or "b")
             elif "/" in element:
                 structure.append(element.split("/"))
@@ -215,12 +214,26 @@ class VerbnetReaderTest(unittest.TestCase):
         reader = VerbnetReader(path)
         self.assertEqual(len(reader.verbs), 4154)
 
-        expected_vb_frame = VerbnetFrame(
-            ['there', 'V', 'NP', list(verbnetprepclasses.prep["loc"]), 'NP'],
-            [{'Theme'}, {'Location'}],
-            43.1)
+        test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
+        test_frames = [
+            VerbnetFrame(
+                ['there', 'V', 'NP', list(verbnetprepclasses.prep["loc"]), 'NP'],
+                ['Theme', 'Location'], "43.1"),
+            VerbnetFrame(
+                ["NP", "V", "NP", "ADV"],
+                ["Agent", "Theme"], "105"),
+            VerbnetFrame(
+                ["NP", "V"],
+                ["Patient"], "45.1"),
+            VerbnetFrame(
+                ["NP", "V", "how", "to", "S"],
+                ["Agent", "Topic"], "37.7"),
+            VerbnetFrame(["NP", "V"], ["Agent"], "40.4")
+        ]
         
-        self.assertIn(expected_vb_frame, reader.verbs["sparkle"])
+        for verb, frame in zip(test_verbs, test_frames):
+            self.assertIn(verb, reader.verbs)
+            self.assertIn(frame, reader.verbs[verb])
         
         reader.verbs = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
