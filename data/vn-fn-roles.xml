@@ -489,13 +489,13 @@
       <role fnrole='Employer' vnrole='Source'/>
     </roles>
   </vncls>
-  <vncls class='11.1' fnframe='Carrying'>
+  <vncls class='11.1' fnframe='Bringing'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Path_start' vnrole='Initial_Location'/>
-      <role fnrole='Path_end' vnrole='Destination'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
+      <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
   <vncls class='11.1' fnframe='Sending'>
@@ -544,22 +544,22 @@
       <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
-  <vncls class='11.3' fnframe='Carrying'>
+  <vncls class='11.3' fnframe='Bringing'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Path_start' vnrole='Initial_Location'/>
-      <role fnrole='Path_end' vnrole='Destination'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
+      <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
-  <vncls class='11.4' fnframe='Carrying'>
+  <vncls class='11.4' fnframe='Bringing'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Path_start' vnrole='Initial_Location'/>
-      <role fnrole='Path_end' vnrole='Destination'/>
+      <role fnrole='Source' vnrole='Initial_Location'/>
+      <role fnrole='Goal' vnrole='Destination'/>
     </roles>
   </vncls>
   <vncls class='11.4' fnframe='Cause_motion'>
@@ -1011,12 +1011,6 @@
       <role fnrole='Patient' vnrole='Patient'/>
     </roles>
   </vncls>
-  <vncls class='21.2' fnframe='Slice'>
-    <roles>
-      <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Food_item' vnrole='Patient'/>
-    </roles>
-  </vncls>
   <vncls class='21.2' fnframe='Grinding'>
     <roles>
       <role fnrole='Grinder' vnrole='Agent'/>
@@ -1153,7 +1147,7 @@
       <role fnrole='Containing_object' vnrole='Patient'/>
     </roles>
   </vncls>
-  <vncls class='23.1' fnframe='Separation'>
+  <vncls class='23.1' fnframe='Separating'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Part_1' vnrole='Patient'/>
@@ -1173,7 +1167,7 @@
       <role fnrole='Whole_patient' vnrole='Patient'/>
     </roles>
   </vncls>
-  <vncls class='23.2' fnframe='Separation'>
+  <vncls class='23.2' fnframe='Separating'>
     <roles>
       <role fnrole='Part_1' vnrole='Patient'/>
       <role fnrole='Part_2' vnrole='Co-Patient'/>
@@ -1194,7 +1188,7 @@
       <role fnrole='Goal' vnrole='Co-Patient'/>
     </roles>
   </vncls>
-  <vncls class='23.3' fnframe='Separation'>
+  <vncls class='23.3' fnframe='Separating'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Part_1' vnrole='Patient'/>
@@ -1253,12 +1247,6 @@
       <role fnrole='Creator' vnrole='Agent'/>
     </roles>
   </vncls>
-  <vncls class='25.2' fnframe='Imitation'>
-    <roles>
-      <role fnrole='Text' vnrole='Theme'/>
-      <role fnrole='Author' vnrole='Agent'/>
-    </roles>
-  </vncls>
   <vncls class='25.2' fnframe='Spelling_and_pronouncing'>
     <roles>
       <role fnrole='Formal_realization' vnrole='Theme'/>
@@ -1280,12 +1268,6 @@
     </roles>
   </vncls>
   <vncls class='25.4' fnframe='Duplication'>
-    <roles>
-      <role fnrole='Copy' vnrole='Theme'/>
-      <role fnrole='Creator' vnrole='Agent'/>
-    </roles>
-  </vncls>
-  <vncls class='25.4' fnframe='Imitation'>
     <roles>
       <role fnrole='Copy' vnrole='Theme'/>
       <role fnrole='Creator' vnrole='Agent'/>
@@ -1329,16 +1311,9 @@
       <role fnrole='Cook' vnrole='Agent'/>
     </roles>
   </vncls>
-  <vncls class='26.1' fnframe='Imitation'>
+  <vncls class='26.1' fnframe='Coming_up_with'>
     <roles>
-      <role fnrole='Copy' vnrole='Product'/>
-      <role fnrole='Creator' vnrole='Agent'/>
-      <role fnrole='Original' vnrole='Material'/>
-    </roles>
-  </vncls>
-  <vncls class='26.1' fnframe='Invention'>
-    <roles>
-      <role fnrole='Invention' vnrole='Product'/>
+      <role fnrole='Idea' vnrole='Product'/>
       <role fnrole='Cognizer' vnrole='Agent'/>
     </roles>
   </vncls>
@@ -1352,13 +1327,6 @@
     <roles>
       <role fnrole='Product' vnrole='Product'/>
       <role fnrole='Manufacturer' vnrole='Agent'/>
-    </roles>
-  </vncls>
-  <vncls class='26.1' fnframe='Transformation'>
-    <roles>
-      <role fnrole='Final_entity' vnrole='Product'/>
-      <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Initial_entity' vnrole='Material'/>
     </roles>
   </vncls>
   <vncls class='26.1' fnframe='Reshaping'> <!-- added mapping for Cause -->
@@ -1389,9 +1357,9 @@
       <role fnrole='Components' vnrole='Material'/>
     </roles>
   </vncls>
-  <vncls class='26.2' fnframe='Invention'>
+  <vncls class='26.2' fnframe='Coming_up_with'>
     <roles>
-      <role fnrole='Invention' vnrole='Product'/>
+      <role fnrole='Idea' vnrole='Product'/>
       <role fnrole='Cognizer' vnrole='Agent'/>
     </roles>
   </vncls>
@@ -1419,9 +1387,9 @@
       <role fnrole='Cook' vnrole='Agent'/>
     </roles>
   </vncls>
-  <vncls class='26.3' fnframe='Invention'>
+  <vncls class='26.3' fnframe='Coming_up_with'>
     <roles>
-      <role fnrole='Invention' vnrole='Product'/>
+      <role fnrole='Idea' vnrole='Product'/>
       <role fnrole='Cognizer' vnrole='Agent'/>
     </roles>
   </vncls>
@@ -1431,9 +1399,9 @@
       <role fnrole='Cognizer' vnrole='Agent'/>
     </roles>
   </vncls>
-  <vncls class='26.4' fnframe='Invention'>
+  <vncls class='26.4' fnframe='Coming_up_with'>
     <roles>
-      <role fnrole='Invention' vnrole='Product'/>
+      <role fnrole='Idea' vnrole='Product'/>
       <role fnrole='Cognizer' vnrole='Agent'/>
     </roles>
   </vncls>
@@ -1497,13 +1465,6 @@
       <role fnrole='Theme' vnrole='Product'/>
     </roles>
   </vncls>
-  <vncls class='26.6.1' fnframe='Transformation'>
-    <roles>
-      <role fnrole='Result' vnrole='Product'/>
-      <role fnrole='Undergoer' vnrole='Material'/>
-      <role fnrole='Deformer' vnrole='Agent'/>
-    </roles>
-  </vncls>
   <vncls class='26.6.1' fnframe='Reshaping'>
     <roles>
       <role fnrole='Deformer' vnrole='Agent'/>
@@ -1554,10 +1515,10 @@
       <role fnrole='Purpose' vnrole='Beneficiary'/>
     </roles>
   </vncls>
-  <vncls class='26.7' fnframe='Invention'>
+  <vncls class='26.7' fnframe='Coming_up_with'>
     <roles>
       <role fnrole='Cognizer' vnrole='Agent'/>
-      <role fnrole='Invention' vnrole='Theme'/>
+      <role fnrole='Idea' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='26.7' fnframe='Create_physical_artwork'> <!-- added -->
@@ -1776,12 +1737,6 @@
       <role fnrole='Cognizer' vnrole='Agent'/>
       <role fnrole='Phenomenon' vnrole='Theme'/>
       <role fnrole='State' vnrole='Predicate'/>
-    </roles>
-  </vncls>
-  <vncls class='29.4' fnframe='Warrant'>
-    <roles>
-      <role fnrole='State_of_affaird' vnrole='Agent'/>
-      <role fnrole='Action' vnrole='Theme'/>
     </roles>
   </vncls>
   <vncls class='29.4' fnframe='Reasoning'> <!-- added; unclear what to do about vn role Predicate -->
@@ -2611,7 +2566,7 @@
       <role fnrole='Side_2' vnrole='Co-Agent'/>
     </roles>
   </vncls>
-  <vncls class='36.3' fnframe='Congregating'> <!-- added for Congregating.meet.v -->
+  <vncls class='36.3' fnframe='Come_together'> <!-- added for Congregating.meet.v -->
     <roles>
       <role fnrole='Party_1' vnrole='Agent'/>
       <role fnrole='Party_2' vnrole='Co-Agent'/>
@@ -3325,7 +3280,7 @@
       <role fnrole='Hair' vnrole='Patient'/>
     </roles>
   </vncls>
-  <vncls class='41.2.2' fnframe='Process_materials'> <!-- added -->
+  <vncls class='41.2.2' fnframe='Processing_materials'> <!-- added -->
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Material' vnrole='Patient'/>
@@ -3424,7 +3379,7 @@
       <role fnrole='Ground' vnrole='Location'/>
     </roles>
   </vncls>
-  <vncls class='43.2' fnframe='Make_Noise'>
+  <vncls class='43.2' fnframe='Make_noise'>
     <roles>
       <role fnrole='Noisy_event' vnrole='Theme'/>
       <role fnrole='Sound' vnrole='Theme'/>
@@ -3528,7 +3483,7 @@
       <role fnrole='Patient' vnrole='Patient'/>
     </roles>
   </vncls>
-  <vncls class='45.1' fnframe='Separation'>
+  <vncls class='45.1' fnframe='Separating'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
@@ -3651,12 +3606,6 @@
       <role fnrole='Instrument' vnrole='Instrument'/>
     </roles>
   </vncls>
-  <vncls class='45.4' fnframe='Transformation'>
-    <roles>
-      <role fnrole='Agent' vnrole='Agent'/>
-      <role fnrole='Initial_entity' vnrole='Patient'/>
-    </roles>
-  </vncls>
   <vncls class='45.4' fnframe='Apply_heat'>
     <roles>
       <role fnrole='Cook' vnrole='Agent'/>
@@ -3767,7 +3716,7 @@
       <role fnrole='Means' vnrole='Instrument'/>
     </roles>
   </vncls>
-  <vncls class='45.4' fnframe='Separation'>
+  <vncls class='45.4' fnframe='Separating'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
@@ -4242,7 +4191,7 @@
       <role fnrole='Goods' vnrole='Theme'/>
     </roles>
   </vncls>
-  <vncls class='47.5.2' fnframe='Congregating'>
+  <vncls class='47.5.2' fnframe='Assemble'>
     <roles>
       <role fnrole='Individuals' vnrole='Theme'/>
     </roles>
@@ -4599,7 +4548,7 @@
       <role fnrole='Cause' vnrole='Agent'/>
     </roles>
   </vncls>
-  <vncls class='51.4.1' fnframe='Carrying'>
+  <vncls class='51.4.1' fnframe='Bringing'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
@@ -4639,7 +4588,7 @@
       <role fnrole='Goal' vnrole='Location'/>
     </roles>
   </vncls>
-  <vncls class='51.4.2' fnframe='Carrying'>
+  <vncls class='51.4.2' fnframe='Bringing'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Carrier' vnrole='Agent'/>
@@ -5314,12 +5263,12 @@
       <role fnrole='Goal' vnrole='Theme'/>
     </roles>
   </vncls>
-  <vncls class='76' fnframe='Cause_confinement'>
+  <vncls class='76' fnframe='Inhibit_movement'>
     <roles>
       <role fnrole='Agent' vnrole='Cause'/>
       <role fnrole='Cause' vnrole='Cause'/>
       <role fnrole='Theme' vnrole='Patient'/>
-      <role fnrole='Goal' vnrole='Proposition'/>
+      <role fnrole='Holding_location' vnrole='Proposition'/>
     </roles>
   </vncls>
   <vncls class='76' fnframe='Hindering'>
@@ -5407,14 +5356,14 @@
       <role fnrole='Charges' vnrole='Predicate'/>
     </roles>
   </vncls>
-  <vncls class='81' fnframe='Judgement'>
+  <vncls class='81' fnframe='Judgment'>
     <roles>
       <role fnrole='Cognizer' vnrole='Agent'/>
       <role fnrole='Evaluee' vnrole='Theme'/>
       <role fnrole='Reason' vnrole='Predicate'/>
     </roles>
   </vncls>
-  <vncls class='81' fnframe='Judgement_communication'>
+  <vncls class='81' fnframe='Judgment_communication'>
     <roles>
       <role fnrole='Communicator' vnrole='Agent'/>
       <role fnrole='Evaluee' vnrole='Theme'/>
@@ -5565,12 +5514,12 @@
       <role fnrole='Facility' vnrole='Destination'/>
     </roles>
   </vncls>
-  <vncls class='92' fnframe='Cause_confinement'>
+  <vncls class='92' fnframe='Inhibit_movement'>
     <roles>
       <role fnrole='Agent' vnrole='Agent'/>
       <role fnrole='Cause' vnrole='Agent'/>
       <role fnrole='Theme' vnrole='Theme'/>
-      <role fnrole='Goal' vnrole='Destination'/>
+      <role fnrole='Goal' vnrole='Holding_location'/>
     </roles>
   </vncls>
   <vncls class='93' fnframe='Change_of_leadership'>
