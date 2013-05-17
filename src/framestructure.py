@@ -55,10 +55,11 @@ class VerbnetFrame:
     
     def __init__(self, structure, roles, vnclass = None):
         self.structure = structure
-        self.slot_types = []
         
         # Transform "a" in {"a"} and keep everything else unchanged
         self.roles = [{x} if isinstance(x, str) else x for x in roles]
+        self.slot_preps = []
+        self.slot_types = []
         
         self.num_slots = len(self.roles)
         
@@ -80,28 +81,32 @@ class VerbnetFrame:
         
         # Re-initialize in case we are called several times
         self.slot_types = [] 
+        self.slot_preps = [None] * self.num_slots
         
         # The next slot we are expecting :
         # always subject before the verb, object immediatly after the verb
         # and indirect_object after we encoutered a slot for object
         next_expected = VerbnetFrame.slot_types["subject"]
-        # If last structure element was a preposition, this will be set to true
-        # and will "overwrite" :next_expected
-        expect_pp = False
+        # If last structure element was a preposition, this will be filled
+        # with the preposition and will "overwrite" :next_expected
+        preposition = ""
         
+        i_slot = 0
         for element in self.structure:
             if element == "V":
                 next_expected = VerbnetFrame.slot_types["object"]
             elif element[0].isupper(): # If this is a slot
-                if expect_pp:
+                if preposition != "":
                     self.slot_types.append(VerbnetFrame.slot_types["prep_object"])
-                    expect_pp = False
+                    self.slot_preps[i_slot] = preposition
+                    preposition = ""
                 else:
                     self.slot_types.append(next_expected)
                     if next_expected == VerbnetFrame.slot_types["object"]:
                         next_expected = VerbnetFrame.slot_types["indirect_object"]
-            else:
-                expect_pp = element in verbnetprepclasses.all_preps
+                i_slot += 1
+            elif element in verbnetprepclasses.all_preps:
+                preposition = element
             
     
     @staticmethod    
@@ -402,7 +407,12 @@ class VerbnetFrameTest(unittest.TestCase):
         vn_frames = [
             VerbnetFrame(["NP", "V", "NP", "to", "S"], [None, None, None]),
             VerbnetFrame(["NP", "V", "NP"], [None, None]),
-            VerbnetFrame(["NP", "NP", "in", "NP", "V", "that", "S", "for", "NP", "NP", "after", "NP"], [])
+            VerbnetFrame(["NP", "NP", "in", "NP", "V", "that", "S", "for", "NP", "NP", "after", "NP"], [None, None, None, None, None, None, None])
+        ]
+        slot_preps = [
+            [None, None, "to"],
+            [None, None],
+            [None, None, "in", None, "for", None, "after"]
         ]
         st = VerbnetFrame.slot_types
         slot_types = [
@@ -416,14 +426,19 @@ class VerbnetFrameTest(unittest.TestCase):
         self.assertEqual(vn_frames[0], verbnet_frame)
         verbnet_frame.compute_slot_types()
         self.assertEqual(verbnet_frame.slot_types, slot_types[0])
+        self.assertEqual(verbnet_frame.slot_preps, slot_preps[0])
+        
         verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[1])
         self.assertEqual(vn_frames[1], verbnet_frame)
         verbnet_frame.compute_slot_types()
         self.assertEqual(verbnet_frame.slot_types, slot_types[1])
+        self.assertEqual(verbnet_frame.slot_preps, slot_preps[1])
+        
         verbnet_frame = vn_frames[2]
         verbnet_frame.compute_slot_types()
         verbnet_frame.compute_slot_types()
         self.assertEqual(verbnet_frame.slot_types, slot_types[2])
+        self.assertEqual(verbnet_frame.slot_preps, slot_preps[2])
         
         
 if __name__ == "__main__":

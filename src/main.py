@@ -352,9 +352,9 @@ for good_frame, frame in zip(annotated_frames, vn_frames):
 
     frame.roles = matcher.possible_distribs()
     
-    for roles, slot_type in zip(frame.roles, frame.slot_types):
+    for roles, slot_type, prep in zip(frame.roles, frame.slot_types, frame.slot_preps):
         if len(roles) == 1:
-            model.add_data(slot_type, list(roles)[0])
+            model.add_data(slot_type, list(roles)[0], prep)
 
     stats["args_kept"] += num_instanciated
     stats["frames_kept"] += 1
@@ -368,7 +368,8 @@ print("Applying probabilistic model...")
 for frame in vn_frames:
     for i in range(0, len(frame.roles)):
         if len(frame.roles[i]) > 1:
-            new_role = model.best_role(frame.roles[i], frame.slot_types[i])
+            new_role = model.best_role(
+                frame.roles[i], frame.slot_types[i], frame.slot_preps[i], "slot")
             if new_role != None:
                 frame.roles[i] = set([new_role])
 
