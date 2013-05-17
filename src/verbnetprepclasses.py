@@ -36,10 +36,7 @@ external_lexemes = {
     "how", "if", "that", "when", "where", "whether"
 }
 
-keywords = set()
-for group in prep.values(): keywords = keywords | group
-keywords = keywords | other_preps
-keywords = keywords | tag_lexemes
-keywords = keywords | external_lexemes
-
-
+all_preps = set()
+for group in prep.values(): all_preps |= group
+all_preps |= other_preps
+keywords = all_preps | tag_lexemes | external_lexemes
