@@ -6,6 +6,7 @@ from framestructure import *
 import verbnetreader
 import framematcher
 import rolematcher
+import probabilitymodel
 import os
 import sys
 import getopt
@@ -77,11 +78,43 @@ def init_fn_reader(path):
     
     return reader
                     
-def stats_frame(distrib, num_args):
-    stats["args_kept"] += num_args
-    stats["frames_kept"] += 1
-    stats["one_role"] += sum([1 if len(x) == 1 else 0 for x in distrib])
-    stats["no_role"] += num_args - sum([0 if x == set() else 1 for x in distrib])  
+def stats_quality():
+    stats["roles_conversion_impossible"] = 0
+    stats["roles_conversion_ambiguous"] = 0
+    stats["one_correct_role"] = 0
+    stats["several_roles_ok"] = 0
+    stats["one_bad_role"] = 0
+    stats["several_roles_bad"] = 0
+    stats["one_role"] = 0
+    stats["no_role"] = 0
+    
+    for good_frame, frame in zip(annotated_frames, vn_frames):    
+        for i, slot in enumerate(frame.roles):
+            if len(slot) == 0: stats["no_role"] += 1
+            elif len(slot) == 1: stats["one_role"] += 1
+            
+            try:
+                possible_roles = role_matcher.possible_vn_roles(
+                    good_frame.args[i].role,
+                    fn_frame=good_frame.frame_name,
+                    vn_classes=verbnet_classes[good_frame.predicate.lemma]
+                    )
+            except rolematcher.RoleMatchingError as e:
+                stats["roles_conversion_impossible"] += 1
+                log_impossible_role_matching(filename, good_frame, i, e.msg)
+                continue
+  
+            if len(possible_roles) > 1:
+                stats["roles_conversion_ambiguous"] += 1
+            elif list(possible_roles)[0] in slot:
+                if len(slot) == 1: stats["one_correct_role"] += 1
+                else: stats["several_roles_ok"] += 1
+            elif len(slot) >= 1:
+                if len(slot) == 1: stats["one_bad_role"] += 1
+                else: stats["several_roles_bad"] += 1
+                    
+        if debug and set() in distrib:
+            log_debug_data(frame, converted_frame, matcher, distrib)
     
 def stats_ambiguous_roles(frame, num_args):
     found_ambiguous_arg = False
@@ -137,7 +170,7 @@ def log_frame_without_slot(filename, frame, converted_frame):
         "structure":converted_frame.structure
     })
 
-def log_impossible_role_matching(filename, frame, msg):
+def log_impossible_role_matching(filename, frame, i, msg):
     errors["impossible_role_matching"].append({
         "file":filename, "sentence":frame.sentence,
         "predicate":frame.predicate.lemma,
@@ -268,10 +301,12 @@ def display_debug(n):
         
 verbnet, verbnet_classes = init_verbnet(verbnet_path)
 
-print("Loading FrameNet and VerbNet roles associations...")
-role_matcher = rolematcher.VnFnRoleMatcher(rolematcher.role_matching_file)
+print("Loading frames...")
 
-for filename in os.listdir(corpus_path):
+annotated_frames = []
+vn_frames = []
+
+for filename in sorted(os.listdir(corpus_path)):
     if not filename[-4:] == ".xml": continue
     print(filename, file=sys.stderr)
 
@@ -282,60 +317,68 @@ for filename in os.listdir(corpus_path):
     fn_reader = init_fn_reader(corpus_path + filename)
 
     for frame in fn_reader.frames:
-        stats["frames"] += 1
         stats["args"] += len(frame.args)
 
         if not frame.predicate.lemma in verbnet:
             log_vn_missing(filename, frame)
             continue
         
-        converted_frame = VerbnetFrame.build_from_frame(frame)
- 
-        num_instanciated = sum([1 if x.instanciated else 0 for x in frame.args])
-
-        stats_ambiguous_roles(frame, num_instanciated)
-         
-        try:
-            matcher = framematcher.FrameMatcher(frame.predicate.lemma, converted_frame)
-        except framematcher.EmptyFrameError:
-            log_frame_without_slot(filename, frame, converted_frame)
-            continue
-
-        for test_frame in verbnet[frame.predicate.lemma]:
-            matcher.new_match(test_frame)       
-
-        distrib = matcher.possible_distribs()
-
-        for i, slot in enumerate(distrib):
-            try:
-                possible_roles = role_matcher.possible_vn_roles(
-                    frame.args[i].role,
-                    fn_frame=frame.frame_name,
-                    vn_classes=verbnet_classes[frame.predicate.lemma]
-                )
-            except rolematcher.RoleMatchingError as e:
-                stats["roles_conversion_impossible"] += 1
-                log_impossible_role_matching(filename, frame, e.msg)
-                continue
-            
-            if len(possible_roles) > 1:
-                stats["roles_conversion_ambiguous"] += 1
-            elif list(possible_roles)[0] in slot:
-                if len(slot) == 1: stats["one_correct_role"] += 1
-                else: stats["several_roles_ok"] += 1
-            elif len(slot) >= 1:
-                if len(slot) == 1: stats["one_bad_role"] += 1
-                else: stats["several_roles_bad"] += 1
-                
-        if debug and set() in distrib:
-            log_debug_data(frame, converted_frame, matcher, distrib)
+        annotated_frames.append(frame)
         
-        stats_frame(distrib, num_instanciated)
+        converted_frame = VerbnetFrame.build_from_frame(frame)
+        converted_frame.compute_slot_types()
+        vn_frames.append(converted_frame)
     stats["files"] += 1
 
+print("Loading FrameNet and VerbNet roles associations...")
+role_matcher = rolematcher.VnFnRoleMatcher(rolematcher.role_matching_file)
+model = probabilitymodel.ProbabilityModel()
+
+print("Frame matching...")
+for good_frame, frame in zip(annotated_frames, vn_frames):
+    num_instanciated = sum([1 if x.instanciated else 0 for x in good_frame.args])
+
+    stats_ambiguous_roles(good_frame, num_instanciated)
+    predicate = good_frame.predicate.lemma
+         
+    try:
+        matcher = framematcher.FrameMatcher(predicate, frame)
+    except framematcher.EmptyFrameError:
+        log_frame_without_slot(filename, good_frame, frame)
+        continue
+
+    for test_frame in verbnet[predicate]:
+        matcher.new_match(test_frame)       
+
+    frame.roles = matcher.possible_distribs()
+    
+    for roles, slot_type in zip(frame.roles, frame.slot_types):
+        if len(roles) == 1:
+            model.add_data(slot_type, list(roles)[0])
+
+    stats["args_kept"] += num_instanciated
+    stats["frames_kept"] += 1
+    
+print("Frame matching stats...") 
+
+stats_quality()
 display_stats()
-display_errors_num()
-display_error_details()
+
+print("Applying probabilistic model...")
+for frame in vn_frames:
+    for i in range(0, len(frame.roles)):
+        if len(frame.roles[i]) > 1:
+            new_role = model.best_role(frame.roles[i], frame.slot_types[i])
+            if new_role != None:
+                frame.roles[i] = set([new_role])
+
+print("Final stats...")   
+
+stats_quality()
+display_stats()
+
+#display_errors_num()
+#display_error_details()
 if debug: display_debug(n_debug)
 
 
