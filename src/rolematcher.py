@@ -12,15 +12,14 @@ role_matching_file = "../data/vn-fn-roles.xml"
 # VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [
     "Actor", "Agent", "Asset", "Attribute", "Beneficiary", "Cause",
-    "Co-Actor", "Co-Patient", "Co-Theme", # Not in the original list
+    "Co-Agent", "Co-Patient", "Co-Theme", # Not in the original list
     "Location", "Destination", "Source", "Experiencer", "Extent",
     "Instrument", "Material", "Product", "Patient", "Predicate",
     "Recipient", "Stimulus", "Theme", "Time", "Topic"]
     
 # Added roles
-vn_roles_additionnal = [  
-    "Concept", "Eclipsed", "Event", 
-    "Oblique", "Proposition", "Value"]
+vn_roles_additionnal = ["Goal", "Initial_Location", "Pivot", "Result", 
+    "Trajectory", "Value"]
     
 # List of VN roles that won't trigger an error in unit tests
 authorised_roles = vn_roles_list + vn_roles_additionnal
@@ -238,7 +237,7 @@ class VnFnRoleMatcherTest(unittest.TestCase):
                             if not vnrole in matcher.issues["new_vn_roles"]:
                                 matcher.issues["new_vn_roles"][vnrole] = 0
                             matcher.issues["new_vn_roles"][vnrole] += 1
-                            self.assertIn(re.sub('[^a-zA-Z]', '', vnrole), authorised_roles)
+                            self.assertIn(vnrole, authorised_roles)
                 
         for fn_frame,data in matcher.mappings.items():
             contradictory = False
@@ -274,12 +273,12 @@ class VnFnRoleMatcherTest(unittest.TestCase):
     def test_matching(self):
         matcher = VnFnRoleMatcher(role_matching_file)
         
-        self.assertTrue(matcher.match("Fixed_location", "Destination"))
+        self.assertTrue(matcher.match("Fixed_location", "Location"))
         self.assertFalse(matcher.match("Fixed_location", "Agent"))
-        self.assertTrue(matcher.match("Individuals", "Actor", "Make_acquaintance"))
+        self.assertTrue(matcher.match("Connector", "Patient", "Inchoative_attaching"))
         self.assertFalse(matcher.match("Speaker", "Patient", "Talking_into"))
-        self.assertTrue(matcher.match("Grantee", "Patient", "Grant_permission", ["60"]))
-        self.assertFalse(matcher.match("Purpose", "Agent", "Exhaust_resource", ["66"]))
+        self.assertTrue(matcher.match("Grantee", "Recipient", "Grant_permission", ["60"]))
+        self.assertFalse(matcher.match("Message", "Agent", "Communication_manner", ["40.2"]))
         
         with self.assertRaises(RoleMatchingError):
             matcher.match(
