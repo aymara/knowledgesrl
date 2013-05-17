@@ -53,8 +53,9 @@ class VerbnetFrame:
         "VPbrst":"S", "VPing":"S_ING", "VPto":"to S"
     }
     
-    def __init__(self, structure, roles, vnclass = None):
+    def __init__(self, structure, roles, vnclass = None, predicate = None):
         self.structure = structure
+        self.predicate = predicate
         
         # Transform "a" in {"a"} and keep everything else unchanged
         self.roles = [{x} if isinstance(x, str) else x for x in roles]
@@ -70,11 +71,12 @@ class VerbnetFrame:
         return (isinstance(other, self.__class__) and
             self.structure == other.structure and
             self.roles == other.roles and
-            self.num_slots == other.num_slots)
+            self.num_slots == other.num_slots and
+            self.predicate == other.predicate)
             
     def __repr__(self):
-        return "VerbnetFrame({}, {}, {})".format(
-                self.structure, self.roles, self.vnclass)
+        return "VerbnetFrame({}, {}, {}, {})".format(
+                self.structure, self.roles, self.vnclass, self.predicate)
     
     def compute_slot_types(self):
         """Build the list of slot types for this frame"""
@@ -142,7 +144,7 @@ class VerbnetFrame:
         structure = structure.split(" ")
         #structure = VerbnetFrame._strip_leftpart_keywords(structure)
                 
-        result = VerbnetFrame(structure, [])
+        result = VerbnetFrame(structure, [], predicate=frame.predicate.lemma)
         result.num_slots = num_slots
         
         # Fill the role list with None value
@@ -405,9 +407,13 @@ class VerbnetFrameTest(unittest.TestCase):
                  "Grant_permission" ) ]
         
         vn_frames = [
-            VerbnetFrame(["NP", "V", "NP", "to", "S"], [None, None, None]),
-            VerbnetFrame(["NP", "V", "NP"], [None, None]),
-            VerbnetFrame(["NP", "NP", "in", "NP", "V", "that", "S", "for", "NP", "NP", "after", "NP"], [None, None, None, None, None, None, None])
+            VerbnetFrame(["NP", "V", "NP", "to", "S"], 
+                [None, None, None], predicate="urge"),
+            VerbnetFrame(["NP", "V", "NP"], [None, None], predicate="allow"),
+            VerbnetFrame(
+                ["NP", "NP", "in", "NP", "V", "that", "S",
+                    "for", "NP", "NP", "after", "NP"],
+                [None, None, None, None, None, None, None])
         ]
         slot_preps = [
             [None, None, "to"],
