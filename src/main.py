@@ -21,6 +21,7 @@ debug = False
 n_debug = 20
 framematcher.matching_algorithm = 1
 core_args_only = False
+probability_model = "predicate_slot"
 
 for opt,value in options[0]:
     if opt == "-d":
@@ -318,6 +319,7 @@ for filename in sorted(os.listdir(corpus_path)):
 
     for frame in fn_reader.frames:
         stats["args"] += len(frame.args)
+        stats["frames"] += 1
 
         if not frame.predicate.lemma in verbnet:
             log_vn_missing(filename, frame)
@@ -370,7 +372,7 @@ for frame in vn_frames:
         if len(frame.roles[i]) > 1:
             new_role = model.best_role(
                 frame.roles[i], frame.slot_types[i], frame.slot_preps[i],
-                frame.predicate, "predicate_slot")
+                frame.predicate, probability_model)
             if new_role != None:
                 frame.roles[i] = set([new_role])
 
