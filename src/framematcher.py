@@ -91,7 +91,7 @@ class FrameMatcher():
                         # happen in the "NP V NP S_INF" structure of want-32.1,
                         # where S_INF is given no role
                         if slot_2 < len(test_frame.roles):
-                            distrib[slot_1] = list(test_frame.roles[slot_2])[0]
+                            distrib[slot_1] = next(iter(test_frame.roles[slot_2]))
                             slot_1, slot_2 = slot_1 + 1, slot_2 + 1
                 elif i < index_v_1 or j < index_v_2:
                     # If we have not encountered the verb yet, we continue the matching
@@ -112,7 +112,7 @@ class FrameMatcher():
                     if FrameMatcher._is_a_slot(elem1):
                         num_match += 1
                         if num_match - 1 < len(test_frame.roles):
-                            distrib[num_match - 1] = list(test_frame.roles[num_match - 1])[0]
+                            distrib[num_match - 1] = next(iter(test_frame.roles[num_match - 1]))
                 else: break
 
         ratio_1 = num_match / self.frame.num_slots

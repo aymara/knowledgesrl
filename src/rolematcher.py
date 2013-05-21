@@ -146,7 +146,7 @@ class VnFnRoleMatcher():
         self.fn_roles[fn_role][fn_frame][vn_class].add(vn_role)
 
     def possible_vn_roles(self, fn_role, fn_frame = None, vn_classes = None):
-        """Returns the list of VN roles that can be mapped to a FN role in a given context
+        """Returns the set of VN roles that can be mapped to a FN role in a given context
         
         :param fn_role: The FrameNet role.
         :type fn_role: str.

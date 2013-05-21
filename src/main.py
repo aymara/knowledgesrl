@@ -107,7 +107,7 @@ def stats_quality():
   
             if len(possible_roles) > 1:
                 stats["roles_conversion_ambiguous"] += 1
-            elif list(possible_roles)[0] in slot:
+            elif next(iter(possible_roles)) in slot:
                 if len(slot) == 1: stats["one_correct_role"] += 1
                 else: stats["several_roles_ok"] += 1
             elif len(slot) >= 1:
@@ -356,7 +356,7 @@ for good_frame, frame in zip(annotated_frames, vn_frames):
     
     for roles, slot_type, prep in zip(frame.roles, frame.slot_types, frame.slot_preps):
         if len(roles) == 1:
-            model.add_data(slot_type, list(roles)[0], prep, predicate)
+            model.add_data(slot_type, next(iter(roles)), prep, predicate)
 
     stats["args_kept"] += num_instanciated
     stats["frames_kept"] += 1
