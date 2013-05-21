@@ -3,80 +3,54 @@
 
 import unittest
 from framestructure import *
+from collections import defaultdict
+from functools import reduce
+
+NO_PREP = "no_prep_magic_value"
+
+def multi_get(d, l):
+    """Traverses multiple levels of a dictionary to get a key or None"""
+    return reduce(lambda d,k: d.get(k) if d else None, l, d) if d else None
+
 
 class ProbabilityModel:
     def __init__(self):
-        self.data_slot_class = {}
-        self.data_slot = {}
-        self.data_predicate_slot = {}
+        self.data_slot_class = defaultdict(lambda: defaultdict(int))
+        self.data_slot = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+        self.data_predicate_slot = defaultdict(lambda: defaultdict(lambda:
+                defaultdict(lambda: defaultdict(int))))
 
     def add_data(self, slot_class, role, prep, predicate):
-        if not slot_class in self.data_slot_class:
-            self.data_slot_class[slot_class] = {}
-        if not role in self.data_slot_class[slot_class]:
-            self.data_slot_class[slot_class][role] = 0
         self.data_slot_class[slot_class][role] += 1
         
-        if not slot_class in self.data_slot:
-            self.data_slot[slot_class] = {}
         if slot_class == VerbnetFrame.slot_types["prep_object"]:
-            if not prep in self.data_slot[slot_class]:
-                self.data_slot[slot_class][prep] = {}
-            role_dict = self.data_slot[slot_class][prep]
+            self.data_slot[slot_class][prep][role] += 1
+            self.data_predicate_slot[predicate][slot_class][prep][role] += 1
         else:
-            role_dict = self.data_slot[slot_class]
-            
-        if not role in role_dict:
-            role_dict[role] = 0
-        role_dict[role] += 1
-                   
-        if not predicate in self.data_predicate_slot:
-            self.data_predicate_slot[predicate] = {}
-        if not slot_class in self.data_predicate_slot[predicate]:
-            self.data_predicate_slot[predicate][slot_class] = {}
-        if slot_class == VerbnetFrame.slot_types["prep_object"]:
-            if not prep in self.data_predicate_slot[predicate][slot_class]:
-                role_dict = self.data_predicate_slot[predicate][slot_class][prep] = {}
-            role_dict = self.data_predicate_slot[predicate][slot_class][prep]
-        else:
-            role_dict = self.data_predicate_slot[predicate][slot_class]
-            
-        if not role in role_dict:
-            role_dict[role] = 0
-        role_dict[role] += 1
+            self.data_slot[slot_class][NO_PREP][role] += 1
+            self.data_predicate_slot[predicate][slot_class][NO_PREP][role] += 1
         
     def best_role(self, role_set, slot_class, prep, predicate, model):
-        if model == "slot_class":
-            if not slot_class in self.data_slot_class: return None
-            data = self.data_slot_class[slot_class]
-        elif model == "slot":
-            if not slot_class in self.data_slot: return None
-            if slot_class == VerbnetFrame.slot_types["prep_object"]:
-                if not prep in self.data_slot[slot_class]: return None
-                data = self.data_slot[slot_class][prep]
-            else:
-                data = self.data_slot[slot_class]
-        elif model == "predicate_slot":
-            if not predicate in self.data_predicate_slot: return None
-            if not slot_class in self.data_predicate_slot[predicate]: return None
-            if slot_class == VerbnetFrame.slot_types["prep_object"]:
-                if not prep in self.data_predicate_slot[predicate][slot_class]: return None
-                data = self.data_predicate_slot[predicate][slot_class][prep]
-            else:
-                data = self.data_predicate_slot[predicate][slot_class]
+        if slot_class != VerbnetFrame.slot_types["prep_object"]:
+            final_prep = NO_PREP
         else:
-            return None
-                
-        possible_roles = set(data.keys()).intersection(role_set)
+            final_prep = prep
 
-        best_value = 0
-        best_role = None
-        for role in possible_roles:
-            if data[role] > best_value:
-                best_value = data[role]
-                best_role = role
+        if model == "slot_class":
+            data = self.data_slot_class.get(slot_class)
+        elif model == "slot":
+            data = multi_get(self.data_slot, [slot_class, final_prep])
+        elif model == "predicate_slot":
+            data = multi_get(self.data_predicate_slot, [predicate, slot_class, final_prep])
+        else:
+            raise Exception("Unknown model {}".format(model))
                 
-        return best_role
+        if data:
+            possible_roles = set(data.keys()) & role_set
+            if possible_roles:
+                return max(possible_roles, key = lambda role: data[role])
+
+        return None
 
 class ProbabilityModelTest(unittest.TestCase):
      def test_1(self):
