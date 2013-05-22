@@ -30,7 +30,7 @@ def init_verbnet(path):
     return reader.verbs, reader.classes
 
 def init_fn_reader(path):
-    reader = framenetreader.FulltextReader(corpus_path+filename, core_args_only)
+    reader = framenetreader.FulltextReader(path, core_args_only)
     
     errors["unannotated_layer"] += reader.ignored_layers
     errors["predicate_was_arg"] += reader.predicate_is_arg
