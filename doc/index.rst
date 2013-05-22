@@ -17,6 +17,7 @@ Documentation:
 
    verbcoverage
    ideas
+   parseresources
    framestructure
    framenetreader
    verbnetreader
