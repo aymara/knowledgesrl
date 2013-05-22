@@ -27,7 +27,7 @@ import sys
 from framestructure import *
 import framenetcoreargs
 
-print("Loading core arguments list for FrameNet frames...")
+print("Loading core arguments list for FrameNet frames...", file=sys.stderr)
 core_arg_finder = framenetcoreargs.CoreArgsFinder()
 core_arg_finder.load_data_from_xml(framenetcoreargs.frame_data_dir)
 

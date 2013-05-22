@@ -64,7 +64,7 @@ errors = {
 debug_data = []
 
 def init_verbnet(path):
-    print("Loading VerbNet data...")
+    print("Loading VerbNet data...", file=sys.stderr)
     reader = verbnetreader.VerbnetReader(path)
     errors["vn_parsing"] = reader.unhandled
     return reader.verbs, reader.classes
@@ -302,7 +302,7 @@ def display_debug(n):
         
 verbnet, verbnet_classes = init_verbnet(verbnet_path)
 
-print("Loading frames...")
+print("Loading frames...", file=sys.stderr)
 
 annotated_frames = []
 vn_frames = []
@@ -332,11 +332,11 @@ for filename in sorted(os.listdir(corpus_path)):
         vn_frames.append(converted_frame)
     stats["files"] += 1
 
-print("Loading FrameNet and VerbNet roles associations...")
+print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
 role_matcher = rolematcher.VnFnRoleMatcher(rolematcher.role_matching_file)
 model = probabilitymodel.ProbabilityModel()
 
-print("Frame matching...")
+print("Frame matching...", file=sys.stderr)
 for good_frame, frame in zip(annotated_frames, vn_frames):
     num_instanciated = sum([1 if x.instanciated else 0 for x in good_frame.args])
 
@@ -361,12 +361,12 @@ for good_frame, frame in zip(annotated_frames, vn_frames):
     stats["args_kept"] += num_instanciated
     stats["frames_kept"] += 1
     
-print("Frame matching stats...") 
+print("Frame matching stats...", file=sys.stderr) 
 
 stats_quality()
 display_stats()
 
-print("Applying probabilistic model...")
+print("Applying probabilistic model...", file=sys.stderr)
 for frame in vn_frames:
     for i in range(0, len(frame.roles)):
         if len(frame.roles[i]) > 1:
@@ -376,7 +376,7 @@ for frame in vn_frames:
             if new_role != None:
                 frame.roles[i] = set([new_role])
 
-print("Final stats...")   
+print("Final stats...", file=sys.stderr)   
 
 stats_quality()
 display_stats()
