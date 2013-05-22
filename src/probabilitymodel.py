@@ -15,6 +15,12 @@ def multi_get(d, l):
 
 class ProbabilityModel:
     def __init__(self):
+        self.data_default = {
+            VerbnetFrame.slot_types["subject"]:"Agent",
+            VerbnetFrame.slot_types["object"]:"Theme",
+            VerbnetFrame.slot_types["indirect_object"]:"Recipient",
+            VerbnetFrame.slot_types["prep_object"]:"Location"
+        }
         self.data_slot_class = defaultdict(lambda: defaultdict(int))
         self.data_slot = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
         self.data_predicate_slot = defaultdict(lambda: defaultdict(lambda:
@@ -36,7 +42,9 @@ class ProbabilityModel:
         else:
             final_prep = prep
 
-        if model == "slot_class":
+        if model == "default":
+            return self.data_default[slot_class]
+        elif model == "slot_class":
             data = self.data_slot_class.get(slot_class)
         elif model == "slot":
             data = multi_get(self.data_slot, [slot_class, final_prep])
