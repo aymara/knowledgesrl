@@ -24,6 +24,8 @@ from functools import reduce
 
 NO_PREP = "no_prep_magic_value"
 
+models = ["default", "slot_class", "slot", "predicate_slot"]
+
 def multi_get(d, l):
     """Traverses multiple levels of a dictionary to get a key or None"""
     return reduce(lambda d,k: d.get(k) if d else None, l, d) if d else None

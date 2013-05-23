@@ -39,7 +39,8 @@ def init_fn_reader(path):
     
     return reader
 
-options = getopt.getopt(sys.argv[1:], "d:", ["fmatching-algo=", "core-args-only"])
+options = getopt.getopt(sys.argv[1:], "d:",
+    ["fmatching-algo=", "core-args-only", "model="])
 for opt,value in options[0]:
     if opt == "-d":
         debug = True
@@ -50,6 +51,11 @@ for opt,value in options[0]:
         framematcher.matching_algorithm = 0
     if opt == "--core-args-only":
         core_args_only = True
+    if opt == "--model":
+        if not value in probabilitymodel.models:
+            print("Unknown model {}".format(value))
+            exit(0)
+        probability_model = value
    
 verbnet, verbnet_classes = init_verbnet(verbnet_path)
 
