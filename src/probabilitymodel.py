@@ -1,6 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+""" Implements the probability models proposed in the article to make a choice
+    in slot where frame matching left several possible roles.
+    
+    There are four possible models :
+      * default does not use any collected data, nor the list of possible roles
+       and makes default assignement depending on the slot class
+      * slot_class choose the most likely of the possible roles given the slot
+        class of the slot (the difference with default it is guaranteed that the
+        chosen role will be in the list of possible roles for this slot)
+      * slot choose the most likely of the possible roles given the slot type
+        (that is, the slot class, but with the PP class is divided into one class
+        for each preposition)
+      * predicate_slot choose the most likely of the possible roles given the
+        slot type and the predicate
+"""
+
 import unittest
 from framestructure import *
 from collections import defaultdict
@@ -14,6 +30,16 @@ def multi_get(d, l):
 
 
 class ProbabilityModel:
+
+    """Class used to collect data and apply one probability model
+
+    :var data_default: str. Dict The default assignements
+    :var data_slot_class: str. 2D Dict The number of occurences of each role in every slot class
+    :var data_slot: str. 3D Dict The number of occurences of each role in every slot
+    :var data_slot: str. 4D Dict The number of occurences of each role in every (slot, predicate)
+    
+    """
+    
     def __init__(self):
         self.data_default = {
             VerbnetFrame.slot_types["subject"]:"Agent",
@@ -27,6 +53,18 @@ class ProbabilityModel:
                 defaultdict(lambda: defaultdict(int))))
 
     def add_data(self, slot_class, role, prep, predicate):
+        """Use one known occurence of a role in a given context to update the data
+        of every model
+        
+        :param slot_class: The slot class of the slot where the role occured
+        :type slot_class: str
+        :param role: The role that occured
+        :type role: str
+        :param prep: The preposition which introduced the slot if it was a PP slot
+        :type prep: str
+        :param predicate: The predicate of which the slot was an argument
+        :type predicate: str
+        """
         self.data_slot_class[slot_class][role] += 1
         
         if slot_class == VerbnetFrame.slot_types["prep_object"]:
@@ -37,6 +75,19 @@ class ProbabilityModel:
             self.data_predicate_slot[predicate][slot_class][NO_PREP][role] += 1
         
     def best_role(self, role_set, slot_class, prep, predicate, model):
+        """Apply one probability model to resolve one slot
+        
+        :param role_set: The set of possible roles left by frame matching
+        :type role_set: str Set
+        :param slot_class: The slot class of the slot we want to resolve
+        :type slot_class: str
+        :param prep: If the slot is a PP, the preposition that introduced it
+        :type prep: str
+        :param predicate: The predicate of which the slot is an argument
+        :type predicate: str
+        :param model: The model that we want to apply
+        :type model: str
+        """
         if slot_class != VerbnetFrame.slot_types["prep_object"]:
             final_prep = NO_PREP
         else:
@@ -61,6 +112,9 @@ class ProbabilityModel:
         return None
 
 class ProbabilityModelTest(unittest.TestCase):
+
+     """ Test class for ProbabilityModel """
+
      def test_1(self):
         model = ProbabilityModel()
         
