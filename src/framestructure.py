@@ -15,12 +15,13 @@ class Frame:
     
     """
     
-    def __init__(self, sentence, predicate, args, words, frame_name):
+    def __init__(self, sentence, predicate, args, words, frame_name, sentence_id = 0):
         self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
         self.args = sorted(args)
         self.words = words
+        self.sentence_id = sentence_id
 
     def get_word(self, word):
         return self.sentence[word.begin:word.end + 1]

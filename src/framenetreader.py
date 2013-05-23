@@ -60,6 +60,9 @@ class FulltextReader:
         self.constant_frame = ""
         self.core_args = []
         
+        # Id of sentences from which we keep at least one frame
+        self.sentence_id = 1
+        
         # Debug data
         self.filename = filename
         self.ignored_layers = []
@@ -89,10 +92,22 @@ class FulltextReader:
             for arg in root.findall(arg_pattern):
                 if arg.attrib["type"] == "Core":
                     self.core_args.append(arg.attrib["name"])
-                       
+        
+        last_sentence = ""
         for sentence in root.findall(self.sentence_pattern):
-            for frame in self._parse_sentence(sentence):
+            new_valid_sentence = False
+            # We need to do what follows to assign the same ID to
+            # duplicate frames like
+            # KBEval__Bandeis, "Sardar Patel faced imprisonment..."
+            for frame in self._parse_sentence(sentence): 
                 self.frames.append(frame)
+                if frame.sentence == last_sentence:
+                    frame.sentence_id -= 1
+                else:
+                    new_valid_sentence = True
+            if new_valid_sentence:
+                self.sentence_id += 1
+                last_sentence = frame.sentence
 
     def _parse_sentence(self, sentence):
         """Handle the parsing of one sentence.
@@ -101,7 +116,7 @@ class FulltextReader:
         :type sentence: xml.etree.ElementTree.Element.
         
         """
- 
+
         text = sentence.find(self._xmlns + "text").text
 
         words = []
@@ -154,7 +169,7 @@ class FulltextReader:
         
         args = self._build_args_list(sentence_text, frame, frame_name, predicate)
         
-        return Frame(sentence_text, predicate, args, words, frame_name)
+        return Frame(sentence_text, predicate, args, words, frame_name, self.sentence_id)
     
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.

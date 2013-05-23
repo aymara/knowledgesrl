@@ -68,15 +68,18 @@ class SyntacticTreeNode:
 
     def closest_match(self, arg):
         """Search the closest match to arg"""
-        return self._closest_match_lcs(arg)[1]
-    
-    def _closest_match_lcs(self, arg):
+        return self.closest_match_as_node(arg).flat().split()
+
+    def closest_match_as_node(self, arg):
+        return self._closest_match_as_node_lcs(arg)[1]
+        
+    def _closest_match_as_node_lcs(self, arg):
         root_match = self.flat().split()
         root_match_len = (len(LongestCommonSubstring(root_match, arg.split())) /
                 (len(root_match) + len(arg.split())))
-        children_matches_len = [c._closest_match_lcs(arg) for c in self.children]
-        return max([(root_match_len, root_match)] + children_matches_len)
-
+        children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
+        return max([(root_match_len, self)] + children_results, key = lambda x: x[0])
+        
     def __str__(self):
         if self.children:
             children = " " + " ".join([str(t) for t in self.children])
