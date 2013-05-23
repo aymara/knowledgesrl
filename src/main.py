@@ -53,8 +53,7 @@ for opt,value in options[0]:
         core_args_only = True
     if opt == "--model":
         if not value in probabilitymodel.models:
-            print("Unknown model {}".format(value))
-            exit(0)
+            raise Exception("Unknown model {}".format(value))
         probability_model = value
    
 verbnet, verbnet_classes = init_verbnet(verbnet_path)
