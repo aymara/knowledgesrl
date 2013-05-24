@@ -26,10 +26,16 @@ NO_PREP = "no_prep_magic_value"
 
 models = ["default", "slot_class", "slot", "predicate_slot"]
 
-def multi_get(d, l):
+def multi_get(d, l, default = None):
     """Traverses multiple levels of a dictionary to get a key or None"""
-    return reduce(lambda d,k: d.get(k) if d else None, l, d) if d else None
+    if not d: return default
+    result = reduce(lambda d,k: d.get(k) if d else default, l, d)
+    return result if result else default
 
+def multi_default_dict(dimension):
+    """Returns an empty int defaultdict of a given dimension"""
+    if dimension <= 1: return defaultdict(int)
+    else: return defaultdict(lambda: multi_default_dict(dimension - 1))
 
 class ProbabilityModel:
 
@@ -49,10 +55,17 @@ class ProbabilityModel:
             VerbnetFrame.slot_types["indirect_object"]:"Recipient",
             VerbnetFrame.slot_types["prep_object"]:"Location"
         }
-        self.data_slot_class = defaultdict(lambda: defaultdict(int))
-        self.data_slot = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
-        self.data_predicate_slot = defaultdict(lambda: defaultdict(lambda:
-                defaultdict(lambda: defaultdict(int))))
+        self.data_slot_class = multi_default_dict(2)
+        self.data_slot = multi_default_dict(3)
+        self.data_predicate_slot = multi_default_dict(4)
+                
+        self.data_bootstrap_p = multi_default_dict(5)
+        self.data_bootstrap_p1 = multi_default_dict(3)
+        self.data_bootstrap_p2 = multi_default_dict(3)
+        self.data_bootstrap_p3 = multi_default_dict(4)
+        self.data_bootstrap_p1_sum = multi_default_dict(2)
+        self.data_bootstrap_p2_sum = multi_default_dict(2)
+        self.data_bootstrap_p3_sum = multi_default_dict(3)
 
     def add_data(self, slot_class, role, prep, predicate):
         """Use one known occurence of a role in a given context to update the data
@@ -75,6 +88,26 @@ class ProbabilityModel:
         else:
             self.data_slot[slot_class][NO_PREP][role] += 1
             self.data_predicate_slot[predicate][slot_class][NO_PREP][role] += 1
+
+    def add_data_bootstrap(self, role, predicate, predicate_class,
+        slot_class, prep, headword, headword_class):
+        
+        if not slot_class == VerbnetFrame.slot_types["prep_object"]:
+            prep = NO_PREP
+        
+        # Most specific
+        self.data_bootstrap_p[slot_class][prep][predicate][headword][role] += 1
+        
+        # First backoff level
+        self.data_bootstrap_p1[slot_class][predicate][role] += 1
+        self.data_bootstrap_p2[predicate][headword_class][role] += 1
+        self.data_bootstrap_p3[slot_class][prep][predicate_class][role] += 1
+        self.data_bootstrap_p1_sum[slot_class][predicate] += 1
+        self.data_bootstrap_p2_sum[predicate][headword_class] += 1
+        self.data_bootstrap_p3_sum[slot_class][prep][predicate_class] += 1
+        
+        # Second backoff level
+        self.data_slot_class[slot_class][role] += 1
         
     def best_role(self, role_set, slot_class, prep, predicate, model):
         """Apply one probability model to resolve one slot
@@ -112,7 +145,49 @@ class ProbabilityModel:
                 return max(possible_roles, key = lambda role: data[role])
 
         return None
-
+        
+    def best_roles_bootstrap(self, role_set, predicate, predicate_class, slot_class,
+        prep, headword, headword_class, backoff_level, min_evidence):
+        if not slot_class == VerbnetFrame.slot_types["prep_object"]:
+            prep = NO_PREP
+        
+        if backoff_level == 0:
+            data = multi_get(self.data_bootstrap_p, [slot_class, prep, predicate, headword], {})
+        elif backoff_level == 1:
+            data1 = multi_get(self.data_bootstrap_p1, [slot_class, predicate], {})
+            data2 = multi_get(self.data_bootstrap_p2, [predicate, headword_class], {})
+            data3 = multi_get(self.data_bootstrap_p3, [slot_class, prep, predicate_class], {})
+            sum1 = multi_get(self.data_bootstrap_p1_sum, [slot_class, predicate], {})
+            sum2 = multi_get(self.data_bootstrap_p2_sum, [predicate, headword_class], {})
+            sum3 = multi_get(self.data_bootstrap_p3_sum, [slot_class, prep, predicate_class], {})
+            
+            roles = set(data1.keys()) & set(data2.keys()) & set(data3.keys())
+            """roles = filter(lambda x: (x in role_set and 
+                                      (data1[x] >= min_evidence) and
+                                      (data2[x] >= min_evidence) and
+                                      (data3[x] >= min_evidence)), roles)"""
+            roles = filter(lambda x: (x in role_set and 
+                    data1[x] + data2[x] + data3[x] >= 3 * min_evidence), roles)
+            data = {x:((data1[x] / sum1) +
+                       (data2[x] / sum2) +
+                       (data3[x] / sum3)) for x in roles}
+        elif backoff_level == 2:
+            data = multi_get(self.data_slot_class, [slot_class], {})
+        else:
+            raise Exception("Unknown backoff level {}".format(backoff_level))
+            
+        if backoff_level in [0, 2]:
+            data = {x:data[x] for x in data if x in role_set and data[x] >= min_evidence}
+        
+        if len(data) == 0:
+            return None, None, None
+        first = max(data, key = lambda r: data[r])
+        if len(data) == 1:
+            return first, None, 0
+        second = max(data, key = lambda r: 0 if r == first else data[r])
+        return first, second, data[first] / data[second]
+        
+        
 class ProbabilityModelTest(unittest.TestCase):
 
      """ Test class for ProbabilityModel """

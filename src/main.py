@@ -10,16 +10,24 @@ from errorslog import *
 import framenetreader
 from framestructure import *
 from stats import *
+from errorslog import *
+from bootstrap import bootstrap_algorithm
 import verbnetreader
 import framematcher
 import rolematcher
 import probabilitymodel
+import headwordextractor
 import paths
+
+corpus_path = "../data/fndata-1.5/fulltext/"
+verbnet_path = "../data/verbnet-3.2/"
+corpus_annotations_path = "../data/framenet_parsed/"
 
 # Default values for command-line options
 framematcher.matching_algorithm = 1
 core_args_only = False
 debug = False
+bootstrap = False
 probability_model = "predicate_slot"
 
 def init_verbnet(path):
@@ -39,7 +47,7 @@ def init_fn_reader(path):
     return reader
 
 options = getopt.getopt(sys.argv[1:], "d:",
-    ["fmatching-algo=", "core-args-only", "model="])
+    ["fmatching-algo=", "core-args-only", "model=", "bootstrap"])
 for opt,value in options[0]:
     if opt == "-d":
         debug = True
@@ -54,6 +62,8 @@ for opt,value in options[0]:
         if not value in probabilitymodel.models:
             raise Exception("Unknown model {}".format(value))
         probability_model = value
+    if opt == "--bootstrap":
+        bootstrap = True
    
 verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
@@ -64,11 +74,13 @@ vn_frames = []
 
 for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
     if not filename[-4:] == ".xml": continue
-    print(filename, file=sys.stderr)
+    print(".", file=sys.stderr, end="")
+    sys.stderr.flush()
 
     if stats_data["files"] % 100 == 0 and stats_data["files"] > 0:
         print("{} {} {}".format(
-            stats_data["files"], stats_data["frames"], stats_data["args"]), file=sys.stderr)   
+            stats_data["files"], stats_data["frames"],
+            stats_data["args"]), file=sys.stderr)   
      
     fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
 
@@ -84,10 +96,11 @@ for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
         
         converted_frame = VerbnetFrame.build_from_frame(frame)
         converted_frame.compute_slot_types()
+
         vn_frames.append(converted_frame)
     stats_data["files"] += 1
 
-print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
+print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
 role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 model = probabilitymodel.ProbabilityModel()
 
@@ -111,7 +124,9 @@ for good_frame, frame in zip(annotated_frames, vn_frames):
     frame.roles = matcher.possible_distribs()
     
     # Update probability model
-    for roles, slot_type, prep in zip(frame.roles, frame.slot_types, frame.slot_preps):
+    for roles, slot_type, prep in zip(
+        frame.roles, frame.slot_types, frame.slot_preps
+    ):
         if len(roles) == 1:
             model.add_data(slot_type, next(iter(roles)), prep, predicate)
 
@@ -123,15 +138,27 @@ print("Frame matching stats...", file=sys.stderr)
 stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, debug)
 display_stats()
 
-print("Applying probabilistic model...", file=sys.stderr)
-for frame in vn_frames:
-    for i in range(0, len(frame.roles)):
-        if len(frame.roles[i]) > 1:
-            new_role = model.best_role(
-                frame.roles[i], frame.slot_types[i], frame.slot_preps[i],
-                frame.predicate, probability_model)
-            if new_role != None:
-                frame.roles[i] = set([new_role])
+if bootstrap:
+    hw_extractor = headwordextractor.HeadWordExtractor(corpus_annotations_path)
+
+    print("Extracting arguments headwords...", file=sys.stderr)
+    hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
+
+    print("Computing headwords classes...", file=sys.stderr);
+    hw_extractor.compute_word_classes()
+    
+    print("Bootstrap algorithm...", file=sys.stderr)
+    bootstrap_algorithm(vn_frames, model, hw_extractor, verbnet_classes)
+else:
+    print("Applying probabilistic model...", file=sys.stderr)
+    for frame in vn_frames:
+        for i in range(0, len(frame.roles)):
+            if len(frame.roles[i]) > 1:
+                new_role = model.best_role(
+                    frame.roles[i], frame.slot_types[i], frame.slot_preps[i],
+                    frame.predicate, probability_model)
+                if new_role != None:
+                    frame.roles[i] = set([new_role])
 
 print("Final stats...", file=sys.stderr)   
 

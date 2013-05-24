@@ -25,15 +25,30 @@ class HeadWordExtractor:
         self.words = set()
         
     def load_file(self, filename):
-        filename = filename.replace(".xml", ".conll")
-        with open(self.annotations_path + filename) as content:
+        path = self.annotations_path + filename.replace(".xml", ".conll")
+        
+        if not os.path.exists(path):
+            self.tree = None
+            self.sentences_data = []
+            return False
+            
+        with open(path) as content:
             self.sentences_data = content.read().split("\n\n")
+            
+        return True
         
     def select_sentence(self, sentence_id):
+        if len(self.sentences_data) < sentence_id:
+            self.tree = None
+            return False
+            
         sentence = self.sentences_data[sentence_id - 1]
         self.tree = SyntacticTreeBuilder(sentence).build_syntactic_tree()
         
+        return True
+        
     def current_sentence(self):
+        if self.tree == None: return ""
         return self.tree.flat()
     
     def compute_word_classes(self):
@@ -50,6 +65,8 @@ class HeadWordExtractor:
         self.word_classes.update(self.special_classes)
     
     def headword(self, arg_text):
+        if self.tree == None: return ""
+        
         word, pos = self._get_headword(arg_text)
         
         if pos == "PP": self.special_classes[word] = "pronoun"
@@ -59,12 +76,29 @@ class HeadWordExtractor:
         return word
         
     def best_node(self, arg_text):
+        if self.tree == None: return None
         return self.tree.closest_match_as_node(arg_text)
 
     def get_class(self, word):
         if word in self.word_classes:
             return self.word_classes[word]
         return "unknown"
+    
+    def compute_all_headwords(self, frames, vn_frames):
+        old_filename = ""
+        previous_sentence = 0
+        for frame, vn_frame in zip(frames, vn_frames):
+            if old_filename != frame.filename:
+                self.load_file(frame.filename)
+                self.select_sentence(frame.sentence_id)
+            elif frame.sentence_id != previous_sentence:
+                self.select_sentence(frame.sentence_id)
+
+            vn_frame.headwords = [  
+                self.headword(x.text) for x in frame.args if x.instanciated]    
+            
+            old_filename = frame.filename
+            previous_sentence = frame.sentence_id
         
     def _get_headword(self, arg_text):
         node = self.tree.closest_match_as_node(arg_text)

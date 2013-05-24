@@ -15,13 +15,15 @@ class Frame:
     
     """
     
-    def __init__(self, sentence, predicate, args, words, frame_name, sentence_id = 0):
+    def __init__(self, sentence, predicate, args,
+        words, frame_name, sentence_id = 0, filename = ""):
         self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
         self.args = sorted(args)
         self.words = words
         self.sentence_id = sentence_id
+        self.filename = filename
 
     def get_word(self, word):
         return self.sentence[word.begin:word.end + 1]
@@ -62,6 +64,7 @@ class VerbnetFrame:
         self.roles = [{x} if isinstance(x, str) else x for x in roles]
         self.slot_preps = []
         self.slot_types = []
+        self.headwords = []
         
         self.num_slots = len(self.roles)
         

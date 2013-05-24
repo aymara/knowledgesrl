@@ -62,9 +62,9 @@ class FulltextReader:
         
         # Id of sentences from which we keep at least one frame
         self.sentence_id = 1
-        
+
         # Debug data
-        self.filename = filename
+        self.filename = filename.split('/')[-1]
         self.ignored_layers = []
         self.predicate_is_arg = []
         self.phrase_not_found = []
@@ -169,7 +169,8 @@ class FulltextReader:
         
         args = self._build_args_list(sentence_text, frame, frame_name, predicate)
         
-        return Frame(sentence_text, predicate, args, words, frame_name, self.sentence_id)
+        return Frame(sentence_text, predicate, args, words,
+            frame_name, self.sentence_id, self.filename)
     
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.
