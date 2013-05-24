@@ -18,9 +18,9 @@ import copy
 
 corpus_path = "../data/fndata-1.5/fulltext/"
 verbnet_path = "../data/verbnet-3.2/"
-test_corpus_path = "../data/fndata-1.5/evaluation/"
+test_corpus_path = "../data/fndata-1.5/fulltext/"
 
-models = ["predicate_slot"]
+models = ["slot_class", "slot", "predicate_slot"]
 step = 1
 num_same = 100
 
@@ -166,7 +166,7 @@ bad_fm = stats_data["one_bad_role"]
 resolved_fm = stats_data["one_role"]
 identified = (stats_data["args_kept"] - stats_data["no_role"])
 
-print("Base precision : {}".format(good_fm / (good_fm + bad_fm)))
+print("Base precision : {}".format(good_fm / (good_fm + bad_fm)), file=sys.stderr)
 
 copy_of_frames = copy.deepcopy(vn_test_frames)
 order = [x for x in range(0, len(vn_test_frames))]
