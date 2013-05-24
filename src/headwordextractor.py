@@ -64,22 +64,8 @@ class HeadWordExtractor:
         
     def _get_headword(self, arg_text):
         node = self.tree.closest_match_as_node(arg_text)
-
-        if len(node.children) == 0: return node.word,node.pos
-        
-        return self._headword_rec(node)
-    
-    def _headword_rec(self, node):
-        if node.pos in ["NN", "NNS", "NP", "PP"]:
-            return node.word,node.pos
-        
-        for child in node.children:
-            result = self._headword_rec(child)
-            if result[0] != None:
-                return result
-        
-        return None,node.pos
-
+        return node.word
+  
 class HeadWordExtractorTest(unittest.TestCase):
     def comp(self, original, parsed):
         return all(
