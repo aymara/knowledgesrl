@@ -135,6 +135,7 @@ class HeadWordExtractorTest(unittest.TestCase):
                     extractor.select_sentence(frame.sentence_id)
                 
                 for arg in frame.args:
+                    if not arg.instanciated: continue
                     node = extractor.best_node(arg.text)
                     sample.append((arg.text, node.flat(), node.word))
                 
@@ -165,16 +166,18 @@ if __name__ == "__main__":
 
     for opt, value in options[0]:
         if opt == "-s": 
-            if len(options[1]) < 1:
-                print("Syntax : headwordextractor [-s num file]")
-                exit(0)
+            if len(options[1]) >= 1:
+                filename = options[1][0]
             num_sample = int(value)
-            filename = options[1][0]
         
     if num_sample > 0:
         tester = HeadWordExtractorTest()
         result = tester.test_sentences_match(num_sample)
-        with open(filename, "wb") as picklefile:
-            pickle.dump(result, picklefile)
+        if filename == "":
+            for exemple in result:
+                print("{}\n{}\n{}\n".format(exemple[0], exemple[1], exemple[2]))
+        else:
+            with open(filename, "wb") as picklefile:
+                pickle.dump(result, picklefile)
     else:
         unittest.main()
