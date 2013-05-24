@@ -1,13 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import framenetreader
-from framestructure import *
-from stats import *
-import verbnetreader
-import framematcher
-import rolematcher
-import probabilitymodel
 import os
 import sys
 import getopt
@@ -16,8 +9,16 @@ from errorslog import *
 import itertools
 import copy
 
+import framenetreader
+from framestructure import *
+from stats import *
+import verbnetreader
+import framematcher
+import rolematcher
+import probabilitymodel
+import paths
+
 corpus_path = "../data/fndata-1.5/fulltext/"
-verbnet_path = "../data/verbnet-3.2/"
 test_corpus_path = "../data/fndata-1.5/fulltext/"
 
 models = ["slot_class", "slot", "predicate_slot"]
@@ -59,7 +60,7 @@ for opt,value in options[0]:
     if opt == "--core-args-only":
         core_args_only = True
    
-verbnet, verbnet_classes = init_verbnet(verbnet_path)
+verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
 # Read data that will be used to feed the probability model
 
@@ -88,7 +89,7 @@ for filename in sorted(os.listdir(corpus_path)):
         vn_frames.append(converted_frame)
 
 print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
-role_matcher = rolematcher.VnFnRoleMatcher(rolematcher.role_matching_file)
+role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 
 # First frame matching
 

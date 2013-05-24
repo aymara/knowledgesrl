@@ -4,8 +4,7 @@
 import unittest
 import xml.etree.ElementTree as ET
 import os
-
-frame_data_dir = "../data/fndata-1.5/frame/"
+import paths
 
 class NoSuchFrameError(Exception):
     """ Trying to determine if a role is a core role of a frame that does not exist.
@@ -63,7 +62,7 @@ class CoreArgsFinder:
 class CoreArgsFinderTest(unittest.TestCase):
     def test_specific(self):
         core_args_finder = CoreArgsFinder()
-        core_args_finder.load_data_from_xml(frame_data_dir)
+        core_args_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
         
         self.assertEqual(len(core_args_finder.core_args), 1019)
         

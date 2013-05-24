@@ -6,12 +6,12 @@ import sys
 import unittest
 from collections import defaultdict
 import random
+import pickle
+import getopt
 
 from conllreader import SyntacticTreeBuilder, SyntacticTreeNode
 import framenetreader
-
-import pickle
-import getopt
+import paths
 
 class HeadWordExtractor:
     def __init__(self, path):
@@ -76,7 +76,6 @@ class HeadWordExtractorTest(unittest.TestCase):
             [x == y or y == "<num>" for x,y in zip(original.split(), parsed.split())]
         )
         
-    corpus_path = "../data/fndata-1.5/fulltext/"
     bad_files = [
             "ANC__110CYL070.xml", "C-4__C-4Text.xml",
             "NTI__BWTutorial_chapter1.xml", "NTI__LibyaCountry1.xml",
@@ -95,10 +94,10 @@ class HeadWordExtractorTest(unittest.TestCase):
             
     def test_classes(self):
         filename = "ANC__110CYL067"
-        extractor = HeadWordExtractor("../data/framenet_parsed/")
+        extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
         extractor.load_file(filename+".conll")
 
-        reader = framenetreader.FulltextReader(self.corpus_path+filename+".xml", False)    
+        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)    
 
         for frame in reader.frames:
             extractor.select_sentence(frame.sentence_id)
@@ -113,10 +112,10 @@ class HeadWordExtractorTest(unittest.TestCase):
         self.assertEqual(extractor.get_class("fghij"), "unknown")
 
     def test_sentences_match(self, num_sample = 0):
-        extractor = HeadWordExtractor("../data/framenet_parsed/")
+        extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
 
         sample = []
-        for filename in sorted(os.listdir(self.corpus_path)):
+        for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
             if not filename[-4:] == ".xml": continue
 
             if filename in self.bad_files: continue
@@ -125,7 +124,7 @@ class HeadWordExtractorTest(unittest.TestCase):
             
             extractor.load_file(filename)
             
-            reader = framenetreader.FulltextReader(self.corpus_path+filename, False)
+            reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename, False)
             previous_sentence = 0
 
             for frame in reader.frames:
@@ -147,10 +146,10 @@ class HeadWordExtractorTest(unittest.TestCase):
     
     def test_1(self):
         filename = "ANC__110CYL067"
-        extractor = HeadWordExtractor("../data/framenet_parsed/")
+        extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
         extractor.load_file(filename+".conll")
 
-        reader = framenetreader.FulltextReader(self.corpus_path+filename+".xml", False)    
+        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)    
 
         frame = reader.frames[1]
         extractor.select_sentence(frame.sentence_id)

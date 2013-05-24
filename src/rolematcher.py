@@ -7,7 +7,7 @@ import unittest
 import xml.etree.ElementTree as ET
 import re
 
-role_matching_file = "../data/vn-fn-roles.xml"
+import paths
 
 # VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [
@@ -217,7 +217,7 @@ class VnFnRoleMatcher():
 
 class VnFnRoleMatcherTest(unittest.TestCase):
     def test_parsing(self):
-        matcher = VnFnRoleMatcher(role_matching_file)
+        matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
 
         num_role_frames = 0
         for fnrole_name, fnrole_data in matcher.fn_roles.items():
@@ -271,7 +271,7 @@ class VnFnRoleMatcherTest(unittest.TestCase):
         
             
     def test_matching(self):
-        matcher = VnFnRoleMatcher(role_matching_file)
+        matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
         
         self.assertTrue(matcher.match("Fixed_location", "Location"))
         self.assertFalse(matcher.match("Fixed_location", "Agent"))

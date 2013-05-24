@@ -6,8 +6,10 @@ import re
 import os
 import sys
 import getopt
-import framenetreader
 from distutils.version import LooseVersion
+
+import framenetreader
+import paths
 
 display_framenet = False
 display_verbnet = False
@@ -20,11 +22,6 @@ for opt,v in options[0]:
 
 if not display_framenet and not display_verbnet:
     display_verbnet = True
-
-role_matching_file = "../data/vn-fn-roles.xml"
-vb_dir = "../data/verbnet-3.2/"
-fn_frames_dir = "../data/fndata-1.5/frame/"
-corpus_dir = "../data/fndata-1.5/fulltext/"
 
 class VerbnetRoleReader:
     
@@ -66,9 +63,9 @@ class VerbnetRoleReader:
 def load_fn_data():
     fn_roles = {}
     xmlns = "{http://framenet.icsi.berkeley.edu}"
-    for filename in os.listdir(fn_frames_dir):
+    for filename in os.listdir(paths.FRAMENET_FRAMES):
         if not filename[-4:] == ".xml": continue
-        root = ET.ElementTree(file=fn_frames_dir+filename).getroot()
+        root = ET.ElementTree(file=paths.FRAMENET_FRAMES+filename).getroot()
 
         fn_roles[root.attrib["name"]] = []
         for arg_data in root.findall(xmlns+"FE"):
@@ -108,7 +105,7 @@ def display_fn_issues():
                 bad_role["vn_class"]+"-"+classes_names[bad_role["vn_class"]]
             ))
             
-role_reader = VerbnetRoleReader(vb_dir)
+role_reader = VerbnetRoleReader(paths.VERBNET_PATH)
 vn_classes = role_reader.classes
 classes_names  = role_reader.classes_names
 
@@ -123,7 +120,7 @@ classes_names["58"] = classes_names["58.1"]
 
 fn_roles = load_fn_data()
 
-root = ET.ElementTree(file=role_matching_file)
+root = ET.ElementTree(file = paths.VNFN_MATCHING)
 
 bad_vn_roles = {}
 bad_fn_frames = {}

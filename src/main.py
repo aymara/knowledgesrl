@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+import sys
+import getopt
+import random
+from errorslog import *
+
 import framenetreader
 from framestructure import *
 from stats import *
@@ -8,14 +14,7 @@ import verbnetreader
 import framematcher
 import rolematcher
 import probabilitymodel
-import os
-import sys
-import getopt
-import random
-from errorslog import *
-
-corpus_path = "../data/fndata-1.5/fulltext/"
-verbnet_path = "../data/verbnet-3.2/"
+import paths
 
 # Default values for command-line options
 framematcher.matching_algorithm = 1
@@ -56,14 +55,14 @@ for opt,value in options[0]:
             raise Exception("Unknown model {}".format(value))
         probability_model = value
    
-verbnet, verbnet_classes = init_verbnet(verbnet_path)
+verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
 print("Loading frames...", file=sys.stderr)
 
 annotated_frames = []
 vn_frames = []
 
-for filename in sorted(os.listdir(corpus_path)):
+for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
     if not filename[-4:] == ".xml": continue
     print(filename, file=sys.stderr)
 
@@ -71,7 +70,7 @@ for filename in sorted(os.listdir(corpus_path)):
         print("{} {} {}".format(
             stats_data["files"], stats_data["frames"], stats_data["args"]), file=sys.stderr)   
      
-    fn_reader = init_fn_reader(corpus_path + filename)
+    fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
 
     for frame in fn_reader.frames:
         stats_data["args"] += len(frame.args)
@@ -89,7 +88,7 @@ for filename in sorted(os.listdir(corpus_path)):
     stats_data["files"] += 1
 
 print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
-role_matcher = rolematcher.VnFnRoleMatcher(rolematcher.role_matching_file)
+role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 model = probabilitymodel.ProbabilityModel()
 
 print("Frame matching...", file=sys.stderr)

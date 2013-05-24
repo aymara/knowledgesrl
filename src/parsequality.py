@@ -10,7 +10,7 @@ import os
 def get_trees(filename):
     # get data from parse trees
     trees = []
-    with open("../data/framenet_parsed/{}.conll".format(filename)) as conll_file:
+    with open("{}/{}.conll".format(paths.FRAMENET_PARSED, filename)) as conll_file:
         conll_tree = ""
         for l in conll_file.readlines():
             if l != "\n":

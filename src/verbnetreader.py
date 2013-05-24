@@ -7,8 +7,10 @@ import unittest
 import xml.etree.ElementTree as ET
 import os
 import sys
+
 from framestructure import *
 import verbnetprepclasses
+import paths
 
 class VerbnetReader:
 
@@ -210,7 +212,7 @@ class VerbnetReaderTest(unittest.TestCase):
     """Unit test class"""
 
     def test_global(self):
-        path = "../data/verbnet-3.2/"
+        path = paths.VERBNET_PATH
         reader = VerbnetReader(path)
         self.assertEqual(len(reader.verbs), 4154)
 
