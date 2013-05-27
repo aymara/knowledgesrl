@@ -10,46 +10,16 @@ import pickle
 import getopt
 
 from conllreader import SyntacticTreeBuilder, SyntacticTreeNode
+from framenetparsedreader import FNParsedReader
 import framenetreader
 import paths
 
-class HeadWordExtractor:
+class HeadWordExtractor(FNParsedReader):
     def __init__(self, path):
-        self.annotations_path = path
-        
-        self.sentences_data = []
-        self.tree = None
-        
+        FNParsedReader.__init__(self, path)
         self.word_classes = {}
         self.special_classes = {}
         self.words = set()
-        
-    def load_file(self, filename):
-        path = self.annotations_path + filename.replace(".xml", ".conll")
-        
-        if not os.path.exists(path):
-            self.tree = None
-            self.sentences_data = []
-            return False
-            
-        with open(path) as content:
-            self.sentences_data = content.read().split("\n\n")
-            
-        return True
-        
-    def select_sentence(self, sentence_id):
-        if len(self.sentences_data) < sentence_id:
-            self.tree = None
-            return False
-            
-        sentence = self.sentences_data[sentence_id - 1]
-        self.tree = SyntacticTreeBuilder(sentence).build_syntactic_tree()
-        
-        return True
-        
-    def current_sentence(self):
-        if self.tree == None: return ""
-        return self.tree.flat()
     
     def compute_word_classes(self):
         with open("temp_wordlist", "wb") as picklefile:
@@ -145,7 +115,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         self.assertEqual(extractor.get_class("abcde"), "unknown")
         self.assertEqual(extractor.get_class("fghij"), "unknown")
 
-    def test_sentences_match(self, num_sample = 0):
+    def sample_args(self, num_sample = 0):
         extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
 
         sample = []
@@ -172,7 +142,6 @@ class HeadWordExtractorTest(unittest.TestCase):
                     node = extractor.best_node(arg.text)
                     sample.append((arg.text, node.flat(), node.word))
                 
-                self.assertTrue(self.comp(frame.sentence, extractor.current_sentence()))
                 previous_sentence = frame.sentence_id
                 
         random.shuffle(sample)
@@ -205,7 +174,7 @@ if __name__ == "__main__":
         
     if num_sample > 0:
         tester = HeadWordExtractorTest()
-        result = tester.test_sentences_match(num_sample)
+        result = tester.sample_args(num_sample)
         if filename == "":
             for exemple in result:
                 print("{}\n{}\n{}\n".format(exemple[0], exemple[1], exemple[2]))
