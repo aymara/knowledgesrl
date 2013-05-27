@@ -6,7 +6,7 @@
     
     There are four possible models :
       * default does not use any collected data, nor the list of possible roles
-       and makes default assignement depending on the slot class
+        and makes default assignement depending on the slot class
       * slot_class choose the most likely of the possible roles given the slot
         class of the slot (the difference with default it is guaranteed that the
         chosen role will be in the list of possible roles for this slot)
@@ -15,6 +15,7 @@
         for each preposition)
       * predicate_slot choose the most likely of the possible roles given the
         slot type and the predicate
+
 """
 
 import unittest

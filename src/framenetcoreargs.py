@@ -51,7 +51,7 @@ class CoreArgsFinder:
         :type arg: str.
         :param frame: The frame in which the argument occurs.
         :type frame: str.
-        :returns bool -- True if the role was a core role, False otherwise.
+        :returns bool: True if the role was a core role, False otherwise.
         
         """
         if not frame in self.core_args:

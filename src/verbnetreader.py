@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" Read VerbNet and build a list of allowed VerbNet frame for each verb"""
+"""Read VerbNet and build a list of allowed VerbNet frame for each verb"""
 
 import unittest
 import xml.etree.ElementTree as ET
@@ -16,8 +16,7 @@ class VerbnetReader:
 
     """Class used to parse VerbNet and build its representation in memory.
     
-    :var verbs: Dictionnary of 
-            VerbnetFrame lists representing VerbNet.
+    :var verbs: Dictionary of VerbnetFrame lists representing VerbNet.
     """
     
     def __init__(self, path):
@@ -154,7 +153,8 @@ class VerbnetReader:
         :type xml:xml.etree.ElementTree.Element.
         :param base_structure: The VerbNet primary structure.
         :type base_structure: str List.
-        :returns: String -- the lexeme value if accepted, "" otherwise
+        :returns: String the lexeme value if accepted, "" otherwise
+
         """
         
         # The lexeme is already mentionned in the primary structure
@@ -179,7 +179,8 @@ class VerbnetReader:
         
         :param xml: The <PREP> entry.
         :type xml:xml.etree.ElementTree.Element.
-        :returns: String List -- the list of acceptable prepositions
+        :returns: String List - the list of acceptable prepositions
+
         """
         for restr_group in xml:
             if restr_group.tag == "SELRESTRS":
