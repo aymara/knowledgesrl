@@ -1,5 +1,16 @@
-Verb coverage
-=============
+Evaluation
+==========
+
+Evaluation is done on FrameNet and is the main reason as to why we're using
+FrameNet annotated text. Basically, once the algorithm has assigned VerbNet
+roles to syntactic chunks, we check that they are correct by mapping the manual
+FrameNet annotation to VerbNet annotations.
+
+Initial mappings
+----------------
+
+FrameNet verbs to possible Verbnet classes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A number of FrameNet lexical units verbs don't appear in VerbNet, here is the
 full list:
@@ -44,7 +55,29 @@ Observations:
    we don't want to deal with them.
  * This stems from one of VerbNet's most important design decision: only
    include frequent English verbs, which leads to a very useful lexicon for
-   NLP. This explain why're we're missing out on a few verbs.
- * 30% of those verbs are particle verbs (that's not too much).
- * 50% of occurrences come from 10% of verbs
+   NLP. This explain why're we're missing out on a few long-tail verbs.
+ * Indeed, 50% of occurrences come from 10% of verbs
+ * 30% of verbs are particle verbs (that's not too much).
  * What's the difference between point (to) and abide ((by))?
+
+FrameNet-VerbNet mapping
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is done by using an existing VN-FN mapping provided by VerbNet. This
+mapping is a possible source of errors but looks quite robust.
+
+Frame-matching
+--------------
+
+Two metrics are of interest here: how precise our matchings are, and what
+matching we missed.
+
+Probability model
+-----------------
+
+TODO: Include the bias-variance analysis and link to it from "Ideas".
+
+Bootstrapping
+-------------
+
+We still need to know how concerned we are with this, since it doesn't appear in 2005.
