@@ -128,6 +128,25 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, de
                     
         if debug and set() in distrib:
             log_debug_data(frame, converted_frame, matcher, distrib)
+
+def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
+    good = stats_data["one_correct_role"]
+    bad = stats_data["one_bad_role"]
+    resolved = stats_data["one_role"]
+    not_resolved = stats_data["args_kept"] - (stats_data["one_role"] + stats_data["no_role"])
+    good_model = stats_data["one_correct_role"] - good_fm
+    bad_model = stats_data["one_bad_role"] - bad_fm
+    resolved_model = stats_data["one_role"] - resolved_fm
+
+    precision_all = good / (good + bad)
+    cover_all = resolved / identified
+    if is_fm:
+        precision, cover = precision_all, cover_all
+    else:
+        precision = good_model / (good_model + bad_model)
+        cover = resolved_model / (identified - resolved_fm)
+        
+    return precision, cover, precision_all, cover_all
     
 def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes, filename):
     found_ambiguous_arg = False

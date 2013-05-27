@@ -15,6 +15,8 @@ import verbnetreader
 import framematcher
 import rolematcher
 import probabilitymodel
+import headwordextractor
+from bootstrap import *
 import paths
 
 # Default values for command-line options
@@ -60,7 +62,8 @@ vn_frames = []
 
 for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
     if not filename[-4:] == ".xml": continue
-    print(filename, file=sys.stderr)
+    print(".", file=sys.stderr, end="")
+    sys.stderr.flush()
 
     if stats_data["files"] % 100 == 0 and stats_data["files"] > 0:
         print("{} {} {}".format(
@@ -83,7 +86,7 @@ for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
         vn_frames.append(converted_frame)
     stats_data["files"] += 1
 
-print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
+print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
 role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 model = probabilitymodel.ProbabilityModel()
 
@@ -155,11 +158,34 @@ for probability_model in ["FM", "default", "slot_class", "slot", "predicate_slot
     else:
         precision = good_model / (good_model + bad_model)
         cover = resolved_model / (identified - resolved_fm)
+    
+    is_fm = probability_model == "FM"
+    data = stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm)
+    precision, cover, precision_all, cover_all = data
           
     print("{:>15} {:>15.2%} {:>20.2%} {:>10.2%} {:>15.2%}".format(
         probability_model, precision, precision_all, cover, cover_all))
     
     # Reset frame roles as they were after frame matching
     for x,y in zip(vn_frames, copy_of_frames):
-        x.roles = [y.roles[i] for i in range(0, len(x.roles))]  
+        x.roles = [y.roles[i] for i in range(0, len(x.roles))]
+        
+hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
+model = probabilitymodel.ProbabilityModel()
+
+print("Extracting arguments headwords...", file=sys.stderr)
+hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
+
+print("Computing headwords classes...", file=sys.stderr);
+hw_extractor.compute_word_classes()
+    
+print("Bootstrap algorithm...", file=sys.stderr)
+bootstrap_algorithm(vn_frames, model, hw_extractor, verbnet_classes)
+
+stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, debug)
+data = stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, False)
+precision, cover, precision_all, cover_all = data
+    
+print("{:>15} {:>15.2%} {:>20.2%} {:>10.2%} {:>15.2%}".format(
+        "bootstrap", precision, precision_all, cover, cover_all))
 
