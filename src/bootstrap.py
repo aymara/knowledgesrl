@@ -28,7 +28,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                 probability_model.add_data_bootstrap(
                     next(iter(role_set)),
                     frame.predicate,
-                    verbnet_classes[frame.predicate][0],
+                    verbnet_classes[frame.predicate],
                     frame.slot_types[j],
                     frame.slot_preps[j],
                     frame.headwords[j],
@@ -49,7 +49,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                     role_set,
                     frame.predicate,
                     # Choosing the first class here is arbitrary
-                    verbnet_classes[frame.predicate][0],
+                    verbnet_classes[frame.predicate],
                     frame.slot_types[j],
                     frame.slot_preps[j],
                     frame.headwords[j],
@@ -74,5 +74,4 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                 # everywhere it is referenced
 
         log_ratio -= log_ratio_step
-
 

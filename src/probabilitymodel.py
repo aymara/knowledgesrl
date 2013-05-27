@@ -40,9 +40,15 @@ def multi_default_dict(dimension):
 
 def multi_count(obj):
     """Returns the sum of all integers in a multidict"""
-    if isinstance(obj, int): return obj
+    if isinstance(obj, int) or isinstance(obj, float): return obj
     else: return sum([multi_count(x) for x in obj.values()])
-
+      
+def check_depth(data, depth):
+    is_scalar = isinstance(data, int) or isinstance(data, float)
+    if depth == 0: return is_scalar
+    if is_scalar: return False
+    return all([check_depth(x, depth - 1) for x in data.values()])
+  
 class ProbabilityModel:
 
     """Class used to collect data and apply one probability model
@@ -95,9 +101,26 @@ class ProbabilityModel:
             self.data_slot[slot_class][NO_PREP][role] += 1
             self.data_predicate_slot[predicate][slot_class][NO_PREP][role] += 1
 
-    def add_data_bootstrap(self, role, predicate, predicate_class,
+    def add_data_bootstrap(self, role, predicate, predicate_classes,
         slot_class, prep, headword, headword_class):
+        """Use one known occurence of a role in a given context to update the data
+        of the bootstrap algorithm
         
+        :param role: The attributed role
+        :type role: str
+        :param predicate: The predicate of which the slot is an argument
+        :type predicate: str
+        :param predicate_classes: The VerbNet classes of the predicate
+        :type predicate_classes: str List
+        :param slot_class: The slot class of the slot we want to resolve
+        :type slot_class: str
+        :param prep: If the slot is a PP, the preposition that introduced it
+        :type prep: str
+        :param headword: The headword of the argument
+        :type headword: str:
+        param headword_class: The WordNet class of the headword
+        :type headword_class: str:
+        """        
         if not slot_class == VerbnetFrame.slot_types["prep_object"]:
             prep = NO_PREP
 
@@ -107,13 +130,19 @@ class ProbabilityModel:
         # First backoff level
         self.data_bootstrap_p1[slot_class][predicate][role] += 1
         self.data_bootstrap_p2[predicate][headword_class][role] += 1
-        self.data_bootstrap_p3[slot_class][prep][predicate_class][role] += 1
         self.data_bootstrap_p1_sum[slot_class][predicate] += 1
         self.data_bootstrap_p2_sum[predicate][headword_class] += 1
-        self.data_bootstrap_p3_sum[slot_class][prep][predicate_class] += 1
         
+        # For verbs with multiple posible VerbNet classes, the score is
+        # uniformly repartited amon every classes
+        increment = 1 / len(predicate_classes)
+        for vn_class in predicate_classes:
+            self.data_bootstrap_p3[slot_class][prep][vn_class][role] += increment
+            self.data_bootstrap_p3_sum[slot_class][prep][vn_class] += increment
+
         # Second backoff level
         self.data_slot_class[slot_class][role] += 1
+
         
     def best_role(self, role_set, slot_class, prep, predicate, model):
         """Apply one probability model to resolve one slot
@@ -151,39 +180,82 @@ class ProbabilityModel:
                 return max(possible_roles, key = lambda role: data[role])
 
         return None
-        
-    def best_roles_bootstrap(self, role_set, predicate, predicate_class, slot_class,
+
+    def best_roles_bootstrap(self, role_set, predicate, predicate_classes, slot_class,
         prep, headword, headword_class, backoff_level, min_evidence):
+        """Computes the two best roles for a slot at a given backoff level
+        of the bootstrap algorithm
+        
+        :param role_set: The set of possible roles left by frame matching
+        :type role_set: str Set
+        :param predicate: The predicate of which the slot is an argument
+        :type predicate: str
+        :param predicate_classes: The VerbNet classes of the predicate
+        :type predicate_classes: str List
+        :param slot_class: The slot class of the slot we want to resolve
+        :type slot_class: str
+        :param prep: If the slot is a PP, the preposition that introduced it
+        :type prep: str
+        :param headword: The headword of the argument
+        :type headword: str:
+        param headword_class: The WordNet class of the headword
+        :type headword_class: str:
+        param backoff_level: The backoff level
+        :type backoff_level: int
+        :param min_evidence: The minimum number of occurences that a role must have to be returned
+        :type min_evidence: int
+        
+        :returns (str, str, float) -- The two roles and their probability ratio
+        """
         if not slot_class == VerbnetFrame.slot_types["prep_object"]:
             prep = NO_PREP
         
         if backoff_level == 0:
-            data = multi_get(self.data_bootstrap_p, [slot_class, prep, predicate, headword], {})
+            data = multi_get(self.data_bootstrap_p,
+                                [slot_class, prep, predicate, headword], {})
+            data = {x:data[x] for x in data if x in role_set and data[x] >= min_evidence}
         elif backoff_level == 1:
-            data1 = multi_get(self.data_bootstrap_p1, [slot_class, predicate], {})
-            data2 = multi_get(self.data_bootstrap_p2, [predicate, headword_class], {})
-            data3 = multi_get(self.data_bootstrap_p3, [slot_class, prep, predicate_class], {})
-            sum1 = multi_get(self.data_bootstrap_p1_sum, [slot_class, predicate], {})
-            sum2 = multi_get(self.data_bootstrap_p2_sum, [predicate, headword_class], {})
-            sum3 = multi_get(self.data_bootstrap_p3_sum, [slot_class, prep, predicate_class], {})
+            data1 = multi_get(self.data_bootstrap_p1,
+                                [slot_class, predicate], {})
+            data2 = multi_get(self.data_bootstrap_p2, 
+                                [predicate, headword_class], {})
+            sum1 = multi_get(self.data_bootstrap_p1_sum, 
+                                [slot_class, predicate], 0)
+            sum2 = multi_get(self.data_bootstrap_p2_sum, 
+                                [predicate, headword_class], 0)
+
+            # We still have the problem of verbs with multiple VN classes
+            # We choose not to give them an equal weight :
+            # the weight of each class is proportionnal to its number of occurences
+            # in the already resolved slots : n is not divided by sum(d.values())
+
+            data3 = defaultdict(int)
+            for vn_class in predicate_classes:
+                d = multi_get(self.data_bootstrap_p3, 
+                                [slot_class, prep, vn_class], {})
+                for role, n in d.items():
+                    data3[role] += n
+                
+            sum3 = sum(multi_get(self.data_bootstrap_p3_sum,
+                                [slot_class, prep, vn_class], 0)
+                       for vn_class in predicate_classes)
             
             roles = set(data1.keys()) & set(data2.keys()) & set(data3.keys())
-            """roles = filter(lambda x: (x in role_set and 
-                                      (data1[x] >= min_evidence) and
-                                      (data2[x] >= min_evidence) and
-                                      (data3[x] >= min_evidence)), roles)"""
-            roles = filter(lambda x: (x in role_set and 
-                    data1[x] + data2[x] + data3[x] >= 3 * min_evidence), roles)
-            data = {x:((data1[x] / sum1) +
-                       (data2[x] / sum2) +
-                       (data3[x] / sum3)) for x in roles}
+            roles = list(filter(lambda x: (x in role_set and
+                                    data1[x] + data2[x] + data3[x] >= 3 * min_evidence),
+                             roles))
+            data = {x:(data1[x] / sum1 + data2[x] / sum2 + data3[x] / sum3)
+                        for x in roles}
         elif backoff_level == 2:
             data = multi_get(self.data_slot_class, [slot_class], {})
+            data = {x:data[x] for x in data if x in role_set and data[x] >= min_evidence}
         else:
             raise Exception("Unknown backoff level {}".format(backoff_level))
-            
-        if backoff_level in [0, 2]:
-            data = {x:data[x] for x in data if x in role_set and data[x] >= min_evidence}
+        
+        # At this point, data is a dictionnary that maps every role of :role_set
+        # that meet the evidence count :min_evidence in the model :backoff_level
+        # to the number of occurences of this role in the given conditions
+        # according to the model.
         
         if len(data) == 0:
             return None, None, None
