@@ -19,10 +19,6 @@ import probabilitymodel
 import headwordextractor
 import paths
 
-corpus_path = "../data/fndata-1.5/fulltext/"
-verbnet_path = "../data/verbnet-3.2/"
-corpus_annotations_path = "../data/framenet_parsed/"
-
 # Default values for command-line options
 framematcher.matching_algorithm = 1
 core_args_only = False
@@ -139,7 +135,7 @@ stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, debug)
 display_stats()
 
 if bootstrap:
-    hw_extractor = headwordextractor.HeadWordExtractor(corpus_annotations_path)
+    hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
 
     print("Extracting arguments headwords...", file=sys.stderr)
     hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
