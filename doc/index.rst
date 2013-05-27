@@ -13,16 +13,27 @@ VN-FN mappings).
 Documentation:
 
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 4
 
-   verbcoverage
-   ideas
-   parseresources
-   framestructure
-   framenetreader
-   verbnetreader
-   framematcher
-   conllreader
+    parseresources
+    evaluation
+    ideas
+
+Code documentation:
+
+.. toctree::
+    :maxdepth: 4
+
+    conllreader
+    framematcher
+    framenetcoreargs
+    framenetreader
+    framestructure
+    headwordextractor
+    probabilitymodel
+    rolematcher
+    verbnetreader
+
 
 
 Indices and tables
