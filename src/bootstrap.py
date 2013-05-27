@@ -3,6 +3,7 @@
 
 import unittest
 import probabilitymodel
+from math import log
 from functools import reduce
 
 def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes):
@@ -10,14 +11,17 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
     # for information about the parameters' values
     log_ratio = 8
     log_ratio_step = 0.5
-    min_evidence = [3, 5, 10]
+    min_evidence = [1, 1, 10]
+    #[1, 3, 10] -> [17, 65, 2076]
+    #[3, 5, 10] -> [17, 65, 2076]
     
     # Transform the frame list (with the slots in frame.roles) into
     # a list of (frame, role_set, frame_position, slot_position)
     grouped_roles = [[(x, y, i, j) for j, y in enumerate(x.roles)] for i, x in enumerate(frames)]
     slots = reduce(lambda a,b:a+b, grouped_roles)
     
-    while log_ratio > 0:
+    total = [0, 0, 0]
+    while log_ratio >= 1:
         # Update probability model with resolved slots
         for frame, role_set, i, j in slots:
             if len(role_set) == 1:
@@ -55,10 +59,11 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                 )
 
                 if (role1 != None and 
-                    ((role2 != None and ratio > log_ratio) or
+                    ((role2 != None and log(ratio) > log_ratio) or
                     log_ratio <= 1)
                 ):
                     role = role1
+                    total[backoff_level] += 1
                     break
 
             if role != None:

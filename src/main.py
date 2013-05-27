@@ -120,11 +120,12 @@ for good_frame, frame in zip(annotated_frames, vn_frames):
     frame.roles = matcher.possible_distribs()
     
     # Update probability model
-    for roles, slot_type, prep in zip(
-        frame.roles, frame.slot_types, frame.slot_preps
-    ):
-        if len(roles) == 1:
-            model.add_data(slot_type, next(iter(roles)), prep, predicate)
+    if not bootstrap:
+        for roles, slot_type, prep in zip(
+            frame.roles, frame.slot_types, frame.slot_preps
+        ):
+            if len(roles) == 1:
+                model.add_data(slot_type, next(iter(roles)), prep, predicate)
 
     stats_data["args_kept"] += num_instanciated
     stats_data["frames_kept"] += 1

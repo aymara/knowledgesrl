@@ -38,6 +38,11 @@ def multi_default_dict(dimension):
     if dimension <= 1: return defaultdict(int)
     else: return defaultdict(lambda: multi_default_dict(dimension - 1))
 
+def multi_count(obj):
+    """Returns the sum of all integers in a multidict"""
+    if isinstance(obj, int): return obj
+    else: return sum([multi_count(x) for x in obj.values()])
+
 class ProbabilityModel:
 
     """Class used to collect data and apply one probability model
@@ -95,7 +100,7 @@ class ProbabilityModel:
         
         if not slot_class == VerbnetFrame.slot_types["prep_object"]:
             prep = NO_PREP
-        
+
         # Most specific
         self.data_bootstrap_p[slot_class][prep][predicate][headword][role] += 1
         
