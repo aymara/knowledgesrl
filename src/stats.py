@@ -17,8 +17,12 @@ stats_data = {
     "one_bad_role":0,
     "several_roles_ok":0, 
     "several_roles_bad":0,
-    "roles_conversion_impossible":0, 
-    "roles_conversion_ambiguous":0
+    "ambiguous_mapping":0,
+    "ambiguous_mapping_one_role":0,
+    "ambiguous_mapping_several_roles":0,
+    "impossible_mapping":0,
+    "impossible_mapping_one_role":0,
+    "impossible_mapping_several_roles":0
 }
 
 ambiguous_mapping = {
@@ -29,7 +33,8 @@ ambiguous_mapping = {
 }
   
 def display_stats():
-    stats_data["several_roles"] = stats_data["args_kept"] - (stats_data["one_role"] + stats_data["no_role"])
+    s = stats_data
+    s["several_roles"] = s["args_kept"] - (s["one_role"] + s["no_role"])
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
         "Frames with predicate in VerbNet: {} frames ({} args) \n\n"
@@ -39,30 +44,36 @@ def display_stats():
         "{} args with exactly one possible role\n"
         "\t{} correct\n"
         "\t{} not correct\n"
-        "\t{} cases where we cannot conclude (no role mapping for "
-        "any possible VerbNet class and this frame or several possible roles)\n"
+        "\t{} cases where we cannot conclude\n"
+        "\t\t {} because no role mapping exists between the frame and any"
+        " of the possible VerbNet classes\n"
+        "\t\t {} because several VerbNet roles are mapped to the FrameNet role\n"
         "{} args with multiple possible roles\n"
         "\t{} correct (correct role is in role list)\n"
         "\t{} not correct (correct role is not in role list)\n"
-        "\t{} cases where we cannot conclude (no role mapping for "
-        "any possible VerbNet class and this frame or several possible roles)\n\n"
+        "\t{} cases where we cannot conclude\n"
+        "\t\t {} because no role mapping exists between the frame and any"
+        " of the possible VerbNet classes\n"
+        "\t\t {} because several VerbNet roles are mapped to the FrameNet role\n"
         "Role conversion issues:\n"
+        "\t{} args for which no mapping between FrameNet and VerbNet roles was found\n"
         "\t{} args with several possible VerbNet roles\n"
-        "\t{} args for which no mapping between FrameNet and VerbNet roles was found"
+
         "\n\n".format(
-            stats_data["files"], stats_data["frames"], stats_data["args"],
-            stats_data["frames_kept"], stats_data["args_kept"],
+            s["files"], s["frames"], s["args"],
+            s["frames_kept"], s["args_kept"],
             
-            stats_data["no_role"],
+            s["no_role"],
             
-            stats_data["one_role"], stats_data["one_correct_role"], stats_data["one_bad_role"],
-            stats_data["one_role"] - (stats_data["one_bad_role"] + stats_data["one_correct_role"]),
+            s["one_role"], s["one_correct_role"], s["one_bad_role"],
+            s["one_role"] - (s["one_bad_role"] + s["one_correct_role"]),
+            s["impossible_mapping_one_role"], s["ambiguous_mapping_one_role"],
             
-            stats_data["several_roles"], stats_data["several_roles_ok"],
-            stats_data["several_roles_bad"],
-            stats_data["several_roles"] - (stats_data["several_roles_ok"] + stats_data["several_roles_bad"]),
-            stats_data["roles_conversion_ambiguous"],
-            stats_data["roles_conversion_impossible"])
+            s["several_roles"], s["several_roles_ok"],
+            s["several_roles_bad"],
+            s["several_roles"] - (s["several_roles_ok"] + s["several_roles_bad"]),
+            s["impossible_mapping_several_roles"], s["ambiguous_mapping_several_roles"],
+            s["impossible_mapping"], s["ambiguous_mapping"])
     )
     
 def display_stats_ambiguous_mapping():
@@ -101,6 +112,12 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, de
     stats_data["several_roles_bad"] = 0
     stats_data["one_role"] = 0
     stats_data["no_role"] = 0
+    stats_data["impossible_mapping"] = 0
+    stats_data["impossible_mapping_one_role"] = 0
+    stats_data["impossible_mapping_several_roles"] = 0
+    stats_data["ambiguous_mapping"] = 0
+    stats_data["ambiguous_mapping_one_role"] = 0
+    stats_data["ambiguous_mapping_several_roles"] = 0
     
     for good_frame, frame in zip(annotated_frames, vn_frames):    
         for i, slot in enumerate(frame.roles):
@@ -114,11 +131,19 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, de
                     vn_classes=verbnet_classes[good_frame.predicate.lemma]
                     )
             except RoleMatchingError as e:
-                stats_data["roles_conversion_impossible"] += 1
+                stats_data["impossible_mapping"] += 1
+                if len(slot) == 1:
+                    stats_data["impossible_mapping_one_role"] += 1
+                elif len(slot) != 0 :
+                    stats_data["impossible_mapping_several_roles"] += 1
                 continue
   
             if len(possible_roles) > 1:
-                stats_data["roles_conversion_ambiguous"] += 1
+                stats_data["ambiguous_mapping"] += 1
+                if len(slot) == 1:
+                    stats_data["ambiguous_mapping_one_role"] += 1
+                elif len(slot) != 0 :
+                    stats_data["ambiguous_mapping_several_roles"] += 1
             elif next(iter(possible_roles)) in slot:
                 if len(slot) == 1: stats_data["one_correct_role"] += 1
                 else: stats_data["several_roles_ok"] += 1
