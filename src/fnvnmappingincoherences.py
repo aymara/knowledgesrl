@@ -62,6 +62,7 @@ class VerbnetRoleReader:
 
 def load_fn_data():
     fn_roles = {}
+    fn_verbal_frames = set()
     xmlns = "{http://framenet.icsi.berkeley.edu}"
     for filename in os.listdir(paths.FRAMENET_FRAMES):
         if not filename[-4:] == ".xml": continue
@@ -70,7 +71,11 @@ def load_fn_data():
         fn_roles[root.attrib["name"]] = []
         for arg_data in root.findall(xmlns+"FE"):
             fn_roles[root.attrib["name"]].append(arg_data.attrib["name"])
-    return fn_roles
+        for lu in root.findall(xmlns+"lexUnit"):
+            if lu.attrib["name"].split(".")[1] == "v":
+                fn_verbal_frames.add(root.attrib["name"])
+                break
+    return fn_roles, fn_verbal_frames
     
 def display_vn_issues():
     for vn_class in sorted(bad_vn_roles, key=LooseVersion):
@@ -118,17 +123,19 @@ classes_names["37.1"] = classes_names["37.1.1"]
 vn_classes["58"] = vn_classes["58.1"]
 classes_names["58"] = classes_names["58.1"]
 
-fn_roles = load_fn_data()
+fn_roles, fn_verbal_frames = load_fn_data()
 
 root = ET.ElementTree(file = paths.VNFN_MATCHING)
 
 bad_vn_roles = {}
 bad_fn_frames = {}
 bad_fn_roles = {}
+encountered_fn_frames = set()
 
 for mapping in root.getroot():
     vn_class = mapping.attrib["class"]
     fn_frame = mapping.attrib["fnframe"]
+    encountered_fn_frames.add(fn_frame)
         
     if not fn_frame in fn_roles:
         if not fn_frame in bad_fn_frames:
@@ -158,3 +165,12 @@ for mapping in root.getroot():
 if display_verbnet: display_vn_issues()
 if display_framenet: display_fn_issues()
     
+
+
+mapped = fn_verbal_frames & encountered_fn_frames
+additionnal = encountered_fn_frames - fn_verbal_frames
+print("{} verbal frames mapped (out of {})".format(len(mapped), len(fn_verbal_frames)))
+print("{} non verbal frames mapped".format(len(additionnal)))
+
+print(fn_verbal_frames - encountered_fn_frames)
+print(len(fn_verbal_frames - encountered_fn_frames))
