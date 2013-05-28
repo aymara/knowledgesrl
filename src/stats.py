@@ -8,6 +8,7 @@ from errorslog import *
 stats_data = {
     "files":0,
     "frames":0, 
+    "predicate_in_verbnet":0,
     "frames_kept":0,
     "args":0, 
     "args_kept":0,
@@ -37,7 +38,8 @@ def display_stats():
     s["several_roles"] = s["args_kept"] - (s["one_role"] + s["no_role"])
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
-        "Frames with predicate in VerbNet: {} frames ({} args) \n\n"
+        "Frames with predicate in VerbNet: {} frames\n"
+        "Frames kept in VerbNet: {} frames ({} args)\n\n"
         
         "Frame matching:\n"
         "{} args without possible role\n"
@@ -61,6 +63,7 @@ def display_stats():
 
         "\n\n".format(
             s["files"], s["frames"], s["args"],
+            s["predicate_in_verbnet"],
             s["frames_kept"], s["args_kept"],
             
             s["no_role"],

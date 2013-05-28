@@ -1,47 +1,47 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+import sys
+import getopt
+import random
+from errorslog import *
+
+import framenetreader
+from framestructure import *
+from stats import *
+from errorslog import *
+from bootstrap import bootstrap_algorithm
+import verbnetreader
+import framematcher
+import rolematcher
+import probabilitymodel
+import headwordextractor
+import paths
+
+def init_verbnet(path):
+    print("Loading VerbNet data...", file=sys.stderr)
+    reader = verbnetreader.VerbnetReader(path)
+    errors["vn_parsing"] = reader.unhandled
+    return reader.verbs, reader.classes
+
+def init_fn_reader(path):
+    reader = framenetreader.FulltextReader(path, core_args_only)
+    
+    errors["unannotated_layer"] += reader.ignored_layers
+    errors["predicate_was_arg"] += reader.predicate_is_arg
+    errors["missing_phrase_type"] += reader.phrase_not_found
+    errors["missing_predicate_data"] += reader.missing_predicate_data
+    
+    return reader
+
 if __name__ == "__main__":
-    import os
-    import sys
-    import getopt
-    import random
-    from errorslog import *
-
-    import framenetreader
-    from framestructure import *
-    from stats import *
-    from errorslog import *
-    from bootstrap import bootstrap_algorithm
-    import verbnetreader
-    import framematcher
-    import rolematcher
-    import probabilitymodel
-    import headwordextractor
-    import paths
-
     # Default values for command-line options
     framematcher.matching_algorithm = 1
     core_args_only = False
     debug = False
     bootstrap = False
     probability_model = "predicate_slot"
-
-    def init_verbnet(path):
-        print("Loading VerbNet data...", file=sys.stderr)
-        reader = verbnetreader.VerbnetReader(path)
-        errors["vn_parsing"] = reader.unhandled
-        return reader.verbs, reader.classes
-
-    def init_fn_reader(path):
-        reader = framenetreader.FulltextReader(path, core_args_only)
-        
-        errors["unannotated_layer"] += reader.ignored_layers
-        errors["predicate_was_arg"] += reader.predicate_is_arg
-        errors["missing_phrase_type"] += reader.phrase_not_found
-        errors["missing_predicate_data"] += reader.missing_predicate_data
-        
-        return reader
 
     options = getopt.getopt(sys.argv[1:], "d:",
         ["fmatching-algo=", "core-args-only", "model=", "bootstrap"])
@@ -109,6 +109,7 @@ if __name__ == "__main__":
         stats_ambiguous_roles(good_frame, num_instanciated,
             role_matcher, verbnet_classes, filename)
      
+        # Find FrameNet frame <-> VerbNet class mapping
         try:
             matcher = framematcher.FrameMatcher(predicate, frame)
         except framematcher.EmptyFrameError:
@@ -119,6 +120,7 @@ if __name__ == "__main__":
         for test_frame in verbnet[predicate]:
             matcher.new_match(test_frame)       
         frame.roles = matcher.possible_distribs()
+        stats_data["predicate_in_verbnet"] += 1
         
         # Update probability model
         if not bootstrap:
