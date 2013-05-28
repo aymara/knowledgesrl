@@ -26,7 +26,7 @@ class HeadWordExtractor(FNParsedReader):
         
     """
     
-   def __init__(self, path):
+    def __init__(self, path):
         FNParsedReader.__init__(self, path)
         self.word_classes = {}
         self.special_classes = {}
