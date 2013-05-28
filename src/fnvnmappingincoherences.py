@@ -171,6 +171,3 @@ mapped = fn_verbal_frames & encountered_fn_frames
 additionnal = encountered_fn_frames - fn_verbal_frames
 print("{} verbal frames mapped (out of {})".format(len(mapped), len(fn_verbal_frames)))
 print("{} non verbal frames mapped".format(len(additionnal)))
-
-print(fn_verbal_frames - encountered_fn_frames)
-print(len(fn_verbal_frames - encountered_fn_frames))
