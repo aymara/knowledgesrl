@@ -114,7 +114,7 @@ class SyntacticTreeBuilder():
         self.words, self.deprels, self.pos, self.parents = [], [], [], []
         self.word_begins = []
         
-        begin = 1
+        begin = 0
         for l in conll_tree.splitlines():
             line_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
             self.words.append(form)
@@ -195,7 +195,7 @@ class TreeBuilderTest(unittest.TestCase):
     
     def test_tree_str(self):
         #The others here today live elsewhere .
-        expected_str = "(VV/ROOT/1/1/38 live (NNS/SBJ/1/1/21 others (DT/NMOD/0/1/3 The) (RB/LOC/0/12/21 here (RB/TMP/0/17/21 today))) (RB/LOC/0/28/36 elsewhere) (./P/0/38/38 .))"
+        expected_str = "(VV/ROOT/1/0/37 live (NNS/SBJ/1/0/20 others (DT/NMOD/0/0/2 The) (RB/LOC/0/11/20 here (RB/TMP/0/16/20 today))) (RB/LOC/0/27/35 elsewhere) (./P/0/37/37 .))"
         
         self.assertEqual(str(self.tree), expected_str)
         self.assertEqual(self.tree.flat(), "The others here today live elsewhere .")
