@@ -48,18 +48,26 @@ class SyntacticTreeNode:
     
     """
     
-    def __init__(self, word, position, pos, deprel, children):
+    def __init__(self, word, position, pos, deprel, begin, end, children):
         self.word = word
         self.position = position
         self.pos = pos
         self.deprel = deprel
         self.children = children
-
+        self.begin = begin
+        self.end = end
+        self.father = None
+                
+    def __iter__(self):
+        for position, child in enumerate(self.children):
+            if position == self.position: yield(self)
+            for node in child:
+                yield node
+        if self.position == len(self.children): yield self
+    
     def flat(self):
         """Return the tokenized sentence from the parse tree."""
-        elements = [c.flat() for c in self.children]
-        elements.insert(self.position, self.word)
-        return " ".join(elements)
+        return " ".join([x.word for x in self])
 
     def contains(self, arg):
         """Search an exact argument in all subtrees"""
@@ -85,8 +93,7 @@ class SyntacticTreeNode:
             children = " " + " ".join([str(t) for t in self.children])
         else:
             children = ""
-        return "({}/{}/{} {}{})".format(self.pos, self.deprel, self.position, self.word, children)
-
+        return "({}/{}/{}/{}/{} {}{})".format(self.pos, self.deprel, self.position, self.begin, self.end, self.word, children)
 
 class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree
@@ -105,14 +112,18 @@ class SyntacticTreeBuilder():
         
         """
         self.words, self.deprels, self.pos, self.parents = [], [], [], []
-
+        self.word_begins = []
+        
+        begin = 1
         for l in conll_tree.splitlines():
             line_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
             self.words.append(form)
             self.deprels.append(deprel)
             self.pos.append(pos)
             self.parents.append(int(head))
-    
+            self.word_begins.append(begin)
+            begin += 1 + len(form)
+        
     def build_syntactic_tree(self):
         """ Build and return a the syntactic tree """
         return self.build_tree_from(0).children[0]
@@ -146,17 +157,28 @@ class SyntacticTreeBuilder():
 
         root_position = 0
         children = []
+        begin = self.word_begins[root - 1]
+        end = begin + len(self.words[root - 1]) - 1
 
         next_child_pos = self.find_child_after(root, 1)
         while next_child_pos != None:
             if next_child_pos < root:
                 root_position += 1
-            children.append(self.build_tree_from(next_child_pos))
+
+            child = self.build_tree_from(next_child_pos)
+            children.append(child)
+            if child.begin < begin: begin = child.begin
+            if child.end > end: end = child.end
             next_child_pos = self.find_child_after(root, next_child_pos + 1)
 
-        return SyntacticTreeNode(self.words[root - 1], root_position,
+        result = SyntacticTreeNode(self.words[root - 1], root_position,
                                  self.pos[root - 1], self.deprels[root - 1],
-                                 children)
+                                 begin, end, children)
+        
+        for child in result.children:
+            child.father = result
+                                 
+        return result
 
 class TreeBuilderTest(unittest.TestCase):
 
@@ -172,7 +194,8 @@ class TreeBuilderTest(unittest.TestCase):
         self.tree = treeBuilder.build_syntactic_tree()
     
     def test_tree_str(self):
-        expected_str = "(VV/ROOT/1 live (NNS/SBJ/1 others (DT/NMOD/0 The) (RB/LOC/0 here (RB/TMP/0 today))) (RB/LOC/0 elsewhere) (./P/0 .))"
+        #The others here today live elsewhere .
+        expected_str = "(VV/ROOT/1/1/38 live (NNS/SBJ/1/1/21 others (DT/NMOD/0/1/3 The) (RB/LOC/0/12/21 here (RB/TMP/0/17/21 today))) (RB/LOC/0/28/36 elsewhere) (./P/0/38/38 .))"
         
         self.assertEqual(str(self.tree), expected_str)
         self.assertEqual(self.tree.flat(), "The others here today live elsewhere .")
