@@ -11,8 +11,10 @@ import sys
 class FNParsedReader:
     def __init__(self, path):
         self.annotations_path = path
-        
+
         self.sentences_data = []
+        self.sentence_id = 0
+        self.filename = None
         self.tree = None
 
     def load_file(self, filename):
@@ -25,6 +27,10 @@ class FNParsedReader:
             
         with open(path) as content:
             self.sentences_data = content.read().split("\n\n")
+            if self.sentences_data[len(self.sentences_data) - 1] == "":
+                del self.sentences_data[len(self.sentences_data) - 1]
+        
+        self.filename=filename
             
         return True
         
@@ -35,7 +41,9 @@ class FNParsedReader:
             
         sentence = self.sentences_data[sentence_id - 1]
         self.tree = SyntacticTreeBuilder(sentence).build_syntactic_tree()
-        
+
+        self.sentence_id = sentence_id
+
         return True
         
     def current_sentence(self):
@@ -69,7 +77,6 @@ class FNParsedReaderTest(unittest.TestCase):
         print("Checking FrameNetParsedReader")
         extractor = FNParsedReader(paths.FRAMENET_PARSED)
 
-        sample = []
         for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
             if not filename[-4:] == ".xml": continue
 
