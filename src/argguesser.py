@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+""" Extract frames, predicates and arguments from a corpus, using only syntactic annotations """
+
 import verbnetreader
 from framenetparsedreader import FNParsedReader
 from framestructure import *
@@ -13,6 +15,11 @@ import os
 import sys
 
 class ArgGuesser(FNParsedReader):
+    """
+    :var verbnet_index: VerbnetFrame Dict -- Used to know which predicates are in VerbNet.
+    :var base_forms: str Dict -- The infinitives of the verbal forms we found in the corpus.
+    """
+    
     predicate_pos = ["VV", "VVN"]
     
     subject_deprels = ["SBJ"]
@@ -24,7 +31,12 @@ class ArgGuesser(FNParsedReader):
         self.base_forms = {}
 
     def handle_corpus(self):
+        """ Extracts frames from the corpus and iterate over them """
+        
+        # First, compute the infinitive for of every verb in the corpus
         self._compute_base_forms()
+        
+        # Read the corpus a second time to build frames
         for filename in sorted(os.listdir(self.annotations_path)):
             if not filename[-6:] == ".conll": continue
 
@@ -35,6 +47,12 @@ class ArgGuesser(FNParsedReader):
                 yield frame
 
     def _extract_verbs(self):
+        """ Computes the set of every verbs in the corpus 
+        
+        :returns: str Set -- The set of every verbal form encountered in the corpus
+        
+        """
+        
         result = set()
         
         for filename in sorted(os.listdir(self.annotations_path)):
@@ -55,6 +73,8 @@ class ArgGuesser(FNParsedReader):
         return result          
 
     def _compute_base_forms(self):
+        """ Use the python2 script that can talk to nltk to compute the infinitive forms """
+    
         with open("temp_wordlist", "wb") as picklefile:
             pickle.dump(self._extract_verbs(), picklefile, 2)
 
@@ -66,6 +86,7 @@ class ArgGuesser(FNParsedReader):
         os.system("rm temp_wordlist temp_morph")
 
     def _handle_file(self, filename):
+        """ Extracts frames from one file and iterate over them """
         self.load_file(filename)
         sentence_id = 1
         while self.select_sentence(sentence_id):
@@ -74,7 +95,10 @@ class ArgGuesser(FNParsedReader):
             sentence_id += 1
     
     def _handle_sentence(self):
+        """ Extracts frames from one sentence and iterate over them """
         for node in self.tree:
+            # For every verb, looks for its infinitive form in verbnet, and
+            # builds a new frame if it is found
             if node.pos in self.predicate_pos:
                 node.lemma = node.word
                 if node.word in self.base_forms:
@@ -84,28 +108,45 @@ class ArgGuesser(FNParsedReader):
                     args = self._find_args(node)
                     
                     yield Frame(
-                    sentence=self.tree.flat(),
-                    predicate=predicate,
-                    args=args,
-                    words=[Word(x.begin, x.end, x.pos) for x in self.tree],
-                    frame_name=None,
-                    sentence_id=self.sentence_id,
-                    filename=self.filename
+                        sentence=self.tree.flat(),
+                        predicate=predicate,
+                        args=args,
+                        words=[Word(x.begin, x.end, x.pos) for x in self.tree],
+                        frame_name=None,
+                        sentence_id=self.sentence_id,
+                        filename=self.filename
                     )
     
     def _find_args(self, node):
-        result = []
-
+        """Returns every arguments of a given node.
+        
+        :param node: The node which descendant are susceptible to be returned.
+        :type node: SyntacticTreeNode.
+        :returns: Arg List -- The resulting list of arguments.
+        
+        """
         result = self._find_args_rec(node, node)
         
+        """
         if node.father != None:
             for brother in node.father.children:
                 if self._is_subject(brother, node):
-                    result.append(self._nodeToArg(brother))
+                    result.append(self._nodeToArg(brother))"""
 
         return result
     
     def _find_args_rec(self, predicate_node, node):
+        """Returns every arguments of a given node that is a descendant of another node.
+        It is possible that one of the returned arguments corresponds
+        to the second node itself.
+        
+        :param predicate_node: The node of which we want to obtain arguments.
+        :type predicate_node: SyntacticTreeNode.
+        :param node: The node which descendant are susceptible to be returned.
+        :type node: SyntacticTreeNode.
+        :returns: Arg List -- The resulting list of arguments.
+        
+        """
         result = []
         for child in node.children:
             if not child.pos in self.predicate_pos:
@@ -115,6 +156,7 @@ class ArgGuesser(FNParsedReader):
         return result
     
     def _nodeToArg(self, node):
+        """ Builds an Arg using the data of a node. """
         return Arg(
             begin=node.begin,
             end=node.end,
@@ -124,10 +166,16 @@ class ArgGuesser(FNParsedReader):
             phrase_type=node.pos)
     
     def _is_subject(self, node, predicate_node):
+        """Tells whether node is the subject of predicate_node. This is only called
+        when node is a brother of predicate_node.
+        """
         return ((not node is predicate_node) and
                 node.deprel in self.subject_deprels)
         
     def _is_arg(self, node, predicate_node):
+        """Tells whether node is an argument of predicate_node. This is only called
+        when node is a descendant of predicate_node.
+        """
         return ((not node is predicate_node) and
                 node.deprel in self.args_deprels)
 
@@ -143,6 +191,8 @@ class ArgGuesserTest(unittest.TestCase):
                 self.assertTrue(arg.text != "")
                 self.assertEqual(frame.sentence[arg.begin:arg.end + 1], arg.text)
             num_args += len(frame.args)
+            
+        print(num_args)
             
     def test_1(self):
         conll_tree = """1	The	The	DT	DT	-	2	NMOD	-	-

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""Reads the files containing the syntactic parser output"""
+
 import framenetreader
 from conllreader import SyntacticTreeBuilder
 import unittest
@@ -9,15 +11,31 @@ import os
 import sys
 
 class FNParsedReader:
+    """A simple object that can read the syntactic parser output and
+    build the corresponding syntactic trees.
+    
+    :var annotation_path: str -- The path to the annotated corpus.
+    :var sentences_data: str List -- The parser output for each sentence in the current file.
+    :var sentence_id: int -- The id of the current sentence (starting at 1 for the first sentence in the file).
+    :var filename: str -- The name of the current file.
+    :var tree: SyntacticTreeNode -- The tree corresponding to the current sentence.
+    """
+    
     def __init__(self, path):
         self.annotations_path = path
-
         self.sentences_data = []
         self.sentence_id = 0
         self.filename = None
         self.tree = None
 
     def load_file(self, filename):
+        """Set the current file to filename, and fill sentences_data
+        accordingly. Not affected by newlines at the end of the file.
+        
+        :param filename: The file to load.
+        :type filename: str.
+        :returns: boolean -- True if the file was correctly loaded, False otherwise.
+        """
         path = self.annotations_path + filename.replace(".xml", ".conll")
         
         if not os.path.exists(path):
@@ -35,6 +53,12 @@ class FNParsedReader:
         return True
         
     def select_sentence(self, sentence_id):
+        """Change the current sentence and rebuild the current tree accordingly.
+        
+        :param sentence_id: The id of the sentence to load.
+        :type sentence_id: int.
+        :returns: boolean -- True if the sentence was correctly loaded, False otherwise.
+        """
         if len(self.sentences_data) < sentence_id:
             self.tree = None
             return False
@@ -47,6 +71,7 @@ class FNParsedReader:
         return True
         
     def current_sentence(self):
+        """Compute the text of the current sentence and returns it."""
         if self.tree == None: return ""
         return self.tree.flat()
 
@@ -57,6 +82,8 @@ class FNParsedReaderTest(unittest.TestCase):
             [x == y or y == "<num>" for x,y in zip(original.split(), parsed.split())]
         )
 
+    # List of sentences and files for which the test would fail
+    # because of mistakes in the parser output
     bad_files = [
             "ANC__110CYL070.xml", "C-4__C-4Text.xml",
             "NTI__BWTutorial_chapter1.xml", "NTI__LibyaCountry1.xml",

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""Extract headwords of arguments and determine their WordNet class"""
+
 import os
 import sys
 import unittest
@@ -15,13 +17,23 @@ import framenetreader
 import paths
 
 class HeadWordExtractor(FNParsedReader):
-    def __init__(self, path):
+    """This object usess syntactic annotations of FrameNet to retrieve the headwords of    
+    arguments, and attributes them a WordNet class.
+        
+    :var word_classes: str Dict -- Retrieved WordNet classes of identified headwords.
+    :var special_classes: str Dict -- Special classes for non noun headwords.
+    :var words: str Set -- Set of words for which we need to compute the WordNet class.
+        
+    """
+    
+   def __init__(self, path):
         FNParsedReader.__init__(self, path)
         self.word_classes = {}
         self.special_classes = {}
         self.words = set()
     
     def compute_word_classes(self):
+        """Fills word_classes by asking the Python2 script which can talk to nltk."""
         with open("temp_wordlist", "wb") as picklefile:
             pickle.dump(self.words, picklefile, 2)
         
@@ -35,6 +47,14 @@ class HeadWordExtractor(FNParsedReader):
         self.word_classes.update(self.special_classes)
     
     def headword(self, arg_text):
+        """Returns the headword of an argument, assuming the proper sentence have
+        already been selected.
+        
+        :param arg_text: The argument.
+        :type arg_text: str.
+        :returns: str -- The headword
+        
+        """
         if self.tree == None: return ""
         
         word, pos = self._get_headword(arg_text)
@@ -46,15 +66,36 @@ class HeadWordExtractor(FNParsedReader):
         return word
         
     def best_node(self, arg_text):
+        """Looks for the closest match of an argument in the syntactic tree.
+        This method is only here for debug purposes.
+        
+        :param arg_text: The argument.
+        :type arg_text: str.
+        :returns: SyntacticTreeNode -- The nodes which contents match arg_text the best
+        
+        """
         if self.tree == None: return None
         return self.tree.closest_match_as_node(arg_text)
 
     def get_class(self, word):
+        """Looks for the WordNet class of a word and returns it.
+        
+        :param word: The word
+        :type word: str.
+        :returns: str -- The class of the word or "unknown" if it was not found
+        """
         if word in self.word_classes:
             return self.word_classes[word]
         return "unknown"
     
     def compute_all_headwords(self, frames, vn_frames):
+        """ Fills frame data with the headwords of the arguments.
+        
+        :param frames: The FrameNet frames as returned by a FrameNetReader.
+        :type frames: Frame List.
+        :param vn_frames: The frames that we have to complete with headwords.
+        :type vn_frames: VerbnetFrame List.
+        """
         old_filename = ""
         previous_sentence = 0
         for frame, vn_frame in zip(frames, vn_frames):
@@ -112,10 +153,20 @@ class HeadWordExtractorTest(unittest.TestCase):
         extractor.compute_word_classes()
         self.assertEqual(extractor.get_class("soda"), "physical_entity.n.01")
         self.assertEqual(extractor.get_class("I"), "pronoun")
+        
+        # get_class should return "unknown" for word that were not resolved by
+        # the nltk script or that were never encountered
+        
         self.assertEqual(extractor.get_class("abcde"), "unknown")
         self.assertEqual(extractor.get_class("fghij"), "unknown")
 
-    def sample_args(self, num_sample = 0):
+    def sample_args(self, num_sample = 10):
+        """Not a unit test. Returns a random sample of argument/node/headword to help.
+        
+        :param num_sample: The requested number of results
+        :type num_sample: int
+        :returns: (str, str, str) List -- Some examples of (arg, best_node_text, headword)
+        """
         extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
 
         sample = []
@@ -162,10 +213,12 @@ class HeadWordExtractorTest(unittest.TestCase):
         self.assertTrue(extractor.headword(frame.args[0].text) == "contribution")
 
 if __name__ == "__main__":
+    # The -s option makes the script display some examples of results 
+    # or write them in a file using pickle
     options = getopt.getopt(sys.argv[1:], "s:", [])
     num_sample = 0
     filename = ""
-
+    
     for opt, value in options[0]:
         if opt == "-s": 
             if len(options[1]) >= 1:
