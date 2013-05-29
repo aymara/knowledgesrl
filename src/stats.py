@@ -23,14 +23,7 @@ stats_data = {
     "ambiguous_mapping_several_roles":0,
     "impossible_mapping":0,
     "impossible_mapping_one_role":0,
-    "impossible_mapping_several_roles":0,
-    "frame_extracted_good":0,
-    "frame_extracted_bad":0,
-    "frame_not_extracted":0,
-    "arg_extracted_good":0,
-    "arg_extracted_partial":0,
-    "arg_extracted_bad":0,
-    "arg_not_extracted":0
+    "impossible_mapping_several_roles":0
 }
 
 ambiguous_mapping = {

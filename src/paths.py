@@ -6,9 +6,9 @@
 ROOT = "../data/"
 
 FRAMENET = ROOT + "fndata-1.5/"
-FRAMENET_FULLTEXT = FRAMENET + "propbank_only/"
+FRAMENET_FULLTEXT = FRAMENET + "fulltext/"
 FRAMENET_FRAMES = FRAMENET + "frame/"
-FRAMENET_PARSED = ROOT + "framenet_parsed/gold/"
+FRAMENET_PARSED = ROOT + "framenet_parsed/"
 
 VERBNET_PATH = ROOT + "verbnet-3.2/"
 
