@@ -41,14 +41,14 @@ class EmptyFrameError(Exception):
                
 class FrameMatcher():
     def __init__(self, predicate, frame):
+        if frame.num_slots == 0:
+            raise EmptyFrameError(frame, predicate)
+
         self.predicate = predicate
         self.frame = frame
         self.best_score = 0
         self.best_frames = []
         self.possible_roles = [{} for x in range(self.frame.num_slots)] 
-        
-        if self.frame.num_slots == 0:
-            raise EmptyFrameError(frame, predicate)
     
     def new_match(self, test_frame):
         """Compute the matching score and update the possible roles distribs
