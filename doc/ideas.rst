@@ -22,10 +22,14 @@ The first result is that only 43% of FrameNet frames are not in the mapping, whi
 is a VerbNet -> FrameNet mapping, not a FrameNet -> Verbnet one. We won't be
 able to perform matching on any of these frames.
 
-The second one is that in our fulltext test corpus, 11% of frame occurrences don't
-have a predicate in VerbNet. Out of those occurrences, 99.3% of predicates have
-at least one associated Verbnet class that is present in our VerbNet->FrameNet
+The second one is that in our fulltext test corpus, 11% of frame occurrences
+don't have a predicate in VerbNet. Out of those occurrences, 99.3%  have at
+least one associated Verbnet class that is present in our VerbNet->FrameNet
 mapping. We're only interested in evaluating those 5454 frame occurrences.
+
+Frame matching (revision 18420) fails for 4069 arguments, finds one match for
+6180 arguments, and finds more than one match for 2158 arguments. We're
+interested in those 4069 failing matchs: what's going on?
 
 Restricting potential VerbNet classes
 -------------------------------------
