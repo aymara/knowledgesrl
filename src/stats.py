@@ -35,9 +35,11 @@ ambiguous_mapping = {
   
 def display_stats():
     s = stats_data
-    s["several_roles"] = s["args_kept"] - (s["one_role"] + s["no_role"])
-    s["unique_role_evaluated"] = s["one_correct_role"] + s["one_bad_role"]
-    s["several_roles_evaluated"] = s["several_roles_ok"] + s["several_roles_bad"]
+    several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
+    unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
+    several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
+    accuracy_numerator = s["one_correct_role"] + s["several_roles_ok"]
+    accuracy_denominator = unique_role_evaluated + several_roles_evaluated + s["no_role"]
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
         "Frames with predicate in VerbNet: {} frames ({} args)\n"
@@ -52,23 +54,23 @@ def display_stats():
         "\n{} cases where we cannot verify the labeling:\n"
         "\t{} because no role mapping was found\n"
         "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
-
-        "\n\n".format(
+        "\nOverall: {:.2%} precision, {:.2%} accuracy\n"
+        "\n".format(
             s["files"], s["frames"], s["args"],
             s["frames_with_predicate_in_verbnet"],  s["args_kept"],
             s["frames_mapped"],
 
             s["no_role"],
-            
             s["one_role"],
-            s["one_correct_role"] / s["unique_role_evaluated"], s["unique_role_evaluated"],
-            
-            s["several_roles"],
-            s["several_roles_ok"] / s["several_roles_evaluated"], s["several_roles_evaluated"],
+            s["one_correct_role"] / unique_role_evaluated, unique_role_evaluated,
+            several_roles,
+            s["several_roles_ok"] / several_roles_evaluated, several_roles_evaluated,
+            s["one_role"] + several_roles - (unique_role_evaluated + several_roles_evaluated),
 
-            s["one_role"] + s["several_roles"] - (s["unique_role_evaluated"] + s["several_roles_evaluated"]),
+            s["impossible_mapping"], s["ambiguous_mapping"],
 
-            s["impossible_mapping"], s["ambiguous_mapping"])
+            (s["one_correct_role"] + s["several_roles_ok"]) / (unique_role_evaluated + several_roles_evaluated),
+            accuracy_numerator / accuracy_denominator)
     )
     
 def display_stats_ambiguous_mapping():
