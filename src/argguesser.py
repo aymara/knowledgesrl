@@ -124,7 +124,9 @@ class ArgGuesser(FNParsedReader):
                 if node.word in self.base_forms:
                     node.lemma = self.base_forms[node.word]
                 if node.lemma in self.verbnet_index:
-                    predicate = Predicate(node.begin, node.end, node.word, node.lemma)
+                    predicate = Predicate(
+                        node.begin_head, node.begin_head + len(node.word) - 1,
+                        node.word, node.lemma)
                     args = self._find_args(node)
                     
                     yield Frame(
@@ -134,7 +136,7 @@ class ArgGuesser(FNParsedReader):
                         words=[Word(x.begin, x.end, x.pos) for x in self.tree],
                         frame_name=None,
                         sentence_id=self.sentence_id,
-                        filename=self.filename
+                        filename=self.filename.replace(".conll", ".xml")
                     )
     
     def _find_args(self, node):
