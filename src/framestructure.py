@@ -35,13 +35,18 @@ class Frame:
             self.args == other.args and
             self.words == other.words)
 
+    def __repr__(self):
+        return "Frame({}, {}, {})".format(
+                self.predicate, self.args, self.frame_name)
+
 class VerbnetFrame:
     """A representation of a frame syntaxic structure
     
     :var structure: String containing a VerbNet-style representation of the structure
     :var roles: List of the possible VerbNet roles for each structure's slot
     :var num_slots: Number of argument slots in :structure
-    :var verbnet_class: For VerbNet-extracted frames, the vnclass
+    :var verbnet_class: For VerbNet-extracted frames, the class number, eg. 9.10
+    :var predicate: For FrameNet-extracted frames, the predicate
     
     """
     
@@ -80,7 +85,7 @@ class VerbnetFrame:
             
     def __repr__(self):
         return "VerbnetFrame({}, {}, {}, {})".format(
-                self.structure, self.roles, self.vnclass, self.predicate)
+                self.predicate, self.structure, self.roles, self.vnclass)
     
     def compute_slot_types(self):
         """Build the list of slot types for this frame"""
@@ -281,6 +286,9 @@ class Arg:
         self.role = role
         self.instanciated = instanciated
         self.phrase_type = phrase_type
+
+    def __repr__(self):
+        return self.role
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__)  and
@@ -328,6 +336,9 @@ class Predicate:
         self.end = end
         self.text = text
         self.lemma = lemma
+
+    def __str__(self):
+        return self.lemma
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
