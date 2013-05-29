@@ -44,7 +44,7 @@ if __name__ == "__main__":
     probability_model = "predicate_slot"
 
     options = getopt.getopt(sys.argv[1:], "d:",
-        ["fmatching-algo=", "core-args-only", "model=", "bootstrap"])
+        ["fmatching-algo=", "add-non-core-args", "model=", "bootstrap"])
     for opt,value in options[0]:
         if opt == "-d":
             debug = True
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         if opt == "--fmatching-algo" and value == 0:
             framematcher.matching_algorithm = 0
         if opt == "--add-non-core-args":
-            core_args_only = True
+            core_args_only = False
         if opt == "--model":
             if not value in probabilitymodel.models:
                 raise Exception("Unknown model {}".format(value))
