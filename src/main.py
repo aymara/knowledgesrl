@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     print("Frame matching...", file=sys.stderr)
     for good_frame, frame in zip(annotated_frames, vn_frames):
-        num_instanciated = sum([1 if x.instanciated else 0 for x in good_frame.args])
+        num_instanciated = len([x for x in good_frame.args if x.instanciated])
         predicate = good_frame.predicate.lemma
         stats_data["args_kept"] += num_instanciated
         
