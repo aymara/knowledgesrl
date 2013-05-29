@@ -67,8 +67,8 @@ def display_stats():
             s["several_roles_ok"] / s["several_roles_evaluated"], s["several_roles_evaluated"],
 
             s["one_role"] + s["several_roles"] - (s["unique_role_evaluated"] + s["several_roles_evaluated"]),
-            s["impossible_mapping_one_role"] + s["impossible_mapping_several_roles"],
-            s["ambiguous_mapping_one_role"] + s["ambiguous_mapping_several_roles"])
+
+            s["impossible_mapping"], s["ambiguous_mapping"])
     )
     
 def display_stats_ambiguous_mapping():
@@ -108,11 +108,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, de
     stats_data["one_role"] = 0
     stats_data["no_role"] = 0
     stats_data["impossible_mapping"] = 0
-    stats_data["impossible_mapping_one_role"] = 0
-    stats_data["impossible_mapping_several_roles"] = 0
     stats_data["ambiguous_mapping"] = 0
-    stats_data["ambiguous_mapping_one_role"] = 0
-    stats_data["ambiguous_mapping_several_roles"] = 0
     
     for good_frame, frame in zip(annotated_frames, vn_frames):    
         for i, slot in enumerate(frame.roles):
@@ -127,18 +123,10 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, de
                     )
             except RoleMatchingError as e:
                 stats_data["impossible_mapping"] += 1
-                if len(slot) == 1:
-                    stats_data["impossible_mapping_one_role"] += 1
-                elif len(slot) != 0 :
-                    stats_data["impossible_mapping_several_roles"] += 1
                 continue
   
             if len(possible_roles) > 1:
                 stats_data["ambiguous_mapping"] += 1
-                if len(slot) == 1:
-                    stats_data["ambiguous_mapping_one_role"] += 1
-                elif len(slot) != 0 :
-                    stats_data["ambiguous_mapping_several_roles"] += 1
             elif next(iter(possible_roles)) in slot:
                 if len(slot) == 1: stats_data["one_correct_role"] += 1
                 else: stats_data["several_roles_ok"] += 1
