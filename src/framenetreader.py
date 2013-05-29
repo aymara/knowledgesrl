@@ -28,10 +28,6 @@ from framestructure import *
 import framenetcoreargs
 import paths
 
-print("Loading core arguments list for FrameNet frames...", file=sys.stderr)
-core_arg_finder = framenetcoreargs.CoreArgsFinder()
-core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
-
 class FulltextReader:
 
     """Class used to parse one file of the FrameNet fulltext corpus
@@ -40,6 +36,8 @@ class FulltextReader:
     
     """
     
+    core_arg_finder = None
+    
     def __init__(self, filename, core_args_only = False):
         """Read a file and update the collected frames list.
         
@@ -47,6 +45,12 @@ class FulltextReader:
         :type filename: str.
         
         """
+        
+        if FulltextReader.core_arg_finder == None and core_args_only:
+            print("Loading core arguments list for FrameNet frames...", file=sys.stderr)
+            FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
+            FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)           
+        
         root = ET.ElementTree(file=filename)
         
         self.core_args_only = core_args_only
@@ -207,7 +211,7 @@ class FulltextReader:
                 if new_arg != None: 
                     if self.core_args_only:
                         if self.fulltext_corpus:
-                            if not core_arg_finder.is_core_role(
+                            if not FulltextReader.core_arg_finder.is_core_role(
                                 new_arg.role, frame_name):
                                 continue
                         elif not arg.attrib["name"] in self.core_args:
