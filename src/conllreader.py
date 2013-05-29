@@ -117,9 +117,10 @@ class SyntacticTreeBuilder():
         begin = 0
         for l in conll_tree.splitlines():
             line_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
+            
             self.words.append(form)
             self.deprels.append(deprel)
-            self.pos.append(pos)
+            self.pos.append(cpos)
             self.parents.append(int(head))
             self.word_begins.append(begin)
             begin += 1 + len(form)
