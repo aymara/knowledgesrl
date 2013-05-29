@@ -48,7 +48,7 @@ class SyntacticTreeNode:
     
     """
     
-    def __init__(self, word, position, pos, deprel, begin, end, children):
+    def __init__(self, word, position, pos, deprel, begin, end, begin_head, children):
         self.word = word
         self.position = position
         self.pos = pos
@@ -56,6 +56,7 @@ class SyntacticTreeNode:
         self.children = children
         self.begin = begin
         self.end = end
+        self.begin_head = begin_head
         self.father = None
                 
     def __iter__(self):
@@ -174,7 +175,7 @@ class SyntacticTreeBuilder():
 
         result = SyntacticTreeNode(self.words[root - 1], root_position,
                                  self.pos[root - 1], self.deprels[root - 1],
-                                 begin, end, children)
+                                 begin, end, self.word_begins[root - 1], children)
         
         for child in result.children:
             child.father = result
