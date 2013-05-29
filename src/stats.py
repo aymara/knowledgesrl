@@ -8,8 +8,8 @@ from errorslog import *
 stats_data = {
     "files":0,
     "frames":0, 
-    "predicate_in_verbnet":0,
-    "frames_kept":0,
+    "frames_with_predicate_in_verbnet":0,
+    "frames_mapped":0, 
     "args":0, 
     "args_kept":0,
     "one_role":0, 
@@ -38,32 +38,31 @@ def display_stats():
     s["several_roles"] = s["args_kept"] - (s["one_role"] + s["no_role"])
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
-        "Frames with predicate in VerbNet: {} frames\n"
-        "Frames kept in VerbNet: {} frames ({} args)\n\n"
+        "Frames with predicate in VerbNet: {} frames ({} args)\n"
+        "Frames mapped: {} frames\n"
         
-        "Frame matching:\n"
+        "\nFrame matching:\n"
         "{} args without possible role\n"
         "{} args with exactly one possible role\n"
         "\t{} correct\n"
         "\t{} not correct\n"
-        "\t{} cases where we cannot conclude\n"
-        "\t\t {} because no mapping exists for this FrameNet role\n"
+        "\t{} cases where we cannot verify the labeling:\n"
+        "\t\t {} because no role mapping was found\n"
         "\t\t {} because several VerbNet roles are mapped to the FrameNet role\n"
         "{} args with multiple possible roles\n"
         "\t{} correct (correct role is in role list)\n"
         "\t{} not correct (correct role is not in role list)\n"
-        "\t{} cases where we cannot conclude\n"
-        "\t\t {} because no mapping exists for this FrameNet role\n"
+        "\t{} cases where we cannot verify the labeling:\n"
+        "\t\t {} because no role mapping was found\n"
         "\t\t {} because several VerbNet roles are mapped to the FrameNet role\n"
-        "Role conversion issues:\n"
+        "\nRole conversion issues:\n"
         "\t{} args for which no mapping between FrameNet and VerbNet roles was found\n"
         "\t{} args with several possible VerbNet roles\n"
 
         "\n\n".format(
             s["files"], s["frames"], s["args"],
-            s["predicate_in_verbnet"],
-            s["frames_kept"], s["args_kept"],
-            
+            s["frames_with_predicate_in_verbnet"],  s["args_kept"],
+            s["frames_mapped"],            
             s["no_role"],
             
             s["one_role"], s["one_correct_role"], s["one_bad_role"],

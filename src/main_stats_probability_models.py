@@ -79,6 +79,7 @@ if __name__ == "__main__":
             if not frame.predicate.lemma in verbnet:
                 log_vn_missing(filename, frame)
                 continue
+            stats_data["frames_with_predicate_in_verbnet"] += 1
             
             annotated_frames.append(frame)
             
@@ -95,6 +96,7 @@ if __name__ == "__main__":
     for good_frame, frame in zip(annotated_frames, vn_frames):
         num_instanciated = sum([1 if x.instanciated else 0 for x in good_frame.args])
         predicate = good_frame.predicate.lemma
+        stats_data["args_kept"] += num_instanciated
         
         stats_ambiguous_roles(good_frame, num_instanciated,
             role_matcher, verbnet_classes, filename)
@@ -104,6 +106,8 @@ if __name__ == "__main__":
         except framematcher.EmptyFrameError:
             log_frame_without_slot(filename, good_frame, frame)
             continue
+
+        stats_data["frames_mapped"] += 1
 
         # Actual frame matching
         for test_frame in verbnet[predicate]:
@@ -115,8 +119,6 @@ if __name__ == "__main__":
             if len(roles) == 1:
                 model.add_data(slot_type, next(iter(roles)), prep, predicate)
 
-        stats_data["args_kept"] += num_instanciated
-        stats_data["frames_kept"] += 1
         
     print("Frame matching stats...", file=sys.stderr) 
 

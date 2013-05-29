@@ -132,6 +132,8 @@ if __name__ == "__main__":
             if not frame.predicate.lemma in verbnet:
                 log_vn_missing(filename, frame)
                 continue
+        
+            stats_data["frames_with_predicate_in_verbnet"] += 1
             
             annotated_test_frames.append(frame)
             
@@ -146,18 +148,19 @@ if __name__ == "__main__":
     for good_frame, frame in zip(annotated_test_frames, vn_test_frames):
         num_instanciated = sum([1 if x.instanciated else 0 for x in good_frame.args])
         predicate = good_frame.predicate.lemma
+        stats_data["args_kept"] += num_instanciated
 
+        # Find FrameNet frame <-> VerbNet class mapping
         try:
             matcher = framematcher.FrameMatcher(predicate, frame)
         except framematcher.EmptyFrameError:
             continue
+        stats_data["frames_mapped"] += 1
 
+        # Actual frame matching
         for test_frame in verbnet[predicate]:
             matcher.new_match(test_frame)       
         frame.roles = matcher.possible_distribs()
-        
-        stats_data["args_kept"] += num_instanciated
-        stats_data["frames_kept"] += 1
 
     stats_quality(annotated_test_frames, vn_test_frames, role_matcher, verbnet_classes, debug)
 

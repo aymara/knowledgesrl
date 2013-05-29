@@ -22,11 +22,10 @@ The first result is that only 43% of FrameNet frames are not in the mapping, whi
 is a VerbNet -> FrameNet mapping, not a FrameNet -> Verbnet one. We won't be
 able to perform matching on any of these frames.
 
-The second one is that in our fulltext corpus, 11% of frame occurrences don't
-have a predicate in VerbNet. It's not an issue in itself since the mapping
-doesn't care of specific verbs that lexicalize the frame. However, there's a
-correlation: 12% of the FrameNet frames that appear in the fulltext corpus are
-not present in the VerbNet->FrameNet mapping.
+The second one is that in our fulltext test corpus, 11% of frame occurrences don't
+have a predicate in VerbNet. Out of those occurrences, 99.3% of predicates have
+at least one associated Verbnet class that is present in our VerbNet->FrameNet
+mapping. We're only interested in evaluating those 5454 frame occurrences.
 
 Restricting potential VerbNet classes
 -------------------------------------
