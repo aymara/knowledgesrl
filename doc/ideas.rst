@@ -31,6 +31,27 @@ Frame matching (revision 18420) fails for 4069 arguments, finds one match for
 6180 arguments, and finds more than one match for 2158 arguments. We're
 interested in those 4069 failing matchs: what's going on?
 
+Concerning arguments that weren't matched, the main reason is non-core FrameNet
+roles. For the sentence, "In march, John bought a dress", our algorithm will
+try to match "in NP NP V NP", whereas we really want "NP V NP". The algorithm
+now ignores non-core FrameNet roles: only 2088 arguments are not matched. (It's
+possible but less likely that non-core arguments in FrameNet will be expressed
+in VerbNet, inducing an error.)
+
+Other errors include:
+ * passive voice is never in VerbNet
+ * FrameNet annotates twice subjects introduced by "that", "who", and so on:
+   one for the preposition, and the other one for the higher subject (splitted
+   args for other reasons can cause problems too).
+ * missing VerbNet constructions (to believe in something), or missing VerbNet
+   phrase types (NP vs. S)
+ * control/raising verbs can cause problems too.
+
+Parsing VerbNet or FrameNet is sometimes an issue for complicated cases: we
+will be handling more and more of them over the time. "He said that S" comes to
+mind: currently, it's seen as "NP V S", whereas it's seen from Verbnet as "NP V
+that S".
+
 Restricting potential VerbNet classes
 -------------------------------------
 

@@ -38,7 +38,7 @@ def init_fn_reader(path):
 if __name__ == "__main__":
     # Default values for command-line options
     framematcher.matching_algorithm = 1
-    core_args_only = False
+    core_args_only = True
     debug = False
     bootstrap = False
     probability_model = "predicate_slot"
@@ -53,7 +53,7 @@ if __name__ == "__main__":
                 n_debug = value
         if opt == "--fmatching-algo" and value == 0:
             framematcher.matching_algorithm = 0
-        if opt == "--core-args-only":
+        if opt == "--add-non-core-args":
             core_args_only = True
         if opt == "--model":
             if not value in probabilitymodel.models:
