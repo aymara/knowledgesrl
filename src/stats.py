@@ -110,16 +110,18 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, de
     stats_data["impossible_mapping"] = 0
     stats_data["ambiguous_mapping"] = 0
     
-    for good_frame, frame in zip(annotated_frames, vn_frames):    
-        for i, slot in enumerate(frame.roles):
-            if len(slot) == 0: stats_data["no_role"] += 1
-            elif len(slot) == 1: stats_data["one_role"] += 1
+    for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):    
+        for i, slot in enumerate(found_vn_frame.roles):
+            if len(slot) == 0:
+                stats_data["no_role"] += 1
+            elif len(slot) == 1:
+                stats_data["one_role"] += 1
             
             try:
                 possible_roles = role_matcher.possible_vn_roles(
-                    good_frame.args[i].role,
-                    fn_frame=good_frame.frame_name,
-                    vn_classes=verbnet_classes[good_frame.predicate.lemma]
+                    gold_fn_frame.args[i].role,
+                    fn_frame=gold_fn_frame.frame_name,
+                    vn_classes=verbnet_classes[gold_fn_frame.predicate.lemma]
                     )
             except RoleMatchingError as e:
                 stats_data["impossible_mapping"] += 1

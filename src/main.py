@@ -62,7 +62,7 @@ if __name__ == "__main__":
         if opt == "--bootstrap":
             bootstrap = True
        
-    verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
+    verbnet_predicates, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
     print("Loading frames...", file=sys.stderr)
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
             stats_data["args"] += len(frame.args)
             stats_data["frames"] += 1
 
-            if not frame.predicate.lemma in verbnet:
+            if not frame.predicate.lemma in verbnet_predicates:
                 log_vn_missing(filename, frame)
                 continue
 
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         stats_data["frames_mapped"] += 1
 
         # Actual frame matching
-        for test_frame in verbnet[predicate]:
+        for test_frame in verbnet_predicates[predicate]:
             matcher.new_match(test_frame)       
         frame.roles = matcher.possible_distribs()
         
@@ -136,7 +136,6 @@ if __name__ == "__main__":
 
         
     print("Frame matching stats...", file=sys.stderr) 
-
     stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, debug)
     display_stats()
 
