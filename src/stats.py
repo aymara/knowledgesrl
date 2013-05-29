@@ -38,8 +38,6 @@ def display_stats():
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
-    accuracy_numerator = s["one_correct_role"] + s["several_roles_ok"]
-    accuracy_denominator = unique_role_evaluated + several_roles_evaluated + s["no_role"]
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
         "Frames with predicate in VerbNet: {} frames ({} args)\n"
@@ -69,8 +67,8 @@ def display_stats():
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            (s["one_correct_role"] + s["several_roles_ok"]) / (unique_role_evaluated + several_roles_evaluated),
-            accuracy_numerator / accuracy_denominator)
+            s["one_correct_role"] / unique_role_evaluated ,
+            s["one_correct_role"] / (unique_role_evaluated + several_roles_evaluated + s["no_role"]))
     )
     
 def display_stats_ambiguous_mapping():
