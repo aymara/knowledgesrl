@@ -36,44 +36,39 @@ ambiguous_mapping = {
 def display_stats():
     s = stats_data
     s["several_roles"] = s["args_kept"] - (s["one_role"] + s["no_role"])
+    s["unique_role_evaluated"] = s["one_correct_role"] + s["one_bad_role"]
+    s["several_roles_evaluated"] = s["several_roles_ok"] + s["several_roles_bad"]
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
         "Frames with predicate in VerbNet: {} frames ({} args)\n"
         "Frames mapped: {} frames\n"
         
         "\nFrame matching:\n"
-        "{} args without possible role\n"
+        "{} args not matched\n"
         "{} args with exactly one possible role\n"
-        "\t{} correct\n"
-        "\t{} not correct\n"
-        "\t{} cases where we cannot verify the labeling:\n"
-        "\t\t {} because no role mapping was found\n"
-        "\t\t {} because several VerbNet roles are mapped to the FrameNet role\n"
+        "\t{:.2%} correct out of {} evaluated\n"
         "{} args with multiple possible roles\n"
-        "\t{} correct (correct role is in role list)\n"
-        "\t{} not correct (correct role is not in role list)\n"
-        "\t{} cases where we cannot verify the labeling:\n"
-        "\t\t {} because no role mapping was found\n"
-        "\t\t {} because several VerbNet roles are mapped to the FrameNet role\n"
-        "\nRole conversion issues:\n"
-        "\t{} args for which no mapping between FrameNet and VerbNet roles was found\n"
-        "\t{} args with several possible VerbNet roles\n"
+        "\t{:.2%} correct (correct role is in role list) out of {} evaluated\n"
+        "\n{} cases where we cannot verify the labeling:\n"
+        "\t{} because no role mapping was found\n"
+        "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
 
         "\n\n".format(
             s["files"], s["frames"], s["args"],
             s["frames_with_predicate_in_verbnet"],  s["args_kept"],
-            s["frames_mapped"],            
+            s["frames_mapped"],
+
             s["no_role"],
             
-            s["one_role"], s["one_correct_role"], s["one_bad_role"],
-            s["one_role"] - (s["one_bad_role"] + s["one_correct_role"]),
-            s["impossible_mapping_one_role"], s["ambiguous_mapping_one_role"],
+            s["one_role"],
+            s["one_correct_role"] / s["unique_role_evaluated"], s["unique_role_evaluated"],
             
-            s["several_roles"], s["several_roles_ok"],
-            s["several_roles_bad"],
-            s["several_roles"] - (s["several_roles_ok"] + s["several_roles_bad"]),
-            s["impossible_mapping_several_roles"], s["ambiguous_mapping_several_roles"],
-            s["impossible_mapping"], s["ambiguous_mapping"])
+            s["several_roles"],
+            s["several_roles_ok"] / s["several_roles_evaluated"], s["several_roles_evaluated"],
+
+            s["one_role"] + s["several_roles"] - (s["unique_role_evaluated"] + s["several_roles_evaluated"]),
+            s["impossible_mapping_one_role"] + s["impossible_mapping_several_roles"],
+            s["ambiguous_mapping_one_role"] + s["ambiguous_mapping_several_roles"])
     )
     
 def display_stats_ambiguous_mapping():
