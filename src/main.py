@@ -39,7 +39,7 @@ def init_fn_reader(path):
 
 if __name__ == "__main__":
     # Default values for command-line options
-    framematcher.matching_algorithm = 1
+    framematcher.matching_algorithm = "synch_predicates"
     core_args_only = True
     gold_args = True
     debug = False
@@ -55,8 +55,8 @@ if __name__ == "__main__":
             value = 0 if value == "" else int(value)
             if value > 0:
                 n_debug = value
-        if opt == "--fmatching-algo" and value == 0:
-            framematcher.matching_algorithm = 0
+        if opt == "--fmatching-algo":
+            framematcher.matching_algorithm = value
         if opt == "--add-non-core-args":
             core_args_only = False
         if opt == "--model":

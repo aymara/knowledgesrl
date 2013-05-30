@@ -16,7 +16,7 @@ class Frame:
     """
     
     def __init__(self, sentence, predicate, args,
-        words, frame_name, sentence_id = 0, filename = ""):
+        words, frame_name, sentence_id = 0, filename = "", slot_type = ""):
         self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
@@ -24,6 +24,7 @@ class Frame:
         self.words = words
         self.sentence_id = sentence_id
         self.filename = filename
+        self.slot_type = slot_type
 
     def get_word(self, word):
         return self.sentence[word.begin:word.end + 1]
@@ -109,14 +110,15 @@ class VerbnetFrame:
             elif element[0].isupper(): # If this is a slot
                 if preposition != "":
                     self.slot_types.append(VerbnetFrame.slot_types["prep_object"])
-                    self.slot_preps[i_slot] = preposition
+                    if len(self.slot_preps) > i_slot:
+                        self.slot_preps[i_slot] = preposition
                     preposition = ""
                 else:
                     self.slot_types.append(next_expected)
                     if next_expected == VerbnetFrame.slot_types["object"]:
                         next_expected = VerbnetFrame.slot_types["indirect_object"]
                 i_slot += 1
-            elif element in verbnetprepclasses.all_preps:
+            elif isinstance(element, list) or element in verbnetprepclasses.all_preps:
                 preposition = element
             
     

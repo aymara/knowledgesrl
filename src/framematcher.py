@@ -19,6 +19,7 @@ subject.
 """
 
 from framestructure import *
+from collections import defaultdict
 import unittest
 import sys
 
@@ -58,16 +59,32 @@ class FrameMatcher():
             
         """
         distrib = [None for x in range(self.frame.num_slots)] 
-        
-        if matching_algorithm == 1:
+        num_match = 0
+            
+        if matching_algorithm == "baseline":
+            last_matching_slot = defaultdict(lambda : 0)
+            
+            if len(test_frame.slot_types) == 0:
+                test_frame.compute_slot_types()
+
+            for slot_pos, slot_type in enumerate(self.frame.slot_types):
+                i = last_matching_slot[slot_type]
+                try:
+                    matching_slot = test_frame.slot_types.index(slot_type, i)
+                except Exception as e:
+                    continue
+                    
+                last_matching_slot[slot_type] = matching_slot + 1
+                if len(test_frame.roles) > matching_slot:
+                    distrib[slot_pos] = next(iter(test_frame.roles[matching_slot]))
+                num_match += 1
+            
+        elif matching_algorithm == "synch_predicates":
             """ New algorithm """
-            num_match = 0
-            i = 0
-            j = 0
+            i, j = 0, 0
             index_v_1 = self.frame.structure.index("V")
             index_v_2 = test_frame.structure.index("V")
-            slot_1 = 0
-            slot_2 = 0
+            slot_1, slot_2 = 0, 0
             num_slots_before_v_1 = 0
             num_slots_before_v_2 = 0
             
@@ -103,10 +120,8 @@ class FrameMatcher():
                 else: break
                    
                 i, j = i + 1, j + 1
-        else:
-            distrib = [None for x in range(self.frame.num_slots)]      
+        elif matching_algorithm == "stop_on_fail":     
             """ Former less permissive algorithm """
-            num_match = 0
             for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
                 if FrameMatcher._is_a_match(elem1, elem2): 
                     if FrameMatcher._is_a_slot(elem1):
@@ -114,6 +129,8 @@ class FrameMatcher():
                         if num_match - 1 < len(test_frame.roles):
                             distrib[num_match - 1] = next(iter(test_frame.roles[num_match - 1]))
                 else: break
+        else:
+            raise Exception("Unknown matching algorithm : {}".format(matching_algorithm))
 
         ratio_1 = num_match / self.frame.num_slots
         if test_frame.num_slots == 0:
@@ -139,7 +156,6 @@ class FrameMatcher():
         
         :returns: str set list -- The lists of possible roles for each slot
         """
-        
         return [set(x.values()) for x in self.possible_roles]
             
     @staticmethod
