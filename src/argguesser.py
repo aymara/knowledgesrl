@@ -252,7 +252,6 @@ class ArgGuesserTest(unittest.TestCase):
         print(num_args)
             
     def test_1(self):
-        return
         conll_tree = """1	The	The	DT	DT	-	2	NMOD	-	-
 2	others	others	NNS	NNS	-	5	SBJ	-	-
 3	here	here	RB	RB	-	2	LOC	-	-
@@ -269,6 +268,6 @@ class ArgGuesserTest(unittest.TestCase):
         verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).verbs
         arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet) 
         
-        #self.assertEqual(arg_finder._find_args(tree), args)
+        self.assertEqual(arg_finder._find_args(tree), args)
 if __name__ == "__main__":
     unittest.main()
