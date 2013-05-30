@@ -7,6 +7,7 @@ import verbnetreader
 from framenetparsedreader import FNParsedReader
 from framestructure import *
 from conllreader import SyntacticTreeBuilder
+from verbnetprepclasses import all_preps
 import framenetreader
 import unittest
 import paths
@@ -41,8 +42,33 @@ class ArgGuesser(FNParsedReader):
     "OPRD",#object complement
     "PRD", #predicative complement
     ]
-
     
+    # Source : http://www.comp.leeds.ac.uk/ccalas/tagsets/upenn.html
+    pos_conversions = {
+    "$":"NP",
+    "CD":"NP", #Cardinal number ("The tree of us")
+    "DT":"NP", #Determiner ("this" or "that")
+    "JJ":"ADJ", "JJR":"ADJ",
+    "MD":"S", #Modal verb
+    "NN":"NP", "NNP":"NP", "NNPS": "NP", "NNS":"NP",
+    "NP":"NP", "NPS":"NP",
+    "PP":"PP",
+    "PRP":"NP",
+    "RB":"ADV",
+    "TO":"to S",
+    "VB":"S", #Base form of a verb
+    "VBD":"S", "VBG":"S_ING",
+    "VBN":"ADJ", # Participe, as "fed" in "He got so fed up that..."
+    "VBP":"S", "VBZ":"S",
+    #VB* become VV* in the non-gold parse
+    "VV":"S", "VVD":"S", "VVG":"S_ING",
+    "VVN":"ADJ",
+    "VVP":"S", "VVZ":"S",
+    "WDT":"NP" #Relative pronom ("that what whatever which whichever ")
+    }
+    
+    complex_pos = ["IN", "WP"]
+
     def __init__(self, path, verbnet_index):
         FNParsedReader.__init__(self, path)
         self.verbnet_index = verbnet_index
@@ -183,6 +209,10 @@ class ArgGuesser(FNParsedReader):
                 result += self._find_args_rec(predicate_node, child)
             if self._is_arg(child, predicate_node):
                 result.append(self._nodeToArg(child))
+                """if not child.pos in self.pos_conversions and child.pos not in self.complex_pos:
+                    print(predicate_node.flat())
+                    print(child.flat())
+                    print(child.pos)"""
         return result
     
     def _nodeToArg(self, node):
@@ -195,8 +225,21 @@ class ArgGuesser(FNParsedReader):
             # a substring of frame.sentence
             role="",
             instanciated=True,
-            phrase_type=node.pos)
-  
+            phrase_type=self._get_phrase_type(node))
+    
+    def _get_phrase_type(self, node):
+        #IN = Preposition or subordinating conjunction
+        if node.pos == "IN":
+            if node.word.lower() in all_preps: return "PP"
+            return "S"
+        # WP = Wh-pronoun
+        if node.pos == "WP":
+            return node.word.lower()+" S"
+        
+        if node.pos in self.pos_conversions:
+            return self.pos_conversions[node.pos]
+        return node.pos
+    
     def _is_predicate(self, node):
         """Tells whether a node can be used as a predicate for a frame"""
         # Check part-of-speech compatibility
