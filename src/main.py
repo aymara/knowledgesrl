@@ -12,6 +12,8 @@ from framestructure import *
 from stats import *
 from errorslog import *
 from bootstrap import bootstrap_algorithm
+import argguesser
+import roleextractor
 import verbnetreader
 import framematcher
 import rolematcher
@@ -39,12 +41,14 @@ if __name__ == "__main__":
     # Default values for command-line options
     framematcher.matching_algorithm = 1
     core_args_only = True
+    gold_args = True
     debug = False
     bootstrap = False
     probability_model = "predicate_slot"
 
     options = getopt.getopt(sys.argv[1:], "d:",
-        ["fmatching-algo=", "add-non-core-args", "model=", "bootstrap"])
+        ["fmatching-algo=", "add-non-core-args",
+        "model=", "bootstrap", "no-gold-args"])
     for opt,value in options[0]:
         if opt == "-d":
             debug = True
@@ -61,6 +65,8 @@ if __name__ == "__main__":
             probability_model = value
         if opt == "--bootstrap":
             bootstrap = True
+        if opt == "--no-gold-args":
+            gold_args = False
        
     verbnet_predicates, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
@@ -69,32 +75,45 @@ if __name__ == "__main__":
     annotated_frames = []
     vn_frames = []
 
-    for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
-        if not filename[-4:] == ".xml": continue
+    if gold_args:
+        for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
+            if not filename[-4:] == ".xml": continue
+            print(".", file=sys.stderr, end="")
+            sys.stderr.flush()
 
-        fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
+            if stats_data["files"] % 100 == 0 and stats_data["files"] > 0:
+                print("{} {} {}".format(
+                    stats_data["files"], stats_data["frames"],
+                    stats_data["args"]), file=sys.stderr)   
+             
+            fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
 
-        print(".", file=sys.stderr, end="")
-        sys.stderr.flush()
+            for frame in fn_reader.frames:
+                stats_data["args"] += len(frame.args)
+                stats_data["frames"] += 1
 
-        for frame in fn_reader.frames:
-            stats_data["args"] += len(frame.args)
-            stats_data["frames"] += 1
+                if not frame.predicate.lemma in verbnet_predicates:
+                    log_vn_missing(frame)
+                    continue
 
-            if not frame.predicate.lemma in verbnet_predicates:
-                log_vn_missing(frame)
-                continue
+                stats_data["frames_with_predicate_in_verbnet"] += 1
+                
+                annotated_frames.append(frame)
+                
+                converted_frame = VerbnetFrame.build_from_frame(frame)
+                converted_frame.compute_slot_types()
 
-            stats_data["frames_with_predicate_in_verbnet"] += 1
-            
-            annotated_frames.append(frame)
-            
+                vn_frames.append(converted_frame)
+            stats_data["files"] += 1
+    else:
+        arg_guesser = argguesser.ArgGuesser(paths.FRAMENET_PARSED, verbnet_classes)
+        extracted_frame = [x for x in arg_guesser.handle_corpus()]
+        annotated_frames = roleextractor.fill_roles(extracted_frame, verbnet_classes)
+        for frame in annotated_frames:
             converted_frame = VerbnetFrame.build_from_frame(frame)
             converted_frame.compute_slot_types()
-
             vn_frames.append(converted_frame)
-        stats_data["files"] += 1
-
+        
     print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
     model = probabilitymodel.ProbabilityModel()
