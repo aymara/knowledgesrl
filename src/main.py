@@ -133,10 +133,12 @@ if __name__ == "__main__":
             ):
                 if len(roles) == 1:
                     model.add_data(slot_type, next(iter(roles)), prep, predicate)
-
+                    
+        if debug and set() in frame.roles:
+            log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
         
     print("Frame matching stats...", file=sys.stderr) 
-    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, debug)
+    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
     display_stats()
 
     if bootstrap:
@@ -163,7 +165,7 @@ if __name__ == "__main__":
 
     print("Final stats...", file=sys.stderr)   
 
-    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, debug)
+    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
     display_stats()
 
     if debug: display_debug(n_debug)

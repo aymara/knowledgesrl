@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import random
+
 errors = {
    "vn_parsing":[],
    "vn_missing":[],
@@ -46,7 +48,7 @@ def log_impossible_role_matching(filename, frame, i, msg):
         "msg":msg
     })
       
-def log_debug_data(frame, converted_frame, matcher, distrib):
+def log_debug_data(frame, converted_frame, matcher, distrib, verbnet):
     debug_data.append({
         "sentence":frame.sentence,
         "predicate":frame.predicate.lemma,

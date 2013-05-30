@@ -105,7 +105,7 @@ def display_stats_ambiguous_mapping():
         n2 = count_with_frame[v] if v in count_with_frame else 0
         print("{:>12}: {:>3} - {:<3}".format(v, n1, n2))
                     
-def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, debug):
+def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes):
     stats_data["roles_conversion_impossible"] = 0
     stats_data["roles_conversion_ambiguous"] = 0
     stats_data["one_correct_role"] = 0
@@ -142,9 +142,6 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, de
             elif len(slot) >= 1:
                 if len(slot) == 1: stats_data["one_bad_role"] += 1
                 else: stats_data["several_roles_bad"] += 1
-                    
-        if debug and set() in distrib:
-            log_debug_data(frame, converted_frame, matcher, distrib)
 
 def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     good = stats_data["one_correct_role"]
