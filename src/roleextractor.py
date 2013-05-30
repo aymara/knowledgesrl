@@ -44,7 +44,7 @@ def fill_roles(extracted_frames, verbnet):
         handle_file(frames, path+filename, i - old_i, verbnet)
 
     # Discard every frame for which there was no match
-    return [x for x in extracted_frames if not x.frame_name == None]
+    return [x for x in extracted_frames if not x.frame_name == ""]
 
 def handle_file(extracted_frames, file_path, num_frames, verbnet):
     """Fills the names and roles of every frames in a file
@@ -149,7 +149,7 @@ def handle_frame(extracted_frame, annotated_frame):
     stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args)
     
     # Discard every argument for which there was no match
-    extracted_frame.args = [x for x in extracted_frame.args if not x.role == None]        
+    extracted_frame.args = [x for x in extracted_frame.args if not x.role == ""]        
 
 def match_score(arg1, arg2):
     if arg1.begin == arg2.begin and arg1.end == arg2.end:

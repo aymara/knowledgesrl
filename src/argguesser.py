@@ -135,7 +135,7 @@ class ArgGuesser(FNParsedReader):
                             predicate=predicate,
                             args=args,
                             words=[Word(x.begin, x.end, x.pos) for x in self.tree],
-                            frame_name=None,
+                            frame_name="",
                             sentence_id=self.sentence_id,
                             filename=self.filename.replace(".conll", ".xml")
                         )
@@ -193,7 +193,7 @@ class ArgGuesser(FNParsedReader):
             text=node.flat(), 
             # If the argument isn't continuous, text will not be
             # a substring of frame.sentence
-            role=None,
+            role="",
             instanciated=True,
             phrase_type=node.pos)
   
