@@ -41,6 +41,12 @@ def display_stats():
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
+    
+    # Avoid division by 0
+    if unique_role_evaluated == 0:
+        print("No role attributed")
+        return
+        
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
         "Frames with predicate in VerbNet: {} frames ({} args)\n"
@@ -119,7 +125,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes):
                 stats_data["no_role"] += 1
             elif len(slot) == 1:
                 stats_data["one_role"] += 1
-            
+
             try:
                 possible_roles = role_matcher.possible_vn_roles(
                     gold_fn_frame.args[i].role,
@@ -158,7 +164,7 @@ def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
         
     return precision, cover, precision_all, cover_all
     
-def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes, filename):
+def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
     found_ambiguous_arg = False
     found_ambiguous_arg_2 = False
     for arg in frame.args:
@@ -173,7 +179,7 @@ def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes, filena
                     ambiguous_mapping["args_total"] += num_args
                 ambiguous_mapping["args"] += 1
 
-                log_ambiguous_role_conversion(filename, frame, arg,
+                log_ambiguous_role_conversion(frame, arg,
                     role_matcher, verbnet_classes)
                 
                 if len(role_matcher.possible_vn_roles(

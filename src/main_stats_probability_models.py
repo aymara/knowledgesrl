@@ -77,7 +77,7 @@ if __name__ == "__main__":
             stats_data["frames"] += 1
 
             if not frame.predicate.lemma in verbnet:
-                log_vn_missing(filename, frame)
+                log_vn_missing(frame)
                 continue
             stats_data["frames_with_predicate_in_verbnet"] += 1
             
@@ -99,12 +99,12 @@ if __name__ == "__main__":
         stats_data["args_kept"] += num_instanciated
         
         stats_ambiguous_roles(good_frame, num_instanciated,
-            role_matcher, verbnet_classes, filename)
+            role_matcher, verbnet_classes)
      
         try:
             matcher = framematcher.FrameMatcher(predicate, frame)
         except framematcher.EmptyFrameError:
-            log_frame_without_slot(filename, good_frame, frame)
+            log_frame_without_slot(good_frame, frame)
             continue
 
         stats_data["frames_mapped"] += 1

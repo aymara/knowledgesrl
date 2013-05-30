@@ -15,9 +15,9 @@ errors = {
 
 debug_data = []
 
-def log_ambiguous_role_conversion(filename, frame, arg, role_matcher, verbnet_classes):
+def log_ambiguous_role_conversion(frame, arg, role_matcher, verbnet_classes):
     errors["ambiguous_role"].append({
-        "file":filename,
+        "file":frame.filename,
         "argument":arg.text,"fn_role":arg.role,"fn_frame":frame.frame_name,
         "predicate":frame.predicate.lemma,
         "predicate_classes":verbnet_classes[frame.predicate.lemma],
@@ -26,22 +26,22 @@ def log_ambiguous_role_conversion(filename, frame, arg, role_matcher, verbnet_cl
                 arg.role, vn_classes = verbnet_classes[frame.predicate.lemma])
     })
 
-def log_vn_missing(filename, frame):
+def log_vn_missing(frame):
     errors["vn_missing"].append({
-        "file":filename,"sentence":frame.sentence,
+        "file":frame.filename,"sentence":frame.sentence,
         "predicate":frame.predicate.lemma,
     })
 
-def log_frame_without_slot(filename, frame, converted_frame):
+def log_frame_without_slot(frame, converted_frame):
     errors["frame_without_slot"].append({
-        "file":filename,"sentence":frame.sentence,
+        "file":frame.filename,"sentence":frame.sentence,
         "predicate":frame.predicate.lemma,
         "structure":converted_frame.structure
     })
 
-def log_impossible_role_matching(filename, frame, i, msg):
+def log_impossible_role_matching(frame, i, msg):
     errors["impossible_role_matching"].append({
-        "file":filename, "sentence":frame.sentence,
+        "file":frame.filename, "sentence":frame.sentence,
         "predicate":frame.predicate.lemma,
         "fn_role":frame.args[i].role,
         "fn_frame":frame.frame_name,
