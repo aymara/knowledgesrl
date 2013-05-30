@@ -71,15 +71,11 @@ if __name__ == "__main__":
 
     for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
         if not filename[-4:] == ".xml": continue
+
+        fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
+
         print(".", file=sys.stderr, end="")
         sys.stderr.flush()
-
-        if stats_data["files"] % 100 == 0 and stats_data["files"] > 0:
-            print("{} {} {}".format(
-                stats_data["files"], stats_data["frames"],
-                stats_data["args"]), file=sys.stderr)   
-         
-        fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
 
         for frame in fn_reader.frames:
             stats_data["args"] += len(frame.args)
