@@ -21,7 +21,7 @@ class ArgGuesser(FNParsedReader):
     """
 
     
-    predicate_pos = ["VV", "VVN", "VB", "VBD", "VBN", "VBP", "VBZ"]
+    predicate_pos = ["VV", "VVN", "MD", "VB", "VBD", "VBN", "VBP", "VBZ"]
     predicate_pp_pos = ["VBN"]
       
     subject_deprels = [
@@ -128,16 +128,17 @@ class ArgGuesser(FNParsedReader):
                         node.begin_head, node.begin_head + len(node.word) - 1,
                         node.word, node.lemma)
                     args = self._find_args(node)
-                    
-                    yield Frame(
-                        sentence=self.tree.flat(),
-                        predicate=predicate,
-                        args=args,
-                        words=[Word(x.begin, x.end, x.pos) for x in self.tree],
-                        frame_name=None,
-                        sentence_id=self.sentence_id,
-                        filename=self.filename.replace(".conll", ".xml")
-                    )
+
+                    if len(args) > 0:
+                        yield Frame(
+                            sentence=self.tree.flat(),
+                            predicate=predicate,
+                            args=args,
+                            words=[Word(x.begin, x.end, x.pos) for x in self.tree],
+                            frame_name=None,
+                            sentence_id=self.sentence_id,
+                            filename=self.filename.replace(".conll", ".xml")
+                        )
     
     def _find_args(self, node):
         """Returns every arguments of a given node.
@@ -243,15 +244,10 @@ class ArgGuesserTest(unittest.TestCase):
         num_args = 0
         
         for frame in frames:
-            print(frame.sentence)
-            print(frame.predicate.lemma)    
             for arg in frame.args:
-                print(arg.text)
-
                 self.assertTrue(arg.text != "")
                 #self.assertEqual(frame.sentence[arg.begin:arg.end + 1], arg.text)
             num_args += len(frame.args)
-            print("")
         print(len(frames))       
         print(num_args)
             

@@ -35,9 +35,7 @@ if handle_wordclasses:
         synsets = wn.synsets(word)
         
         if(len(synsets) == 0): continue
-        
-        print(synsets[0].__class__)
-        
+
         # Since WSD is complicated, we choose the first synset.
         # Taking the path of the first element of the synset is a less
         # important decision, since the two highest nodes are very likely
