@@ -92,8 +92,7 @@ class VerbnetFrame:
         """Build the list of slot types for this frame"""
         
         # Re-initialize in case we are called several times
-        self.slot_types = [] 
-        self.slot_preps = [None] * self.num_slots
+        self.slot_types, self.slot_preps = [], []
         
         # The next slot we are expecting :
         # always subject before the verb, object immediatly after the verb
@@ -103,21 +102,19 @@ class VerbnetFrame:
         # with the preposition and will "overwrite" :next_expected
         preposition = ""
         
-        i_slot = 0
         for element in self.structure:
             if element == "V":
                 next_expected = VerbnetFrame.slot_types["object"]
             elif element[0].isupper(): # If this is a slot
                 if preposition != "":
                     self.slot_types.append(VerbnetFrame.slot_types["prep_object"])
-                    if len(self.slot_preps) > i_slot:
-                        self.slot_preps[i_slot] = preposition
+                    self.slot_preps.append(preposition)
                     preposition = ""
                 else:
                     self.slot_types.append(next_expected)
+                    self.slot_preps.append(None)
                     if next_expected == VerbnetFrame.slot_types["object"]:
                         next_expected = VerbnetFrame.slot_types["indirect_object"]
-                i_slot += 1
             elif isinstance(element, list) or element in verbnetprepclasses.all_preps:
                 preposition = element
             
