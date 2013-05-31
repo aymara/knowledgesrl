@@ -27,7 +27,7 @@ if __name__ == "__main__":
     num_same = 100
 
     # Default values for command-line options
-    framematcher.matching_algorithm = 1
+    matching_algorithm = "sync_predicates"
     core_args_only = False
     debug = False
     probability_model = "predicate_slot"
@@ -56,8 +56,8 @@ if __name__ == "__main__":
             value = 0 if value == "" else int(value)
             if value > 0:
                 n_debug = value
-        if opt == "--fmatching-algo" and value == 0:
-            framematcher.matching_algorithm = 0
+        if opt == "--fmatching-algo":
+            matching_algorithm = value
         if opt == "--core-args-only":
             core_args_only = True
        
@@ -100,7 +100,7 @@ if __name__ == "__main__":
         predicate = good_frame.predicate.lemma
 
         try:
-            matcher = framematcher.FrameMatcher(predicate, frame)
+            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
         except framematcher.EmptyFrameError:
             continue
 
@@ -152,7 +152,7 @@ if __name__ == "__main__":
 
         # Find FrameNet frame <-> VerbNet class mapping
         try:
-            matcher = framematcher.FrameMatcher(predicate, frame)
+            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
         except framematcher.EmptyFrameError:
             continue
         stats_data["frames_mapped"] += 1

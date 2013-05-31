@@ -129,7 +129,7 @@ if __name__ == "__main__":
      
         # Find FrameNet frame <-> VerbNet class mapping
         try:
-            matcher = framematcher.FrameMatcher(predicate, frame, matching_algorithm)
+            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue

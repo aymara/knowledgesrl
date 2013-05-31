@@ -32,13 +32,12 @@ class EmptyFrameError(Exception):
     :var predicate: str, predicate
     """
     
-    def __init__(self, frame, predicate):
+    def __init__(self, frame):
         self.frame = frame
-        self.predicate = predicate
-        
+
     def __str__(self):
         return ("Error : tried to use a frame without any slot in frame matching\n"
-               "frame : {}\npredicate : {}".format(self.frame, self.predicate))
+               "frame : {}\npredicate : {}".format(self.frame, self.frame.predicate))
                
 class FrameMatcher():
     """Handle frame matching for a given frame that we want to annotate.
@@ -53,11 +52,10 @@ class FrameMatcher():
     
     """
     
-    def __init__(self, predicate, frame, algo = matching_algorithm):
+    def __init__(self, frame, algo = matching_algorithm):
         if frame.num_slots == 0:
-            raise EmptyFrameError(frame, predicate)
+            raise EmptyFrameError(frame)
 
-        self.predicate = predicate
         self.frame = frame
         self.best_score = 0
         self.best_frames = []
@@ -87,8 +85,7 @@ class FrameMatcher():
             # As slots are not attributed in order, we need to keep a list
             # of the slots that have not been attributed yet
             available_slots = []
-            print(test_frame.slot_types)
-            print(test_frame.slot_preps)
+
             for i, x in enumerate(test_frame.slot_types):
                 available_slots.append(
                     {"slot_type":x, "pos":i, "prep":test_frame.slot_preps[i]}
@@ -236,7 +233,7 @@ class frameMatcherTest(unittest.TestCase):
         frame3 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role2"], "b")
         frame4 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"], "c")
 
-        matcher = FrameMatcher("predicate", frame1, "sync_predicates")
+        matcher = FrameMatcher(frame1, "sync_predicates")
         matcher.new_match(frame2)
         self.assertEqual(matcher.best_score, int(100 * 4 / 3))
         matcher.new_match(frame3)
@@ -249,20 +246,20 @@ class frameMatcherTest(unittest.TestCase):
         frame2 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
 
         with self.assertRaises(EmptyFrameError):
-            matcher = FrameMatcher("predicate", frame1, "sync_predicates")
+            matcher = FrameMatcher(frame1, "sync_predicates")
             matcher.new_match(frame2)
             
     def test_3(self):
         frame1 = VerbnetFrame(["NP", "V", "with", "NP"], [None, None])
         frame2 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
 
-        matcher = FrameMatcher("predicate", frame1, "sync_predicates")
+        matcher = FrameMatcher(frame1, "sync_predicates")
         matcher.new_match(frame2)
         self.assertEqual(matcher.best_score, int(100 / 2 + 100 / 3))
         
     def test_4(self):
         frame = VerbnetFrame(['NP', 'V', 'NP'], [None, None])
-        matcher = FrameMatcher("begin", frame, "sync_predicates")
+        matcher = FrameMatcher(frame, "sync_predicates")
         test_frames = [
             VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
             VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
@@ -286,7 +283,7 @@ class frameMatcherTest(unittest.TestCase):
             VerbnetFrame(['NP', 'V', 'NP', 'by', 'NP'], ['R1', 'R2', 'R3']),
             VerbnetFrame(['NP', 'V', 'NP', ['for', 'as'], 'NP'], ['R1', 'R4', 'R5'])
         ]
-        matcher = FrameMatcher("predicate", frame, "baseline")
+        matcher = FrameMatcher(frame, "baseline")
         for test_frame in test_frames:
             matcher.new_match(test_frame)
         self.assertEqual(matcher.possible_distribs(), [{"R1"}, {"R2", "R4"}, set(), {"R5"}])

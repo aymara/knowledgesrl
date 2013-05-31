@@ -21,7 +21,7 @@ if __name__ == "__main__":
     import paths
 
     # Default values for command-line options
-    framematcher.matching_algorithm = 1
+    matching_algorithm = "sync_predicates"
     core_args_only = False
     debug = False
     probability_model = "predicate_slot"
@@ -49,8 +49,8 @@ if __name__ == "__main__":
             value = 0 if value == "" else int(value)
             if value > 0:
                 n_debug = value
-        if opt == "--fmatching-algo" and value == 0:
-            framematcher.matching_algorithm = 0
+        if opt == "--fmatching-algo":
+            matching_algorithm = value
         if opt == "--core-args-only":
             core_args_only = True
        
@@ -102,7 +102,7 @@ if __name__ == "__main__":
             role_matcher, verbnet_classes)
      
         try:
-            matcher = framematcher.FrameMatcher(predicate, frame)
+            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue
