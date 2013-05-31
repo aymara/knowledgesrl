@@ -41,11 +41,6 @@ def display_stats():
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
-    
-    # Avoid division by 0
-    if unique_role_evaluated == 0:
-        print("No role attributed")
-        return
         
     print(
         "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
@@ -69,15 +64,15 @@ def display_stats():
 
             s["no_role"],
             s["one_role"],
-            s["one_correct_role"] / unique_role_evaluated, unique_role_evaluated,
+            s["one_correct_role"] / max(unique_role_evaluated, 1), unique_role_evaluated,
             several_roles,
-            s["several_roles_ok"] / several_roles_evaluated, several_roles_evaluated,
+            s["several_roles_ok"] / max(several_roles_evaluated, 1), several_roles_evaluated,
             s["one_role"] + several_roles - (unique_role_evaluated + several_roles_evaluated),
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            s["one_correct_role"] / unique_role_evaluated ,
-            s["one_correct_role"] / (unique_role_evaluated + several_roles_evaluated + s["no_role"]))
+            s["one_correct_role"] / max(unique_role_evaluated, 1),
+            s["one_correct_role"] / max(unique_role_evaluated + several_roles_evaluated + s["no_role"], 1))
     )
     
 def display_stats_ambiguous_mapping():
