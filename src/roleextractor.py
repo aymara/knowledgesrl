@@ -105,21 +105,25 @@ def find_sentence_id(extracted_frames, sentence_1, expected_id):
         
         if len(extracted_frames[test_id]) > 0:
             sentence_2 = extracted_frames[test_id][0].sentence
-
-            # This is not necessary but resolves many cases without computing
-            # the symetric difference of the two sets of words of the two sentences
-            if sentence_1 == sentence_2:
+        
+            if sentence_match(sentence_1, sentence_2):
                 return test_id
-            
-            # The previous test might fail for the two "same" sentences because of
-            # minor differences between the two corpora, or because of parsing errors 
-            # that change word order
-            words_1 = sentence_1.split(" ")
-            words_2 = sentence_2.split(" ")
-            if len(set(words_1) ^ set(words_2)) > (len(words_1) + len(words_2)) / 6:
-                continue
-            return test_id
     return 0
+
+def sentence_match(sentence_1, sentence_2):
+    # This is not necessary but resolves many cases without computing
+    # the symetric difference of the two sets of words of the two sentences
+    if sentence_1 == sentence_2:
+        return True
+    
+    # The previous test might fail for the two "same" sentences because of
+    # minor differences between the two corpora, or because of parsing errors 
+    # that change word order
+    words_1 = sentence_1.split(" ")
+    words_2 = sentence_2.split(" ")
+    if len(set(words_1) ^ set(words_2)) > (len(words_1) + len(words_2)) / 6:
+         return False
+    return True
     
 def predicate_match(predicate1, predicate2):
     """ Tells whether two predicates in the same sentence belongs to the same frame"""
