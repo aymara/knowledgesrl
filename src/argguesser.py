@@ -22,8 +22,9 @@ class ArgGuesser(FNParsedReader):
     """
 
     
-    predicate_pos = ["VV", "VVN", "MD", "VB", "VBD", "VBN", "VBP", "VBZ"]
-    predicate_pp_pos = ["VBN"]
+    predicate_pos = ["VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
+    "MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+    predicate_pp_pos = ["VBN", "VVN"]
       
     subject_deprels = [
     "LGS", #Logical subject -> should we keep this (36 args) ?
