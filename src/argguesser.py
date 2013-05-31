@@ -188,7 +188,6 @@ class ArgGuesser(FNParsedReader):
             for brother in node.father.children:
                 if self._is_subject(brother, node):
                     result.append(self._nodeToArg(brother))"""
-
         return result
     
     def _find_args_rec(self, predicate_node, node):
@@ -305,12 +304,12 @@ class ArgGuesserTest(unittest.TestCase):
         treeBuilder = SyntacticTreeBuilder(conll_tree)
         tree = treeBuilder.build_syntactic_tree()
         args = [
-            Arg(0, 20, "The others here today", None, True, "NNS")
+            Arg(0, 20, "The others here today", "", True, "NP")
         ]
         
         verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).verbs
         arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet) 
-        
+
         self.assertEqual(arg_finder._find_args(tree), args)
 if __name__ == "__main__":
     unittest.main()
