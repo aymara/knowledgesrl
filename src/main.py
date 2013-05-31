@@ -39,7 +39,7 @@ def init_fn_reader(path):
 
 if __name__ == "__main__":
     # Default values for command-line options
-    framematcher.matching_algorithm = "synch_predicates"
+    framematcher.matching_algorithm = "sync_predicates"
     core_args_only = True
     gold_args = True
     debug = False

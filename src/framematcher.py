@@ -23,7 +23,7 @@ from collections import defaultdict
 import unittest
 import sys
 
-matching_algorithm = 1
+matching_algorithm = "sync_predicates"
 
 class EmptyFrameError(Exception):
     """Trying to use an empty frame in a FrameMatcher
@@ -79,7 +79,7 @@ class FrameMatcher():
                     distrib[slot_pos] = next(iter(test_frame.roles[matching_slot]))
                 num_match += 1
             
-        elif matching_algorithm == "synch_predicates":
+        elif matching_algorithm == "sync_predicates":
             """ New algorithm """
             i, j = 0, 0
             index_v_1 = self.frame.structure.index("V")
@@ -139,7 +139,7 @@ class FrameMatcher():
             ratio_2 = num_match / test_frame.num_slots
 
         score = int(100 * (ratio_1 + ratio_2))
-        
+
         if score > self.best_score:
             self.possible_roles = [{} for x in range(self.frame.num_slots)] 
             self.best_frames = []
@@ -185,6 +185,7 @@ class FrameMatcher():
         
 class frameMatcherTest(unittest.TestCase):
     def test_1(self):
+        self.matching_algorithm = "sync_predicates"
         frame1 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], [None, None, None])
         frame2 = VerbnetFrame(["NP", "V", "NP", "for", "NP"], ["Agent", "Patient", "Role1"], "a")
         frame3 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role2"], "b")
@@ -199,6 +200,7 @@ class frameMatcherTest(unittest.TestCase):
         self.assertEqual(matcher.possible_distribs(), [{"Agent"}, {"Patient"}, {"Role2", "Role3"}])
         
     def test_2(self):
+        self.matching_algorithm = "sync_predicates"
         frame1 = VerbnetFrame(["to", "be"], [])
         frame2 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
 
@@ -207,6 +209,7 @@ class frameMatcherTest(unittest.TestCase):
             matcher.new_match(frame2)
             
     def test_3(self):
+        self.matching_algorithm = "sync_predicates"
         frame1 = VerbnetFrame(["NP", "V", "with", "NP"], [None, None])
         frame2 = VerbnetFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"])
 
@@ -215,6 +218,7 @@ class frameMatcherTest(unittest.TestCase):
         self.assertEqual(matcher.best_score, int(100 / 2 + 100 / 3))
         
     def test_4(self):
+        self.matching_algorithm = "sync_predicates"
         frame = VerbnetFrame(['NP', 'V', 'NP'], [None, None])
         matcher = FrameMatcher("begin", frame)
         test_frames = [
@@ -228,7 +232,6 @@ class frameMatcherTest(unittest.TestCase):
         ]
         for test_frame in test_frames:
             matcher.new_match(test_frame)
-
             
 if __name__ == "__main__":
     unittest.main()
