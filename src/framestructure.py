@@ -193,11 +193,12 @@ class VerbnetFrame:
                          
                 added_length = 6 + len(prep)
                 structure = "{}< {} NP>{}".format(before, prep, after)
-            # Replace every "Swhether" by "if S" or "whether S"
-            elif argument.phrase_type == "Swhether":
+            # Replace every "Swhether" and "S" by "that S", "if S", ...
+            elif argument.phrase_type in ["Swhether", "Sub"]:
                 sub = argument.text.split(" ")[0].lower()
                 added_length = 5 + len(sub)
                 structure = "{}< {} S>{}".format(before, sub, after)
+                print(structure)
             # Handle simple phrase replacements
             elif argument.phrase_type in VerbnetFrame.phrase_replacements:
                 phrase = VerbnetFrame.phrase_replacements[argument.phrase_type]
