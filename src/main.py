@@ -39,7 +39,7 @@ def init_fn_reader(path):
 
 if __name__ == "__main__":
     # Default values for command-line options
-    framematcher.matching_algorithm = "sync_predicates"
+    matching_algorithm = "sync_predicates"
     core_args_only = True
     gold_args = True
     debug = False
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             if value > 0:
                 n_debug = value
         if opt == "--fmatching-algo":
-            framematcher.matching_algorithm = value
+            matching_algorithm = value
         if opt == "--add-non-core-args":
             core_args_only = False
         if opt == "--model":
@@ -67,7 +67,7 @@ if __name__ == "__main__":
             bootstrap = True
         if opt == "--no-gold-args":
             gold_args = False
-       
+ 
     verbnet_predicates, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
     print("Loading frames...", file=sys.stderr)
@@ -129,7 +129,7 @@ if __name__ == "__main__":
      
         # Find FrameNet frame <-> VerbNet class mapping
         try:
-            matcher = framematcher.FrameMatcher(predicate, frame)
+            matcher = framematcher.FrameMatcher(predicate, frame, matching_algorithm)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue
