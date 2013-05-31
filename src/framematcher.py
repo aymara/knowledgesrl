@@ -49,6 +49,7 @@ class FrameMatcher():
         self.frame = frame
         self.best_score = 0
         self.best_frames = []
+        self.num_new_match = 0
         self.possible_roles = [{} for x in range(self.frame.num_slots)] 
     
     def new_match(self, test_frame):
@@ -58,6 +59,7 @@ class FrameMatcher():
         :type test_frame: VerbnetFrame.
             
         """
+        self.num_new_match += 1
         distrib = [None for x in range(self.frame.num_slots)] 
         num_match = 0
             
@@ -146,7 +148,8 @@ class FrameMatcher():
         if score >= self.best_score:
             for slot, role in enumerate(distrib):
                 if role != None:
-                    self.possible_roles[slot][test_frame.vnclass] = role
+                    index = "{}_{}".format(test_frame.vnclass, self.num_new_match)
+                    self.possible_roles[slot][index] = role
             
             self.best_frames.append(test_frame)
             self.best_score = score
