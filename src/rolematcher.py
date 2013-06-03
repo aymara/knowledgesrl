@@ -55,10 +55,6 @@ class VnFnRoleMatcher():
         self.mappings = {}
         
         self.issues = {
-            # <role> elements with empty vnrole attributes
-            "empty_vn_role":0,
-            # Errors in FN roles or VN roles spelling
-            "typo":0,
             # VN roles stored in vn_roles_additionnal
             "new_vn_roles":{},
             # Frames to which are associated different FN/VN roles mappings
@@ -86,11 +82,6 @@ class VnFnRoleMatcher():
                 vn_role = role.attrib["vnrole"]
                 fn_role = role.attrib["fnrole"]
 
-                if vn_role == "":
-                    self.issues["empty_vn_role"] += 1
-                    continue
-
-                vn_role, fn_role = self._correct_errors(vn_role, fn_role)
                 vn_role = self._handle_co_roles(vn_role)
                 
                 mapping_as_dict[fn_role] = vn_role
@@ -107,18 +98,6 @@ class VnFnRoleMatcher():
         if vn_role[-1] == "2":
             return "Co-"+vn_role[0:-1]
         return vn_role
-
-    def _correct_errors(self, vn_role, fn_role):
-        if vn_role == "Eperiencer":
-            self.issues["typo"] += 1
-            vn_role = "Experiencer"
-        if vn_role == "Patients":
-            self.issues["typo"] += 1
-            vn_role = "Patient"
-        if fn_role == "Eperiencer":
-            self.issues["typo"] += 1
-            fn_role = "Experiencer"
-        return vn_role, fn_role
     
     def _update_mapping_list(self, fn_frame, new_mapping):
         if not fn_frame in self.mappings:
@@ -253,7 +232,7 @@ class VnFnRoleMatcherTest(unittest.TestCase):
                 matcher.issues["vbclass_contradictory"] += 1           
                     
         print("Found {} fnrole-fnframe entries".format(num_role_frames))
-        print("{} different Frameverbnet_classes[frame.predicate.lemma]Net frames".format(len(matcher.mappings)))
+        print("{} different FrameNet frames".format(len(matcher.mappings)))
         
         print("{} frames have different possible mappings".format(matcher.issues["vbclass_dependent"]))
         print("{} frames have contradictory mappings".format(matcher.issues["vbclass_contradictory"]))
@@ -265,10 +244,7 @@ class VnFnRoleMatcherTest(unittest.TestCase):
 
         for role, n in matcher.issues["new_vn_roles"].items():
             print("VerbNet role \"{}\" was encountered {} time(s)".format(
-                role, n))
-                
-        print("{} other minor errors".format(matcher.issues["typo"]+matcher.issues["empty_vn_role"]))
-        
+                role, n))    
             
     def test_matching(self):
         matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
