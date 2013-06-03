@@ -4,6 +4,7 @@
 from collections import Counter
 from rolematcher import RoleMatchingError
 from errorslog import *
+from options import *
 
 stats_data = {
     "files":0,
@@ -41,10 +42,28 @@ def display_stats():
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
+    
+    if gold_args:
+        print(
+            "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
+            "Frames with predicate in VerbNet: {} frames ({} args)\n".format(
+            s["files"], s["frames"], s["args"],
+            s["frames_with_predicate_in_verbnet"],  s["args_kept"]
+        ))
+    else:
+        print(
+            "\n\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
+            "Did not extract {} annotated frames.\n"
+            "Extracted {} correct, {} partial-match and {} incorrect arguments.\n"
+            "Did not extract {} annotated arguments.\n".format(
+            s["frame_extracted_good"], s["frame_extracted_bad"],
+            s["frame_not_extracted"],
+            s["arg_extracted_good"], s["arg_extracted_partial"],
+            s["arg_extracted_bad"],
+            s["arg_not_extracted"]
+        ))
         
     print(
-        "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
-        "Frames with predicate in VerbNet: {} frames ({} args)\n"
         "Frames mapped: {} frames\n"
         
         "\nFrame matching:\n"
@@ -58,8 +77,6 @@ def display_stats():
         "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
         "\nOverall: {:.2%} precision, {:.2%} accuracy\n"
         "\n".format(
-            s["files"], s["frames"], s["args"],
-            s["frames_with_predicate_in_verbnet"],  s["args_kept"],
             s["frames_mapped"],
 
             s["no_role"],
