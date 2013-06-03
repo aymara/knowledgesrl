@@ -20,7 +20,7 @@ import rolematcher
 import probabilitymodel
 import headwordextractor
 import paths
-import dump
+import dumper
 
 def init_verbnet(path):
     print("Loading VerbNet data...", file=sys.stderr)
@@ -124,7 +124,7 @@ if __name__ == "__main__":
             log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
     
     if dump:
-        dump.add_data_frame_matching(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        dumper.add_data_frame_matching(annotated_frames, vn_frames, role_matcher, verbnet_classes)
     else:       
         print("Frame matching stats...", file=sys.stderr) 
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
@@ -153,8 +153,8 @@ if __name__ == "__main__":
                         frame.roles[i] = set([new_role])
 
     if dump:
-        dump.add_data_prob_model(annotated_frames, vn_frames, role_matcher, verbnet_classes)
-        dump.dump(dump_file)
+        dumper.add_data_prob_model(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        dumper.dump(dump_file)
     else:    
         print("Final stats...", file=sys.stderr)   
 
