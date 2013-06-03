@@ -69,7 +69,11 @@ is either:
   * SBJ or LGS for subject
   * OBJ or OPRD for objects
   * BNF, DTV or PRD
-  
+
+We also stop exploring the subtree at each node which contains a verb, because
+arguments that we might find under this node are much more likely to relate to
+this verb rather than the verb at the top node of the subtree.
+
 This results in the extraction of very few PP: there are probably other
 dependency relations that should be extracted.
 

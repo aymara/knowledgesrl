@@ -17,6 +17,7 @@ Documentation:
 
     parseresources
     extractframeargs
+    debug
     evaluation
     ideas
 
