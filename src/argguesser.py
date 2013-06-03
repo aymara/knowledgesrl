@@ -78,7 +78,7 @@ class ArgGuesser(FNParsedReader):
     def handle_corpus(self):
         """ Extracts frames from the corpus and iterate over them """
         
-        # First, compute the infinitive for of every verb in the corpus
+        # First, compute the infinitive form of every verb in the corpus
         self._compute_base_forms()
         
         # Read the corpus a second time to build frames
@@ -114,7 +114,8 @@ class ArgGuesser(FNParsedReader):
                     if pos in self.predicate_pos:
                         result.add(word.lower())
         
-        print("")                
+        print("")
+             
         return result          
 
     def _compute_base_forms(self):
@@ -124,10 +125,10 @@ class ArgGuesser(FNParsedReader):
             pickle.dump(self._extract_verbs(), picklefile, 2)
 
         os.system("python2.7 wordclassesloader.py --morph")
-        
+
         with open("temp_morph", "rb") as picklefile:
             self.base_forms.update(pickle.load(picklefile))
-            
+                            
         os.system("rm temp_wordlist temp_morph")
 
     def _handle_file(self, filename):
@@ -148,24 +149,23 @@ class ArgGuesser(FNParsedReader):
                 #Si deprel = VC, prendre le noeud du haut pour les args
                 #Si un child est VC -> ne rien faire avec ce node
                 node.lemma = node.word.lower()
-                if node.word in self.base_forms:
-                    node.lemma = self.base_forms[node.word]
+                if node.lemma in self.base_forms:
+                    node.lemma = self.base_forms[node.lemma]
                 if node.lemma in self.verbnet_index:
                     predicate = Predicate(
                         node.begin_head, node.begin_head + len(node.word) - 1,
                         node.word, node.lemma)
                     args = self._find_args(node)
 
-                    if len(args) > 0:
-                        yield Frame(
-                            sentence=self.tree.flat(),
-                            predicate=predicate,
-                            args=args,
-                            words=[Word(x.begin, x.end, x.pos) for x in self.tree],
-                            frame_name="",
-                            sentence_id=self.sentence_id,
-                            filename=self.filename.replace(".conll", ".xml")
-                        )
+                    yield Frame(
+                        sentence=self.tree.flat(),
+                        predicate=predicate,
+                        args=args,
+                        words=[Word(x.begin, x.end, x.pos) for x in self.tree],
+                        frame_name="",
+                        sentence_id=self.sentence_id,
+                        filename=self.filename.replace(".conll", ".xml")
+                    )
     
     def _find_args(self, node):
         """Returns every arguments of a given node.
@@ -246,16 +246,18 @@ class ArgGuesser(FNParsedReader):
         if not node.pos in self.predicate_pos:
             return False
         
-        # For a past participe, find the auxiliary
-        # and return false if it is also a past participe
+        # For a past participe, makes sur that there is an auxiliary
         if node.pos in self.predicate_pp_pos:
             current_node = node
             while current_node.deprel == "VC":
                 current_node = current_node.father
-            if (current_node.pos in self.predicate_pp_pos or
+                
+            if current_node is node:
+                return False
+            """if (current_node.pos in self.predicate_pp_pos or
                 not current_node.pos in self.predicate_pos
             ):
-                return False
+                return False"""
         
         # Check that this node is not an auxiliary
         for child in node.children:
