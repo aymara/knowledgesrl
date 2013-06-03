@@ -4,7 +4,6 @@
 if __name__ == "__main__":
     import os
     import sys
-    import getopt
     import random
     import copy
     from errorslog import *
@@ -12,6 +11,7 @@ if __name__ == "__main__":
     import framenetreader
     from framestructure import *
     from stats import *
+    from options import *
     import verbnetreader
     import framematcher
     import rolematcher
@@ -19,12 +19,6 @@ if __name__ == "__main__":
     import headwordextractor
     from bootstrap import *
     import paths
-
-    # Default values for command-line options
-    matching_algorithm = "sync_predicates"
-    core_args_only = False
-    debug = False
-    probability_model = "predicate_slot"
 
     def init_verbnet(path):
         print("Loading VerbNet data...", file=sys.stderr)
@@ -42,18 +36,6 @@ if __name__ == "__main__":
         
         return reader
 
-    options = getopt.getopt(sys.argv[1:], "d:", ["fmatching-algo=", "core-args-only"])
-    for opt,value in options[0]:
-        if opt == "-d":
-            debug = True
-            value = 0 if value == "" else int(value)
-            if value > 0:
-                n_debug = value
-        if opt == "--fmatching-algo":
-            matching_algorithm = value
-        if opt == "--core-args-only":
-            core_args_only = True
-       
     verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
     print("Loading frames...", file=sys.stderr)

@@ -3,7 +3,6 @@
 
 import os
 import sys
-import getopt
 import random
 from errorslog import *
 
@@ -12,6 +11,7 @@ from framestructure import *
 from stats import *
 from errorslog import *
 from bootstrap import bootstrap_algorithm
+from options import *
 import argguesser
 import roleextractor
 import verbnetreader
@@ -38,7 +38,7 @@ def init_fn_reader(path):
     return reader
 
 if __name__ == "__main__":
-    # Default values for command-line options
+    """# Default values for command-line options
     matching_algorithm = "sync_predicates"
     core_args_only = True
     gold_args = True
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         if opt == "--bootstrap":
             bootstrap = True
         if opt == "--no-gold-args":
-            gold_args = False
+            gold_args = False"""
  
     verbnet_predicates, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
