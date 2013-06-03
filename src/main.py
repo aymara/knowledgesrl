@@ -20,6 +20,7 @@ import rolematcher
 import probabilitymodel
 import headwordextractor
 import paths
+import dump
 
 def init_verbnet(path):
     print("Loading VerbNet data...", file=sys.stderr)
@@ -83,7 +84,7 @@ if __name__ == "__main__":
             converted_frame = VerbnetFrame.build_from_frame(frame)
             converted_frame.compute_slot_types()
             vn_frames.append(converted_frame)
-        
+
     print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
     model = probabilitymodel.ProbabilityModel()
@@ -121,10 +122,13 @@ if __name__ == "__main__":
                     
         if debug and set() in frame.roles:
             log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
-        
-    print("Frame matching stats...", file=sys.stderr) 
-    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
-    display_stats()
+    
+    if dump:
+        dump.add_data_frame_matching(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+    else:       
+        print("Frame matching stats...", file=sys.stderr) 
+        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        display_stats()
 
     if bootstrap:
         hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
@@ -148,10 +152,14 @@ if __name__ == "__main__":
                     if new_role != None:
                         frame.roles[i] = set([new_role])
 
-    print("Final stats...", file=sys.stderr)   
+    if dump:
+        dump.add_data_prob_model(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        dump.dump(dump_file)
+    else:    
+        print("Final stats...", file=sys.stderr)   
 
-    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
-    display_stats()
+        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        display_stats()
 
     if debug: display_debug(n_debug)
 

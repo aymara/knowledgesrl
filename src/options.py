@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import probabilitymodel
 import getopt
 import sys
 
@@ -15,12 +16,12 @@ dump_file = ""
 
 options = getopt.getopt(sys.argv[1:], "d:",
     ["fmatching-algo=", "add-non-core-args", "help",
-     "model=", "bootstrap", "no-gold-args"])
+     "model=", "bootstrap", "no-gold-args", "dump"])
 
 display_syntax = False
 syntax_str = ("main.py [-d num_sample] [--fmatching-algo=algo] "
               "[--model=probability_model] [--add-non-core-args] "
-              "[--bootstrap] [--no-gold-args] [--help]")
+              "[--bootstrap] [--no-gold-args] [--dump filename] [--help]")
 
 for opt,value in options[0]:
     if opt == "-d":
@@ -40,6 +41,12 @@ for opt,value in options[0]:
         bootstrap = True
     if opt == "--no-gold-args":
         gold_args = False
+    if opt == "--dump":
+        if len(options[1]) > 0:
+            dump = True
+            dump_file = options[1][0]
+        else:
+            display_syntax = True
     if opt == "--help":
         display_syntax = True
             
