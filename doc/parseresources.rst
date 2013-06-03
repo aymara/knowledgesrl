@@ -18,7 +18,7 @@ The difficult part is to build the structure and the role list of the
 annotations) list of syntactic elements, and to retrieve the roles of the
 elements that have one.
 
-The following operations are applied to the elements of the *primary* attribute :
+The following operations are applied to the elements of the *primary* attribute:
   * everything that is after a "." or a "-" is removed (for instance, NP.theme
     becomes NP, S-Quote becomes S)
   * adverbs are removed from the structure (not handled yet)

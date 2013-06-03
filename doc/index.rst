@@ -16,6 +16,7 @@ Documentation:
     :maxdepth: 4
 
     parseresources
+    extractframeargs
     evaluation
     ideas
 
