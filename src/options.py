@@ -10,11 +10,18 @@ gold_args = True
 debug = False
 bootstrap = False
 probability_model = "predicate_slot"
+dump = False
+dump_file = ""
 
 options = getopt.getopt(sys.argv[1:], "d:",
-    ["fmatching-algo=", "add-non-core-args",
+    ["fmatching-algo=", "add-non-core-args", "help",
      "model=", "bootstrap", "no-gold-args"])
-     
+
+display_syntax = False
+syntax_str = ("main.py [-d num_sample] [--fmatching-algo=algo] "
+              "[--model=probability_model] [--add-non-core-args] "
+              "[--bootstrap] [--no-gold-args] [--help]")
+
 for opt,value in options[0]:
     if opt == "-d":
         debug = True
@@ -33,3 +40,9 @@ for opt,value in options[0]:
         bootstrap = True
     if opt == "--no-gold-args":
         gold_args = False
+    if opt == "--help":
+        display_syntax = True
+            
+if display_syntax:
+    print(syntax_str)
+    exit(0)
