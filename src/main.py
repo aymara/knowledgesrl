@@ -128,7 +128,7 @@ if __name__ == "__main__":
     else:       
         print("Frame matching stats...", file=sys.stderr) 
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
-        display_stats()
+        display_stats(gold_args)
 
     if bootstrap:
         hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
@@ -159,7 +159,7 @@ if __name__ == "__main__":
         print("Final stats...", file=sys.stderr)   
 
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
-        display_stats()
+        display_stats(gold_args)
 
     if debug: display_debug(n_debug)
 

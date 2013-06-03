@@ -4,7 +4,6 @@
 from collections import Counter
 from rolematcher import RoleMatchingError
 from errorslog import *
-from options import *
 
 stats_data = {
     "files":0,
@@ -37,7 +36,7 @@ ambiguous_mapping = {
     "verbs_with_frame":[], "args_total_with_frame":0, "args_with_frame":0
 }
   
-def display_stats():
+def display_stats(gold_args):
     s = stats_data
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
