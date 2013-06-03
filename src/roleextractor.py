@@ -29,10 +29,16 @@ def fill_roles(extracted_frames, verbnet):
     path = paths.FRAMENET_FULLTEXT
     i = 0
     i_max = len(extracted_frames)
-    for filename in sorted(os.listdir(path)):
+
+    files = os.listdir(path)
+    for filename in sorted(files):
         if not filename[-4:] == ".xml": continue
         print(".", file=sys.stderr, end="")
         sys.stderr.flush()
+
+        # Skip any file that is not in our corpus
+        while i < i_max and extracted_frames[i].filename not in files:
+            i += 1
 
         frames = defaultdict(lambda : [])
         old_i = i
