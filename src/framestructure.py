@@ -57,7 +57,7 @@ class VerbnetFrame:
     }
     
     phrase_replacements = {
-        "N":"NP", "Poss":"NP", "PPing":"S_ING", "QUO":"S",
+        "N":"NP", "Poss":"NP", "QUO":"S",
         "Sinterrog":"S", "Sfin":"S",
         "VPbrst":"S", "VPing":"S_ING", "VPto":"to S"
     }
@@ -193,6 +193,18 @@ class VerbnetFrame:
                          
                 added_length = 6 + len(prep)
                 structure = "{}< {} NP>{}".format(before, prep, after)
+            # Replace every "PPing" by "prep S_ING", 
+            elif argument.phrase_type == "PPing":
+                prep = ""
+                for word in argument.text.lower().split(" "):
+                    if word in verbnetprepclasses.keywords:
+                        prep = word
+                        break             
+                if prep == "":
+                    prep = argument.text.lower().split(" ")[0]
+                         
+                added_length = 9 + len(prep)
+                structure = "{}< {} S_ING>{}".format(before, prep, after)
             # Replace every "Swhether" and "S" by "that S", "if S", ...
             elif argument.phrase_type in ["Swhether", "Sub"]:
                 sub = argument.text.split(" ")[0].lower()
