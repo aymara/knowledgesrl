@@ -1,13 +1,13 @@
-1	His	His	PP$	PP$	-	3	NMOD	-	-
+1	His	His	PRP$	PRP$	-	3	NMOD	-	-
 2	job	job	NN	NN	-	3	NMOD	-	-
-3	objectives	objectives	NNS	NNS	-	0	ROOT	-	-
-4	call	call	VVP	VVP	-	3	APPO	-	-
-5	for	for	IN	IN	-	3	NMOD	-	-
-6	him	him	PP	PP	-	5	PMOD	-	-
+3	objectives	objectives	NNS	NNS	-	4	SBJ	-	-
+4	call	call	VBP	VBP	-	0	ROOT	-	-
+5	for	for	IN	IN	-	4	ADV	-	-
+6	him	him	PRP	PRP	-	7	PMOD	-	-
 7	to	to	TO	TO	-	5	SUB	-	-
-8	do	do	VV	VV	-	7	IM	-	-
-9	it	it	PP	PP	-	7	PMOD	-	-
-10	in	in	IN	IN	-	7	IM	-	-
+8	do	do	VB	VB	-	7	IM	-	-
+9	it	it	PRP	PRP	-	8	OBJ	-	-
+10	in	in	IN	IN	-	8	LOC	-	-
 11	<num>	<num>	CD	CD	-	10	PMOD	-	-
-12	.	.	.	.	-	3	P	-	-
+12	.	.	.	.	-	4	P	-	-
 
