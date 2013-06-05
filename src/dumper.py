@@ -4,6 +4,7 @@
 import pickle
 import sys
 import getopt
+import framematcher
 from copy import deepcopy
 
 data = {
@@ -11,18 +12,36 @@ data = {
     "prob_model":[]
 }
 
-def add_data_frame_matching(annotated_frames, vn_frames, role_matcher, verbnet_classes):
+def add_data_frame_matching(annotated_frames, vn_frames, role_matcher,
+    verbnet_classes, verbnet_predicates, matching_algorithm):
+    
     data["frame_matching"] = clone_and_eval(
-            annotated_frames, vn_frames, role_matcher, verbnet_classes)
+            annotated_frames, vn_frames, role_matcher, verbnet_classes,
+            frame_matching=True, verbnet_predicates=verbnet_predicates,
+            matching_algorithm=matching_algorithm)
     
 def add_data_prob_model(annotated_frames, vn_frames, role_matcher, verbnet_classes):
     data["prob_model"] = clone_and_eval(
             annotated_frames, vn_frames, role_matcher, verbnet_classes)
 
-def clone_and_eval(annotated_frames, vn_frames, role_matcher, verbnet_classes):
-    result = []
+def clone_and_eval(annotated_frames, vn_frames, role_matcher,
+    verbnet_classes, frame_matching = False, verbnet_predicates = None,
+    matching_algorithm = ""):
     
-    for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):    
+    result = []
+    for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
+        if frame_matching:
+            try:
+                matcher = framematcher.FrameMatcher(found_vn_frame, matching_algorithm)
+                
+                for test_frame in verbnet_predicates[gold_fn_frame.predicate.lemma]:
+                    matcher.new_match(test_frame)   
+            except framematcher.EmptyFrameError:
+                pass
+
+            best_match_structures = [x.structure for x in matcher.best_frames]
+            best_match_roles = [x.roles for x in matcher.best_frames]
+               
         for i, slot in enumerate(found_vn_frame.roles):
             status = "?"
             possible_roles = None
@@ -47,7 +66,7 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher, verbnet_classes):
                     if len(slot) == 1: status = "one_role_bad"
                     else: status = "several_roles_bad"
 
-            result.append({
+            to_add = {
                 "slot":i,
                 "structure":found_vn_frame.structure,
                 "frame_name":gold_fn_frame.frame_name,
@@ -58,8 +77,14 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher, verbnet_classes):
                 "role_list":slot,
                 "correct_role_fn":gold_fn_frame.args[i].role,
                 "correct_role_vn":possible_roles
-            })
-         
+            }
+                           
+            if frame_matching:
+                to_add["best_match_structures"] = best_match_structures
+                to_add["best_match_roles"] = best_match_roles
+
+            result.append(to_add)
+
     return result
 
 def diff_status(data1, data2):
@@ -107,6 +132,14 @@ def print_slot(slot_data):
             slot_data["status"]
         )
     )
+    if "best_match_structures" in slot_data:
+        print(
+            "Frame matching best structures {}\n"
+            "Frame matching best roles {}\n".format(
+                slot_data["best_match_structures"],
+                slot_data["best_match_roles"]
+            )
+        )
   
 def dump(filename):
      with open("dump/"+filename, "wb") as picklefile:
