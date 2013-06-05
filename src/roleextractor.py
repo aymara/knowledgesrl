@@ -139,7 +139,7 @@ def handle_frame(extracted_frame, annotated_frame):
     # Update the frame name
     extracted_frame.frame_name = annotated_frame.frame_name
     
-    good_args = 0
+    good_args, partial_args = 0, 0
     
     # Update the argument roles and statistics
     for annotated_arg in annotated_frame.args:
@@ -147,8 +147,14 @@ def handle_frame(extracted_frame, annotated_frame):
         
         arg_found = False
         for extracted_arg in extracted_frame.args:
-            if match_score(extracted_arg, annotated_arg) == 1:
+            score = match_score(extracted_arg, annotated_arg)
+            if score == 1:
                 good_args += 1
+                extracted_arg.role = annotated_arg.role
+                arg_found = True
+                break
+            elif score > 0.5:
+                partial_args += 1
                 extracted_arg.role = annotated_arg.role
                 arg_found = True
                 break
@@ -156,15 +162,16 @@ def handle_frame(extracted_frame, annotated_frame):
             stats_data["arg_not_extracted"] += 1
             
     stats_data["arg_extracted_good"] += good_args
-    stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args)
+    stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args - partial_args)
+    stats_data["arg_extracted_partial"] += partial_args
     
     # Discard every argument for which there was no match
     extracted_frame.args = [x for x in extracted_frame.args if not x.role == ""]        
 
 def match_score(arg1, arg2):
-    if arg1.begin == arg2.begin and arg1.end == arg2.end:
-        return 1
-    return 0
+    intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
+    sum_length = (1 + arg1.end - arg1.begin) + (1 + arg2.end - arg2.begin)
+    return 2 * max(0, intersect) / sum_length
 
 if __name__ == "__main__":     
     import verbnetreader
