@@ -22,8 +22,7 @@ class ArgGuesser(FNParsedReader):
     """
     
     predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
-    predicate_pp_pos = ["VBN", "VVN"]
-      
+
     subject_deprels = [
     "LGS", #Logical subject -> should we keep this (36 args) ?
     "SBJ"
@@ -144,6 +143,7 @@ class ArgGuesser(FNParsedReader):
                 node.lemma = self.base_forms[node.lemma]
             if not node.lemma in self.verbnet_index:
                 continue
+            
             if self._is_predicate(node):
                 #Si deprel = VC, prendre le noeud du haut pour les args
                 #Si un child est VC -> ne rien faire avec ce node
@@ -151,17 +151,16 @@ class ArgGuesser(FNParsedReader):
                     node.begin_head, node.begin_head + len(node.word) - 1,
                     node.word, node.lemma)
                 args = self._find_args(node)
-                
-                if True or len(args) > 0:
-                    yield Frame(
-                        sentence=self.tree.flat(),
-                        predicate=predicate,
-                        args=args,
-                        words=[Word(x.begin, x.end, x.pos) for x in self.tree],
-                        frame_name="",
-                        sentence_id=self.sentence_id,
-                        filename=self.filename.replace(".conll", ".xml")
-                    )
+
+                yield Frame(
+                    sentence=self.tree.flat(),
+                    predicate=predicate,
+                    args=args,
+                    words=[Word(x.begin, x.end, x.pos) for x in self.tree],
+                    frame_name="",
+                    sentence_id=self.sentence_id,
+                    filename=self.filename.replace(".conll", ".xml")
+                )
     
     def _find_args(self, node):
         """Returns every arguments of a given node.
@@ -236,10 +235,11 @@ class ArgGuesser(FNParsedReader):
             return False
         
         # Check that this node is not an auxiliary
-        for child in node.children:
-            if child.pos in self.predicate_pos and child.deprel == "VC":
-                return False
-                
+        if node.lemma in ["be", "do", "have", "will", "would"]:
+            for child in node.children:
+                if child.pos in self.predicate_pos and child.deprel == "VC":
+                    return False
+                    
         return True
     
     def _is_subject(self, node, predicate_node):
