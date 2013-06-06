@@ -84,13 +84,16 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
                 handle_frame(extracted_frame, annotated_frame)
                 frame_found = True
                 break
-        if not frame_found and annotated_frame.predicate.lemma in verbnet:
+        if not frame_found:
+            num_args = len([x for x in annotated_frame.args if x.instanciated])
+            if annotated_frame.predicate.lemma not in verbnet:
+                stats_data["frame_not_extracted_not_verbnet"] += 1
+                stats_data["arg_not_extracted_not_verbnet"] += num_args
             stats_data["frame_not_extracted"] += 1
-            stats_data["arg_not_extracted"] += len(annotated_frame.args)
-                
+            stats_data["arg_not_extracted"] += num_args
+    
     stats_data["frame_extracted_good"] += good_frames
     stats_data["frame_extracted_bad"] += (num_frames - good_frames)
-
 
 def find_sentence_id(extracted_frames, sentence_1, expected_id):
     """Find the id of the matching sentence of the syntactic annotations
@@ -186,14 +189,14 @@ if __name__ == "__main__":
     frames = fill_roles(frames, verbnet)
 
     print("\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
-          "Did not extract {} annotated frames.\n"
+          "Did not extract {} annotated frames ({} had a predicate not in VerbNet).\n"
           "Extracted {} correct, {} partial-match and {} incorrect arguments.\n"
-          "Did not extract {} annotated arguments.\n".format(
+          "Did not extract {} annotated arguments ({} had a predicate not in VerbNet).\n".format(
           stats_data["frame_extracted_good"], stats_data["frame_extracted_bad"],
-          stats_data["frame_not_extracted"],
+          stats_data["frame_not_extracted"], stats_data["frame_not_extracted_not_verbnet"],
           stats_data["arg_extracted_good"], stats_data["arg_extracted_partial"],
           stats_data["arg_extracted_bad"],
-          stats_data["arg_not_extracted"]
+          stats_data["arg_not_extracted"], stats_data["arg_not_extracted_not_verbnet"]
     ))
 
 

@@ -26,7 +26,9 @@ stats_data = {
     "arg_extracted_good":0,
     "arg_extracted_partial":0,
     "arg_extracted_bad":0,
-    "arg_not_extracted":0
+    "arg_not_extracted":0,
+    "frame_not_extracted_not_verbnet":0,
+    "arg_not_extracted_not_verbnet":0
 }
 
 ambiguous_mapping = {
