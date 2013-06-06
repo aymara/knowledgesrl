@@ -5,6 +5,7 @@ from framenetreader import FulltextReader
 from conllreader import SyntacticTreeBuilder, SyntacticTreeNode
 import glob
 import os
+import paths
 
 
 def get_trees(filename):
@@ -25,7 +26,7 @@ if __name__ == '__main__':
     correct, partial_credit, total = 0, 0, 0
 
     # get data from FrameNet arguments
-    for fulltext_file in glob.glob("{}/*.xml".format(FulltextReader.FN_BASEPATH)):
+    for fulltext_file in glob.glob("{}/*.xml".format(paths.FRAMENET_FULLTEXT)):
         reader = FulltextReader(fulltext_file)
         trees = get_trees(".".join(os.path.basename(fulltext_file).split(".")[:-1]))
 
