@@ -317,6 +317,17 @@ class FulltextReader:
 
         last_sentence = ""
 
+        pos_mapping = {
+            # Nouns
+            "NP": "NNP", "NPS": "NNPS",
+            # Preposition
+            "PP": "PRP", "PP$": "PRP$",
+            # Verbs
+            "VH": "VB", "VHD": "VBD", "VHG": "VBG", "VHP": "VBP", "VHN": "VBN",
+            "VHZ": "VBZ", "VV": "VB", "VVD": "VBD", "VVG": "VBG", "VVN": "VBN",
+            "VVP": "VBP", "VVZ": "VBZ"
+        }
+
         for frame in self.frames:
             if frame.sentence != last_sentence:
                 frame_conll = ""
@@ -324,7 +335,7 @@ class FulltextReader:
                 for w in frame.words:
                     i += 1
                     frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\t \t\n".format(
-                            i, frame.get_word(w), w.pos)
+                            i, frame.get_word(w), pos_mapping.get(w.pos, w.pos))
 
                 yield frame_conll + "\n"
 
@@ -525,7 +536,7 @@ class FulltextReaderTest(unittest.TestCase):
         path = paths.FRAMENET_FULLTEXT + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         conll_sentence = next(reader.to_conll_format()).splitlines()
-        self.assertEqual(conll_sentence[2], "3\tTony\tTony\tNP\tNP\t_\t0\t \t")
+        self.assertEqual(conll_sentence[2], "3\tTony\tTony\tNNP\tNNP\t_\t0\t \t")
         self.assertEqual(conll_sentence[23], "24\t.\t.\t.\t.\t_\t0\t \t")
         
 import glob
@@ -534,7 +545,7 @@ import sys
 
 if __name__ == "__main__":
     if 'conll' in sys.argv:
-        for p in glob.glob(paths.FRAMENET_FULLTEXT + "*.xml"):
+        for p in glob.glob(paths.FRAMENET + "/*.xml"):
             name = os.path.basename(p)[:-4]
             with open('framenet_conll/{}.conll'.format(name), 'w') as conll_file:
                 for conll_sentence in FulltextReader(p).to_conll_format():
