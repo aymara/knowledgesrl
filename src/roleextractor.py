@@ -4,10 +4,12 @@
 import framenetreader
 import paths
 from stats import stats_data
+from framestructure import *
 from collections import defaultdict
 from collections import Counter
 import os
 import sys
+import unittest
 
 """Fill the roles of some frames extracted from the syntactic parser output
 using the annotated FrameNet data.
@@ -66,18 +68,21 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
     :type verbnet: VerbnetFrame Dict.
     """
     reader = framenetreader.FulltextReader(file_path, core_args_only = True)
-    sentence_id = 1
     good_frames = 0
-
+    
+    previous_id, matching_id = 0, 0
     for annotated_frame in reader.frames:
-        matching_id = 0
-
         matching_id = find_sentence_id(extracted_frames,
                                         annotated_frame.sentence,
                                         annotated_frame.sentence_id)
-
+        
+        # Remove <num> tags from the extracted frames
+        if matching_id != previous_id:
+            for extracted_frame in extracted_frames[matching_id]:
+                correct_num_tags(extracted_frame, annotated_frame.sentence)
+            
         frame_found = False
-        for extracted_frame in extracted_frames[matching_id]:   
+        for extracted_frame in extracted_frames[matching_id]:
             # See if we have the two "same" frames
             if predicate_match(extracted_frame.predicate, annotated_frame.predicate):
                 good_frames += 1
@@ -91,7 +96,8 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
                 stats_data["arg_not_extracted_not_verbnet"] += num_args
             stats_data["frame_not_extracted"] += 1
             stats_data["arg_not_extracted"] += num_args
-    
+        previous_id = matching_id
+
     stats_data["frame_extracted_good"] += good_frames
     stats_data["frame_extracted_bad"] += (num_frames - good_frames)
 
@@ -118,6 +124,41 @@ def find_sentence_id(extracted_frames, sentence_1, expected_id):
             if sentence_match(sentence_1, sentence_2):
                 return test_id
     return 0
+
+def correct_num_tags(extracted_frame, original_sentence):
+    """ Replace <num> tags by their real equivalents 
+    and update begin/end attributes where necessary.
+    
+    :param extracted_frame: The frame that contains <num> tags
+    :type extracted_frame: Frame
+    :param original_sentence: The original unaltered sentence of the frame
+    :type original_sentence: str
+    
+    """
+    
+    search = "<num>"
+    correct_words = original_sentence.split(" ")
+
+    for word_number, word in enumerate(extracted_frame.sentence.split(" ")):
+        if word != search: continue
+        
+        position = extracted_frame.sentence.find(search)
+        replacement = correct_words[word_number]
+        offset = len(replacement) - len(search)
+        
+        extracted_frame.sentence = extracted_frame.sentence.replace(
+            search, replacement, 1)
+        
+        if extracted_frame.predicate.begin > position:
+            extracted_frame.predicate.begin += offset
+            extracted_frame.predicate.end += offset
+        for arg in extracted_frame.args:
+            if arg.begin > position:
+                arg.begin += offset
+            elif arg.end > position:
+                arg.text = arg.text.replace(search, replacement, 1)
+            if arg.end > position:
+                arg.end += offset
 
 def sentence_match(sentence_1, sentence_2):
     # This is not necessary but resolves many cases without computing
@@ -176,7 +217,43 @@ def match_score(arg1, arg2):
     sum_length = (1 + arg1.end - arg1.begin) + (1 + arg2.end - arg2.begin)
     return 2 * max(0, intersect) / sum_length
 
-if __name__ == "__main__":     
+class RoleExtractorTest(unittest.TestCase):
+    def test_num_replacements(self):
+        initial_sentence = ("She tells me that the <num> people we helped find"
+                            " jobs in <num> earned approximately $ <num>"
+                            " million dollars .")
+        final_sentence = ("She tells me that the 3,666 people we helped find"
+                          " jobs in 1998 earned approximately $ 49"
+                          " million dollars .")
+                          
+        initial_predicate = Predicate(64, 69, "earned", "earn")
+        final_predicate = Predicate(63, 68, "earned", "earn")
+        
+        initial_args = [    
+            Arg(18, 62, "the <num> people we helped find jobs in <num>",
+                "role1", True, "phrase_type"),
+            Arg(71, 107, "approximately $ <num> million dollars",
+                "role2", True, "phrase_type")
+        ]
+        final_args = [    
+            Arg(18, 61, "the 3,666 people we helped find jobs in 1998",
+                "role1", True, "phrase_type"),
+            Arg(70, 103, "approximately $ 49 million dollars",
+                "role2", True, "phrase_type")
+        ]
+        words = []
+        
+        frame = Frame(initial_sentence, initial_predicate, initial_args,
+            words, "fn_frame_name")
+        
+        correct_num_tags(frame, final_sentence)
+        self.assertEqual(frame.sentence, final_sentence)
+        self.assertEqual(frame.predicate, final_predicate)
+        self.assertEqual(frame.args, final_args)
+
+if __name__ == "__main__":
+    #unittest.main()
+      
     import verbnetreader
     from argguesser import ArgGuesser
 
