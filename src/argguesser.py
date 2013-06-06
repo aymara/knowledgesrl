@@ -20,10 +20,8 @@ class ArgGuesser(FNParsedReader):
     :var verbnet_index: VerbnetFrame Dict -- Used to know which predicates are in VerbNet.
     :var base_forms: str Dict -- The infinitives of the verbal forms we found in the corpus.
     """
-
     
-    predicate_pos = ["VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
-    "MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+    predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
     predicate_pp_pos = ["VBN", "VVN"]
       
     subject_deprels = [
@@ -61,10 +59,6 @@ class ArgGuesser(FNParsedReader):
     "VBD":"S", "VBG":"S_ING",
     "VBN":"ADJ", # Participe, as "fed" in "He got so fed up that..."
     "VBP":"S", "VBZ":"S",
-    #VB* become VV* in the non-gold parse
-    "VV":"S", "VVD":"S", "VVG":"S_ING",
-    "VVN":"ADJ",
-    "VVP":"S", "VVZ":"S",
     "WDT":"NP" #Relative pronom ("that what whatever which whichever ")
     }
     
@@ -145,18 +139,20 @@ class ArgGuesser(FNParsedReader):
         for node in self.tree:
             # For every verb, looks for its infinitive form in verbnet, and
             # builds a new frame if it is found
+            node.lemma = node.word.lower()
+            if node.lemma in self.base_forms:
+                node.lemma = self.base_forms[node.lemma]
+            if not node.lemma in self.verbnet_index:
+                continue
             if self._is_predicate(node):
                 #Si deprel = VC, prendre le noeud du haut pour les args
                 #Si un child est VC -> ne rien faire avec ce node
-                node.lemma = node.word.lower()
-                if node.lemma in self.base_forms:
-                    node.lemma = self.base_forms[node.lemma]
-                if node.lemma in self.verbnet_index:
-                    predicate = Predicate(
-                        node.begin_head, node.begin_head + len(node.word) - 1,
-                        node.word, node.lemma)
-                    args = self._find_args(node)
-
+                predicate = Predicate(
+                    node.begin_head, node.begin_head + len(node.word) - 1,
+                    node.word, node.lemma)
+                args = self._find_args(node)
+                
+                if True or len(args) > 0:
                     yield Frame(
                         sentence=self.tree.flat(),
                         predicate=predicate,
@@ -183,12 +179,7 @@ class ArgGuesser(FNParsedReader):
         result = self._find_args_rec(node, node)
         if not base_node is node and base_node.pos in self.predicate_pos:
             result += self._find_args_rec(base_node, base_node)
-        
-        """
-        if node.father != None:
-            for brother in node.father.children:
-                if self._is_subject(brother, node):
-                    result.append(self._nodeToArg(brother))"""
+
         return result
     
     def _find_args_rec(self, predicate_node, node):
@@ -208,11 +199,9 @@ class ArgGuesser(FNParsedReader):
             if not child.pos in self.predicate_pos:
                 result += self._find_args_rec(predicate_node, child)
             if self._is_arg(child, predicate_node):
+
                 result.append(self._nodeToArg(child))
-                """if not child.pos in self.pos_conversions and child.pos not in self.complex_pos:
-                    print(predicate_node.flat())
-                    print(child.flat())
-                    print(child.pos)"""
+                
         return result
     
     def _nodeToArg(self, node):
@@ -245,19 +234,6 @@ class ArgGuesser(FNParsedReader):
         # Check part-of-speech compatibility
         if not node.pos in self.predicate_pos:
             return False
-        
-        # For a past participe, makes sur that there is an auxiliary
-        if node.pos in self.predicate_pp_pos:
-            current_node = node
-            while current_node.deprel == "VC":
-                current_node = current_node.father
-                
-            if current_node is node:
-                return False
-            """if (current_node.pos in self.predicate_pp_pos or
-                not current_node.pos in self.predicate_pos
-            ):
-                return False"""
         
         # Check that this node is not an auxiliary
         for child in node.children:
