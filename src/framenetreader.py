@@ -250,33 +250,29 @@ class FulltextReader:
                 if phrase_found:
                     phrase_type = phrase.attrib["name"]
                     break
-                    
+            
+            # If the argument and the predicate overlap, mark the argument as NI
+            if arg_start <= predicate.end and arg_end >= predicate.begin:
+                self.predicate_is_arg.append({
+                        "file":self.filename,
+                        "predicate":predicate.lemma,
+                        "sentence": sentence_text
+                    })
+                return False, Arg(0, -1, "",  arg.attrib["name"], False, "")
+            
             if phrase_found:
                 return False, Arg(
                     arg_start, arg_end,
                     sentence_text[arg_start:(arg_end + 1)],
                     arg.attrib["name"], True, phrase_type)
             else:
-                # Check wether this is some strange case where 
-                # the predicate is also an argument
-                phrase_found = (
-                    arg_start == predicate.begin and
-                    arg_end == predicate.end)
-                if phrase_found:
-                    self.predicate_is_arg.append({
-                        "file":self.filename,
-                        "predicate":predicate.lemma,
-                        "sentence": sentence_text
-                    })
-                    return False, Arg(0, -1, "",  arg.attrib["name"], False, "")
-                else:
-                    self.phrase_not_found.append({
-                        "file":self.filename,
-                        "predicate":predicate.lemma,
-                        "argument":sentence_text[arg_start:(arg_end + 1)],
-                        "sentence": sentence_text
-                    })
-                    return False, None
+                self.phrase_not_found.append({
+                    "file":self.filename,
+                    "predicate":predicate.lemma,
+                    "argument":sentence_text[arg_start:(arg_end + 1)],
+                    "sentence": sentence_text
+                })
+                return False, None
     
     def _build_predicate(self, sentence_text, frame):
         """Handle the collection of the predicate data.
