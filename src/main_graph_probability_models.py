@@ -143,7 +143,8 @@ if __name__ == "__main__":
             matcher.new_match(test_frame)       
         frame.roles = matcher.possible_distribs()
 
-    stats_quality(annotated_test_frames, vn_test_frames, role_matcher, verbnet_classes)
+    stats_quality(annotated_test_frames, vn_test_frames, role_matcher,
+        verbnet_classes, gold_args)
 
     # We need to remember some parameters to evaluate
     # the probability model performances
@@ -198,7 +199,7 @@ if __name__ == "__main__":
                             frame.roles[i] = set([new_role])
 
             stats_quality(annotated_test_frames, vn_test_frames,
-                role_matcher, verbnet_classes)
+                role_matcher, verbnet_classes, gold_args)
 
             # Update the results according to the quality statistics
             good = stats_data["one_correct_role"]

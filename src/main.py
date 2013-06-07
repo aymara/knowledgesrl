@@ -119,10 +119,12 @@ if __name__ == "__main__":
             log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
     
     if dump:
-        dumper.add_data_frame_matching(annotated_frames, vn_frames, role_matcher, verbnet_classes, verbnet_predicates, matching_algorithm)
+        dumper.add_data_frame_matching(annotated_frames, vn_frames,
+            role_matcher, verbnet_classes,
+            verbnet_predicates, matching_algorithm)
     else:       
         print("Frame matching stats...", file=sys.stderr) 
-        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
         display_stats(gold_args)
 
     if bootstrap:
@@ -153,7 +155,7 @@ if __name__ == "__main__":
     else:    
         print("Final stats...", file=sys.stderr)   
 
-        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
         display_stats(gold_args)
 
     if debug: display_debug(n_debug)

@@ -104,7 +104,8 @@ if __name__ == "__main__":
         
     print("Frame matching stats...", file=sys.stderr) 
 
-    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+    stats_quality(annotated_frames, vn_frames, role_matcher,
+        verbnet_classes, gold_args)
 
     good_fm = stats_data["one_correct_role"]
     bad_fm = stats_data["one_bad_role"]
@@ -126,7 +127,8 @@ if __name__ == "__main__":
                             frame.predicate, probability_model)
                         if new_role != None:
                             frame.roles[i] = set([new_role])
-        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+        stats_quality(annotated_frames, vn_frames, role_matcher,
+            verbnet_classes, gold_args)
 
         good = stats_data["one_correct_role"]
         bad = stats_data["one_bad_role"]
@@ -167,7 +169,8 @@ if __name__ == "__main__":
     print("Bootstrap algorithm...", file=sys.stderr)
     bootstrap_algorithm(vn_frames, model, hw_extractor, verbnet_classes)
 
-    stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes)
+    stats_quality(annotated_frames, vn_frames, role_matcher,
+        verbnet_classes, gold_args)
     data = stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, False)
     precision, cover, precision_all, cover_all = data
         
