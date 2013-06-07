@@ -27,6 +27,7 @@ The following operations are applied to the elements of the *primary* attribute:
   * "a/b" is interpreted as [a or b].
   * every preposition is made explicit. That means that "S_INF" is replaced by
     "to S" and more importantly, "PP" is replaced by "prep NP".
+  * every "PP S_ING" is converted to "prep S_ING" (and not "prep NP S_ING")
   
 In order to know which preposition can be used in a PP, which is not always
 explicit in the primary structure, we look into the *SYNTAX* element of the
@@ -38,6 +39,15 @@ frame. The information can take three different forms :
     restrictions data. In this case, the *type* attribute of the
     SELRESTRS/SELREST element is the class of acceptable prepositions
 
+Sometimes, keyword (prepositions or what/who/it/...) which presence cannot be
+deduced from the primary structure appear in the *SYNTAX*. That is why for every
+element of the primary structure, we have to find the position of the matching
+element of the *SYNTAX* and add any keywords that occured between this position
+and the previous one to our final structure if it was not present in the primary
+structure. Note that case it is also possible to find keywords in the primary
+structure and not in the *SYNTAX*, so a parsing based on the *SYNTAX* is not
+a better idea.
+
 The constructed structure is the list of everything that will have an
 importance in the frame matching, that is NP, V, S and also every required
 preposition (which, as, ...). Those emplacements are represented by strings
@@ -45,9 +55,22 @@ unless there are several possibilities (for instance, when a class of
 preposition can introduced a NP). In that case, the element is represented by
 the list of every acceptable string.
 
-The role list is simpler to build. We just need to retrieve the *value*
-attribute of every element of *SYNTAX* which has such a *value* attribute, and
-is not a *VERB*, *LEX* or *PREP*.
+We use two sources of informations to build the role list:
+  * the *value* attributes of the elements of *SYNTAX* where it is present
+  * everything that is after a "." in the primary structure. For instance, we
+    extract "theme" in "NP.theme". We make sure that the extracted role is 
+    one of the possible role listed in the *THEMROLES* element (after some
+    case modifications), to avoid extracting every "attribute" of
+    "PP.attribute".
+    
+Conflicts can occur between the sources of informations. For instance, in
+*calibrate_cos-45.6*, reading the structure of the frame
+``NP.attribute V NP.extent`` leads to the conclusion that there are two slots
+with the role *Attribute* and *Extent*. In the *SYNTAX* element, another NP with
+a *Patient* role is present between the first NP and the verb. For those case,
+as the final structure comes mainly from the primary structure, we trust the
+roles found in the primary element, and the second element keeps an *Extent*
+role.
 
 FrameNet parsing
 ----------------
