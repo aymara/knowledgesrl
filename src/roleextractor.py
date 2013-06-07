@@ -67,20 +67,26 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
     from the corpus we should have extracted.
     :type verbnet: VerbnetFrame Dict.
     """
-    reader = framenetreader.FulltextReader(file_path, core_args_only = True)
+    reader = framenetreader.FulltextReader(file_path,
+        core_args_only = True, keep_unannotated = True)
     good_frames = 0
     
     previous_id, matching_id = 0, 0
+    debug_ = False
+    if "KBEval__Brandeis" in file_path:
+        debug_ = True
+
     for annotated_frame in reader.frames:
         matching_id = find_sentence_id(extracted_frames,
                                         annotated_frame.sentence,
-                                        annotated_frame.sentence_id)
+                                        annotated_frame.sentence_id, debug_)
+        if matching_id == 0: continue
         
         # Remove <num> tags from the extracted frames
         if matching_id != previous_id:
             for extracted_frame in extracted_frames[matching_id]:
                 correct_num_tags(extracted_frame, annotated_frame.sentence)
-            
+        
         frame_found = False
         for extracted_frame in extracted_frames[matching_id]:
             # See if we have the two "same" frames
@@ -94,6 +100,7 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
             if annotated_frame.predicate.lemma not in verbnet:
                 stats_data["frame_not_extracted_not_verbnet"] += 1
                 stats_data["arg_not_extracted_not_verbnet"] += num_args
+
             stats_data["frame_not_extracted"] += 1
             stats_data["arg_not_extracted"] += num_args
         previous_id = matching_id
@@ -101,7 +108,7 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
     stats_data["frame_extracted_good"] += good_frames
     stats_data["frame_extracted_bad"] += (num_frames - good_frames)
 
-def find_sentence_id(extracted_frames, sentence_1, expected_id):
+def find_sentence_id(extracted_frames, sentence_1, expected_id, debug_ = False):
     """Find the id of the matching sentence of the syntactic annotations
     for a sentence from the annotated corpus.
     We can't be sure that they have the same id because of "junk" sentence
@@ -114,10 +121,7 @@ def find_sentence_id(extracted_frames, sentence_1, expected_id):
     :param expected_id: The id of the sentence in the annotated corpus.
     :type expected_id: int.
     """
-    for i in range(len(extracted_frames)):
-        # Loops through every possible ids in ascending order starting at expect_id
-        test_id = 1 + (expected_id - 1 + i) % len(extracted_frames)
-        
+    for test_id in extracted_frames:
         if len(extracted_frames[test_id]) > 0:
             sentence_2 = extracted_frames[test_id][0].sentence
         
@@ -183,6 +187,8 @@ def handle_frame(extracted_frame, annotated_frame):
     # Update the frame name
     extracted_frame.frame_name = annotated_frame.frame_name
     
+    extracted_frame.annotated = annotated_frame.annotated
+    
     good_args, partial_args = 0, 0
     
     # Update the argument roles and statistics
@@ -204,6 +210,11 @@ def handle_frame(extracted_frame, annotated_frame):
                 break
         if not arg_found:
             stats_data["arg_not_extracted"] += 1
+            """print(annotated_frame.filename)
+            print(annotated_frame.sentence)
+            print(annotated_frame.predicate)
+            print(annotated_arg.text)
+            print("")"""
             
     stats_data["arg_extracted_good"] += good_args
     stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args - partial_args)

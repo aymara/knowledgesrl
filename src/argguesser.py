@@ -34,6 +34,7 @@ class ArgGuesser(FNParsedReader):
     ]
         
     args_deprels = subject_deprels + [
+    "DIR",
     "BNF", #the 'for' phrase for verbs that undergo dative shift
     "DTV", #the 'to' phrase for verbs that undergo dative shift
     "OBJ", #direct or indirect object or clause complement
@@ -56,7 +57,7 @@ class ArgGuesser(FNParsedReader):
     "TO":"to S",
     "VB":"S", #Base form of a verb
     "VBD":"S", "VBG":"S_ING",
-    "VBN":"ADJ", # Participe, as "fed" in "He got so fed up that..."
+    "VBN":"ADJ", #Participe, as "fed" in "He got so fed up that..."
     "VBP":"S", "VBZ":"S",
     "WDT":"NP" #Relative pronom ("that what whatever which whichever ")
     }
@@ -134,7 +135,8 @@ class ArgGuesser(FNParsedReader):
             sentence_id += 1
     
     def _handle_sentence(self):
-        """ Extracts frames from one sentence and iterate over them """
+        """ Extracts frames from one sentence and iterate over them """            
+        found_one_frame = False
         for node in self.tree:
             # For every verb, looks for its infinitive form in verbnet, and
             # builds a new frame if it is found
@@ -143,8 +145,9 @@ class ArgGuesser(FNParsedReader):
                 node.lemma = self.base_forms[node.lemma]
             if not node.lemma in self.verbnet_index:
                 continue
-            
+
             if self._is_predicate(node):
+                found_one_frame = True
                 #Si deprel = VC, prendre le noeud du haut pour les args
                 #Si un child est VC -> ne rien faire avec ce node
                 predicate = Predicate(
@@ -161,6 +164,13 @@ class ArgGuesser(FNParsedReader):
                     sentence_id=self.sentence_id,
                     filename=self.filename.replace(".conll", ".xml")
                 )
+        #FIXME :
+        # if no frame was found, we have to yield a dummy frame
+        # to remember that this sentence was in framenet_parsed
+        if not found_one_frame:
+            yield Frame(self.tree.flat(), Predicate(-10, -10, "", ""),
+                [], [], "", sentence_id=self.sentence_id,
+                filename=self.filename.replace(".conll", ".xml"))
     
     def _find_args(self, node):
         """Returns every arguments of a given node.

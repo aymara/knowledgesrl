@@ -15,8 +15,8 @@ class Frame:
     
     """
     
-    def __init__(self, sentence, predicate, args,
-        words, frame_name, sentence_id = 0, filename = "", slot_type = ""):
+    def __init__(self, sentence, predicate, args, words, frame_name,
+        sentence_id = 0, filename = "", slot_type = "", annotated = False):
         self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
@@ -25,6 +25,7 @@ class Frame:
         self.sentence_id = sentence_id
         self.filename = filename
         self.slot_type = slot_type
+        self.annotated = annotated
 
     def get_word(self, word):
         return self.sentence[word.begin:word.end + 1]

@@ -38,7 +38,7 @@ class FulltextReader:
     
     core_arg_finder = None
     
-    def __init__(self, filename, core_args_only = False):
+    def __init__(self, filename, core_args_only = False, keep_unannotated = False):
         """Read a file and update the collected frames list.
         
         :param filename: Path to the file to read.
@@ -54,6 +54,7 @@ class FulltextReader:
         root = ET.ElementTree(file=filename)
         
         self.core_args_only = core_args_only
+        self.keep_unannotated = keep_unannotated
                 
         # etree will add the xmlns string before every tag name
         self._xmlns = "{http://framenet.icsi.berkeley.edu}"
@@ -140,11 +141,14 @@ class FulltextReader:
             annotated = potential_frame.attrib["status"]
             
             # We keep only annotated verbal frames
-            if frame_type == "v" and annotated != "UNANN":
-                frame = self._parse_frame(text, words, potential_frame)                 
+            if frame_type == "v" :
+                annotated = (potential_frame.attrib["status"] != "UNANN")
+                if not (annotated or self.keep_unannotated): continue
+                frame = self._parse_frame(
+                    text, words, potential_frame, annotated)                 
                 if frame: yield frame
                   
-    def _parse_frame(self, sentence_text, words, frame):
+    def _parse_frame(self, sentence_text, words, frame, annotated):
         """Handle the parsing of one frame.
         
         :param sentence_text: Sentence in which the frame occurs.
@@ -171,10 +175,15 @@ class FulltextReader:
             })
             return
         
-        args = self._build_args_list(sentence_text, frame, frame_name, predicate)
+        if annotated:
+            args = self._build_args_list(
+                sentence_text, frame, frame_name, predicate)
+        else:
+            args = []
         
-        return Frame(sentence_text, predicate, args, words,
-            frame_name, self.sentence_id, self.filename)
+        return Frame(sentence_text, predicate, args, words, frame_name, 
+            sentence_id=self.sentence_id, filename=self.filename,
+            annotated=annotated)
     
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.
