@@ -205,12 +205,10 @@ class ArgGuesser(FNParsedReader):
         """
         result = []
         for child in node.children:
-            if not child.pos in self.predicate_pos:
-                result += self._find_args_rec(predicate_node, child)
             if self._is_arg(child, predicate_node):
-
                 result.append(self._nodeToArg(child))
-                
+            elif not child.pos in self.predicate_pos:
+                result += self._find_args_rec(predicate_node, child) 
         return result
     
     def _nodeToArg(self, node):
