@@ -18,11 +18,15 @@ stats_data = {
     "args":0, 
     # Number of instanciated args belonging to a frame wich has a predicate in VerbNet
     "args_kept":0,
+    # Number of annotated, instanciated args with a role mapping ok
+    "args_annotated_mapping_ok":0,
     
     # Slots states (applies to extracted slots if no gold args)
     
     # One role attributed
     "one_role":0, 
+    # One role attributed, annotated
+    "one_role_annotated":0,
     # No role attributed
     "no_role":0,
     # One role attributed, annotated, role mapping possible, correct role
@@ -57,11 +61,7 @@ stats_data = {
     # Number of non-extracted annotated arguments
     "arg_not_extracted":0,
     # Number of non-extracted annotated args which do not have a predicate in VerbNet
-    "arg_not_extracted_not_verbnet":0,
-
-    # Number of annotated, instanciated args with a role mapping ok
-    "args_annotated_mapping_ok":0
-    
+    "arg_not_extracted_not_verbnet":0
 }
 
 ambiguous_mapping = {
@@ -76,6 +76,8 @@ def display_stats(gold_args):
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
+    precision_denominator = (s["one_role"] - 
+        (s["one_role_annotated"] - unique_role_evaluated))
     
     if gold_args:
         print(
@@ -122,7 +124,7 @@ def display_stats(gold_args):
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            s["one_correct_role"] / max(unique_role_evaluated, 1),
+            s["one_correct_role"] / max(precision_denominator, 1),
             s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1))
     )
     
@@ -162,6 +164,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
     stats_data["no_role"] = 0
     stats_data["impossible_mapping"] = 0
     stats_data["ambiguous_mapping"] = 0
+    stats_data["one_role_annotated"] = 0
 
     # This is variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point
@@ -175,7 +178,9 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
                 stats_data["no_role"] += 1
             elif len(slot) == 1:
                 stats_data["one_role"] += 1
-
+                if gold_fn_frame.args[i].annotated:
+                    stats_data["one_role_annotated"] += 1
+            
             try:
                 possible_roles = role_matcher.possible_vn_roles(
                     gold_fn_frame.args[i].role,

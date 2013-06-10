@@ -15,16 +15,16 @@ import unittest
 using the annotated FrameNet data.
 """
 
-def fill_roles(extracted_frames, verbnet):
+def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     """Fills the roles of some frames argument, when possible.
     Note : extracted_frames must be sorted by file.
     Note : extracted_frames is altered, even if the final result is returned.
     
     :param extracted_frames: The frames.
     :type extracted_frames: Frame List.
-    :param verbnet: The VerbNet lexicon, used to determine which frames
+    :param verbnet_classes: The VerbNet lexicon, used to determine which frames
     from the corpus we should have extracted.
-    :type verbnet: VerbnetFrame Dict.
+    :type verbnet_classes: Str Dict.
     """
     
     print("")
@@ -49,12 +49,12 @@ def fill_roles(extracted_frames, verbnet):
             frames[extracted_frames[i].sentence_id].append(extracted_frames[i])
             i += 1
 
-        handle_file(frames, path+filename, i - old_i, verbnet)
+        handle_file(frames, path+filename, i - old_i, verbnet_classes, role_matcher)
 
     # Discard every frame for which there was no match
     return [x for x in extracted_frames if not x.frame_name == ""]
 
-def handle_file(extracted_frames, file_path, num_frames, verbnet):
+def handle_file(extracted_frames, file_path, num_frames, verbnet_classes, role_matcher):
     """Fills the names and roles of every frames in a file
     
     :param extracted_frames: The extracted frames of the file sorted by sentence in a dict.
@@ -63,9 +63,9 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
     :type file_path: str.
     :param num_frames: The total number of extracted frames (used for statistics).
     :type num_frames: int.
-    :param verbnet: The VerbNet lexicon, used to determine which frames
+    :param verbnet_classes: The VerbNet lexicon, used to determine which frames
     from the corpus we should have extracted.
-    :type verbnet: VerbnetFrame Dict.
+    :type verbnet_classes: str Dict.
     """
     reader = framenetreader.FulltextReader(file_path,
         core_args_only = True, keep_unannotated = True)
@@ -77,6 +77,18 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
         debug_ = True
 
     for annotated_frame in reader.frames:
+        # Count annotated args with a role mapping ok
+        for arg in annotated_frame.args:
+            if not arg.instanciated: continue
+            try:
+                possible_roles = role_matcher.possible_vn_roles(
+                    arg.role,
+                    fn_frame=annotated_frame.frame_name,
+                    vn_classes=verbnet_classes[annotated_frame.predicate.lemma])
+            except Exception: continue
+            if len(possible_roles) == 1:
+                stats_data["args_annotated_mapping_ok"] += 1
+        
         matching_id = find_sentence_id(extracted_frames,
                                         annotated_frame.sentence,
                                         annotated_frame.sentence_id, debug_)
@@ -97,7 +109,7 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet):
                 break
         if not frame_found:
             num_args = len([x for x in annotated_frame.args if x.instanciated])
-            if annotated_frame.predicate.lemma not in verbnet:
+            if annotated_frame.predicate.lemma not in verbnet_classes:
                 stats_data["frame_not_extracted_not_verbnet"] += 1
                 stats_data["arg_not_extracted_not_verbnet"] += num_args
 
@@ -201,27 +213,21 @@ def handle_frame(extracted_frame, annotated_frame):
             if score == 1:
                 good_args += 1
                 extracted_arg.role = annotated_arg.role
+                extracted_arg.annotated = True
                 arg_found = True
                 break
             elif score > 0.5:
                 partial_args += 1
                 extracted_arg.role = annotated_arg.role
+                extracted_arg.annotated = True
                 arg_found = True
                 break
         if not arg_found:
             stats_data["arg_not_extracted"] += 1
-            """print(annotated_frame.filename)
-            print(annotated_frame.sentence)
-            print(annotated_frame.predicate)
-            print(annotated_arg.text)
-            print("")"""
-            
+    
     stats_data["arg_extracted_good"] += good_args
     stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args - partial_args)
-    stats_data["arg_extracted_partial"] += partial_args
-    
-    # Discard every argument for which there was no match
-    extracted_frame.args = [x for x in extracted_frame.args if not x.role == ""]        
+    stats_data["arg_extracted_partial"] += partial_args       
 
 def match_score(arg1, arg2):
     intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
@@ -267,14 +273,16 @@ if __name__ == "__main__":
       
     import verbnetreader
     from argguesser import ArgGuesser
+    from rolematcher import VnFnRoleMatcher
 
-    verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).verbs
-    arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet)
+    role_matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
+    verbnet_classes = verbnetreader.VerbnetReader(paths.VERBNET_PATH).classes
+    arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet_classes)
 
     frames = [x for x in arg_finder.handle_corpus()]
 
     len_begin = len(frames)
-    frames = fill_roles(frames, verbnet)
+    frames = fill_roles(frames, verbnet_classes, role_matcher)
 
     print("\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
           "Did not extract {} annotated frames ({} had a predicate not in VerbNet).\n"

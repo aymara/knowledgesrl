@@ -221,7 +221,8 @@ class ArgGuesser(FNParsedReader):
             # a substring of frame.sentence
             role="",
             instanciated=True,
-            phrase_type=self._get_phrase_type(node))
+            phrase_type=self._get_phrase_type(node),
+            annotated=False)
     
     def _get_phrase_type(self, node):
         #IN = Preposition or subordinating conjunction

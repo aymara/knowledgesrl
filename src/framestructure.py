@@ -295,13 +295,17 @@ class Arg:
     
     """
     
-    def __init__(self, begin, end, text, role, instanciated, phrase_type):
+    def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated = True):
         self.begin = begin
         self.end = end
         self.text = text
         self.role = role
         self.instanciated = instanciated
         self.phrase_type = phrase_type
+        
+        # This can be false for extracted args which could not be matched with
+        # annotated args from the fulltext corpus
+        self.annotated = annotated
 
     def __repr__(self):
         return self.role

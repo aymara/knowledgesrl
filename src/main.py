@@ -43,9 +43,13 @@ if __name__ == "__main__":
 
     print("Loading frames...", file=sys.stderr)
 
+    print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
+    role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
+    model = probabilitymodel.ProbabilityModel()
+ 
     annotated_frames = []
     vn_frames = []
-
+   
     if gold_args:
         for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
             if not filename[-4:] == ".xml": continue
@@ -74,15 +78,12 @@ if __name__ == "__main__":
     else:
         arg_guesser = argguesser.ArgGuesser(paths.FRAMENET_PARSED, verbnet_classes)
         extracted_frame = [x for x in arg_guesser.handle_corpus()]
-        annotated_frames = roleextractor.fill_roles(extracted_frame, verbnet_classes)
+        annotated_frames = roleextractor.fill_roles(
+            extracted_frame, verbnet_classes, role_matcher)
         for frame in annotated_frames:
             converted_frame = VerbnetFrame.build_from_frame(frame)
             converted_frame.compute_slot_types()
             vn_frames.append(converted_frame)
-
-    print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
-    role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
-    model = probabilitymodel.ProbabilityModel()
 
     print("Frame matching...", file=sys.stderr)
     for good_frame, frame in zip(annotated_frames, vn_frames):
