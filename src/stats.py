@@ -70,7 +70,10 @@ ambiguous_mapping = {
     # Stats of ambiguous mapping remaining despite the FN frame given by the annotations
     "verbs_with_frame":[], "args_total_with_frame":0, "args_with_frame":0
 }
-  
+
+def hmean(x, y):
+    return (2 * x * y) / (x + y)
+
 def display_stats(gold_args):
     s = stats_data
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
@@ -78,6 +81,8 @@ def display_stats(gold_args):
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
     precision_denominator = (s["one_role"] - 
         (s["one_role_annotated"] - unique_role_evaluated))
+    precision = s["one_correct_role"] / max(precision_denominator, 1)
+    recall = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
     
     if gold_args:
         print(
@@ -111,7 +116,7 @@ def display_stats(gold_args):
         "\n{} cases where we cannot verify the labeling:\n"
         "\t{} because no role mapping was found\n"
         "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
-        "\nOverall: {:.2%} precision, {:.2%} accuracy\n"
+        "\nOverall: {:.2%} precision, {:.2%} accuracy, {:.2%} F1\n"
         "\n".format(
             s["frames_mapped"],
 
@@ -124,8 +129,7 @@ def display_stats(gold_args):
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            s["one_correct_role"] / max(precision_denominator, 1),
-            s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1))
+            precision, recall, hmean(precision, recall))
     )
     
 def display_stats_ambiguous_mapping():
