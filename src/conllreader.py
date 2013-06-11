@@ -128,7 +128,9 @@ class SyntacticTreeBuilder():
         
     def build_syntactic_tree(self):
         """ Build and return a the syntactic tree """
-        return self.build_tree_from(0).children[0]
+        result = self.build_tree_from(0).children[0]
+        result.father = None
+        return result
 
     def find_child_after(self, father, min_pos):
         """Search the position (real offset + 1) of a node's child after a given position
@@ -194,6 +196,7 @@ class TreeBuilderTest(unittest.TestCase):
 7	.	.	.	.	-	5	P	-	-"""
         treeBuilder = SyntacticTreeBuilder(conll_tree)
         self.tree = treeBuilder.build_syntactic_tree()
+        self.assertEqual(self.tree.father, None)
     
     def test_tree_str(self):
         #The others here today live elsewhere .
