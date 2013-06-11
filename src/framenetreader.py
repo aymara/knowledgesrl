@@ -37,6 +37,7 @@ class FulltextReader:
     """
     
     core_arg_finder = None
+    predicate_pos = ["MD", "VV", "VVD", "VVG", "VVN", "VVP", "VVZ"]
     
     def __init__(self, filename, core_args_only = False, keep_unannotated = False):
         """Read a file and update the collected frames list.
@@ -125,30 +126,26 @@ class FulltextReader:
         text = sentence.find(self._xmlns + "text").text
 
         words = []
+        predicate_starts = []
         pos_annotation = "{0}annotationSet/{0}layer[@name='PENN']/" \
                          "{0}label".format(self._xmlns)
         for label in sentence.findall(pos_annotation):
+            if label.attrib["name"] in FulltextReader.predicate_pos:
+                predicate_starts.append(int(label.attrib["start"]))
+            
             words.append(Word(int(label.attrib["start"]),
                               int(label.attrib["end"]),
                               label.attrib["name"]))
-
+        
         for potential_frame in sentence.findall(self.frame_pattern):
-            if self.fulltext_corpus:
-                frame_type = potential_frame.attrib["luName"].split(".")[1]
-            else:
-                frame_type = "v"
-            
-            annotated = potential_frame.attrib["status"]
-            
             # We keep only annotated verbal frames
-            if frame_type == "v" :
-                annotated = (potential_frame.attrib["status"] != "UNANN")
-                if not (annotated or self.keep_unannotated): continue
-                frame = self._parse_frame(
-                    text, words, potential_frame, annotated)                 
-                if frame: yield frame
+            annotated = (potential_frame.attrib["status"] != "UNANN")
+            if not (annotated or self.keep_unannotated): continue
+            frame = self._parse_frame(
+                text, words, potential_frame, annotated, predicate_starts)                 
+            if frame: yield frame
                   
-    def _parse_frame(self, sentence_text, words, frame, annotated):
+    def _parse_frame(self, sentence_text, words, frame, annotated, predicate_starts):
         """Handle the parsing of one frame.
         
         :param sentence_text: Sentence in which the frame occurs.
@@ -159,8 +156,12 @@ class FulltextReader:
         """
 
         predicate = self._build_predicate(sentence_text, frame)
-        if predicate == None: return
-
+        
+        if (predicate == None or
+            (self.fulltext_corpus and not predicate.begin in predicate_starts)
+        ):
+            return
+        
         if self.constant_frame == "":
             frame_name = frame.attrib["frameName"]
         else:
@@ -357,86 +358,79 @@ class FulltextReaderTest(unittest.TestCase):
     def setUp(self):
 
         self.expected_values = {
-            "LUCorpus-v0.3__AFGP-2002-602187-Trans.xml":(50,133),
-            "LUCorpus-v0.3__AFGP-2002-600045-Trans.xml":(82,205),
-            "LUCorpus-v0.3__20000416_xin_eng-NEW.xml":(40,108),
-            #"ANC__HistoryOfGreece.xml":(251,715),
-            "Miscellaneous__SadatAssassination.xml":(11,40),
-            #"ANC__IntroOfDublin.xml":(84,208),
-            "ANC__110CYL200.xml":(34,83),
-            "KBEval__parc.xml":(57,151),
-            "LUCorpus-v0.3__wsj_2465.xml":(70,182),
-            "NTI__LibyaCountry1.xml":(81,242),
-            "NTI__SouthAfrica_Introduction.xml":(105,299),
-            "Miscellaneous__Hound-Ch14.xml":(20,43),
-            "NTI__Iran_Introduction.xml":(125,320),
-            "PropBank__AetnaLifeAndCasualty.xml":(12,37),
-            "PropBank__ElectionVictory.xml":(57,156),
-            "LUCorpus-v0.3__ENRON-pearson-email-25jul02.xml":(6,12),
-            "KBEval__atm.xml":(101,280),
-            "ANC__110CYL068.xml":(61,163),
-            "KBEval__lcch.xml":(185,517),
-            "NTI__Iran_Chemical.xml":(229,655),
-            "LUCorpus-v0.3__IZ-060316-01-Trans-1.xml":(86,209),
-            "ANC__110CYL070.xml":(26,71),
-            "LUCorpus-v0.3__SNO-525.xml":(24,55),
-            "LUCorpus-v0.3__wsj_1640.mrg-NEW.xml":(41,96),
-            "LUCorpus-v0.3__CNN_ENG_20030614_173123.4-NEW-1.xml":(51,121),
-            "LUCorpus-v0.3__artb_004_A1_E1_NEW.xml":(14,40),
-            "LUCorpus-v0.3__20000424_nyt-NEW.xml":(5,14),
-            "LUCorpus-v0.3__enron-thread-159550.xml":(67,197),
-            "NTI__Iran_Missile.xml":(242,657),
-            "ANC__112C-L013.xml":(41,100),
-            #"LUCorpus-v0.3__20000415_apw_eng-NEW.xml":(37,99),
-            "ANC__EntrepreneurAsMadonna.xml":(71,183),
-            "KBEval__MIT.xml":(78,207),
-            "LUCorpus-v0.3__20000419_apw_eng-NEW.xml":(25,61),
-            "NTI__Kazakhstan.xml":(26,75),
-            "ANC__110CYL072.xml":(20,51),
-            "KBEval__cycorp.xml":(12,31),
-            "KBEval__Stanford.xml":(46,122),
-            "SemAnno__Text1.xml":(14,49),
-            "NTI__Syria_NuclearOverview.xml":(101,281),
-            #"PropBank__PolemicProgressiveEducation.xml":(144,362),
-            "LUCorpus-v0.3__artb_004_A1_E2_NEW.xml":(16,42),
-            "LUCorpus-v0.3__CNN_AARONBROWN_ENG_20051101_215800.partial-NEW.xml":(93,238),
-            "C-4__C-4Text.xml":(24,67),
-            "LUCorpus-v0.3__602CZL285-1.xml":(24,64),
-            "NTI__Taiwan_Introduction.xml":(50,136),
-            "KBEval__Brandeis.xml":(23,56),
-            "NTI__NorthKorea_ChemicalOverview.xml":(109,285),
-            "PropBank__TicketSplitting.xml":(91,234),
-            "ANC__IntroHongKong.xml":(44,104),
-            "ANC__WhereToHongKong.xml":(160,395),
-            "ANC__HistoryOfLasVegas.xml":(191,524),
-            "NTI__Russia_Introduction.xml":(62,159),
-            "NTI__WMDNews_042106.xml":(105,282),
-            "LUCorpus-v0.3__sw2025-ms98-a-trans.ascii-1-NEW.xml":(148,318),
-            #"NTI__workAdvances.xml":(45,124),
-            "NTI__WMDNews_062606.xml":(167,449),
-            "LUCorpus-v0.3__20000410_nyt-NEW.xml":(24,70),
-            "LUCorpus-v0.3__AFGP-2002-600002-Trans.xml":(192,505),
-            "NTI__Iran_Biological.xml":(142,359),
-            "PropBank__LomaPrieta.xml":(164,396),
-            "LUCorpus-v0.3__20000420_xin_eng-NEW.xml":(20,52),
-            "ANC__StephanopoulosCrimes.xml":(60,164),
-            #"NTI__ChinaOverview.xml":(72,204),
-            "QA__IranRelatedQuestions.xml":(439,1154),
-            "NTI__NorthKorea_Introduction.xml":(128,355),
-            "KBEval__utd-icsi.xml":(107,259),
-            "NTI__NorthKorea_NuclearOverview.xml":(284,767),
-            "NTI__NorthKorea_NuclearCapabilities.xml":(60,160),
+            "ANC__110CYL067.xml":(22,51),
+            "ANC__110CYL068.xml":(56,153),
             "ANC__110CYL069.xml":(1,2),
-            "ANC__110CYL067.xml":(30,67),
-            "ANC__IntroJamaica.xml":(111,287),
-            "ANC__HistoryOfJerusalem.xml":(183,501),
-            "NTI__BWTutorial_chapter1.xml":(177,446),
-            "KBEval__LCC-M.xml":(90,246),
-            "Miscellaneous__Hijack.xml":(6,15),
-            "NTI__Iran_Nuclear.xml":(215,610),
-            "PropBank__BellRinging.xml":(138,342)
-            }
-        """Total : 18072 arguments in 6828 frames"""
+            "ANC__110CYL070.xml":(23,66),
+            "ANC__110CYL072.xml":(17,47),
+            "ANC__110CYL200.xml":(30,73),
+            "ANC__112C-L013.xml":(35,90),
+            "ANC__EntrepreneurAsMadonna.xml":(64,170),
+            "ANC__HistoryOfJerusalem.xml":(190,507),
+            "ANC__HistoryOfLasVegas.xml":(190,517),
+            "ANC__IntroHongKong.xml":(37,94),
+            "ANC__IntroJamaica.xml":(105,272),
+            "ANC__StephanopoulosCrimes.xml":(56,156),
+            "ANC__WhereToHongKong.xml":(147,361),
+            "C-4__C-4Text.xml":(25,69),
+            "KBEval__Brandeis.xml":(20,51),
+            "KBEval__LCC-M.xml":(77,213),
+            "KBEval__MIT.xml":(73,200),
+            "KBEval__Stanford.xml":(45,119),
+            "KBEval__atm.xml":(92,262),
+            "KBEval__cycorp.xml":(14,33),
+            "KBEval__lcch.xml":(173,493),
+            "KBEval__parc.xml":(57,151),
+            "KBEval__utd-icsi.xml":(94,235),
+            "LUCorpus-v0.3__20000410_nyt-NEW.xml":(27,76),
+            "LUCorpus-v0.3__20000416_xin_eng-NEW.xml":(37,103),
+            "LUCorpus-v0.3__20000419_apw_eng-NEW.xml":(22,57),
+            "LUCorpus-v0.3__20000420_xin_eng-NEW.xml":(20,53),
+            "LUCorpus-v0.3__20000424_nyt-NEW.xml":(5,14),
+            "LUCorpus-v0.3__602CZL285-1.xml":(21,58),
+            "LUCorpus-v0.3__AFGP-2002-600002-Trans.xml":(128,352),
+            "LUCorpus-v0.3__AFGP-2002-600045-Trans.xml":(63,157),
+            "LUCorpus-v0.3__AFGP-2002-602187-Trans.xml":(47,128),
+            "LUCorpus-v0.3__CNN_AARONBROWN_ENG_20051101_215800.partial-NEW.xml":(83,217),
+            "LUCorpus-v0.3__CNN_ENG_20030614_173123.4-NEW-1.xml":(46,113),
+            "LUCorpus-v0.3__ENRON-pearson-email-25jul02.xml":(4,9),
+            "LUCorpus-v0.3__IZ-060316-01-Trans-1.xml":(73,185),
+            "LUCorpus-v0.3__SNO-525.xml":(21,48),
+            "LUCorpus-v0.3__artb_004_A1_E1_NEW.xml":(15,41),
+            "LUCorpus-v0.3__artb_004_A1_E2_NEW.xml":(17,46),
+            "LUCorpus-v0.3__enron-thread-159550.xml":(60,179),
+            "LUCorpus-v0.3__sw2025-ms98-a-trans.ascii-1-NEW.xml":(103,230),
+            "LUCorpus-v0.3__wsj_1640.mrg-NEW.xml":(37,87),
+            "LUCorpus-v0.3__wsj_2465.xml":(68,177),
+            "Miscellaneous__Hijack.xml":(5,13),
+            "Miscellaneous__Hound-Ch14.xml":(19,41),
+            "Miscellaneous__SadatAssassination.xml":(12,42),
+            "NTI__BWTutorial_chapter1.xml":(178,447),
+            "NTI__Iran_Biological.xml":(147,375),
+            "NTI__Iran_Chemical.xml":(238,676),
+            "NTI__Iran_Introduction.xml":(134,334),
+            "NTI__Iran_Missile.xml":(245,658),
+            "NTI__Iran_Nuclear.xml":(217,608),
+            "NTI__Kazakhstan.xml":(33,90),
+            "NTI__LibyaCountry1.xml":(82,242),
+            "NTI__NorthKorea_ChemicalOverview.xml":(106,282),
+            "NTI__NorthKorea_Introduction.xml":(126,347),
+            "NTI__NorthKorea_NuclearCapabilities.xml":(54,145),
+            "NTI__NorthKorea_NuclearOverview.xml":(293,786),
+            "NTI__Russia_Introduction.xml":(61,159),
+            "NTI__SouthAfrica_Introduction.xml":(116,324),
+            "NTI__Syria_NuclearOverview.xml":(107,299),
+            "NTI__Taiwan_Introduction.xml":(45,125),
+            "NTI__WMDNews_042106.xml":(102,276),
+            "NTI__WMDNews_062606.xml":(161,435),
+            "PropBank__AetnaLifeAndCasualty.xml":(13,39),
+            "PropBank__BellRinging.xml":(141,350),
+            "PropBank__ElectionVictory.xml":(46,130),
+            "PropBank__LomaPrieta.xml":(153,374),
+            "PropBank__TicketSplitting.xml":(72,186),
+            "QA__IranRelatedQuestions.xml":(442,1152),
+            "SemAnno__Text1.xml":(11,40)
+        }
         
         self.tested_frames = [
             Frame(
@@ -492,7 +486,7 @@ class FulltextReaderTest(unittest.TestCase):
         no obvious errors occurs while parsing the whole corpus
         
         """
-
+        
         for filename in self.expected_values:
             print("Parsing " + filename)
             reader = FulltextReader(paths.FRAMENET_FULLTEXT + filename)
@@ -528,6 +522,7 @@ class FulltextReaderTest(unittest.TestCase):
                             
             # The total number of frames and args is correct
             good_frame_num, good_arg_num = self.expected_values[filename]
+            
             self.assertEqual(len(reader.frames), good_frame_num)
             self.assertEqual(arg_num, good_arg_num)
         
