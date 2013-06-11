@@ -110,8 +110,11 @@ point in the program.
 There are many other things that we have to be careful about:
 
   * not every annotated frame is a verbal frame. All non-verbal frames are
-    discarded. Verbal frames can be identified by checking that the *luName*
-    attribute of the *annotationSet* element ends with ".v"
+    discarded. We used to identify verbal frames by checking that the *luName*
+    attribute of the *annotationSet* element ends with ".v", but we realize that
+    their are many cases were this yields strange results. We now use the part
+    of speech annotations available in the PENN *layer*, which can be equal to
+    "MD", "VV", "VVD", "VVG", "VVN", "VVP" or "VVZ" for verbs.
   * we need to attribute a sentence ID to every extracted frame, so that we can
     later recover syntactic data about it in the parsed corpus. Some sentences 
     appears twice in the fulltext corpus, and there will be only one matching

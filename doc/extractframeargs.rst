@@ -16,18 +16,19 @@ As always, we are only interested in verbal frames which predicate is in
 VerbNet.
 Finding verbs is not very complex, since they are the words to which our
 parser attribute one of the following part-of-speech:
-  * *VV*: base form (as 'eat' in 'He should eat')
-  * *VVD*: past tense
-  * *VVG*: gerund
-  * *VVN*: past participle
-  * *VVP*: present tense
-  * *VVZ*: third personn of present
+  * *VB*: base form (as 'eat' in 'He should eat')
+  * *VBD*: past tense
+  * *VBG*: gerund
+  * *VBN*: past participle
+  * *VBP*: present tense
+  * *VBZ*: third personn of present
   * *MD*: modal verb
-  * *VHP* and *VHZ* : always associated with "have"
 
-Two question: why are our parser tags for verbs different from those of the
-gold parse? (which are VB, VBD, VBG, VBP, VBZ and MD). What are *VHP* and *VHZ*?
-(they never appear in the gold parse files)
+Note : these tags are different from those of the fulltext annotations. The
+reason for this is unclear, and this only concerns verbs part-of-speech. As
+we are not currently using a part-of-speech tagger, our parser takes those POS
+annotation as input, after conversion of verbal POS into the more standard tags
+listed above, which are those which were used in the parser training data.
 
 Parsing errors can already introduce some mistakes at this point, since our
 parser can fail at distinguishing some verbs from nouns.
@@ -92,7 +93,7 @@ subordinating conjunction require complex operations which are hard-coded in the
 
 
 Evaluation
-==========
+----------
 
 The frames and arguments extractions should be evaluated conjointly if we do not
 want to have to answer questions like "Do we penalize the extraction of a frame
