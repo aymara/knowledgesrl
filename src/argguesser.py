@@ -206,17 +206,40 @@ class ArgGuesser(FNParsedReader):
         result = []
         for child in node.children:
             if self._is_arg(child, predicate_node):
-                result.append(self._nodeToArg(child))
+                result.append(self._nodeToArg(child, predicate_node))
             elif not child.pos in self.predicate_pos:
                 result += self._find_args_rec(predicate_node, child) 
         return result
     
-    def _nodeToArg(self, node):
+    def _overlap(self, node1, node2):
+        return (node1.begin <= node2.begin_head + len(node2.word) - 1 and
+            node1.end >= node2.begin_head)
+    
+    def _same_side(self, node, child, predicate):
+        if node.begin_head < predicate.begin_head:
+            return child.end < predicate.begin_head
+        return child.begin > predicate.begin_head
+    
+    def _nodeToArg(self, node, predicate):
         """ Builds an Arg using the data of a node. """
+        
+        # Prevent arguments from overlapping over the predicate
+        begin, end = node.begin, node.end
+        text = node.flat()
+
+        if self._overlap(node, predicate):
+            begin, end = node.begin_head, node.begin_head + len(node.word) - 1
+            for child in node.children:
+                if self._same_side(node, child, predicate):
+                    begin, end = min(begin, child.begin), max(end, child.end)
+            root = node
+            while root.father != None: root = root.father
+            text = root.flat()[begin:end+1]
+            
         return Arg(
-            begin=node.begin,
-            end=node.end,
-            text=node.flat(), 
+            begin=begin,
+            end=end,
+            text=text, 
             # If the argument isn't continuous, text will not be
             # a substring of frame.sentence
             role="",
