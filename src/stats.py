@@ -116,7 +116,7 @@ def display_stats(gold_args):
         "\n{} cases where we cannot verify the labeling:\n"
         "\t{} because no role mapping was found\n"
         "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
-        "\nOverall: {:.2%} precision, {:.2%} accuracy, {:.2%} F1\n"
+        "\nOverall: {:.2%} precision, {:.2%} accuracy\n"
         "\n".format(
             s["frames_mapped"],
 
@@ -129,7 +129,7 @@ def display_stats(gold_args):
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            precision, recall, hmean(precision, recall))
+            precision, recall)
     )
     
 def display_stats_ambiguous_mapping():
