@@ -8,6 +8,7 @@ import sys
 matching_algorithm = "sync_predicates"
 core_args_only = True
 gold_args = True
+heuristic_rules = False
 debug = False
 bootstrap = False
 probability_model = "predicate_slot"
@@ -16,12 +17,13 @@ dump_file = ""
 
 options = getopt.getopt(sys.argv[1:], "d:",
     ["fmatching-algo=", "add-non-core-args", "help",
-     "model=", "bootstrap", "no-gold-args", "dump"])
+     "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump"])
 
 display_syntax = False
 syntax_str = ("main.py [-d num_sample] [--fmatching-algo=algo] "
               "[--model=probability_model] [--add-non-core-args] "
-              "[--bootstrap] [--no-gold-args] [--dump filename] [--help]")
+              "[--bootstrap] [--no-gold-args [--heuristic-rules]] "
+              "[--dump filename] [--help]")
 
 for opt,value in options[0]:
     if opt == "-d":
@@ -41,6 +43,8 @@ for opt,value in options[0]:
         bootstrap = True
     if opt == "--no-gold-args":
         gold_args = False
+    if opt == "--heuristic-rules":
+        heuristic_rules = True
     if opt == "--dump":
         if len(options[1]) > 0:
             dump = True
