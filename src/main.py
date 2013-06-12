@@ -60,6 +60,8 @@ if __name__ == "__main__":
 
             for frame in fn_reader.frames:
                 stats_data["args"] += len(frame.args)
+                stats_data["args_instanciated"] += len(
+                    [x for x in frame.args if x.instanciated])
                 stats_data["frames"] += 1
 
                 if not frame.predicate.lemma in verbnet_predicates:

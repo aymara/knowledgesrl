@@ -14,8 +14,10 @@ stats_data = {
     "frames_with_predicate_in_verbnet":0,
     # Number of frames for which frame-matching is possible (at least one slot)
     "frames_mapped":0, 
-    # Total number of args belonging to an annotated verbal frame in the corpus
-    "args":0, 
+    # Number of args belonging to an annotated verbal frame in the corpus
+    "args":0,
+    # Number of instanciated args
+    "args_instanciated":0,
     # Number of instanciated args belonging to a frame wich has a predicate in VerbNet
     "args_kept":0,
     # Number of annotated, instanciated args with a role mapping ok
@@ -23,23 +25,25 @@ stats_data = {
     
     # Slots states (applies to extracted slots if no gold args)
     
+    # No role attributed
+    "no_role":0,
     # One role attributed
     "one_role":0, 
     # One role attributed, annotated
     "one_role_annotated":0,
-    # No role attributed
-    "no_role":0,
     # One role attributed, annotated, role mapping possible, correct role
     "one_correct_role":0, 
     # One role attributed, annotated, role mapping possible, incorrect role
     "one_bad_role":0,
+    # Several role attributed, annotated
+    "several_roles_annotated":0,
     # Several roles attributed, annotated, role mapping ok, correct role in the list
     "several_roles_ok":0, 
     # Several roles attributed, annotated, role mapping ok, correct role not in the list
     "several_roles_bad":0,
-    # Several roles attributed, annotated, role mapping returned several possible VerbNet roles
+    # Role mapping returned several possible VerbNet roles
     "ambiguous_mapping":0,
-    # Several roles attributed, annotated, role mapping returned no possible VerbNet roles
+    # Role mapping returned no possible VerbNet roles
     "impossible_mapping":0,
     
     # Total number of roles = sum of number of possible roles for each slot
@@ -94,6 +98,16 @@ def display_stats(gold_args):
     recall = good_slots / max(s["args_annotated_mapping_ok"], 1)
     accuracy = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
     
+    extrapolated_one_good = (s["one_correct_role"] *
+        s["one_role_annotated"] / unique_role_evaluated)
+    extrapolated_good_slots = (extrapolated_one_good +
+        s["several_roles_ok"] * s["several_roles_annotated"] /
+        several_roles_evaluated)
+    
+    extrapolated_precision = extrapolated_good_slots / s["attributed_roles"]
+    extrapolated_recall = extrapolated_good_slots / s["args_instanciated"]
+    extrapolated_accuracy = extrapolated_one_good / s["args_instanciated"]
+    
     if gold_args:
         print(
             "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
@@ -126,7 +140,8 @@ def display_stats(gold_args):
         "\n{} cases where we cannot verify the labeling:\n"
         "\t{} because no role mapping was found\n"
         "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
-        "\nOverall: {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
+        "\nOver VerbNet when role mapping applies: {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
+        "\nOverall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
         "\n".format(
             s["frames_mapped"],
 
@@ -139,7 +154,11 @@ def display_stats(gold_args):
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            precision, recall, hmean(precision, recall), accuracy)
+            precision, recall, hmean(precision, recall), accuracy,
+            
+            extrapolated_precision, extrapolated_recall,
+            hmean(extrapolated_precision, extrapolated_recall),
+            extrapolated_accuracy)
     )
     
 def display_stats_ambiguous_mapping():
@@ -179,6 +198,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
     stats_data["impossible_mapping"] = 0
     stats_data["ambiguous_mapping"] = 0
     stats_data["one_role_annotated"] = 0
+    stats_data["several_roles_annotated"] = 0
     stats_data["attributed_roles"] = 0
     stats_data["attributed_roles_mapping_ok"] = 0
 
@@ -197,6 +217,8 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
                 stats_data["one_role"] += 1
                 if gold_fn_frame.args[i].annotated:
                     stats_data["one_role_annotated"] += 1
+            elif gold_fn_frame.args[i].annotated:
+                stats_data["several_roles_annotated"] += 1
             
             try:
                 possible_roles = role_matcher.possible_vn_roles(
