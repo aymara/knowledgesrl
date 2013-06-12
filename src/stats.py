@@ -42,6 +42,11 @@ stats_data = {
     # Several roles attributed, annotated, role mapping returned no possible VerbNet roles
     "impossible_mapping":0,
     
+    # Total number of roles = sum of number of possible roles for each slot
+    "attributed_roles":0,
+    # Idem only on slots where role mapping is ok
+    "attributed_roles_mapping_ok":0,
+    
     # Frame and argument extraction from raw text
     
     # Number of correct extracted frames
@@ -72,6 +77,10 @@ ambiguous_mapping = {
 }
 
 def hmean(x, y):
+    if x < 0 or y < 0:
+        raise ValueError("Harmonic mean does not apply to negative parameters.")
+    if x == 0 and y == 0:
+        return 0
     return (2 * x * y) / (x + y)
 
 def display_stats(gold_args):
@@ -79,10 +88,11 @@ def display_stats(gold_args):
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
-    precision_denominator = (s["one_role"] - 
-        (s["one_role_annotated"] - unique_role_evaluated))
-    precision = s["one_correct_role"] / max(precision_denominator, 1)
-    recall = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
+    
+    good_slots = s["one_correct_role"] + s["several_roles_ok"]
+    precision = good_slots / max(s["attributed_roles_mapping_ok"], 1)
+    recall = good_slots / max(s["args_annotated_mapping_ok"], 1)
+    accuracy = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
     
     if gold_args:
         print(
@@ -116,7 +126,7 @@ def display_stats(gold_args):
         "\n{} cases where we cannot verify the labeling:\n"
         "\t{} because no role mapping was found\n"
         "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
-        "\nOverall: {:.2%} precision, {:.2%} accuracy\n"
+        "\nOverall: {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
         "\n".format(
             s["frames_mapped"],
 
@@ -129,7 +139,7 @@ def display_stats(gold_args):
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            precision, recall)
+            precision, recall, hmean(precision, recall), accuracy)
     )
     
 def display_stats_ambiguous_mapping():
@@ -169,6 +179,8 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
     stats_data["impossible_mapping"] = 0
     stats_data["ambiguous_mapping"] = 0
     stats_data["one_role_annotated"] = 0
+    stats_data["attributed_roles"] = 0
+    stats_data["attributed_roles_mapping_ok"] = 0
 
     # This is variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point
@@ -178,6 +190,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
     
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):    
         for i, slot in enumerate(found_vn_frame.roles):
+            stats_data["attributed_roles"] += len(slot)
             if len(slot) == 0:
                 stats_data["no_role"] += 1
             elif len(slot) == 1:
@@ -199,6 +212,8 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
                 stats_data["ambiguous_mapping"] += 1
                 continue
 
+            stats_data["attributed_roles_mapping_ok"] += len(slot)
+            
             if gold_args:
                 stats_data["args_annotated_mapping_ok"] += 1
             
