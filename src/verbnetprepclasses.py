@@ -36,6 +36,10 @@ external_lexemes = {
     "how", "if", "that", "when", "where", "whether"
 }
 
+sub_pronouns = {
+    "how", "that", "when", "where", "whether", "which",
+    "who", "whom", "whose", "why"}
+
 all_preps = set()
 for group in prep.values(): all_preps |= group
 all_preps |= other_preps

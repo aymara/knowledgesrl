@@ -25,6 +25,8 @@ import xml.etree.ElementTree as ET
 import os
 import sys
 from framestructure import *
+from collections import Counter
+from verbnetprepclasses import sub_pronouns
 import framenetcoreargs
 import paths
 
@@ -53,7 +55,7 @@ class FulltextReader:
             FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)           
         
         root = ET.ElementTree(file=filename)
-        
+
         self.core_args_only = core_args_only
         self.keep_unannotated = keep_unannotated
                 
@@ -114,7 +116,7 @@ class FulltextReader:
             if new_valid_sentence:
                 self.sentence_id += 1
                 last_sentence = frame.sentence
-
+    
     def _parse_sentence(self, sentence):
         """Handle the parsing of one sentence.
         
@@ -221,15 +223,26 @@ class FulltextReader:
                 stop, new_arg = self._build_arg(
                     sentence_text, frame, predicate, arg, phrase_data, rank)
                     
-                if new_arg != None: 
-                    if self.core_args_only:
-                        if self.fulltext_corpus:
-                            if not FulltextReader.core_arg_finder.is_core_role(
-                                new_arg.role, frame_name):
-                                continue
-                        elif not arg.attrib["name"] in self.core_args:
+                if new_arg == None: continue
+                
+                if self.core_args_only:
+                    if self.fulltext_corpus:
+                        if not FulltextReader.core_arg_finder.is_core_role(
+                            new_arg.role, frame_name):
                             continue
-                       
+                    elif not arg.attrib["name"] in self.core_args:
+                        continue
+                    
+                add = True
+                for arg in args[:]:
+                    if (arg.role == new_arg.role and
+                        arg.phrase_type == new_arg.phrase_type):
+                        if arg.text in sub_pronouns:
+                            add = False
+                        if new_arg.text in sub_pronouns:
+                            args.remove(arg)
+                
+                if add:
                     args.append(new_arg)
                 
             rank += 1
@@ -362,76 +375,76 @@ class FulltextReaderTest(unittest.TestCase):
 
         self.expected_values = {
             "ANC__110CYL067.xml":(26,59),
-            "ANC__110CYL068.xml":(58,157),
+            "ANC__110CYL068.xml":(58,153),
             "ANC__110CYL069.xml":(1,2),
-            "ANC__110CYL070.xml":(24,68),
-            "ANC__110CYL072.xml":(18,48),
-            "ANC__110CYL200.xml":(32,78),
-            "ANC__112C-L013.xml":(36,92),
-            "ANC__EntrepreneurAsMadonna.xml":(66,175),
-            "ANC__HistoryOfJerusalem.xml":(190,509),
-            "ANC__HistoryOfLasVegas.xml":(194,527),
-            "ANC__IntroHongKong.xml":(38,97),
-            "ANC__IntroJamaica.xml":(110,284),
-            "ANC__StephanopoulosCrimes.xml":(57,158),
-            "ANC__WhereToHongKong.xml":(157,382),
+            "ANC__110CYL070.xml":(24,66),
+            "ANC__110CYL072.xml":(18,45),
+            "ANC__110CYL200.xml":(32,77),
+            "ANC__112C-L013.xml":(36,90),
+            "ANC__EntrepreneurAsMadonna.xml":(66,174),
+            "ANC__HistoryOfJerusalem.xml":(190,497),
+            "ANC__HistoryOfLasVegas.xml":(194,511),
+            "ANC__IntroHongKong.xml":(38,93),
+            "ANC__IntroJamaica.xml":(110,277),
+            "ANC__StephanopoulosCrimes.xml":(57,153),
+            "ANC__WhereToHongKong.xml":(157,375),
             "C-4__C-4Text.xml":(25,69),
             "KBEval__Brandeis.xml":(20,51),
-            "KBEval__LCC-M.xml":(79,217),
-            "KBEval__MIT.xml":(76,206),
-            "KBEval__Stanford.xml":(46,122),
-            "KBEval__atm.xml":(97,272),
+            "KBEval__LCC-M.xml":(79,213),
+            "KBEval__MIT.xml":(76,203),
+            "KBEval__Stanford.xml":(46,119),
+            "KBEval__atm.xml":(97,259),
             "KBEval__cycorp.xml":(16,38),
-            "KBEval__lcch.xml":(181,513),
-            "KBEval__parc.xml":(57,151),
-            "KBEval__utd-icsi.xml":(97,241),
-            "LUCorpus-v0.3__20000410_nyt-NEW.xml":(27,76),
+            "KBEval__lcch.xml":(181,496),
+            "KBEval__parc.xml":(57,150),
+            "KBEval__utd-icsi.xml":(97,225),
+            "LUCorpus-v0.3__20000410_nyt-NEW.xml":(27,69),
             "LUCorpus-v0.3__20000416_xin_eng-NEW.xml":(37,103),
             "LUCorpus-v0.3__20000419_apw_eng-NEW.xml":(25,63),
-            "LUCorpus-v0.3__20000420_xin_eng-NEW.xml":(20,53),
-            "LUCorpus-v0.3__20000424_nyt-NEW.xml":(5,14),
-            "LUCorpus-v0.3__602CZL285-1.xml":(21,58),
-            "LUCorpus-v0.3__AFGP-2002-600002-Trans.xml":(173,448),
-            "LUCorpus-v0.3__AFGP-2002-600045-Trans.xml":(77,187),
-            "LUCorpus-v0.3__AFGP-2002-602187-Trans.xml":(48,130),
-            "LUCorpus-v0.3__CNN_AARONBROWN_ENG_20051101_215800.partial-NEW.xml":(88,228),
-            "LUCorpus-v0.3__CNN_ENG_20030614_173123.4-NEW-1.xml":(49,119),
+            "LUCorpus-v0.3__20000420_xin_eng-NEW.xml":(20,52),
+            "LUCorpus-v0.3__20000424_nyt-NEW.xml":(5,13),
+            "LUCorpus-v0.3__602CZL285-1.xml":(21,57),
+            "LUCorpus-v0.3__AFGP-2002-600002-Trans.xml":(173,436),
+            "LUCorpus-v0.3__AFGP-2002-600045-Trans.xml":(77,183),
+            "LUCorpus-v0.3__AFGP-2002-602187-Trans.xml":(48,125),
+            "LUCorpus-v0.3__CNN_AARONBROWN_ENG_20051101_215800.partial-NEW.xml":(88,217),
+            "LUCorpus-v0.3__CNN_ENG_20030614_173123.4-NEW-1.xml":(49,118),
             "LUCorpus-v0.3__ENRON-pearson-email-25jul02.xml":(4,9),
-            "LUCorpus-v0.3__IZ-060316-01-Trans-1.xml":(76,189),
-            "LUCorpus-v0.3__SNO-525.xml":(23,54),
+            "LUCorpus-v0.3__IZ-060316-01-Trans-1.xml":(76,182),
+            "LUCorpus-v0.3__SNO-525.xml":(23,52),
             "LUCorpus-v0.3__artb_004_A1_E1_NEW.xml":(15,41),
-            "LUCorpus-v0.3__artb_004_A1_E2_NEW.xml":(17,46),
-            "LUCorpus-v0.3__enron-thread-159550.xml":(61,181),
-            "LUCorpus-v0.3__sw2025-ms98-a-trans.ascii-1-NEW.xml":(115,253),
+            "LUCorpus-v0.3__artb_004_A1_E2_NEW.xml":(17,45),
+            "LUCorpus-v0.3__enron-thread-159550.xml":(61,180),
+            "LUCorpus-v0.3__sw2025-ms98-a-trans.ascii-1-NEW.xml":(115,244),
             "LUCorpus-v0.3__wsj_1640.mrg-NEW.xml":(41,96),
-            "LUCorpus-v0.3__wsj_2465.xml":(71,184),
-            "Miscellaneous__Hijack.xml":(5,13),
+            "LUCorpus-v0.3__wsj_2465.xml":(71,183),
+            "Miscellaneous__Hijack.xml":(5,12),
             "Miscellaneous__Hound-Ch14.xml":(19,41),
-            "Miscellaneous__SadatAssassination.xml":(12,42),
-            "NTI__BWTutorial_chapter1.xml":(182,456),
-            "NTI__Iran_Biological.xml":(146,371),
-            "NTI__Iran_Chemical.xml":(242,684),
-            "NTI__Iran_Introduction.xml":(134,334),
-            "NTI__Iran_Missile.xml":(245,658),
-            "NTI__Iran_Nuclear.xml":(219,613),
+            "Miscellaneous__SadatAssassination.xml":(12,38),
+            "NTI__BWTutorial_chapter1.xml":(182,444),
+            "NTI__Iran_Biological.xml":(146,369),
+            "NTI__Iran_Chemical.xml":(242,674),
+            "NTI__Iran_Introduction.xml":(134,332),
+            "NTI__Iran_Missile.xml":(245,654),
+            "NTI__Iran_Nuclear.xml":(219,607),
             "NTI__Kazakhstan.xml":(33,90),
-            "NTI__LibyaCountry1.xml":(82,242),
-            "NTI__NorthKorea_ChemicalOverview.xml":(107,284),
-            "NTI__NorthKorea_Introduction.xml":(131,357),
-            "NTI__NorthKorea_NuclearCapabilities.xml":(59,156),
-            "NTI__NorthKorea_NuclearOverview.xml":(294,785),
-            "NTI__Russia_Introduction.xml":(62,161),
-            "NTI__SouthAfrica_Introduction.xml":(117,327),
-            "NTI__Syria_NuclearOverview.xml":(103,287),
-            "NTI__Taiwan_Introduction.xml":(47,131),
-            "NTI__WMDNews_042106.xml":(105,282),
-            "NTI__WMDNews_062606.xml":(168,450),
-            "PropBank__AetnaLifeAndCasualty.xml":(13,39),
-            "PropBank__BellRinging.xml":(142,352),
-            "PropBank__ElectionVictory.xml":(56,153),
-            "PropBank__LomaPrieta.xml":(162,393),
-            "PropBank__TicketSplitting.xml":(81,207),
-            "QA__IranRelatedQuestions.xml":(442,1152),
+            "NTI__LibyaCountry1.xml":(82,239),
+            "NTI__NorthKorea_ChemicalOverview.xml":(107,283),
+            "NTI__NorthKorea_Introduction.xml":(131,353),
+            "NTI__NorthKorea_NuclearCapabilities.xml":(59,154),
+            "NTI__NorthKorea_NuclearOverview.xml":(294,770),
+            "NTI__Russia_Introduction.xml":(62,158),
+            "NTI__SouthAfrica_Introduction.xml":(117,321),
+            "NTI__Syria_NuclearOverview.xml":(103,282),
+            "NTI__Taiwan_Introduction.xml":(47,125),
+            "NTI__WMDNews_042106.xml":(105,275),
+            "NTI__WMDNews_062606.xml":(168,438),
+            "PropBank__AetnaLifeAndCasualty.xml":(13,37),
+            "PropBank__BellRinging.xml":(142,343),
+            "PropBank__ElectionVictory.xml":(56,147),
+            "PropBank__LomaPrieta.xml":(162,389),
+            "PropBank__TicketSplitting.xml":(81,203),
+            "QA__IranRelatedQuestions.xml":(442,1137),
             "SemAnno__Text1.xml":(12,43),
         }
         
@@ -528,7 +541,6 @@ class FulltextReaderTest(unittest.TestCase):
             
             self.assertEqual(len(reader.frames), good_frame_num)
             self.assertEqual(arg_num, good_arg_num)
-        
             print("Found {} frames and {} arguments: ok".format(
                 len(reader.frames), arg_num))
     def test_specific_frames(self):
