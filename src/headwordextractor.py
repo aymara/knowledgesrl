@@ -60,8 +60,8 @@ class HeadWordExtractor(FNParsedReader):
         
         word, pos = self._get_headword(arg_text)
         
-        if pos == "PP": self.special_classes[word] = "pronoun"
-        elif pos == "NP": self.special_classes[word] = "proper_noun"
+        if pos == "PRP": self.special_classes[word] = "pronoun"
+        elif pos == "NNP": self.special_classes[word] = "proper_noun"
         else: self.words.add(word)
         
         return word
