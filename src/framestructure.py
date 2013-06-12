@@ -44,7 +44,7 @@ class Frame:
 class VerbnetFrame:
     """A representation of a frame syntaxic structure
     
-    :var structure: String containing a VerbNet-style representation of the structure
+    :var structure: String list containing a VerbNet-style representation of the structure
     :var roles: List of the possible VerbNet roles for each structure's slot
     :var num_slots: Number of argument slots in :structure
     :var verbnet_class: For VerbNet-extracted frames, the class number, eg. 9.10
