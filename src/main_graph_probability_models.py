@@ -34,12 +34,6 @@ if __name__ == "__main__":
 
     def init_fn_reader(path):
         reader = framenetreader.FulltextReader(path, core_args_only)
-        
-        errors["unannotated_layer"] += reader.ignored_layers
-        errors["predicate_was_arg"] += reader.predicate_is_arg
-        errors["missing_phrase_type"] += reader.phrase_not_found
-        errors["missing_predicate_data"] += reader.missing_predicate_data
-        
         return reader
        
     verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)

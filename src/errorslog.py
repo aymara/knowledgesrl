@@ -6,8 +6,6 @@ import random
 errors = {
    "vn_parsing":[],
    "vn_missing":[],
-   "unannotated_layer":[], "predicate_was_arg":[],
-   "missing_phrase_type":[], "missing_predicate_data":[],
    "frame_without_slot":[],
    "impossible_role_matching":[],
    "ambiguous_role":[]
