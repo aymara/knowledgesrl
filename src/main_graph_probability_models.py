@@ -9,7 +9,7 @@ if __name__ == "__main__":
     import itertools
     import copy
 
-    import framenetreader
+    import framenetallreader
     from framestructure import *
     from stats import *
     from options import *
@@ -32,9 +32,6 @@ if __name__ == "__main__":
         errors["vn_parsing"] = reader.unhandled
         return reader.verbs, reader.classes
 
-    def init_fn_reader(path):
-        reader = framenetreader.FulltextReader(path, core_args_only)
-        return reader
        
     verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
@@ -45,23 +42,17 @@ if __name__ == "__main__":
     annotated_frames = []
     vn_frames = []
 
-    for filename in sorted(os.listdir(corpus_path)):
-        if not filename[-4:] == ".xml": continue
-        print(filename, file=sys.stderr)
+    fn_reader = framenetallreader.FNAllReader(
+            corpus_path, paths.FRAMENET_PARSED,
+            core_args_only=core_args_only)
 
-        if stats_data["files"] % 100 == 0 and stats_data["files"] > 0:
-            print("{} {} {}".format(
-                stats_data["files"], stats_data["frames"], stats_data["args"]), file=sys.stderr)   
-        
-        fn_reader = init_fn_reader(corpus_path + filename)
-
-        for frame in fn_reader.frames:
-            if not frame.predicate.lemma in verbnet: continue
+    for frame in fn_reader.frames:
+        if not frame.predicate.lemma in verbnet: continue
             
-            annotated_frames.append(frame)
+        annotated_frames.append(frame)
             
-            converted_frame = VerbnetFrame.build_from_frame(frame)
-            vn_frames.append(converted_frame)
+        converted_frame = VerbnetFrame.build_from_frame(frame)
+        vn_frames.append(converted_frame)
 
     print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
@@ -89,31 +80,25 @@ if __name__ == "__main__":
     annotated_test_frames = []
     vn_test_frames = []
 
-    for filename in sorted(os.listdir(test_corpus_path)):
-        if not filename[-4:] == ".xml": continue
-        print(filename, file=sys.stderr)
+    fn_reader = framenetallreader.FNAllReader(
+            test_corpus_path, paths.FRAMENET_PARSED,
+            core_args_only=core_args_only)
 
-        if stats_data["files"] % 100 == 0 and stats_data["files"] > 0:
-            print("{} {} {}".format(
-                stats_data["files"], stats_data["frames"], stats_data["args"]), file=sys.stderr)   
-         
-        fn_reader = init_fn_reader(test_corpus_path + filename)
+    for frame in fn_reader.frames:
+        stats_data["args"] += len(frame.args)
+        stats_data["frames"] += 1
 
-        for frame in fn_reader.frames:
-            stats_data["args"] += len(frame.args)
-            stats_data["frames"] += 1
-
-            if not frame.predicate.lemma in verbnet:
-                log_vn_missing(filename, frame)
-                continue
+        if not frame.predicate.lemma in verbnet:
+            log_vn_missing(filename, frame)
+            continue
         
-            stats_data["frames_with_predicate_in_verbnet"] += 1
+        stats_data["frames_with_predicate_in_verbnet"] += 1
             
-            annotated_test_frames.append(frame)
+        annotated_test_frames.append(frame)
             
-            converted_frame = VerbnetFrame.build_from_frame(frame)
-            vn_test_frames.append(converted_frame)
-        stats_data["files"] += 1
+        converted_frame = VerbnetFrame.build_from_frame(frame)
+        vn_test_frames.append(converted_frame)
+    stats_data["files"] += fn_reader.stats["files"]
 
     # Frame matching on the evaluation data
 

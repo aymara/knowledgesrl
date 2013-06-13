@@ -38,6 +38,12 @@ class FNAllReader:
         self.trees = []
         self.sentences_syntax = []
         self.frames = []
+        
+        self.stats = {
+            "files":0
+        }
+        
+        self.handle_corpus()
 
     def handle_corpus(self):
         """Read the corpus and fill self.frames"""
@@ -55,6 +61,8 @@ class FNAllReader:
             
             if not self.load_syntax_file(filename): continue
             
+            self.stats["files"] += 1
+            
             matching_id = -1
             previous_sentence_id = -1
             for frame in reader.frames:
@@ -69,6 +77,7 @@ class FNAllReader:
                 self.frames.append(frame)
                     
                 previous_sentence_id = frame.sentence_id
+        print("")
     
     def load_syntax_file(self, filename):
         """Load the data of the syntax annotations files.
@@ -169,7 +178,6 @@ class FNAllReaderTest(unittest.TestCase):
     def test_sentences_match(self, num_sample = 0):
         print("Checking FrameNetAllReader")
         extractor = FNAllReader(paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED)
-        extractor.handle_corpus()
 
         frame = extractor.frames[26]
         self.assertTrue(frame.sentence == ("A few months ago "

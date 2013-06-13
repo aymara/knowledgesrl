@@ -5,8 +5,7 @@ import os
 import sys
 import random
 from errorslog import *
-
-import framenetreader
+import framenetallreader
 from framestructure import *
 from stats import *
 from errorslog import *
@@ -28,10 +27,6 @@ def init_verbnet(path):
     errors["vn_parsing"] = reader.unhandled
     return reader.verbs, reader.classes
 
-def init_fn_reader(path):
-    reader = framenetreader.FulltextReader(path, core_args_only)
-    return reader
-
 if __name__ == "__main__":
     verbnet_predicates, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
@@ -44,31 +39,28 @@ if __name__ == "__main__":
    
     if gold_args:
         print("Loading frames...", file=sys.stderr)
-        for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
-            if not filename[-4:] == ".xml": continue
+        fn_reader = framenetallreader.FNAllReader(
+            paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED,
+            core_args_only=core_args_only)
 
-            fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
+        for frame in fn_reader.frames:
+            stats_data["args"] += len(frame.args)
+            stats_data["args_instanciated"] += len(
+                [x for x in frame.args if x.instanciated])
+            stats_data["frames"] += 1
+            
+            if not frame.predicate.lemma in verbnet_predicates:
+                log_vn_missing(frame)
+                continue
 
-            for frame in fn_reader.frames:
-                stats_data["args"] += len(frame.args)
-                stats_data["args_instanciated"] += len(
-                    [x for x in frame.args if x.instanciated])
-                stats_data["frames"] += 1
-
-                if not frame.predicate.lemma in verbnet_predicates:
-                    log_vn_missing(frame)
-                    continue
-
-                stats_data["frames_with_predicate_in_verbnet"] += 1
+            stats_data["frames_with_predicate_in_verbnet"] += 1
                 
-                annotated_frames.append(frame)
+            annotated_frames.append(frame)
                 
-                converted_frame = VerbnetFrame.build_from_frame(frame)
+            converted_frame = VerbnetFrame.build_from_frame(frame)
 
-                vn_frames.append(converted_frame)
-            stats_data["files"] += 1
-            print(".", file=sys.stderr, end="", flush=True)
-        print()
+            vn_frames.append(converted_frame)
+        stats_data["files"] += fn_reader.stats["files"]
     else:
         arg_guesser = argguesser.ArgGuesser(paths.FRAMENET_PARSED, verbnet_classes)
         extracted_frame = [x for x in arg_guesser.handle_corpus()]
