@@ -162,6 +162,27 @@ class VerbnetFrame:
         result.roles = [None] * num_slots
         
         return result
+
+    def passivize(self):
+        """
+        Based on current frame, return a list of possible passivizations
+        Currently extremely simple on purpose, the goal is to add variations later on.
+        """
+        passivizedframes = []
+        index_v = self.structure.index("V")
+
+        intransitive = VerbnetFrame([self.structure[index_v+1], "V"], [self.roles[1]], vnclass = self.vnclass)
+        passivizedframes.append(intransitive)
+
+        transitive = VerbnetFrame(
+            [self.structure[index_v+1], "V", "by", self.structure[0]],
+            [self.roles[1], self.roles[0]],
+            vnclass = self.vnclass)
+        passivizedframes.append(transitive)
+
+        return passivizedframes
+        
+        
     
     @staticmethod    
     def _reduce_args(frame, structure, new_begin):
@@ -481,6 +502,13 @@ class VerbnetFrameTest(unittest.TestCase):
         verbnet_frame.compute_slot_types()
         self.assertEqual(verbnet_frame.slot_types, slot_types[2])
         self.assertEqual(verbnet_frame.slot_preps, slot_preps[2])
+
+    def test_passivize(self):
+        vn_frame_transitive = VerbnetFrame(["NP", "V", "NP"], ["Agent", "Theme"])
+        passivizations = vn_frame_transitive.passivize()
+        self.assertEqual(passivizations, [
+            VerbnetFrame(["NP", "V"], ["Theme"]),
+            VerbnetFrame(["NP", "V", "by", "NP"], ["Theme", "Agent"])])
         
         
 if __name__ == "__main__":
