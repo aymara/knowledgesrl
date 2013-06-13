@@ -62,10 +62,7 @@ class FrameMatcher():
         self.num_new_match = 0
         self.possible_roles = [{} for x in range(self.frame.num_slots)] 
         self.algo = algo
-        
-        if len(self.frame.slot_types) == 0:
-            self.frame.compute_slot_types()
-                   
+
     def new_match(self, test_frame):
         """Compute the matching score and update the possible roles distribs
             
@@ -78,10 +75,6 @@ class FrameMatcher():
         num_match = 0
 
         if self.algo == "baseline":
-            # We will need the test_frame slots' types
-            if len(test_frame.slot_types) == 0:
-                test_frame.compute_slot_types()
-            
             # As slots are not attributed in order, we need to keep a list
             # of the slots that have not been attributed yet
             available_slots = []

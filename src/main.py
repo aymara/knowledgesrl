@@ -70,7 +70,6 @@ if __name__ == "__main__":
                 annotated_frames.append(frame)
                 
                 converted_frame = VerbnetFrame.build_from_frame(frame)
-                converted_frame.compute_slot_types()
 
                 vn_frames.append(converted_frame)
             stats_data["files"] += 1
@@ -83,7 +82,6 @@ if __name__ == "__main__":
             extracted_frame, verbnet_classes, role_matcher)
         for frame in annotated_frames:
             converted_frame = VerbnetFrame.build_from_frame(frame)
-            converted_frame.compute_slot_types()
             vn_frames.append(converted_frame)
 
     print("Frame matching...", file=sys.stderr)

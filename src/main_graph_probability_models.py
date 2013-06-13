@@ -67,7 +67,6 @@ if __name__ == "__main__":
             annotated_frames.append(frame)
             
             converted_frame = VerbnetFrame.build_from_frame(frame)
-            converted_frame.compute_slot_types()
             vn_frames.append(converted_frame)
 
     print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
@@ -119,7 +118,6 @@ if __name__ == "__main__":
             annotated_test_frames.append(frame)
             
             converted_frame = VerbnetFrame.build_from_frame(frame)
-            converted_frame.compute_slot_types()
             vn_test_frames.append(converted_frame)
         stats_data["files"] += 1
 

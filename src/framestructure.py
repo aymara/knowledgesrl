@@ -77,6 +77,8 @@ class VerbnetFrame:
         
         # Used to retrieve vnclass and map roles to framenet roles
         self.vnclass = vnclass
+
+        self.compute_slot_types()
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
@@ -465,16 +467,15 @@ class VerbnetFrameTest(unittest.TestCase):
         
         verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[0])
         self.assertEqual(vn_frames[0], verbnet_frame)
-        verbnet_frame.compute_slot_types()
         self.assertEqual(verbnet_frame.slot_types, slot_types[0])
         self.assertEqual(verbnet_frame.slot_preps, slot_preps[0])
         
         verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[1])
         self.assertEqual(vn_frames[1], verbnet_frame)
-        verbnet_frame.compute_slot_types()
         self.assertEqual(verbnet_frame.slot_types, slot_types[1])
         self.assertEqual(verbnet_frame.slot_preps, slot_preps[1])
         
+        # compute_slot_types is idempotent
         verbnet_frame = vn_frames[2]
         verbnet_frame.compute_slot_types()
         verbnet_frame.compute_slot_types()
