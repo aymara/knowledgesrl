@@ -77,6 +77,9 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet_classes, role_m
         debug_ = True
 
     for annotated_frame in reader.frames:
+        stats_data["args_instanciated"] += len(
+                    [x for x in annotated_frame.args if x.instanciated])
+        
         # Count annotated args with a role mapping ok
         for arg in annotated_frame.args:
             if not arg.instanciated: continue

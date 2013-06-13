@@ -99,14 +99,14 @@ def display_stats(gold_args):
     accuracy = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
     
     extrapolated_one_good = (s["one_correct_role"] *
-        s["one_role_annotated"] / unique_role_evaluated)
+        s["one_role_annotated"] / max(unique_role_evaluated, 1))
     extrapolated_good_slots = (extrapolated_one_good +
         s["several_roles_ok"] * s["several_roles_annotated"] /
-        several_roles_evaluated)
+        max(several_roles_evaluated, 1))
     
-    extrapolated_precision = extrapolated_good_slots / s["attributed_roles"]
-    extrapolated_recall = extrapolated_good_slots / s["args_instanciated"]
-    extrapolated_accuracy = extrapolated_one_good / s["args_instanciated"]
+    extrapolated_precision = extrapolated_good_slots / max(s["attributed_roles"], 1)
+    extrapolated_recall = extrapolated_good_slots / max(s["args_instanciated"], 1)
+    extrapolated_accuracy = extrapolated_one_good / max(s["args_instanciated"], 1)
     
     if gold_args:
         print(
