@@ -124,13 +124,13 @@ class FrameMatcher():
             num_slots_before_v_2 = 0
             
             for elem in self.frame.structure:
-                if elem == "V": break
                 if FrameMatcher._is_a_slot(elem):
                     num_slots_before_v_1 += 1
+                elif elem == "V": break
             for elem in test_frame.structure:
-                if elem == "V": break
                 if FrameMatcher._is_a_slot(elem):
                     num_slots_before_v_2 += 1
+                elif elem == "V": break
 
             while i < len(self.frame.structure) and j < len(test_frame.structure):
                 elem1 = self.frame.structure[i]
