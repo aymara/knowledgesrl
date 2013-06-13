@@ -124,7 +124,8 @@ class ArgGuesser(FNParsedReader):
         with open("temp_morph", "rb") as picklefile:
             self.base_forms.update(pickle.load(picklefile))
                             
-        os.system("rm temp_wordlist temp_morph")
+        os.remove("temp_wordlist")
+        os.remove("temp_morph")
 
     def _handle_file(self, filename):
         """ Extracts frames from one file and iterate over them """

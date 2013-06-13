@@ -43,7 +43,8 @@ class HeadWordExtractor(FNParsedReader):
         with open("temp_wordclasses", "rb") as picklefile:
             self.word_classes.update(pickle.load(picklefile))
             
-        os.system("rm temp_wordlist temp_wordclasses")
+        os.remove("temp_wordlist")
+        os.remove("temp_wordclasses")
         
         self.word_classes.update(self.special_classes)
     
