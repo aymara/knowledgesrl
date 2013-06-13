@@ -207,7 +207,7 @@ class FrameMatcher():
         
         :param elem: The element.
         :type elem: str.
-        :returns: bool -- True if elem represents a solt, False otherwise
+        :returns: bool -- True if elem represents a slot, False otherwise
         """
         
         return elem[0].isupper() and elem != "V"

@@ -47,7 +47,7 @@ class ArgGuesser(FNParsedReader):
     # Source : http://www.comp.leeds.ac.uk/ccalas/tagsets/upenn.html
     pos_conversions = {
     "$":"NP",
-    "CD":"NP", #Cardinal number ("The tree of us")
+    "CD":"NP", #Cardinal number ("The three of us")
     "DT":"NP", #Determiner ("this" or "that")
     "JJ":"ADJ", "JJR":"ADJ",
     "MD":"S", #Modal verb
@@ -61,7 +61,7 @@ class ArgGuesser(FNParsedReader):
     "VBD":"S", "VBG":"S_ING",
     "VBN":"ADJ", #Participe, as "fed" in "He got so fed up that..."
     "VBP":"S", "VBZ":"S",
-    "WDT":"NP" #Relative pronom ("that what whatever which whichever ")
+    "WDT":"NP" #Relative determiners ("that what whatever which whichever")
     }
     
     complex_pos = ["IN", "WP"]
@@ -181,7 +181,7 @@ class ArgGuesser(FNParsedReader):
     def _find_args(self, node):
         """Returns every arguments of a given node.
         
-        :param node: The node which descendant are susceptible to be returned.
+        :param node: The node for which descendants are susceptible to be returned.
         :type node: SyntacticTreeNode.
         :returns: Arg List -- The resulting list of arguments.
         
@@ -204,7 +204,7 @@ class ArgGuesser(FNParsedReader):
         
         :param predicate_node: The node of which we want to obtain arguments.
         :type predicate_node: SyntacticTreeNode.
-        :param node: The node which descendant are susceptible to be returned.
+        :param node: The node for which descendants are susceptible to be returned.
         :type node: SyntacticTreeNode.
         :returns: Arg List -- The resulting list of arguments.
         
