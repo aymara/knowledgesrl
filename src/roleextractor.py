@@ -71,9 +71,6 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet_classes, role_m
     good_frames = 0
     
     previous_id, matching_id = 0, 0
-    debug_ = False
-    if "KBEval__Brandeis" in file_path:
-        debug_ = True
 
     for annotated_frame in reader.frames:
         stats_data["args_instanciated"] += len(
@@ -93,7 +90,7 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet_classes, role_m
         
         matching_id = find_sentence_id(extracted_frames,
                                         annotated_frame.sentence,
-                                        annotated_frame.sentence_id, debug_)
+                                        annotated_frame.sentence_id)
         if matching_id == 0: continue
         
         # Remove <num> tags from the extracted frames
@@ -122,7 +119,7 @@ def handle_file(extracted_frames, file_path, num_frames, verbnet_classes, role_m
     stats_data["frame_extracted_good"] += good_frames
     stats_data["frame_extracted_bad"] += (num_frames - good_frames)
 
-def find_sentence_id(extracted_frames, sentence_1, expected_id, debug_ = False):
+def find_sentence_id(extracted_frames, sentence_1, expected_id):
     """Find the id of the matching sentence of the syntactic annotations
     for a sentence from the annotated corpus.
     We can't be sure that they have the same id because of "junk" sentence
