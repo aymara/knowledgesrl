@@ -26,6 +26,8 @@ class Frame:
         self.filename = filename
         self.slot_type = slot_type
         self.annotated = annotated
+        self.passive = False
+        self.tree = None
 
     def get_word(self, word):
         return self.sentence[word.begin:word.end + 1]
