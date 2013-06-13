@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import framenetreader
+import framenetallreader
 import paths
 from stats import stats_data
 from framestructure import *
@@ -27,118 +27,61 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     :type verbnet_classes: Str Dict.
     """
     
-    path = paths.FRAMENET_FULLTEXT
-    i = 0
-    i_max = len(extracted_frames)
-
-    files = os.listdir(path)
-    for filename in sorted(files):
-        if not filename[-4:] == ".xml": continue
-
-        # Skip any file that is not in our corpus
-        while i < i_max and extracted_frames[i].filename not in files:
-            i += 1
-
-        frames = defaultdict(lambda : [])
-        old_i = i
-
-        while i < i_max and extracted_frames[i].filename == filename:
-            frames[extracted_frames[i].sentence_id].append(extracted_frames[i])
-            i += 1
-
-        handle_file(frames, path+filename, i - old_i, verbnet_classes, role_matcher)
-        print(".", file=sys.stderr, end="", flush=True)
-    print()
-
-    # Discard every frame for which there was no match
-    return [x for x in extracted_frames if not x.frame_name == ""]
-
-def handle_file(extracted_frames, file_path, num_frames, verbnet_classes, role_matcher):
-    """Fills the names and roles of every frames in a file
+    frames = defaultdict(lambda : (defaultdict(lambda : []) ))
+    for frame in extracted_frames:
+        frames[frame.filename][frame.sentence_id_fn_parsed].append(frame)
     
-    :param extracted_frames: The extracted frames of the file sorted by sentence in a dict.
-    :type extracted_frames: Frame List Dict.
-    :param file_path: The path to the FrameNet annotation file.
-    :type file_path: str.
-    :param num_frames: The total number of extracted frames (used for statistics).
-    :type num_frames: int.
-    :param verbnet_classes: The VerbNet lexicon, used to determine which frames
-    from the corpus we should have extracted.
-    :type verbnet_classes: str Dict.
-    """
-    reader = framenetreader.FulltextReader(file_path,
-        core_args_only = True, keep_unannotated = True)
-    good_frames = 0
+    fn_reader = framenetallreader.FNAllReader(
+            paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED,
+            core_args_only = True, keep_unannotated = True)
     
-    previous_id, matching_id = 0, 0
-
-    for annotated_frame in reader.frames:
+    previous_id = -1
+    sentence_frames = []
+    for frame in fn_reader.frames:
         stats_data["args_instanciated"] += len(
-                    [x for x in annotated_frame.args if x.instanciated])
+            [x for x in frame.args if x.instanciated])
         
-        # Count annotated args with a role mapping ok
-        for arg in annotated_frame.args:
+        for arg in frame.args:
             if not arg.instanciated: continue
             try:
                 possible_roles = role_matcher.possible_vn_roles(
                     arg.role,
-                    fn_frame=annotated_frame.frame_name,
-                    vn_classes=verbnet_classes[annotated_frame.predicate.lemma])
+                    fn_frame=frame.frame_name,
+                    vn_classes=verbnet_classes[frame.predicate.lemma])
             except Exception: continue
             if len(possible_roles) == 1:
                 stats_data["args_annotated_mapping_ok"] += 1
-        
-        matching_id = find_sentence_id(extracted_frames,
-                                        annotated_frame.sentence,
-                                        annotated_frame.sentence_id)
-        if matching_id == 0: continue
-        
-        # Remove <num> tags from the extracted frames
-        if matching_id != previous_id:
-            for extracted_frame in extracted_frames[matching_id]:
-                correct_num_tags(extracted_frame, annotated_frame.sentence)
+            
+        if frame.sentence_id_fn_parsed == -1: continue
+        if frame.sentence_id_fn_parsed != previous_id:
+            sentence_frames = frames[frame.filename][frame.sentence_id_fn_parsed]
+            for extracted_frame in sentence_frames:
+                correct_num_tags(extracted_frame, frame.sentence)
+        previous_id = frame.sentence_id_fn_parsed
         
         frame_found = False
-        for extracted_frame in extracted_frames[matching_id]:
+        for extracted_frame in sentence_frames:
             # See if we have the two "same" frames
-            if predicate_match(extracted_frame.predicate, annotated_frame.predicate):
-                good_frames += 1
-                handle_frame(extracted_frame, annotated_frame)
+            if predicate_match(extracted_frame.predicate, frame.predicate):
+                stats_data["frame_extracted_good"] += 1
+                handle_frame(extracted_frame, frame)
                 frame_found = True
                 break
         if not frame_found:
-            num_args = len([x for x in annotated_frame.args if x.instanciated])
-            if annotated_frame.predicate.lemma not in verbnet_classes:
+            num_args = len([x for x in frame.args if x.instanciated])
+            if frame.predicate.lemma not in verbnet_classes:
                 stats_data["frame_not_extracted_not_verbnet"] += 1
                 stats_data["arg_not_extracted_not_verbnet"] += num_args
 
             stats_data["frame_not_extracted"] += 1
             stats_data["arg_not_extracted"] += num_args
-        previous_id = matching_id
+        previous_id = frame.sentence_id_fn_parsed
 
-    stats_data["frame_extracted_good"] += good_frames
-    stats_data["frame_extracted_bad"] += (num_frames - good_frames)
+        stats_data["frame_extracted_bad"] = (
+            len(extracted_frames) - stats_data["frame_extracted_good"])
 
-def find_sentence_id(extracted_frames, sentence_1, expected_id):
-    """Find the id of the matching sentence of the syntactic annotations
-    for a sentence from the annotated corpus.
-    We can't be sure that they have the same id because of "junk" sentence
-    of the annotated corpus that do not appears in the syntactic annotations.
-    
-    :param extracted_frames: The frames from the syntactic annotations corpus.
-    :type extracted_frames: Frame List Dict.
-    :param sentence_1: The sentence we are looking for.
-    :type sentence_1: str.
-    :param expected_id: The id of the sentence in the annotated corpus.
-    :type expected_id: int.
-    """
-    for test_id in extracted_frames:
-        if len(extracted_frames[test_id]) > 0:
-            sentence_2 = extracted_frames[test_id][0].sentence
-        
-            if sentence_match(sentence_1, sentence_2):
-                return test_id
-    return 0
+    # Discard every frame for which there was no match
+    return [x for x in extracted_frames if not x.frame_name == ""]
 
 def correct_num_tags(extracted_frame, original_sentence):
     """ Replace <num> tags by their real equivalents 
@@ -174,21 +117,6 @@ def correct_num_tags(extracted_frame, original_sentence):
                 arg.text = arg.text.replace(search, replacement, 1)
             if arg.end > position:
                 arg.end += offset
-
-def sentence_match(sentence_1, sentence_2):
-    # This is not necessary but resolves many cases without computing
-    # the symetric difference of the two sets of words of the two sentences
-    if sentence_1 == sentence_2:
-        return True
-    
-    # The previous test might fail for the two "same" sentences because of
-    # minor differences between the two corpora, or because of parsing errors 
-    # that change word order
-    words_1 = sentence_1.split(" ")
-    words_2 = sentence_2.split(" ")
-    if len(set(words_1) ^ set(words_2)) > (len(words_1) + len(words_2)) / 6:
-         return False
-    return True
     
 def predicate_match(predicate1, predicate2):
     """ Tells whether two predicates in the same sentence belongs to the same frame"""

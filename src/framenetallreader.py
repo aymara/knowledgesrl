@@ -144,6 +144,7 @@ class FNAllReader:
         
         frame.passive = FNAllReader.is_passive(node)
         frame.tree = self.trees[matching_id]
+        frame.sentence_id_fn_parsed = matching_id
     
     @staticmethod
     def is_passive(node):

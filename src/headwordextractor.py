@@ -13,7 +13,7 @@ import getopt
 
 from conllreader import SyntacticTreeBuilder, SyntacticTreeNode
 from framenetparsedreader import FNParsedReader
-from roleextractor import sentence_match
+from framenetallreader import FNAllReader
 import framenetreader
 import paths
 
@@ -110,7 +110,7 @@ class HeadWordExtractor(FNParsedReader):
                 for i in range(len(self.sentences_data)):
                     test_id = 1 + (expected_id - 1 - i) % len(self.sentences_data)
                     self.select_sentence(test_id)
-                    if sentence_match(self.current_sentence(), frame.sentence):
+                    if FNAllReader.sentence_match(self.current_sentence(), frame.sentence):
                         break
 
             vn_frame.headwords = [  

@@ -167,7 +167,8 @@ class ArgGuesser(FNParsedReader):
                     args=args,
                     words=[Word(x.begin, x.end, x.pos) for x in self.tree],
                     frame_name="",
-                    sentence_id=self.sentence_id,
+                    #FIXME : offset of 1 between framenetparsedreader and framenetallreader
+                    sentence_id_fn_parsed=self.sentence_id - 1,
                     filename=self.filename.replace(".conll", ".xml")
                 )
         #FIXME :
