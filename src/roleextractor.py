@@ -27,7 +27,6 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     :type verbnet_classes: Str Dict.
     """
     
-    print("")
     path = paths.FRAMENET_FULLTEXT
     i = 0
     i_max = len(extracted_frames)
@@ -35,8 +34,6 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     files = os.listdir(path)
     for filename in sorted(files):
         if not filename[-4:] == ".xml": continue
-        print(".", file=sys.stderr, end="")
-        sys.stderr.flush()
 
         # Skip any file that is not in our corpus
         while i < i_max and extracted_frames[i].filename not in files:
@@ -50,6 +47,8 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
             i += 1
 
         handle_file(frames, path+filename, i - old_i, verbnet_classes, role_matcher)
+        print(".", file=sys.stderr, end="", flush=True)
+    print()
 
     # Discard every frame for which there was no match
     return [x for x in extracted_frames if not x.frame_name == ""]

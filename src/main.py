@@ -41,9 +41,7 @@ def init_fn_reader(path):
 if __name__ == "__main__":
     verbnet_predicates, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
 
-    print("Loading frames...", file=sys.stderr)
-
-    print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
+    print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
     model = probabilitymodel.ProbabilityModel()
  
@@ -51,12 +49,11 @@ if __name__ == "__main__":
     vn_frames = []
    
     if gold_args:
+        print("Loading frames...", file=sys.stderr)
         for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
             if not filename[-4:] == ".xml": continue
 
             fn_reader = init_fn_reader(paths.FRAMENET_FULLTEXT + filename)
-
-            print(".", file=sys.stderr, end="", flush=True)
 
             for frame in fn_reader.frames:
                 stats_data["args"] += len(frame.args)
@@ -77,6 +74,8 @@ if __name__ == "__main__":
 
                 vn_frames.append(converted_frame)
             stats_data["files"] += 1
+            print(".", file=sys.stderr, end="", flush=True)
+        print()
     else:
         arg_guesser = argguesser.ArgGuesser(paths.FRAMENET_PARSED, verbnet_classes)
         extracted_frame = [x for x in arg_guesser.handle_corpus()]

@@ -45,8 +45,6 @@ if __name__ == "__main__":
 
     for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
         if not filename[-4:] == ".xml": continue
-        print(".", file=sys.stderr, end="")
-        sys.stderr.flush()
 
         if stats_data["files"] % 100 == 0 and stats_data["files"] > 0:
             print("{} {} {}".format(
@@ -69,6 +67,8 @@ if __name__ == "__main__":
             converted_frame.compute_slot_types()
             vn_frames.append(converted_frame)
         stats_data["files"] += 1
+        print(".", file=sys.stderr, end="", flush=True)
+    print()
 
     print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)

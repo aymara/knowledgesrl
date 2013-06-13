@@ -109,8 +109,6 @@ class FNParsedReaderTest(unittest.TestCase):
 
             if filename in self.bad_files: continue
             
-            print(".", file=sys.stderr, end="")
-            sys.stderr.flush()
             
             extractor.load_file(filename)
             
@@ -128,6 +126,8 @@ class FNParsedReaderTest(unittest.TestCase):
                 # be needed
                 #self.assertTrue(self.comp(frame.sentence, extractor.current_sentence()))
                 previous_sentence = frame.sentence_id
+            print(".", file=sys.stderr, end="", flush=True)
+        print()
 
 if __name__ == "__main__":
     unittest.main()

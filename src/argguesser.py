@@ -81,11 +81,11 @@ class ArgGuesser(FNParsedReader):
         for filename in sorted(os.listdir(self.annotations_path)):
             if not filename[-6:] == ".conll": continue
 
-            print(".", file=sys.stderr, end="")
-            sys.stderr.flush()
        
             for frame in self._handle_file(filename):
                 yield frame
+            print(".", file=sys.stderr, end="", flush=True)
+        print()
 
     def _extract_verbs(self):
         """ Computes the set of every verbs in the corpus 
@@ -99,8 +99,6 @@ class ArgGuesser(FNParsedReader):
         for filename in sorted(os.listdir(self.annotations_path)):
             if not filename[-6:] == ".conll": continue
 
-            print(".", file=sys.stderr, end="")
-            sys.stderr.flush()
        
             with open(self.annotations_path + filename) as content:
                 for line in content.readlines():
@@ -110,7 +108,8 @@ class ArgGuesser(FNParsedReader):
                     if pos in self.predicate_pos:
                         result.add(word.lower())
         
-        print("")
+            print(".", file=sys.stderr, end="", flush=True)
+        print()
              
         return result          
 
