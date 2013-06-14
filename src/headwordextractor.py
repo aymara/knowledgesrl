@@ -100,24 +100,12 @@ class HeadWordExtractor(FNParsedReader):
         """
         old_filename = ""
         previous_sentence = 0
-
+        
         for frame, vn_frame in zip(frames, vn_frames):
-            if old_filename != frame.filename:
-                self.load_file(frame.filename)
-                self.select_sentence(frame.sentence_id)
-            elif frame.sentence_id != previous_sentence:
-                expected_id = frame.sentence_id
-                for i in range(len(self.sentences_data)):
-                    test_id = 1 + (expected_id - 1 - i) % len(self.sentences_data)
-                    self.select_sentence(test_id)
-                    if FNAllReader.sentence_match(self.current_sentence(), frame.sentence):
-                        break
-
+            self.tree = frame.tree
+            
             vn_frame.headwords = [
                 self.headword(x.text) for x in frame.args if x.instanciated]
-            
-            old_filename = frame.filename
-            previous_sentence = frame.sentence_id
         
     def _get_headword(self, arg_text):
         node = self.tree.closest_match_as_node(arg_text)
