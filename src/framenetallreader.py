@@ -67,9 +67,9 @@ class FNAllReader:
             previous_sentence_id = -1
             for frame in reader.frames:
                 if frame.sentence_id != previous_sentence_id:
-                    matching_id = self.find_sentence(frame.sentence,
-                        matching_id)
-
+                    matching_id = FNAllReader.best_match_sentence(
+                        frame.sentence, self.sentences_syntax, matching_id)
+                
                 if matching_id == -1: continue
                 
                 self.handle_frame(frame, matching_id)
@@ -104,25 +104,6 @@ class FNAllReader:
             self.sentences_syntax.append(tree.flat())
             
         return True
-    
-    def find_sentence(self, sentence, expected_position):
-        """Look for a match to :sentence in the syntax annotations
-        and return its position.
-        
-        :param sentence: The sentence to find
-        :type sentence: str
-        :param expected_position: The first position to check
-        :type expected_position: int
-        :returns: int -- The position of the sentence in
-            self.sentences_syntax if a match was found, -1 otherwise
-        """
-        n = len(self.sentences_syntax)
-        for i in range(0, n):
-            test_position = (expected_position + i) % n
-            sentence_2 = self.sentences_syntax[test_position]
-            if FNAllReader.sentence_match(sentence, sentence_2):
-                return test_position
-        return -1
         
     def handle_frame(self, frame, matching_id):
         """Add information to a frame using the syntax annotation
@@ -155,21 +136,27 @@ class FNAllReader:
         return node.father.word.lower() in FNAllReader.be_forms
     
     @staticmethod
-    def sentence_match(sentence_1, sentence_2):
-        # This is not necessary but resolves many cases without computing
-        # the symetric difference of the two sets of words of the two sentences
-        if sentence_1 == sentence_2:
-            return True
+    def best_match_sentence(sentence, candidates, expected_position):
+        best_score, best_index = -1, -1
         
-        # The previous test might fail for the two "same" sentences because of
-        # minor differences between the two corpora, or because of parsing errors
-        # that change word order
-        words_1 = sentence_1.split(" ")
-        words_2 = sentence_2.split(" ")
-        if len(set(words_1) ^ set(words_2)) > (len(words_1) + len(words_2)) / 6:
-             return False
-        return True
-  
+        words_1 = set(sentence.split(" "))
+        n = len(candidates)
+        for i in range(0, n):
+            index = (expected_position + i) % n
+            sentence_2 = candidates[index]
+            
+            if sentence == sentence_2:
+                return index
+
+            words_2 = set(sentence_2.split(" "))
+            score = len(words_1 & words_2) / (len(words_1) + len(words_2))
+            
+            if score > best_score:
+                best_score, best_index = score, index
+        
+        if best_score > 0.3: return best_index
+        return -1
+    
 class FNAllReaderTest(unittest.TestCase):
     def comp(self, original, parsed):
         return all(
