@@ -100,7 +100,7 @@ if __name__ == "__main__":
         frame.roles = matcher.possible_distribs()
         
         # Update probability model
-        if not bootstrap:
+        if not options.bootstrap:
             for roles, slot_type, prep in zip(
                 frame.roles, frame.slot_types, frame.slot_preps
             ):
