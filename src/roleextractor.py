@@ -79,7 +79,9 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
 
     stats_data["frame_extracted_bad"] = (
         len(extracted_frames) - stats_data["frame_extracted_good"])
-
+    stats_data["arg_extracted_bad"] += sum(
+        [len(x.args) for x in extracted_frames if x.frame_name == ""])
+    
     # Discard every frame for which there was no match
     return extracted_frames
 
@@ -123,10 +125,10 @@ def predicate_match(predicate1, predicate2):
     return predicate1.begin == predicate2.begin
 
 def handle_frame(extracted_frame, annotated_frame):
-    # Update the frame name
+    # Update the frame data
     extracted_frame.frame_name = annotated_frame.frame_name
-    
     extracted_frame.arg_annotated = annotated_frame.arg_annotated
+    extracted_frame.annotated = True
     
     good_args, partial_args = 0, 0
     

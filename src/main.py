@@ -74,7 +74,9 @@ if __name__ == "__main__":
     for good_frame, frame in zip(annotated_frames, vn_frames):
         num_instanciated = len([x for x in good_frame.args if x.instanciated])
         predicate = good_frame.predicate.lemma
-        stats_data["args_kept"] += num_instanciated
+        
+        if good_frame.arg_annotated or good_frame.frame_name == "":
+            stats_data["args_kept"] += num_instanciated
         
         stats_ambiguous_roles(good_frame, num_instanciated,
             role_matcher, verbnet_classes)
