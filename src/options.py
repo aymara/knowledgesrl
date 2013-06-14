@@ -18,7 +18,8 @@ passive = True
 
 options = getopt.getopt(sys.argv[1:], "d:",
     ["baseline", "fmatching-algo=", "add-non-core-args", "help",
-     "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump"])
+     "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump",
+     "no-passive", "baseline"])
 
 display_syntax = False
 syntax_str = ("main.py [--baseline] [-d num_sample] [--fmatching-algo=algo] "
