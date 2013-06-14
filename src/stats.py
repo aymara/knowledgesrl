@@ -212,6 +212,10 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
         stats_data["args_annotated_mapping_ok"] = 0
     
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
+        # We don't know how to evaluate args that were extracted from a frame
+        # that exist in the fulltext corpus but that lacks argument annotations
+        if not gold_fn_frame.arg_annotated: continue
+        
         for i, slot in enumerate(found_vn_frame.roles):
             stats_data["attributed_roles"] += len(slot)
             if len(slot) == 0:

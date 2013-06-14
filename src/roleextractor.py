@@ -152,9 +152,10 @@ def handle_frame(extracted_frame, annotated_frame):
         if not arg_found:
             stats_data["arg_not_extracted"] += 1
     
-    stats_data["arg_extracted_good"] += good_args
-    stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args - partial_args)
-    stats_data["arg_extracted_partial"] += partial_args
+    if extracted_frame.arg_annotated:
+        stats_data["arg_extracted_good"] += good_args
+        stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args - partial_args)
+        stats_data["arg_extracted_partial"] += partial_args
 
 def match_score(arg1, arg2):
     intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
