@@ -21,12 +21,16 @@ options = getopt.getopt(sys.argv[1:], "d:",
      "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump"])
 
 display_syntax = False
-syntax_str = ("main.py [-d num_sample] [--fmatching-algo=algo] "
+syntax_str = ("main.py [--baseline] [-d num_sample] [--fmatching-algo=algo] "
               "[--model=probability_model] [--add-non-core-args] "
               "[--bootstrap] [--no-gold-args [--heuristic-rules]] "
               "[--dump filename] [--no-passive] [--help]")
 
 for opt,value in options[0]:
+    # Removes our enhancements
+    if opt == "--baseline":
+        passive = False
+
     if opt == "-d":
         debug = True
         value = 0 if value == "" else int(value)
