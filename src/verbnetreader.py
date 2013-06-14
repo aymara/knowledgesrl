@@ -13,8 +13,6 @@ from framematcher import FrameMatcher
 import verbnetprepclasses
 import paths
 
-is_a_slot = FrameMatcher._is_a_slot
-
 class VerbnetReader:
 
     """Class used to parse VerbNet and build its representation in memory.
@@ -200,7 +198,7 @@ class VerbnetReader:
             if new_index != -1:
                 index_xml = new_index
             
-            if is_a_slot(element): roles.append(None)
+            if VerbnetFrame._is_a_slot(element): roles.append(None)
 
             if len(full_element) > 1:
                 potential_role = "-".join([x.title() for x in full_element[1].split('-')])

@@ -98,7 +98,7 @@ class FrameMatcher():
                     if test_slot_data["slot_type"] != slot_type:
                         continue
                     if (slot_type == VerbnetFrame.slot_types["prep_object"] and
-                        not self._is_a_match(
+                        not VerbnetFrame._is_a_match(
                             self.frame.slot_preps[slot_pos], 
                             test_slot_data["prep"])
                     ):
@@ -124,11 +124,11 @@ class FrameMatcher():
             num_slots_before_v_2 = 0
             
             for elem in self.frame.structure:
-                if FrameMatcher._is_a_slot(elem):
+                if VerbnetFrame._is_a_slot(elem):
                     num_slots_before_v_1 += 1
                 elif elem == "V": break
             for elem in test_frame.structure:
-                if FrameMatcher._is_a_slot(elem):
+                if VerbnetFrame._is_a_slot(elem):
                     num_slots_before_v_2 += 1
                 elif elem == "V": break
 
@@ -136,8 +136,8 @@ class FrameMatcher():
                 elem1 = self.frame.structure[i]
                 elem2 = test_frame.structure[j]
 
-                if FrameMatcher._is_a_match(elem1, elem2): 
-                    if FrameMatcher._is_a_slot(elem1):
+                if VerbnetFrame._is_a_match(elem1, elem2): 
+                    if VerbnetFrame._is_a_slot(elem1):
                         num_match += 1
                         # test_frame.roles can be too short. This will for instance
                         # happen in the "NP V NP S_INF" structure of want-32.1,
@@ -158,8 +158,8 @@ class FrameMatcher():
         elif self.algo == "stop_on_fail":     
             """ Former less permissive algorithm """
             for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
-                if FrameMatcher._is_a_match(elem1, elem2): 
-                    if FrameMatcher._is_a_slot(elem1):
+                if VerbnetFrame._is_a_match(elem1, elem2): 
+                    if VerbnetFrame._is_a_slot(elem1):
                         num_match += 1
                         if num_match - 1 < len(test_frame.roles):
                             distrib[num_match - 1] = next(iter(test_frame.roles[num_match - 1]))
@@ -193,31 +193,6 @@ class FrameMatcher():
         :returns: str set list -- The lists of possible roles for each slot
         """
         return [set(x.values()) for x in self.possible_roles]
-            
-    @staticmethod
-    def _is_a_slot(elem):
-        """Tell wether an element represent a slot
-        
-        :param elem: The element.
-        :type elem: str.
-        :returns: bool -- True if elem represents a slot, False otherwise
-        """
-        
-        return elem[0].isupper() and elem != "V"
-
-    @staticmethod        
-    def _is_a_match(elem1, elem2):
-        """Tell wether two elements can be considered as a match
-        
-        :param elem1: first element.
-        :type elem1: str.
-        :param elem2: second element.
-        :type elem2: str.
-        :returns: bool -- True if this is a match, False otherwise
-        """
-        
-        return ((isinstance(elem2, list) and elem1 in elem2) or
-            elem1 == elem2)
         
 class frameMatcherTest(unittest.TestCase):
     def test_1(self):

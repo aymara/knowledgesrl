@@ -125,6 +125,30 @@ class VerbnetFrame:
             elif isinstance(element, list) or element in verbnetprepclasses.all_preps:
                 preposition = element
             
+    @staticmethod
+    def _is_a_slot(elem):
+        """Tell wether an element represent a slot
+        
+        :param elem: The element.
+        :type elem: str.
+        :returns: bool -- True if elem represents a slot, False otherwise
+        """
+        
+        return elem[0].isupper() and elem != "V"
+
+    @staticmethod        
+    def _is_a_match(elem1, elem2):
+        """Tell wether two elements can be considered as a match
+        
+        :param elem1: first element.
+        :type elem1: str.
+        :param elem2: second element.
+        :type elem2: str.
+        :returns: bool -- True if this is a match, False otherwise
+        """
+        
+        return ((isinstance(elem2, list) and elem1 in elem2) or
+            elem1 == elem2)
     
     @staticmethod    
     def build_from_frame(frame):
