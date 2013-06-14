@@ -126,7 +126,7 @@ def handle_frame(extracted_frame, annotated_frame):
     # Update the frame name
     extracted_frame.frame_name = annotated_frame.frame_name
     
-    extracted_frame.annotated = annotated_frame.annotated
+    extracted_frame.arg_annotated = annotated_frame.arg_annotated
     
     good_args, partial_args = 0, 0
     

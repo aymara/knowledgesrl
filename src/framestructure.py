@@ -17,7 +17,7 @@ class Frame:
     
     def __init__(self, sentence, predicate, args, words, frame_name,
         sentence_id = -1, sentence_id_fn_parsed = -1, filename = "",
-        slot_type = "", annotated = False):
+        slot_type = "", arg_annotated = False):
         self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
@@ -27,7 +27,7 @@ class Frame:
         self.sentence_id_fn_parsed = sentence_id_fn_parsed
         self.filename = filename
         self.slot_type = slot_type
-        self.annotated = annotated
+        self.arg_annotated = arg_annotated
         self.passive = False
         self.tree = None
 

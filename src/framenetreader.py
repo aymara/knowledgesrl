@@ -189,7 +189,7 @@ class FulltextReader:
         
         return Frame(sentence_text, predicate, args, words, frame_name,
             sentence_id=self.sentence_id, filename=self.filename,
-            annotated=annotated)
+            arg_annotated=annotated)
     
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.
