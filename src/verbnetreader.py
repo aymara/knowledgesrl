@@ -51,6 +51,7 @@ class VerbnetReader:
         
         """
         frames = parent_frames[:]
+        role_list = role_list[:]
         
         # Use the format of the vn/fn mapping
         vnclass = "-".join(xml_class.attrib["ID"].split('-')[1:])
