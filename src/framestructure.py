@@ -199,13 +199,23 @@ class VerbnetFrame:
         passivizedframes = []
         index_v = self.structure.index("V")
 
-        intransitive = VerbnetFrame([self.structure[index_v+1], "V"], [self.roles[1]], vnclass = self.vnclass)
+        subject = {"structure": self.structure[:index_v], "roles": self.roles[0]}
+        dobject = {"structure": self.structure[index_v+1], "roles": self.roles[1]}
+        iobject = {"structure": self.structure[index_v+2:], "roles": self.roles[2:]}
+
+        intransitive = VerbnetFrame([dobject["structure"], "V"], [dobject["roles"]], vnclass = self.vnclass)
         passivizedframes.append(intransitive)
 
-        transitive = VerbnetFrame(
-            [self.structure[index_v+1], "V", "by", self.structure[0]],
-            [self.roles[1], self.roles[0]],
-            vnclass = self.vnclass)
+        if iobject["structure"] and not VerbnetFrame._is_a_slot(iobject["structure"][0]):
+            transitive = VerbnetFrame(
+                [dobject["structure"], "V"] + iobject["structure"],
+                [dobject["roles"]] + iobject["roles"],
+                vnclass = self.vnclass)
+        else:
+            transitive = VerbnetFrame(
+                [dobject["structure"], "V", "by"] + subject["structure"],
+                [dobject["roles"]] + [subject["roles"]],
+                vnclass = self.vnclass)
         passivizedframes.append(transitive)
 
         return passivizedframes
@@ -533,10 +543,13 @@ class VerbnetFrameTest(unittest.TestCase):
 
     def test_passivize(self):
         vn_frame_transitive = VerbnetFrame(["NP", "V", "NP"], ["Agent", "Theme"])
-        passivizations = vn_frame_transitive.passivize()
-        self.assertEqual(passivizations, [
+        self.assertEqual(vn_frame_transitive.passivize(), [
             VerbnetFrame(["NP", "V"], ["Theme"]),
             VerbnetFrame(["NP", "V", "by", "NP"], ["Theme", "Agent"])])
+        vn_frame_ditransitive = VerbnetFrame(["NP", "V", "NP", "at", "NP"], ["Agent", "Theme", "Value"])
+        self.assertEqual(vn_frame_ditransitive.passivize(), [
+            VerbnetFrame(["NP", "V"], ["Theme"]),
+            VerbnetFrame(["NP", "V", "at", "NP"], ["Theme", "Value"])])
         
         
 if __name__ == "__main__":
