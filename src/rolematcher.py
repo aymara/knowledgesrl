@@ -18,7 +18,7 @@ vn_roles_list = [
     "Recipient", "Stimulus", "Theme", "Time", "Topic"]
     
 # Added roles
-vn_roles_additionnal = ["Goal", "Initial_Location", "Pivot", "Result", 
+vn_roles_additionnal = ["Goal", "Initial_Location", "Pivot", "Result",
     "Trajectory", "Value"]
     
 # List of VN roles that won't trigger an error in unit tests
@@ -76,7 +76,7 @@ class VnFnRoleMatcher():
             vn_class = mapping.attrib["class"]
             fn_frame = mapping.attrib["fnframe"]
 
-            mapping_as_dict = {}                          
+            mapping_as_dict = {}
 
             for role in mapping.findall("roles/role"):
                 vn_role = role.attrib["vnrole"]
@@ -110,7 +110,7 @@ class VnFnRoleMatcher():
                    break
                    
         if not found:
-            self.mappings[fn_frame].append(new_mapping)   
+            self.mappings[fn_frame].append(new_mapping)
                 
     def _add_relation(self, fn_role, vn_role, fn_frame, vn_class):
         if not fn_role in self.fn_roles:
@@ -170,7 +170,7 @@ class VnFnRoleMatcher():
                     if position == -1: break
                     vn_class = vn_class[0:position]
         
-        if vn_roles == set(): 
+        if vn_roles == set():
             # We don't have the mapping for any of the VN class provided in vn_classes
             raise RoleMatchingError(
                 "None of the given VerbNet classes ({}) were corresponding to"\
@@ -228,8 +228,8 @@ class VnFnRoleMatcherTest(unittest.TestCase):
  
             if len(mapping) > 1:
                 matcher.issues["vbclass_dependent"] += 1
-            if contradictory: 
-                matcher.issues["vbclass_contradictory"] += 1           
+            if contradictory:
+                matcher.issues["vbclass_contradictory"] += 1
                     
         print("Found {} fnrole-fnframe entries".format(num_role_frames))
         print("{} different FrameNet frames".format(len(matcher.mappings)))
@@ -244,7 +244,7 @@ class VnFnRoleMatcherTest(unittest.TestCase):
 
         for role, n in matcher.issues["new_vn_roles"].items():
             print("VerbNet role \"{}\" was encountered {} time(s)".format(
-                role, n))    
+                role, n))
             
     def test_matching(self):
         matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)

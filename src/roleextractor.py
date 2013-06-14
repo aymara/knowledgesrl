@@ -84,7 +84,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     return [x for x in extracted_frames if not x.frame_name == ""]
 
 def correct_num_tags(extracted_frame, original_sentence):
-    """ Replace <num> tags by their real equivalents 
+    """ Replace <num> tags by their real equivalents
     and update begin/end attributes where necessary.
     
     :param extracted_frame: The frame that contains <num> tags
@@ -154,7 +154,7 @@ def handle_frame(extracted_frame, annotated_frame):
     
     stats_data["arg_extracted_good"] += good_args
     stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args - partial_args)
-    stats_data["arg_extracted_partial"] += partial_args       
+    stats_data["arg_extracted_partial"] += partial_args
 
 def match_score(arg1, arg2):
     intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
@@ -173,13 +173,13 @@ class RoleExtractorTest(unittest.TestCase):
         initial_predicate = Predicate(64, 69, "earned", "earn")
         final_predicate = Predicate(63, 68, "earned", "earn")
         
-        initial_args = [    
+        initial_args = [
             Arg(18, 62, "the <num> people we helped find jobs in <num>",
                 "role1", True, "phrase_type"),
             Arg(71, 107, "approximately $ <num> million dollars",
                 "role2", True, "phrase_type")
         ]
-        final_args = [    
+        final_args = [
             Arg(18, 61, "the 3,666 people we helped find jobs in 1998",
                 "role1", True, "phrase_type"),
             Arg(70, 103, "approximately $ 49 million dollars",

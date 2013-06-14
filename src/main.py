@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
         # Actual frame matching
         for test_frame in verbnet_predicates[predicate]:
-            matcher.new_match(test_frame)       
+            matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
         
         # Update probability model
@@ -108,8 +108,8 @@ if __name__ == "__main__":
         dumper.add_data_frame_matching(annotated_frames, vn_frames,
             role_matcher, verbnet_classes,
             verbnet_predicates, matching_algorithm)
-    else:       
-        print("Frame matching stats...", file=sys.stderr) 
+    else:
+        print("Frame matching stats...", file=sys.stderr)
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
         display_stats(gold_args)
 
@@ -138,8 +138,8 @@ if __name__ == "__main__":
     if dump:
         dumper.add_data_prob_model(annotated_frames, vn_frames, role_matcher, verbnet_classes)
         dumper.dump(dump_file)
-    else:    
-        print("Final stats...", file=sys.stderr)   
+    else:
+        print("Final stats...", file=sys.stderr)
 
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
         display_stats(gold_args)

@@ -139,7 +139,7 @@ class VerbnetReader:
             # Handle "PP S_ING": we must ignore the PP
             if element == "S_ING" and previous_was_pp:
                 del roles[-1]
-                del structure[-1]     
+                del structure[-1]
             previous_was_pp = (element == "PP")
             
             # Handle "(PP)" which means that the element is optionnal
@@ -205,7 +205,7 @@ class VerbnetReader:
                 if potential_role in role_list:
                     roles[num_slot - 1] = potential_role
 
-        # Fill the role list      
+        # Fill the role list
         i = 0
         for element in syntax_data:
             if ((not element.tag in ["VERB", "PREP", "LEX"]) and
@@ -262,7 +262,7 @@ class VerbnetReader:
         
         while index_xml < len(syntax_data):
             if syntax_data[index_xml].tag == "PREP":
-                keyword = self._handle_prep(syntax_data[index_xml])                    
+                keyword = self._handle_prep(syntax_data[index_xml])
             if syntax_data[index_xml].tag == "LEX":
                 keyword = self._handle_lex(syntax_data[index_xml], base_structure)
                 
@@ -317,7 +317,7 @@ class VerbnetReader:
         for restr_group in xml:
             if restr_group.tag == "SELRESTRS":
                 for restr in restr_group:
-                    if (restr.attrib["Value"] == "+" 
+                    if (restr.attrib["Value"] == "+"
                         and restr.attrib["type"] in verbnetprepclasses.prep
                     ):
                         return list(verbnetprepclasses.prep[restr.attrib["type"]])
@@ -333,7 +333,7 @@ class VerbnetReader:
                     "file":self.filename,
                     "elem":"PREP",
                     "data":"Unknown restriction : {}".format(restr_group.tag)
-                })                         
+                })
         if "value" in xml.attrib:
             return xml.attrib["value"].split(" ")
         else:
@@ -374,12 +374,12 @@ class VerbnetReaderTest(unittest.TestCase):
         root = ET.ElementTree(file=path+"separate-23.1.xml")
         reader._handle_class(root.getroot(), [], [])
         
-        list1 = [  
-            VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),  
+        list1 = [
+            VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),
             VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
             VerbnetFrame(['NP', 'V'], ['Patient']),
-            VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),           
-            VerbnetFrame(['NP', 'V'], ['Patient'])]           
+            VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),
+            VerbnetFrame(['NP', 'V'], ['Patient'])]
         list2 = [VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])]
         list3 = [VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])]
         expected_result = {
@@ -387,15 +387,15 @@ class VerbnetReaderTest(unittest.TestCase):
             'disconnect': list1+list2,
             'divide': list1+list3,
             'disassociate': list1,
-            'disentangle': list1+list3, 
-            'divorce': list1+list3, 
-            'separate': list1+list2, 
-            'segregate': list1+list3, 
-            'part': list1+list2, 
-            'differentiate': list1+list3, 
-            'uncoil': list1, 
-            'decouple': list1+list3, 
-            'sever': list1, 
+            'disentangle': list1+list3,
+            'divorce': list1+list3,
+            'separate': list1+list2,
+            'segregate': list1+list3,
+            'part': list1+list2,
+            'differentiate': list1+list3,
+            'uncoil': list1,
+            'decouple': list1+list3,
+            'sever': list1,
             'dissimilate': list1+list3
         }
         

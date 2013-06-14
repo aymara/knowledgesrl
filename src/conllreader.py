@@ -106,7 +106,7 @@ class SyntacticTreeBuilder():
     """
     
     def __init__(self, conll_tree):
-        """Extract the data provided 
+        """Extract the data provided
         
         :param conll_tree: The output of the CoNLL parser
         :type conll_tree: str
@@ -210,7 +210,7 @@ class TreeBuilderTest(unittest.TestCase):
         self.assertFalse(self.tree.contains("others here today"))
 
     def test_tree_match(self):
-        self.assertEqual(self.tree.closest_match("others here today"), 
+        self.assertEqual(self.tree.closest_match("others here today"),
                 ['The', 'others', 'here', 'today'])
         
 import sys

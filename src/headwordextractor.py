@@ -18,7 +18,7 @@ import framenetreader
 import paths
 
 class HeadWordExtractor(FNParsedReader):
-    """This object usess syntactic annotations of FrameNet to retrieve the headwords of    
+    """This object usess syntactic annotations of FrameNet to retrieve the headwords of
     arguments, and attributes them a WordNet class.
         
     :var word_classes: str Dict -- Retrieved WordNet classes of identified headwords.
@@ -113,8 +113,8 @@ class HeadWordExtractor(FNParsedReader):
                     if FNAllReader.sentence_match(self.current_sentence(), frame.sentence):
                         break
 
-            vn_frame.headwords = [  
-                self.headword(x.text) for x in frame.args if x.instanciated]    
+            vn_frame.headwords = [
+                self.headword(x.text) for x in frame.args if x.instanciated]
             
             old_filename = frame.filename
             previous_sentence = frame.sentence_id
@@ -150,7 +150,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
         extractor.load_file(filename+".conll")
 
-        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)    
+        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)
 
         for frame in reader.frames:
             extractor.select_sentence(frame.sentence_id)
@@ -211,7 +211,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
         extractor.load_file(filename+".conll")
 
-        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)    
+        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)
 
         frame = reader.frames[1]
         extractor.select_sentence(frame.sentence_id)
@@ -221,14 +221,14 @@ class HeadWordExtractorTest(unittest.TestCase):
         self.assertTrue(extractor.headword(frame.args[0].text) == "contribution")
 
 if __name__ == "__main__":
-    # The -s option makes the script display some examples of results 
+    # The -s option makes the script display some examples of results
     # or write them in a file using pickle
     options = getopt.getopt(sys.argv[1:], "s:", [])
     num_sample = 0
     filename = ""
     
     for opt, value in options[0]:
-        if opt == "-s": 
+        if opt == "-s":
             if len(options[1]) >= 1:
                 filename = options[1][0]
             num_sample = int(value)

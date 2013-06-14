@@ -35,7 +35,7 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher,
                 matcher = framematcher.FrameMatcher(found_vn_frame, matching_algorithm)
                 
                 for test_frame in verbnet_predicates[gold_fn_frame.predicate.lemma]:
-                    matcher.new_match(test_frame)   
+                    matcher.new_match(test_frame)
             except framematcher.EmptyFrameError:
                 pass
 
@@ -173,7 +173,7 @@ if __name__ == "__main__":
     else:
         diff_all(data1["frame_matching"], data2["frame_matching"])
     
-    print("\n\nDifferences after probability model:") 
+    print("\n\nDifferences after probability model:")
     if status:
         diff_status(data1["prob_model"], data2["prob_model"])
     else:

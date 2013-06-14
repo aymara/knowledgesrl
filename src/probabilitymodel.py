@@ -120,7 +120,7 @@ class ProbabilityModel:
         :type headword: str:
         param headword_class: The WordNet class of the headword
         :type headword_class: str:
-        """        
+        """
         if not slot_class == VerbnetFrame.slot_types["prep_object"]:
             prep = NO_PREP
 
@@ -217,11 +217,11 @@ class ProbabilityModel:
         elif backoff_level == 1:
             data1 = multi_get(self.data_bootstrap_p1,
                                 [slot_class, predicate], {})
-            data2 = multi_get(self.data_bootstrap_p2, 
+            data2 = multi_get(self.data_bootstrap_p2,
                                 [predicate, headword_class], {})
-            sum1 = multi_get(self.data_bootstrap_p1_sum, 
+            sum1 = multi_get(self.data_bootstrap_p1_sum,
                                 [slot_class, predicate], 0)
-            sum2 = multi_get(self.data_bootstrap_p2_sum, 
+            sum2 = multi_get(self.data_bootstrap_p2_sum,
                                 [predicate, headword_class], 0)
 
             # We still have the problem of verbs with multiple VN classes
@@ -231,7 +231,7 @@ class ProbabilityModel:
 
             data3 = defaultdict(int)
             for vn_class in predicate_classes:
-                d = multi_get(self.data_bootstrap_p3, 
+                d = multi_get(self.data_bootstrap_p3,
                                 [slot_class, prep, vn_class], {})
                 for role, n in d.items():
                     data3[role] += n
@@ -315,7 +315,7 @@ class ProbabilityModelTest(unittest.TestCase):
         self.assertEqual(model.best_role(
             set(["Agent", "Location"]), "PPOBJ", "to", "sleep", "slot"), "Location")
         
-        # The model should ignore the preposition, since this is a 'SUBJ' slot 
+        # The model should ignore the preposition, since this is a 'SUBJ' slot
         self.assertEqual(model.best_role(
             set(["Agent", "Theme"]), "SUBJ", "for", "sleep", "slot"), "Agent")
             

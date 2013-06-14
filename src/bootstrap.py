@@ -58,7 +58,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                     min_evidence[backoff_level]
                 )
 
-                if (role1 != None and 
+                if (role1 != None and
                     ((role2 != None and log(ratio) > log_ratio) or
                     log_ratio <= 1)
                 ):

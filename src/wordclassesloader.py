@@ -44,7 +44,7 @@ if handle_wordclasses:
         
         if hypernyms[0].name == entity_synset and len(hypernyms) > 1:
             wordclasses[word] = hypernyms[1].name
-        else: 
+        else:
             wordclasses[word] = hypernyms[0].name
 
     # Save output

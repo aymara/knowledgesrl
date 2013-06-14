@@ -70,7 +70,7 @@ if __name__ == "__main__":
             continue
 
         for test_frame in verbnet[predicate]:
-            matcher.new_match(test_frame)       
+            matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
         
     print("Loading evaluation frames...", file=sys.stderr)
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
         # Actual frame matching
         for test_frame in verbnet[predicate]:
-            matcher.new_match(test_frame)       
+            matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
 
     stats_quality(annotated_test_frames, vn_test_frames, role_matcher,
@@ -149,7 +149,7 @@ if __name__ == "__main__":
             for x,y in zip(vn_test_frames, copy_of_frames):
                 x.roles = [y.roles[i] for i in range(0, len(x.roles))]
 
-            # Instanciate the probability model and fill it with 
+            # Instanciate the probability model and fill it with
             # an appropriate amount of data
             model = probabilitymodel.ProbabilityModel()
             max_frame = int(n * len(annotated_frames) / 100)
@@ -165,7 +165,7 @@ if __name__ == "__main__":
                     if len(roles) == 1:
                         model.add_data(slot_type, next(iter(roles)), prep, predicate)
             
-            # Apply the probability model   
+            # Apply the probability model
             for frame in vn_test_frames:
                 for i in range(0, len(frame.roles)):
                     if len(frame.roles[i]) > 1:
@@ -185,13 +185,13 @@ if __name__ == "__main__":
             bad_model = stats_data["one_bad_role"] - bad_fm
             resolved_model = stats_data["one_role"] - resolved_fm
 
-            sum_cover += resolved_model / (identified - resolved_fm)        
+            sum_cover += resolved_model / (identified - resolved_fm)
             if good_model + bad_model > 0:
                 num_data_precision += 1
                 sum_precision += good_model / (good_model + bad_model)
 
             # Display the results if we are done with this %
-            if j + 1 == num_same: 
+            if j + 1 == num_same:
                 if num_data_precision == 0:
                     mean_precision = 0
                 else:

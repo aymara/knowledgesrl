@@ -52,7 +52,7 @@ class FulltextReader:
         if FulltextReader.core_arg_finder == None and core_args_only:
             print("Loading core arguments list for FrameNet frames...", file=sys.stderr)
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
-            FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)           
+            FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
         
         root = ET.ElementTree(file=filename)
 
@@ -107,7 +107,7 @@ class FulltextReader:
             # We need to do what follows to assign the same ID to
             # duplicate frames like
             # KBEval__Bandeis, "Sardar Patel faced imprisonment..."
-            for frame in self._parse_sentence(sentence): 
+            for frame in self._parse_sentence(sentence):
                 self.frames.append(frame)
                 if frame.sentence == last_sentence:
                     frame.sentence_id -= 1
@@ -145,7 +145,7 @@ class FulltextReader:
             annotated = (potential_frame.attrib["status"] != "UNANN")
             if not (annotated or self.keep_unannotated): continue
             frame = self._parse_frame(
-                text, words, potential_frame, annotated, predicate_starts)                 
+                text, words, potential_frame, annotated, predicate_starts)
             if frame and not frame.predicate.begin in already_annotated:
                 already_annotated.append(frame.predicate.begin)
                 yield frame
@@ -187,7 +187,7 @@ class FulltextReader:
         else:
             args = []
         
-        return Frame(sentence_text, predicate, args, words, frame_name, 
+        return Frame(sentence_text, predicate, args, words, frame_name,
             sentence_id=self.sentence_id, filename=self.filename,
             annotated=annotated)
     
@@ -330,7 +330,7 @@ class FulltextReader:
         predicate_start = int(predicate_data.attrib["start"])
         predicate_end = int(predicate_data.attrib["end"])
         return Predicate(
-            predicate_start, 
+            predicate_start,
             predicate_end,
             sentence_text[predicate_start:(predicate_end + 1)],
             predicate_lemma)
@@ -451,12 +451,12 @@ class FulltextReaderTest(unittest.TestCase):
         self.tested_frames = [
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
-                " a freer flow of food and medicine into Iraq .", 
+                " a freer flow of food and medicine into Iraq .",
                 Predicate(28, 32, "urges", "urge"),
                 [
                     Arg(34, 51, "the United Nations", "Addressee", True, "NP"),
                     Arg(53, 104,
-                        "to allow a freer flow of food and medicine into Iraq", 
+                        "to allow a freer flow of food and medicine into Iraq",
                         "Content", True, "VPto"),
                     Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True, "NP")
                 ],
@@ -473,10 +473,10 @@ class FulltextReaderTest(unittest.TestCase):
                 "Attempt_suasion" ),
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
-                " a freer flow of food and medicine into Iraq .", 
+                " a freer flow of food and medicine into Iraq .",
                  Predicate(56, 60, "allow", "allow"),
                  [
-                    Arg(62, 104, 
+                    Arg(62, 104,
                         "a freer flow of food and medicine into Iraq",
                         "Action", True, "NP"),
                     Arg(34, 51, "the United Nations", "Grantee", True, "NP"),
@@ -497,7 +497,7 @@ class FulltextReaderTest(unittest.TestCase):
                 "Grant_permission" ) ]
             
 
-    def test_global(self):        
+    def test_global(self):
         """Checks that no exception is raised and that
         no obvious errors occurs while parsing the whole corpus
         
@@ -512,7 +512,7 @@ class FulltextReaderTest(unittest.TestCase):
             for frame in reader.frames:
                 self.assertNotEqual(frame.predicate.text, "")
                 self.assertEqual(
-                    frame.predicate.text, 
+                    frame.predicate.text,
                     frame.sentence[frame.predicate.begin:(frame.predicate.end + 1)])
                     
                 arg_num += len(frame.args)
@@ -522,7 +522,7 @@ class FulltextReaderTest(unittest.TestCase):
                     self.assertTrue(arg.text != "" or arg.instanciated == False)
                     # Begin, end and text must be coherent
                     self.assertEqual(
-                        arg.text, 
+                        arg.text,
                         frame.sentence[arg.begin:(arg.end + 1)])
                     # The argument order must be correct (uninstanciated args last)
                     self.assertTrue(
@@ -533,8 +533,8 @@ class FulltextReaderTest(unittest.TestCase):
                             # no instanciated args allowed after an uninstanciated arg
                             (arg.instanciated == False or last_arg.instanciated == True)
                         )
-                    )  
-                    last_arg = arg   
+                    )
+                    last_arg = arg
                             
             # The total number of frames and args is correct
             good_frame_num, good_arg_num = self.expected_values[filename]

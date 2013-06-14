@@ -7,7 +7,7 @@ import unittest
 import verbnetprepclasses
 
 class Frame:
-    """A frame extracted from the corpus 
+    """A frame extracted from the corpus
     
     :var sentence: Sentence in which the frame appears
     :var predicate: Predicate object representing the frame's predicate
@@ -136,7 +136,7 @@ class VerbnetFrame:
         
         return elem[0].isupper() and elem != "V"
 
-    @staticmethod        
+    @staticmethod
     def _is_a_match(elem1, elem2):
         """Tell wether two elements can be considered as a match
         
@@ -150,7 +150,7 @@ class VerbnetFrame:
         return ((isinstance(elem2, list) and elem1 in elem2) or
             elem1 == elem2)
     
-    @staticmethod    
+    @staticmethod
     def build_from_frame(frame):
         """Build a VerbNet frame from a Frame object
         
@@ -212,7 +212,7 @@ class VerbnetFrame:
         
         
     
-    @staticmethod    
+    @staticmethod
     def _reduce_args(frame, structure, new_begin):
         """Replace the predicate and the argument of a frame by phrase type marks
         
@@ -239,19 +239,19 @@ class VerbnetFrame:
                 for word in argument.text.lower().split(" "):
                     if word in verbnetprepclasses.keywords:
                         prep = word
-                        break             
+                        break
                 if prep == "":
                     prep = argument.text.lower().split(" ")[0]
                          
                 added_length = 6 + len(prep)
                 structure = "{}| {} NP|{}".format(before, prep, after)
-            # Replace every "PPing" by "prep S_ING", 
+            # Replace every "PPing" by "prep S_ING",
             elif argument.phrase_type == "PPing":
                 prep = ""
                 for word in argument.text.lower().split(" "):
                     if word in verbnetprepclasses.keywords:
                         prep = word
-                        break             
+                        break
                 if prep == "":
                     prep = argument.text.lower().split(" ")[0]
                          
@@ -271,7 +271,7 @@ class VerbnetFrame:
                 added_length = 3 + len(argument.phrase_type)
                 structure = "{}| {}|{}".format(before, argument.phrase_type, after)
             
-            # Compute the new position of the predicate if we reduced an argument before it    
+            # Compute the new position of the predicate if we reduced an argument before it
             if argument.begin - new_begin < predicate_begin:
                 offset = (argument.end - argument.begin + 1) - added_length
                 predicate_begin -= offset
@@ -282,7 +282,7 @@ class VerbnetFrame:
          
         return structure
     
-    @staticmethod        
+    @staticmethod
     def _keep_only_keywords(sentence):
         """Keep only keywords and phrase type markers in the structure
         
@@ -300,7 +300,7 @@ class VerbnetFrame:
             if inside_tag and sentence[pos] == "|":
                 inside_tag = False
                 closing_tag = True
-            if inside_tag: 
+            if inside_tag:
                 result += sentence[pos]
                 pos += 1
                 continue
@@ -323,7 +323,7 @@ class VerbnetFrame:
             
         return result
     
-    @staticmethod    
+    @staticmethod
     def _strip_leftpart_keywords(sentence):
         result = []
         found_verb = False
@@ -336,7 +336,7 @@ class VerbnetFrame:
         
 class Arg:
 
-    """An argument of a frame 
+    """An argument of a frame
 
     :var begin: integer, position of the argument's first character in the sentence
     :var end: integer, position of the argument's last character in the sentence
@@ -393,7 +393,7 @@ class Arg:
     
 class Predicate:
 
-    """A frame's predicate 
+    """A frame's predicate
     
     :var begin: integer, position of the predicate's first character in the sentence
     :var end: integer, position of the predicate's last character in the sentence
@@ -449,12 +449,12 @@ class VerbnetFrameTest(unittest.TestCase):
         tested_frames = [
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
-                " a freer flow of food and medicine into Iraq .", 
+                " a freer flow of food and medicine into Iraq .",
                 Predicate(28, 32, "urges", "urge"),
                 [
                     Arg(34, 51, "the United Nations", "Addressee", True, "NP"),
                     Arg(53, 104,
-                        "to allow a freer flow of food and medicine into Iraq", 
+                        "to allow a freer flow of food and medicine into Iraq",
                         "Content", True, "VPto"),
                     Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True, "NP")
                 ],
@@ -471,10 +471,10 @@ class VerbnetFrameTest(unittest.TestCase):
                 "Attempt_suasion" ),
             Frame(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
-                " a freer flow of food and medicine into Iraq .", 
+                " a freer flow of food and medicine into Iraq .",
                  Predicate(56, 60, "allow", "allow"),
                  [
-                    Arg(62, 104, 
+                    Arg(62, 104,
                         "a freer flow of food and medicine into Iraq",
                         "Action", True, "NP"),
                     Arg(34, 51, "the United Nations", "Grantee", True, "NP"),
@@ -493,7 +493,7 @@ class VerbnetFrameTest(unittest.TestCase):
                  "Grant_permission" ) ]
         
         vn_frames = [
-            VerbnetFrame(["NP", "V", "NP", "to", "S"], 
+            VerbnetFrame(["NP", "V", "NP", "to", "S"],
                 [None, None, None], predicate="urge"),
             VerbnetFrame(["NP", "V", "NP"], [None, None], predicate="allow"),
             VerbnetFrame(

@@ -60,7 +60,7 @@ class FrameMatcher():
         self.best_score = 0
         self.best_frames = []
         self.num_new_match = 0
-        self.possible_roles = [{} for x in range(self.frame.num_slots)] 
+        self.possible_roles = [{} for x in range(self.frame.num_slots)]
         self.algo = algo
 
     def new_match(self, test_frame):
@@ -71,7 +71,7 @@ class FrameMatcher():
             
         """
         self.num_new_match += 1
-        distrib = [None for x in range(self.frame.num_slots)] 
+        distrib = [None for x in range(self.frame.num_slots)]
         num_match = 0
 
         if self.algo == "baseline":
@@ -99,7 +99,7 @@ class FrameMatcher():
                         continue
                     if (slot_type == VerbnetFrame.slot_types["prep_object"] and
                         not VerbnetFrame._is_a_match(
-                            self.frame.slot_preps[slot_pos], 
+                            self.frame.slot_preps[slot_pos],
                             test_slot_data["prep"])
                     ):
                         continue
@@ -136,7 +136,7 @@ class FrameMatcher():
                 elem1 = self.frame.structure[i]
                 elem2 = test_frame.structure[j]
 
-                if VerbnetFrame._is_a_match(elem1, elem2): 
+                if VerbnetFrame._is_a_match(elem1, elem2):
                     if VerbnetFrame._is_a_slot(elem1):
                         num_match += 1
                         # test_frame.roles can be too short. This will for instance
@@ -148,17 +148,17 @@ class FrameMatcher():
                 elif i < index_v_1 or j < index_v_2:
                     # If we have not encountered the verb yet, we continue the matching
                     # with everything that follows the verb
-                    # This is for instance to prevent a "NP NP V" construct 
+                    # This is for instance to prevent a "NP NP V" construct
                     # from interrupting the matching early
                     i, j = index_v_1, index_v_2
                     slot_1, slot_2 = num_slots_before_v_1, num_slots_before_v_2
                 else: break
                    
                 i, j = i + 1, j + 1
-        elif self.algo == "stop_on_fail":     
+        elif self.algo == "stop_on_fail":
             """ Former less permissive algorithm """
             for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
-                if VerbnetFrame._is_a_match(elem1, elem2): 
+                if VerbnetFrame._is_a_match(elem1, elem2):
                     if VerbnetFrame._is_a_slot(elem1):
                         num_match += 1
                         if num_match - 1 < len(test_frame.roles):
@@ -169,14 +169,14 @@ class FrameMatcher():
 
         ratio_1 = num_match / self.frame.num_slots
         if test_frame.num_slots == 0:
-            ratio_2 = 1          
+            ratio_2 = 1
         else:
             ratio_2 = num_match / test_frame.num_slots
 
         score = int(100 * (ratio_1 + ratio_2))
 
         if score > self.best_score:
-            self.possible_roles = [{} for x in range(self.frame.num_slots)] 
+            self.possible_roles = [{} for x in range(self.frame.num_slots)]
             self.best_frames = []
         if score >= self.best_score:
             for slot, role in enumerate(distrib):

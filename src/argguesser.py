@@ -31,7 +31,7 @@ class ArgGuesser(FNParsedReader):
     ]
     
     non_core_deprels = [
-    "DIR", "EXT", "LOC", 
+    "DIR", "EXT", "LOC",
     "MNR", "PRP", "PUT", "TMP"
     ]
         
@@ -88,7 +88,7 @@ class ArgGuesser(FNParsedReader):
         print()
 
     def _extract_verbs(self):
-        """ Computes the set of every verbs in the corpus 
+        """ Computes the set of every verbs in the corpus
         
         :returns: str Set -- The set of every verbal form encountered in the corpus
         
@@ -111,7 +111,7 @@ class ArgGuesser(FNParsedReader):
             print(".", file=sys.stderr, end="", flush=True)
         print()
              
-        return result          
+        return result
 
     def _compute_base_forms(self):
         """ Use the python2 script that can talk to nltk to compute the infinitive forms """
@@ -137,7 +137,7 @@ class ArgGuesser(FNParsedReader):
             sentence_id += 1
     
     def _handle_sentence(self):
-        """ Extracts frames from one sentence and iterate over them """            
+        """ Extracts frames from one sentence and iterate over them """
         found_one_frame = False
         for node in self.tree:
             # For every verb, looks for its infinitive form in verbnet, and
@@ -215,7 +215,7 @@ class ArgGuesser(FNParsedReader):
             if self._is_arg(child, predicate_node):
                 result.append(self._nodeToArg(child, predicate_node))
             elif not child.pos in self.predicate_pos:
-                result += self._find_args_rec(predicate_node, child) 
+                result += self._find_args_rec(predicate_node, child)
         return result
     
     def _overlap(self, node1, node2):
@@ -246,7 +246,7 @@ class ArgGuesser(FNParsedReader):
         return Arg(
             begin=begin,
             end=end,
-            text=text, 
+            text=text,
             # If the argument isn't continuous, text will not be
             # a substring of frame.sentence
             role="",
@@ -308,7 +308,7 @@ class ArgGuesserTest(unittest.TestCase):
                 self.assertTrue(arg.text != "")
                 #self.assertEqual(frame.sentence[arg.begin:arg.end + 1], arg.text)
             num_args += len(frame.args)
-        print(len(frames))       
+        print(len(frames))
         print(num_args)
             
     def test_1(self):
@@ -326,7 +326,7 @@ class ArgGuesserTest(unittest.TestCase):
         ]
         
         verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).verbs
-        arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet) 
+        arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet)
 
         self.assertEqual(arg_finder._find_args(tree), args)
 if __name__ == "__main__":

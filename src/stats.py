@@ -13,7 +13,7 @@ stats_data = {
     # Number of annotated verbal frames which have a predicate in VerbNet
     "frames_with_predicate_in_verbnet":0,
     # Number of frames for which frame-matching is possible (at least one slot)
-    "frames_mapped":0, 
+    "frames_mapped":0,
     # Number of args belonging to an annotated verbal frame in the corpus
     "args":0,
     # Number of instanciated args
@@ -28,17 +28,17 @@ stats_data = {
     # No role attributed
     "no_role":0,
     # One role attributed
-    "one_role":0, 
+    "one_role":0,
     # One role attributed, annotated
     "one_role_annotated":0,
     # One role attributed, annotated, role mapping possible, correct role
-    "one_correct_role":0, 
+    "one_correct_role":0,
     # One role attributed, annotated, role mapping possible, incorrect role
     "one_bad_role":0,
     # Several role attributed, annotated
     "several_roles_annotated":0,
     # Several roles attributed, annotated, role mapping ok, correct role in the list
-    "several_roles_ok":0, 
+    "several_roles_ok":0,
     # Several roles attributed, annotated, role mapping ok, correct role not in the list
     "several_roles_bad":0,
     # Role mapping returned several possible VerbNet roles
@@ -58,7 +58,7 @@ stats_data = {
     # Number of incorrect (no annotations) extracted frames
     "frame_extracted_bad":0,
     # Number of non-extracted annotated frames
-    "frame_not_extracted":0,    
+    "frame_not_extracted":0,
     # Number of non-extracted annotated frames which do not have a predicate in VerbNet
     "frame_not_extracted_not_verbnet":0,
     # Number of correct extracted arguments
@@ -208,7 +208,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
     if gold_args:
         stats_data["args_annotated_mapping_ok"] = 0
     
-    for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):    
+    for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
         for i, slot in enumerate(found_vn_frame.roles):
             stats_data["attributed_roles"] += len(slot)
             if len(slot) == 0:

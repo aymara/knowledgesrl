@@ -75,12 +75,12 @@ def display_errors_num():
     )
 
 def display_error_details():
-    #for data in errors["vn_parsing"]: print(data) 
-    #for data in errors["missing_predicate_data"]: print(data) 
-    #for data in errors["unannotated_layer"]: print(data) 
-    #for data in errors["predicate_was_arg"]: print(data) 
-    #for data in errors["missing_phrase_type"]: print(data) 
-    #for data in errors["vn_missing"]: print(data)          
+    #for data in errors["vn_parsing"]: print(data)
+    #for data in errors["missing_predicate_data"]: print(data)
+    #for data in errors["unannotated_layer"]: print(data)
+    #for data in errors["predicate_was_arg"]: print(data)
+    #for data in errors["missing_phrase_type"]: print(data)
+    #for data in errors["vn_missing"]: print(data)
     #for data in errors["frame_without_slot"]: print(data)
     #for data in errors["impossible_role_matching"]: print(data)
     #for data in errors["ambiguous_role"]: print(data)

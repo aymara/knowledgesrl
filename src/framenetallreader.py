@@ -162,7 +162,7 @@ class FNAllReader:
             return True
         
         # The previous test might fail for the two "same" sentences because of
-        # minor differences between the two corpora, or because of parsing errors 
+        # minor differences between the two corpora, or because of parsing errors
         # that change word order
         words_1 = sentence_1.split(" ")
         words_2 = sentence_2.split(" ")

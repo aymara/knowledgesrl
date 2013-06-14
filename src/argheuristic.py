@@ -29,7 +29,7 @@ class InvalidRelationError(Exception):
 
 class Relation:
     """A syntactic relation between one node and its neighbour that is closer
-    to the predicate. This can be an upward dependency if the node is the 
+    to the predicate. This can be an upward dependency if the node is the
     governor of the relation or a downward dependency in the other case.
     
     :var name: str -- The name of the relation
@@ -301,7 +301,7 @@ class ArgHeuristicTest(unittest.TestCase):
             ")))"
         )
         
-        relation_tree = build_relation_tree(self.initial_tree.children[1]) 
+        relation_tree = build_relation_tree(self.initial_tree.children[1])
                
         self.assertEqual(str(relation_tree), expected)
 

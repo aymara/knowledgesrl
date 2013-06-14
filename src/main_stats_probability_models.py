@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
         # Actual frame matching
         for test_frame in verbnet[predicate]:
-            matcher.new_match(test_frame)       
+            matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
         
         # Update probability model
@@ -85,7 +85,7 @@ if __name__ == "__main__":
                 model.add_data(slot_type, next(iter(roles)), prep, predicate)
 
         
-    print("Frame matching stats...", file=sys.stderr) 
+    print("Frame matching stats...", file=sys.stderr)
 
     stats_quality(annotated_frames, vn_frames, role_matcher,
         verbnet_classes, gold_args)
