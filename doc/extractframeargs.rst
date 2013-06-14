@@ -1,59 +1,55 @@
-Frames and arguments extractions
-================================
+Frames and arguments extractions ================================
 
 Our aim is to be able to create a SRL program that takes raw text as input.
 This means that we need to find a way to extract the verbal frames and
 arguments from a text for which we only have the syntactic annotations of the
 MST parser.
 
-Frame extraction
-----------------
+Frame extraction ----------------
 
-Verb extraction
-```````````````
+Verb extraction ```````````````
 
 As always, we are only interested in verbal frames which predicate is in
-VerbNet.
-Finding verbs is not very complex, since they are the words to which our
-parser attribute one of the following part-of-speech:
-  * *VB*: base form (as 'eat' in 'He should eat')
-  * *VBD*: past tense
-  * *VBG*: gerund
-  * *VBN*: past participle
-  * *VBP*: present tense
-  * *VBZ*: third personn of present
-  * *MD*: modal verb
+VerbNet.  Finding verbs is not very complex, since they are the words to which
+our parser attribute one of the following part-of-speech:
+  * *VB*: base form (as 'eat' in 'He should eat') *VBD*: past tense *VBG*:
+  * gerund *VBN*: past participle *VBP*: present tense *VBZ*: third personn of
+  * present *MD*: modal verb
 
 Note : these tags are different from those of the fulltext annotations. The
-reason for this is unclear, and this only concerns verbs part-of-speech. As
-we are not currently using a part-of-speech tagger, our parser takes those POS
+reason for this is unclear, and this only concerns verbs part-of-speech. As we
+are not currently using a part-of-speech tagger, our parser takes those POS
 annotation as input, after conversion of verbal POS into the more standard tags
 listed above, which are those which were used in the parser training data.
 
 Parsing errors can already introduce some mistakes at this point, since our
 parser can fail at distinguishing some verbs from nouns.
 
-We do not want to keep every of those extracted verbs. Auxiliary verbs (as 
+We do not want to keep every of those extracted verbs. Auxiliary verbs (as
 "has" and "been"' in "He has been working") must be discarded. We can do this
-by discarding every occurence that belongs to a small list of verbs (like 
+by discarding every occurence that belongs to a small list of verbs (like
 "have", "be" or "do"), but we might lose some intersting occurence of "have".
-Another solution to identify auxiliary verbs is to look for verbs which have
-at least one child bound to them by a *VC* (Verb Chain) relation and which are 
-not modal verbs (because construction as "I can eat an apple" seem to result in
-two frames in the FrameNet fulltext annotations, so we should not discard "can"
-in this sentence).
+Another solution to identify auxiliary verbs is to look for verbs which have at
+least one child bound to them by a *VC* (Verb Chain) relation and which are not
+modal verbs (because construction as "I can eat an apple" seem to result in two
+frames in the FrameNet fulltext annotations, so we should not discard "can" in
+this sentence).
 
-We also need to determine what to do with isolated gerunds and past participles.
-They tend to be annotated in FrameNet, but we are not sure that they
-are compatible with the frame structures that exist in VerbNet.
+We also need to determine what to do with isolated gerunds and past
+participles.  They tend to be annotated in FrameNet, but we are not sure that
+they are compatible with the frame structures that exist in VerbNet.
 
-Infinitive form
-```````````````
+Infinitive form ```````````````
 
-In order to find the VerbNet entries associated with a verb, we need to find its
-infinitive form. Our solution for that is to use WordNet, and more specifically
-the *morphy* method of *nltk.corpus.wordnet*. This is done in a separate python2
-script, since *nltk* is not compatible with python3 yet.
+In order to find the VerbNet entries associated with a verb, we need to find
+its infinitive form. Our solution for that is to use WordNet, and more
+specifically the *morphy* method of *nltk.corpus.wordnet*. This is done in a
+separate python2 script, since *nltk* is not compatible with python3 yet.
+
+Note: the relation between could and can is added manually since Morphy
+doesn't detect it. We would like to remove "can" since it's a modal not covered
+by VerbNet, but it also means to fire ("She canned her secretary") and to
+pocket, which are in VerbNet.
 
 Arguments extraction
 --------------------
