@@ -11,7 +11,7 @@ if __name__ == "__main__":
     import framenetallreader
     from framestructure import *
     from stats import *
-    from options import *
+    import options
     import verbnetreader
     import framematcher
     import rolematcher
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     fn_reader = framenetallreader.FNAllReader(
             paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED,
-            core_args_only=core_args_only)
+            core_args_only=options.core_args_only)
             
     for frame in fn_reader.frames:
         stats_data["args"] += len(frame.args)
@@ -67,7 +67,7 @@ if __name__ == "__main__":
             role_matcher, verbnet_classes)
      
         try:
-            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
+            matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     print("Frame matching stats...", file=sys.stderr)
 
     stats_quality(annotated_frames, vn_frames, role_matcher,
-        verbnet_classes, gold_args)
+        verbnet_classes, options.gold_args)
 
     good_fm = stats_data["one_correct_role"]
     bad_fm = stats_data["one_bad_role"]
@@ -111,7 +111,7 @@ if __name__ == "__main__":
                         if new_role != None:
                             frame.roles[i] = set([new_role])
         stats_quality(annotated_frames, vn_frames, role_matcher,
-            verbnet_classes, gold_args)
+            verbnet_classes, options.gold_args)
 
         good = stats_data["one_correct_role"]
         bad = stats_data["one_bad_role"]
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     bootstrap_algorithm(vn_frames, model, hw_extractor, verbnet_classes)
 
     stats_quality(annotated_frames, vn_frames, role_matcher,
-        verbnet_classes, gold_args)
+        verbnet_classes, options.gold_args)
     data = stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, False)
     precision, cover, precision_all, cover_all = data
         

@@ -6,7 +6,7 @@
 import verbnetreader
 from framenetparsedreader import FNParsedReader
 from framestructure import *
-from options import heuristic_rules
+import options
 from conllreader import SyntacticTreeBuilder
 from verbnetprepclasses import all_preps
 from argheuristic import find_args
@@ -156,7 +156,7 @@ class ArgGuesser(FNParsedReader):
                     node.begin_head, node.begin_head + len(node.word) - 1,
                     node.word, node.lemma)
                 
-                if heuristic_rules:
+                if options.heuristic_rules:
                     args = [self._nodeToArg(x, node) for x in find_args(node)]
                 else:
                     args = self._find_args(node)

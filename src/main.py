@@ -10,7 +10,7 @@ from framestructure import *
 from stats import *
 from errorslog import *
 from bootstrap import bootstrap_algorithm
-from options import *
+import options
 import argguesser
 import roleextractor
 import verbnetreader
@@ -37,11 +37,11 @@ if __name__ == "__main__":
     annotated_frames = []
     vn_frames = []
    
-    if gold_args:
+    if options.gold_args:
         print("Loading frames...", file=sys.stderr)
         fn_reader = framenetallreader.FNAllReader(
             paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED,
-            core_args_only=core_args_only)
+            core_args_only=options.core_args_only)
 
         for frame in fn_reader.frames:
             stats_data["args"] += len(frame.args)
@@ -81,7 +81,7 @@ if __name__ == "__main__":
      
         # Find FrameNet frame <-> VerbNet class mapping
         try:
-            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
+            matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue
@@ -101,19 +101,19 @@ if __name__ == "__main__":
                 if len(roles) == 1:
                     model.add_data(slot_type, next(iter(roles)), prep, predicate)
                     
-        if debug and set() in frame.roles:
+        if options.debug and set() in frame.roles:
             log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
     
-    if dump:
+    if options.dump:
         dumper.add_data_frame_matching(annotated_frames, vn_frames,
             role_matcher, verbnet_classes,
-            verbnet_predicates, matching_algorithm)
-    else:
+            verbnet_predicates, options.matching_algorithm)
+    else:       
         print("Frame matching stats...", file=sys.stderr)
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
         display_stats(gold_args)
 
-    if bootstrap:
+    if options.bootstrap:
         hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
 
         print("Extracting arguments headwords...", file=sys.stderr)
@@ -131,18 +131,18 @@ if __name__ == "__main__":
                 if len(frame.roles[i]) > 1:
                     new_role = model.best_role(
                         frame.roles[i], frame.slot_types[i], frame.slot_preps[i],
-                        frame.predicate, probability_model)
+                        frame.predicate, options.probability_model)
                     if new_role != None:
                         frame.roles[i] = set([new_role])
 
-    if dump:
+    if options.dump:
         dumper.add_data_prob_model(annotated_frames, vn_frames, role_matcher, verbnet_classes)
-        dumper.dump(dump_file)
+        dumper.dump(options.dump_file)
     else:
         print("Final stats...", file=sys.stderr)
 
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
         display_stats(gold_args)
 
-    if debug: display_debug(n_debug)
+    if options.debug: display_debug(n_debug)
 

@@ -12,7 +12,7 @@ if __name__ == "__main__":
     import framenetallreader
     from framestructure import *
     from stats import *
-    from options import *
+    import options
     import verbnetreader
     import framematcher
     import rolematcher
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     fn_reader = framenetallreader.FNAllReader(
             corpus_path, paths.FRAMENET_PARSED,
-            core_args_only=core_args_only)
+            core_args_only=options.core_args_only)
 
     for frame in fn_reader.frames:
         if not frame.predicate.lemma in verbnet: continue
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         predicate = good_frame.predicate.lemma
 
         try:
-            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
+            matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
         except framematcher.EmptyFrameError:
             continue
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     fn_reader = framenetallreader.FNAllReader(
             test_corpus_path, paths.FRAMENET_PARSED,
-            core_args_only=core_args_only)
+            core_args_only=options.core_args_only)
 
     for frame in fn_reader.frames:
         stats_data["args"] += len(frame.args)
@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
         # Find FrameNet frame <-> VerbNet class mapping
         try:
-            matcher = framematcher.FrameMatcher(frame, matching_algorithm)
+            matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
         except framematcher.EmptyFrameError:
             continue
         stats_data["frames_mapped"] += 1
@@ -121,7 +121,7 @@ if __name__ == "__main__":
         frame.roles = matcher.possible_distribs()
 
     stats_quality(annotated_test_frames, vn_test_frames, role_matcher,
-        verbnet_classes, gold_args)
+        verbnet_classes, options.gold_args)
 
     # We need to remember some parameters to evaluate
     # the probability model performances
@@ -176,7 +176,7 @@ if __name__ == "__main__":
                             frame.roles[i] = set([new_role])
 
             stats_quality(annotated_test_frames, vn_test_frames,
-                role_matcher, verbnet_classes, gold_args)
+                role_matcher, verbnet_classes, options.gold_args)
 
             # Update the results according to the quality statistics
             good = stats_data["one_correct_role"]
