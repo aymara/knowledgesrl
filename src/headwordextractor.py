@@ -112,11 +112,6 @@ class HeadWordExtractor(FNParsedReader):
         return node.word, node.pos
   
 class HeadWordExtractorTest(unittest.TestCase):
-    def comp(self, original, parsed):
-        return all(
-            [x == y or y == "<num>" for x,y in zip(original.split(), parsed.split())]
-        )
-        
     bad_files = [
             "ANC__110CYL070.xml", "C-4__C-4Text.xml",
             "NTI__BWTutorial_chapter1.xml", "NTI__LibyaCountry1.xml",
