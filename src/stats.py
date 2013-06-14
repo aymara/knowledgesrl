@@ -94,8 +94,11 @@ def display_stats(gold_args):
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
     
     good_slots = s["one_correct_role"] + s["several_roles_ok"]
+
+    # Currently not displayed, but could be useful
     precision = good_slots / max(s["attributed_roles_mapping_ok"], 1)
     recall = good_slots / max(s["args_annotated_mapping_ok"], 1)
+
     accuracy = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
     
     extrapolated_one_good = (s["one_correct_role"] *
@@ -140,8 +143,8 @@ def display_stats(gold_args):
         "\n{} cases where we cannot verify the labeling:\n"
         "\t{} because no role mapping was found\n"
         "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
-        "\nOver VerbNet when role mapping applies: {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
         "\nOverall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
+        "\nOverall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n"
         "\n".format(
             s["frames_mapped"],
 
@@ -154,11 +157,11 @@ def display_stats(gold_args):
 
             s["impossible_mapping"], s["ambiguous_mapping"],
 
-            precision, recall, hmean(precision, recall), accuracy,
-            
             extrapolated_precision, extrapolated_recall,
             hmean(extrapolated_precision, extrapolated_recall),
-            extrapolated_accuracy)
+            extrapolated_accuracy,
+
+            hmean(precision, recall), accuracy)
     )
     
 def display_stats_ambiguous_mapping():
