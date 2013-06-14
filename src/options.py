@@ -14,6 +14,7 @@ bootstrap = False
 probability_model = "predicate_slot"
 dump = False
 dump_file = ""
+passive = True
 
 options = getopt.getopt(sys.argv[1:], "d:",
     ["fmatching-algo=", "add-non-core-args", "help",
@@ -23,7 +24,7 @@ display_syntax = False
 syntax_str = ("main.py [-d num_sample] [--fmatching-algo=algo] "
               "[--model=probability_model] [--add-non-core-args] "
               "[--bootstrap] [--no-gold-args [--heuristic-rules]] "
-              "[--dump filename] [--help]")
+              "[--dump filename] [--no-passive] [--help]")
 
 for opt,value in options[0]:
     if opt == "-d":
@@ -51,6 +52,8 @@ for opt,value in options[0]:
             dump_file = options[1][0]
         else:
             display_syntax = True
+    if opt == "--no-passive":
+        passive = False 
     if opt == "--help":
         display_syntax = True
             

@@ -90,7 +90,13 @@ if __name__ == "__main__":
 
         # Actual frame matching
         for test_frame in verbnet_predicates[predicate]:
-            matcher.new_match(test_frame)
+            if options.passive and good_frame.passive:
+                try:
+                    for passivized_frame in test_frame.passivize():
+                        matcher.new_match(passivized_frame)
+                except: print(good_frame.sentence)
+            else:
+                matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
         
         # Update probability model
