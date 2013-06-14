@@ -81,7 +81,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
         len(extracted_frames) - stats_data["frame_extracted_good"])
 
     # Discard every frame for which there was no match
-    return [x for x in extracted_frames if not x.frame_name == ""]
+    return extracted_frames
 
 def correct_num_tags(extracted_frame, original_sentence):
     """ Replace <num> tags by their real equivalents

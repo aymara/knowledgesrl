@@ -227,6 +227,14 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
             elif gold_fn_frame.args[i].annotated:
                 stats_data["several_roles_annotated"] += 1
             
+            # Penalize slots extracted from frames that do not exist
+            # or associated with arguments that are not annotated
+            # when they have at least one possible roles
+            if not gold_fn_frame.args[i].annotated:
+                if len(slot) == 1: stats_data["one_bad_role"] += 1
+                elif len(slot) >= 1: stats_data["several_roles_bad"] += 1
+                stats_data["attributed_roles_mapping_ok"] += len(slot)
+                continue
             try:
                 possible_roles = role_matcher.possible_vn_roles(
                     gold_fn_frame.args[i].role,
