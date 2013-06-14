@@ -94,7 +94,9 @@ if __name__ == "__main__":
                 try:
                     for passivized_frame in test_frame.passivize():
                         matcher.new_match(passivized_frame)
-                except: print(good_frame.sentence)
+                except:
+                    #print(good_frame.sentence)
+                    pass
             else:
                 matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
@@ -116,8 +118,8 @@ if __name__ == "__main__":
             verbnet_predicates, options.matching_algorithm)
     else:       
         print("Frame matching stats...", file=sys.stderr)
-        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
-        display_stats(gold_args)
+        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
+        display_stats(options.gold_args)
 
     if options.bootstrap:
         hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
@@ -147,8 +149,8 @@ if __name__ == "__main__":
     else:
         print("Final stats...", file=sys.stderr)
 
-        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args)
-        display_stats(gold_args)
+        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
+        display_stats(options.gold_args)
 
     if options.debug: display_debug(n_debug)
 

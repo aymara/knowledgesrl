@@ -17,7 +17,7 @@ dump_file = ""
 passive = True
 
 options = getopt.getopt(sys.argv[1:], "d:",
-    ["fmatching-algo=", "add-non-core-args", "help",
+    ["baseline", "fmatching-algo=", "add-non-core-args", "help",
      "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump"])
 
 display_syntax = False
