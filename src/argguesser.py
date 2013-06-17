@@ -171,13 +171,6 @@ class ArgGuesser(FNParsedReader):
                     sentence_id_fn_parsed=self.sentence_id - 1,
                     filename=self.filename.replace(".conll", ".xml")
                 )
-        #FIXME :
-        # if no frame was found, we have to yield a dummy frame
-        # to remember that this sentence was in framenet_parsed
-        if not found_one_frame:
-            yield Frame(self.tree.flat(), Predicate(-10, -10, "", ""),
-                [], [], "", sentence_id=self.sentence_id,
-                filename=self.filename.replace(".conll", ".xml"))
     
     def _find_args(self, node):
         """Returns every arguments of a given node.
