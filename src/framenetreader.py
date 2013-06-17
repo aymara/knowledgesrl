@@ -39,7 +39,8 @@ class FulltextReader:
     """
     
     core_arg_finder = None
-    predicate_pos = ["md", "VV", "VVD", "VVG", "VVN", "VVP", "VVZ"]
+    predicate_pos = ["md", "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
+    "VH", "VHD", "VHG", "VHN", "VHP", "VHZ"]
     
     def __init__(self, filename, core_args_only = False, keep_unannotated = False):
         """Read a file and update the collected frames list.
