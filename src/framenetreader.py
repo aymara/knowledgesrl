@@ -243,7 +243,7 @@ class FulltextReader:
                             is_relative = True
                             add = False
                         if new_arg.text in rel_pronouns:
-                            is_relative = False
+                            is_relative = True
                             args.remove(arg)
                 
                 if add:
