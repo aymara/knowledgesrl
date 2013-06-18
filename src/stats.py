@@ -27,6 +27,8 @@ stats_data = {
     
     # No role attributed
     "no_role":0,
+    # No role attributed, annotated
+    "no_role_annotated":0,
     # One role attributed
     "one_role":0,
     # One role attributed, annotated
@@ -135,7 +137,7 @@ def display_stats(gold_args):
         "Frames mapped: {} frames\n"
         
         "\nFrame matching:\n"
-        "{} args not matched\n"
+        "{} args not matched ({} not annotated)\n"
         "{} args with exactly one possible role\n"
         "\t{:.2%} correct out of {} evaluated\n"
         "{} args with multiple possible roles\n"
@@ -148,7 +150,7 @@ def display_stats(gold_args):
         "\n".format(
             s["frames_mapped"],
 
-            s["no_role"],
+            s["no_role"], s["no_role"] - s["no_role_annotated"],
             s["one_role"],
             s["one_correct_role"] / max(unique_role_evaluated, 1), unique_role_evaluated,
             several_roles,
@@ -198,6 +200,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
     stats_data["several_roles_bad"] = 0
     stats_data["one_role"] = 0
     stats_data["no_role"] = 0
+    stats_data["no_role_annotated"] = 0
     stats_data["impossible_mapping"] = 0
     stats_data["ambiguous_mapping"] = 0
     stats_data["one_role_annotated"] = 0
@@ -221,6 +224,8 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
             stats_data["attributed_roles"] += len(slot)
             if len(slot) == 0:
                 stats_data["no_role"] += 1
+                if gold_fn_frame.args[i].annotated:
+                    stats_data["no_role_annotated"] += 1
             elif len(slot) == 1:
                 stats_data["one_role"] += 1
                 if gold_fn_frame.args[i].annotated:
