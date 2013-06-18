@@ -196,7 +196,7 @@ def find_args(predicate_node):
     rule4(tree)
     rule5(tree)
     rule6(tree)
-    rule7(tree)
+    #rule7(tree)
     rule8(tree)
     
     # At this point, all nodes are marked as "KEPT" or "DISCARDED"
