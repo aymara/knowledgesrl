@@ -36,7 +36,7 @@ external_lexemes = {
     "how", "if", "that", "when", "where", "whether"
 }
 
-sub_pronouns = {
+rel_pronouns = {
     "how", "that", "when", "where", "whether", "which",
     "who", "whom", "whose", "why"}
 

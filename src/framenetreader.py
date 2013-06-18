@@ -26,7 +26,7 @@ import os
 import sys
 from framestructure import *
 from collections import Counter
-from verbnetprepclasses import sub_pronouns
+from verbnetprepclasses import rel_pronouns
 import framenetcoreargs
 import paths
 
@@ -183,14 +183,14 @@ class FulltextReader:
             return
         
         if annotated:
-            args = self._build_args_list(
+            args, relative = self._build_args_list(
                 sentence_text, frame, frame_name, predicate)
         else:
-            args = []
+            args, relative = [], False
         
         return Frame(sentence_text, predicate, args, words, frame_name,
             sentence_id=self.sentence_id, filename=self.filename,
-            arg_annotated=annotated)
+            arg_annotated=annotated, relative=relative)
     
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.
@@ -203,12 +203,13 @@ class FulltextReader:
         :type frame_name: str.
         :param predicate: The predicate of the frame
         :type predicate: Predicate
-        :returns: Argument list -- the built argument list
+        :returns: Argument list, Boolean -- the built argument list, whether this is a relative clause
         """
         
         args = []
         rank = 1
         stop = False
+        is_relative = False
         while not stop:
             arg_search_str = "{}layer[@name='FE'][@rank='{}']/*".format(
                 self._xmlns, rank)
@@ -238,16 +239,19 @@ class FulltextReader:
                 for arg in args[:]:
                     if (arg.role == new_arg.role and
                         arg.phrase_type == new_arg.phrase_type):
-                        if arg.text in sub_pronouns:
+                        if arg.text in rel_pronouns:
+                            is_relative = True
                             add = False
-                        if new_arg.text in sub_pronouns:
+                        if new_arg.text in rel_pronouns:
+                            is_relative = False
                             args.remove(arg)
                 
                 if add:
                     args.append(new_arg)
                 
             rank += 1
-        return args
+
+        return args, is_relative
     
     def _build_arg(self, sentence_text, frame, predicate, arg, phrase_data, rank):
         # Checks wether the argument is instanciated
