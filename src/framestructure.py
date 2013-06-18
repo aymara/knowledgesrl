@@ -220,7 +220,22 @@ class VerbnetFrame:
 
         return passivizedframes
         
-        
+    def generate_relatives(self):
+    
+        relatives = []
+        i_slot = 0
+        for i, element in enumerate(self.structure):
+            if VerbnetFrame._is_a_slot(element):
+                j = i - 1
+                while j >= 0 and self.structure[j][0].islower(): j -= 1
+                relatives.append(VerbnetFrame(
+                    self.structure[j+1:i+1]+self.structure[0:j+1]+self.structure[i+1:],
+                    [self.roles[i_slot]]+self.roles[0:i_slot]+self.roles[i_slot+1:],
+                    vnclass=self.vnclass
+                ))
+                i_slot += 1
+    
+        return relatives
     
     @staticmethod
     def _reduce_args(frame, structure, new_begin):
@@ -550,7 +565,23 @@ class VerbnetFrameTest(unittest.TestCase):
         self.assertEqual(vn_frame_ditransitive.passivize(), [
             VerbnetFrame(["NP", "V"], ["Theme"]),
             VerbnetFrame(["NP", "V", "at", "NP"], ["Theme", "Value"])])
+    
+    def test_relatives(self):
+        test_frame = VerbnetFrame(
+        ["NP", "V", "NP", "for", "NP"],
+        ["Agent", "Theme", "Beneficiary"])
         
+        self.assertEqual(test_frame.generate_relatives(), [
+            VerbnetFrame(
+            ["NP", "V", "NP", "for", "NP"],
+            ["Agent", "Theme", "Beneficiary"]),
+            VerbnetFrame(
+            ["NP", "NP", "V", "for", "NP"],
+            ["Theme", "Agent", "Beneficiary"]),
+            VerbnetFrame(
+            ["for", "NP", "NP", "V", "NP"],
+            ["Beneficiary", "Agent", "Theme"])
+        ])
         
 if __name__ == "__main__":
     unittest.main()
