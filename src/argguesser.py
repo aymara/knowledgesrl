@@ -64,6 +64,8 @@ class ArgGuesser(FNParsedReader):
     "WDT":"NP" #Relative determiners ("that what whatever which whichever")
     }
     
+    acceptable_pt = ["NP", "PP", "S_ING", "S"]
+    
     complex_pos = ["IN", "WP"]
 
     def __init__(self, path, verbnet_index):
@@ -160,7 +162,9 @@ class ArgGuesser(FNParsedReader):
                     args = [self._nodeToArg(x, node) for x in find_args(node)]
                 else:
                     args = self._find_args(node)
-                    
+
+                args = [x for x in args if self._is_good_pt(x.phrase_type)]
+                
                 yield Frame(
                     sentence=self.tree.flat(),
                     predicate=predicate,
@@ -171,6 +175,13 @@ class ArgGuesser(FNParsedReader):
                     sentence_id_fn_parsed=self.sentence_id - 1,
                     filename=self.filename.replace(".conll", ".xml")
                 )
+    
+    def _is_good_pt(self, phrase_type):
+        """ Tells whether a phrase type is acceptable for an argument """
+        # If it contains a space, it has been assigned by _get_phrase_type
+        if " " in phrase_type: return True
+        
+        return phrase_type in self.acceptable_pt
     
     def _find_args(self, node):
         """Returns every arguments of a given node.
