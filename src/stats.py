@@ -220,6 +220,11 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
         if gold_fn_frame.frame_name != "" and not gold_fn_frame.arg_annotated:
             continue
         
+        # Do not penalize arguments extracted from frames that do not exist
+        # in the fulltext corpus
+        if gold_fn_frame.frame_name == "":
+            continue
+        
         for i, slot in enumerate(found_vn_frame.roles):
             stats_data["attributed_roles"] += len(slot)
             if len(slot) == 0:
@@ -266,7 +271,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
             elif len(slot) >= 1:
                 if len(slot) == 1: stats_data["one_bad_role"] += 1
                 else: stats_data["several_roles_bad"] += 1
-
+    
 def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     good = stats_data["one_correct_role"]
     bad = stats_data["one_bad_role"]
