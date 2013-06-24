@@ -259,7 +259,7 @@ def rule5(tree):
 
 def rule6(tree):
     for elem in tree.children:
-        if not elem is tree.node.father:
+        if not elem.node is tree.node.father:
             elem.keep()
 
 def rule7(tree, root = True):
