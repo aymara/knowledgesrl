@@ -75,7 +75,7 @@ if __name__ == "__main__":
         num_instanciated = len([x for x in good_frame.args if x.instanciated])
         predicate = good_frame.predicate.lemma
         
-        if good_frame.arg_annotated or good_frame.frame_name == "":
+        if good_frame.arg_annotated:
             stats_data["args_kept"] += num_instanciated
         
         stats_ambiguous_roles(good_frame, num_instanciated,
