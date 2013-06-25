@@ -1,20 +1,27 @@
-Frames and arguments extractions ================================
+Frames and arguments extractions
+================================
 
 Our aim is to be able to create a SRL program that takes raw text as input.
 This means that we need to find a way to extract the verbal frames and
 arguments from a text for which we only have the syntactic annotations of the
 MST parser.
 
-Frame extraction ----------------
+Frame extraction
+----------------
 
-Verb extraction ```````````````
+Verb extraction
+```````````````
 
 As always, we are only interested in verbal frames which predicate is in
 VerbNet.  Finding verbs is not very complex, since they are the words to which
 our parser attribute one of the following part-of-speech:
-  * *VB*: base form (as 'eat' in 'He should eat') *VBD*: past tense *VBG*:
-  * gerund *VBN*: past participle *VBP*: present tense *VBZ*: third personn of
-  * present *MD*: modal verb
+  * *VB*: base form (as 'eat' in 'He should eat')
+  * *VBD*: past tense
+  * *VBG*: gerund
+  * *VBN*: past participle
+  * *VBP*: present tense
+  * *VBZ*: third personn of present
+  * *MD*: modal verb
 
 Note : these tags are different from those of the fulltext annotations. The
 reason for this is unclear, and this only concerns verbs part-of-speech. As we
@@ -39,11 +46,12 @@ We also need to determine what to do with isolated gerunds and past
 participles.  They tend to be annotated in FrameNet, but we are not sure that
 they are compatible with the frame structures that exist in VerbNet.
 
-Infinitive form ```````````````
+Infinitive form
+```````````````
 
 In order to find the VerbNet entries associated with a verb, we need to find
 its infinitive form. Our solution for that is to use WordNet, and more
-specifically the *morphy* method of *nltk.corpus.wordnet*. This is done in a
+specifically the ``morphy`` method of ``nltk.corpus.wordnet``. This is done in a
 separate python2 script, since *nltk* is not compatible with python3 yet.
 
 Note: the relation between could and can is added manually since Morphy
@@ -51,11 +59,27 @@ doesn't detect it. We would like to remove "can" since it's a modal not covered
 by VerbNet, but it also means to fire ("She canned her secretary") and to
 pocket, which are in VerbNet.
 
+Error analysis
+``````````````
+
+Some of the extracted frames are not annotated in the fulltext corpus. In most
+cases, this is because the annotations are not comprehensive. We analysed 50 of
+those frame after commit 18615 and found the following other reasons for the 
+lack of annotation in the corpus::
+
+    Gérondif ou participe passé adjectival : 11
+    Non verbe auquel le corpus fulltext donne une POS de verbe : 8
+    Mauvais arbre syntaxique (=> auxiliaire non détecté comme tel) : 2
+    
+Because there is no simple way to know which of the extracted frames that do not
+appear in the corpus should be considered as errors, we chose not to penalize
+arguments extracted from those frames in the performances evaluation. 
+
 Arguments extraction
 --------------------
 
-Finding arguments
-`````````````````
+Standard method
+```````````````
 
 Once we found a predicate, we can look for candidate argument nodes. This is
 done by exploring the subtree of the syntactic tree that starts at the predicate
@@ -73,6 +97,54 @@ this verb rather than the verb at the top node of the subtree.
 
 This results in the extraction of very few PP: there are probably other
 dependency relations that should be extracted.
+
+Heuristic method
+````````````````
+
+Another method based on (Lang & Lapata, 2011) has been implemented. It results
+in the extraction of a greater proportion of the annotated arguments, but also
+extracts much more junk arguments.
+
+An analysis of incorrect extracted arguments and non-extracted correct arguments
+has been done on 50 frames and the reason for each mistakes was noted. This was
+done after commit 18615 ::
+
+    Extraits incorrects :
+
+        - argument non core : 10 (8 frames)
+        - argument non core perturbant le frame matching : 3 (2 frames)
+        - le prédicat n'est pas un verbe : 3 (2 frame)
+
+        A cause des règles heuristiques (total : 12 arguments)
+        - la règle 3 n'extrait pas un argument (souvent avec des gérondifs): 6 (6 frames)
+        - le sujet est objet d'un autre verbe et donc pas extrait : 4 (4 frames)
+        - erreur d'implémentation de la règle 6 (corrigée) : 2 (2 frames)
+
+        A cause de l'arbre syntaxique (total : 8 arguments)
+        - verbe rattaché au mauvais auxiliaire : 2 (2 frames)
+        - subordonnée mal rattachée : 2 (2 frames)
+        - construction "help (service somebody)" -> "help (service) (somebody)" : 1 (1 frame)
+        - sujet pas marqué comme SBJ : 1 (1 frame)
+        - argument adjoint rattaché à un autre verbe : 1 (1 frame)
+        - structure trop complexe : 1 (1 frame)
+
+    Non extraits annotés :
+
+        - le prédicat n'est pas un verbe : 2 (2 frame)
+        - prédicat isolé de ses arguments par des virgules : 2 (1 frame)
+       
+        A cause des règles heuristiques (total : 10 arguments)
+        - le sujet est objet d'un autre verbe et donc pas extrait : 4 (4 frames)
+        - plusieurs verbes pour un seul objet : 3 (2 frames)
+        - un auxiliaire (jeté par la règle 4) se trouvait être un argument : 2 (2 frames)
+        - non extraction du sujet d'un gérondif qualifiant un nom : 1 (1 frame)
+
+         A cause de l'arbre syntaxique (total : 12 arguments)
+        - objet pas rattaché au verbe : 7 (6 frames)
+        - verbe rattaché au mauvais auxiliaire : 2 (2 frames)
+        - sujet rattaché à un autre verbe : 1 (1 frame)
+        - subordonnée rattachée à un mauvais verbe : 1 (1 frame)
+        - adjoint rattaché à un autre verbe : 1 (1 frame)
 
 POS conversions
 ```````````````
