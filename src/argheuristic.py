@@ -259,7 +259,9 @@ def rule5(tree):
 
 def rule6(tree):
     for elem in tree.children:
-        if not elem.node is tree.node.father:
+        # Do not keep elem that are on the left of the predicate
+        if (not elem.node is tree.node.father and
+        elem.node.begin_head > tree.node.begin_head):
             elem.keep()
 
 def rule7(tree, root = True):
