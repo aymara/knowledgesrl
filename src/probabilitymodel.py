@@ -175,7 +175,7 @@ class ProbabilityModel:
             raise Exception("Unknown model {}".format(model))
                 
         if data:
-            possible_roles = set(data.keys()) & role_set
+            possible_roles = sorted(list(set(data.keys()) & role_set))
             if possible_roles:
                 return max(possible_roles, key = lambda role: data[role])
 
