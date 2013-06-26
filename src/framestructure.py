@@ -195,34 +195,63 @@ class VerbnetFrame:
     def passivize(self):
         """
         Based on current frame, return a list of possible passivizations
-        Currently extremely simple on purpose, the goal is to add variations later on.
         """
         passivizedframes = []
-        index_v = self.structure.index("V")
 
-        subject = {"structure": self.structure[:index_v], "roles": self.roles[0]}
-        dobject = {"structure": self.structure[index_v+1], "roles": self.roles[1]}
-        iobject = {"structure": self.structure[index_v+2:], "roles": self.roles[2:]}
-
-        intransitive = VerbnetFrame([dobject["structure"], "V"], [dobject["roles"]], vnclass = self.vnclass)
-        passivizedframes.append(intransitive)
-
-        if iobject["structure"] and not VerbnetFrame._is_a_slot(iobject["structure"][0]):
-            transitive = VerbnetFrame(
-                [dobject["structure"], "V"] + iobject["structure"],
-                [dobject["roles"]] + iobject["roles"],
-                vnclass = self.vnclass)
-        else:
-            transitive = VerbnetFrame(
-                [dobject["structure"], "V", "by"] + subject["structure"],
-                [dobject["roles"]] + [subject["roles"]],
-                vnclass = self.vnclass)
-        passivizedframes.append(transitive)
-
-        return passivizedframes
+        # Find the position of the first slot following the verb and
+        # the last element of the first slot of the frame
+        slot_position = 0
+        old_sbj_end = 0
+        first_slot = True
+        for i, element in enumerate(self.structure):
+            if first_slot: old_sbj_end = i
+            if VerbnetFrame._is_a_slot(element):
+                first_slot = False
+                slot_position += 1
+            if element == "V": break
         
+        # Find the first and last element of the first slot following the verb
+        index_v = self.structure.index("V")
+        new_sbj_begin, new_sbj_end = index_v + 1, index_v + 1
+        while True:
+            if new_sbj_end >= len(self.structure): return []
+            if VerbnetFrame._is_a_slot(self.structure[new_sbj_end]): break
+            new_sbj_end += 1
+        
+        # Build the passive frame without "by"
+        frame_without_agent = VerbnetFrame(
+            (self.structure[new_sbj_begin:new_sbj_end+1] +
+                self.structure[old_sbj_end+1:index_v] + ["V"] +
+                self.structure[new_sbj_end+1:]),
+            ([self.roles[slot_position]] + self.roles[1:slot_position] +
+                self.roles[slot_position+1:]),
+            vnclass=self.vnclass
+        )
+        
+        passivizedframes.append(frame_without_agent)
+        
+        # Add the frames obtained by inserting "by + the old subject"
+        # after the verb and every slot that follows it
+        new_index_v = frame_without_agent.structure.index("V")
+        i = new_index_v
+        slot = slot_position - 1
+        while i < len(frame_without_agent.structure):
+            if frame_without_agent.structure[i][0].isupper():
+                passivizedframes.append(VerbnetFrame(
+                    (frame_without_agent.structure[0:i+1] +
+                        ["by"] + self.structure[0:old_sbj_end+1] +
+                        frame_without_agent.structure[i+1:]),
+                    (frame_without_agent.roles[0:slot+1] +
+                        [self.roles[0]] +
+                        frame_without_agent.roles[slot+1:]),
+                    vnclass=self.vnclass
+                ))
+                slot += 1
+            i += 1
+        
+        return passivizedframes
+           
     def generate_relatives(self):
-    
         relatives = []
         i_slot = 0
         for i, element in enumerate(self.structure):
@@ -562,10 +591,24 @@ class VerbnetFrameTest(unittest.TestCase):
         self.assertEqual(vn_frame_transitive.passivize(), [
             VerbnetFrame(["NP", "V"], ["Theme"]),
             VerbnetFrame(["NP", "V", "by", "NP"], ["Theme", "Agent"])])
-        vn_frame_ditransitive = VerbnetFrame(["NP", "V", "NP", "at", "NP"], ["Agent", "Theme", "Value"])
+            
+        vn_frame_ditransitive = VerbnetFrame(["NP", "V", "NP", "at", "NP"],
+            ["Agent", "Theme", "Value"])
         self.assertEqual(vn_frame_ditransitive.passivize(), [
-            VerbnetFrame(["NP", "V"], ["Theme"]),
-            VerbnetFrame(["NP", "V", "at", "NP"], ["Theme", "Value"])])
+            VerbnetFrame(["NP", "V", "at", "NP"],
+                ["Theme", "Value"]),
+            VerbnetFrame(["NP", "V", "by", "NP", "at", "NP"],
+                ["Theme", "Agent", "Value"]),
+            VerbnetFrame(["NP", "V", "at", "NP", "by", "NP"],
+                ["Theme", "Value", "Agent"])])
+                
+        vn_frame_strange = VerbnetFrame(["NP", "NP", "V", "S"],
+            ["Agent", "Theme", "Value"])
+        self.assertEqual(vn_frame_strange.passivize(), [
+            VerbnetFrame(["S", "NP", "V"],
+                ["Value", "Theme"]),
+           VerbnetFrame(["S", "NP", "V", "by", "NP"],
+                ["Value", "Theme", "Agent"])])
     
     def test_relatives(self):
         test_frame = VerbnetFrame(
