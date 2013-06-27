@@ -154,5 +154,5 @@ if __name__ == "__main__":
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)
 
-    if options.debug: display_debug(n_debug)
+    if options.debug: display_debug(options.n_debug)
 
