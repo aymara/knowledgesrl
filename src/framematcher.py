@@ -112,7 +112,7 @@ class FrameMatcher():
                     if len(test_frame.roles) > matching_slot:
                         distrib[slot_pos] = next(iter(test_frame.roles[matching_slot]))
                         
-                num_match += 1
+                    num_match += 1
             
         elif self.algo == "sync_predicates":
             """ New algorithm """
