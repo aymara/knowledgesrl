@@ -143,7 +143,11 @@ class VerbnetReader:
                 del structure[-1]
             previous_was_pp = (element == "PP")
             
-            # Handle "(PP)" which means that the element is optionnal
+            # Make "that" optionnal
+            if element == "that": element = "(#that)"
+            if element == "#that": element = "that"
+            
+            # Handle optionnal elements
             if len(element) > 0 and element[0] == "(":
                 base_structure_1 = base_structure[:]
                 del base_structure_1[i]
