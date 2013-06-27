@@ -286,45 +286,44 @@ class VerbnetFrame:
                 
             if not argument.instanciated: continue
 
+            phrase_type = argument.phrase_type
+            if phrase_type in VerbnetFrame.phrase_replacements:
+                phrase_type = VerbnetFrame.phrase_replacements[phrase_type]
+            
             before = structure[0:argument.begin - new_begin]
             after = structure[1 + argument.end - new_begin:]
+            arg_first_word = argument.text.lower().split(" ")[0]
             # Replace every "PP" by "prep NP"
-            if argument.phrase_type == "PP":
+            if phrase_type == "PP":
                 prep = ""
                 for word in argument.text.lower().split(" "):
                     if word in verbnetprepclasses.keywords:
                         prep = word
                         break
                 if prep == "":
-                    prep = argument.text.lower().split(" ")[0]
+                    prep = arg_first_word
                          
                 added_length = 6 + len(prep)
                 structure = "{}| {} NP|{}".format(before, prep, after)
             # Replace every "PPing" by "prep S_ING",
-            elif argument.phrase_type == "PPing":
+            elif phrase_type == "PPing":
                 prep = ""
                 for word in argument.text.lower().split(" "):
                     if word in verbnetprepclasses.keywords:
                         prep = word
                         break
                 if prep == "":
-                    prep = argument.text.lower().split(" ")[0]
+                    prep = arg_first_word
                          
                 added_length = 9 + len(prep)
                 structure = "{}| {} S_ING|{}".format(before, prep, after)
             # Replace every "Swhether" and "S" by "that S", "if S", ...
-            elif argument.phrase_type in ["Swhether", "Sub"]:
-                sub = argument.text.split(" ")[0].lower()
-                added_length = 5 + len(sub)
-                structure = "{}| {} S|{}".format(before, sub, after)
-            # Handle simple phrase replacements
-            elif argument.phrase_type in VerbnetFrame.phrase_replacements:
-                phrase = VerbnetFrame.phrase_replacements[argument.phrase_type]
-                added_length = 4 + len(phrase)
-                structure = "{} | {}|{}".format(before, phrase, after)
+            elif phrase_type in ["Swhether", "Sub"]:
+                added_length = 5 + len(arg_first_word)
+                structure = "{}| {} S|{}".format(before, arg_first_word, after)
             else:
-                added_length = 3 + len(argument.phrase_type)
-                structure = "{}| {}|{}".format(before, argument.phrase_type, after)
+                added_length = 3 + len(phrase_type)
+                structure = "{}| {}|{}".format(before, phrase_type, after)
             
             # Compute the new position of the predicate if we reduced an argument before it
             if argument.begin - new_begin < predicate_begin:
