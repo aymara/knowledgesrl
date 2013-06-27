@@ -40,6 +40,8 @@ rel_pronouns = {
     "how", "that", "when", "where", "whether", "which",
     "who", "whom", "whose", "why"}
 
+sub_pronouns = rel_pronouns | {"if"}
+    
 all_preps = set()
 for group in prep.values(): all_preps |= group
 all_preps |= other_preps
