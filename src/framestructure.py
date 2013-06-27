@@ -293,8 +293,15 @@ class VerbnetFrame:
             before = structure[0:argument.begin - new_begin]
             after = structure[1 + argument.end - new_begin:]
             arg_first_word = argument.text.lower().split(" ")[0]
+            
+            # Fix some S incorrectly marked as PP
+            if (phrase_type == "PP" and
+                arg_first_word in verbnetprepclasses.sub_pronouns
+            ):
+                added_length = 5 + len(arg_first_word)
+                structure = "{}| {} S|{}".format(before, arg_first_word, after)
             # Replace every "PP" by "prep NP"
-            if phrase_type == "PP":
+            elif phrase_type == "PP":
                 prep = ""
                 for word in argument.text.lower().split(" "):
                     if word in verbnetprepclasses.keywords:
