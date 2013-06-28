@@ -302,7 +302,7 @@ class ArgGuesser(FNParsedReader):
 class ArgGuesserTest(unittest.TestCase):
     def test_global(self):
         verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).verbs
-        arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet)
+        arg_finder = ArgGuesser(options.framenet_parsed, verbnet)
 
         frames = [x for x in arg_finder.handle_corpus()]
         num_args = 0
@@ -330,7 +330,7 @@ class ArgGuesserTest(unittest.TestCase):
         ]
         
         verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).verbs
-        arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet)
+        arg_finder = ArgGuesser(options.framenet_parsed, verbnet)
 
         self.assertEqual(arg_finder._find_args(tree), args)
 if __name__ == "__main__":

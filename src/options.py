@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import probabilitymodel
+import paths
+
 import getopt
 import sys
 
@@ -15,17 +17,20 @@ probability_model = "predicate_slot"
 dump = False
 dump_file = ""
 passive = True
+use_test_set = False
+fulltext_corpus = paths.FRAMENET_FULLTEXT
+framenet_parsed = paths.FRAMENET_PARSED
 
 options = getopt.getopt(sys.argv[1:], "d:",
     ["baseline", "fmatching-algo=", "add-non-core-args", "help",
      "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump",
-     "no-passive", "baseline"])
+     "no-passive", "baseline", "test-set"])
 
 display_syntax = False
 syntax_str = ("main.py [--baseline] [-d num_sample] [--fmatching-algo=algo] "
               "[--model=probability_model] [--add-non-core-args] "
               "[--bootstrap] [--no-gold-args [--heuristic-rules]] "
-              "[--dump filename] [--no-passive] [--help]")
+              "[--dump filename] [--no-passive] [--test-set] [--help]")
 
 for opt,value in options[0]:
     # Removes our enhancements
@@ -59,6 +64,10 @@ for opt,value in options[0]:
             display_syntax = True
     if opt == "--no-passive":
         passive = False 
+    if opt == "--test-set":
+        use_test_set = True
+        fulltext_corpus = paths.FRAMENET_FULLTEXT_EVALUATION
+        framenet_parsed = paths.FRAMENET_PARSED_EVALUATION
     if opt == "--help":
         display_syntax = True
             

@@ -8,6 +8,7 @@ from conllreader import SyntacticTreeBuilder
 import framenetreader
 import unittest
 import paths
+import options
 import os
 import sys
 
@@ -165,7 +166,7 @@ class FNAllReaderTest(unittest.TestCase):
 
     def test_sentences_match(self, num_sample = 0):
         print("Checking FrameNetAllReader")
-        extractor = FNAllReader(paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED)
+        extractor = FNAllReader(options.fulltext_corpus, options.framenet_parsed)
 
         frame = extractor.frames[26]
         self.assertTrue(frame.sentence == ("A few months ago "

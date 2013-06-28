@@ -40,7 +40,7 @@ if __name__ == "__main__":
     if options.gold_args:
         print("Loading frames...", file=sys.stderr)
         fn_reader = framenetallreader.FNAllReader(
-            paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED,
+            options.fulltext_corpus, options.framenet_parsed,
             core_args_only=options.core_args_only)
 
         for frame in fn_reader.frames:
@@ -62,7 +62,7 @@ if __name__ == "__main__":
             vn_frames.append(converted_frame)
         stats_data["files"] += fn_reader.stats["files"]
     else:
-        arg_guesser = argguesser.ArgGuesser(paths.FRAMENET_PARSED, verbnet_classes)
+        arg_guesser = argguesser.ArgGuesser(options.framenet_parsed, verbnet_classes)
         extracted_frame = [x for x in arg_guesser.handle_corpus()]
         annotated_frames = roleextractor.fill_roles(
             extracted_frame, verbnet_classes, role_matcher)
@@ -124,7 +124,7 @@ if __name__ == "__main__":
         display_stats(options.gold_args)
 
     if options.bootstrap:
-        hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
+        hw_extractor = headwordextractor.HeadWordExtractor(options.framenet_parsed)
 
         print("Extracting arguments headwords...", file=sys.stderr)
         hw_extractor.compute_all_headwords(annotated_frames, vn_frames)

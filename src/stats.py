@@ -4,6 +4,7 @@
 from collections import Counter
 from rolematcher import RoleMatchingError
 from errorslog import *
+import options
 
 stats_data = {
     # Total number of files in the corpus
@@ -133,32 +134,37 @@ def display_stats(gold_args):
             s["arg_not_extracted"]
         ))
         
+    if not options.use_test_set:
+        print(
+            "Frames mapped: {} frames\n"
+            
+            "\nFrame matching:\n"
+            "{} args not matched ({} not annotated)\n"
+            "{} args with exactly one possible role\n"
+            "\t{:.2%} correct out of {} evaluated\n"
+            "{} args with multiple possible roles\n"
+            "\t{:.2%} correct (correct role is in role list) out of {} evaluated\n"
+            "\n{} slots with at least one possible role where we cannot verify the labeling\n"
+            "{} slots where no role mapping was found\n"
+            "{} slots where several VerbNet roles are mapped to the FrameNet role\n"
+            .format(
+                s["frames_mapped"],
+
+                s["no_role"], s["no_role"] - s["no_role_annotated"],
+                s["one_role"],
+                s["one_correct_role"] / max(unique_role_evaluated, 1), unique_role_evaluated,
+                several_roles,
+                s["several_roles_ok"] / max(several_roles_evaluated, 1), several_roles_evaluated,
+                s["one_role"] + several_roles - (unique_role_evaluated + several_roles_evaluated),
+
+                s["impossible_mapping"], s["ambiguous_mapping"])
+
+        )
+
     print(
-        "Frames mapped: {} frames\n"
-        
-        "\nFrame matching:\n"
-        "{} args not matched ({} not annotated)\n"
-        "{} args with exactly one possible role\n"
-        "\t{:.2%} correct out of {} evaluated\n"
-        "{} args with multiple possible roles\n"
-        "\t{:.2%} correct (correct role is in role list) out of {} evaluated\n"
-        "\n{} slots with at least one possible role where we cannot verify the labeling\n"
-        "{} slots where no role mapping was found\n"
-        "{} slots where several VerbNet roles are mapped to the FrameNet role\n"
-        "\nOverall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
+        "Overall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
         "\nOverall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n"
         "\n".format(
-            s["frames_mapped"],
-
-            s["no_role"], s["no_role"] - s["no_role_annotated"],
-            s["one_role"],
-            s["one_correct_role"] / max(unique_role_evaluated, 1), unique_role_evaluated,
-            several_roles,
-            s["several_roles_ok"] / max(several_roles_evaluated, 1), several_roles_evaluated,
-            s["one_role"] + several_roles - (unique_role_evaluated + several_roles_evaluated),
-
-            s["impossible_mapping"], s["ambiguous_mapping"],
-
             extrapolated_precision, extrapolated_recall,
             hmean(extrapolated_precision, extrapolated_recall),
             extrapolated_accuracy,

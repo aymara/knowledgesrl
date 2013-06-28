@@ -16,6 +16,7 @@ from framenetparsedreader import FNParsedReader
 from framenetallreader import FNAllReader
 import framenetreader
 import paths
+import options
 
 class HeadWordExtractor(FNParsedReader):
     """This object usess syntactic annotations of FrameNet to retrieve the headwords of
@@ -130,10 +131,10 @@ class HeadWordExtractorTest(unittest.TestCase):
             
     def test_classes(self):
         filename = "ANC__110CYL067"
-        extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
+        extractor = HeadWordExtractor(options.framenet_parsed)
         extractor.load_file(filename+".conll")
 
-        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)
+        reader = framenetreader.FulltextReader(options.fulltext_corpus+filename+".xml", False)
 
         for frame in reader.frames:
             extractor.select_sentence(frame.sentence_id)
@@ -158,10 +159,10 @@ class HeadWordExtractorTest(unittest.TestCase):
         :type num_sample: int
         :returns: (str, str, str) List -- Some examples of (arg, best_node_text, headword)
         """
-        extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
+        extractor = HeadWordExtractor(options.framenet_parsed)
 
         sample = []
-        for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
+        for filename in sorted(os.listdir(options.fulltext_corpus)):
             if not filename[-4:] == ".xml": continue
 
             if filename in self.bad_files: continue
@@ -170,7 +171,7 @@ class HeadWordExtractorTest(unittest.TestCase):
             
             extractor.load_file(filename)
             
-            reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename, False)
+            reader = framenetreader.FulltextReader(options.fulltext_corpus+filename, False)
             previous_sentence = 0
 
             for frame in reader.frames:
@@ -191,10 +192,10 @@ class HeadWordExtractorTest(unittest.TestCase):
     
     def test_1(self):
         filename = "ANC__110CYL067"
-        extractor = HeadWordExtractor(paths.FRAMENET_PARSED)
+        extractor = HeadWordExtractor(options.framenet_parsed)
         extractor.load_file(filename+".conll")
 
-        reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename+".xml", False)
+        reader = framenetreader.FulltextReader(options.fulltext_corpus+filename+".xml", False)
 
         frame = reader.frames[1]
         extractor.select_sentence(frame.sentence_id)

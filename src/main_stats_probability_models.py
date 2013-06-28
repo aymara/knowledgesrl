@@ -34,7 +34,7 @@ if __name__ == "__main__":
     vn_frames = []
 
     fn_reader = framenetallreader.FNAllReader(
-            paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED,
+            options.fulltext_corpus, options.framenet_parsed,
             core_args_only=options.core_args_only)
             
     for frame in fn_reader.frames:
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         for x,y in zip(vn_frames, copy_of_frames):
             x.roles = [y.roles[i] for i in range(0, len(x.roles))]
             
-    hw_extractor = headwordextractor.HeadWordExtractor(paths.FRAMENET_PARSED)
+    hw_extractor = headwordextractor.HeadWordExtractor(options.framenet_parsed)
     model = probabilitymodel.ProbabilityModel()
 
     print("Extracting arguments headwords...", file=sys.stderr)

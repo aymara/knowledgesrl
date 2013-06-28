@@ -3,6 +3,7 @@
 
 import framenetallreader
 import paths
+import options
 from stats import stats_data
 from framestructure import *
 from collections import defaultdict
@@ -32,7 +33,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
         frames[frame.filename][frame.sentence_id_fn_parsed].append(frame)
     
     fn_reader = framenetallreader.FNAllReader(
-            paths.FRAMENET_FULLTEXT, paths.FRAMENET_PARSED,
+            options.fulltext_corpus, options.framenet_parsed,
             core_args_only = True, keep_unannotated = True)
     
     previous_id = -1
@@ -207,7 +208,7 @@ if __name__ == "__main__":
 
     role_matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
     verbnet_classes = verbnetreader.VerbnetReader(paths.VERBNET_PATH).classes
-    arg_finder = ArgGuesser(paths.FRAMENET_PARSED, verbnet_classes)
+    arg_finder = ArgGuesser(options.framenet_parsed, verbnet_classes)
 
     frames = [x for x in arg_finder.handle_corpus()]
 

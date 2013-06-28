@@ -43,7 +43,7 @@ if __name__ == "__main__":
     vn_frames = []
 
     fn_reader = framenetallreader.FNAllReader(
-            corpus_path, paths.FRAMENET_PARSED,
+            corpus_path, options.framenet_parsed,
             core_args_only=options.core_args_only)
 
     for frame in fn_reader.frames:
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     vn_test_frames = []
 
     fn_reader = framenetallreader.FNAllReader(
-            test_corpus_path, paths.FRAMENET_PARSED,
+            test_corpus_path, options.framenet_parsed,
             core_args_only=options.core_args_only)
 
     for frame in fn_reader.frames:

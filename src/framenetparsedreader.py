@@ -7,6 +7,7 @@ import framenetreader
 from conllreader import SyntacticTreeBuilder
 import unittest
 import paths
+import options
 import os
 import sys
 
@@ -102,9 +103,9 @@ class FNParsedReaderTest(unittest.TestCase):
     
     def test_sentences_match(self, num_sample = 0):
         print("Checking FrameNetParsedReader")
-        extractor = FNParsedReader(paths.FRAMENET_PARSED)
+        extractor = FNParsedReader(options.framenet_parsed)
 
-        for filename in sorted(os.listdir(paths.FRAMENET_FULLTEXT)):
+        for filename in sorted(os.listdir(options.fulltext_corpus)):
             if not filename[-4:] == ".xml": continue
 
             if filename in self.bad_files: continue
@@ -112,7 +113,7 @@ class FNParsedReaderTest(unittest.TestCase):
             
             extractor.load_file(filename)
             
-            reader = framenetreader.FulltextReader(paths.FRAMENET_FULLTEXT+filename, False)
+            reader = framenetreader.FulltextReader(options.fulltext_corpus+filename, False)
             previous_sentence = 0
 
             for frame in reader.frames:

@@ -6,12 +6,13 @@ from conllreader import SyntacticTreeBuilder, SyntacticTreeNode
 import glob
 import os
 import paths
+import options
 
 
 def get_trees(filename):
     # get data from parse trees
     trees = []
-    with open("{}/{}.conll".format(paths.FRAMENET_PARSED, filename)) as conll_file:
+    with open("{}/{}.conll".format(options.framenet_parsed, filename)) as conll_file:
         conll_tree = ""
         for l in conll_file.readlines():
             if l != "\n":
@@ -26,7 +27,7 @@ if __name__ == '__main__':
     correct, partial_credit, total = 0, 0, 0
 
     # get data from FrameNet arguments
-    for fulltext_file in glob.glob("{}/*.xml".format(paths.FRAMENET_FULLTEXT)):
+    for fulltext_file in glob.glob("{}/*.xml".format(options.fulltext_corpus)):
         reader = FulltextReader(fulltext_file)
         trees = get_trees(".".join(os.path.basename(fulltext_file).split(".")[:-1]))
 
