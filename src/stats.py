@@ -142,9 +142,9 @@ def display_stats(gold_args):
         "\t{:.2%} correct out of {} evaluated\n"
         "{} args with multiple possible roles\n"
         "\t{:.2%} correct (correct role is in role list) out of {} evaluated\n"
-        "\n{} cases where we cannot verify the labeling:\n"
-        "\t{} because no role mapping was found\n"
-        "\t{} because several VerbNet roles are mapped to the FrameNet role\n"
+        "\n{} slots with at least one possible role where we cannot verify the labeling\n"
+        "{} slots where no role mapping was found\n"
+        "{} slots where several VerbNet roles are mapped to the FrameNet role\n"
         "\nOverall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
         "\nOverall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n"
         "\n".format(
