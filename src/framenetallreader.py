@@ -11,6 +11,7 @@ import paths
 import options
 import os
 import sys
+import time
 
 class FNAllReader:
     """ Reads simultaneously the fulltext corpus and framenet_parsed
@@ -55,29 +56,19 @@ class FNAllReader:
             
             print(".", file=sys.stderr, end="", flush=True)
             
+            if not self.load_syntax_file(filename): continue
+            
             reader = framenetreader.FulltextReader(
                 self.corpus_path + filename,
                 core_args_only = self.core_args_only,
-                keep_unannotated = self.keep_unannotated)
-            
-            if not self.load_syntax_file(filename): continue
+                keep_unannotated = self.keep_unannotated,
+                trees = self.trees)
             
             self.stats["files"] += 1
-            
-            matching_id = -1
-            previous_sentence_id = -1
+
             for frame in reader.frames:
-                if frame.sentence_id != previous_sentence_id:
-                    matching_id = FNAllReader.best_match_sentence(
-                        frame.sentence, self.sentences_syntax, matching_id)
-                
-                if matching_id == -1: continue
-                
-                self.handle_frame(frame, matching_id)
-                
-                self.frames.append(frame)
-                    
-                previous_sentence_id = frame.sentence_id
+                if self.handle_frame(frame):
+                    self.frames.append(frame)
         print("")
     
     def load_syntax_file(self, filename):
@@ -106,27 +97,28 @@ class FNAllReader:
             
         return True
         
-    def handle_frame(self, frame, matching_id):
+    def handle_frame(self, frame):
         """Add information to a frame using the syntax annotation
         
         :param frame: The frame
         :type frame: Frame
-        :param matching_id: The position of the matching sentence
-        :type matching_id: int
         """
-        search = frame.predicate.text.split()[0]
+        
+        search = frame.predicate.text.split()[0].lower()
         found = False
-        for node in self.trees[matching_id]:
+        for node in frame.tree:
             if node.word == search:
                 found = True
                 break
         if not found:
-            raise Exception("framenetparsedreader : predicate {} not found in "
-                "sentence {}".format(search, self.trees[matching_id].flat()))
+            print("\nframenetparsedreader : predicate \"{}\" not found in "
+                "sentence {}".format(search, frame.tree.flat()))
+            return False
         
         frame.passive = FNAllReader.is_passive(node)
-        frame.tree = self.trees[matching_id]
-        frame.sentence_id_fn_parsed = matching_id
+        frame.sentence_id_fn_parsed = 0
+        
+        return True
     
     @staticmethod
     def is_passive(node):
@@ -135,28 +127,6 @@ class FNAllReader:
         if node.father == None: return False
         if node.father.pos not in FNAllReader.predicate_pos: return False
         return node.father.word.lower() in FNAllReader.be_forms
-    
-    @staticmethod
-    def best_match_sentence(sentence, candidates, expected_position):
-        best_score, best_index = -1, -1
-        
-        words_1 = set(sentence.split(" "))
-        n = len(candidates)
-        for i in range(0, n):
-            index = (expected_position + i) % n
-            sentence_2 = candidates[index]
-            
-            if sentence == sentence_2:
-                return index
-
-            words_2 = set(sentence_2.split(" "))
-            score = len(words_1 & words_2) / (len(words_1) + len(words_2))
-            
-            if score > best_score:
-                best_score, best_index = score, index
-        
-        if best_score > 0.3: return best_index
-        return -1
     
 class FNAllReaderTest(unittest.TestCase):
     def comp(self, original, parsed):

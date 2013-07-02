@@ -11,6 +11,7 @@ from collections import Counter
 import os
 import sys
 import unittest
+import re
 
 """Fill the roles of some frames extracted from the syntactic parser output
 using the annotated FrameNet data.
@@ -30,7 +31,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     
     frames = defaultdict(lambda : (defaultdict(lambda : []) ))
     for frame in extracted_frames:
-        frames[frame.filename][frame.sentence_id_fn_parsed].append(frame)
+        frames[frame.filename][frame.sentence_id].append(frame)
     
     fn_reader = framenetallreader.FNAllReader(
             options.fulltext_corpus, options.framenet_parsed,
@@ -53,12 +54,12 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
             if len(possible_roles) == 1:
                 stats_data["args_annotated_mapping_ok"] += 1
             
-        if frame.sentence_id_fn_parsed == -1: continue
-        if frame.sentence_id_fn_parsed != previous_id:
-            sentence_frames = frames[frame.filename][frame.sentence_id_fn_parsed]
+        if frame.sentence_id != previous_id:
+            sentence_frames = frames[frame.filename][frame.sentence_id]
+            
             for extracted_frame in sentence_frames:
                 correct_num_tags(extracted_frame, frame.sentence)
-        previous_id = frame.sentence_id_fn_parsed
+        previous_id = frame.sentence_id
         
         frame_found = False
         for extracted_frame in sentence_frames:
@@ -98,13 +99,19 @@ def correct_num_tags(extracted_frame, original_sentence):
     """
     
     search = "<num>"
-    correct_words = original_sentence.split(" ")
-
-    for word_number, word in enumerate(extracted_frame.sentence.split(" ")):
-        if word != search: continue
-        
+    p = re.compile('[0-9]+')
+    numbers = p.findall(original_sentence)
+    
+    new_sentence = extracted_frame.sentence.replace("<num> , <num>", "<num>,<num>")
+    new_sentence = new_sentence.replace("<num> : <num>", "<num>:<num>")
+    extracted_frame.sentence = new_sentence
+    
+    i = 0
+    while True:
         position = extracted_frame.sentence.find(search)
-        replacement = correct_words[word_number]
+        if position == -1: break
+        
+        replacement = numbers[i]
         offset = len(replacement) - len(search)
         
         extracted_frame.sentence = extracted_frame.sentence.replace(
@@ -120,7 +127,8 @@ def correct_num_tags(extracted_frame, original_sentence):
                 arg.text = arg.text.replace(search, replacement, 1)
             if arg.end > position:
                 arg.end += offset
-    
+        i += 1
+
 def predicate_match(predicate1, predicate2):
     """ Tells whether two predicates in the same sentence belongs to the same frame"""
     return predicate1.begin == predicate2.begin

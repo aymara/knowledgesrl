@@ -60,12 +60,12 @@ class HeadWordExtractor(FNParsedReader):
         """
         if self.tree == None: return ""
         
-        word, pos = self._get_headword(arg_text)
+        word, pos = self._get_headword(arg_text.lower())
         
         if pos == "PRP": self.special_classes[word] = "pronoun"
         elif pos == "NNP": self.special_classes[word] = "proper_noun"
         else: self.words.add(word)
-        
+
         return word
         
     def best_node(self, arg_text):
@@ -144,7 +144,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         extractor.words.add("abcde")
         extractor.compute_word_classes()
         self.assertEqual(extractor.get_class("soda"), "physical_entity.n.01")
-        self.assertEqual(extractor.get_class("I"), "pronoun")
+        self.assertEqual(extractor.get_class("i"), "pronoun")
         
         # get_class should return "unknown" for word that were not resolved by
         # the nltk script or that were never encountered
@@ -207,14 +207,14 @@ class HeadWordExtractorTest(unittest.TestCase):
 if __name__ == "__main__":
     # The -s option makes the script display some examples of results
     # or write them in a file using pickle
-    options = getopt.getopt(sys.argv[1:], "s:", [])
+    cli_options = getopt.getopt(sys.argv[1:], "s:", [])
     num_sample = 0
     filename = ""
     
-    for opt, value in options[0]:
+    for opt, value in cli_options[0]:
         if opt == "-s":
-            if len(options[1]) >= 1:
-                filename = options[1][0]
+            if len(cli_options[1]) >= 1:
+                filename = cli_options[1][0]
             num_sample = int(value)
         
     if num_sample > 0:

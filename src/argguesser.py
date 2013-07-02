@@ -42,6 +42,7 @@ class ArgGuesser(FNParsedReader):
     "OBJ", #direct or indirect object or clause complement
     "OPRD",#object complement
     "PRD", #predicative complement
+    "VMOD"
     ]
     
     # Source : http://www.comp.leeds.ac.uk/ccalas/tagsets/upenn.html
@@ -132,7 +133,7 @@ class ArgGuesser(FNParsedReader):
     def _handle_file(self, filename):
         """ Extracts frames from one file and iterate over them """
         self.load_file(filename)
-        sentence_id = 1
+        sentence_id = 0
         while self.select_sentence(sentence_id):
             for frame in self._handle_sentence():
                 yield frame
@@ -171,8 +172,7 @@ class ArgGuesser(FNParsedReader):
                     args=args,
                     words=[Word(x.begin, x.end, x.pos) for x in self.tree],
                     frame_name="",
-                    #FIXME : offset of 1 between framenetparsedreader and framenetallreader
-                    sentence_id_fn_parsed=self.sentence_id - 1,
+                    sentence_id=self.sentence_id,
                     filename=self.filename.replace(".conll", ".xml")
                 )
     
@@ -281,8 +281,7 @@ class ArgGuesser(FNParsedReader):
         if node.lemma in ["be", "do", "have", "will", "would"]:
             for child in node.children:
                 if child.pos in self.predicate_pos and child.deprel == "VC":
-                    return False
-                    
+                    return False    
         return True
     
     def _is_subject(self, node, predicate_node):

@@ -41,8 +41,8 @@ class Relation:
         "ADV", "AMOD", "APPO", "BNF", "CONJ", "COORD", "DEP", "DIR", "DTV",
         "EXT", "EXTR", "GAP-LGS", "GAP-LOC", "IM", "LGS", "LOC", "LOC-PRD",
         "MNR", "NAME", "NMOD", "OBJ", "OPRD", "P", "PMOD", "POSTHON", "PRD",
-        "PRN", "PRP", "PRT", "PUT", "ROOT", "SBJ", "SUB", "SUFFIX", "TITLE",
-        "TMP", "VC", "VOC",
+        "PRN", "PRP", "PRT", "PUT", "ROOT", "SBAR", "SBJ", "SUB", "SUFFIX",
+        "TITLE", "TMP", "VC", "VMOD", "VOC",
         # Last two were never encoutered in the corpus :
         "HMOD", "IOBJ"}
 

@@ -24,7 +24,6 @@ class Frame:
         self.args = sorted(args)
         self.words = words
         self.sentence_id = sentence_id
-        self.sentence_id_fn_parsed = sentence_id_fn_parsed
         self.filename = filename
         self.slot_type = slot_type
         self.arg_annotated = arg_annotated

@@ -43,7 +43,8 @@ class FulltextReader:
     predicate_pos = ["md", "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
     "VH", "VHD", "VHG", "VHN", "VHP", "VHZ"]
     
-    def __init__(self, filename, core_args_only = False, keep_unannotated = False):
+    def __init__(self, filename, core_args_only = False, keep_unannotated = False,
+        trees = None):
         """Read a file and update the collected frames list.
         
         :param filename: Path to the file to read.
@@ -69,9 +70,6 @@ class FulltextReader:
         self.constant_predicate = ""
         self.constant_frame = ""
         self.core_args = []
-        
-        # Id of sentences from which we keep at least one frame
-        self.sentence_id = 1
 
         # Debug data
         self.filename = filename.split('/')[-1]
@@ -103,21 +101,12 @@ class FulltextReader:
                 if arg.attrib["type"] == "Core":
                     self.core_args.append(arg.attrib["name"])
         
-        last_sentence = ""
-        for sentence in root.findall(self.sentence_pattern):
-            new_valid_sentence = False
-            # We need to do what follows to assign the same ID to
-            # duplicate frames like
-            # KBEval__Bandeis, "Sardar Patel faced imprisonment..."
+        for i, sentence in enumerate(root.findall(self.sentence_pattern)):
             for frame in self._parse_sentence(sentence):
+                frame.sentence_id = i
+                if trees != None: frame.tree = trees[i]
+                
                 self.frames.append(frame)
-                if frame.sentence == last_sentence:
-                    frame.sentence_id -= 1
-                else:
-                    new_valid_sentence = True
-            if new_valid_sentence:
-                self.sentence_id += 1
-                last_sentence = frame.sentence
     
     def _parse_sentence(self, sentence):
         """Handle the parsing of one sentence.
@@ -127,7 +116,7 @@ class FulltextReader:
         
         """
 
-        text = sentence.find(self._xmlns + "text").text
+        text = sentence.find(self._xmlns + "text").text.lower()
 
         words = []
         predicate_starts = []
@@ -190,8 +179,8 @@ class FulltextReader:
             args, relative = [], False
         
         return Frame(sentence_text, predicate, args, words, frame_name,
-            sentence_id=self.sentence_id, filename=self.filename,
-            arg_annotated=annotated, relative=relative)
+            filename=self.filename, arg_annotated=annotated,
+            relative=relative)
     
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.

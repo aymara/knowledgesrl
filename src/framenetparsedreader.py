@@ -60,11 +60,11 @@ class FNParsedReader:
         :type sentence_id: int.
         :returns: boolean -- True if the sentence was correctly loaded, False otherwise.
         """
-        if len(self.sentences_data) < sentence_id:
+        if len(self.sentences_data) <= sentence_id:
             self.tree = None
             return False
             
-        sentence = self.sentences_data[sentence_id - 1]
+        sentence = self.sentences_data[sentence_id]
         self.tree = SyntacticTreeBuilder(sentence).build_syntactic_tree()
 
         self.sentence_id = sentence_id
