@@ -22,9 +22,10 @@ if __name__ == "__main__":
     corpus_path = "../data/fndata-1.5/fulltext/"
     test_corpus_path = "../data/fndata-1.5/fulltext/"
 
-    models = ["slot_class", "slot", "predicate_slot"]
-    step = 1
-    num_same = 100
+    #models = ["slot_class", "slot", "predicate_slot"]
+    models = ["predicate_slot"]
+    step = 10
+    num_same = 5
 
     def init_verbnet(path):
         print("Loading VerbNet data...", file=sys.stderr)
@@ -89,7 +90,7 @@ if __name__ == "__main__":
         stats_data["frames"] += 1
 
         if not frame.predicate.lemma in verbnet:
-            log_vn_missing(filename, frame)
+            #log_vn_missing(filename, frame)
             continue
         
         stats_data["frames_with_predicate_in_verbnet"] += 1
@@ -165,6 +166,8 @@ if __name__ == "__main__":
                     if len(roles) == 1:
                         model.add_data(slot_type, next(iter(roles)), prep, predicate)
             
+            print(probabilitymodel.multi_count(model.data_predicate_slot))
+            
             # Apply the probability model
             for frame in vn_test_frames:
                 for i in range(0, len(frame.roles)):
@@ -189,6 +192,8 @@ if __name__ == "__main__":
             if good_model + bad_model > 0:
                 num_data_precision += 1
                 sum_precision += good_model / (good_model + bad_model)
+
+            print("{} {} {}".format(good_model, bad_model, resolved_model))
 
             # Display the results if we are done with this %
             if j + 1 == num_same:
