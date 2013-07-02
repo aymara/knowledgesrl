@@ -1,478 +1,2091 @@
-1	Some	Some	DT	DT	-	2	NMOD	-	-
-2	students	students	NNS	NNS	-	3	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-1	-1	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	some	some	DT	DT	-	2	NMOD	-	-
+2	students	students	NNS	NNS	-	3	SUB	-	-
 3	came	came	VBD	VBD	-	0	ROOT	-	-
-4	to	to	TO	TO	-	3	DIR	-	-
-5	school	school	NN	NN	-	4	PMOD	-	-
-6	by	by	IN	IN	-	3	LGS	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	school	school	VB	VB	-	3	VMOD	-	-
+6	by	by	IN	IN	-	5	VMOD	-	-
 7	car	car	NN	NN	-	6	PMOD	-	-
 8	.	.	.	.	-	3	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
 4	any	any	DT	DT	-	5	NMOD	-	-
-5	students	students	NNS	NNS	-	6	SBJ	-	-
-6	come	come	VBP	VBP	-	3	VC	-	-
-7	to	to	TO	TO	-	6	DIR	-	-
-8	school	school	NN	NN	-	7	PMOD	-	-
+5	students	students	NNS	NNS	-	6	SUB	-	-
+6	come	come	VBP	VBP	-	3	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	school	school	VB	VB	-	6	VMOD	-	-
 9	?	?	.	.	-	3	P	-	-
 
-1	Jones	Jones	NNP	NNP	-	2	SBJ	-	-
-2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
-3	in	in	IN	IN	-	2	LOC	-	-
-4	Paris	Paris	NNP	NNP	-	3	PMOD	-	-
-5	in	in	IN	IN	-	2	LOC	-	-
-6	September	September	NNP	NNP	-	5	PMOD	-	-
-7	last	last	JJ	JJ	-	8	NMOD	-	-
-8	year	year	NN	NN	-	2	TMP	-	-
-9	.	.	.	.	-	2	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
 2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	Jones	Jones	NNP	NNP	-	3	SBJ	-	-
-5	arrive	arrive	VB	VB	-	3	SBJ	-	-
-6	in	in	IN	IN	-	5	LOC	-	-
-7	Paris	Paris	NNP	NNP	-	6	PMOD	-	-
-8	last	last	JJ	JJ	-	9	NMOD	-	-
-9	year	year	NN	NN	-	3	TMP	-	-
-10	?	?	.	.	-	3	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-2	-2	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
 
-1	Jones	Jones	NNP	NNP	-	2	SBJ	-	-
-2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
-3	in	in	IN	IN	-	2	LOC	-	-
-4	Paris	Paris	NNP	NNP	-	3	PMOD	-	-
-5	in	in	IN	IN	-	2	LOC	-	-
-6	September	September	NNP	NNP	-	5	PMOD	-	-
-7	last	last	JJ	JJ	-	8	NMOD	-	-
-8	year	year	NN	NN	-	2	TMP	-	-
-9	.	.	.	.	-	2	P	-	-
+1	no	no	DT	DT	-	2	NMOD	-	-
+2	students	students	NNS	NNS	-	3	SUB	-	-
+3	came	came	VBD	VBD	-	0	ROOT	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	school	school	VB	VB	-	3	VMOD	-	-
+6	by	by	IN	IN	-	5	VMOD	-	-
+7	car	car	NN	NN	-	6	PMOD	-	-
+8	.	.	.	.	-	3	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	Jones	Jones	NNP	NNP	-	3	SBJ	-	-
-5	arrive	arrive	VB	VB	-	3	SBJ	-	-
-6	in	in	IN	IN	-	5	LOC	-	-
-7	Paris	Paris	NNP	NNP	-	6	PMOD	-	-
-8	in	in	IN	IN	-	3	LOC	-	-
-9	September	September	NNP	NNP	-	8	PMOD	-	-
-10	?	?	.	.	-	3	P	-	-
-
-1	Jones	Jones	NNP	NNP	-	2	SBJ	-	-
-2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
-3	on	on	IN	IN	-	2	ADV	-	-
-4	a	a	DT	DT	-	5	NMOD	-	-
-5	Sunday	Sunday	NNP	NNP	-	3	PMOD	-	-
-6	in	in	IN	IN	-	2	LOC	-	-
-7	September	September	NNP	NNP	-	6	PMOD	-	-
-8	.	.	.	.	-	2	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	Jones	Jones	NNP	NNP	-	3	SBJ	-	-
-5	arrive	arrive	VB	VB	-	3	SBJ	-	-
-6	on	on	IN	IN	-	3	LOC	-	-
-7	a	a	DT	DT	-	8	NMOD	-	-
-8	Sunday	Sunday	NNP	NNP	-	6	PMOD	-	-
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	any	any	DT	DT	-	5	NMOD	-	-
+5	students	students	NNS	NNS	-	6	SUB	-	-
+6	come	come	VBP	VBP	-	3	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	school	school	VB	VB	-	6	VMOD	-	-
 9	?	?	.	.	-	3	P	-	-
 
-1	Jones	Jones	NNP	NNP	-	2	SBJ	-	-
-2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
-3	on	on	IN	IN	-	2	ADV	-	-
-4	a	a	DT	DT	-	5	NMOD	-	-
-5	Sunday	Sunday	NNP	NNP	-	3	PMOD	-	-
-6	in	in	IN	IN	-	2	LOC	-	-
-7	September	September	NNP	NNP	-	6	PMOD	-	-
-8	.	.	.	.	-	2	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
 2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	Jones	Jones	NNP	NNP	-	3	SBJ	-	-
-5	arrive	arrive	VB	VB	-	3	SBJ	-	-
-6	in	in	IN	IN	-	5	LOC	-	-
-7	September	September	NNP	NNP	-	6	PMOD	-	-
-8	?	?	.	.	-	3	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-3	-3	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
 
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	president	president	NN	NN	-	7	SBJ	-	-
-3	left	left	VBN	VBN	-	2	APPO	-	-
-4	after	after	IN	IN	-	3	TMP	-	-
-5	the	the	DT	DT	-	6	NMOD	-	-
-6	diplomat	diplomat	NN	NN	-	7	SBJ	-	-
-7	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
-8	.	.	.	.	-	7	P	-	-
+1	ed	ed	NNP	NNP	-	2	SUB	-	-
+2	drove	drove	VBD	VBD	-	0	ROOT	-	-
+3	legally	legally	RB	RB	-	2	VMOD	-	-
+4	.	.	.	.	-	2	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	5	NMOD	-	-
+4	ed	ed	NNP	NNP	-	5	NMOD	-	-
+5	drive	drive	NN	NN	-	0	ROOT	-	-
+6	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
 2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-4	-4	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	ed	ed	NNP	NNP	-	2	SUB	-	-
+2	drove	drove	VBD	VBD	-	0	ROOT	-	-
+3	predictably	predictably	RB	RB	-	2	VMOD	-	-
+4	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	5	NMOD	-	-
+4	ed	ed	NNP	NNP	-	5	NMOD	-	-
+5	drive	drive	NN	NN	-	0	ROOT	-	-
+6	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-5	-5	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	legally	legally	RB	RB	-	4	VMOD	-	-
+2	,	,	,	,	-	4	P	-	-
+3	ed	ed	NNP	NNP	-	4	SUB	-	-
+4	could	could	MD	MD	-	0	ROOT	-	-
+5	drive	drive	VB	VB	-	4	VC	-	-
+6	.	.	.	.	-	4	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	5	NMOD	-	-
+4	ed	ed	NNP	NNP	-	5	NMOD	-	-
+5	drive	drive	NN	NN	-	0	ROOT	-	-
+6	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	4	NMOD	-	-
+2	:	:	:	:	-	4	P	-	-
+3	parc	parc	NNP	NNP	-	4	NMOD	-	-
+4	-6	-6	NNP	NNP	-	0	ROOT	-	-
+5	.	.	.	.	-	4	P	-	-
+
+1	predictably	predictably	RB	RB	-	4	VMOD	-	-
+2	,	,	,	,	-	4	P	-	-
+3	ed	ed	NNP	NNP	-	4	SUB	-	-
+4	drove	drove	VBD	VBD	-	0	ROOT	-	-
+5	.	.	.	.	-	4	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	5	NMOD	-	-
+4	ed	ed	NNP	NNP	-	5	NMOD	-	-
+5	drive	drive	NN	NN	-	0	ROOT	-	-
+6	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	4	NMOD	-	-
+2	:	:	:	:	-	4	P	-	-
+3	parc	parc	NNP	NNP	-	4	NMOD	-	-
+4	-7	-7	NNP	NNP	-	0	ROOT	-	-
+5	.	.	.	.	-	4	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	technician	technician	NN	NN	-	3	SUB	-	-
+3	cooled	cooled	VBD	VBD	-	0	ROOT	-	-
 4	the	the	DT	DT	-	5	NMOD	-	-
-5	diplomat	diplomat	NN	NN	-	3	SBJ	-	-
-6	arrive	arrive	VB	VB	-	7	PMOD	-	-
-7	before	before	IN	IN	-	5	TMP	-	-
-8	the	the	DT	DT	-	9	NMOD	-	-
-9	president	president	NN	NN	-	10	SBJ	-	-
-10	left	left	VBD	VBD	-	7	SUB	-	-
-11	?	?	.	.	-	3	P	-	-
-
-1	Some	Some	DT	DT	-	2	NMOD	-	-
-2	students	students	NNS	NNS	-	3	SBJ	-	-
-3	arrived	arrived	VBN	VBN	-	0	ROOT	-	-
-4	at	at	IN	IN	-	3	LOC	-	-
-5	the	the	DT	DT	-	6	NMOD	-	-
-6	school	school	NN	NN	-	4	PMOD	-	-
-7	on	on	IN	IN	-	3	ADV	-	-
-8	Sunday	Sunday	NNP	NNP	-	7	PMOD	-	-
-9	.	.	.	.	-	3	P	-	-
-
-1	No	No	DT	DT	-	2	NMOD	-	-
-2	students	students	NNS	NNS	-	3	SBJ	-	-
-3	arrived	arrived	VBN	VBN	-	0	ROOT	-	-
-4	at	at	IN	IN	-	3	LOC	-	-
-5	the	the	DT	DT	-	6	NMOD	-	-
-6	school	school	NN	NN	-	4	PMOD	-	-
-7	on	on	IN	IN	-	3	ADV	-	-
-8	Sunday	Sunday	NNP	NNP	-	7	PMOD	-	-
-9	.	.	.	.	-	3	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	any	any	DT	DT	-	5	NMOD	-	-
-5	students	students	NNS	NNS	-	10	PMOD	-	-
-6	arrive	arrive	VBP	VBP	-	5	ROOT	-	-
-7	at	at	IN	IN	-	5	LOC	-	-
-8	the	the	DT	DT	-	9	NMOD	-	-
-9	school	school	NN	NN	-	7	PMOD	-	-
-10	on	on	IN	IN	-	3	LOC	-	-
-11	Sunday	Sunday	NNP	NNP	-	10	PMOD	-	-
-12	?	?	.	.	-	3	P	-	-
-
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	diplomat	diplomat	NN	NN	-	3	SBJ	-	-
-3	left	left	VBN	VBN	-	0	ROOT	-	-
-4	Baghdad	Baghdad	NNP	NNP	-	3	OPRD	-	-
-5	last	last	JJ	JJ	-	6	NMOD	-	-
-6	week	week	NN	NN	-	3	TMP	-	-
-7	.	.	.	.	-	3	P	-	-
-
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	diplomat	diplomat	NN	NN	-	3	SBJ	-	-
-3	will	will	MD	MD	-	0	ROOT	-	-
-4	arrive	arrive	VB	VB	-	3	VC	-	-
-5	in	in	IN	IN	-	4	LOC	-	-
-6	Baghdad	Baghdad	NNP	NNP	-	5	PMOD	-	-
-7	next	next	JJ	JJ	-	8	NMOD	-	-
-8	week	week	NN	NN	-	5	PMOD	-	-
-9	.	.	.	.	-	3	P	-	-
-
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	president	president	NN	NN	-	3	SBJ	-	-
-3	knows	knows	VBZ	VBZ	-	0	ROOT	-	-
-4	that	that	IN	IN	-	3	OBJ	-	-
-5	the	the	DT	DT	-	6	NMOD	-	-
-6	diplomat	diplomat	NN	NN	-	7	SBJ	-	-
-7	left	left	VBN	VBN	-	3	OBJ	-	-
-8	Baghdad	Baghdad	NNP	NNP	-	7	OPRD	-	-
-9	.	.	.	.	-	3	P	-	-
-
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	president	president	NN	NN	-	3	SBJ	-	-
-3	has	has	VBZ	VBZ	-	0	ROOT	-	-
-4	n't	n't	RB	RB	-	3	ADV	-	-
-5	gone	gone	VBN	VBN	-	3	VC	-	-
-6	to	to	TO	TO	-	5	DIR	-	-
-7	Iraq	Iraq	NNP	NNP	-	6	IM	-	-
-8	since	since	IN	IN	-	5	TMP	-	-
-9	the	the	DT	DT	-	10	NMOD	-	-
-10	diplomat	diplomat	NN	NN	-	8	PMOD	-	-
-11	left	left	VBN	VBN	-	10	APPO	-	-
-12	Baghdad	Baghdad	NNP	NNP	-	11	OPRD	-	-
-13	.	.	.	.	-	3	P	-	-
-
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	diplomat	diplomat	NN	NN	-	3	SBJ	-	-
-3	did	did	VBD	VBD	-	0	ROOT	-	-
-4	n't	n't	RB	RB	-	3	ADV	-	-
-5	manage	manage	VB	VB	-	3	VC	-	-
-6	to	to	TO	TO	-	5	OPRD	-	-
-7	leave	leave	VB	VB	-	6	IM	-	-
-8	Baghdad	Baghdad	NNP	NNP	-	7	OPRD	-	-
-9	.	.	.	.	-	3	P	-	-
-
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	diplomat	diplomat	NN	NN	-	3	SBJ	-	-
-3	has	has	VBZ	VBZ	-	0	ROOT	-	-
-4	n't	n't	RB	RB	-	3	ADV	-	-
-5	managed	managed	VBN	VBN	-	3	VC	-	-
-6	to	to	TO	TO	-	5	OPRD	-	-
-7	leave	leave	VB	VB	-	6	IM	-	-
-8	Baghdad	Baghdad	NNP	NNP	-	7	OPRD	-	-
-9	.	.	.	.	-	3	P	-	-
-
-1	No	No	DT	DT	-	2	NMOD	-	-
-2	delegates	delegates	NNS	NNS	-	3	SBJ	-	-
-3	finished	finished	VBD	VBD	-	0	ROOT	-	-
-4	the	the	DT	DT	-	5	NMOD	-	-
-5	report	report	NN	NN	-	3	DEP	-	-
+5	room	room	NN	NN	-	3	OBJ	-	-
 6	.	.	.	.	-	3	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	any	any	DT	DT	-	5	NMOD	-	-
-5	delegate	delegate	NN	NN	-	3	VC	-	-
-6	finish	finish	VB	VB	-	3	VC	-	-
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	technician	technician	NN	NN	-	3	OBJ	-	-
+6	lower	lower	RBR	RBR	-	5	NMOD	-	-
 7	the	the	DT	DT	-	8	NMOD	-	-
-8	report	report	NN	NN	-	6	OBJ	-	-
-9	on	on	IN	IN	-	6	ADV	-	-
+8	temperature	temperature	NN	NN	-	6	AMOD	-	-
+9	of	of	IN	IN	-	8	NMOD	-	-
+10	the	the	DT	DT	-	11	NMOD	-	-
+11	room	room	NN	NN	-	9	PMOD	-	-
+12	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-8	-8	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	technician	technician	NN	NN	-	3	SUB	-	-
+3	raised	raised	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	temperature	temperature	NN	NN	-	3	OBJ	-	-
+6	of	of	IN	IN	-	5	NMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	room	room	NN	NN	-	6	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	technician	technician	NN	NN	-	6	SUB	-	-
+6	cool	cool	VBP	VBP	-	3	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	room	room	NN	NN	-	6	OBJ	-	-
+9	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-9	-9	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	president	president	NN	NN	-	3	SUB	-	-
+3	visited	visited	VBD	VBD	-	0	ROOT	-	-
+4	iraq	iraq	NNP	NNP	-	3	OBJ	-	-
+5	in	in	IN	IN	-	3	VMOD	-	-
+6	september	september	NNP	NNP	-	5	PMOD	-	-
+7	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	NMOD	-	-
+2	:	:	:	:	-	3	P	-	-
+3	has	has	NNPS	NNPS	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	president	president	NN	NN	-	6	SUB	-	-
+6	gone	gone	VBN	VBN	-	3	NMOD	-	-
+7	to	to	TO	TO	-	6	VMOD	-	-
+8	iraq	iraq	NNP	NNP	-	7	PMOD	-	-
+9	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-10	-10	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	jones	jones	NNP	NNP	-	2	SUB	-	-
+2	has	has	VBZ	VBZ	-	0	ROOT	-	-
+3	visited	visited	VBN	VBN	-	2	VC	-	-
+4	iraq	iraq	NNP	NNP	-	3	OBJ	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	6	NMOD	-	-
+2	:	:	:	:	-	6	P	-	-
+3	did	did	NNP	NNP	-	6	NMOD	-	-
+4	jones	jones	NNP	NNP	-	6	NMOD	-	-
+5	visit	visit	NN	NN	-	6	NMOD	-	-
+6	iraq	iraq	NNP	NNP	-	0	ROOT	-	-
+7	in	in	IN	IN	-	6	NMOD	-	-
+8	september	september	NNP	NNP	-	7	PMOD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-11	-11	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	jones	jones	NNP	NNP	-	2	SUB	-	-
+2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
+3	in	in	IN	IN	-	2	VMOD	-	-
+4	paris	paris	NNP	NNP	-	3	PMOD	-	-
+5	in	in	IN	IN	-	2	VMOD	-	-
+6	september	september	NNP	NNP	-	5	PMOD	-	-
+7	last	last	JJ	JJ	-	8	NMOD	-	-
+8	year	year	NN	NN	-	2	VMOD	-	-
+9	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	VMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	jones	jones	NNP	NNP	-	5	SUB	-	-
+5	arrive	arrive	VBP	VBP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	VMOD	-	-
+7	paris	paris	NNP	NNP	-	6	PMOD	-	-
+8	last	last	JJ	JJ	-	9	NMOD	-	-
+9	year	year	NN	NN	-	5	VMOD	-	-
+10	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-12	-12	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	jones	jones	NNP	NNP	-	2	SUB	-	-
+2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
+3	in	in	IN	IN	-	2	VMOD	-	-
+4	paris	paris	NNP	NNP	-	3	PMOD	-	-
+5	in	in	IN	IN	-	2	VMOD	-	-
+6	september	september	NNP	NNP	-	5	PMOD	-	-
+7	last	last	JJ	JJ	-	8	NMOD	-	-
+8	year	year	NN	NN	-	2	VMOD	-	-
+9	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	VMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	jones	jones	NNP	NNP	-	5	SUB	-	-
+5	arrive	arrive	VBP	VBP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	VMOD	-	-
+7	paris	paris	NNP	NNP	-	6	PMOD	-	-
+8	in	in	IN	IN	-	5	VMOD	-	-
+9	september	september	NNP	NNP	-	8	PMOD	-	-
+10	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-13	-13	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	jones	jones	NNP	NNP	-	2	SUB	-	-
+2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
+3	on	on	IN	IN	-	2	VMOD	-	-
+4	a	a	DT	DT	-	5	NMOD	-	-
+5	sunday	sunday	NNP	NNP	-	3	PMOD	-	-
+6	in	in	IN	IN	-	2	VMOD	-	-
+7	september	september	NNP	NNP	-	6	PMOD	-	-
+8	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	SUB	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	jones	jones	NNP	NNP	-	5	SUB	-	-
+5	arrive	arrive	VBP	VBP	-	0	ROOT	-	-
+6	on	on	IN	IN	-	5	VMOD	-	-
+7	a	a	DT	DT	-	8	NMOD	-	-
+8	sunday	sunday	NNP	NNP	-	6	PMOD	-	-
+9	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-14	-14	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	jones	jones	NNP	NNP	-	2	SUB	-	-
+2	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
+3	on	on	IN	IN	-	2	VMOD	-	-
+4	a	a	DT	DT	-	5	NMOD	-	-
+5	sunday	sunday	NNP	NNP	-	3	PMOD	-	-
+6	in	in	IN	IN	-	2	VMOD	-	-
+7	september	september	NNP	NNP	-	6	PMOD	-	-
+8	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	SUB	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	jones	jones	NNP	NNP	-	5	SUB	-	-
+5	arrive	arrive	VBP	VBP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	VMOD	-	-
+7	september	september	NNP	NNP	-	6	PMOD	-	-
+8	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-15	-15	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	president	president	NN	NN	-	3	SUB	-	-
+3	left	left	VBD	VBD	-	0	ROOT	-	-
+4	after	after	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	diplomat	diplomat	NN	NN	-	7	SUB	-	-
+7	arrived	arrived	VBD	VBD	-	4	SBAR	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	diplomat	diplomat	NN	NN	-	6	SUB	-	-
+6	arrive	arrive	VBP	VBP	-	3	VMOD	-	-
+7	before	before	IN	IN	-	6	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	president	president	NN	NN	-	10	SUB	-	-
+10	left	left	VBD	VBD	-	7	SBAR	-	-
+11	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-16	-16	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	no	no	DT	DT	-	3	NMOD	-	-
+2	us	us	NNP	NNP	-	3	NMOD	-	-
+3	congressman	congressman	NN	NN	-	4	SUB	-	-
+4	has	has	VBZ	VBZ	-	0	ROOT	-	-
+5	visited	visited	VBN	VBN	-	4	VC	-	-
+6	iraq	iraq	NNP	NNP	-	5	OBJ	-	-
+7	since	since	IN	IN	-	5	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	war	war	NN	NN	-	10	SUB	-	-
+10	ended	ended	VBD	VBD	-	7	SBAR	-	-
+11	.	.	.	.	-	4	P	-	-
+
+1	qn	qn	NNP	NNP	-	10	SUB	-	-
+2	:	:	:	:	-	10	P	-	-
+3	has	has	NNP	NNP	-	4	NMOD	-	-
+4	jones	jones	NNP	NNP	-	8	NMOD	-	-
+5	,	,	,	,	-	8	P	-	-
+6	a	a	DT	DT	-	8	NMOD	-	-
+7	us	us	NNP	NNP	-	8	NMOD	-	-
+8	congressman	congressman	NNP	NNP	-	10	SUB	-	-
+9	,	,	,	,	-	8	P	-	-
+10	visited	visited	VBD	VBD	-	0	ROOT	-	-
+11	iraq	iraq	NNP	NNP	-	10	OBJ	-	-
+12	after	after	IN	IN	-	10	VMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	war	war	NN	NN	-	12	PMOD	-	-
+15	ended	ended	VBN	VBN	-	14	NMOD	-	-
+16	?	?	.	.	-	10	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-17	-17	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	no	no	DT	DT	-	3	NMOD	-	-
+2	us	us	NNP	NNP	-	3	NMOD	-	-
+3	congressman	congressman	NN	NN	-	4	SUB	-	-
+4	has	has	VBZ	VBZ	-	0	ROOT	-	-
+5	visited	visited	VBN	VBN	-	4	VC	-	-
+6	iraq	iraq	NNP	NNP	-	5	OBJ	-	-
+7	since	since	IN	IN	-	5	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	war	war	NN	NN	-	7	PMOD	-	-
+10	.	.	.	.	-	4	P	-	-
+
+1	qn	qn	NNP	NNP	-	11	NMOD	-	-
+2	:	:	:	:	-	11	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	jones	jones	NNP	NNP	-	11	NMOD	-	-
+5	,	,	,	,	-	11	P	-	-
+6	a	a	DT	DT	-	11	NMOD	-	-
+7	us	us	NNP	NNP	-	11	NMOD	-	-
+8	congressman	congressman	NNP	NNP	-	11	NMOD	-	-
+9	,	,	,	,	-	11	P	-	-
+10	visit	visit	NN	NN	-	11	NMOD	-	-
+11	iraq	iraq	NNP	NNP	-	0	ROOT	-	-
+12	before	before	IN	IN	-	11	NMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	war	war	NN	NN	-	12	PMOD	-	-
+15	?	?	.	.	-	11	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-18	-18	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	no	no	DT	DT	-	3	NMOD	-	-
+2	us	us	NNP	NNP	-	3	NMOD	-	-
+3	congressman	congressman	NN	NN	-	4	SUB	-	-
+4	visited	visited	VBD	VBD	-	0	ROOT	-	-
+5	iraq	iraq	NNP	NNP	-	4	OBJ	-	-
+6	until	until	IN	IN	-	4	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	war	war	NN	NN	-	6	PMOD	-	-
+9	.	.	.	.	-	4	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	any	any	DT	DT	-	8	NMOD	-	-
+5	us	us	NNP	NNP	-	8	NMOD	-	-
+6	congressman	congressman	NN	NN	-	8	NMOD	-	-
+7	visit	visit	NN	NN	-	8	NMOD	-	-
+8	iraq	iraq	NNP	NNP	-	3	OBJ	-	-
+9	before	before	IN	IN	-	3	VMOD	-	-
+10	the	the	DT	DT	-	11	NMOD	-	-
+11	war	war	NN	NN	-	9	PMOD	-	-
+12	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-19	-19	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	some	some	DT	DT	-	2	NMOD	-	-
+2	students	students	NNS	NNS	-	3	SUB	-	-
+3	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
+4	at	at	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	school	school	NN	NN	-	4	PMOD	-	-
+7	on	on	IN	IN	-	3	VMOD	-	-
+8	sunday	sunday	NNP	NNP	-	7	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	were	were	VB	VB	-	0	ROOT	-	-
+4	there	there	RB	RB	-	3	VMOD	-	-
+5	any	any	DT	DT	-	6	NMOD	-	-
+6	students	students	NNS	NNS	-	3	VMOD	-	-
+7	at	at	IN	IN	-	3	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	school	school	NN	NN	-	7	PMOD	-	-
+10	on	on	IN	IN	-	9	NMOD	-	-
+11	sunday	sunday	NNP	NNP	-	10	PMOD	-	-
+12	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-20	-20	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	no	no	DT	DT	-	2	NMOD	-	-
+2	students	students	NNS	NNS	-	3	SUB	-	-
+3	arrived	arrived	VBD	VBD	-	0	ROOT	-	-
+4	at	at	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	school	school	NN	NN	-	4	PMOD	-	-
+7	on	on	IN	IN	-	3	VMOD	-	-
+8	sunday	sunday	NNP	NNP	-	7	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	were	were	VB	VB	-	0	ROOT	-	-
+4	there	there	RB	RB	-	3	VMOD	-	-
+5	any	any	DT	DT	-	6	NMOD	-	-
+6	students	students	NNS	NNS	-	3	VMOD	-	-
+7	at	at	IN	IN	-	3	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	school	school	NN	NN	-	7	PMOD	-	-
+10	on	on	IN	IN	-	9	NMOD	-	-
+11	sunday	sunday	NNP	NNP	-	10	PMOD	-	-
+12	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-21	-21	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	there	there	EX	EX	-	2	SUB	-	-
+2	were	were	VBD	VBD	-	0	ROOT	-	-
+3	no	no	DT	DT	-	4	NMOD	-	-
+4	students	students	NNS	NNS	-	2	PRD	-	-
+5	at	at	IN	IN	-	4	NMOD	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	school	school	NN	NN	-	5	PMOD	-	-
+8	on	on	IN	IN	-	4	NMOD	-	-
+9	sunday	sunday	NNP	NNP	-	8	PMOD	-	-
+10	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	any	any	DT	DT	-	5	NMOD	-	-
+5	students	students	NNS	NNS	-	6	SUB	-	-
+6	arrive	arrive	VBP	VBP	-	3	VMOD	-	-
+7	at	at	IN	IN	-	6	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	school	school	NN	NN	-	7	PMOD	-	-
+10	on	on	IN	IN	-	9	NMOD	-	-
+11	sunday	sunday	NNP	NNP	-	10	PMOD	-	-
+12	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-22	-22	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	diplomat	diplomat	NN	NN	-	3	SUB	-	-
+3	left	left	VBD	VBD	-	0	ROOT	-	-
+4	baghdad	baghdad	NNP	NNP	-	3	OBJ	-	-
+5	last	last	JJ	JJ	-	6	NMOD	-	-
+6	week	week	NN	NN	-	3	VMOD	-	-
+7	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	has	has	NNPS	NNPS	-	5	NMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	diplomat	diplomat	NN	NN	-	6	SUB	-	-
+6	been	been	VBN	VBN	-	0	ROOT	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	baghdad	baghdad	VB	VB	-	6	PRD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-23	-23	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	diplomat	diplomat	NN	NN	-	3	SUB	-	-
+3	will	will	MD	MD	-	0	ROOT	-	-
+4	arrive	arrive	VB	VB	-	3	VC	-	-
+5	in	in	IN	IN	-	4	VMOD	-	-
+6	baghdad	baghdad	NNP	NNP	-	5	PMOD	-	-
+7	next	next	JJ	JJ	-	8	NMOD	-	-
+8	week	week	NN	NN	-	4	VMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	has	has	NNPS	NNPS	-	5	NMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	diplomat	diplomat	NN	NN	-	6	SUB	-	-
+6	been	been	VBN	VBN	-	0	ROOT	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	baghdad	baghdad	VB	VB	-	6	PRD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-24	-24	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	president	president	NN	NN	-	3	SUB	-	-
+3	knows	knows	VBZ	VBZ	-	0	ROOT	-	-
+4	that	that	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	diplomat	diplomat	NN	NN	-	7	SUB	-	-
+7	left	left	VBD	VBD	-	4	SBAR	-	-
+8	baghdad	baghdad	NNP	NNP	-	7	OBJ	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	has	has	NNPS	NNPS	-	5	NMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	diplomat	diplomat	NN	NN	-	6	SUB	-	-
+6	been	been	VBN	VBN	-	0	ROOT	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	baghdad	baghdad	VB	VB	-	6	PRD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-25	-25	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	president	president	NN	NN	-	3	SUB	-	-
+3	has	has	VBZ	VBZ	-	0	ROOT	-	-
+4	n't	n't	RB	RB	-	3	VMOD	-	-
+5	gone	gone	VBN	VBN	-	3	VC	-	-
+6	to	to	TO	TO	-	5	VMOD	-	-
+7	iraq	iraq	NNP	NNP	-	6	PMOD	-	-
+8	since	since	IN	IN	-	5	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	diplomat	diplomat	NN	NN	-	8	PMOD	-	-
+11	left	left	VBD	VBD	-	10	NMOD	-	-
+12	baghdad	baghdad	NNP	NNP	-	11	OBJ	-	-
+13	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	has	has	NNPS	NNPS	-	5	NMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	diplomat	diplomat	NN	NN	-	6	SUB	-	-
+6	been	been	VBN	VBN	-	0	ROOT	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	baghdad	baghdad	VB	VB	-	6	PRD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-26	-26	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	president	president	NN	NN	-	3	SUB	-	-
+3	has	has	VBZ	VBZ	-	0	ROOT	-	-
+4	n't	n't	RB	RB	-	3	VMOD	-	-
+5	gone	gone	VBN	VBN	-	3	VC	-	-
+6	to	to	TO	TO	-	5	VMOD	-	-
+7	iraq	iraq	NNP	NNP	-	6	PMOD	-	-
+8	since	since	IN	IN	-	5	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	diplomat	diplomat	NN	NN	-	8	PMOD	-	-
+11	left	left	VBD	VBD	-	10	NMOD	-	-
+12	baghdad	baghdad	NNP	NNP	-	11	OBJ	-	-
+13	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	NMOD	-	-
+2	:	:	:	:	-	3	P	-	-
+3	has	has	NNPS	NNPS	-	6	SUB	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	president	president	NN	NN	-	6	SUB	-	-
+6	been	been	VBN	VBN	-	0	ROOT	-	-
+7	to	to	TO	TO	-	6	VMOD	-	-
+8	iraq	iraq	NNP	NNP	-	7	PMOD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-27	-27	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	diplomat	diplomat	NN	NN	-	3	SUB	-	-
+3	did	did	VBD	VBD	-	0	ROOT	-	-
+4	n't	n't	RB	RB	-	3	VMOD	-	-
+5	manage	manage	VB	VB	-	3	VC	-	-
+6	to	to	TO	TO	-	7	VMOD	-	-
+7	leave	leave	VB	VB	-	5	VMOD	-	-
+8	baghdad	baghdad	NNP	NNP	-	7	OBJ	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	has	has	NNPS	NNPS	-	5	NMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	diplomat	diplomat	NN	NN	-	6	SUB	-	-
+6	been	been	VBN	VBN	-	0	ROOT	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	baghdad	baghdad	VB	VB	-	6	PRD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-28	-28	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	diplomat	diplomat	NN	NN	-	3	SUB	-	-
+3	has	has	VBZ	VBZ	-	0	ROOT	-	-
+4	n't	n't	RB	RB	-	3	VMOD	-	-
+5	managed	managed	VBN	VBN	-	3	VC	-	-
+6	to	to	TO	TO	-	7	VMOD	-	-
+7	leave	leave	VB	VB	-	5	VMOD	-	-
+8	baghdad	baghdad	NNP	NNP	-	7	OBJ	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	is	is	VBZ	VBZ	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	diplomat	diplomat	NN	NN	-	3	PRD	-	-
+6	in	in	IN	IN	-	5	NMOD	-	-
+7	baghdad	baghdad	NNP	NNP	-	6	PMOD	-	-
+8	now	now	RB	RB	-	3	VMOD	-	-
+9	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-29	-29	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	room	room	NN	NN	-	3	SUB	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	full	full	JJ	JJ	-	3	PRD	-	-
+5	of	of	IN	IN	-	4	AMOD	-	-
+6	intelligent	intelligent	JJ	JJ	-	7	NMOD	-	-
+7	women	women	NNS	NNS	-	5	PMOD	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	room	room	NN	NN	-	3	PRD	-	-
+6	full	full	JJ	JJ	-	5	NMOD	-	-
+7	of	of	IN	IN	-	6	AMOD	-	-
+8	women	women	NNS	NNS	-	7	PMOD	-	-
+9	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-30	-30	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	room	room	NN	NN	-	3	SUB	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	full	full	JJ	JJ	-	3	PRD	-	-
+5	of	of	IN	IN	-	4	AMOD	-	-
+6	women	women	NNS	NNS	-	5	PMOD	-	-
+7	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	room	room	NN	NN	-	3	PRD	-	-
+6	full	full	JJ	JJ	-	5	NMOD	-	-
+7	of	of	IN	IN	-	6	AMOD	-	-
+8	intelligent	intelligent	JJ	JJ	-	9	NMOD	-	-
+9	women	women	NNS	NNS	-	7	PMOD	-	-
+10	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-31	-31	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	children	children	NNS	NNS	-	2	SUB	-	-
+2	are	are	VBP	VBP	-	0	ROOT	-	-
+3	not	not	RB	RB	-	2	VMOD	-	-
+4	admitted	admitted	VBN	VBN	-	2	VC	-	-
+5	to	to	TO	TO	-	4	VMOD	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	theatre	theatre	NN	NN	-	5	PMOD	-	-
+8	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	are	are	VBP	VBP	-	0	ROOT	-	-
+4	small	small	JJ	JJ	-	5	NMOD	-	-
+5	children	children	NNS	NNS	-	3	PRD	-	-
+6	admitted	admitted	VBN	VBN	-	5	NMOD	-	-
+7	to	to	TO	TO	-	6	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	theatre	theatre	NN	NN	-	7	PMOD	-	-
+10	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-32	-32	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	small	small	JJ	JJ	-	2	NMOD	-	-
+2	children	children	NNS	NNS	-	3	SUB	-	-
+3	are	are	VBP	VBP	-	0	ROOT	-	-
+4	not	not	RB	RB	-	3	VMOD	-	-
+5	admitted	admitted	VBN	VBN	-	3	VC	-	-
+6	to	to	TO	TO	-	5	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	theatre	theatre	NN	NN	-	6	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	are	are	VBP	VBP	-	0	ROOT	-	-
+4	children	children	NNS	NNS	-	3	SUB	-	-
+5	admitted	admitted	VBN	VBN	-	4	NMOD	-	-
+6	to	to	TO	TO	-	5	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	theatre	theatre	NN	NN	-	6	PMOD	-	-
+9	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-33	-33	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	all	all	DT	DT	-	2	NMOD	-	-
+2	companies	companies	NNS	NNS	-	3	SUB	-	-
+3	have	have	VBP	VBP	-	0	ROOT	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	file	file	VB	VB	-	3	VMOD	-	-
+6	annual	annual	JJ	JJ	-	7	NMOD	-	-
+7	reports	reports	NNS	NNS	-	5	OBJ	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	do	do	VBP	VBP	-	0	ROOT	-	-
+4	all	all	DT	DT	-	7	NMOD	-	-
+5	fortune	fortune	NNP	NNP	-	7	NMOD	-	-
+6	<num>	<num>	CD	CD	-	7	NMOD	-	-
+7	companies	companies	NNS	NNS	-	8	SUB	-	-
+8	have	have	VBP	VBP	-	3	VMOD	-	-
+9	to	to	TO	TO	-	10	VMOD	-	-
+10	file	file	VB	VB	-	8	VMOD	-	-
+11	annual	annual	JJ	JJ	-	12	NMOD	-	-
+12	reports	reports	NNS	NNS	-	10	OBJ	-	-
+13	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-34	-34	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	all	all	DT	DT	-	4	NMOD	-	-
+2	fortune	fortune	NNP	NNP	-	4	NMOD	-	-
+3	<num>	<num>	CD	CD	-	4	NMOD	-	-
+4	companies	companies	NNS	NNS	-	5	SUB	-	-
+5	have	have	VBP	VBP	-	0	ROOT	-	-
+6	to	to	TO	TO	-	7	VMOD	-	-
+7	file	file	VB	VB	-	5	VMOD	-	-
+8	annual	annual	JJ	JJ	-	9	NMOD	-	-
+9	reports	reports	NNS	NNS	-	7	OBJ	-	-
+10	.	.	.	.	-	5	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	do	do	VBP	VBP	-	0	ROOT	-	-
+4	all	all	DT	DT	-	5	NMOD	-	-
+5	companies	companies	NNS	NNS	-	6	SUB	-	-
+6	have	have	VBP	VBP	-	3	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	file	file	VB	VB	-	6	VMOD	-	-
+9	annual	annual	JJ	JJ	-	10	NMOD	-	-
+10	reports	reports	NNS	NNS	-	8	OBJ	-	-
+11	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-35	-35	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	all	all	DT	DT	-	2	NMOD	-	-
+2	companies	companies	NNS	NNS	-	3	SUB	-	-
+3	have	have	VBP	VBP	-	0	ROOT	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	file	file	VB	VB	-	3	VMOD	-	-
+6	annual	annual	JJ	JJ	-	7	NMOD	-	-
+7	reports	reports	NNS	NNS	-	5	OBJ	-	-
+8	to	to	TO	TO	-	7	NMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	sec	sec	NNP	NNP	-	8	PMOD	-	-
+11	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	do	do	VBP	VBP	-	0	ROOT	-	-
+4	all	all	DT	DT	-	5	NMOD	-	-
+5	companies	companies	NNS	NNS	-	6	SUB	-	-
+6	have	have	VBP	VBP	-	3	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	file	file	VB	VB	-	6	VMOD	-	-
+9	annual	annual	JJ	JJ	-	10	NMOD	-	-
+10	reports	reports	NNS	NNS	-	8	OBJ	-	-
+11	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-36	-36	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	all	all	DT	DT	-	2	NMOD	-	-
+2	companies	companies	NNS	NNS	-	3	SUB	-	-
+3	have	have	VBP	VBP	-	0	ROOT	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	file	file	VB	VB	-	3	VMOD	-	-
+6	annual	annual	JJ	JJ	-	7	NMOD	-	-
+7	reports	reports	NNS	NNS	-	5	OBJ	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	do	do	VBP	VBP	-	0	ROOT	-	-
+4	all	all	DT	DT	-	5	NMOD	-	-
+5	companies	companies	NNS	NNS	-	6	SUB	-	-
+6	have	have	VBP	VBP	-	3	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	file	file	VB	VB	-	6	VMOD	-	-
+9	annual	annual	JJ	JJ	-	10	NMOD	-	-
+10	reports	reports	NNS	NNS	-	8	OBJ	-	-
+11	to	to	TO	TO	-	10	NMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	sec	sec	NNP	NNP	-	11	PMOD	-	-
+14	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-37	-37	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	no	no	DT	DT	-	2	NMOD	-	-
+2	delegates	delegates	NNS	NNS	-	3	SUB	-	-
+3	finished	finished	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	report	report	NN	NN	-	3	OBJ	-	-
+6	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	any	any	DT	DT	-	6	NMOD	-	-
+5	delegate	delegate	JJ	JJ	-	6	NMOD	-	-
+6	finish	finish	NN	NN	-	3	OBJ	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	report	report	NN	NN	-	3	OBJ	-	-
+9	on	on	IN	IN	-	8	NMOD	-	-
 10	time	time	NN	NN	-	9	PMOD	-	-
 11	?	?	.	.	-	3	P	-	-
 
-1	Bush	Bush	NNP	NNP	-	2	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-38	-38	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	us	us	NNP	NNP	-	3	NMOD	-	-
+3	troops	troops	NNS	NNS	-	4	SUB	-	-
+4	stayed	stayed	VBD	VBD	-	0	ROOT	-	-
+5	in	in	IN	IN	-	4	VMOD	-	-
+6	iraq	iraq	NNP	NNP	-	5	PMOD	-	-
+7	although	although	IN	IN	-	4	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	war	war	NN	NN	-	10	SUB	-	-
+10	was	was	VBD	VBD	-	7	SBAR	-	-
+11	over	over	RB	RB	-	10	PRD	-	-
+12	.	.	.	.	-	4	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	war	war	NN	NN	-	3	PRD	-	-
+6	over	over	IN	IN	-	5	NMOD	-	-
+7	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-39	-39	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	since	since	IN	IN	-	7	VMOD	-	-
+2	it	it	PRP	PRP	-	3	SUB	-	-
+3	was	was	VBD	VBD	-	1	SBAR	-	-
+4	cold	cold	JJ	JJ	-	3	PRD	-	-
+5	,	,	,	,	-	7	P	-	-
+6	he	he	PRP	PRP	-	7	SUB	-	-
+7	closed	closed	VBD	VBD	-	0	ROOT	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	window	window	NN	NN	-	7	OBJ	-	-
+10	.	.	.	.	-	7	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	it	it	PRP	PRP	-	3	SUB	-	-
+5	cold	cold	JJ	JJ	-	3	PRD	-	-
+6	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-40	-40	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	john	john	NNP	NNP	-	2	SUB	-	-
+2	did	did	VBD	VBD	-	0	ROOT	-	-
+3	n't	n't	RB	RB	-	2	VMOD	-	-
+4	visit	visit	VB	VB	-	2	VC	-	-
+5	us	us	PRP	PRP	-	4	OBJ	-	-
+6	after	after	IN	IN	-	4	VMOD	-	-
+7	he	he	PRP	PRP	-	8	SUB	-	-
+8	returned	returned	VBD	VBD	-	6	SBAR	-	-
+9	from	from	IN	IN	-	8	VMOD	-	-
+10	spain	spain	NNP	NNP	-	9	PMOD	-	-
+11	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	5	NMOD	-	-
+4	john	john	NNP	NNP	-	5	NMOD	-	-
+5	return	return	NN	NN	-	0	ROOT	-	-
+6	from	from	IN	IN	-	5	NMOD	-	-
+7	spain	spain	NNP	NNP	-	6	PMOD	-	-
+8	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-41	-41	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	hanssen	hanssen	NNP	NNP	-	11	SUB	-	-
+2	,	,	,	,	-	1	P	-	-
+3	who	who	WP	WP	-	1	NMOD	-	-
+4	sold	sold	VBD	VBD	-	3	SBAR	-	-
+5	fbi	fbi	NNP	NNP	-	6	NMOD	-	-
+6	secrets	secrets	NNS	NNS	-	4	OBJ	-	-
+7	to	to	TO	TO	-	4	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	russians	russians	NNPS	NNPS	-	7	PMOD	-	-
+10	,	,	,	,	-	1	P	-	-
+11	could	could	MD	MD	-	0	ROOT	-	-
+12	face	face	VB	VB	-	11	VC	-	-
+13	the	the	DT	DT	-	15	NMOD	-	-
+14	death	death	NN	NN	-	15	NMOD	-	-
+15	penalty	penalty	NN	NN	-	12	OBJ	-	-
+16	.	.	.	.	-	11	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	SUB	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	hanssen	hanssen	NNP	NNP	-	5	SUB	-	-
+5	sell	sell	VBP	VBP	-	0	ROOT	-	-
+6	fbi	fbi	NNP	NNP	-	7	NMOD	-	-
+7	secrets	secrets	NNS	NNS	-	5	OBJ	-	-
+8	to	to	TO	TO	-	5	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	russians	russians	NNPS	NNPS	-	8	PMOD	-	-
+11	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-42	-42	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	4	NMOD	-	-
+2	new	new	NNP	NNP	-	4	NMOD	-	-
+3	york	york	NNP	NNP	-	4	NMOD	-	-
+4	times	times	NNP	NNP	-	5	SUB	-	-
+5	reported	reported	VBD	VBD	-	0	ROOT	-	-
+6	that	that	DT	DT	-	5	VMOD	-	-
+7	hanssen	hanssen	NNP	NNP	-	17	SUB	-	-
+8	,	,	,	,	-	7	P	-	-
+9	who	who	WP	WP	-	7	NMOD	-	-
+10	sold	sold	VBD	VBD	-	9	SBAR	-	-
+11	fbi	fbi	NNP	NNP	-	12	NMOD	-	-
+12	secrets	secrets	NNS	NNS	-	10	OBJ	-	-
+13	to	to	TO	TO	-	10	VMOD	-	-
+14	the	the	DT	DT	-	15	NMOD	-	-
+15	russians	russians	NNPS	NNPS	-	13	PMOD	-	-
+16	,	,	,	,	-	7	P	-	-
+17	could	could	MD	MD	-	6	SBAR	-	-
+18	face	face	VB	VB	-	17	VC	-	-
+19	the	the	DT	DT	-	21	NMOD	-	-
+20	death	death	NN	NN	-	21	NMOD	-	-
+21	penalty	penalty	NN	NN	-	18	OBJ	-	-
+22	.	.	.	.	-	5	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	SUB	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	hanssen	hanssen	NNP	NNP	-	5	SUB	-	-
+5	sell	sell	VBP	VBP	-	0	ROOT	-	-
+6	fbi	fbi	NNP	NNP	-	7	NMOD	-	-
+7	secrets	secrets	NNS	NNS	-	5	OBJ	-	-
+8	to	to	TO	TO	-	5	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	russians	russians	NNPS	NNPS	-	8	PMOD	-	-
+11	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-43	-43	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	4	NMOD	-	-
+2	new	new	NNP	NNP	-	4	NMOD	-	-
+3	york	york	NNP	NNP	-	4	NMOD	-	-
+4	times	times	NNP	NNP	-	5	SUB	-	-
+5	reported	reported	VBD	VBD	-	0	ROOT	-	-
+6	that	that	DT	DT	-	5	VMOD	-	-
+7	hanssen	hanssen	NNP	NNP	-	8	SUB	-	-
+8	sold	sold	VBD	VBD	-	6	SBAR	-	-
+9	fbi	fbi	NNP	NNP	-	10	NMOD	-	-
+10	secrets	secrets	NNS	NNS	-	8	OBJ	-	-
+11	to	to	TO	TO	-	8	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	russians	russians	NNPS	NNPS	-	11	PMOD	-	-
+14	and	and	CC	CC	-	8	VMOD	-	-
+15	could	could	MD	MD	-	8	VMOD	-	-
+16	face	face	VB	VB	-	15	VC	-	-
+17	the	the	DT	DT	-	19	NMOD	-	-
+18	death	death	NN	NN	-	19	NMOD	-	-
+19	penalty	penalty	NN	NN	-	16	OBJ	-	-
+20	.	.	.	.	-	5	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	SUB	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	hanssen	hanssen	NNP	NNP	-	5	SUB	-	-
+5	sell	sell	VBP	VBP	-	0	ROOT	-	-
+6	fbi	fbi	NNP	NNP	-	7	NMOD	-	-
+7	secrets	secrets	NNS	NNS	-	5	OBJ	-	-
+8	to	to	TO	TO	-	5	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	russians	russians	NNPS	NNPS	-	8	PMOD	-	-
+11	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-44	-44	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	bush	bush	NNP	NNP	-	2	SUB	-	-
 2	said	said	VBD	VBD	-	0	ROOT	-	-
-3	that	that	IN	IN	-	2	OBJ	-	-
-4	it	it	PRP	PRP	-	5	SBJ	-	-
-5	was	was	VBD	VBD	-	3	SUB	-	-
-6	Khan	Khan	NNP	NNP	-	5	PRD	-	-
-7	who	who	WP	WP	-	8	SBJ	-	-
-8	sold	sold	VBD	VBD	-	6	APPO	-	-
+3	that	that	IN	IN	-	2	VMOD	-	-
+4	it	it	PRP	PRP	-	5	SUB	-	-
+5	was	was	VBD	VBD	-	3	SBAR	-	-
+6	khan	khan	NNP	NNP	-	5	PRD	-	-
+7	who	who	WP	WP	-	5	VMOD	-	-
+8	sold	sold	VBD	VBD	-	7	SBAR	-	-
 9	centrifuges	centrifuges	NNS	NNS	-	8	OBJ	-	-
-10	to	to	TO	TO	-	8	DTV	-	-
-11	North	North	NNP	NNP	-	12	NAME	-	-
-12	Korea	Korea	NNP	NNP	-	10	IM	-	-
+10	to	to	TO	TO	-	8	VMOD	-	-
+11	north	north	NNP	NNP	-	12	NMOD	-	-
+12	korea	korea	NNP	NNP	-	10	PMOD	-	-
 13	.	.	.	.	-	2	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	NMOD	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Were	Were	VBD	VBD	-	0	ROOT	-	-
-4	centrifuges	centrifuges	NNS	NNS	-	3	PRD	-	-
-5	sold	sold	VBN	VBN	-	4	APPO	-	-
-6	to	to	TO	TO	-	5	DTV	-	-
-7	North	North	NNP	NNP	-	8	NAME	-	-
-8	Korea	Korea	NNP	NNP	-	6	IM	-	-
-9	?	?	.	.	-	3	P	-	-
+1	qn	qn	NNP	NNP	-	3	NMOD	-	-
+2	:	:	:	:	-	3	P	-	-
+3	were	were	NNP	NNP	-	4	SUB	-	-
+4	centrifuges	centrifuges	VBZ	VBZ	-	0	ROOT	-	-
+5	sold	sold	VBN	VBN	-	4	VC	-	-
+6	to	to	TO	TO	-	5	VMOD	-	-
+7	north	north	NNP	NNP	-	8	NMOD	-	-
+8	korea	korea	NNP	NNP	-	6	PMOD	-	-
+9	?	?	.	.	-	4	P	-	-
 
-1	Bush	Bush	NNP	NNP	-	2	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-45	-45	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	bush	bush	NNP	NNP	-	2	SUB	-	-
 2	said	said	VBD	VBD	-	0	ROOT	-	-
-3	that	that	IN	IN	-	2	OBJ	-	-
-4	Khan	Khan	NNP	NNP	-	5	SBJ	-	-
-5	sold	sold	VBD	VBD	-	3	SUB	-	-
+3	that	that	IN	IN	-	2	VMOD	-	-
+4	khan	khan	NNP	NNP	-	5	SUB	-	-
+5	sold	sold	VBD	VBD	-	3	SBAR	-	-
 6	centrifuges	centrifuges	NNS	NNS	-	5	OBJ	-	-
-7	to	to	TO	TO	-	5	DTV	-	-
-8	North	North	NNP	NNP	-	9	NAME	-	-
-9	Korea	Korea	NNP	NNP	-	7	IM	-	-
+7	to	to	TO	TO	-	5	VMOD	-	-
+8	north	north	NNP	NNP	-	9	NMOD	-	-
+9	korea	korea	NNP	NNP	-	7	PMOD	-	-
 10	.	.	.	.	-	2	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	NMOD	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Were	Were	VBD	VBD	-	0	ROOT	-	-
-4	centrifuges	centrifuges	NNS	NNS	-	3	PRD	-	-
-5	sold	sold	VBN	VBN	-	4	APPO	-	-
-6	to	to	TO	TO	-	5	DTV	-	-
-7	North	North	NNP	NNP	-	8	NAME	-	-
-8	Korea	Korea	NNP	NNP	-	6	IM	-	-
-9	?	?	.	.	-	3	P	-	-
+1	qn	qn	NNP	NNP	-	3	NMOD	-	-
+2	:	:	:	:	-	3	P	-	-
+3	were	were	NNP	NNP	-	4	SUB	-	-
+4	centrifuges	centrifuges	VBZ	VBZ	-	0	ROOT	-	-
+5	sold	sold	VBN	VBN	-	4	VC	-	-
+6	to	to	TO	TO	-	5	VMOD	-	-
+7	north	north	NNP	NNP	-	8	NMOD	-	-
+8	korea	korea	NNP	NNP	-	6	PMOD	-	-
+9	?	?	.	.	-	4	P	-	-
 
-1	What	What	WP	WP	-	3	OBJ	-	-
-2	we	we	PRP	PRP	-	3	SBJ	-	-
-3	found	found	VBD	VBD	-	0	ROOT	-	-
-4	in	in	IN	IN	-	3	LOC	-	-
-5	Iraq	Iraq	NNP	NNP	-	4	PMOD	-	-
-6	was	was	VBD	VBD	-	4	SUB	-	-
-7	rusted	rusted	VBN	VBN	-	6	PRD	-	-
-8	shrapnel	shrapnel	NN	NN	-	7	ROOT	-	-
-9	.	.	.	.	-	3	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
 2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	we	we	PRP	PRP	-	5	SBJ	-	-
-5	find	find	VBP	VBP	-	3	VC	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-46	-46	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	what	what	WP	WP	-	6	VMOD	-	-
+2	we	we	PRP	PRP	-	3	SUB	-	-
+3	found	found	VBD	VBD	-	1	SBAR	-	-
+4	in	in	IN	IN	-	3	VMOD	-	-
+5	iraq	iraq	NNP	NNP	-	4	PMOD	-	-
+6	was	was	VBD	VBD	-	0	ROOT	-	-
+7	rusted	rusted	VBN	VBN	-	6	VC	-	-
+8	shrapnel	shrapnel	NN	NN	-	7	VMOD	-	-
+9	.	.	.	.	-	6	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	NMOD	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	NN	NN	-	0	ROOT	-	-
+4	we	we	PRP	PRP	-	5	SUB	-	-
+5	find	find	VBP	VBP	-	3	NMOD	-	-
 6	anything	anything	NN	NN	-	5	OBJ	-	-
-7	in	in	IN	IN	-	5	LOC	-	-
-8	Iraq	Iraq	NNP	NNP	-	7	PMOD	-	-
+7	in	in	IN	IN	-	5	VMOD	-	-
+8	iraq	iraq	NNP	NNP	-	7	PMOD	-	-
 9	?	?	.	.	-	3	P	-	-
 
-1	The	The	DT	DT	-	2	NMOD	-	-
-2	fact	fact	NN	NN	-	10	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-47	-47	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	fact	fact	NN	NN	-	10	SUB	-	-
 3	that	that	IN	IN	-	2	NMOD	-	-
-4	Bin	Bin	NNP	NNP	-	5	NMOD	-	-
-5	Laden	Laden	JJ	JJ	-	6	SBJ	-	-
-6	was	was	VBD	VBD	-	3	SUB	-	-
-7	in	in	IN	IN	-	6	LOC-PRD	-	-
-8	Tora	Tora	NNP	NNP	-	9	NMOD	-	-
-9	Bora	Bora	NNP	NNP	-	7	PMOD	-	-
+4	bin	bin	NNP	NNP	-	5	NMOD	-	-
+5	laden	laden	NNP	NNP	-	6	SUB	-	-
+6	was	was	VBD	VBD	-	3	SBAR	-	-
+7	in	in	IN	IN	-	6	VMOD	-	-
+8	tora	tora	NNP	NNP	-	9	NMOD	-	-
+9	bora	bora	NNP	NNP	-	7	PMOD	-	-
 10	led	led	VBD	VBD	-	0	ROOT	-	-
-11	to	to	TO	TO	-	10	DIR	-	-
+11	to	to	TO	TO	-	10	VMOD	-	-
 12	the	the	DT	DT	-	13	NMOD	-	-
-13	suspicion	suspicion	NN	NN	-	11	IM	-	-
-14	that	that	IN	IN	-	10	OBJ	-	-
+13	suspicion	suspicion	NN	NN	-	11	PMOD	-	-
+14	that	that	IN	IN	-	10	VMOD	-	-
 15	the	the	DT	DT	-	17	NMOD	-	-
-16	Afghan	Afghan	JJ	JJ	-	17	NMOD	-	-
-17	campaign	campaign	NN	NN	-	18	SBJ	-	-
-18	was	was	VBD	VBD	-	14	SUB	-	-
-19	mismanaged	mismanaged	VBN	VBN	-	18	PRD	-	-
+16	afghan	afghan	NNP	NNP	-	17	NMOD	-	-
+17	campaign	campaign	NN	NN	-	18	SUB	-	-
+18	was	was	VBD	VBD	-	14	SBAR	-	-
+19	mismanaged	mismanaged	VBN	VBN	-	18	VC	-	-
 20	.	.	.	.	-	10	P	-	-
 
-1	There	There	EX	EX	-	2	SBJ	-	-
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	was	was	NNP	NNP	-	5	NMOD	-	-
+4	bin	bin	NNP	NNP	-	5	NMOD	-	-
+5	laden	laden	NNP	NNP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	NMOD	-	-
+7	tora	tora	NNP	NNP	-	8	NMOD	-	-
+8	bora	bora	NNP	NNP	-	6	PMOD	-	-
+9	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-48	-48	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	fact	fact	NN	NN	-	10	SUB	-	-
+3	that	that	IN	IN	-	2	NMOD	-	-
+4	bin	bin	NNP	NNP	-	5	NMOD	-	-
+5	laden	laden	NNP	NNP	-	6	SUB	-	-
+6	was	was	VBD	VBD	-	3	SBAR	-	-
+7	in	in	IN	IN	-	6	VMOD	-	-
+8	tora	tora	NNP	NNP	-	9	NMOD	-	-
+9	bora	bora	NNP	NNP	-	7	PMOD	-	-
+10	led	led	VBD	VBD	-	0	ROOT	-	-
+11	to	to	TO	TO	-	10	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	suspicion	suspicion	NN	NN	-	11	PMOD	-	-
+14	that	that	IN	IN	-	10	VMOD	-	-
+15	the	the	DT	DT	-	17	NMOD	-	-
+16	afghan	afghan	NNP	NNP	-	17	NMOD	-	-
+17	campaign	campaign	NN	NN	-	18	SUB	-	-
+18	was	was	VBD	VBD	-	14	SBAR	-	-
+19	mismanaged	mismanaged	VBN	VBN	-	18	VC	-	-
+20	.	.	.	.	-	10	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	6	NMOD	-	-
+5	afghan	afghan	NNP	NNP	-	6	NMOD	-	-
+6	campaign	campaign	NN	NN	-	7	SUB	-	-
+7	mismanaged	mismanaged	VBD	VBD	-	3	VMOD	-	-
+8	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-49	-49	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	paper	paper	NN	NN	-	3	SUB	-	-
+3	concluded	concluded	VBD	VBD	-	0	ROOT	-	-
+4	that	that	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	election	election	NN	NN	-	7	SUB	-	-
+7	had	had	VBD	VBD	-	4	SBAR	-	-
+8	been	been	VBN	VBN	-	7	VC	-	-
+9	rigged	rigged	VBN	VBN	-	8	VC	-	-
+10	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	election	election	NN	NN	-	3	SUB	-	-
+6	rigged	rigged	VBN	VBN	-	5	NMOD	-	-
+7	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-50	-50	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	ames	ames	NNP	NNP	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	0	ROOT	-	-
+3	,	,	,	,	-	2	P	-	-
+4	as	as	IN	IN	-	2	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	press	press	NN	NN	-	7	SUB	-	-
+7	reported	reported	VBD	VBD	-	4	SBAR	-	-
+8	,	,	,	,	-	7	P	-	-
+9	a	a	DT	DT	-	11	NMOD	-	-
+10	successful	successful	JJ	JJ	-	11	NMOD	-	-
+11	spy	spy	NN	NN	-	7	OBJ	-	-
+12	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	NMOD	-	-
+2	:	:	:	:	-	3	P	-	-
+3	was	was	NNP	NNP	-	4	SUB	-	-
+4	ames	ames	VBZ	VBZ	-	0	ROOT	-	-
+5	a	a	DT	DT	-	7	NMOD	-	-
+6	successful	successful	JJ	JJ	-	7	NMOD	-	-
+7	spy	spy	NN	NN	-	4	OBJ	-	-
+8	?	?	.	.	-	4	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-51	-51	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	press	press	NN	NN	-	3	SUB	-	-
+3	reported	reported	VBD	VBD	-	0	ROOT	-	-
+4	that	that	IN	IN	-	3	VMOD	-	-
+5	ames	ames	NNP	NNP	-	6	SUB	-	-
+6	was	was	VBD	VBD	-	4	SBAR	-	-
+7	a	a	DT	DT	-	9	NMOD	-	-
+8	successful	successful	JJ	JJ	-	9	NMOD	-	-
+9	spy	spy	NN	NN	-	6	PRD	-	-
+10	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	NMOD	-	-
+2	:	:	:	:	-	3	P	-	-
+3	was	was	NNP	NNP	-	4	SUB	-	-
+4	ames	ames	VBZ	VBZ	-	0	ROOT	-	-
+5	a	a	DT	DT	-	7	NMOD	-	-
+6	successful	successful	JJ	JJ	-	7	NMOD	-	-
+7	spy	spy	NN	NN	-	4	OBJ	-	-
+8	?	?	.	.	-	4	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-52	-52	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	us	us	NNP	NNP	-	3	NMOD	-	-
+3	forgot	forgot	NN	NN	-	0	ROOT	-	-
+4	that	that	IN	IN	-	3	NMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	afghans	afghans	NNPS	NNPS	-	7	SUB	-	-
+7	speak	speak	VBP	VBP	-	4	SBAR	-	-
+8	several	several	JJ	JJ	-	10	NMOD	-	-
+9	different	different	JJ	JJ	-	10	NMOD	-	-
+10	languages	languages	NNS	NNS	-	7	OBJ	-	-
+11	.	.	.	.	-	7	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	do	do	VBP	VBP	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	afghans	afghans	NNPS	NNPS	-	6	SUB	-	-
+6	speak	speak	VBP	VBP	-	3	VMOD	-	-
+7	several	several	JJ	JJ	-	9	NMOD	-	-
+8	different	different	JJ	JJ	-	9	NMOD	-	-
+9	languages	languages	NNS	NNS	-	6	OBJ	-	-
+10	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-53	-53	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	bush	bush	NNP	NNP	-	2	SUB	-	-
+2	realized	realized	VBD	VBD	-	0	ROOT	-	-
+3	that	that	IN	IN	-	2	VMOD	-	-
+4	the	the	DT	DT	-	6	NMOD	-	-
+5	us	us	NNP	NNP	-	6	NMOD	-	-
+6	army	army	NNP	NNP	-	7	SUB	-	-
+7	had	had	VBD	VBD	-	3	SBAR	-	-
+8	to	to	TO	TO	-	9	VMOD	-	-
+9	be	be	VB	VB	-	7	VMOD	-	-
+10	transformed	transformed	VBN	VBN	-	9	VC	-	-
+11	to	to	TO	TO	-	12	VMOD	-	-
+12	meet	meet	VB	VB	-	10	VMOD	-	-
+13	new	new	JJ	JJ	-	14	NMOD	-	-
+14	threats	threats	NNS	NNS	-	12	OBJ	-	-
+15	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	the	the	DT	DT	-	6	NMOD	-	-
+5	us	us	NNP	NNP	-	6	NMOD	-	-
+6	army	army	NNP	NNP	-	3	OBJ	-	-
+7	have	have	VBP	VBP	-	3	VMOD	-	-
+8	to	to	TO	TO	-	9	VMOD	-	-
+9	be	be	VB	VB	-	7	VMOD	-	-
+10	transformed	transformed	VBN	VBN	-	9	VC	-	-
+11	to	to	TO	TO	-	12	VMOD	-	-
+12	meet	meet	VB	VB	-	10	VMOD	-	-
+13	new	new	JJ	JJ	-	14	NMOD	-	-
+14	threats	threats	NNS	NNS	-	12	OBJ	-	-
+15	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-54	-54	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	bush	bush	NNP	NNP	-	2	SUB	-	-
+2	did	did	VBD	VBD	-	0	ROOT	-	-
+3	n't	n't	RB	RB	-	2	VMOD	-	-
+4	realize	realize	VB	VB	-	2	VC	-	-
+5	that	that	DT	DT	-	4	VMOD	-	-
+6	afghanistan	afghanistan	NNP	NNP	-	7	SUB	-	-
+7	is	is	VBZ	VBZ	-	5	SBAR	-	-
+8	land-locked	land-locked	JJ	JJ	-	7	PRD	-	-
+9	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	is	is	VBZ	VBZ	-	0	ROOT	-	-
+4	afghanistan	afghanistan	NNP	NNP	-	3	SUB	-	-
+5	land-locked	land-locked	JJ	JJ	-	3	PRD	-	-
+6	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-55	-55	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	there	there	EX	EX	-	2	SUB	-	-
 2	is	is	VBZ	VBZ	-	0	ROOT	-	-
 3	a	a	DT	DT	-	4	NMOD	-	-
 4	belief	belief	NN	NN	-	2	PRD	-	-
 5	that	that	IN	IN	-	4	NMOD	-	-
 6	the	the	DT	DT	-	7	NMOD	-	-
-7	US	US	NNP	NNP	-	8	SBJ	-	-
-8	will	will	MD	MD	-	5	SUB	-	-
+7	us	us	NNP	NNP	-	8	SUB	-	-
+8	will	will	MD	MD	-	5	SBAR	-	-
 9	invade	invade	VB	VB	-	8	VC	-	-
-10	Syria	Syria	NNP	NNP	-	9	OBJ	-	-
+10	syria	syria	NNP	NNP	-	9	OBJ	-	-
 11	.	.	.	.	-	2	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	NAME	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Will	Will	MD	MD	-	0	ROOT	-	-
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	will	will	MD	MD	-	0	ROOT	-	-
 4	the	the	DT	DT	-	5	NMOD	-	-
-5	US	US	NNP	NNP	-	3	VC	-	-
-6	invade	invade	VBP	VBP	-	3	VC	-	-
-7	Syria	Syria	NNP	NNP	-	6	OBJ	-	-
+5	us	us	NNP	NNP	-	3	SUB	-	-
+6	invade	invade	VB	VB	-	3	VMOD	-	-
+7	syria	syria	NNP	NNP	-	6	OBJ	-	-
 8	?	?	.	.	-	3	P	-	-
 
-1	Kerry	Kerry	NNP	NNP	-	2	NAME	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-56	-56	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	is	is	VBZ	VBZ	-	0	ROOT	-	-
+3	not	not	RB	RB	-	4	AMOD	-	-
+4	surprising	surprising	JJ	JJ	-	2	PRD	-	-
+5	that	that	IN	IN	-	2	VMOD	-	-
+6	bush	bush	NNP	NNP	-	7	SUB	-	-
+7	has	has	VBZ	VBZ	-	5	SBAR	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	lead	lead	NN	NN	-	7	OBJ	-	-
+10	in	in	IN	IN	-	9	NMOD	-	-
+11	ohio	ohio	NNP	NNP	-	10	PMOD	-	-
+12	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	SUB	-	-
+2	:	:	:	:	-	5	P	-	-
+3	does	does	NNP	NNP	-	4	NMOD	-	-
+4	bush	bush	NNP	NNP	-	5	SUB	-	-
+5	have	have	VBP	VBP	-	0	ROOT	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	lead	lead	NN	NN	-	5	OBJ	-	-
+8	in	in	IN	IN	-	7	NMOD	-	-
+9	ohio	ohio	NNP	NNP	-	8	PMOD	-	-
+10	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-57	-57	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	is	is	VBZ	VBZ	-	0	ROOT	-	-
+3	not	not	RB	RB	-	2	VMOD	-	-
+4	likely	likely	JJ	JJ	-	2	PRD	-	-
+5	that	that	IN	IN	-	2	VMOD	-	-
+6	bush	bush	NNP	NNP	-	7	SUB	-	-
+7	has	has	VBZ	VBZ	-	5	SBAR	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	lead	lead	NN	NN	-	7	OBJ	-	-
+10	in	in	IN	IN	-	9	NMOD	-	-
+11	ohio	ohio	NNP	NNP	-	10	PMOD	-	-
+12	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	SUB	-	-
+2	:	:	:	:	-	5	P	-	-
+3	does	does	NNP	NNP	-	4	NMOD	-	-
+4	bush	bush	NNP	NNP	-	5	SUB	-	-
+5	have	have	VBP	VBP	-	0	ROOT	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	lead	lead	NN	NN	-	5	OBJ	-	-
+8	in	in	IN	IN	-	7	NMOD	-	-
+9	ohio	ohio	NNP	NNP	-	8	PMOD	-	-
+10	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-58	-58	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	kerry	kerry	NNP	NNP	-	2	SUB	-	-
 2	knew	knew	VBD	VBD	-	0	ROOT	-	-
-3	that	that	IN	IN	-	2	OBJ	-	-
-4	Edwards	Edwards	NNP	NNP	-	5	SBJ	-	-
-5	would	would	MD	MD	-	3	SUB	-	-
+3	that	that	IN	IN	-	2	VMOD	-	-
+4	edwards	edwards	NNP	NNP	-	5	SUB	-	-
+5	would	would	MD	MD	-	3	SBAR	-	-
 6	accept	accept	VB	VB	-	5	VC	-	-
 7	the	the	DT	DT	-	8	NMOD	-	-
 8	nomination	nomination	NN	NN	-	6	OBJ	-	-
 9	.	.	.	.	-	2	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	Kerry	Kerry	NNP	NNP	-	3	SBJ	-	-
-5	know	know	VBP	VBP	-	12	DEP	-	-
-6	whether	whether	IN	IN	-	5	OBJ	-	-
-7	Edwards	Edwards	NNP	NNP	-	8	SBJ	-	-
-8	would	would	MD	MD	-	6	SUB	-	-
+1	qn	qn	NNP	NNP	-	4	NMOD	-	-
+2	:	:	:	:	-	4	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	kerry	kerry	NNP	NNP	-	5	SUB	-	-
+5	know	know	VBP	VBP	-	0	ROOT	-	-
+6	whether	whether	IN	IN	-	5	VMOD	-	-
+7	edwards	edwards	NNP	NNP	-	8	SUB	-	-
+8	would	would	MD	MD	-	6	SBAR	-	-
 9	accept	accept	VB	VB	-	8	VC	-	-
 10	the	the	DT	DT	-	11	NMOD	-	-
 11	nomination	nomination	NN	NN	-	9	OBJ	-	-
-12	?	?	.	.	-	3	P	-	-
+12	?	?	.	.	-	5	P	-	-
 
-1	Tom	Tom	NNP	NNP	-	2	NAME	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-59	-59	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	tom	tom	NNP	NNP	-	2	SUB	-	-
 2	knows	knows	VBZ	VBZ	-	0	ROOT	-	-
-3	that	that	IN	IN	-	2	OBJ	-	-
-4	Naples	Naples	NNP	NNP	-	5	SBJ	-	-
-5	is	is	VBZ	VBZ	-	3	SUB	-	-
-6	in	in	IN	IN	-	5	LOC-PRD	-	-
-7	Campania	Campania	NNP	NNP	-	6	PMOD	-	-
+3	that	that	IN	IN	-	2	VMOD	-	-
+4	naples	naples	NNP	NNP	-	5	SUB	-	-
+5	is	is	VBZ	VBZ	-	3	SBAR	-	-
+6	in	in	IN	IN	-	5	VMOD	-	-
+7	campania	campania	NNP	NNP	-	6	PMOD	-	-
 8	.	.	.	.	-	2	P	-	-
 
-1	QN	QN	NNP	NNP	-	5	SBJ	-	-
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
 2	:	:	:	:	-	1	P	-	-
-3	Does	Does	NNP	NNP	-	4	NAME	-	-
-4	Tom	Tom	NNP	NNP	-	1	ROOT	-	-
-5	know	know	VB	VB	-	0	ROOT	-	-
-6	where	where	WRB	WRB	-	8	LOC-PRD	-	-
-7	Naples	Naples	NNP	NNP	-	8	SBJ	-	-
-8	is	is	VBZ	VBZ	-	5	OBJ	-	-
-9	?	?	.	.	-	8	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	the	the	DT	DT	-	5	NMOD	-	-
-5	feast	feast	NN	NN	-	3	SBJ	-	-
-6	take	take	VB	VB	-	3	VC	-	-
-7	place	place	NN	NN	-	6	OBJ	-	-
-8	in	in	IN	IN	-	6	PRT	-	-
-9	September	September	NNP	NNP	-	8	PMOD	-	-
-10	?	?	.	.	-	3	P	-	-
-
-1	It	It	PRP	PRP	-	2	SBJ	-	-
-2	is	is	VBZ	VBZ	-	0	ROOT	-	-
-3	false	false	JJ	JJ	-	2	PRD	-	-
-4	that	that	IN	IN	-	2	PRD	-	-
-5	Bin	Bin	NNP	NNP	-	6	NMOD	-	-
-6	Laden	Laden	JJ	JJ	-	7	SBJ	-	-
-7	was	was	VBD	VBD	-	4	SUB	-	-
-8	seen	seen	VBN	VBN	-	7	VC	-	-
-9	in	in	IN	IN	-	8	LOC	-	-
-10	Tora	Tora	NNP	NNP	-	11	NMOD	-	-
-11	Bora	Bora	NNP	NNP	-	9	PMOD	-	-
-12	.	.	.	.	-	2	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Was	Was	VBD	VBD	-	0	ROOT	-	-
-4	Bin	Bin	NNP	NNP	-	3	PRD	-	-
-5	Laden	Laden	JJ	JJ	-	3	PRD	-	-
-6	seen	seen	VBN	VBN	-	3	VC	-	-
-7	in	in	IN	IN	-	3	LOC	-	-
-8	Tora	Tora	NNP	NNP	-	9	NMOD	-	-
-9	Bora	Bora	NNP	NNP	-	7	PMOD	-	-
-10	?	?	.	.	-	3	P	-	-
-
-1	Tony	Tony	NNP	NNP	-	2	NAME	-	-
-2	Hall	Hall	NNP	NNP	-	3	SBJ	-	-
-3	left	left	VBD	VBD	-	0	ROOT	-	-
-4	Amman	Amman	NNP	NNP	-	3	OPRD	-	-
-5	on	on	IN	IN	-	3	ADV	-	-
-6	Sunday	Sunday	NNP	NNP	-	5	PMOD	-	-
-7	.	.	.	.	-	3	P	-	-
-
-1	Khan	Khan	NNP	NNP	-	2	SBJ	-	-
-2	sold	sold	VBD	VBD	-	0	ROOT	-	-
-3	<num>	<num>	CD	CD	-	4	DEP	-	-
-4	centrifuges	centrifuges	NNS	NNS	-	2	OBJ	-	-
-5	to	to	TO	TO	-	2	DTV	-	-
-6	North	North	NNP	NNP	-	7	NAME	-	-
-7	Korea	Korea	NNP	NNP	-	5	IM	-	-
-8	.	.	.	.	-	2	P	-	-
-
-1	QN	QN	NNP	NNP	-	3	SBJ	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Did	Did	VBD	VBD	-	0	ROOT	-	-
-4	North	North	NNP	NNP	-	5	NAME	-	-
-5	Korea	Korea	NNP	NNP	-	3	SBJ	-	-
-6	buy	buy	VBP	VBP	-	3	VC	-	-
-7	<num>	<num>	CD	CD	-	8	DEP	-	-
-8	centrifuges	centrifuges	NNS	NNS	-	6	OBJ	-	-
+3	does	does	VBZ	VBZ	-	0	ROOT	-	-
+4	tom	tom	NNP	NNP	-	5	SUB	-	-
+5	know	know	VBP	VBP	-	3	VMOD	-	-
+6	where	where	WRB	WRB	-	5	VMOD	-	-
+7	naples	naples	NNP	NNP	-	8	SUB	-	-
+8	is	is	VBZ	VBZ	-	6	SBAR	-	-
 9	?	?	.	.	-	3	P	-	-
 
-1	The	The	DT	DT	-	3	NMOD	-	-
-2	US	US	NNP	NNP	-	3	NAME	-	-
-3	invasion	invasion	NN	NN	-	6	SBJ	-	-
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-60	-60	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	we	we	PRP	PRP	-	2	SUB	-	-
+2	met	met	VBD	VBD	-	0	ROOT	-	-
+3	in	in	IN	IN	-	2	VMOD	-	-
+4	september	september	NNP	NNP	-	3	PMOD	-	-
+5	during	during	IN	IN	-	2	VMOD	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	feast	feast	NN	NN	-	5	PMOD	-	-
+8	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	feast	feast	NN	NN	-	3	OBJ	-	-
+6	take	take	VB	VB	-	3	VMOD	-	-
+7	place	place	NN	NN	-	6	VMOD	-	-
+8	in	in	IN	IN	-	6	VMOD	-	-
+9	september	september	NNP	NNP	-	8	PMOD	-	-
+10	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-61	-61	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	is	is	VBZ	VBZ	-	0	ROOT	-	-
+3	false	false	JJ	JJ	-	2	PRD	-	-
+4	that	that	IN	IN	-	2	VMOD	-	-
+5	bin	bin	NNP	NNP	-	6	NMOD	-	-
+6	laden	laden	NNP	NNP	-	7	SUB	-	-
+7	was	was	VBD	VBD	-	4	SBAR	-	-
+8	seen	seen	VBN	VBN	-	7	VC	-	-
+9	in	in	IN	IN	-	8	VMOD	-	-
+10	tora	tora	NNP	NNP	-	11	NMOD	-	-
+11	bora	bora	NNP	NNP	-	9	PMOD	-	-
+12	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	was	was	NNP	NNP	-	5	NMOD	-	-
+4	bin	bin	NNP	NNP	-	5	NMOD	-	-
+5	laden	laden	NNP	NNP	-	6	SUB	-	-
+6	seen	seen	VBN	VBN	-	0	ROOT	-	-
+7	in	in	IN	IN	-	6	VMOD	-	-
+8	tora	tora	NNP	NNP	-	9	NMOD	-	-
+9	bora	bora	NNP	NNP	-	7	PMOD	-	-
+10	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-62	-62	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	follows	follows	VBZ	VBZ	-	0	ROOT	-	-
+3	that	that	DT	DT	-	2	VMOD	-	-
+4	bin	bin	NNP	NNP	-	5	NMOD	-	-
+5	laden	laden	NNP	NNP	-	6	SUB	-	-
+6	was	was	VBD	VBD	-	3	SBAR	-	-
+7	in	in	IN	IN	-	6	VMOD	-	-
+8	tora	tora	NNP	NNP	-	9	NMOD	-	-
+9	bora	bora	NNP	NNP	-	7	PMOD	-	-
+10	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	was	was	NNP	NNP	-	5	NMOD	-	-
+4	bin	bin	NNP	NNP	-	5	NMOD	-	-
+5	laden	laden	NNP	NNP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	NMOD	-	-
+7	tora	tora	NNP	NNP	-	8	NMOD	-	-
+8	bora	bora	NNP	NNP	-	6	PMOD	-	-
+9	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-63	-63	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	is	is	VBZ	VBZ	-	0	ROOT	-	-
+3	likely	likely	JJ	JJ	-	2	PRD	-	-
+4	that	that	IN	IN	-	2	VMOD	-	-
+5	bin	bin	NNP	NNP	-	6	NMOD	-	-
+6	laden	laden	NNP	NNP	-	7	SUB	-	-
+7	was	was	VBD	VBD	-	4	SBAR	-	-
+8	in	in	IN	IN	-	7	VMOD	-	-
+9	tora	tora	NNP	NNP	-	10	NMOD	-	-
+10	bora	bora	NNP	NNP	-	8	PMOD	-	-
+11	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	was	was	NNP	NNP	-	5	NMOD	-	-
+4	bin	bin	NNP	NNP	-	5	NMOD	-	-
+5	laden	laden	NNP	NNP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	NMOD	-	-
+7	tora	tora	NNP	NNP	-	8	NMOD	-	-
+8	bora	bora	NNP	NNP	-	6	PMOD	-	-
+9	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-64	-64	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	tony	tony	NNP	NNP	-	2	NMOD	-	-
+2	hall	hall	NNP	NNP	-	3	SUB	-	-
+3	left	left	VBD	VBD	-	0	ROOT	-	-
+4	amman	amman	NNP	NNP	-	3	OBJ	-	-
+5	on	on	IN	IN	-	3	VMOD	-	-
+6	sunday	sunday	NNP	NNP	-	5	PMOD	-	-
+7	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	was	was	NNP	NNP	-	5	NMOD	-	-
+4	tony	tony	NNP	NNP	-	5	NMOD	-	-
+5	hall	hall	NNP	NNP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	NMOD	-	-
+7	amman	amman	NNP	NNP	-	6	PMOD	-	-
+8	on	on	IN	IN	-	5	NMOD	-	-
+9	sunday	sunday	NNP	NNP	-	8	PMOD	-	-
+10	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-65	-65	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	tony	tony	NNP	NNP	-	2	NMOD	-	-
+2	hall	hall	NNP	NNP	-	3	SUB	-	-
+3	left	left	VBD	VBD	-	0	ROOT	-	-
+4	amman	amman	NNP	NNP	-	3	OBJ	-	-
+5	on	on	IN	IN	-	3	VMOD	-	-
+6	sunday	sunday	NNP	NNP	-	5	PMOD	-	-
+7	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	NMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	was	was	NNP	NNP	-	5	NMOD	-	-
+4	tony	tony	NNP	NNP	-	5	NMOD	-	-
+5	hall	hall	NNP	NNP	-	0	ROOT	-	-
+6	in	in	IN	IN	-	5	NMOD	-	-
+7	amman	amman	NNP	NNP	-	6	PMOD	-	-
+8	on	on	IN	IN	-	5	NMOD	-	-
+9	saturday	saturday	NNP	NNP	-	8	PMOD	-	-
+10	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-66	-66	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	khan	khan	NNP	NNP	-	2	SUB	-	-
+2	sold	sold	VBD	VBD	-	0	ROOT	-	-
+3	<num>	<num>	CD	CD	-	4	NMOD	-	-
+4	centrifuges	centrifuges	NNS	NNS	-	2	OBJ	-	-
+5	to	to	TO	TO	-	2	VMOD	-	-
+6	north	north	NNP	NNP	-	7	NMOD	-	-
+7	korea	korea	NNP	NNP	-	5	PMOD	-	-
+8	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	6	SUB	-	-
+2	:	:	:	:	-	6	P	-	-
+3	did	did	NNP	NNP	-	5	NMOD	-	-
+4	north	north	NNP	NNP	-	5	NMOD	-	-
+5	korea	korea	NNP	NNP	-	6	SUB	-	-
+6	buy	buy	VBP	VBP	-	0	ROOT	-	-
+7	<num>	<num>	CD	CD	-	8	NMOD	-	-
+8	centrifuges	centrifuges	NNS	NNS	-	6	OBJ	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-67	-67	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	us	us	NNP	NNP	-	3	NMOD	-	-
+3	invasion	invasion	NN	NN	-	6	SUB	-	-
 4	of	of	IN	IN	-	3	NMOD	-	-
-5	Afghanistan	Afghanistan	NNP	NNP	-	4	PMOD	-	-
+5	afghanistan	afghanistan	NNP	NNP	-	4	PMOD	-	-
 6	prevented	prevented	VBD	VBD	-	0	ROOT	-	-
-7	Al-Qaida	Al-Qaida	NNP	NNP	-	6	ADV	-	-
-8	from	from	IN	IN	-	6	ADV	-	-
+7	al-qaida	al-qaida	NNP	NNP	-	6	OBJ	-	-
+8	from	from	IN	IN	-	6	VMOD	-	-
 9	attacking	attacking	VBG	VBG	-	8	PMOD	-	-
-10	Ryad	Ryad	NNP	NNP	-	9	OBJ	-	-
-11	in	in	IN	IN	-	6	LOC	-	-
+10	ryad	ryad	NN	NN	-	9	OBJ	-	-
+11	in	in	IN	IN	-	9	VMOD	-	-
 12	<num>	<num>	CD	CD	-	11	PMOD	-	-
 13	.	.	.	.	-	6	P	-	-
 
-1	Many	Many	JJ	JJ	-	2	NMOD	-	-
-2	soldiers	soldiers	NNS	NNS	-	3	SBJ	-	-
+1	qn	qn	NNP	NNP	-	6	NMOD	-	-
+2	:	:	:	:	-	6	P	-	-
+3	did	did	NNP	NNP	-	6	NMOD	-	-
+4	al-qaida	al-qaida	NNP	NNP	-	6	NMOD	-	-
+5	attack	attack	NN	NN	-	6	NMOD	-	-
+6	ryad	ryad	NN	NN	-	0	ROOT	-	-
+7	in	in	IN	IN	-	6	NMOD	-	-
+8	<num>	<num>	CD	CD	-	7	PMOD	-	-
+9	?	?	.	.	-	6	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-68	-68	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	administration	administration	NN	NN	-	3	SUB	-	-
+3	managed	managed	VBD	VBD	-	0	ROOT	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	track	track	VB	VB	-	3	VMOD	-	-
+6	down	down	IN	IN	-	5	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	perpetrators	perpetrators	NNS	NNS	-	6	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	the	the	DT	DT	-	6	NMOD	-	-
+5	administration	administration	NN	NN	-	6	NMOD	-	-
+6	track	track	NN	NN	-	3	VMOD	-	-
+7	down	down	IN	IN	-	3	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	perpetrators	perpetrators	NNS	NNS	-	7	PMOD	-	-
+10	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-69	-69	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	administration	administration	NN	NN	-	3	SUB	-	-
+3	did	did	VBD	VBD	-	0	ROOT	-	-
+4	n't	n't	RB	RB	-	3	VMOD	-	-
+5	manage	manage	VB	VB	-	3	VC	-	-
+6	to	to	TO	TO	-	7	VMOD	-	-
+7	track	track	VB	VB	-	5	VMOD	-	-
+8	down	down	IN	IN	-	5	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	perpetrators	perpetrators	NNS	NNS	-	8	PMOD	-	-
+11	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	did	did	VB	VB	-	0	ROOT	-	-
+4	the	the	DT	DT	-	6	NMOD	-	-
+5	administration	administration	NN	NN	-	6	NMOD	-	-
+6	track	track	NN	NN	-	3	VMOD	-	-
+7	down	down	IN	IN	-	3	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	perpetrators	perpetrators	NNS	NNS	-	7	PMOD	-	-
+10	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-70	-70	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	bush	bush	NNP	NNP	-	2	SUB	-	-
+2	did	did	VBD	VBD	-	0	ROOT	-	-
+3	n't	n't	RB	RB	-	2	VMOD	-	-
+4	have	have	VB	VB	-	2	VC	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	time	time	NN	NN	-	4	OBJ	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	read	read	VB	VB	-	6	NMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	report	report	NN	NN	-	8	OBJ	-	-
+11	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	VMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	bush	bush	NNP	NNP	-	5	SUB	-	-
+5	read	read	VBD	VBD	-	0	ROOT	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	report	report	NN	NN	-	5	OBJ	-	-
+8	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-71	-71	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	bush	bush	NNP	NNP	-	2	SUB	-	-
+2	had	had	VBD	VBD	-	0	ROOT	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	time	time	NN	NN	-	2	OBJ	-	-
+5	to	to	TO	TO	-	6	VMOD	-	-
+6	read	read	VB	VB	-	4	NMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	report	report	NN	NN	-	6	OBJ	-	-
+9	.	.	.	.	-	2	P	-	-
+
+1	qn	qn	NNP	NNP	-	5	VMOD	-	-
+2	:	:	:	:	-	5	P	-	-
+3	did	did	NNP	NNP	-	4	NMOD	-	-
+4	bush	bush	NNP	NNP	-	5	SUB	-	-
+5	read	read	VBD	VBD	-	0	ROOT	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	report	report	NN	NN	-	5	OBJ	-	-
+8	?	?	.	.	-	5	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-72	-72	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	president	president	NN	NN	-	3	SUB	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	n't	n't	RB	RB	-	3	VMOD	-	-
+5	able	able	JJ	JJ	-	3	PRD	-	-
+6	to	to	TO	TO	-	7	VMOD	-	-
+7	attend	attend	VB	VB	-	5	AMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	meeting	meeting	NN	NN	-	7	OBJ	-	-
+10	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	did	did	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	president	president	NN	NN	-	3	OBJ	-	-
+6	attend	attend	VBP	VBP	-	3	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	meeting	meeting	NN	NN	-	6	OBJ	-	-
+9	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-73	-73	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	president	president	NN	NN	-	3	SUB	-	-
+3	was	was	VBD	VBD	-	0	ROOT	-	-
+4	able	able	JJ	JJ	-	3	PRD	-	-
+5	to	to	TO	TO	-	6	VMOD	-	-
+6	attend	attend	VB	VB	-	4	AMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	meeting	meeting	NN	NN	-	6	OBJ	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	did	did	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	president	president	NN	NN	-	3	OBJ	-	-
+6	attend	attend	VBP	VBP	-	3	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	meeting	meeting	NN	NN	-	6	OBJ	-	-
+9	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-74	-74	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	many	many	JJ	JJ	-	2	NMOD	-	-
+2	soldiers	soldiers	NNS	NNS	-	3	SUB	-	-
 3	were	were	VBD	VBD	-	0	ROOT	-	-
 4	killed	killed	VBN	VBN	-	3	VC	-	-
-5	in	in	IN	IN	-	4	LOC	-	-
+5	in	in	IN	IN	-	4	VMOD	-	-
 6	the	the	DT	DT	-	7	NMOD	-	-
 7	ambush	ambush	NN	NN	-	5	PMOD	-	-
 8	.	.	.	.	-	3	P	-	-
 
-1	QN	QN	NNP	NNP	-	3	NMOD	-	-
-2	:	:	:	:	-	1	P	-	-
-3	Were	Were	VBD	VBD	-	0	ROOT	-	-
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	3	P	-	-
+3	were	were	VB	VB	-	0	ROOT	-	-
 4	all	all	DT	DT	-	5	NMOD	-	-
-5	soldiers	soldiers	NNS	NNS	-	3	PRD	-	-
-6	killed	killed	VBN	VBN	-	5	APPO	-	-
-7	in	in	IN	IN	-	6	LOC	-	-
+5	soldiers	soldiers	NNS	NNS	-	3	SUB	-	-
+6	killed	killed	VBN	VBN	-	5	NMOD	-	-
+7	in	in	IN	IN	-	6	VMOD	-	-
 8	the	the	DT	DT	-	9	NMOD	-	-
 9	ambush	ambush	NN	NN	-	7	PMOD	-	-
 10	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-75	-75	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	man	man	NN	NN	-	3	SUB	-	-
+3	had	had	VBD	VBD	-	0	ROOT	-	-
+4	$	$	$	$	-	5	P	-	-
+5	<num>	<num>	CD	CD	-	3	OBJ	-	-
+6	in	in	IN	IN	-	3	VMOD	-	-
+7	his	his	PRP$	PRP$	-	8	NMOD	-	-
+8	pocket	pocket	NN	NN	-	6	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	did	did	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	man	man	NN	NN	-	6	SUB	-	-
+6	have	have	VBP	VBP	-	3	VMOD	-	-
+7	$	$	$	$	-	8	P	-	-
+8	<num>	<num>	CD	CD	-	6	OBJ	-	-
+9	in	in	IN	IN	-	6	VMOD	-	-
+10	his	his	PRP$	PRP$	-	11	NMOD	-	-
+11	pocket	pocket	NN	NN	-	9	PMOD	-	-
+12	?	?	.	.	-	3	P	-	-
+
+1	id	id	NNP	NNP	-	0	ROOT	-	-
+2	:	:	:	:	-	1	P	-	-
+3	parc	parc	NNP	NNP	-	1	DEP	-	-
+4	-76	-76	CD	CD	-	3	NMOD	-	-
+5	.	.	.	.	-	1	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	man	man	NN	NN	-	3	SUB	-	-
+3	had	had	VBD	VBD	-	0	ROOT	-	-
+4	$	$	$	$	-	5	P	-	-
+5	<num>	<num>	CD	CD	-	3	OBJ	-	-
+6	in	in	IN	IN	-	3	VMOD	-	-
+7	his	his	PRP$	PRP$	-	8	NMOD	-	-
+8	pocket	pocket	NN	NN	-	6	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	qn	qn	NNP	NNP	-	3	SUB	-	-
+2	:	:	:	:	-	1	P	-	-
+3	did	did	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	man	man	NN	NN	-	6	SUB	-	-
+6	have	have	VBP	VBP	-	3	VMOD	-	-
+7	$	$	$	$	-	8	P	-	-
+8	<num>	<num>	CD	CD	-	6	OBJ	-	-
+9	in	in	IN	IN	-	6	VMOD	-	-
+10	his	his	PRP$	PRP$	-	11	NMOD	-	-
+11	pocket	pocket	NN	NN	-	9	PMOD	-	-
+12	?	?	.	.	-	3	P	-	-
 
