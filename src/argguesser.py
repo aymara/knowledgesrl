@@ -27,7 +27,7 @@ class ArgGuesser(FNParsedReader):
 
     subject_deprels = [
     "LGS", #Logical subject -> should we keep this (36 args) ?
-    "SBJ"
+    "SBJ", "SUB"
     ]
     
     non_core_deprels = [
