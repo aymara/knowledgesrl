@@ -81,8 +81,8 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
 
     stats_data["frame_extracted_bad"] = (
         len(extracted_frames) - stats_data["frame_extracted_good"])
-    stats_data["arg_extracted_bad"] += sum(
-        [len(x.args) for x in extracted_frames if x.frame_name == ""])
+    #stats_data["arg_extracted_bad"] += sum(
+    #    [len(x.args) for x in extracted_frames if x.frame_name == ""])
     
     # Discard every frame for which there was no match
     return extracted_frames
