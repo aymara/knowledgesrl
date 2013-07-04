@@ -98,36 +98,43 @@ def correct_num_tags(extracted_frame, original_sentence):
     
     """
     
-    search = "<num>"
     p = re.compile('[0-9]+')
     numbers = p.findall(original_sentence)
     
-    new_sentence = extracted_frame.sentence.replace("<num> , <num>", "<num>,<num>")
-    new_sentence = new_sentence.replace("<num> : <num>", "<num>:<num>")
-    extracted_frame.sentence = new_sentence
+    frame_replace_all(extracted_frame, "<num> , <num>", "<num>,<num>")
+    frame_replace_all(extracted_frame, "<num> : <num>", "<num>:<num>")
     
-    i = 0
-    while True:
-        position = extracted_frame.sentence.find(search)
-        if position == -1: break
-        
-        replacement = numbers[i]
-        offset = len(replacement) - len(search)
-        
-        extracted_frame.sentence = extracted_frame.sentence.replace(
-            search, replacement, 1)
-        
-        if extracted_frame.predicate.begin > position:
-            extracted_frame.predicate.begin += offset
-            extracted_frame.predicate.end += offset
-        for arg in extracted_frame.args:
-            if arg.begin > position:
-                arg.begin += offset
-            elif arg.end > position:
-                arg.text = arg.text.replace(search, replacement, 1)
-            if arg.end > position:
-                arg.end += offset
-        i += 1
+    for number in numbers:
+        frame_replace_one(extracted_frame, "<num>", number)
+
+def frame_replace_one(frame, search, replace):
+    """ Replace the first occurence of a word by another word in a frame """
+    position = frame.sentence.find(search)
+    if position == -1: return False
+    
+    offset = len(replace) - len(search)
+    
+    frame.sentence = frame.sentence.replace(search, replace, 1)
+    
+    if frame.predicate.begin > position:
+        frame.predicate.begin += offset
+        frame.predicate.end += offset
+    for arg in frame.args:
+        if arg.begin > position:
+            arg.begin += offset
+        elif arg.end > position:
+            arg.text = arg.text.replace(search, replace, 1)
+        if arg.end > position:
+            arg.end += offset
+    return True
+    
+def frame_replace_all(frame, search, replace):
+    """ Replace very occurence of a word by another word in a frame"""
+    if search in replace:
+        raise Exception("frame_replace_all : cannot handle cases where :search"
+            " is a substring of :replace")
+    
+    while frame_replace_one(frame, search, replace): pass
 
 def predicate_match(predicate1, predicate2):
     """ Tells whether two predicates in the same sentence belongs to the same frame"""
