@@ -50,7 +50,9 @@ class ArgGuesser(FNParsedReader):
     "$":"NP",
     "CD":"NP", #Cardinal number ("The three of us")
     "DT":"NP", #Determiner ("this" or "that")
-    "JJ":"ADJ", "JJR":"ADJ",
+    "JJ":"ADJ",
+    "JJR":"NP", #Comparative
+    "JJS":"NP", #Superlative
     "MD":"S", #Modal verb
     "NN":"NP", "NNP":"NP", "NNPS": "NP", "NNS":"NP",
     "NP":"NP", "NPS":"NP",
