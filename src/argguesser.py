@@ -206,6 +206,8 @@ class ArgGuesser(FNParsedReader):
         if not base_node is node and base_node.pos in self.predicate_pos:
             result += self._find_args_rec(base_node, base_node)
 
+        result = [x for x in result if x.text != "to"]
+
         return result
     
     def _find_args_rec(self, predicate_node, node):
