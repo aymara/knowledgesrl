@@ -80,6 +80,8 @@ class ArgGuesser(FNParsedReader):
         # First, compute the infinitive form of every verb in the corpus
         self._compute_base_forms()
         
+        print("Extracting frames and arguments...")
+        
         # Read the corpus a second time to build frames
         for filename in sorted(os.listdir(self.annotations_path)):
             if not filename[-6:] == ".conll": continue
@@ -99,9 +101,9 @@ class ArgGuesser(FNParsedReader):
         
         result = set()
         
+        print("Extracting predicates...")
         for filename in sorted(os.listdir(self.annotations_path)):
             if not filename[-6:] == ".conll": continue
-
        
             with open(self.annotations_path + filename) as content:
                 for line in content.readlines():
@@ -122,6 +124,8 @@ class ArgGuesser(FNParsedReader):
         with open("temp_wordlist", "wb") as picklefile:
             pickle.dump(self._extract_verbs(), picklefile, 2)
 
+        print("Computing predicates infinitive forms...")
+        
         os.system("python2.7 wordclassesloader.py --morph")
 
         with open("temp_morph", "rb") as picklefile:
