@@ -67,12 +67,14 @@ class VerbnetFrame:
         "VPbrst":"S", "VPing":"S_ING", "VPto":"to S"
     }
     
-    def __init__(self, structure, roles, vnclass = None, predicate = None):
+    def __init__(self, structure, roles, vnclass = None, predicate = None,
+        role_restrictions = []):
         self.structure = structure
         self.predicate = predicate
         
         # Transform "a" in {"a"} and keep everything else unchanged
         self.roles = [{x} if isinstance(x, str) else x for x in roles]
+        self.role_restrictions = role_restrictions
         self.slot_preps = []
         self.slot_types = []
         self.headwords = []

@@ -13,6 +13,109 @@ from framematcher import FrameMatcher
 import verbnetprepclasses
 import paths
 
+class VNRestriction:
+    possible_types = {
+        "abstract", "animal", "animate", "body_part", "comestible",
+        "communication", "concrete", "currency", "elongated", "force",
+        "garment", "human", "int_control", "location", "machine", "nonrigid",
+        "organization", "plural", "pointy", "refl", "region", "scalar", "solid",
+        "sound", "substance", "time", "vehicle"
+    }
+    
+    def __init__(self, restr_type=None, child1=None, child2=None,
+        logical_rel=None, empty=False
+    ):
+        if restr_type != None and not restr_type in VNRestriction.possible_types:
+            raise Exception("VNRestriction : unhandled restriction "+restr_type)
+        
+        if child1 != None and not isinstance(child1, self.__class__):
+            raise Exception("VNRestriction : invalid argument for logical relation")
+        if child2 != None and not isinstance(child2, self.__class__):
+            raise Exception("VNRestriction : invalid argument for logical relation")
+            
+        self.type = restr_type
+        self.child1 = child1
+        self.child2 = child2
+        self.logical_rel = logical_rel
+        self.empty = empty
+    
+    def __str__(self):
+        if self.empty:
+            return "NORESTR"
+        if self.logical_rel == None:
+            return self.type
+        if self.logical_rel == "NOT":
+            return "(NOT "+str(self.child1)+")"
+        return "("+str(self.child1)+" "+self.logical_rel+" "+str(self.child2)+")"
+    
+    def __repr__(self):
+        return self.__str__()
+    
+    def _simple_match(self, word):
+        """ Not implemented """
+        pass
+        
+    def match(self, word):
+        if self.empty: return True
+        
+        if self.logical_rel == None:
+            return self._simple_match(word)
+        elif self.logical_rel == "NOT":
+            return not self.child1.match(word)
+        elif self.logical_rel == "AND":
+            return self.child1.match(word) and self.child2.match(word)
+        elif self.logical_rel == "OR":
+            return self.child1.match(word) or self.child2.match(word)
+        else:
+            raise Exception("VNRestriction.match : invalid logical relation")
+    
+    @staticmethod    
+    def build(restr_type):
+        return VNRestriction(restr_type=restr_type)
+    
+    @staticmethod
+    def build_and(r1, r2):
+        return VNRestriction(child1=r1, child2=r2, logical_rel="AND")
+    
+    @staticmethod
+    def build_or(r1, r2):
+        return VNRestriction(child1=r1, child2=r2, logical_rel="OR")
+    
+    @staticmethod
+    def build_not(r):
+        return VNRestriction(child1=r, logical_rel="NOT")
+        
+    @staticmethod
+    def build_empty():
+        return VNRestriction(empty=True)
+    
+    @staticmethod 
+    def build_from_xml(xml):
+        disjunction = "logic" in xml.attrib and xml.attrib["logic"] == "or"
+        
+        restr_list = []
+        for xml_restr in xml:
+            if xml_restr.tag == "SELRESTRS":
+                restr_list.append(VNRestriction.build_from_xml(xml_restr))
+            elif xml_restr.tag == "SELRESTR":
+                restr = VNRestriction.build(xml_restr.attrib["type"])
+                if xml_restr.attrib["Value"] == "-":
+                    restr_list.append(VNRestriction.build_not(restr))
+                else:
+                    restr_list.append(restr)
+            else:
+                raise Exception("Unknown tag in restrictions : "+xml_restr.tag)
+        
+        result = VNRestriction.build_empty()
+        for i, restr in enumerate(restr_list):
+            if i == 0:
+                result = restr
+            elif disjunction:
+                result = VNRestriction.build_or(result, restr)
+            else:
+                result = VNRestriction.build_and(result, restr)
+        return result
+
 class VerbnetReader:
 
     """Class used to parse VerbNet and build its representation in memory.
@@ -39,9 +142,9 @@ class VerbnetReader:
 
             self.filename = filename
             root = ET.ElementTree(file=path+self.filename)
-            self._handle_class(root.getroot(), [], [])
+            self._handle_class(root.getroot(), [], [], [])
     
-    def _handle_class(self, xml_class, parent_frames, role_list):
+    def _handle_class(self, xml_class, parent_frames, role_list, restrictions):
         """Parse one class of verbs and all its subclasses.
         
         :param xml_class: XML representation of the class of verbs.
@@ -52,15 +155,18 @@ class VerbnetReader:
         """
         frames = parent_frames[:]
         role_list = role_list[:]
+        restrictions = restrictions[:]
         
         # Use the format of the vn/fn mapping
         vnclass = "-".join(xml_class.attrib["ID"].split('-')[1:])
         
         for xml_role in xml_class.find("THEMROLES"):
             role_list.append(xml_role.attrib["type"])
+            restrictions.append(
+                VNRestriction.build_from_xml(xml_role.find("SELRESTRS")))
 
         for xml_frame in xml_class.find("FRAMES"):
-            frames += self._build_frame(xml_frame, vnclass, role_list)
+            frames += self._build_frame(xml_frame, vnclass, role_list, restrictions)
         
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
@@ -72,9 +178,9 @@ class VerbnetReader:
             self.classes[verb].append(vnclass)
             
         for subclass in xml_class.find("SUBCLASSES"):
-            self._handle_class(subclass, frames, role_list)
+            self._handle_class(subclass, frames, role_list, restrictions)
        
-    def _build_frame(self, xml_frame, vnclass, role_list):
+    def _build_frame(self, xml_frame, vnclass, role_list, restrictions):
         """Parse one frame
         
         :param xml_frame: XML representation of the frame.
@@ -100,7 +206,9 @@ class VerbnetReader:
         roles, structures = self._build_structure(
             base_structure, syntax_data, vnclass, role_list)
 
-        return [VerbnetFrame(y, x, vnclass) for x, y in zip(roles, structures)]
+        role_restr = [[restrictions[role_list.index(x)] for x in y] for y in roles]
+        return [VerbnetFrame(y, x, vnclass, role_restrictions=z)
+            for x, y, z in zip(roles, structures, role_restr)]
   
     def _build_structure(self, base_structure, syntax_data, vnclass, role_list):
         """ Build the final structure from base_structure
@@ -377,7 +485,7 @@ class VerbnetReaderTest(unittest.TestCase):
         
         reader.verbs = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
-        reader._handle_class(root.getroot(), [], [])
+        reader._handle_class(root.getroot(), [], [], [])
         
         list1 = [
             VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),
