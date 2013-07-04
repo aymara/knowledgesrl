@@ -91,7 +91,9 @@ class VerbnetFrame:
             self.structure == other.structure and
             self.roles == other.roles and
             self.num_slots == other.num_slots and
-            self.predicate == other.predicate)
+            self.predicate == other.predicate and
+            (self.vnclass == None or other.vnclass == None or
+            self.vnclass == other.vnclass))
             
     def __repr__(self):
         return "VerbnetFrame({}, {}, {}, {})".format(

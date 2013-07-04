@@ -478,10 +478,20 @@ class VerbnetReaderTest(unittest.TestCase):
                 ["Agent", "Topic"], "37.7"),
             VerbnetFrame(["NP", "V"], ["Agent"], "40.4")
         ]
+        restrictions_str = {
+            "sparkle":["(NOT animate)", "NORESTR"],
+            "employ":["(animate OR organization)", "NORESTR"],
+            "break":["solid"],
+            "suggest":["(animate OR organization)", "communication"],
+            "snooze":["animate"]
+        }
         
         for verb, frame in zip(test_verbs, test_frames):
             self.assertIn(verb, reader.verbs)
             self.assertIn(frame, reader.verbs[verb])
+            vnframe = reader.verbs[verb][reader.verbs[verb].index(frame)]
+            self.assertEqual(
+                [str(x) for x in vnframe.role_restrictions], restrictions_str[verb])
         
         reader.verbs = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
