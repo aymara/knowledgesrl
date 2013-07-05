@@ -70,7 +70,14 @@ if __name__ == "__main__":
             converted_frame = VerbnetFrame.build_from_frame(frame)
             vn_frames.append(converted_frame)
 
+    hw_extractor = headwordextractor.HeadWordExtractor(options.framenet_parsed)
+
+    print("Extracting arguments headwords...", file=sys.stderr)
+    hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
+    
     print("Frame matching...", file=sys.stderr)
+    semantic_restrictions = {}
+    all_matcher = []
     for good_frame, frame in zip(annotated_frames, vn_frames):
         num_instanciated = len([x for x in good_frame.args if x.instanciated])
         predicate = good_frame.predicate.lemma
@@ -84,6 +91,7 @@ if __name__ == "__main__":
         # Find FrameNet frame <-> VerbNet class mapping
         try:
             matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
+            all_matcher.append(matcher)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue
@@ -102,6 +110,10 @@ if __name__ == "__main__":
             else:
                 matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
+        for restr, words in matcher.semantic_restrictions.items():
+            if not restr in semantic_restrictions:
+                semantic_restrictions[restr] = {}
+            semantic_restrictions[restr].update(words)
         
         # Update probability model
         if not options.bootstrap:
@@ -114,6 +126,8 @@ if __name__ == "__main__":
         if options.debug and set() in frame.roles:
             log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
     
+    framematcher.FrameMatcher.compute_all_restrictions(semantic_restrictions)
+    
     if options.dump:
         dumper.add_data_frame_matching(annotated_frames, vn_frames,
             role_matcher, verbnet_classes,
@@ -124,11 +138,6 @@ if __name__ == "__main__":
         display_stats(options.gold_args)
 
     if options.bootstrap:
-        hw_extractor = headwordextractor.HeadWordExtractor(options.framenet_parsed)
-
-        print("Extracting arguments headwords...", file=sys.stderr)
-        hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
-
         print("Computing headwords classes...", file=sys.stderr);
         hw_extractor.compute_word_classes()
         

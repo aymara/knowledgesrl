@@ -69,7 +69,7 @@ class VNRestriction:
         else:
             raise Exception("VNRestriction.match : invalid logical relation")
     
-    @staticmethod    
+    @staticmethod
     def build(restr_type):
         return VNRestriction(restr_type=restr_type)
     
@@ -115,6 +115,13 @@ class VNRestriction:
             else:
                 result = VNRestriction.build_and(result, restr)
         return result
+    
+    def get_atomic_restrictions(self):
+        if self.empty: return set()
+        if self.child1 == None: return {self.type}
+        if self.child2 == None: return self.child1.get_atomic_restrictions()
+        return (self.child1.get_atomic_restrictions() |
+            self.child2.get_atomic_restrictions())
 
 class VerbnetReader:
 

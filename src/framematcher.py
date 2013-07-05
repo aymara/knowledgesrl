@@ -22,6 +22,8 @@ from framestructure import *
 from collections import defaultdict
 import unittest
 import sys
+import pickle
+import os
 
 matching_algorithm = "sync_predicates"
 
@@ -49,6 +51,7 @@ class FrameMatcher():
     :var num_new_match: int -- The total number of calls to new_match
     :var possible_roles: str Dict List -- A map of possible roles for every slot (the keys contains the VerbNet class from which each role comes)
     :var algo: str -- The algorithm that we want to use
+    :var semantic_restrictions
     
     """
     
@@ -62,7 +65,8 @@ class FrameMatcher():
         self.num_new_match = 0
         self.possible_roles = [{} for x in range(self.frame.num_slots)]
         self.algo = algo
-
+        self.semantic_restrictions = defaultdict(lambda : {})
+    
     def new_match(self, test_frame):
         """Compute the matching score and update the possible roles distribs
             
@@ -71,7 +75,7 @@ class FrameMatcher():
             
         """
         self.num_new_match += 1
-        distrib = [None for x in range(self.frame.num_slots)]
+        slots_associations = [None for x in range(self.frame.num_slots)]
         num_match = 0
 
         if self.algo == "baseline":
@@ -110,7 +114,7 @@ class FrameMatcher():
                     del available_slots[i] # Slot i has been attributed
                     #FIXME : we need to check that enough roles were given in VerbNet
                     if len(test_frame.roles) > matching_slot:
-                        distrib[slot_pos] = next(iter(test_frame.roles[matching_slot]))
+                        slots_associations[slot_pos] = matching_slot
                         
                     num_match += 1
             
@@ -143,7 +147,7 @@ class FrameMatcher():
                         # happen in the "NP V NP S_INF" structure of want-32.1,
                         # where S_INF is given no role
                         if slot_2 < len(test_frame.roles):
-                            distrib[slot_1] = next(iter(test_frame.roles[slot_2]))
+                            slots_associations[slot_1] = slot_2
                             slot_1, slot_2 = slot_1 + 1, slot_2 + 1
                 elif i < index_v_1 or j < index_v_2:
                     # If we have not encountered the verb yet, we continue the matching
@@ -162,7 +166,7 @@ class FrameMatcher():
                     if VerbnetFrame._is_a_slot(elem1):
                         num_match += 1
                         if num_match - 1 < len(test_frame.roles):
-                            distrib[num_match - 1] = next(iter(test_frame.roles[num_match - 1]))
+                            slot_associations[num_match - 1] = num_match - 1
                 else: break
         else:
             raise Exception("Unknown matching algorithm : {}".format(self.algo))
@@ -177,12 +181,19 @@ class FrameMatcher():
 
         if score > self.best_score:
             self.possible_roles = [{} for x in range(self.frame.num_slots)]
+            self.semantic_restrictions = defaultdict(lambda: {})
             self.best_frames = []
         if score >= self.best_score:
-            for slot, role in enumerate(distrib):
-                if role != None:
+            for slot1, slot2 in enumerate(slots_associations):
+                if slot2 != None:
                     index = "{}_{}".format(test_frame.vnclass, self.num_new_match)
-                    self.possible_roles[slot][index] = role
+                    role = next(iter(test_frame.roles[slot2]))
+                    vn_restriction = test_frame.role_restrictions[slot2]
+                    headword = self.frame.headwords[slot1]
+                    
+                    self.possible_roles[slot1][index] = role
+                    for restriction in vn_restriction.get_atomic_restrictions():
+                        self.semantic_restrictions[restriction][headword] = 0
             
             self.best_frames.append(test_frame)
             self.best_score = score
@@ -193,6 +204,20 @@ class FrameMatcher():
         :returns: str set list -- The lists of possible roles for each slot
         """
         return [set(x.values()) for x in self.possible_roles]
+    
+    @staticmethod
+    def compute_all_restrictions(semantic_restrictions):
+        """Fills semantic_restrictions by asking the Python2 script"""
+        with open("semantic_restrictions", "wb") as picklefile:
+            pickle.dump(semantic_restrictions, picklefile, 2)
+        
+        os.system("python2.7 wordclassesloader.py --restr")
+        
+        with open("semantic_restrictions_answer", "rb") as picklefile:
+            semantic_restrictions.update(pickle.load(picklefile))
+            
+        os.remove("semantic_restrictions")
+        os.remove("semantic_restrictions_answer")
         
 class frameMatcherTest(unittest.TestCase):
     def test_1(self):
