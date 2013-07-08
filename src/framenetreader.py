@@ -89,6 +89,9 @@ class FulltextReader:
             self.sentence_pattern = self._xmlns + "subCorpus/" + self._xmlns + "sentence"
             self.frame_pattern = self._xmlns + "annotationSet"
             
+            # keep_unannotated has non sense for LUCorpus
+            self.keep_unannotated = False
+            
             predicate_data = root.getroot().attrib["name"].split(".")
             if predicate_data[1] != "v":
                 return
@@ -304,6 +307,7 @@ class FulltextReader:
         :type frame: xml.etree.ElementTree.Element.
         :returns: Predicate -- the built predicate
         """
+        
         if self.constant_predicate == "":
             predicate_lemma = frame.attrib["luName"].split(".")[0]
         else:
