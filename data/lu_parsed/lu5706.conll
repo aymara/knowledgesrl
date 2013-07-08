@@ -1,0 +1,21 @@
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	0	ROOT	-	-
+3	sleeting	sleeting	VBG	VBG	-	2	VC	-	-
+4	so	so	RB	RB	-	7	VMOD	-	-
+5	hard	hard	RB	RB	-	4	AMOD	-	-
+6	we	we	PRP	PRP	-	7	SUB	-	-
+7	could	could	MD	MD	-	3	VMOD	-	-
+8	barely	barely	RB	RB	-	7	VMOD	-	-
+9	see	see	VB	VB	-	7	VC	-	-
+10	for	for	IN	IN	-	9	VMOD	-	-
+11	<num>	<num>	CD	CD	-	12	NMOD	-	-
+12	yards	yards	NNS	NNS	-	10	PMOD	-	-
+13	.	.	.	.	-	2	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	sleeted	sleeted	VBD	VBD	-	0	ROOT	-	-
+3	and	and	CC	CC	-	2	VMOD	-	-
+4	rained	rained	VBD	VBD	-	2	VMOD	-	-
+5	incessantly	incessantly	RB	RB	-	4	VMOD	-	-
+6	.	.	.	.	-	2	P	-	-
+

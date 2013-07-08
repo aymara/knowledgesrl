@@ -1,0 +1,31 @@
+1	ratagan	ratagan	NN	NN	-	2	SUB	-	-
+2	cocked	cocked	VBD	VBD	-	0	ROOT	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	head	head	NN	NN	-	5	SUB	-	-
+5	to	to	TO	TO	-	6	VMOD	-	-
+6	listen	listen	VB	VB	-	2	VMOD	-	-
+7	to	to	TO	TO	-	6	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	race	race	NN	NN	-	7	PMOD	-	-
+10	of	of	IN	IN	-	9	NMOD	-	-
+11	the	the	DT	DT	-	12	NMOD	-	-
+12	wind	wind	NN	NN	-	10	PMOD	-	-
+13	outside	outside	IN	IN	-	12	NMOD	-	-
+14	that	that	WDT	WDT	-	13	PMOD	-	-
+15	creaked	creaked	VBD	VBD	-	14	SBAR	-	-
+16	the	the	DT	DT	-	17	NMOD	-	-
+17	rafters	rafters	NNS	NNS	-	15	OBJ	-	-
+18	.	.	.	.	-	2	P	-	-
+
+1	emmie	emmie	NN	NN	-	2	SUB	-	-
+2	got	got	VBD	VBD	-	0	ROOT	-	-
+3	up	up	RB	RB	-	2	VMOD	-	-
+4	,	,	,	,	-	2	P	-	-
+5	trying	trying	VBG	VBG	-	2	VMOD	-	-
+6	not	not	RB	RB	-	8	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	creak	creak	VB	VB	-	5	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	chair	chair	NN	NN	-	8	OBJ	-	-
+11	.	.	.	.	-	2	P	-	-
+

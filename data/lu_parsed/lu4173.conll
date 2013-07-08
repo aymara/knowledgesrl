@@ -1,0 +1,28 @@
+1	parboil	parboil	VB	VB	-	0	ROOT	-	-
+2	the	the	DT	DT	-	3	NMOD	-	-
+3	vegetables	vegetables	NNS	NNS	-	1	OBJ	-	-
+4	in	in	IN	IN	-	1	VMOD	-	-
+5	boiling	boiling	NN	NN	-	4	PMOD	-	-
+6	,	,	,	,	-	1	P	-	-
+7	salted	salted	JJ	JJ	-	8	NMOD	-	-
+8	water	water	NN	NN	-	1	OBJ	-	-
+9	for	for	IN	IN	-	1	VMOD	-	-
+10	about	about	IN	IN	-	12	NMOD	-	-
+11	<num>	<num>	CD	CD	-	10	AMOD	-	-
+12	minutes	minutes	NNS	NNS	-	9	PMOD	-	-
+13	.	.	.	.	-	1	P	-	-
+
+1	parboil	parboil	VB	VB	-	0	ROOT	-	-
+2	the	the	DT	DT	-	3	NMOD	-	-
+3	vegetables	vegetables	NNS	NNS	-	1	OBJ	-	-
+4	in	in	IN	IN	-	3	NMOD	-	-
+5	separate	separate	JJ	JJ	-	6	NMOD	-	-
+6	pans	pans	NNS	NNS	-	4	PMOD	-	-
+7	of	of	IN	IN	-	6	NMOD	-	-
+8	boiling	boiling	NN	NN	-	9	NMOD	-	-
+9	water	water	NN	NN	-	7	PMOD	-	-
+10	until	until	IN	IN	-	1	VMOD	-	-
+11	just	just	RB	RB	-	12	NMOD	-	-
+12	tender	tender	NN	NN	-	10	PMOD	-	-
+13	.	.	.	.	-	1	P	-	-
+

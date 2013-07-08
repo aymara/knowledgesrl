@@ -1,0 +1,42 @@
+1	but	but	CC	CC	-	17	VMOD	-	-
+2	people	people	NNS	NNS	-	17	SUB	-	-
+3	,	,	,	,	-	2	P	-	-
+4	especially	especially	RB	RB	-	5	AMOD	-	-
+5	when	when	WRB	WRB	-	2	NMOD	-	-
+6	they	they	PRP	PRP	-	7	SUB	-	-
+7	ganged	ganged	VBD	VBD	-	5	SBAR	-	-
+8	together	together	RB	RB	-	7	VMOD	-	-
+9	into	into	IN	IN	-	7	VMOD	-	-
+10	that	that	DT	DT	-	12	NMOD	-	-
+11	mysterious	mysterious	JJ	JJ	-	12	NMOD	-	-
+12	thing	thing	NN	NN	-	9	PMOD	-	-
+13	called	called	VBD	VBD	-	12	NMOD	-	-
+14	a	a	DT	DT	-	15	NMOD	-	-
+15	crowd	crowd	NN	NN	-	13	VMOD	-	-
+16	,	,	,	,	-	12	P	-	-
+17	were	were	VBD	VBD	-	0	ROOT	-	-
+18	his	his	PRP$	PRP$	-	19	NMOD	-	-
+19	liberation	liberation	NN	NN	-	17	PRD	-	-
+20	.	.	.	.	-	17	P	-	-
+
+1	why	why	WRB	WRB	-	2	VMOD	-	-
+2	did	did	VBD	VBD	-	0	ROOT	-	-
+3	cells	cells	NNS	NNS	-	2	SUB	-	-
+4	gang	gang	NN	NN	-	2	SUB	-	-
+5	together	together	RB	RB	-	4	NMOD	-	-
+6	;	;	:	:	-	2	P	-	-
+7	why	why	WRB	WRB	-	2	VMOD	-	-
+8	the	the	DT	DT	-	10	NMOD	-	-
+9	lumbering	lumbering	NN	NN	-	10	NMOD	-	-
+10	robots	robots	NNS	NNS	-	7	SBAR	-	-
+11	?	?	.	.	-	2	P	-	-
+
+1	people	people	NNS	NNS	-	2	SUB	-	-
+2	would	would	MD	MD	-	0	ROOT	-	-
+3	gang	gang	NN	NN	-	2	VC	-	-
+4	together	together	RB	RB	-	3	VMOD	-	-
+5	to	to	TO	TO	-	6	VMOD	-	-
+6	destroy	destroy	VB	VB	-	3	NMOD	-	-
+7	him	him	PRP	PRP	-	6	OBJ	-	-
+8	.	.	.	.	-	2	P	-	-
+

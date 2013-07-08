@@ -1,0 +1,19 @@
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	truck-sized	truck-sized	JJ	JJ	-	3	NMOD	-	-
+3	stone	stone	NN	NN	-	4	SUB	-	-
+4	ars	ars	VBZ	VBZ	-	0	ROOT	-	-
+5	gratia	gratia	NN	NN	-	7	NMOD	-	-
+6	artis	artis	NNS	NNS	-	7	NMOD	-	-
+7	lion	lion	NN	NN	-	4	OBJ	-	-
+8	on	on	IN	IN	-	7	NMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	roof	roof	NN	NN	-	8	PMOD	-	-
+11	mewled	mewled	VBN	VBN	-	10	NMOD	-	-
+12	and	and	CC	CC	-	11	VMOD	-	-
+13	leaped	leaped	VBN	VBN	-	11	VMOD	-	-
+14	for	for	IN	IN	-	13	VMOD	-	-
+15	a	a	DT	DT	-	17	NMOD	-	-
+16	safer	safer	JJR	JJR	-	17	NMOD	-	-
+17	perch	perch	NN	NN	-	14	PMOD	-	-
+18	.	.	.	.	-	4	P	-	-
+

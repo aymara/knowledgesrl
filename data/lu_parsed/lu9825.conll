@@ -1,0 +1,29 @@
+1	`	`	``	``	-	12	P	-	-
+2	a	a	DT	DT	-	4	NMOD	-	-
+3	handsome	handsome	JJ	JJ	-	4	NMOD	-	-
+4	boy	boy	NN	NN	-	12	NMOD	-	-
+5	,	,	,	,	-	4	P	-	-
+6	as	as	IN	IN	-	4	NMOD	-	-
+7	you	you	PRP	PRP	-	8	SUB	-	-
+8	say	say	VBP	VBP	-	6	SBAR	-	-
+9	,	,	,	,	-	8	P	-	-
+10	``	``	``	``	-	8	P	-	-
+11	pouted	pouted	JJ	JJ	-	12	NMOD	-	-
+12	anne	anne	NN	NN	-	0	ROOT	-	-
+13	.	.	.	.	-	12	P	-	-
+
+1	`	`	``	``	-	4	P	-	-
+2	but	but	CC	CC	-	4	VMOD	-	-
+3	you	you	PRP	PRP	-	4	SUB	-	-
+4	knew	knew	VBD	VBD	-	0	ROOT	-	-
+5	how	how	WRB	WRB	-	4	VMOD	-	-
+6	i	i	PRP	PRP	-	7	SUB	-	-
+7	felt	felt	VBD	VBD	-	5	SBAR	-	-
+8	about	about	IN	IN	-	7	VMOD	-	-
+9	him	him	PRP	PRP	-	8	PMOD	-	-
+10	,	,	,	,	-	4	P	-	-
+11	``	``	``	``	-	4	P	-	-
+12	pouted	pouted	JJ	JJ	-	13	NMOD	-	-
+13	anne	anne	NN	NN	-	4	OBJ	-	-
+14	.	.	.	.	-	4	P	-	-
+

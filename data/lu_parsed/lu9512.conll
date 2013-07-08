@@ -1,0 +1,23 @@
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	0	ROOT	-	-
+3	coming	coming	VBG	VBG	-	2	VC	-	-
+4	out	out	IN	IN	-	3	VMOD	-	-
+5	of	of	IN	IN	-	4	PMOD	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	bank	bank	NN	NN	-	5	PMOD	-	-
+8	,	,	,	,	-	2	P	-	-
+9	and	and	CC	CC	-	2	VMOD	-	-
+10	i	i	VBD	VBD	-	2	VMOD	-	-
+11	nearly	nearly	RB	RB	-	10	VMOD	-	-
+12	peeped	peeped	VBN	VBN	-	10	VC	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	horn	horn	NN	NN	-	12	OBJ	-	-
+15	to	to	TO	TO	-	16	VMOD	-	-
+16	let	let	VB	VB	-	10	VMOD	-	-
+17	him	him	PRP	PRP	-	18	SUB	-	-
+18	know	know	VB	VB	-	16	VMOD	-	-
+19	i	i	PRP	PRP	-	20	SUB	-	-
+20	was	was	VBD	VBD	-	18	VMOD	-	-
+21	there	there	RB	RB	-	20	VMOD	-	-
+22	.	.	.	.	-	2	P	-	-
+

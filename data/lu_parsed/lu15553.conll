@@ -1,0 +1,13 @@
+1	they	they	PRP	PRP	-	2	SUB	-	-
+2	touched	touched	VBD	VBD	-	0	ROOT	-	-
+3	my	my	PRP$	PRP$	-	6	NMOD	-	-
+4	heart	heart	NN	NN	-	6	NMOD	-	-
+5	and	and	CC	CC	-	6	NMOD	-	-
+6	i	i	NNS	NNS	-	7	SUB	-	-
+7	know	know	VBP	VBP	-	2	VMOD	-	-
+8	they	they	PRP	PRP	-	9	SUB	-	-
+9	'll	'll	MD	MD	-	7	VMOD	-	-
+10	touch	touch	VB	VB	-	9	VC	-	-
+11	yours	yours	NNS	NNS	-	10	OBJ	-	-
+12	.	.	.	.	-	2	P	-	-
+

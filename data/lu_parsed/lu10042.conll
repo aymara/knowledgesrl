@@ -1,0 +1,37 @@
+1	in	in	IN	IN	-	21	VMOD	-	-
+2	serious	serious	JJ	JJ	-	4	NMOD	-	-
+3	cases	cases	NNS	NNS	-	4	NMOD	-	-
+4	results	results	NNS	NNS	-	5	SUB	-	-
+5	can	can	MD	MD	-	1	SBAR	-	-
+6	be	be	VB	VB	-	5	VC	-	-
+7	produced	produced	VBN	VBN	-	6	VC	-	-
+8	more	more	RBR	RBR	-	9	AMOD	-	-
+9	quickly	quickly	RB	RB	-	7	VMOD	-	-
+10	,	,	,	,	-	21	P	-	-
+11	but	but	CC	CC	-	21	VMOD	-	-
+12	in	in	IN	IN	-	21	VMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	case	case	NN	NN	-	12	PMOD	-	-
+15	of	of	IN	IN	-	14	NMOD	-	-
+16	organic	organic	JJ	JJ	-	17	NMOD	-	-
+17	pollutions	pollutions	NNS	NNS	-	15	PMOD	-	-
+18	the	the	DT	DT	-	19	NMOD	-	-
+19	analysis	analysis	NN	NN	-	20	NMOD	-	-
+20	itself	itself	PRP	PRP	-	21	SUB	-	-
+21	takes	takes	VBZ	VBZ	-	0	ROOT	-	-
+22	five	five	CD	CD	-	23	NMOD	-	-
+23	days	days	NNS	NNS	-	21	VMOD	-	-
+24	.	.	.	.	-	21	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	whole	whole	JJ	JJ	-	3	NMOD	-	-
+3	action	action	NN	NN	-	4	SUB	-	-
+4	must	must	MD	MD	-	0	ROOT	-	-
+5	take	take	VB	VB	-	4	VC	-	-
+6	no	no	DT	DT	-	8	AMOD	-	-
+7	more	more	JJR	JJR	-	8	AMOD	-	-
+8	than	than	IN	IN	-	10	NMOD	-	-
+9	five	five	CD	CD	-	8	AMOD	-	-
+10	seconds	seconds	NNS	NNS	-	5	OBJ	-	-
+11	.	.	.	.	-	4	P	-	-
+

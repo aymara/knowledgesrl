@@ -1,0 +1,60 @@
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	soiled	soiled	VBD	VBD	-	12	VMOD	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	clothes	clothes	NNS	NNS	-	2	OBJ	-	-
+5	so	so	IN	IN	-	2	VMOD	-	-
+6	he	he	PRP	PRP	-	7	SUB	-	-
+7	stank	stank	VB	VB	-	5	SBAR	-	-
+8	,	,	,	,	-	12	P	-	-
+9	and	and	CC	CC	-	12	VMOD	-	-
+10	his	his	PRP$	PRP$	-	11	NMOD	-	-
+11	face	face	NN	NN	-	12	SUB	-	-
+12	was	was	VBD	VBD	-	0	ROOT	-	-
+13	all	all	DT	DT	-	14	NMOD	-	-
+14	swollen	swollen	NN	NN	-	16	NMOD	-	-
+15	and	and	CC	CC	-	16	NMOD	-	-
+16	black	black	JJ	JJ	-	12	PRD	-	-
+17	.	.	.	.	-	12	P	-	-
+
+1	the	the	DT	DT	-	4	NMOD	-	-
+2	whole	whole	JJ	JJ	-	4	NMOD	-	-
+3	place	place	NN	NN	-	4	NMOD	-	-
+4	stank	stank	NN	NN	-	0	ROOT	-	-
+5	.	.	.	.	-	4	P	-	-
+
+1	my	my	PRP$	PRP$	-	2	NMOD	-	-
+2	perm	perm	NN	NN	-	3	SUB	-	-
+3	would	would	MD	MD	-	0	ROOT	-	-
+4	stink	stink	VB	VB	-	3	VC	-	-
+5	under	under	IN	IN	-	4	VMOD	-	-
+6	my	my	PRP$	PRP$	-	8	NMOD	-	-
+7	swimming	swimming	NN	NN	-	8	NMOD	-	-
+8	hat	hat	NN	NN	-	5	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	`	`	``	``	-	6	P	-	-
+2	you	you	PRP	PRP	-	3	SUB	-	-
+3	stink	stink	VBP	VBP	-	6	VMOD	-	-
+4	,	,	,	,	-	6	P	-	-
+5	``	``	``	``	-	6	P	-	-
+6	said	said	VBD	VBD	-	0	ROOT	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	voice	voice	NN	NN	-	11	SUB	-	-
+9	,	,	,	,	-	11	P	-	-
+10	steely	steely	RB	RB	-	11	AMOD	-	-
+11	cold	cold	JJ	JJ	-	6	VMOD	-	-
+12	.	.	.	.	-	6	P	-	-
+
+1	`	`	``	``	-	3	P	-	-
+2	he	he	PRP	PRP	-	3	SUB	-	-
+3	stinks	stinks	VBZ	VBZ	-	9	VMOD	-	-
+4	too	too	RB	RB	-	3	VMOD	-	-
+5	,	,	,	,	-	9	P	-	-
+6	and	and	CC	CC	-	9	VMOD	-	-
+7	those	those	DT	DT	-	8	NMOD	-	-
+8	clothes	clothes	NNS	NNS	-	9	SUB	-	-
+9	must	must	MD	MD	-	0	ROOT	-	-
+10	be	be	VB	VB	-	9	VC	-	-
+11	crawling	crawling	VBG	VBG	-	10	VC	-	-
+12	.	.	.	.	-	9	P	-	-
+

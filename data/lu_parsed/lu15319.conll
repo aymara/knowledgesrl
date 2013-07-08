@@ -1,0 +1,20 @@
+1	just	just	RB	RB	-	4	AMOD	-	-
+2	as	as	RB	RB	-	1	AMOD	-	-
+3	with	with	IN	IN	-	1	AMOD	-	-
+4	word	word	NN	NN	-	6	NMOD	-	-
+5	processing	processing	NN	NN	-	6	NMOD	-	-
+6	type	type	NN	NN	-	7	SUB	-	-
+7	can	can	MD	MD	-	0	ROOT	-	-
+8	be	be	VB	VB	-	7	VC	-	-
+9	set	set	VBN	VBN	-	8	VC	-	-
+10	flush	flush	JJ	JJ	-	9	VMOD	-	-
+11	with	with	IN	IN	-	10	AMOD	-	-
+12	the	the	DT	DT	-	14	NMOD	-	-
+13	left-hand	left-hand	JJ	JJ	-	14	NMOD	-	-
+14	margin	margin	NN	NN	-	11	PMOD	-	-
+15	,	,	,	,	-	10	P	-	-
+16	centred	centred	JJ	JJ	-	18	AMOD	-	-
+17	or	or	CC	CC	-	18	AMOD	-	-
+18	justified	justified	JJ	JJ	-	10	DEP	-	-
+19	.	.	.	.	-	7	P	-	-
+

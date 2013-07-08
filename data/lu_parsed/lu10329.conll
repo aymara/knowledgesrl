@@ -1,0 +1,26 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	instrument	instrument	NN	NN	-	8	VMOD	-	-
+3	(	(	-LRB-	-LRB-	-	5	P	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	telescreen	telescreen	NN	NN	-	2	NMOD	-	-
+6	,	,	,	,	-	8	P	-	-
+7	it	it	PRP	PRP	-	8	SUB	-	-
+8	was	was	VBD	VBD	-	17	VMOD	-	-
+9	called	called	VBN	VBN	-	8	VC	-	-
+10	)	)	-RRB-	-RRB-	-	8	P	-	-
+11	could	could	MD	MD	-	8	VMOD	-	-
+12	be	be	VB	VB	-	11	VC	-	-
+13	dimmed	dimmed	VBN	VBN	-	12	VC	-	-
+14	,	,	,	,	-	17	P	-	-
+15	but	but	CC	CC	-	17	VMOD	-	-
+16	there	there	EX	EX	-	17	SUB	-	-
+17	was	was	VBD	VBD	-	0	ROOT	-	-
+18	no	no	DT	DT	-	19	NMOD	-	-
+19	way	way	NN	NN	-	17	PRD	-	-
+20	of	of	IN	IN	-	19	NMOD	-	-
+21	shutting	shutting	VBG	VBG	-	20	PMOD	-	-
+22	it	it	PRP	PRP	-	21	OBJ	-	-
+23	off	off	RB	RB	-	21	VMOD	-	-
+24	completely	completely	RB	RB	-	21	VMOD	-	-
+25	.	.	.	.	-	17	P	-	-
+

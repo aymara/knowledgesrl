@@ -1,0 +1,13 @@
+1	that	that	DT	DT	-	2	NMOD	-	-
+2	creature	creature	NN	NN	-	3	SUB	-	-
+3	must	must	MD	MD	-	0	ROOT	-	-
+4	have	have	VB	VB	-	3	VC	-	-
+5	been	been	VBN	VBN	-	4	VC	-	-
+6	travelling	travelling	VBG	VBG	-	5	VC	-	-
+7	at	at	IN	IN	-	6	VMOD	-	-
+8	<num>	<num>	CD	CD	-	9	NMOD	-	-
+9	miles	miles	NNS	NNS	-	7	PMOD	-	-
+10	per	per	IN	IN	-	9	NMOD	-	-
+11	hour	hour	NN	NN	-	10	PMOD	-	-
+12	.	.	.	.	-	3	P	-	-
+

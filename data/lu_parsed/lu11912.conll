@@ -1,0 +1,14 @@
+1	you	you	PRP	PRP	-	2	SUB	-	-
+2	can	can	MD	MD	-	0	ROOT	-	-
+3	not	not	RB	RB	-	2	VMOD	-	-
+4	yoke	yoke	VB	VB	-	2	VC	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	dragonfly	dragonfly	NN	NN	-	4	OBJ	-	-
+7	and	and	CC	CC	-	4	VMOD	-	-
+8	make	make	VB	VB	-	4	VMOD	-	-
+9	it	it	PRP	PRP	-	10	SUB	-	-
+10	drive	drive	VB	VB	-	8	VMOD	-	-
+11	the	the	DT	DT	-	12	NMOD	-	-
+12	corn-mill	corn-mill	NN	NN	-	10	OBJ	-	-
+13	.	.	.	.	-	2	P	-	-
+

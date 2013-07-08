@@ -1,0 +1,15 @@
+1	pringle	pringle	NN	NN	-	2	SUB	-	-
+2	had	had	VBD	VBD	-	0	ROOT	-	-
+3	reached	reached	VBN	VBN	-	2	VC	-	-
+4	her	her	PRP$	PRP$	-	5	NMOD	-	-
+5	first	first	JJ	JJ	-	3	OBJ	-	-
+6	and	and	CC	CC	-	2	VMOD	-	-
+7	dropped	dropped	VBD	VBD	-	2	VMOD	-	-
+8	on	on	IN	IN	-	7	VMOD	-	-
+9	to	to	TO	TO	-	7	VMOD	-	-
+10	his	his	PRP$	PRP$	-	11	NMOD	-	-
+11	knees	knees	NNS	NNS	-	9	PMOD	-	-
+12	beside	beside	IN	IN	-	7	VMOD	-	-
+13	her	her	PRP$	PRP$	-	12	PMOD	-	-
+14	.	.	.	.	-	2	P	-	-
+

@@ -1,0 +1,14 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	tram	tram	NN	NN	-	3	SUB	-	-
+3	clanged	clanged	VBD	VBD	-	0	ROOT	-	-
+4	its	its	PRP$	PRP$	-	5	NMOD	-	-
+5	bell	bell	NN	NN	-	3	OBJ	-	-
+6	and	and	CC	CC	-	3	VMOD	-	-
+7	rattled	rattled	VBD	VBD	-	3	VMOD	-	-
+8	off	off	RP	RP	-	7	VMOD	-	-
+9	angrily	angrily	RB	RB	-	7	VMOD	-	-
+10	into	into	IN	IN	-	7	VMOD	-	-
+11	the	the	DT	DT	-	12	NMOD	-	-
+12	gloom	gloom	NN	NN	-	10	PMOD	-	-
+13	.	.	.	.	-	3	P	-	-
+

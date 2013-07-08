@@ -1,0 +1,20 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	ice	ice	NN	NN	-	3	SUB	-	-
+3	sublimed	sublimed	VBN	VBN	-	0	ROOT	-	-
+4	away	away	RB	RB	-	3	VMOD	-	-
+5	,	,	,	,	-	3	P	-	-
+6	leaving	leaving	VBG	VBG	-	3	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	books	books	NNS	NNS	-	6	OBJ	-	-
+9	,	,	,	,	-	6	P	-	-
+10	dry	dry	JJ	JJ	-	12	AMOD	-	-
+11	and	and	CC	CC	-	12	AMOD	-	-
+12	undamaged	undamaged	JJ	JJ	-	15	VMOD	-	-
+13	,	,	,	,	-	15	P	-	-
+14	to	to	TO	TO	-	15	VMOD	-	-
+15	be	be	VB	VB	-	6	VMOD	-	-
+16	returned	returned	VBN	VBN	-	15	VC	-	-
+17	to	to	TO	TO	-	16	VMOD	-	-
+18	sudbury	sudbury	NN	NN	-	17	PMOD	-	-
+19	.	.	.	.	-	3	P	-	-
+

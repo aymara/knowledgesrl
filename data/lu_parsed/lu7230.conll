@@ -1,0 +1,19 @@
+1	`	`	``	``	-	9	P	-	-
+2	we	we	PRP	PRP	-	3	SUB	-	-
+3	made	made	VBD	VBD	-	9	VMOD	-	-
+4	it	it	PRP	PRP	-	3	OBJ	-	-
+5	,	,	,	,	-	9	P	-	-
+6	``	``	``	``	-	9	P	-	-
+7	and	and	CC	CC	-	9	VMOD	-	-
+8	he	he	PRP	PRP	-	9	SUB	-	-
+9	slapped	slapped	VBD	VBD	-	0	ROOT	-	-
+10	the	the	DT	DT	-	12	NMOD	-	-
+11	gloved	gloved	JJ	JJ	-	12	NMOD	-	-
+12	hand	hand	NN	NN	-	9	OBJ	-	-
+13	twice	twice	RB	RB	-	14	PMOD	-	-
+14	against	against	IN	IN	-	9	VMOD	-	-
+15	the	the	DT	DT	-	17	NMOD	-	-
+16	steering	steering	VBG	VBG	-	17	NMOD	-	-
+17	wheel	wheel	NN	NN	-	14	PMOD	-	-
+18	.	.	.	.	-	9	P	-	-
+

@@ -1,0 +1,45 @@
+1	jack	jack	NN	NN	-	3	SUB	-	-
+2	finally	finally	RB	RB	-	3	VMOD	-	-
+3	crested	crested	VBD	VBD	-	0	ROOT	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	hill	hill	NN	NN	-	3	OBJ	-	-
+6	and	and	CC	CC	-	3	VMOD	-	-
+7	stood	stood	VBD	VBD	-	3	VMOD	-	-
+8	in	in	IN	IN	-	7	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	shadow	shadow	NN	NN	-	8	PMOD	-	-
+11	of	of	IN	IN	-	10	NMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	monument	monument	NN	NN	-	11	PMOD	-	-
+14	.	.	.	.	-	3	P	-	-
+
+1	as	as	IN	IN	-	6	VMOD	-	-
+2	he	he	PRP	PRP	-	3	SUB	-	-
+3	crested	crested	VBD	VBD	-	1	SBAR	-	-
+4	it	it	PRP	PRP	-	3	OBJ	-	-
+5	he	he	PRP	PRP	-	6	SUB	-	-
+6	flinched	flinched	VBD	VBD	-	0	ROOT	-	-
+7	.	.	.	.	-	6	P	-	-
+
+1	but	but	CC	CC	-	15	VMOD	-	-
+2	,	,	,	,	-	15	P	-	-
+3	even	even	RB	RB	-	4	DEP	-	-
+4	as	as	IN	IN	-	15	VMOD	-	-
+5	he	he	PRP	PRP	-	6	SUB	-	-
+6	spoke	spoke	VBD	VBD	-	4	SBAR	-	-
+7	,	,	,	,	-	15	P	-	-
+8	two	two	CD	CD	-	10	NMOD	-	-
+9	black-robed	black-robed	JJ	JJ	-	10	NMOD	-	-
+10	monks	monks	NNS	NNS	-	15	SUB	-	-
+11	driving	driving	VBG	VBG	-	10	NMOD	-	-
+12	a	a	DT	DT	-	14	NMOD	-	-
+13	small	small	JJ	JJ	-	14	NMOD	-	-
+14	donkey-cart	donkey-cart	NN	NN	-	11	OBJ	-	-
+15	crested	crested	VBD	VBD	-	0	ROOT	-	-
+16	the	the	DT	DT	-	17	NMOD	-	-
+17	hill	hill	NN	NN	-	15	OBJ	-	-
+18	ahead	ahead	RB	RB	-	15	VMOD	-	-
+19	of	of	IN	IN	-	18	AMOD	-	-
+20	them	them	PRP	PRP	-	19	PMOD	-	-
+21	.	.	.	.	-	15	P	-	-
+

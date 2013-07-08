@@ -1,0 +1,24 @@
+1	it	it	PRP	PRP	-	2	NMOD	-	-
+2	all	all	DT	DT	-	3	SUB	-	-
+3	sounded	sounded	VBD	VBD	-	0	ROOT	-	-
+4	so	so	RB	RB	-	5	AMOD	-	-
+5	romantic	romantic	JJ	JJ	-	3	PRD	-	-
+6	,	,	,	,	-	3	P	-	-
+7	nigel	nigel	JJ	JJ	-	3	VMOD	-	-
+8	nearly	nearly	RB	RB	-	9	VMOD	-	-
+9	threw	threw	VBD	VBD	-	3	VMOD	-	-
+10	up	up	RP	RP	-	9	VMOD	-	-
+11	.	.	.	.	-	3	P	-	-
+
+1	hir	hir	NN	NN	-	2	SUB	-	-
+2	stomach	stomach	VBP	VBP	-	0	ROOT	-	-
+3	contracted	contracted	VBN	VBN	-	2	VMOD	-	-
+4	so	so	RB	RB	-	9	VMOD	-	-
+5	fiercely	fiercely	RB	RB	-	4	AMOD	-	-
+6	,	,	,	,	-	9	P	-	-
+7	she	she	PRP	PRP	-	9	SUB	-	-
+8	nearly	nearly	RB	RB	-	9	VMOD	-	-
+9	threw	threw	VBD	VBD	-	3	VMOD	-	-
+10	up	up	RP	RP	-	9	VMOD	-	-
+11	.	.	.	.	-	2	P	-	-
+

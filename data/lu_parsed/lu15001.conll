@@ -1,0 +1,24 @@
+1	david	david	NN	NN	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	0	ROOT	-	-
+3	confident	confident	JJ	JJ	-	2	PRD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	police	police	NN	NN	-	6	SUB	-	-
+6	had	had	VBD	VBD	-	3	AMOD	-	-
+7	no	no	DT	DT	-	8	NMOD	-	-
+8	evidence	evidence	NN	NN	-	6	OBJ	-	-
+9	to	to	TO	TO	-	10	VMOD	-	-
+10	connect	connect	VB	VB	-	8	NMOD	-	-
+11	him	him	PRP	PRP	-	10	OBJ	-	-
+12	with	with	IN	IN	-	10	VMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	murder	murder	NN	NN	-	12	PMOD	-	-
+15	otherwise	otherwise	RB	RB	-	17	VMOD	-	-
+16	they	they	PRP	PRP	-	17	SUB	-	-
+17	would	would	MD	MD	-	14	NMOD	-	-
+18	have	have	VB	VB	-	17	VC	-	-
+19	arrested	arrested	VBN	VBN	-	18	VC	-	-
+20	him	him	PRP	PRP	-	19	OBJ	-	-
+21	by	by	IN	IN	-	19	VMOD	-	-
+22	now	now	RB	RB	-	21	PMOD	-	-
+23	.	.	.	.	-	2	P	-	-
+

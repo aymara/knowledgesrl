@@ -1,0 +1,12 @@
+1	a	a	DT	DT	-	3	NMOD	-	-
+2	small	small	JJ	JJ	-	3	NMOD	-	-
+3	fountain	fountain	NN	NN	-	4	SUB	-	-
+4	pattered	pattered	VBN	VBN	-	0	ROOT	-	-
+5	gently	gently	RB	RB	-	4	VMOD	-	-
+6	in	in	IN	IN	-	4	VMOD	-	-
+7	the	the	DT	DT	-	10	NMOD	-	-
+8	big	big	JJ	JJ	-	10	NMOD	-	-
+9	reception	reception	NN	NN	-	10	NMOD	-	-
+10	hall	hall	NN	NN	-	6	PMOD	-	-
+11	.	.	.	.	-	4	P	-	-
+

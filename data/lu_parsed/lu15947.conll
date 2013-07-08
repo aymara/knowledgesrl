@@ -1,0 +1,25 @@
+1	inside	inside	IN	IN	-	7	VMOD	-	-
+2	the	the	DT	DT	-	3	NMOD	-	-
+3	flat	flat	JJ	JJ	-	1	PMOD	-	-
+4	a	a	DT	DT	-	6	NMOD	-	-
+5	fruity	fruity	JJ	JJ	-	6	NMOD	-	-
+6	voice	voice	NN	NN	-	7	SUB	-	-
+7	was	was	VBD	VBD	-	0	ROOT	-	-
+8	reading	reading	VBG	VBG	-	7	VC	-	-
+9	out	out	IN	IN	-	8	VMOD	-	-
+10	a	a	DT	DT	-	11	NMOD	-	-
+11	list	list	NN	NN	-	8	OBJ	-	-
+12	of	of	IN	IN	-	11	NMOD	-	-
+13	figures	figures	NNS	NNS	-	12	PMOD	-	-
+14	which	which	WDT	WDT	-	13	NMOD	-	-
+15	had	had	VBD	VBD	-	14	SBAR	-	-
+16	something	something	NN	NN	-	15	OBJ	-	-
+17	to	to	TO	TO	-	18	VMOD	-	-
+18	do	do	VB	VB	-	16	NMOD	-	-
+19	with	with	IN	IN	-	18	VMOD	-	-
+20	the	the	DT	DT	-	21	NMOD	-	-
+21	production	production	NN	NN	-	19	PMOD	-	-
+22	of	of	IN	IN	-	21	NMOD	-	-
+23	pig-iron	pig-iron	NN	NN	-	22	PMOD	-	-
+24	.	.	.	.	-	7	P	-	-
+

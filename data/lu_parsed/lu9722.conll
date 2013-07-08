@@ -1,0 +1,66 @@
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	hunched	hunched	VBD	VBD	-	0	ROOT	-	-
+3	up	up	RP	RP	-	2	VMOD	-	-
+4	against	against	IN	IN	-	2	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	back	back	NN	NN	-	4	PMOD	-	-
+7	of	of	IN	IN	-	6	NMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	car	car	NN	NN	-	7	PMOD	-	-
+10	.	.	.	.	-	2	P	-	-
+
+1	`	`	``	``	-	9	P	-	-
+2	have	have	VB	VB	-	9	VMOD	-	-
+3	you	you	PRP	PRP	-	4	SUB	-	-
+4	got	got	VBD	VBD	-	2	VMOD	-	-
+5	any	any	DT	DT	-	6	NMOD	-	-
+6	food	food	NN	NN	-	4	OBJ	-	-
+7	?	?	.	.	-	9	P	-	-
+8	``	``	``	``	-	9	P	-	-
+9	said	said	VBD	VBD	-	0	ROOT	-	-
+10	adam	adam	NN	NN	-	9	SUB	-	-
+11	hoarsely	hoarsely	RB	RB	-	9	VMOD	-	-
+12	,	,	,	,	-	9	P	-	-
+13	hunching	hunching	VBG	VBG	-	9	VMOD	-	-
+14	up	up	RP	RP	-	13	VMOD	-	-
+15	sideways	sideways	NNS	NNS	-	13	OBJ	-	-
+16	in	in	IN	IN	-	13	VMOD	-	-
+17	the	the	DT	DT	-	19	NMOD	-	-
+18	driver	driver	NN	NN	-	19	NMOD	-	-
+19	's	's	POS	POS	-	20	NMOD	-	-
+20	seat	seat	NN	NN	-	16	PMOD	-	-
+21	.	.	.	.	-	9	P	-	-
+
+1	you	you	PRP	PRP	-	2	SUB	-	-
+2	could	could	MD	MD	-	0	ROOT	-	-
+3	not	not	RB	RB	-	2	VMOD	-	-
+4	hunch	hunch	VB	VB	-	2	VC	-	-
+5	up	up	RB	RB	-	4	VMOD	-	-
+6	into	into	IN	IN	-	4	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	tree	tree	NN	NN	-	6	PMOD	-	-
+9	,	,	,	,	-	4	P	-	-
+10	hugging	hugging	VBG	VBG	-	4	VMOD	-	-
+11	closer	closer	JJR	JJR	-	10	VMOD	-	-
+12	to	to	TO	TO	-	11	AMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	trunk	trunk	NN	NN	-	12	PMOD	-	-
+15	.	.	.	.	-	2	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	hunched	hunched	VBD	VBD	-	0	ROOT	-	-
+3	up	up	RP	RP	-	2	VMOD	-	-
+4	.	.	.	.	-	2	P	-	-
+
+1	i	i	PRP	PRP	-	2	SUB	-	-
+2	said	said	VBD	VBD	-	0	ROOT	-	-
+3	,	,	,	,	-	2	P	-	-
+4	hunching	hunching	VBG	VBG	-	2	VMOD	-	-
+5	up	up	RP	RP	-	4	VMOD	-	-
+6	as	as	RB	RB	-	7	AMOD	-	-
+7	small	small	JJ	JJ	-	4	OBJ	-	-
+8	as	as	IN	IN	-	7	AMOD	-	-
+9	i	i	PRP	PRP	-	10	SUB	-	-
+10	could	could	MD	MD	-	8	SBAR	-	-
+11	.	.	.	.	-	2	P	-	-
+

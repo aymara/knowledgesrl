@@ -1,0 +1,43 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	end	end	NN	NN	-	6	SUB	-	-
+3	of	of	IN	IN	-	2	NMOD	-	-
+4	my	my	PRP$	PRP$	-	5	NMOD	-	-
+5	teddy-tail	teddy-tail	NN	NN	-	3	PMOD	-	-
+6	is	is	VBZ	VBZ	-	13	VMOD	-	-
+7	tickling	tickling	VBG	VBG	-	6	VC	-	-
+8	like	like	IN	IN	-	7	VMOD	-	-
+9	mad	mad	JJ	JJ	-	8	PMOD	-	-
+10	,	,	,	,	-	13	P	-	-
+11	but	but	CC	CC	-	13	VMOD	-	-
+12	it	it	PRP	PRP	-	13	SUB	-	-
+13	is	is	VBZ	VBZ	-	0	ROOT	-	-
+14	not-nice	not-nice	JJ	JJ	-	13	PRD	-	-
+15	for	for	IN	IN	-	13	VMOD	-	-
+16	boys	boys	NNS	NNS	-	18	SUB	-	-
+17	to	to	TO	TO	-	18	VMOD	-	-
+18	scratch	scratch	VB	VB	-	15	SBAR	-	-
+19	down	down	RB	RB	-	18	VMOD	-	-
+20	below	below	RB	RB	-	19	AMOD	-	-
+21	.	.	.	.	-	13	P	-	-
+
+1	my	my	PRP$	PRP$	-	2	NMOD	-	-
+2	feet	feet	NNS	NNS	-	3	SUB	-	-
+3	tickle	tickle	VBP	VBP	-	0	ROOT	-	-
+4	with	with	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	7	NMOD	-	-
+6	marching	marching	VBG	VBG	-	7	NMOD	-	-
+7	rhythm	rhythm	NN	NN	-	4	PMOD	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	laughed	laughed	VBD	VBD	-	7	VMOD	-	-
+3	softly	softly	RB	RB	-	2	VMOD	-	-
+4	,	,	,	,	-	7	P	-	-
+5	and	and	CC	CC	-	7	VMOD	-	-
+6	it	it	PRP	PRP	-	7	SUB	-	-
+7	tickled	tickled	VBD	VBD	-	0	ROOT	-	-
+8	up	up	RP	RP	-	7	VMOD	-	-
+9	her	her	PRP$	PRP$	-	10	NMOD	-	-
+10	spine	spine	NN	NN	-	7	OBJ	-	-
+11	.	.	.	.	-	7	P	-	-
+

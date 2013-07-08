@@ -1,0 +1,26 @@
+1	`	`	``	``	-	23	P	-	-
+2	so	so	RB	RB	-	5	VMOD	-	-
+3	now	now	RB	RB	-	2	AMOD	-	-
+4	you	you	PRP	PRP	-	5	SUB	-	-
+5	go	go	VBP	VBP	-	23	VMOD	-	-
+6	and	and	CC	CC	-	5	VMOD	-	-
+7	tramp	tramp	VBP	VBP	-	5	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	streets	streets	NNS	NNS	-	23	SUB	-	-
+10	changing	changing	VBG	VBG	-	9	NMOD	-	-
+11	your	your	PRP$	PRP$	-	13	NMOD	-	-
+12	traveller	traveller	NN	NN	-	13	NMOD	-	-
+13	's	's	POS	POS	-	14	NMOD	-	-
+14	cheques	cheques	NNS	NNS	-	10	OBJ	-	-
+15	into	into	IN	IN	-	10	VMOD	-	-
+16	cash	cash	NN	NN	-	15	PMOD	-	-
+17	and	and	CC	CC	-	10	VMOD	-	-
+18	then	then	RB	RB	-	10	VMOD	-	-
+19	into	into	IN	IN	-	10	VMOD	-	-
+20	traveller	traveller	NN	NN	-	21	NMOD	-	-
+21	's	's	POS	POS	-	22	NMOD	-	-
+22	cheques	cheques	NNS	NNS	-	19	PMOD	-	-
+23	signed	signed	VBD	VBD	-	0	ROOT	-	-
+24	winterbotham	winterbotham	NN	NN	-	23	OBJ	-	-
+25	.	.	.	.	-	23	P	-	-
+

@@ -1,0 +1,28 @@
+1	how	how	WRB	WRB	-	6	VMOD	-	-
+2	'd	'd	MD	MD	-	1	SBAR	-	-
+3	you	you	PRP	PRP	-	2	SUB	-	-
+4	win	win	VB	VB	-	2	VMOD	-	-
+5	radio	radio	NN	NN	-	4	OBJ	-	-
+6	contests	contests	VBZ	VBZ	-	0	ROOT	-	-
+
+1	gal	gal	NNS	NNS	-	0	ROOT	-	-
+2	that	that	WDT	WDT	-	1	NMOD	-	-
+3	won	won	VBD	VBD	-	2	SBAR	-	-
+
+1	i	i	PRP	PRP	-	2	SUB	-	-
+2	keep	keep	VBP	VBP	-	0	ROOT	-	-
+3	hoping	hoping	VBG	VBG	-	2	VC	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	win	win	VB	VB	-	3	VMOD	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	lotto	lotto	NN	NN	-	5	OBJ	-	-
+8	for	for	IN	IN	-	5	VMOD	-	-
+9	i	i	PRP	PRP	-	10	SUB	-	-
+10	can	can	MD	MD	-	8	SBAR	-	-
+11	do	do	VB	VB	-	10	VC	-	-
+12	all	all	PDT	PDT	-	14	NMOD	-	-
+13	these	these	DT	DT	-	14	NMOD	-	-
+14	things	things	NNS	NNS	-	11	OBJ	-	-
+15	you	you	PRP	PRP	-	16	SUB	-	-
+16	know	know	VBP	VBP	-	14	NMOD	-	-
+

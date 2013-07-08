@@ -1,0 +1,33 @@
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	0	ROOT	-	-
+3	a	a	DT	DT	-	5	NMOD	-	-
+4	balkan	balkan	JJ	JJ	-	5	NMOD	-	-
+5	wake	wake	NN	NN	-	2	PRD	-	-
+6	,	,	,	,	-	2	P	-	-
+7	with	with	IN	IN	-	2	VMOD	-	-
+8	black-scarved	black-scarved	JJ	JJ	-	9	NMOD	-	-
+9	women	women	NNS	NNS	-	10	SUB	-	-
+10	keening	keening	VBG	VBG	-	7	PMOD	-	-
+11	and	and	CC	CC	-	10	VMOD	-	-
+12	strapping	strapping	VBG	VBG	-	10	VMOD	-	-
+13	soldiers	soldiers	NNS	NNS	-	12	OBJ	-	-
+14	in	in	IN	IN	-	12	VMOD	-	-
+15	uniform	uniform	JJ	JJ	-	14	PMOD	-	-
+16	weeping	weeping	VBG	VBG	-	15	NMOD	-	-
+17	openly	openly	RB	RB	-	16	VMOD	-	-
+18	.	.	.	.	-	2	P	-	-
+
+1	others	others	NNS	NNS	-	2	SUB	-	-
+2	wailed	wailed	VBD	VBD	-	0	ROOT	-	-
+3	and	and	CC	CC	-	2	VMOD	-	-
+4	keened	keened	VBD	VBD	-	2	VMOD	-	-
+5	,	,	,	,	-	2	P	-	-
+6	as	as	IN	IN	-	2	VMOD	-	-
+7	friends	friends	NNS	NNS	-	9	NMOD	-	-
+8	and	and	CC	CC	-	9	NMOD	-	-
+9	relatives	relatives	NNS	NNS	-	10	SUB	-	-
+10	propped	propped	VBD	VBD	-	6	SBAR	-	-
+11	them	them	PRP	PRP	-	10	OBJ	-	-
+12	up	up	RP	RP	-	10	VMOD	-	-
+13	.	.	.	.	-	2	P	-	-
+

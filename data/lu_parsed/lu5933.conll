@@ -1,0 +1,31 @@
+1	lifeless	lifeless	JJ	JJ	-	0	ROOT	-	-
+2	,	,	,	,	-	1	P	-	-
+3	decrepit	decrepit	NN	NN	-	1	DEP	-	-
+4	,	,	,	,	-	1	P	-	-
+5	falling	falling	VBG	VBG	-	1	DEP	-	-
+6	alert	alert	NN	NN	-	5	OBJ	-	-
+7	,	,	,	,	-	5	P	-	-
+8	putrefying	putrefying	VBG	VBG	-	5	VMOD	-	-
+9	.	.	.	.	-	1	P	-	-
+
+1	two	two	CD	CD	-	2	NMOD	-	-
+2	days	days	NNS	NNS	-	3	VMOD	-	-
+3	dead	dead	JJ	JJ	-	7	VMOD	-	-
+4	,	,	,	,	-	7	P	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	body	body	NN	NN	-	7	SUB	-	-
+7	was	was	VBD	VBD	-	14	VMOD	-	-
+8	beginning	beginning	VBG	VBG	-	7	VC	-	-
+9	to	to	TO	TO	-	10	VMOD	-	-
+10	putrefy	putrefy	VB	VB	-	8	VMOD	-	-
+11	and	and	CC	CC	-	14	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	stench	stench	NN	NN	-	14	SUB	-	-
+14	made	made	VBD	VBD	-	0	ROOT	-	-
+15	both	both	DT	DT	-	19	NMOD	-	-
+16	benjamin	benjamin	NN	NN	-	19	NMOD	-	-
+17	and	and	CC	CC	-	19	NMOD	-	-
+18	myself	myself	PRP	PRP	-	19	NMOD	-	-
+19	gag	gag	NN	NN	-	14	OBJ	-	-
+20	.	.	.	.	-	14	P	-	-
+

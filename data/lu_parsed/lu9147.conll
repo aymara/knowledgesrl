@@ -1,0 +1,19 @@
+1	or	or	CC	CC	-	4	VMOD	-	-
+2	anything	anything	NN	NN	-	4	VMOD	-	-
+3	he	he	PRP	PRP	-	4	SUB	-	-
+4	has	has	VBZ	VBZ	-	0	ROOT	-	-
+5	not	not	RB	RB	-	4	VMOD	-	-
+6	been	been	VBN	VBN	-	4	VC	-	-
+7	able	able	JJ	JJ	-	6	PRD	-	-
+8	to	to	TO	TO	-	9	VMOD	-	-
+9	hush	hush	VB	VB	-	7	AMOD	-	-
+10	up	up	RP	RP	-	9	VMOD	-	-
+11	.	.	.	.	-	4	P	-	-
+
+1	`	`	``	``	-	5	P	-	-
+2	hush	hush	JJ	JJ	-	5	NMOD	-	-
+3	up	up	RB	RB	-	2	VMOD	-	-
+4	,	,	,	,	-	2	P	-	-
+5	guy	guy	NN	NN	-	0	ROOT	-	-
+6	.	.	.	.	-	5	P	-	-
+

@@ -1,0 +1,26 @@
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	explained	explained	VBD	VBD	-	14	VMOD	-	-
+3	without	without	IN	IN	-	2	VMOD	-	-
+4	the	the	DT	DT	-	6	NMOD	-	-
+5	slightest	slightest	JJS	JJS	-	6	NMOD	-	-
+6	embarrassment	embarrassment	NN	NN	-	3	PMOD	-	-
+7	,	,	,	,	-	14	P	-	-
+8	and	and	CC	CC	-	14	VMOD	-	-
+9	while	while	IN	IN	-	14	VMOD	-	-
+10	he	he	PRP	PRP	-	11	SUB	-	-
+11	did	did	VBD	VBD	-	9	SBAR	-	-
+12	so	so	RB	RB	-	11	VMOD	-	-
+13	he	he	PRP	PRP	-	14	SUB	-	-
+14	looped	looped	VBD	VBD	-	0	ROOT	-	-
+15	lengths	lengths	NNS	NNS	-	14	OBJ	-	-
+16	of	of	IN	IN	-	15	NMOD	-	-
+17	the	the	DT	DT	-	20	NMOD	-	-
+18	rope	rope	NN	NN	-	20	NMOD	-	-
+19	clothes	clothes	NNS	NNS	-	20	NMOD	-	-
+20	'	'	POS	POS	-	21	NMOD	-	-
+21	line	line	NN	NN	-	16	PMOD	-	-
+22	by	by	IN	IN	-	21	NMOD	-	-
+23	his	his	PRP$	PRP$	-	24	NMOD	-	-
+24	feet	feet	NNS	NNS	-	22	PMOD	-	-
+25	.	.	.	.	-	14	P	-	-
+

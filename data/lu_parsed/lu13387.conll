@@ -1,0 +1,37 @@
+1	yet	yet	RB	RB	-	14	VMOD	-	-
+2	those	those	DT	DT	-	3	NMOD	-	-
+3	people	people	NNS	NNS	-	14	SUB	-	-
+4	,	,	,	,	-	14	P	-	-
+5	the	the	DT	DT	-	7	NMOD	-	-
+6	fellow	fellow	JJ	JJ	-	7	NMOD	-	-
+7	countrymen	countrymen	NNS	NNS	-	14	SUB	-	-
+8	of	of	IN	IN	-	7	NMOD	-	-
+9	jan	jan	NN	NN	-	11	NMOD	-	-
+10	mayen	mayen	NN	NN	-	11	NMOD	-	-
+11	's	's	POS	POS	-	12	NMOD	-	-
+12	crew	crew	NN	NN	-	8	PMOD	-	-
+13	,	,	,	,	-	12	P	-	-
+14	would	would	MD	MD	-	0	ROOT	-	-
+15	put	put	VB	VB	-	14	VC	-	-
+16	their	their	PRP$	PRP$	-	17	NMOD	-	-
+17	lives	lives	NNS	NNS	-	15	OBJ	-	-
+18	at	at	IN	IN	-	15	VMOD	-	-
+19	risk	risk	NN	NN	-	18	PMOD	-	-
+20	to	to	TO	TO	-	21	VMOD	-	-
+21	give	give	VB	VB	-	15	VMOD	-	-
+22	help	help	NN	NN	-	24	NMOD	-	-
+23	and	and	CC	CC	-	24	NMOD	-	-
+24	shelter	shelter	NN	NN	-	21	OBJ	-	-
+25	to	to	TO	TO	-	26	VMOD	-	-
+26	british	british	VB	VB	-	21	VMOD	-	-
+27	airmen	airmen	NNS	NNS	-	26	OBJ	-	-
+28	.	.	.	.	-	14	P	-	-
+
+1	this	this	DT	DT	-	2	SUB	-	-
+2	could	could	MD	MD	-	0	ROOT	-	-
+3	put	put	VB	VB	-	2	VC	-	-
+4	you	you	PRP	PRP	-	3	OBJ	-	-
+5	at	at	IN	IN	-	3	VMOD	-	-
+6	risk	risk	NN	NN	-	5	PMOD	-	-
+7	.	.	.	.	-	2	P	-	-
+

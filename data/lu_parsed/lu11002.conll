@@ -1,0 +1,29 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	man	man	NN	NN	-	3	SUB	-	-
+3	licked	licked	VBD	VBD	-	0	ROOT	-	-
+4	mud-caked	mud-caked	JJ	JJ	-	5	NMOD	-	-
+5	lips	lips	NNS	NNS	-	8	NMOD	-	-
+6	,	,	,	,	-	8	P	-	-
+7	eyes	eyes	NNS	NNS	-	8	NMOD	-	-
+8	half-closing	half-closing	NN	NN	-	3	OBJ	-	-
+9	in	in	IN	IN	-	8	NMOD	-	-
+10	weariness	weariness	NN	NN	-	9	PMOD	-	-
+11	.	.	.	.	-	3	P	-	-
+
+1	will	will	MD	MD	-	0	ROOT	-	-
+2	licked	licked	VBD	VBD	-	1	VMOD	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	lips	lips	NNS	NNS	-	2	OBJ	-	-
+5	and	and	CC	CC	-	2	VMOD	-	-
+6	looked	looked	VBD	VBD	-	2	VMOD	-	-
+7	uncertainly	uncertainly	RB	RB	-	6	VMOD	-	-
+8	towards	towards	RB	RB	-	9	AMOD	-	-
+9	hari	hari	JJ	JJ	-	6	PRD	-	-
+10	.	.	.	.	-	1	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	licked	licked	VBD	VBD	-	0	ROOT	-	-
+3	her	her	PRP$	PRP$	-	4	NMOD	-	-
+4	lips	lips	NNS	NNS	-	2	OBJ	-	-
+5	.	.	.	.	-	2	P	-	-
+

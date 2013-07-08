@@ -1,0 +1,35 @@
+1	two	two	CD	CD	-	3	NMOD	-	-
+2	spayed	spayed	JJ	JJ	-	3	NMOD	-	-
+3	females	females	NNS	NNS	-	8	SUB	-	-
+4	disputing	disputing	VBG	VBG	-	3	NMOD	-	-
+5	a	a	DT	DT	-	7	NMOD	-	-
+6	territorial	territorial	JJ	JJ	-	7	NMOD	-	-
+7	boundary	boundary	NN	NN	-	4	OBJ	-	-
+8	can	can	MD	MD	-	0	ROOT	-	-
+9	caterwaul	caterwaul	VB	VB	-	8	VC	-	-
+10	as	as	RB	RB	-	9	VMOD	-	-
+11	dramatically	dramatically	RB	RB	-	10	AMOD	-	-
+12	as	as	IN	IN	-	10	AMOD	-	-
+13	any	any	DT	DT	-	15	NMOD	-	-
+14	`	`	``	``	-	15	P	-	-
+15	rutting	rutting	NN	NN	-	16	SUB	-	-
+16	toms	toms	VBZ	VBZ	-	12	SBAR	-	-
+17	``	``	``	``	-	16	P	-	-
+18	.	.	.	.	-	8	P	-	-
+
+1	and	and	CC	CC	-	10	VMOD	-	-
+2	i	i	NNP	NNP	-	10	SUB	-	-
+3	,	,	,	,	-	10	P	-	-
+4	it	it	PRP	PRP	-	5	SUB	-	-
+5	was	was	VBD	VBD	-	10	VMOD	-	-
+6	n't	n't	RB	RB	-	5	VMOD	-	-
+7	until	until	IN	IN	-	5	PRD	-	-
+8	afterwards	afterwards	RB	RB	-	7	PMOD	-	-
+9	i	i	,	,	-	10	P	-	-
+10	realized	realized	VBD	VBD	-	0	ROOT	-	-
+11	it	it	PRP	PRP	-	12	SUB	-	-
+12	was	was	VBD	VBD	-	10	VMOD	-	-
+13	cats	cats	NNS	NNS	-	14	SUB	-	-
+14	caterwauling	caterwauling	VBG	VBG	-	12	VMOD	-	-
+15	.	.	.	.	-	10	P	-	-
+

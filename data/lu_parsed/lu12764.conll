@@ -1,0 +1,11 @@
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	knew	knew	VBD	VBD	-	0	ROOT	-	-
+3	angel	angel	NN	NN	-	4	NMOD	-	-
+4	clare	clare	NN	NN	-	2	OBJ	-	-
+5	preferred	preferred	VBD	VBD	-	2	VMOD	-	-
+6	her	her	PRP	PRP	-	5	OBJ	-	-
+7	to	to	TO	TO	-	5	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	others	others	NNS	NNS	-	7	PMOD	-	-
+10	.	.	.	.	-	2	P	-	-
+

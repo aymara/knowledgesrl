@@ -1,0 +1,23 @@
+1	people	people	NNS	NNS	-	2	SUB	-	-
+2	sent	sent	VBD	VBD	-	0	ROOT	-	-
+3	their	their	PRP$	PRP$	-	4	NMOD	-	-
+4	daughters	daughters	NNS	NNS	-	2	OBJ	-	-
+5	to	to	TO	TO	-	6	VMOD	-	-
+6	cambridge	cambridge	VB	VB	-	2	VMOD	-	-
+7	school	school	NN	NN	-	6	OBJ	-	-
+8	,	,	,	,	-	2	P	-	-
+9	dressing	dressing	VBG	VBG	-	2	VMOD	-	-
+10	them	them	PRP	PRP	-	9	OBJ	-	-
+11	up	up	RP	RP	-	9	VMOD	-	-
+12	in	in	IN	IN	-	9	VMOD	-	-
+13	the	the	DT	DT	-	19	NMOD	-	-
+14	toffee-brown	toffee-brown	JJ	JJ	-	17	AMOD	-	-
+15	and	and	CC	CC	-	17	AMOD	-	-
+16	pale	pale	VBP	VBP	-	17	AMOD	-	-
+17	uniform	uniform	JJ	JJ	-	19	NMOD	-	-
+18	elizabeth	elizabeth	NN	NN	-	19	NMOD	-	-
+19	jarvis	jarvis	NNS	NNS	-	20	SUB	-	-
+20	had	had	VBD	VBD	-	12	SBAR	-	-
+21	selected	selected	VBN	VBN	-	20	VC	-	-
+22	.	.	.	.	-	2	P	-	-
+

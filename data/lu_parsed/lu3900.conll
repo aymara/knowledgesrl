@@ -1,0 +1,23 @@
+1	yellow	yellow	JJ	JJ	-	3	NMOD	-	-
+2	victorian	victorian	JJ	JJ	-	3	NMOD	-	-
+3	mansions	mansions	NNS	NNS	-	9	SUB	-	-
+4	,	,	,	,	-	3	P	-	-
+5	with	with	IN	IN	-	3	NMOD	-	-
+6	their	their	PRP$	PRP$	-	8	NMOD	-	-
+7	front	front	JJ	JJ	-	8	NMOD	-	-
+8	gardens	gardens	NNS	NNS	-	5	PMOD	-	-
+9	asphalted	asphalted	VBD	VBD	-	0	ROOT	-	-
+10	over	over	RP	RP	-	9	VMOD	-	-
+11	to	to	TO	TO	-	12	VMOD	-	-
+12	make	make	VB	VB	-	9	VMOD	-	-
+13	yellow	yellow	JJ	JJ	-	15	NMOD	-	-
+14	parking	parking	NN	NN	-	15	NMOD	-	-
+15	areas	areas	NNS	NNS	-	12	OBJ	-	-
+16	for	for	IN	IN	-	15	NMOD	-	-
+17	the	the	DT	DT	-	19	NMOD	-	-
+18	flatholders	flatholders	NNS	NNS	-	19	NMOD	-	-
+19	'	'	POS	POS	-	21	NMOD	-	-
+20	yellow	yellow	JJ	JJ	-	21	NMOD	-	-
+21	cars	cars	NNS	NNS	-	16	PMOD	-	-
+22	.	.	.	.	-	9	P	-	-
+

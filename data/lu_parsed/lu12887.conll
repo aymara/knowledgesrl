@@ -1,0 +1,46 @@
+1	over	over	IN	IN	-	9	VMOD	-	-
+2	the	the	DT	DT	-	5	NMOD	-	-
+3	next	next	JJ	JJ	-	5	NMOD	-	-
+4	four	four	CD	CD	-	5	NMOD	-	-
+5	months	months	NNS	NNS	-	1	PMOD	-	-
+6	,	,	,	,	-	9	P	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	weather	weather	NN	NN	-	9	SUB	-	-
+9	veered	veered	VBN	VBN	-	0	ROOT	-	-
+10	from	from	IN	IN	-	9	VMOD	-	-
+11	intense	intense	JJ	JJ	-	12	NMOD	-	-
+12	heat	heat	NN	NN	-	10	PMOD	-	-
+13	to	to	TO	TO	-	10	PMOD	-	-
+14	snowstorms	snowstorms	NNS	NNS	-	13	PMOD	-	-
+15	.	.	.	.	-	9	P	-	-
+
+1	branson	branson	NN	NN	-	2	NMOD	-	-
+2	's	's	POS	POS	-	3	NMOD	-	-
+3	attitude	attitude	NN	NN	-	7	SUB	-	-
+4	to	to	TO	TO	-	3	NMOD	-	-
+5	his	his	PRP$	PRP$	-	6	NMOD	-	-
+6	bank	bank	NN	NN	-	4	PMOD	-	-
+7	had	had	VBD	VBD	-	0	ROOT	-	-
+8	always	always	RB	RB	-	7	VMOD	-	-
+9	veered	veered	VBN	VBN	-	7	VC	-	-
+10	between	between	IN	IN	-	9	VMOD	-	-
+11	naivety	naivety	NN	NN	-	16	NMOD	-	-
+12	,	,	,	,	-	16	P	-	-
+13	respect	respect	NN	NN	-	16	NMOD	-	-
+14	--	--	:	:	-	16	P	-	-
+15	and	and	CC	CC	-	16	NMOD	-	-
+16	evasiveness	evasiveness	NN	NN	-	10	PMOD	-	-
+17	.	.	.	.	-	7	P	-	-
+
+1	an	an	DT	DT	-	3	NMOD	-	-
+2	intellectual	intellectual	JJ	JJ	-	3	NMOD	-	-
+3	ripper	ripper	NN	NN	-	0	ROOT	-	-
+4	,	,	,	,	-	3	P	-	-
+5	which	which	WDT	WDT	-	3	NMOD	-	-
+6	veers	veers	VBZ	VBZ	-	5	SBAR	-	-
+7	between	between	IN	IN	-	6	VMOD	-	-
+8	poetry	poetry	NN	NN	-	10	NMOD	-	-
+9	and	and	CC	CC	-	10	NMOD	-	-
+10	pretentiousness	pretentiousness	NN	NN	-	7	PMOD	-	-
+11	.	.	.	.	-	5	P	-	-
+

@@ -1,0 +1,22 @@
+1	two	two	CD	CD	-	2	NMOD	-	-
+2	words	words	NNS	NNS	-	14	SUB	-	-
+3	which	which	WDT	WDT	-	2	NMOD	-	-
+4	collocate	collocate	VBP	VBP	-	3	SBAR	-	-
+5	(	(	-LRB-	-LRB-	-	6	P	-	-
+6	may	may	MD	MD	-	4	VMOD	-	-
+7	occur	occur	VB	VB	-	6	VC	-	-
+8	together	together	RB	RB	-	7	VMOD	-	-
+9	)	)	-RRB-	-RRB-	-	8	P	-	-
+10	in	in	IN	IN	-	7	VMOD	-	-
+11	your	your	PRP$	PRP$	-	13	NMOD	-	-
+12	own	own	JJ	JJ	-	13	NMOD	-	-
+13	language	language	NN	NN	-	10	PMOD	-	-
+14	may	may	MD	MD	-	0	ROOT	-	-
+15	not	not	RB	RB	-	14	VMOD	-	-
+16	collocate	collocate	VB	VB	-	14	VC	-	-
+17	in	in	IN	IN	-	16	VMOD	-	-
+18	the	the	DT	DT	-	20	NMOD	-	-
+19	target	target	NN	NN	-	20	NMOD	-	-
+20	language	language	NN	NN	-	17	PMOD	-	-
+21	.	.	.	.	-	14	P	-	-
+

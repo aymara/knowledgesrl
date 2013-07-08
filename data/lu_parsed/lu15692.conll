@@ -1,0 +1,24 @@
+1	one	one	CD	CD	-	2	NMOD	-	-
+2	day	day	NN	NN	-	8	VMOD	-	-
+3	at	at	IN	IN	-	2	NMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	beach	beach	NN	NN	-	3	PMOD	-	-
+6	,	,	,	,	-	8	P	-	-
+7	they	they	PRP	PRP	-	8	SUB	-	-
+8	encountered	encountered	VBD	VBD	-	0	ROOT	-	-
+9	a	a	DT	DT	-	12	NMOD	-	-
+10	beautiful	beautiful	JJ	JJ	-	12	NMOD	-	-
+11	blonde	blonde	JJ	JJ	-	12	NMOD	-	-
+12	starlet	starlet	NN	NN	-	8	OBJ	-	-
+13	called	called	VBN	VBN	-	12	NMOD	-	-
+14	lila	lila	NNP	NNP	-	15	NMOD	-	-
+15	leeds	leeds	NNS	NNS	-	17	NMOD	-	-
+16	,	,	,	,	-	17	P	-	-
+17	something	something	NN	NN	-	13	VMOD	-	-
+18	of	of	IN	IN	-	17	NMOD	-	-
+19	a	a	DT	DT	-	22	NMOD	-	-
+20	lana	lana	NN	NN	-	22	NMOD	-	-
+21	turner	turner	NN	NN	-	22	NMOD	-	-
+22	lookalike	lookalike	NN	NN	-	18	PMOD	-	-
+23	.	.	.	.	-	8	P	-	-
+

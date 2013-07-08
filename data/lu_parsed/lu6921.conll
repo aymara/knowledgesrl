@@ -1,0 +1,11 @@
+1	as	as	RB	RB	-	0	ROOT	-	-
+2	soon	soon	RB	RB	-	1	AMOD	-	-
+3	as	as	IN	IN	-	1	AMOD	-	-
+4	you	you	PRP	PRP	-	5	SUB	-	-
+5	've	've	VBP	VBP	-	3	SBAR	-	-
+6	birthed	birthed	VBN	VBN	-	5	VC	-	-
+7	your	your	PRP$	PRP$	-	8	NMOD	-	-
+8	child	child	NN	NN	-	6	OBJ	-	-
+9	--	--	:	:	-	1	P	-	-
+10	`	`	``	``	-	1	P	-	-
+

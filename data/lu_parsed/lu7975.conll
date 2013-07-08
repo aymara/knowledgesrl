@@ -1,0 +1,11 @@
+1	mills	mills	NNS	NNS	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	0	ROOT	-	-
+3	suspected	suspected	VBN	VBN	-	2	VC	-	-
+4	of	of	IN	IN	-	3	VMOD	-	-
+5	having	having	VBG	VBG	-	4	PMOD	-	-
+6	worked	worked	VBN	VBN	-	5	VC	-	-
+7	for	for	IN	IN	-	6	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	kgb	kgb	NN	NN	-	7	PMOD	-	-
+10	.	.	.	.	-	2	P	-	-
+

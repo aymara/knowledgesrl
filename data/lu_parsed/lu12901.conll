@@ -1,0 +1,37 @@
+1	should	should	MD	MD	-	0	ROOT	-	-
+2	i	i	PRP	PRP	-	1	SUB	-	-
+3	lay	lay	VB	VB	-	1	VMOD	-	-
+4	them	them	PRP	PRP	-	3	OBJ	-	-
+5	on	on	IN	IN	-	3	VMOD	-	-
+6	the	the	DT	DT	-	9	NMOD	-	-
+7	doorstep	doorstep	NN	NN	-	9	NMOD	-	-
+8	and	and	CC	CC	-	9	NMOD	-	-
+9	vamoose	vamoose	NN	NN	-	5	PMOD	-	-
+10	before	before	IN	IN	-	3	VMOD	-	-
+11	she	she	PRP	PRP	-	12	SUB	-	-
+12	responded	responded	VBD	VBD	-	10	SBAR	-	-
+13	to	to	TO	TO	-	12	VMOD	-	-
+14	the	the	DT	DT	-	15	NMOD	-	-
+15	bell	bell	NN	NN	-	13	PMOD	-	-
+16	?	?	.	.	-	1	P	-	-
+
+1	you	you	PRP	PRP	-	2	SUB	-	-
+2	go	go	VBP	VBP	-	15	VMOD	-	-
+3	vamoose	vamoose	JJ	JJ	-	2	VMOD	-	-
+4	from	from	IN	IN	-	2	VMOD	-	-
+5	here	here	RB	RB	-	4	PMOD	-	-
+6	plenty	plenty	JJ	JJ	-	7	NMOD	-	-
+7	chop-chop	chop-chop	NN	NN	-	4	PMOD	-	-
+8	,	,	,	,	-	2	P	-	-
+9	tuck	tuck	VBP	VBP	-	2	VMOD	-	-
+10	up	up	RB	RB	-	9	VMOD	-	-
+11	in	in	IN	IN	-	9	VMOD	-	-
+12	him	him	PRP	PRP	-	13	SUB	-	-
+13	blanket	blanket	VBP	VBP	-	11	SBAR	-	-
+14	,	,	,	,	-	15	P	-	-
+15	take	take	VBP	VBP	-	0	ROOT	-	-
+16	sleeping	sleeping	VBG	VBG	-	15	VMOD	-	-
+17	pill	pill	NN	NN	-	16	OBJ	-	-
+18	.	.	.	.	-	15	P	-	-
+19	``	``	``	``	-	15	P	-	-
+

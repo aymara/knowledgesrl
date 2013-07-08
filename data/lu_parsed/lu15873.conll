@@ -1,0 +1,28 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	base	base	NN	NN	-	3	SUB	-	-
+3	can	can	MD	MD	-	0	ROOT	-	-
+4	no	no	RB	RB	-	3	VMOD	-	-
+5	longer	longer	RB	RB	-	4	AMOD	-	-
+6	support	support	VB	VB	-	3	VC	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	half-span	half-span	NN	NN	-	6	OBJ	-	-
+9	which	which	WDT	WDT	-	8	NMOD	-	-
+10	snaps	snaps	VBZ	VBZ	-	9	SBAR	-	-
+11	off	off	RP	RP	-	10	VMOD	-	-
+12	.	.	.	.	-	3	P	-	-
+
+1	`	`	``	``	-	12	P	-	-
+2	last	last	JJ	JJ	-	3	NMOD	-	-
+3	week	week	NN	NN	-	12	VMOD	-	-
+4	,	,	,	,	-	7	P	-	-
+5	''	''	''	''	-	7	P	-	-
+6	she	she	PRP	PRP	-	7	SUB	-	-
+7	said	said	VBD	VBD	-	12	VMOD	-	-
+8	,	,	,	,	-	7	P	-	-
+9	`	`	``	``	-	12	P	-	-
+10	my	my	PRP$	PRP$	-	11	NMOD	-	-
+11	nail	nail	NN	NN	-	12	SUB	-	-
+12	snapped	snapped	VBD	VBD	-	0	ROOT	-	-
+13	off	off	RP	RP	-	12	VMOD	-	-
+14	.	.	.	.	-	12	P	-	-
+

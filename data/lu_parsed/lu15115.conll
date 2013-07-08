@@ -1,0 +1,19 @@
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	ferryhill	ferryhill	JJ	JJ	-	3	NMOD	-	-
+3	area	area	NN	NN	-	4	SUB	-	-
+4	was	was	VBD	VBD	-	0	ROOT	-	-
+5	struck	struck	VBN	VBN	-	4	VC	-	-
+6	twice	twice	RB	RB	-	5	VMOD	-	-
+7	last	last	JJ	JJ	-	8	NMOD	-	-
+8	weekend	weekend	NN	NN	-	6	NMOD	-	-
+9	,	,	,	,	-	5	P	-	-
+10	once	once	RB	RB	-	5	VMOD	-	-
+11	on	on	IN	IN	-	10	AMOD	-	-
+12	friday	friday	JJ	JJ	-	11	PMOD	-	-
+13	and	and	CC	CC	-	10	AMOD	-	-
+14	then	then	RB	RB	-	10	AMOD	-	-
+15	again	again	RB	RB	-	10	AMOD	-	-
+16	on	on	IN	IN	-	10	AMOD	-	-
+17	saturday	saturday	NN	NN	-	16	PMOD	-	-
+18	.	.	.	.	-	4	P	-	-
+

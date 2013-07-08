@@ -1,0 +1,44 @@
+1	for	for	IN	IN	-	5	VMOD	-	-
+2	recommended	recommended	VBN	VBN	-	3	NMOD	-	-
+3	booklist	booklist	NN	NN	-	1	PMOD	-	-
+4	,	,	,	,	-	5	P	-	-
+5	see	see	VBP	VBP	-	0	ROOT	-	-
+6	page	page	NN	NN	-	5	OBJ	-	-
+7	<num>	<num>	CD	CD	-	6	NMOD	-	-
+8	.	.	.	.	-	5	P	-	-
+
+1	so	so	RB	RB	-	5	VMOD	-	-
+2	far	far	RB	RB	-	1	AMOD	-	-
+3	mr	mr	JJR	JJR	-	4	NMOD	-	-
+4	balladur	balladur	NN	NN	-	5	SUB	-	-
+5	has	has	VBZ	VBZ	-	0	ROOT	-	-
+6	managed	managed	VBN	VBN	-	5	VC	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	pin	pin	VB	VB	-	6	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	blame	blame	NN	NN	-	8	OBJ	-	-
+11	for	for	IN	IN	-	10	NMOD	-	-
+12	france	france	NN	NN	-	13	NMOD	-	-
+13	's	's	POS	POS	-	15	NMOD	-	-
+14	current	current	JJ	JJ	-	15	NMOD	-	-
+15	malaise	malaise	NN	NN	-	11	PMOD	-	-
+16	squarely	squarely	RB	RB	-	17	PMOD	-	-
+17	on	on	IN	IN	-	8	VMOD	-	-
+18	the	the	DT	DT	-	20	NMOD	-	-
+19	socialists	socialists	NNS	NNS	-	20	NMOD	-	-
+20	'	'	POS	POS	-	21	NMOD	-	-
+21	legacy	legacy	NN	NN	-	17	PMOD	-	-
+22	(	(	-LRB-	-LRB-	-	23	P	-	-
+23	see	see	VB	VB	-	8	VMOD	-	-
+24	page	page	NN	NN	-	23	OBJ	-	-
+25	<num>	<num>	CD	CD	-	24	NMOD	-	-
+26	)	)	-RRB-	-RRB-	-	23	P	-	-
+27	.	.	.	.	-	5	P	-	-
+
+1	see	see	VB	VB	-	0	ROOT	-	-
+2	page	page	NN	NN	-	1	OBJ	-	-
+3	<num>	<num>	CD	CD	-	2	NMOD	-	-
+4	for	for	IN	IN	-	1	VMOD	-	-
+5	full	full	JJ	JJ	-	6	NMOD	-	-
+6	details	details	NNS	NNS	-	4	PMOD	-	-
+

@@ -1,0 +1,37 @@
+1	when	when	WRB	WRB	-	8	VMOD	-	-
+2	the	the	DT	DT	-	3	NMOD	-	-
+3	restaurant	restaurant	NN	NN	-	4	SUB	-	-
+4	was	was	VBD	VBD	-	1	SBAR	-	-
+5	quiet	quiet	JJ	JJ	-	4	PRD	-	-
+6	,	,	,	,	-	8	P	-	-
+7	she	she	PRP	PRP	-	8	SUB	-	-
+8	went	went	VBD	VBD	-	0	ROOT	-	-
+9	and	and	CC	CC	-	8	VMOD	-	-
+10	stood	stood	VBD	VBD	-	8	VMOD	-	-
+11	by	by	IN	IN	-	8	VMOD	-	-
+12	bogle	bogle	NNP	NNP	-	13	NMOD	-	-
+13	's	's	POS	POS	-	14	NMOD	-	-
+14	desk	desk	NN	NN	-	11	PMOD	-	-
+15	.	.	.	.	-	8	P	-	-
+
+1	stand	stand	NN	NN	-	2	NMOD	-	-
+2	upright	upright	NN	NN	-	4	SUB	-	-
+3	,	,	,	,	-	4	P	-	-
+4	holding	holding	VBG	VBG	-	0	ROOT	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	bar	bar	NN	NN	-	4	OBJ	-	-
+7	at	at	IN	IN	-	6	NMOD	-	-
+8	shoulder	shoulder	NN	NN	-	9	NMOD	-	-
+9	height	height	NN	NN	-	7	PMOD	-	-
+10	in	in	IN	IN	-	9	NMOD	-	-
+11	front	front	NN	NN	-	10	PMOD	-	-
+12	of	of	IN	IN	-	11	NMOD	-	-
+13	your	your	PRP$	PRP$	-	14	NMOD	-	-
+14	chest	chest	NN	NN	-	12	PMOD	-	-
+15	with	with	IN	IN	-	14	NMOD	-	-
+16	your	your	PRP$	PRP$	-	17	NMOD	-	-
+17	palms	palms	NNS	NNS	-	15	PMOD	-	-
+18	facing	facing	VBG	VBG	-	17	NMOD	-	-
+19	outwards	outwards	NNS	NNS	-	18	OBJ	-	-
+20	.	.	.	.	-	4	P	-	-
+

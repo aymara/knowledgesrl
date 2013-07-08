@@ -1,0 +1,40 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	letterbox	letterbox	NN	NN	-	3	SUB	-	-
+3	clashed	clashed	VBN	VBN	-	7	VMOD	-	-
+4	and	and	CC	CC	-	7	VMOD	-	-
+5	no	no	DT	DT	-	6	NMOD	-	-
+6	letters	letters	NNS	NNS	-	7	SUB	-	-
+7	came	came	VBD	VBD	-	0	ROOT	-	-
+8	.	.	.	.	-	7	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	typewriter	typewriter	NN	NN	-	3	SUB	-	-
+3	clashed	clashed	VBN	VBN	-	0	ROOT	-	-
+4	and	and	CC	CC	-	3	VMOD	-	-
+5	harried	harried	VBN	VBN	-	3	VMOD	-	-
+6	him	him	PRP	PRP	-	5	OBJ	-	-
+7	at	at	IN	IN	-	5	VMOD	-	-
+8	night	night	NN	NN	-	7	PMOD	-	-
+9	,	,	,	,	-	3	P	-	-
+10	never	never	RB	RB	-	11	AMOD	-	-
+11	rhythmical	rhythmical	JJ	JJ	-	3	VMOD	-	-
+12	enough	enough	RB	RB	-	11	AMOD	-	-
+13	to	to	TO	TO	-	14	VMOD	-	-
+14	be	be	VB	VB	-	11	AMOD	-	-
+15	ignored	ignored	VBN	VBN	-	14	VC	-	-
+16	.	.	.	.	-	3	P	-	-
+
+1	brings	brings	VBZ	VBZ	-	0	ROOT	-	-
+2	the	the	DT	DT	-	3	NMOD	-	-
+3	wolves	wolves	NNS	NNS	-	1	OBJ	-	-
+4	running	running	VBG	VBG	-	3	NMOD	-	-
+5	--	--	:	:	-	4	P	-	-
+6	brings	brings	VBZ	VBZ	-	1	VMOD	-	-
+7	the	the	DT	DT	-	12	NMOD	-	-
+8	steel	steel	NN	NN	-	12	NMOD	-	-
+9	traps	traps	NNS	NNS	-	12	NMOD	-	-
+10	clashing	clashing	NN	NN	-	12	NMOD	-	-
+11	and	and	CC	CC	-	12	NMOD	-	-
+12	slavering	slavering	NN	NN	-	6	OBJ	-	-
+13	,	,	,	,	-	1	P	-	-
+

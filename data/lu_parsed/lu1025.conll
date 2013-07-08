@@ -1,0 +1,44 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	coins	coins	NNS	NNS	-	3	SUB	-	-
+3	clinked	clinked	VBD	VBD	-	0	ROOT	-	-
+4	into	into	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	slot	slot	NN	NN	-	4	PMOD	-	-
+7	.	.	.	.	-	3	P	-	-
+
+1	his	his	PRP$	PRP$	-	2	NMOD	-	-
+2	knife	knife	NN	NN	-	3	SUB	-	-
+3	clinked	clinked	VBD	VBD	-	0	ROOT	-	-
+4	to	to	TO	TO	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	floor	floor	NN	NN	-	4	PMOD	-	-
+7	.	.	.	.	-	3	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	noticed	noticed	VBD	VBD	-	0	ROOT	-	-
+3	that	that	IN	IN	-	2	VMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	horses	horses	NNS	NNS	-	12	SUB	-	-
+6	drawing	drawing	VBG	VBG	-	5	NMOD	-	-
+7	the	the	DT	DT	-	11	NMOD	-	-
+8	`	`	``	``	-	11	P	-	-
+9	olde	olde	NN	NN	-	11	NMOD	-	-
+10	``	``	``	``	-	11	P	-	-
+11	cabs	cabs	NNS	NNS	-	6	OBJ	-	-
+12	were	were	VBD	VBD	-	3	SBAR	-	-
+13	not	not	RB	RB	-	12	VMOD	-	-
+14	all	all	PDT	PDT	-	15	NMOD	-	-
+15	that	that	DT	DT	-	13	NMOD	-	-
+16	well	well	RB	RB	-	17	AMOD	-	-
+17	cared	cared	VBN	VBN	-	12	VMOD	-	-
+18	for	for	IN	IN	-	17	VMOD	-	-
+19	,	,	,	,	-	22	P	-	-
+20	and	and	CC	CC	-	22	NMOD	-	-
+21	several	several	JJ	JJ	-	22	NMOD	-	-
+22	clinked	clinked	NNS	NNS	-	18	PMOD	-	-
+23	along	along	IN	IN	-	17	VMOD	-	-
+24	with	with	IN	IN	-	23	PMOD	-	-
+25	loose	loose	JJ	JJ	-	26	NMOD	-	-
+26	shoes	shoes	NNS	NNS	-	24	PMOD	-	-
+27	.	.	.	.	-	2	P	-	-
+

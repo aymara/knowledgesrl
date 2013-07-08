@@ -1,0 +1,17 @@
+1	smoke	smoke	NN	NN	-	2	SUB	-	-
+2	purled	purled	VBD	VBD	-	0	ROOT	-	-
+3	out	out	IN	IN	-	2	VMOD	-	-
+4	of	of	IN	IN	-	3	PMOD	-	-
+5	his	his	PRP$	PRP$	-	6	NMOD	-	-
+6	nostrils	nostrils	NNS	NNS	-	4	PMOD	-	-
+7	,	,	,	,	-	6	P	-	-
+8	taken	taken	VBN	VBN	-	6	NMOD	-	-
+9	this	this	DT	DT	-	10	NMOD	-	-
+10	way	way	NN	NN	-	8	VMOD	-	-
+11	and	and	CC	CC	-	12	DEP	-	-
+12	that	that	DT	DT	-	10	NMOD	-	-
+13	by	by	IN	IN	-	8	VMOD	-	-
+14	the	the	DT	DT	-	15	NMOD	-	-
+15	breeze	breeze	NN	NN	-	13	PMOD	-	-
+16	.	.	.	.	-	2	P	-	-
+

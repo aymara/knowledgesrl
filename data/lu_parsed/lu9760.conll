@@ -1,0 +1,32 @@
+1	rain	rain	NN	NN	-	2	SUB	-	-
+2	hissed	hissed	VBD	VBD	-	13	VMOD	-	-
+3	against	against	IN	IN	-	2	VMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	tyres	tyres	NNS	NNS	-	3	PMOD	-	-
+6	,	,	,	,	-	13	P	-	-
+7	and	and	CC	CC	-	13	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	beat	beat	NN	NN	-	13	SUB	-	-
+10	of	of	IN	IN	-	9	NMOD	-	-
+11	the	the	DT	DT	-	12	NMOD	-	-
+12	wipers	wipers	NNS	NNS	-	10	PMOD	-	-
+13	became	became	VBD	VBD	-	0	ROOT	-	-
+14	almost	almost	RB	RB	-	15	AMOD	-	-
+15	hypnotic	hypnotic	JJ	JJ	-	13	PRD	-	-
+16	.	.	.	.	-	13	P	-	-
+
+1	thunder	thunder	NN	NN	-	2	SUB	-	-
+2	grumbled	grumbled	VBD	VBD	-	0	ROOT	-	-
+3	somewhere	somewhere	RB	RB	-	2	VMOD	-	-
+4	in	in	IN	IN	-	3	AMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	sky	sky	NN	NN	-	4	PMOD	-	-
+7	again	again	RB	RB	-	3	AMOD	-	-
+8	and	and	CC	CC	-	3	AMOD	-	-
+9	rain	rain	VB	VB	-	3	AMOD	-	-
+10	hissed	hissed	VBN	VBN	-	9	VC	-	-
+11	at	at	IN	IN	-	10	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	windows	windows	NNS	NNS	-	11	PMOD	-	-
+14	.	.	.	.	-	2	P	-	-
+

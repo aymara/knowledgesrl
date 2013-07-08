@@ -1,0 +1,10 @@
+1	i	i	NNP	NNP	-	2	SUB	-	-
+2	countered	countered	VBD	VBD	-	0	ROOT	-	-
+3	this	this	DT	DT	-	2	OBJ	-	-
+4	by	by	IN	IN	-	2	VMOD	-	-
+5	intermixing	intermixing	VBG	VBG	-	4	PMOD	-	-
+6	with	with	IN	IN	-	5	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	transoxides	transoxides	NNS	NNS	-	6	PMOD	-	-
+9	.	.	.	.	-	2	P	-	-
+

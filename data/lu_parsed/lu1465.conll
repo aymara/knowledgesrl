@@ -1,0 +1,15 @@
+1	crisp	crisp	JJ	JJ	-	3	NMOD	-	-
+2	yellow	yellow	JJ	JJ	-	3	NMOD	-	-
+3	leaves	leaves	NNS	NNS	-	4	SUB	-	-
+4	scrunched	scrunched	VBD	VBD	-	0	ROOT	-	-
+5	satisfyingly	satisfyingly	RB	RB	-	6	AMOD	-	-
+6	underfoot	underfoot	JJ	JJ	-	4	PRD	-	-
+7	,	,	,	,	-	4	P	-	-
+8	giving	giving	VBG	VBG	-	4	VMOD	-	-
+9	off	off	RP	RP	-	8	VMOD	-	-
+10	a	a	DT	DT	-	13	NMOD	-	-
+11	sweet	sweet	JJ	JJ	-	13	NMOD	-	-
+12	sad	sad	JJ	JJ	-	13	NMOD	-	-
+13	scent	scent	NN	NN	-	8	OBJ	-	-
+14	.	.	.	.	-	4	P	-	-
+

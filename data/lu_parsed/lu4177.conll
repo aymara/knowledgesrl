@@ -1,0 +1,23 @@
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	had	had	VBD	VBD	-	0	ROOT	-	-
+3	charred	charred	VBN	VBN	-	2	VC	-	-
+4	a	a	DT	DT	-	7	NMOD	-	-
+5	good	good	JJ	JJ	-	7	NMOD	-	-
+6	many	many	JJ	JJ	-	7	NMOD	-	-
+7	slices	slices	NNS	NNS	-	3	OBJ	-	-
+8	of	of	IN	IN	-	7	NMOD	-	-
+9	bread	bread	NN	NN	-	8	PMOD	-	-
+10	and	and	CC	CC	-	2	VMOD	-	-
+11	sent	sent	VBD	VBD	-	2	VMOD	-	-
+12	several	several	JJ	JJ	-	11	OBJ	-	-
+13	up	up	RB	RB	-	11	VMOD	-	-
+14	in	in	IN	IN	-	11	VMOD	-	-
+15	flames	flames	NNS	NNS	-	14	PMOD	-	-
+16	before	before	IN	IN	-	11	VMOD	-	-
+17	he	he	PRP	PRP	-	18	SUB	-	-
+18	discovered	discovered	VBD	VBD	-	16	SBAR	-	-
+19	this	this	DT	DT	-	21	NMOD	-	-
+20	simple	simple	JJ	JJ	-	21	NMOD	-	-
+21	device	device	NN	NN	-	18	OBJ	-	-
+22	.	.	.	.	-	2	P	-	-
+

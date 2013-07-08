@@ -1,0 +1,27 @@
+1	after	after	IN	IN	-	7	VMOD	-	-
+2	adding	adding	VBG	VBG	-	1	PMOD	-	-
+3	water	water	NN	NN	-	2	OBJ	-	-
+4	,	,	,	,	-	7	P	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	beef	beef	NN	NN	-	7	SUB	-	-
+7	can	can	MD	MD	-	0	ROOT	-	-
+8	be	be	VB	VB	-	7	VC	-	-
+9	barbecued	barbecued	VBN	VBN	-	8	VC	-	-
+10	or	or	CC	CC	-	9	VMOD	-	-
+11	fried	fried	VBN	VBN	-	9	VMOD	-	-
+12	.	.	.	.	-	7	P	-	-
+
+1	however	however	RB	RB	-	10	VMOD	-	-
+2	,	,	,	,	-	10	P	-	-
+3	for	for	IN	IN	-	10	VMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	epitome	epitome	NN	NN	-	3	PMOD	-	-
+6	of	of	IN	IN	-	5	NMOD	-	-
+7	taste	taste	NN	NN	-	6	PMOD	-	-
+8	,	,	,	,	-	10	P	-	-
+9	they	they	PRP	PRP	-	10	SUB	-	-
+10	should	should	MD	MD	-	0	ROOT	-	-
+11	be	be	VB	VB	-	10	VC	-	-
+12	barbecued	barbecued	VBN	VBN	-	11	VC	-	-
+13	.	.	.	.	-	10	P	-	-
+

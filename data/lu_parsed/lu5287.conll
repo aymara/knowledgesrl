@@ -1,0 +1,15 @@
+1	`	`	``	``	-	13	P	-	-
+2	you	you	PRP	PRP	-	3	SUB	-	-
+3	're	're	VBP	VBP	-	13	VMOD	-	-
+4	fooling	fooling	VBG	VBG	-	3	VC	-	-
+5	no	no	DT	DT	-	6	NMOD	-	-
+6	one	one	NN	NN	-	4	OBJ	-	-
+7	with	with	IN	IN	-	4	VMOD	-	-
+8	that	that	DT	DT	-	9	NMOD	-	-
+9	line	line	NN	NN	-	7	PMOD	-	-
+10	,	,	,	,	-	13	P	-	-
+11	``	``	``	``	-	13	P	-	-
+12	candy	candy	NN	NN	-	13	SUB	-	-
+13	scoffed	scoffed	VBD	VBD	-	0	ROOT	-	-
+14	.	.	.	.	-	13	P	-	-
+

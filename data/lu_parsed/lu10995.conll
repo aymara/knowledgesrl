@@ -1,0 +1,21 @@
+1	others	others	NNS	NNS	-	3	VMOD	-	-
+2	i	i	PRP	PRP	-	3	SUB	-	-
+3	'd	'd	MD	MD	-	0	ROOT	-	-
+4	just	just	RB	RB	-	3	VMOD	-	-
+5	throw	throw	VB	VB	-	3	VC	-	-
+6	on	on	RP	RP	-	5	VMOD	-	-
+7	a	a	DT	DT	-	9	NMOD	-	-
+8	cotton	cotton	NN	NN	-	9	NMOD	-	-
+9	frock	frock	NN	NN	-	12	NMOD	-	-
+10	and	and	CC	CC	-	12	NMOD	-	-
+11	a	a	DT	DT	-	12	NMOD	-	-
+12	pair	pair	NN	NN	-	5	OBJ	-	-
+13	of	of	IN	IN	-	12	NMOD	-	-
+14	sandals	sandals	NNS	NNS	-	13	PMOD	-	-
+15	to	to	TO	TO	-	16	VMOD	-	-
+16	go	go	VB	VB	-	14	NMOD	-	-
+17	out	out	IN	IN	-	16	VMOD	-	-
+18	shopping	shopping	NN	NN	-	17	PMOD	-	-
+19	.	.	.	.	-	3	P	-	-
+20	``	``	``	``	-	3	P	-	-
+

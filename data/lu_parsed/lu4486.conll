@@ -1,0 +1,17 @@
+1	inspector	inspector	NN	NN	-	2	NMOD	-	-
+2	fouchard	fouchard	NN	NN	-	9	SUB	-	-
+3	hastily	hastily	RB	RB	-	4	AMOD	-	-
+4	rethought	rethought	JJ	JJ	-	2	NMOD	-	-
+5	his	his	PRP$	PRP$	-	6	NMOD	-	-
+6	position	position	NN	NN	-	4	PMOD	-	-
+7	and	and	CC	CC	-	4	DEP	-	-
+8	reluctantly	reluctantly	RB	RB	-	9	VMOD	-	-
+9	agreed	agreed	VBD	VBD	-	0	ROOT	-	-
+10	to	to	TO	TO	-	11	VMOD	-	-
+11	wire	wire	VB	VB	-	9	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	information	information	NN	NN	-	11	OBJ	-	-
+14	to	to	TO	TO	-	11	VMOD	-	-
+15	paris	paris	NNS	NNS	-	14	PMOD	-	-
+16	.	.	.	.	-	9	P	-	-
+

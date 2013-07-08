@@ -1,0 +1,18 @@
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	goes	goes	VBZ	VBZ	-	0	ROOT	-	-
+3	without	without	IN	IN	-	2	VMOD	-	-
+4	saying	saying	VBG	VBG	-	3	PMOD	-	-
+5	that	that	IN	IN	-	4	VMOD	-	-
+6	such	such	JJ	JJ	-	7	NMOD	-	-
+7	developments	developments	NNS	NNS	-	8	SUB	-	-
+8	demand	demand	VBP	VBP	-	5	SBAR	-	-
+9	fundamental	fundamental	JJ	JJ	-	10	NMOD	-	-
+10	changes	changes	NNS	NNS	-	8	OBJ	-	-
+11	of	of	IN	IN	-	10	NMOD	-	-
+12	attitude	attitude	NN	NN	-	11	PMOD	-	-
+13	on	on	IN	IN	-	10	NMOD	-	-
+14	behalf	behalf	NN	NN	-	13	PMOD	-	-
+15	of	of	IN	IN	-	14	NMOD	-	-
+16	drivers	drivers	NNS	NNS	-	15	PMOD	-	-
+17	.	.	.	.	-	2	P	-	-
+

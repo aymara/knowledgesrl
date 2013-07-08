@@ -1,0 +1,480 @@
+1	don	don	NN	NN	-	2	NMOD	-	-
+2	peters	peters	NNS	NNS	-	3	SUB	-	-
+3	smiled	smiled	VBD	VBD	-	0	ROOT	-	-
+4	and	and	CC	CC	-	3	VMOD	-	-
+5	nodded	nodded	VBD	VBD	-	3	VMOD	-	-
+6	his	his	PRP$	PRP$	-	7	NMOD	-	-
+7	head	head	NN	NN	-	5	OBJ	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	margaret	margaret	NN	NN	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	her	her	PRP$	PRP$	-	4	NMOD	-	-
+4	head	head	NN	NN	-	2	OBJ	-	-
+5	vigorously	vigorously	RB	RB	-	2	VMOD	-	-
+6	.	.	.	.	-	2	P	-	-
+
+1	omally	omally	RB	RB	-	2	VMOD	-	-
+2	nodded	nodded	VBN	VBN	-	0	ROOT	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	head	head	NN	NN	-	2	OBJ	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	other	other	JJ	JJ	-	3	NMOD	-	-
+3	boys	boys	NNS	NNS	-	0	ROOT	-	-
+4	nod	nod	IN	IN	-	3	NMOD	-	-
+5	their	their	PRP$	PRP$	-	6	NMOD	-	-
+6	heads	heads	NNS	NNS	-	4	PMOD	-	-
+7	in	in	IN	IN	-	6	NMOD	-	-
+8	agreement	agreement	NN	NN	-	7	PMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+
+1	we	we	PRP	PRP	-	2	NMOD	-	-
+2	all	all	DT	DT	-	3	SUB	-	-
+3	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+4	our	our	PRP$	PRP$	-	5	NMOD	-	-
+5	heads	heads	NNS	NNS	-	3	OBJ	-	-
+6	in	in	IN	IN	-	3	VMOD	-	-
+7	agreement	agreement	NN	NN	-	6	PMOD	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	jack	jack	NN	NN	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	a	a	DT	DT	-	5	NMOD	-	-
+4	few	few	JJ	JJ	-	5	NMOD	-	-
+5	times	times	NNS	NNS	-	2	OBJ	-	-
+6	to	to	TO	TO	-	5	NMOD	-	-
+7	himself	himself	PRP	PRP	-	6	PMOD	-	-
+8	.	.	.	.	-	2	P	-	-
+
+1	baldwin	baldwin	NN	NN	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	assent	assent	JJ	JJ	-	2	VMOD	-	-
+4	to	to	TO	TO	-	3	AMOD	-	-
+5	both	both	DT	DT	-	6	NMOD	-	-
+6	propositions	propositions	NNS	NNS	-	4	PMOD	-	-
+7	.	.	.	.	-	2	P	-	-
+
+1	his	his	PRP$	PRP$	-	2	NMOD	-	-
+2	eyes	eyes	NNS	NNS	-	3	SUB	-	-
+3	flared	flared	VBD	VBD	-	0	ROOT	-	-
+4	over	over	RB	RB	-	5	AMOD	-	-
+5	maggie	maggie	JJ	JJ	-	3	PRD	-	-
+6	as	as	IN	IN	-	5	AMOD	-	-
+7	he	he	PRP	PRP	-	8	SUB	-	-
+8	nodded	nodded	VBD	VBD	-	6	SBAR	-	-
+9	her	her	PRP	PRP	-	8	OBJ	-	-
+10	to	to	TO	TO	-	8	VMOD	-	-
+11	a	a	DT	DT	-	12	NMOD	-	-
+12	seat	seat	NN	NN	-	10	PMOD	-	-
+13	.	.	.	.	-	3	P	-	-
+
+1	one	one	CD	CD	-	4	SUB	-	-
+2	of	of	IN	IN	-	1	NMOD	-	-
+3	them	them	PRP	PRP	-	2	PMOD	-	-
+4	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+5	a	a	DT	DT	-	6	NMOD	-	-
+6	greeting	greeting	NN	NN	-	4	OBJ	-	-
+7	to	to	TO	TO	-	4	VMOD	-	-
+8	susan	susan	NN	NN	-	7	PMOD	-	-
+9	.	.	.	.	-	4	P	-	-
+
+1	lawton	lawton	JJ	JJ	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	agreement	agreement	NN	NN	-	2	OBJ	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	julie	julie	NN	NN	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	a	a	DT	DT	-	4	NMOD	-	-
+4	greeting	greeting	NN	NN	-	2	OBJ	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	managing	managing	NN	NN	-	3	NMOD	-	-
+3	director	director	NN	NN	-	4	SUB	-	-
+4	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+5	his	his	PRP$	PRP$	-	6	NMOD	-	-
+6	understanding	understanding	NN	NN	-	4	OBJ	-	-
+7	.	.	.	.	-	4	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	council	council	NN	NN	-	12	SUB	-	-
+3	,	,	,	,	-	5	P	-	-
+4	or	or	CC	CC	-	5	DEP	-	-
+5	what	what	WP	WP	-	2	NMOD	-	-
+6	was	was	VBD	VBD	-	5	SBAR	-	-
+7	left	left	VBN	VBN	-	6	VC	-	-
+8	of	of	IN	IN	-	7	VMOD	-	-
+9	it	it	PRP	PRP	-	8	PMOD	-	-
+10	now	now	RB	RB	-	7	VMOD	-	-
+11	,	,	,	,	-	2	P	-	-
+12	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+13	wisely	wisely	RB	RB	-	12	VMOD	-	-
+14	although	although	IN	IN	-	12	VMOD	-	-
+15	frankly	frankly	JJ	JJ	-	16	NMOD	-	-
+16	none	none	NN	NN	-	19	SUB	-	-
+17	of	of	IN	IN	-	16	NMOD	-	-
+18	them	them	PRP	PRP	-	17	PMOD	-	-
+19	understood	understood	VBD	VBD	-	14	SBAR	-	-
+20	or	or	CC	CC	-	19	VMOD	-	-
+21	cared	cared	VBD	VBD	-	19	VMOD	-	-
+22	much	much	RB	RB	-	21	VMOD	-	-
+23	about	about	IN	IN	-	21	VMOD	-	-
+24	mechanical	mechanical	JJ	JJ	-	25	NMOD	-	-
+25	things	things	NNS	NNS	-	23	PMOD	-	-
+26	.	.	.	.	-	12	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	11	VMOD	-	-
+3	mubarak	mubarak	NN	NN	-	2	PRD	-	-
+4	who	who	WP	WP	-	3	NMOD	-	-
+5	made	made	VBD	VBD	-	4	SBAR	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	observation	observation	NN	NN	-	5	OBJ	-	-
+8	,	,	,	,	-	11	P	-	-
+9	and	and	CC	CC	-	11	VMOD	-	-
+10	rostov	rostov	NNP	NNP	-	11	SUB	-	-
+11	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+12	.	.	.	.	-	11	P	-	-
+
+1	waiting	waiting	VBG	VBG	-	11	VMOD	-	-
+2	while	while	IN	IN	-	1	VMOD	-	-
+3	his	his	PRP$	PRP$	-	5	NMOD	-	-
+4	shop	shop	NN	NN	-	5	NMOD	-	-
+5	takings	takings	NNS	NNS	-	6	SUB	-	-
+6	were	were	VBD	VBD	-	2	SBAR	-	-
+7	checked	checked	VBN	VBN	-	6	VC	-	-
+8	and	and	CC	CC	-	7	VMOD	-	-
+9	deposited	deposited	VBN	VBN	-	7	VMOD	-	-
+10	,	,	,	,	-	11	P	-	-
+11	ewan	ewan	VBP	VBP	-	0	ROOT	-	-
+12	dean	dean	JJ	JJ	-	11	VMOD	-	-
+13	nodded	nodded	VBN	VBN	-	12	AMOD	-	-
+14	through	through	IN	IN	-	13	VMOD	-	-
+15	the	the	DT	DT	-	17	NMOD	-	-
+16	glass	glass	NN	NN	-	17	NMOD	-	-
+17	partition	partition	NN	NN	-	14	PMOD	-	-
+18	.	.	.	.	-	11	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	her	her	PRP$	PRP$	-	4	NMOD	-	-
+4	agreement	agreement	NN	NN	-	2	OBJ	-	-
+5	and	and	CC	CC	-	2	VMOD	-	-
+6	glanced	glanced	VBD	VBD	-	2	VMOD	-	-
+7	up	up	RP	RP	-	6	VMOD	-	-
+8	proudly	proudly	RB	RB	-	6	VMOD	-	-
+9	at	at	IN	IN	-	6	VMOD	-	-
+10	her	her	PRP$	PRP$	-	11	NMOD	-	-
+11	father	father	NN	NN	-	9	PMOD	-	-
+12	.	.	.	.	-	2	P	-	-
+
+1	from	from	IN	IN	-	6	VMOD	-	-
+2	the	the	DT	DT	-	3	PMOD	-	-
+3	altar	altar	IN	IN	-	1	PMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	priest	priest	JJS	JJS	-	3	PMOD	-	-
+6	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+7	a	a	DT	DT	-	8	NMOD	-	-
+8	smile	smile	NN	NN	-	6	OBJ	-	-
+9	of	of	IN	IN	-	8	NMOD	-	-
+10	recognition	recognition	NN	NN	-	9	PMOD	-	-
+11	to	to	TO	TO	-	6	VMOD	-	-
+12	the	the	DT	DT	-	14	NMOD	-	-
+13	best	best	JJS	JJS	-	14	NMOD	-	-
+14	man	man	NN	NN	-	11	PMOD	-	-
+15	.	.	.	.	-	6	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	8	VMOD	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	thanks	thanks	NNS	NNS	-	2	OBJ	-	-
+5	and	and	CC	CC	-	8	VMOD	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	men	men	NNS	NNS	-	8	SUB	-	-
+8	laid	laid	VBD	VBD	-	0	ROOT	-	-
+9	her	her	PRP	PRP	-	8	OBJ	-	-
+10	back	back	RB	RB	-	8	VMOD	-	-
+11	on	on	IN	IN	-	8	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	table	table	NN	NN	-	11	PMOD	-	-
+14	.	.	.	.	-	8	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	at	at	IN	IN	-	2	VMOD	-	-
+4	charlie	charlie	NN	NN	-	3	PMOD	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	as	as	IN	IN	-	9	VMOD	-	-
+2	he	he	PRP	PRP	-	3	SUB	-	-
+3	introduced	introduced	VBD	VBD	-	1	SBAR	-	-
+4	them	them	PRP	PRP	-	3	OBJ	-	-
+5	,	,	,	,	-	9	P	-	-
+6	the	the	DT	DT	-	8	NMOD	-	-
+7	two	two	CD	CD	-	8	NMOD	-	-
+8	women	women	NNS	NNS	-	9	SUB	-	-
+9	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+10	at	at	IN	IN	-	9	VMOD	-	-
+11	each	each	DT	DT	-	12	NMOD	-	-
+12	other	other	JJ	JJ	-	10	PMOD	-	-
+13	.	.	.	.	-	9	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	slowly	slowly	RB	RB	-	2	VMOD	-	-
+4	at	at	IN	IN	-	2	VMOD	-	-
+5	shag	shag	NN	NN	-	4	PMOD	-	-
+6	.	.	.	.	-	2	P	-	-
+
+1	father	father	NN	NN	-	2	NMOD	-	-
+2	devlin	devlin	NN	NN	-	3	SUB	-	-
+3	nodded	nodded	VBN	VBN	-	0	ROOT	-	-
+4	in	in	IN	IN	-	3	VMOD	-	-
+5	agreement	agreement	NN	NN	-	4	PMOD	-	-
+6	.	.	.	.	-	3	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	in	in	IN	IN	-	2	VMOD	-	-
+4	concern	concern	NN	NN	-	3	PMOD	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	in	in	IN	IN	-	2	VMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	direction	direction	NN	NN	-	3	PMOD	-	-
+6	of	of	IN	IN	-	5	NMOD	-	-
+7	esther	esther	NNP	NNP	-	9	NMOD	-	-
+8	ahilar	ahilar	NNP	NNP	-	9	NMOD	-	-
+9	's	's	POS	POS	-	11	NMOD	-	-
+10	little	little	JJ	JJ	-	11	NMOD	-	-
+11	car	car	NN	NN	-	6	PMOD	-	-
+12	,	,	,	,	-	11	P	-	-
+13	parked	parked	VBN	VBN	-	11	NMOD	-	-
+14	in	in	IN	IN	-	13	VMOD	-	-
+15	the	the	DT	DT	-	16	NMOD	-	-
+16	driveway	driveway	NN	NN	-	14	PMOD	-	-
+17	.	.	.	.	-	2	P	-	-
+
+1	blanche	blanche	NN	NN	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	in	in	IN	IN	-	2	VMOD	-	-
+4	a	a	DT	DT	-	6	NMOD	-	-
+5	conciliatory	conciliatory	JJ	JJ	-	6	NMOD	-	-
+6	way	way	NN	NN	-	3	PMOD	-	-
+7	.	.	.	.	-	2	P	-	-
+
+1	freddy	freddy	JJ	JJ	-	2	AMOD	-	-
+2	nodded	nodded	JJ	JJ	-	0	ROOT	-	-
+3	reassuringly	reassuringly	RB	RB	-	2	AMOD	-	-
+4	to	to	TO	TO	-	2	AMOD	-	-
+5	his	his	PRP$	PRP$	-	6	NMOD	-	-
+6	friends	friends	NNS	NNS	-	4	PMOD	-	-
+7	.	.	.	.	-	2	P	-	-
+
+1	gabriel	gabriel	NNP	NNP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	eagerly	eagerly	RB	RB	-	2	VMOD	-	-
+4	to	to	TO	TO	-	2	VMOD	-	-
+5	himself	himself	PRP	PRP	-	4	PMOD	-	-
+6	.	.	.	.	-	2	P	-	-
+
+1	i	i	NNP	NNP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	to	to	TO	TO	-	4	VMOD	-	-
+4	keith	keith	VB	VB	-	2	VMOD	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	ignored	ignored	VBD	VBD	-	0	ROOT	-	-
+3	devlin	devlin	NN	NN	-	2	OBJ	-	-
+4	and	and	CC	CC	-	2	VMOD	-	-
+5	nodded	nodded	VBD	VBD	-	2	VMOD	-	-
+6	formally	formally	RB	RB	-	5	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	schellenberg	schellenberg	VB	VB	-	5	VMOD	-	-
+9	.	.	.	.	-	2	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	put	put	VBD	VBD	-	0	ROOT	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	finger	finger	NN	NN	-	2	OBJ	-	-
+5	to	to	TO	TO	-	2	VMOD	-	-
+6	his	his	PRP$	PRP$	-	7	NMOD	-	-
+7	lips	lips	NNS	NNS	-	13	NMOD	-	-
+8	,	,	,	,	-	13	P	-	-
+9	and	and	CC	CC	-	13	NMOD	-	-
+10	nodded	nodded	JJ	JJ	-	11	NMOD	-	-
+11	towards	towards	NNS	NNS	-	13	NMOD	-	-
+12	his	his	PRP$	PRP$	-	13	NMOD	-	-
+13	passenger	passenger	NN	NN	-	5	PMOD	-	-
+14	.	.	.	.	-	2	P	-	-
+
+1	blanche	blanche	NN	NN	-	0	ROOT	-	-
+2	nodded	nodded	VBN	VBN	-	1	NMOD	-	-
+3	with	with	IN	IN	-	2	VMOD	-	-
+4	genuine	genuine	JJ	JJ	-	5	NMOD	-	-
+5	compassion	compassion	NN	NN	-	3	PMOD	-	-
+6	.	.	.	.	-	1	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	with	with	IN	IN	-	2	VMOD	-	-
+4	enthsiasm	enthsiasm	NN	NN	-	3	PMOD	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	with	with	IN	IN	-	2	VMOD	-	-
+4	a	a	DT	DT	-	6	NMOD	-	-
+5	sudden	sudden	JJ	JJ	-	6	NMOD	-	-
+6	feeling	feeling	NN	NN	-	3	PMOD	-	-
+7	of	of	IN	IN	-	6	NMOD	-	-
+8	excitement	excitement	NN	NN	-	7	PMOD	-	-
+9	.	.	.	.	-	2	P	-	-
+
+1	kirov	kirov	NNP	NNP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	with	with	IN	IN	-	2	VMOD	-	-
+4	satisfaction	satisfaction	NN	NN	-	3	PMOD	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	i	i	NNP	NNP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	bitterly	bitterly	RB	RB	-	2	VMOD	-	-
+4	behind	behind	IN	IN	-	2	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	door	door	NN	NN	-	4	PMOD	-	-
+7	.	.	.	.	-	2	P	-	-
+
+1	blanche	blanche	NN	NN	-	2	SUB	-	-
+2	winked	winked	VBD	VBD	-	0	ROOT	-	-
+3	at	at	IN	IN	-	2	VMOD	-	-
+4	dexter	dexter	NN	NN	-	3	PMOD	-	-
+5	and	and	CC	CC	-	2	VMOD	-	-
+6	nodded	nodded	VBN	VBN	-	2	VMOD	-	-
+7	for	for	IN	IN	-	6	VMOD	-	-
+8	him	him	PRP	PRP	-	10	SUB	-	-
+9	to	to	TO	TO	-	10	VMOD	-	-
+10	follow	follow	VB	VB	-	7	SBAR	-	-
+11	her	her	PRP$	PRP$	-	12	NMOD	-	-
+12	outside	outside	JJ	JJ	-	10	OBJ	-	-
+13	with	with	IN	IN	-	10	VMOD	-	-
+14	his	his	PRP$	PRP$	-	15	NMOD	-	-
+15	coat	coat	NN	NN	-	13	PMOD	-	-
+16	.	.	.	.	-	2	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	past	past	IN	IN	-	2	VMOD	-	-
+4	his	his	PRP$	PRP$	-	5	NMOD	-	-
+5	shoulder	shoulder	NN	NN	-	3	PMOD	-	-
+6	.	.	.	.	-	2	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	paused	paused	VBD	VBD	-	0	ROOT	-	-
+3	to	to	TO	TO	-	4	VMOD	-	-
+4	light	light	VB	VB	-	2	VMOD	-	-
+5	another	another	DT	DT	-	6	NMOD	-	-
+6	cigarette	cigarette	NN	NN	-	4	OBJ	-	-
+7	,	,	,	,	-	6	P	-	-
+8	then	then	RB	RB	-	9	VMOD	-	-
+9	nodded	nodded	VBD	VBD	-	6	NMOD	-	-
+10	through	through	IN	IN	-	9	VMOD	-	-
+11	his	his	PRP$	PRP$	-	13	NMOD	-	-
+12	scratched	scratched	JJ	JJ	-	13	NMOD	-	-
+13	windscreen	windscreen	NN	NN	-	10	PMOD	-	-
+14	.	.	.	.	-	2	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	sympathetically	sympathetically	RB	RB	-	2	VMOD	-	-
+4	before	before	RB	RB	-	5	VMOD	-	-
+5	hurrying	hurrying	VBG	VBG	-	2	VMOD	-	-
+6	off	off	RP	RP	-	5	VMOD	-	-
+7	to	to	TO	TO	-	8	VMOD	-	-
+8	discharge	discharge	VB	VB	-	5	VMOD	-	-
+9	more	more	RBR	RBR	-	10	AMOD	-	-
+10	pressing	pressing	JJ	JJ	-	11	NMOD	-	-
+11	duties	duties	NNS	NNS	-	8	OBJ	-	-
+12	.	.	.	.	-	2	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	fat	fat	JJ	JJ	-	3	NMOD	-	-
+3	man	man	NN	NN	-	4	SUB	-	-
+4	beamed	beamed	VBN	VBN	-	0	ROOT	-	-
+5	and	and	CC	CC	-	4	VMOD	-	-
+6	nodded	nodded	VBN	VBN	-	4	VMOD	-	-
+7	happily	happily	RB	RB	-	6	VMOD	-	-
+8	before	before	RB	RB	-	9	VMOD	-	-
+9	hurrying	hurrying	VBG	VBG	-	6	VMOD	-	-
+10	away	away	RB	RB	-	9	VMOD	-	-
+11	.	.	.	.	-	4	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	to	to	TO	TO	-	2	VMOD	-	-
+4	where	where	WRB	WRB	-	3	PMOD	-	-
+5	eline	eline	NN	NN	-	6	SUB	-	-
+6	was	was	VBD	VBD	-	4	SBAR	-	-
+7	standing	standing	VBG	VBG	-	6	VC	-	-
+8	.	.	.	.	-	2	P	-	-
+
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	without	without	IN	IN	-	2	VMOD	-	-
+4	speaking	speaking	NN	NN	-	3	PMOD	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	bishop	bishop	NN	NN	-	3	SUB	-	-
+3	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+4	encouragingly	encouragingly	RB	RB	-	3	VMOD	-	-
+5	.	.	.	.	-	3	P	-	-
+
+1	his	his	PRP$	PRP$	-	3	NMOD	-	-
+2	head	head	NN	NN	-	3	NMOD	-	-
+3	sags	sags	NNS	NNS	-	6	NMOD	-	-
+4	,	,	,	,	-	6	P	-	-
+5	nods	nods	NNS	NNS	-	6	NMOD	-	-
+6	once	once	RB	RB	-	8	VMOD	-	-
+7	,	,	,	,	-	8	P	-	-
+8	jerks	jerks	VBZ	VBZ	-	0	ROOT	-	-
+9	up	up	RP	RP	-	8	VMOD	-	-
+10	again	again	RB	RB	-	8	VMOD	-	-
+11	.	.	.	.	-	8	P	-	-
+
+1	the	the	DT	DT	-	4	NMOD	-	-
+2	most	most	RBS	RBS	-	4	NMOD	-	-
+3	senior	senior	JJ	JJ	-	4	NMOD	-	-
+4	officer	officer	NN	NN	-	5	SUB	-	-
+5	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+6	profoundly	profoundly	RB	RB	-	5	VMOD	-	-
+7	.	.	.	.	-	5	P	-	-
+
+1	joseph	joseph	NN	NN	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	5	VMOD	-	-
+3	;	;	:	:	-	5	P	-	-
+4	he	he	PRP	PRP	-	5	SUB	-	-
+5	knew	knew	VBD	VBD	-	0	ROOT	-	-
+6	what	what	WP	WP	-	5	VMOD	-	-
+7	katherine	katherine	NN	NN	-	8	NMOD	-	-
+8	lundy	lundy	NN	NN	-	9	SUB	-	-
+9	was	was	VBD	VBD	-	6	SBAR	-	-
+10	like	like	IN	IN	-	9	PRD	-	-
+11	.	.	.	.	-	5	P	-	-
+
+1	patrick	patrick	NN	NN	-	2	SUB	-	-
+2	nodded	nodded	VBD	VBD	-	0	ROOT	-	-
+3	,	,	,	,	-	2	P	-	-
+4	unsure	unsure	VB	VB	-	2	VMOD	-	-
+5	what	what	WP	WP	-	4	VMOD	-	-
+6	to	to	TO	TO	-	7	VMOD	-	-
+7	say	say	VB	VB	-	5	SBAR	-	-
+8	.	.	.	.	-	2	P	-	-
+

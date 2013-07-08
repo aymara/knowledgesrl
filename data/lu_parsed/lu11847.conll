@@ -1,0 +1,12 @@
+1	my	my	PRP$	PRP$	-	2	NMOD	-	-
+2	face	face	NN	NN	-	3	SUB	-	-
+3	scorched	scorched	VBD	VBD	-	7	VMOD	-	-
+4	,	,	,	,	-	7	P	-	-
+5	and	and	CC	CC	-	7	VMOD	-	-
+6	i	i	PRP	PRP	-	7	SUB	-	-
+7	could	could	MD	MD	-	0	ROOT	-	-
+8	n't	n't	RB	RB	-	7	VMOD	-	-
+9	see	see	VB	VB	-	7	VC	-	-
+10	properly	properly	RB	RB	-	9	VMOD	-	-
+11	.	.	.	.	-	7	P	-	-
+

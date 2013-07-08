@@ -1,0 +1,22 @@
+1	i	i	PRP	PRP	-	2	SUB	-	-
+2	hope	hope	VBP	VBP	-	0	ROOT	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	others	others	NNS	NNS	-	5	SUB	-	-
+5	have	have	VBP	VBP	-	2	VMOD	-	-
+6	been	been	VBN	VBN	-	5	VC	-	-
+7	copped	copped	VBN	VBN	-	6	VC	-	-
+8	by	by	IN	IN	-	7	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	attendants	attendants	NNS	NNS	-	8	PMOD	-	-
+11	.	.	.	.	-	2	P	-	-
+
+1	i	i	DT	DT	-	2	NMOD	-	-
+2	i	i	NNS	NNS	-	3	SUB	-	-
+3	must	must	MD	MD	-	0	ROOT	-	-
+4	try	try	VB	VB	-	3	VC	-	-
+5	and	and	CC	CC	-	4	VMOD	-	-
+6	cop	cop	VB	VB	-	4	VMOD	-	-
+7	him	him	PRP	PRP	-	4	OBJ	-	-
+8	tomorrow	tomorrow	NN	NN	-	4	VMOD	-	-
+9	.	.	.	.	-	3	P	-	-
+

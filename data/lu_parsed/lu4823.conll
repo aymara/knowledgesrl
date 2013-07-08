@@ -1,0 +1,34 @@
+1	all	all	DT	DT	-	3	NMOD	-	-
+2	excess	excess	JJ	JJ	-	3	NMOD	-	-
+3	grass	grass	NN	NN	-	4	SUB	-	-
+4	was	was	VBD	VBD	-	0	ROOT	-	-
+5	dried	dried	VBN	VBN	-	4	VC	-	-
+6	and	and	CC	CC	-	5	VMOD	-	-
+7	cubed	cubed	VBN	VBN	-	5	VMOD	-	-
+8	at	at	IN	IN	-	5	VMOD	-	-
+9	a	a	DT	DT	-	11	NMOD	-	-
+10	local	local	JJ	JJ	-	11	NMOD	-	-
+11	factory	factory	NN	NN	-	8	PMOD	-	-
+12	with	with	IN	IN	-	11	NMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	cubes	cubes	NNS	NNS	-	12	PMOD	-	-
+15	forming	forming	VBG	VBG	-	14	NMOD	-	-
+16	an	an	DT	DT	-	18	NMOD	-	-
+17	important	important	JJ	JJ	-	18	NMOD	-	-
+18	part	part	NN	NN	-	15	OBJ	-	-
+19	of	of	IN	IN	-	18	NMOD	-	-
+20	the	the	DT	DT	-	22	NMOD	-	-
+21	winter	winter	NN	NN	-	22	NMOD	-	-
+22	diet	diet	NN	NN	-	19	PMOD	-	-
+23	.	.	.	.	-	4	P	-	-
+
+1	cube	cube	NN	NN	-	6	NMOD	-	-
+2	<num>	<num>	CD	CD	-	6	NMOD	-	-
+3	oz	oz	NN	NN	-	6	NMOD	-	-
+4	butter	butter	NN	NN	-	6	NMOD	-	-
+5	and	and	CC	CC	-	6	NMOD	-	-
+6	rub	rub	NN	NN	-	0	ROOT	-	-
+7	into	into	IN	IN	-	6	NMOD	-	-
+8	flour	flour	NN	NN	-	7	PMOD	-	-
+9	.	.	.	.	-	6	P	-	-
+

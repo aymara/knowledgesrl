@@ -1,0 +1,24 @@
+1	such	such	JJ	JJ	-	2	NMOD	-	-
+2	exposures	exposures	NNS	NNS	-	3	SUB	-	-
+3	are	are	VBP	VBP	-	0	ROOT	-	-
+4	destroying	destroying	VBG	VBG	-	3	VC	-	-
+5	long-held	long-held	JJ	JJ	-	6	NMOD	-	-
+6	notions	notions	NNS	NNS	-	4	OBJ	-	-
+7	that	that	IN	IN	-	4	VMOD	-	-
+8	it	it	PRP	PRP	-	9	SUB	-	-
+9	is	is	VBZ	VBZ	-	7	SBAR	-	-
+10	somehow	somehow	RB	RB	-	9	VMOD	-	-
+11	unpatriotic	unpatriotic	JJ	JJ	-	9	PRD	-	-
+12	for	for	IN	IN	-	9	VMOD	-	-
+13	american	american	JJ	JJ	-	14	NMOD	-	-
+14	investors	investors	NNS	NNS	-	16	SUB	-	-
+15	to	to	TO	TO	-	16	VMOD	-	-
+16	sell	sell	VB	VB	-	12	SBAR	-	-
+17	short	short	RB	RB	-	16	VMOD	-	-
+18	the	the	DT	DT	-	19	NMOD	-	-
+19	shares	shares	NNS	NNS	-	16	OBJ	-	-
+20	of	of	IN	IN	-	19	NMOD	-	-
+21	american	american	JJ	JJ	-	22	NMOD	-	-
+22	companies	companies	NNS	NNS	-	20	PMOD	-	-
+23	.	.	.	.	-	3	P	-	-
+

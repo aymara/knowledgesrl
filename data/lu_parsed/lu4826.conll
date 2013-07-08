@@ -1,0 +1,52 @@
+1	roped	roped	JJ	JJ	-	2	AMOD	-	-
+2	perilously	perilously	RB	RB	-	0	ROOT	-	-
+3	to	to	TO	TO	-	2	AMOD	-	-
+4	the	the	DT	DT	-	6	NMOD	-	-
+5	ice	ice	NN	NN	-	6	NMOD	-	-
+6	face	face	NN	NN	-	10	NMOD	-	-
+7	,	,	,	,	-	10	P	-	-
+8	the	the	DT	DT	-	10	NMOD	-	-
+9	german	german	NN	NN	-	10	NMOD	-	-
+10	pair	pair	NN	NN	-	3	PMOD	-	-
+11	drowsed	drowsed	VBN	VBN	-	10	NMOD	-	-
+12	through	through	IN	IN	-	11	VMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	night	night	NN	NN	-	12	PMOD	-	-
+15	.	.	.	.	-	2	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	shop	shop	NN	NN	-	3	SUB	-	-
+3	gloomed	gloomed	VBD	VBD	-	10	VMOD	-	-
+4	behind	behind	IN	IN	-	3	VMOD	-	-
+5	its	its	PRP$	PRP$	-	6	NMOD	-	-
+6	blinds	blinds	NNS	NNS	-	4	PMOD	-	-
+7	and	and	CC	CC	-	10	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	parakeet	parakeet	NN	NN	-	10	SUB	-	-
+10	drowsed	drowsed	VBD	VBD	-	0	ROOT	-	-
+11	.	.	.	.	-	10	P	-	-
+
+1	and	and	CC	CC	-	3	VMOD	-	-
+2	you	you	PRP	PRP	-	3	SUB	-	-
+3	drowse	drowse	VBP	VBP	-	0	ROOT	-	-
+4	and	and	CC	CC	-	3	VMOD	-	-
+5	mutter	mutter	VB	VB	-	3	VMOD	-	-
+6	beside	beside	IN	IN	-	5	VMOD	-	-
+7	me	me	PRP	PRP	-	6	PMOD	-	-
+8	.	.	.	.	-	3	P	-	-
+
+1	exhausted	exhausted	VBN	VBN	-	7	VMOD	-	-
+2	by	by	IN	IN	-	1	VMOD	-	-
+3	their	their	PRP$	PRP$	-	4	NMOD	-	-
+4	exercise	exercise	NN	NN	-	2	PMOD	-	-
+5	,	,	,	,	-	7	P	-	-
+6	they	they	PRP	PRP	-	7	SUB	-	-
+7	were	were	VBD	VBD	-	0	ROOT	-	-
+8	content	content	JJ	JJ	-	7	PRD	-	-
+9	to	to	TO	TO	-	10	VMOD	-	-
+10	drowse	drowse	VB	VB	-	8	AMOD	-	-
+11	in	in	IN	IN	-	10	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	sun	sun	NN	NN	-	11	PMOD	-	-
+14	.	.	.	.	-	7	P	-	-
+

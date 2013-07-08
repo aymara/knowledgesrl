@@ -1,0 +1,27 @@
+1	they	they	PRP	PRP	-	2	SUB	-	-
+2	like	like	VBP	VBP	-	0	ROOT	-	-
+3	to	to	TO	TO	-	4	VMOD	-	-
+4	tangle	tangle	VB	VB	-	2	VMOD	-	-
+5	their	their	PRP$	PRP$	-	7	NMOD	-	-
+6	victims	victims	NNS	NNS	-	7	NMOD	-	-
+7	'	'	POS	POS	-	8	NMOD	-	-
+8	hair	hair	NN	NN	-	4	OBJ	-	-
+9	into	into	IN	IN	-	4	VMOD	-	-
+10	elflocks	elflocks	NNS	NNS	-	9	PMOD	-	-
+11	,	,	,	,	-	9	P	-	-
+12	or	or	CC	CC	-	9	PMOD	-	-
+13	as	as	IN	IN	-	9	PMOD	-	-
+14	they	they	PRP	PRP	-	15	SUB	-	-
+15	are	are	VBP	VBP	-	13	SBAR	-	-
+16	also	also	RB	RB	-	15	VMOD	-	-
+17	called	called	VBN	VBN	-	15	VC	-	-
+18	,	,	,	,	-	23	P	-	-
+19	tangle	tangle	NN	NN	-	20	NMOD	-	-
+20	locks	locks	NNS	NNS	-	23	NMOD	-	-
+21	,	,	,	,	-	23	P	-	-
+22	or	or	CC	CC	-	23	NMOD	-	-
+23	mare	mare	NN	NN	-	24	NMOD	-	-
+24	's	's	POS	POS	-	25	NMOD	-	-
+25	braids	braids	NNS	NNS	-	17	VMOD	-	-
+26	.	.	.	.	-	2	P	-	-
+

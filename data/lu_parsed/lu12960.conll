@@ -1,0 +1,18 @@
+1	anna	anna	NNP	NNP	-	12	SUB	-	-
+2	,	,	,	,	-	1	P	-	-
+3	exhausted	exhausted	VBN	VBN	-	1	NMOD	-	-
+4	by	by	IN	IN	-	3	VMOD	-	-
+5	all	all	DT	DT	-	4	PMOD	-	-
+6	she	she	PRP	PRP	-	7	SUB	-	-
+7	was	was	VBD	VBD	-	5	NMOD	-	-
+8	trying	trying	VBG	VBG	-	7	VC	-	-
+9	to	to	TO	TO	-	10	VMOD	-	-
+10	do	do	VB	VB	-	8	VMOD	-	-
+11	,	,	,	,	-	7	P	-	-
+12	plummeted	plummeted	VBD	VBD	-	0	ROOT	-	-
+13	from	from	IN	IN	-	12	VMOD	-	-
+14	fury	fury	NN	NN	-	13	PMOD	-	-
+15	to	to	TO	TO	-	12	VMOD	-	-
+16	weeping	weeping	VBG	VBG	-	15	PMOD	-	-
+17	.	.	.	.	-	12	P	-	-
+

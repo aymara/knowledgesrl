@@ -1,0 +1,27 @@
+1	translucent	translucent	JJ	JJ	-	2	NMOD	-	-
+2	shapes	shapes	NNS	NNS	-	3	SUB	-	-
+3	undulated	undulated	VBD	VBD	-	19	VMOD	-	-
+4	through	through	IN	IN	-	3	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	jungle	jungle	NN	NN	-	4	PMOD	-	-
+7	,	,	,	,	-	3	P	-	-
+8	glimmering	glimmering	VBG	VBG	-	3	VMOD	-	-
+9	in	in	IN	IN	-	8	VMOD	-	-
+10	the	the	DT	DT	-	11	NMOD	-	-
+11	sunlight	sunlight	NN	NN	-	9	PMOD	-	-
+12	:	:	:	:	-	19	P	-	-
+13	the	the	DT	DT	-	15	NMOD	-	-
+14	only	only	JJ	JJ	-	15	NMOD	-	-
+15	life	life	NN	NN	-	19	SUB	-	-
+16	the	the	DT	DT	-	18	NMOD	-	-
+17	lucifer	lucifer	NN	NN	-	18	NMOD	-	-
+18	system	system	NN	NN	-	19	SUB	-	-
+19	had	had	VBD	VBD	-	0	ROOT	-	-
+20	so	so	RB	RB	-	19	VMOD	-	-
+21	far	far	RB	RB	-	20	AMOD	-	-
+22	offered	offered	VBN	VBN	-	19	VC	-	-
+23	up	up	RP	RP	-	22	AMOD	-	-
+24	for	for	IN	IN	-	22	VMOD	-	-
+25	study	study	NN	NN	-	24	PMOD	-	-
+26	.	.	.	.	-	19	P	-	-
+

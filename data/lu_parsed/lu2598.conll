@@ -1,0 +1,45 @@
+1	sprinkle	sprinkle	NN	NN	-	0	ROOT	-	-
+2	with	with	IN	IN	-	1	NMOD	-	-
+3	golden	golden	JJ	JJ	-	5	NMOD	-	-
+4	granulated	granulated	JJ	JJ	-	5	NMOD	-	-
+5	sugar	sugar	NN	NN	-	7	NMOD	-	-
+6	and	and	CC	CC	-	7	NMOD	-	-
+7	drizzle	drizzle	NN	NN	-	2	PMOD	-	-
+8	with	with	IN	IN	-	7	NMOD	-	-
+9	remaining	remaining	VBG	VBG	-	10	NMOD	-	-
+10	butter	butter	NN	NN	-	8	PMOD	-	-
+11	.	.	.	.	-	1	P	-	-
+
+1	quarter	quarter	NN	NN	-	2	NMOD	-	-
+2	figs	figs	NNS	NNS	-	4	SUB	-	-
+3	,	,	,	,	-	2	P	-	-
+4	top	top	VBP	VBP	-	0	ROOT	-	-
+5	them	them	PRP	PRP	-	4	OBJ	-	-
+6	with	with	IN	IN	-	4	VMOD	-	-
+7	some	some	DT	DT	-	11	NMOD	-	-
+8	cinnamon-spiced	cinnamon-spiced	JJ	JJ	-	11	NMOD	-	-
+9	ricotta	ricotta	NN	NN	-	11	NMOD	-	-
+10	and	and	CC	CC	-	11	NMOD	-	-
+11	drizzle	drizzle	NN	NN	-	6	PMOD	-	-
+12	with	with	IN	IN	-	11	NMOD	-	-
+13	clear	clear	JJ	JJ	-	14	NMOD	-	-
+14	honey	honey	NN	NN	-	12	PMOD	-	-
+15	.	.	.	.	-	4	P	-	-
+
+1	drizzle	drizzle	NN	NN	-	0	ROOT	-	-
+2	with	with	IN	IN	-	1	NMOD	-	-
+3	olive	olive	JJ	JJ	-	6	NMOD	-	-
+4	oil	oil	NN	NN	-	6	NMOD	-	-
+5	and	and	CC	CC	-	6	NMOD	-	-
+6	top	top	NN	NN	-	2	PMOD	-	-
+7	with	with	IN	IN	-	6	NMOD	-	-
+8	flakes	flakes	NNS	NNS	-	7	PMOD	-	-
+9	of	of	IN	IN	-	8	NMOD	-	-
+10	fresh	fresh	JJ	JJ	-	11	NMOD	-	-
+11	parmesan	parmesan	NN	NN	-	9	PMOD	-	-
+12	for	for	IN	IN	-	11	NMOD	-	-
+13	an	an	DT	DT	-	15	NMOD	-	-
+14	elegant	elegant	JJ	JJ	-	15	NMOD	-	-
+15	starter	starter	NN	NN	-	12	PMOD	-	-
+16	.	.	.	.	-	1	P	-	-
+

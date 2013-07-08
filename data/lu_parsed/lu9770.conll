@@ -1,0 +1,14 @@
+1	just	just	RB	RB	-	3	NMOD	-	-
+2	then	then	RB	RB	-	1	AMOD	-	-
+3	biff	biff	NN	NN	-	4	SUB	-	-
+4	started	started	VBD	VBD	-	0	ROOT	-	-
+5	clanging	clanging	VBG	VBG	-	4	VMOD	-	-
+6	the	the	DT	DT	-	8	NMOD	-	-
+7	iron	iron	NN	NN	-	8	NMOD	-	-
+8	triangle	triangle	NN	NN	-	5	OBJ	-	-
+9	to	to	TO	TO	-	10	VMOD	-	-
+10	summon	summon	VB	VB	-	5	VMOD	-	-
+11	them	them	PRP	PRP	-	10	OBJ	-	-
+12	together	together	RB	RB	-	10	VMOD	-	-
+13	.	.	.	.	-	4	P	-	-
+

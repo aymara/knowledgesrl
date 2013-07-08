@@ -1,0 +1,18 @@
+1	`	`	``	``	-	16	P	-	-
+2	you	you	PRP	PRP	-	3	SUB	-	-
+3	could	could	MD	MD	-	16	VMOD	-	-
+4	catch	catch	VB	VB	-	3	VC	-	-
+5	trout	trout	NN	NN	-	4	OBJ	-	-
+6	and	and	CC	CC	-	4	VMOD	-	-
+7	smoke	smoke	VB	VB	-	4	VMOD	-	-
+8	them	them	PRP	PRP	-	7	OBJ	-	-
+9	if	if	IN	IN	-	4	VMOD	-	-
+10	you	you	PRP	PRP	-	11	SUB	-	-
+11	had	had	VBD	VBD	-	9	SBAR	-	-
+12	to	to	TO	TO	-	11	VMOD	-	-
+13	,	,	,	,	-	16	P	-	-
+14	''	''	''	''	-	16	P	-	-
+15	i	i	PRP	PRP	-	16	SUB	-	-
+16	said	said	VBD	VBD	-	0	ROOT	-	-
+17	.	.	.	.	-	16	P	-	-
+

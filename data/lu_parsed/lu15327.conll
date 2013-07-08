@@ -1,0 +1,25 @@
+1	there	there	EX	EX	-	2	SUB	-	-
+2	were	were	VBD	VBD	-	19	VMOD	-	-
+3	clear	clear	JJ	JJ	-	4	NMOD	-	-
+4	signals	signals	NNS	NNS	-	2	PRD	-	-
+5	,	,	,	,	-	4	P	-	-
+6	then	then	RB	RB	-	2	VMOD	-	-
+7	,	,	,	,	-	2	P	-	-
+8	from	from	IN	IN	-	2	VMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	beginning	beginning	NN	NN	-	8	PMOD	-	-
+11	of	of	IN	IN	-	10	NMOD	-	-
+12	his	his	PRP$	PRP$	-	13	NMOD	-	-
+13	time	time	NN	NN	-	11	PMOD	-	-
+14	in	in	IN	IN	-	13	NMOD	-	-
+15	power	power	NN	NN	-	14	PMOD	-	-
+16	,	,	,	,	-	19	P	-	-
+17	that	that	DT	DT	-	18	NMOD	-	-
+18	deng	deng	NN	NN	-	19	SUB	-	-
+19	would	would	MD	MD	-	0	ROOT	-	-
+20	not	not	RB	RB	-	19	VMOD	-	-
+21	tolerate	tolerate	VB	VB	-	19	VC	-	-
+22	serious	serious	JJ	JJ	-	23	NMOD	-	-
+23	dissent	dissent	NN	NN	-	21	OBJ	-	-
+24	.	.	.	.	-	19	P	-	-
+

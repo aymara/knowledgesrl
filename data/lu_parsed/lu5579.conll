@@ -1,0 +1,16 @@
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	nurse	nurse	NN	NN	-	3	NMOD	-	-
+3	eggs	eggs	NNS	NNS	-	4	SUB	-	-
+4	agglutinate	agglutinate	VBP	VBP	-	0	ROOT	-	-
+5	to	to	TO	TO	-	4	VMOD	-	-
+6	a	a	DT	DT	-	7	NMOD	-	-
+7	mass	mass	NN	NN	-	5	PMOD	-	-
+8	in	in	IN	IN	-	7	NMOD	-	-
+9	the	the	DT	DT	-	10	NMOD	-	-
+10	centre	centre	NN	NN	-	8	PMOD	-	-
+11	of	of	IN	IN	-	10	NMOD	-	-
+12	the	the	DT	DT	-	14	NMOD	-	-
+13	capsular	capsular	JJ	JJ	-	14	NMOD	-	-
+14	space	space	NN	NN	-	11	PMOD	-	-
+15	.	.	.	.	-	4	P	-	-
+

@@ -1,0 +1,18 @@
+1	winston	winston	NN	NN	-	2	SUB	-	-
+2	turned	turned	VBD	VBD	-	8	VMOD	-	-
+3	a	a	DT	DT	-	4	NMOD	-	-
+4	switch	switch	NN	NN	-	2	OBJ	-	-
+5	and	and	CC	CC	-	8	VMOD	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	voice	voice	NN	NN	-	8	SUB	-	-
+8	sank	sank	VBD	VBD	-	0	ROOT	-	-
+9	somewhat	somewhat	RB	RB	-	8	VMOD	-	-
+10	,	,	,	,	-	8	P	-	-
+11	though	though	IN	IN	-	8	VMOD	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-
+13	words	words	NNS	NNS	-	14	SUB	-	-
+14	were	were	VBD	VBD	-	11	SBAR	-	-
+15	still	still	RB	RB	-	14	VMOD	-	-
+16	distinguishable	distinguishable	JJ	JJ	-	14	PRD	-	-
+17	.	.	.	.	-	8	P	-	-
+

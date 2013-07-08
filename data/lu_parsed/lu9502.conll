@@ -1,0 +1,21 @@
+1	useful	useful	JJ	JJ	-	2	NMOD	-	-
+2	contributions	contributions	NNS	NNS	-	6	SUB	-	-
+3	from	from	IN	IN	-	2	NMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	tail	tail	NN	NN	-	3	PMOD	-	-
+6	swelled	swelled	VBD	VBD	-	0	ROOT	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	score	score	NN	NN	-	6	OBJ	-	-
+9	to	to	TO	TO	-	6	VMOD	-	-
+10	<num>	<num>	CD	CD	-	9	PMOD	-	-
+11	,	,	,	,	-	6	P	-	-
+12	leaving	leaving	VBG	VBG	-	6	VMOD	-	-
+13	india	india	NN	NN	-	12	OBJ	-	-
+14	a	a	DT	DT	-	17	NMOD	-	-
+15	distant	distant	JJ	JJ	-	17	NMOD	-	-
+16	victory	victory	NN	NN	-	17	NMOD	-	-
+17	target	target	NN	NN	-	12	OBJ	-	-
+18	of	of	IN	IN	-	17	NMOD	-	-
+19	<num>	<num>	CD	CD	-	18	PMOD	-	-
+20	.	.	.	.	-	6	P	-	-
+

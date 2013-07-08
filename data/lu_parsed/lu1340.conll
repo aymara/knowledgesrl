@@ -1,0 +1,18 @@
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	9	VMOD	-	-
+3	very	very	RB	RB	-	4	AMOD	-	-
+4	noisy	noisy	JJ	JJ	-	2	PRD	-	-
+5	;	;	:	:	-	9	P	-	-
+6	every	every	DT	DT	-	8	NMOD	-	-
+7	other	other	JJ	JJ	-	8	NMOD	-	-
+8	table	table	NN	NN	-	9	SUB	-	-
+9	was	was	VBD	VBD	-	0	ROOT	-	-
+10	full	full	JJ	JJ	-	12	AMOD	-	-
+11	and	and	CC	CC	-	12	AMOD	-	-
+12	music	music	NN	NN	-	9	PRD	-	-
+13	babbled	babbled	VBN	VBN	-	12	NMOD	-	-
+14	from	from	IN	IN	-	13	VMOD	-	-
+15	the	the	DT	DT	-	16	NMOD	-	-
+16	walls	walls	NNS	NNS	-	14	PMOD	-	-
+17	.	.	.	.	-	9	P	-	-
+

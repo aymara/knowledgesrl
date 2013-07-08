@@ -1,0 +1,18 @@
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	made	made	VBD	VBD	-	0	ROOT	-	-
+3	the	the	DT	DT	-	5	NMOD	-	-
+4	shallow	shallow	JJ	JJ	-	5	NMOD	-	-
+5	end	end	NN	NN	-	2	OBJ	-	-
+6	and	and	CC	CC	-	2	VMOD	-	-
+7	stood	stood	VBD	VBD	-	2	VMOD	-	-
+8	up	up	RP	RP	-	7	VMOD	-	-
+9	,	,	,	,	-	7	P	-	-
+10	plastering	plastering	VBG	VBG	-	7	VMOD	-	-
+11	her	her	PRP$	PRP$	-	12	NMOD	-	-
+12	hair	hair	NN	NN	-	10	OBJ	-	-
+13	back	back	RB	RB	-	10	VMOD	-	-
+14	with	with	IN	IN	-	10	VMOD	-	-
+15	her	her	PRP$	PRP$	-	16	NMOD	-	-
+16	hands	hands	NNS	NNS	-	14	PMOD	-	-
+17	.	.	.	.	-	2	P	-	-
+

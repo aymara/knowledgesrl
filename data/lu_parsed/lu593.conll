@@ -1,0 +1,54 @@
+1	`	`	``	``	-	8	P	-	-
+2	follow	follow	VB	VB	-	8	VMOD	-	-
+3	and	and	CC	CC	-	2	VMOD	-	-
+4	find	find	VB	VB	-	2	VMOD	-	-
+5	!	!	.	.	-	2	P	-	-
+6	``	``	``	``	-	8	P	-	-
+7	he	he	PRP	PRP	-	8	SUB	-	-
+8	hoots	hoots	VBZ	VBZ	-	0	ROOT	-	-
+9	.	.	.	.	-	8	P	-	-
+
+1	`	`	``	``	-	4	P	-	-
+2	but	but	CC	CC	-	4	VMOD	-	-
+3	it	it	PRP	PRP	-	4	SUB	-	-
+4	's	's	VBZ	VBZ	-	0	ROOT	-	-
+5	your	your	PRP$	PRP$	-	6	NMOD	-	-
+6	night	night	NN	NN	-	11	VMOD	-	-
+7	off	off	RB	RB	-	11	VMOD	-	-
+8	,	,	,	,	-	11	P	-	-
+9	``	``	``	``	-	11	P	-	-
+10	she	she	PRP	PRP	-	11	SUB	-	-
+11	hooted	hooted	VBD	VBD	-	4	VMOD	-	-
+12	,	,	,	,	-	11	P	-	-
+13	as	as	IN	IN	-	11	VMOD	-	-
+14	she	she	PRP	PRP	-	15	SUB	-	-
+15	ran	ran	VBD	VBD	-	13	SBAR	-	-
+16	for	for	IN	IN	-	15	VMOD	-	-
+17	the	the	DT	DT	-	18	NMOD	-	-
+18	door	door	NN	NN	-	16	PMOD	-	-
+19	.	.	.	.	-	4	P	-	-
+
+1	`	`	``	``	-	6	P	-	-
+2	shakespeare	shakespeare	NN	NN	-	6	NMOD	-	-
+3	!	!	.	.	-	6	P	-	-
+4	``	``	``	``	-	6	P	-	-
+5	hooted	hooted	JJ	JJ	-	6	NMOD	-	-
+6	carrie	carrie	NN	NN	-	0	ROOT	-	-
+7	.	.	.	.	-	6	P	-	-
+
+1	`	`	``	``	-	11	P	-	-
+2	stuff	stuff	NN	NN	-	5	NMOD	-	-
+3	you	you	PRP	PRP	-	2	NMOD	-	-
+4	,	,	,	,	-	5	P	-	-
+5	froggy	froggy	RB	RB	-	11	VMOD	-	-
+6	,	,	,	,	-	11	P	-	-
+7	``	``	``	``	-	11	P	-	-
+8	our	our	PRP$	PRP$	-	10	NMOD	-	-
+9	brat-pack	brat-pack	NN	NN	-	10	NMOD	-	-
+10	novelists	novelists	NNS	NNS	-	11	SUB	-	-
+11	hooted	hooted	VBD	VBD	-	0	ROOT	-	-
+12	back	back	RB	RB	-	11	VMOD	-	-
+13	years	years	NNS	NNS	-	14	AMOD	-	-
+14	ago	ago	RB	RB	-	11	VMOD	-	-
+15	.	.	.	.	-	11	P	-	-
+

@@ -1,0 +1,58 @@
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	excited	excited	JJ	JJ	-	3	NMOD	-	-
+3	chatter	chatter	NN	NN	-	16	SUB	-	-
+4	hushed	hushed	VBN	VBN	-	3	NMOD	-	-
+5	as	as	IN	IN	-	4	VMOD	-	-
+6	charles	charles	NNS	NNS	-	5	PMOD	-	-
+7	in	in	IN	IN	-	6	NMOD	-	-
+8	his	his	PRP$	PRP$	-	9	NMOD	-	-
+9	capacity	capacity	NN	NN	-	7	PMOD	-	-
+10	of	of	IN	IN	-	9	NMOD	-	-
+11	presenter	presenter	NN	NN	-	10	PMOD	-	-
+12	of	of	IN	IN	-	11	NMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	affair	affair	NN	NN	-	12	PMOD	-	-
+15	,	,	,	,	-	3	P	-	-
+16	came	came	VBD	VBD	-	0	ROOT	-	-
+17	before	before	IN	IN	-	16	VMOD	-	-
+18	the	the	DT	DT	-	19	NMOD	-	-
+19	curtain	curtain	NN	NN	-	17	PMOD	-	-
+20	.	.	.	.	-	16	P	-	-
+
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	crowd	crowd	NN	NN	-	3	NMOD	-	-
+3	noise	noise	NN	NN	-	4	SUB	-	-
+4	hushed	hushed	VBD	VBD	-	0	ROOT	-	-
+5	.	.	.	.	-	4	P	-	-
+
+1	all	all	DT	DT	-	2	AMOD	-	-
+2	around	around	IN	IN	-	4	NMOD	-	-
+3	fellow	fellow	JJ	JJ	-	4	NMOD	-	-
+4	diners	diners	NNS	NNS	-	5	SUB	-	-
+5	hushed	hushed	VBD	VBD	-	0	ROOT	-	-
+6	.	.	.	.	-	5	P	-	-
+
+1	eventually	eventually	RB	RB	-	16	VMOD	-	-
+2	,	,	,	,	-	16	P	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	lights	lights	NNS	NNS	-	5	SUB	-	-
+5	dimmed	dimmed	VBD	VBD	-	16	VMOD	-	-
+6	,	,	,	,	-	8	P	-	-
+7	everyone	everyone	NN	NN	-	8	SUB	-	-
+8	hushed	hushed	VBD	VBD	-	5	VMOD	-	-
+9	,	,	,	,	-	16	P	-	-
+10	the	the	DT	DT	-	11	NMOD	-	-
+11	curtains	curtains	NNS	NNS	-	15	NMOD	-	-
+12	parted	parted	VBN	VBN	-	11	NMOD	-	-
+13	and	and	CC	CC	-	15	NMOD	-	-
+14	the	the	DT	DT	-	15	NMOD	-	-
+15	show	show	NN	NN	-	16	SUB	-	-
+16	began	began	VBD	VBD	-	0	ROOT	-	-
+17	.	.	.	.	-	16	P	-	-
+
+1	isabel	isabel	NN	NN	-	2	SUB	-	-
+2	had	had	VBD	VBD	-	0	ROOT	-	-
+3	eventually	eventually	RB	RB	-	2	VMOD	-	-
+4	hushed	hushed	VBN	VBN	-	2	VC	-	-
+5	.	.	.	.	-	2	P	-	-
+

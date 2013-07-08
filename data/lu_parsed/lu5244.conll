@@ -1,0 +1,65 @@
+1	a	a	DT	DT	-	2	NMOD	-	-
+2	party	party	NN	NN	-	5	SUB	-	-
+3	of	of	IN	IN	-	2	NMOD	-	-
+4	schoolchildren	schoolchildren	NNS	NNS	-	3	PMOD	-	-
+5	are	are	VBP	VBP	-	0	ROOT	-	-
+6	shushed	shushed	VBN	VBN	-	5	VC	-	-
+7	by	by	IN	IN	-	6	VMOD	-	-
+8	their	their	PRP$	PRP$	-	9	NMOD	-	-
+9	teacher	teacher	NN	NN	-	7	PMOD	-	-
+10	before	before	IN	IN	-	6	VMOD	-	-
+11	they	they	PRP	PRP	-	12	SUB	-	-
+12	enter	enter	VBP	VBP	-	10	SBAR	-	-
+13	what	what	WP	WP	-	12	VMOD	-	-
+14	is	is	VBZ	VBZ	-	13	SBAR	-	-
+15	more	more	RBR	RBR	-	14	PRD	-	-
+16	a	a	DT	DT	-	17	NMOD	-	-
+17	sanctum	sanctum	NN	NN	-	14	PRD	-	-
+18	than	than	IN	IN	-	17	NMOD	-	-
+19	a	a	DT	DT	-	20	NMOD	-	-
+20	room	room	NN	NN	-	18	PMOD	-	-
+21	in	in	IN	IN	-	20	NMOD	-	-
+22	a	a	DT	DT	-	23	NMOD	-	-
+23	museum	museum	NN	NN	-	21	PMOD	-	-
+24	.	.	.	.	-	5	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	mother	mother	NN	NN	-	3	SUB	-	-
+3	shushed	shushed	VBD	VBD	-	0	ROOT	-	-
+4	them	them	PRP	PRP	-	3	OBJ	-	-
+5	.	.	.	.	-	3	P	-	-
+
+1	`	`	``	``	-	6	P	-	-
+2	now	now	RB	RB	-	6	VMOD	-	-
+3	,	,	,	,	-	6	P	-	-
+4	``	``	``	``	-	6	P	-	-
+5	jinkwa	jinkwa	NN	NN	-	6	SUB	-	-
+6	shushed	shushed	VBD	VBD	-	0	ROOT	-	-
+7	them	them	PRP	PRP	-	6	OBJ	-	-
+8	.	.	.	.	-	6	P	-	-
+
+1	it	it	PRP	PRP	-	2	SUB	-	-
+2	tickled	tickled	VBD	VBD	-	7	VMOD	-	-
+3	,	,	,	,	-	2	P	-	-
+4	and	and	CC	CC	-	7	VMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	patient	patient	NN	NN	-	7	SUB	-	-
+7	had	had	VBD	VBD	-	0	ROOT	-	-
+8	to	to	TO	TO	-	9	VMOD	-	-
+9	be	be	VB	VB	-	7	VMOD	-	-
+10	shushed	shushed	VBN	VBN	-	9	VC	-	-
+11	.	.	.	.	-	7	P	-	-
+
+1	lampard	lampard	NN	NN	-	2	SUB	-	-
+2	shushed	shushed	VBD	VBD	-	0	ROOT	-	-
+3	him	him	PRP	PRP	-	2	OBJ	-	-
+4	again	again	RB	RB	-	2	VMOD	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	tuppe	tuppe	NN	NN	-	2	SUB	-	-
+2	shushed	shushed	VBD	VBD	-	0	ROOT	-	-
+3	him	him	PRP	PRP	-	2	OBJ	-	-
+4	to	to	TO	TO	-	2	VMOD	-	-
+5	silence	silence	NN	NN	-	4	PMOD	-	-
+6	.	.	.	.	-	2	P	-	-
+

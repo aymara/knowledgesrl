@@ -1,0 +1,16 @@
+1	''	''	''	''	-	4	P	-	-
+2	waffenruhe	waffenruhe	NN	NN	-	4	NMOD	-	-
+3	''	''	''	''	-	4	P	-	-
+4	translates	translates	NNS	NNS	-	0	ROOT	-	-
+5	as	as	IN	IN	-	4	NMOD	-	-
+6	truce	truce	NN	NN	-	14	NMOD	-	-
+7	,	,	,	,	-	14	P	-	-
+8	armistice	armistice	NN	NN	-	14	NMOD	-	-
+9	,	,	,	,	-	14	P	-	-
+10	an	an	DT	DT	-	14	NMOD	-	-
+11	uneasy	uneasy	JJ	JJ	-	14	NMOD	-	-
+12	,	,	,	,	-	14	P	-	-
+13	provisional	provisional	JJ	JJ	-	14	NMOD	-	-
+14	peace	peace	NN	NN	-	5	PMOD	-	-
+15	.	.	.	.	-	4	P	-	-
+

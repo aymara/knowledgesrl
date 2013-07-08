@@ -1,0 +1,22 @@
+1	she	she	PRP	PRP	-	2	SUB	-	-
+2	voided	voided	VBD	VBD	-	0	ROOT	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	lavatory	lavatory	NN	NN	-	2	OBJ	-	-
+5	,	,	,	,	-	2	P	-	-
+6	and	and	CC	CC	-	2	VMOD	-	-
+7	ran	ran	VBD	VBD	-	2	VMOD	-	-
+8	cold	cold	JJ	JJ	-	9	NMOD	-	-
+9	water	water	NN	NN	-	7	OBJ	-	-
+10	in	in	IN	IN	-	7	VMOD	-	-
+11	the	the	DT	DT	-	12	NMOD	-	-
+12	basin	basin	NN	NN	-	10	PMOD	-	-
+13	,	,	,	,	-	7	P	-	-
+14	laving	laving	VBG	VBG	-	7	VMOD	-	-
+15	her	her	PRP$	PRP$	-	20	NMOD	-	-
+16	face	face	NN	NN	-	20	NMOD	-	-
+17	,	,	,	,	-	20	P	-	-
+18	hands	hands	NNS	NNS	-	20	NMOD	-	-
+19	,	,	,	,	-	20	P	-	-
+20	wrists	wrists	NNS	NNS	-	14	OBJ	-	-
+21	.	.	.	.	-	2	P	-	-
+

@@ -1,0 +1,86 @@
+1	their	their	PRP$	PRP$	-	2	NMOD	-	-
+2	babble	babble	NN	NN	-	7	SUB	-	-
+3	of	of	IN	IN	-	2	NMOD	-	-
+4	french	french	JJ	JJ	-	6	AMOD	-	-
+5	and	and	CC	CC	-	6	AMOD	-	-
+6	arabic	arabic	JJ	JJ	-	3	PMOD	-	-
+7	made	made	VBD	VBD	-	21	VMOD	-	-
+8	an	an	DT	DT	-	10	NMOD	-	-
+9	awful	awful	JJ	JJ	-	10	NMOD	-	-
+10	din	din	NN	NN	-	7	OBJ	-	-
+11	,	,	,	,	-	21	P	-	-
+12	but	but	CC	CC	-	21	VMOD	-	-
+13	within	within	IN	IN	-	21	VMOD	-	-
+14	just	just	RB	RB	-	16	AMOD	-	-
+15	a	a	DT	DT	-	16	AMOD	-	-
+16	few	few	JJ	JJ	-	17	NMOD	-	-
+17	feet	feet	NNS	NNS	-	13	PMOD	-	-
+18	of	of	IN	IN	-	17	NMOD	-	-
+19	us	us	PRP	PRP	-	18	PMOD	-	-
+20	they	they	PRP	PRP	-	21	SUB	-	-
+21	quietened	quietened	VBD	VBD	-	0	ROOT	-	-
+22	.	.	.	.	-	21	P	-	-
+
+1	`	`	``	``	-	15	P	-	-
+2	all	all	DT	DT	-	3	NMOD	-	-
+3	right	right	RB	RB	-	15	VMOD	-	-
+4	,	,	,	,	-	15	P	-	-
+5	all	all	DT	DT	-	6	NMOD	-	-
+6	right	right	NN	NN	-	15	VMOD	-	-
+7	!	!	.	.	-	6	P	-	-
+8	``	``	``	``	-	15	P	-	-
+9	he	he	PRP	PRP	-	10	SUB	-	-
+10	shouted	shouted	VBD	VBD	-	15	VMOD	-	-
+11	,	,	,	,	-	10	P	-	-
+12	and	and	CC	CC	-	15	VMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	audience	audience	NN	NN	-	15	SUB	-	-
+15	began	began	VBD	VBD	-	0	ROOT	-	-
+16	gradually	gradually	RB	RB	-	18	VMOD	-	-
+17	to	to	TO	TO	-	18	VMOD	-	-
+18	quieten	quieten	VB	VB	-	15	VMOD	-	-
+19	.	.	.	.	-	15	P	-	-
+
+1	her	her	PRP	PRP	-	3	NMOD	-	-
+2	travelling	travelling	VBG	VBG	-	3	NMOD	-	-
+3	companions	companions	NNS	NNS	-	4	SUB	-	-
+4	had	had	VBD	VBD	-	0	ROOT	-	-
+5	quietened	quietened	VBN	VBN	-	4	VC	-	-
+6	,	,	,	,	-	5	P	-	-
+7	as	as	RB	RB	-	8	DEP	-	-
+8	if	if	IN	IN	-	5	VMOD	-	-
+9	someone	someone	NN	NN	-	12	SUB	-	-
+10	in	in	IN	IN	-	9	NMOD	-	-
+11	authority	authority	NN	NN	-	10	PMOD	-	-
+12	had	had	VBD	VBD	-	8	SBAR	-	-
+13	arrived	arrived	VBN	VBN	-	12	VC	-	-
+14	.	.	.	.	-	4	P	-	-
+
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	quietened	quietened	VBD	VBD	-	0	ROOT	-	-
+3	his	his	PRP$	PRP$	-	4	NMOD	-	-
+4	voice	voice	NN	NN	-	2	OBJ	-	-
+5	.	.	.	.	-	2	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	man	man	NN	NN	-	3	SUB	-	-
+3	quietened	quietened	VBD	VBD	-	0	ROOT	-	-
+4	,	,	,	,	-	3	P	-	-
+5	frowned	frowned	VBD	VBD	-	3	VMOD	-	-
+6	.	.	.	.	-	3	P	-	-
+
+1	his	his	PRP$	PRP$	-	2	NMOD	-	-
+2	voice	voice	NN	NN	-	3	SUB	-	-
+3	had	had	VBD	VBD	-	8	VMOD	-	-
+4	quietened	quietened	VBN	VBN	-	3	VC	-	-
+5	,	,	,	,	-	8	P	-	-
+6	his	his	PRP$	PRP$	-	7	NMOD	-	-
+7	nostrils	nostrils	NNS	NNS	-	8	SUB	-	-
+8	flared	flared	VBD	VBD	-	0	ROOT	-	-
+9	.	.	.	.	-	8	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	bar	bar	NN	NN	-	3	SUB	-	-
+3	quietened	quietened	VBD	VBD	-	0	ROOT	-	-
+4	.	.	.	.	-	3	P	-	-
+

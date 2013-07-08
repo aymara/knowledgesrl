@@ -1,0 +1,17 @@
+1	but	but	CC	CC	-	10	VMOD	-	-
+2	when	when	WRB	WRB	-	10	VMOD	-	-
+3	she	she	PRP	PRP	-	4	SUB	-	-
+4	read	read	VBD	VBD	-	2	SBAR	-	-
+5	brian	brian	NN	NN	-	6	NMOD	-	-
+6	's	's	POS	POS	-	7	NMOD	-	-
+7	application	application	NN	NN	-	4	OBJ	-	-
+8	,	,	,	,	-	10	P	-	-
+9	she	she	PRP	PRP	-	10	SUB	-	-
+10	decided	decided	VBD	VBD	-	0	ROOT	-	-
+11	to	to	TO	TO	-	12	VMOD	-	-
+12	nab	nab	VB	VB	-	10	VMOD	-	-
+13	him	him	PRP	PRP	-	12	OBJ	-	-
+14	for	for	IN	IN	-	12	VMOD	-	-
+15	herself	herself	PRP	PRP	-	14	PMOD	-	-
+16	.	.	.	.	-	10	P	-	-
+

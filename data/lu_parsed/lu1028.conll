@@ -1,0 +1,50 @@
+1	interference	interference	NN	NN	-	2	SUB	-	-
+2	crackled	crackled	VBD	VBD	-	0	ROOT	-	-
+3	across	across	IN	IN	-	2	VMOD	-	-
+4	the	the	DT	DT	-	5	NMOD	-	-
+5	screen	screen	NN	NN	-	3	PMOD	-	-
+6	.	.	.	.	-	2	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	seas	seas	NNS	NNS	-	3	SUB	-	-
+3	were	were	VBD	VBD	-	0	ROOT	-	-
+4	hot	hot	JJ	JJ	-	3	PRD	-	-
+5	,	,	,	,	-	3	P	-	-
+6	volcanoes	volcanoes	NNS	NNS	-	7	SUB	-	-
+7	spouted	spouted	VBD	VBD	-	15	VMOD	-	-
+8	ash	ash	NN	NN	-	10	NMOD	-	-
+9	and	and	CC	CC	-	10	NMOD	-	-
+10	lava	lava	NN	NN	-	7	OBJ	-	-
+11	,	,	,	,	-	15	P	-	-
+12	and	and	CC	CC	-	15	VMOD	-	-
+13	electrical	electrical	JJ	JJ	-	14	NMOD	-	-
+14	storms	storms	NNS	NNS	-	15	SUB	-	-
+15	crackled	crackled	VBN	VBN	-	3	VMOD	-	-
+16	across	across	IN	IN	-	15	VMOD	-	-
+17	the	the	DT	DT	-	18	NMOD	-	-
+18	skies	skies	NNS	NNS	-	16	PMOD	-	-
+19	.	.	.	.	-	3	P	-	-
+
+1	little	little	JJ	JJ	-	2	NMOD	-	-
+2	lines	lines	NNS	NNS	-	7	SUB	-	-
+3	of	of	IN	IN	-	2	NMOD	-	-
+4	crawling	crawling	VBG	VBG	-	3	PMOD	-	-
+5	blue	blue	JJ	JJ	-	6	NMOD	-	-
+6	fire	fire	NN	NN	-	4	OBJ	-	-
+7	crackled	crackled	VBD	VBD	-	0	ROOT	-	-
+8	over	over	IN	IN	-	7	VMOD	-	-
+9	jekub	jekub	NN	NN	-	10	NMOD	-	-
+10	's	's	POS	POS	-	12	NMOD	-	-
+11	battered	battered	JJ	JJ	-	12	NMOD	-	-
+12	paintwork	paintwork	NN	NN	-	8	PMOD	-	-
+13	.	.	.	.	-	7	P	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	panels	panels	NNS	NNS	-	6	SUB	-	-
+3	of	of	IN	IN	-	2	NMOD	-	-
+4	her	her	PRP$	PRP$	-	5	NMOD	-	-
+5	door	door	NN	NN	-	3	PMOD	-	-
+6	crackled	crackled	VBD	VBD	-	0	ROOT	-	-
+7	open	open	JJ	JJ	-	6	PRD	-	-
+8	.	.	.	.	-	6	P	-	-
+

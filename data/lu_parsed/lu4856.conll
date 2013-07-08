@@ -1,0 +1,55 @@
+1	`	`	``	``	-	3	P	-	-
+2	to	to	TO	TO	-	3	VMOD	-	-
+3	tell	tell	VB	VB	-	10	VMOD	-	-
+4	you	you	PRP	PRP	-	3	OBJ	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	truth	truth	NN	NN	-	3	OBJ	-	-
+7	,	,	,	,	-	10	P	-	-
+8	my	my	PRP$	PRP$	-	9	NMOD	-	-
+9	secretary	secretary	NN	NN	-	10	SUB	-	-
+10	fucked	fucked	VBD	VBD	-	0	ROOT	-	-
+11	up	up	RP	RP	-	10	VMOD	-	-
+12	.	.	.	.	-	10	P	-	-
+
+1	i	i	NNP	NNP	-	2	SUB	-	-
+2	fucked	fucked	VBD	VBD	-	7	VMOD	-	-
+3	up	up	RP	RP	-	2	VMOD	-	-
+4	,	,	,	,	-	7	P	-	-
+5	and	and	CC	CC	-	7	VMOD	-	-
+6	i	i	NNS	NNS	-	7	SUB	-	-
+7	should	should	MD	MD	-	0	ROOT	-	-
+8	face	face	VB	VB	-	7	VC	-	-
+9	it	it	PRP	PRP	-	8	OBJ	-	-
+10	.	.	.	.	-	7	P	-	-
+11	``	``	``	``	-	7	P	-	-
+
+1	then	then	RB	RB	-	3	VMOD	-	-
+2	i	i	PRP	PRP	-	3	SUB	-	-
+3	fucked	fucked	VBD	VBD	-	0	ROOT	-	-
+4	up	up	RP	RP	-	3	VMOD	-	-
+5	.	.	.	.	-	3	P	-	-
+
+1	`	`	``	``	-	2	P	-	-
+2	important	important	JJ	JJ	-	0	ROOT	-	-
+3	enough	enough	RB	RB	-	2	AMOD	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	fuck	fuck	VB	VB	-	3	AMOD	-	-
+6	up	up	RP	RP	-	5	VMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	raid	raid	NN	NN	-	5	OBJ	-	-
+9	?	?	.	.	-	3	P	-	-
+10	``	``	``	``	-	3	P	-	-
+
+1	i	i	PRP	PRP	-	2	SUB	-	-
+2	'm	'm	VBP	VBP	-	0	ROOT	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	one	one	NN	NN	-	2	PRD	-	-
+5	who	who	WP	WP	-	4	NMOD	-	-
+6	's	's	VBZ	VBZ	-	5	SBAR	-	-
+7	fucked	fucked	VBN	VBN	-	6	VC	-	-
+8	up	up	RP	RP	-	7	VMOD	-	-
+9	your	your	PRP$	PRP$	-	11	NMOD	-	-
+10	entire	entire	JJ	JJ	-	11	NMOD	-	-
+11	operation	operation	NN	NN	-	7	OBJ	-	-
+12	.	.	.	.	-	2	P	-	-
+

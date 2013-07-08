@@ -1,0 +1,20 @@
+1	the	the	DT	DT	-	2	NMOD	-	-
+2	whistling	whistling	NN	NN	-	3	SUB	-	-
+3	resumed	resumed	VBD	VBD	-	0	ROOT	-	-
+4	,	,	,	,	-	3	P	-	-
+5	some	some	DT	DT	-	6	NMOD	-	-
+6	way	way	NN	NN	-	7	PMOD	-	-
+7	down	down	IN	IN	-	3	VMOD	-	-
+8	the	the	DT	DT	-	9	NMOD	-	-
+9	road	road	NN	NN	-	7	PMOD	-	-
+10	.	.	.	.	-	3	P	-	-
+
+1	talks	talks	NNS	NNS	-	2	SUB	-	-
+2	were	were	VBD	VBD	-	0	ROOT	-	-
+3	to	to	TO	TO	-	4	VMOD	-	-
+4	resume	resume	VB	VB	-	2	VMOD	-	-
+5	on	on	IN	IN	-	4	VMOD	-	-
+6	july	july	RB	RB	-	5	PMOD	-	-
+7	<num>	<num>	CD	CD	-	6	AMOD	-	-
+8	.	.	.	.	-	2	P	-	-
+

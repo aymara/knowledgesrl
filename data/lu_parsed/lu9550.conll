@@ -1,0 +1,21 @@
+1	along	along	IN	IN	-	14	PRD	-	-
+2	its	its	PRP$	PRP$	-	5	NMOD	-	-
+3	southern	southern	JJ	JJ	-	5	NMOD	-	-
+4	edge	edge	NN	NN	-	5	NMOD	-	-
+5	stands	stands	NNS	NNS	-	1	PMOD	-	-
+6	of	of	IN	IN	-	5	NMOD	-	-
+7	low	low	JJ	JJ	-	9	NMOD	-	-
+8	trees	trees	NNS	NNS	-	9	NMOD	-	-
+9	intermix	intermix	NN	NN	-	6	PMOD	-	-
+10	with	with	IN	IN	-	9	NMOD	-	-
+11	the	the	DT	DT	-	12	NMOD	-	-
+12	shrubs	shrubs	NNS	NNS	-	10	PMOD	-	-
+13	,	,	,	,	-	14	P	-	-
+14	in	in	IN	IN	-	0	ROOT	-	-
+15	places	places	NNS	NNS	-	14	PMOD	-	-
+16	grading	grading	VBG	VBG	-	15	NMOD	-	-
+17	insensibly	insensibly	RB	RB	-	16	VMOD	-	-
+18	into	into	IN	IN	-	16	VMOD	-	-
+19	forest	forest	NN	NN	-	18	PMOD	-	-
+20	.	.	.	.	-	15	P	-	-
+

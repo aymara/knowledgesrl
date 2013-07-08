@@ -1,0 +1,33 @@
+1	they	they	PRP	PRP	-	2	SUB	-	-
+2	shackled	shackled	VBD	VBD	-	0	ROOT	-	-
+3	my	my	PRP$	PRP$	-	4	NMOD	-	-
+4	legs	legs	NNS	NNS	-	2	OBJ	-	-
+5	so	so	RB	RB	-	6	DEP	-	-
+6	that	that	IN	IN	-	2	VMOD	-	-
+7	i	i	PRP	PRP	-	8	SUB	-	-
+8	could	could	MD	MD	-	6	SBAR	-	-
+9	not	not	RB	RB	-	8	VMOD	-	-
+10	run	run	VB	VB	-	8	VC	-	-
+11	.	.	.	.	-	2	P	-	-
+
+1	you	you	PRP	PRP	-	2	SUB	-	-
+2	may	may	MD	MD	-	0	ROOT	-	-
+3	be	be	VB	VB	-	2	VC	-	-
+4	surprised	surprised	VBN	VBN	-	3	VC	-	-
+5	to	to	TO	TO	-	6	VMOD	-	-
+6	find	find	VB	VB	-	4	VMOD	-	-
+7	that	that	IN	IN	-	6	VMOD	-	-
+8	she	she	PRP	PRP	-	9	SUB	-	-
+9	does	does	VBZ	VBZ	-	7	SBAR	-	-
+10	n't	n't	RB	RB	-	9	VMOD	-	-
+11	want	want	VB	VB	-	9	VC	-	-
+12	to	to	TO	TO	-	13	VMOD	-	-
+13	shackle	shackle	VB	VB	-	11	VMOD	-	-
+14	you	you	PRP	PRP	-	13	OBJ	-	-
+15	with	with	IN	IN	-	13	VMOD	-	-
+16	a	a	DT	DT	-	19	NMOD	-	-
+17	ball	ball	NN	NN	-	19	NMOD	-	-
+18	and	and	CC	CC	-	19	NMOD	-	-
+19	chain	chain	NN	NN	-	15	PMOD	-	-
+20	.	.	.	.	-	2	P	-	-
+

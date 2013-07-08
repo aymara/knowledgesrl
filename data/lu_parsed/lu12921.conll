@@ -1,0 +1,26 @@
+1	the	the	DT	DT	-	2	DEP	-	-
+2	steeper	steeper	JJR	JJR	-	4	DEP	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	slope	slope	NN	NN	-	9	SUB	-	-
+5	the	the	DT	DT	-	8	NMOD	-	-
+6	more	more	RBR	RBR	-	8	NMOD	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-
+8	toes	toes	NNS	NNS	-	9	SUB	-	-
+9	must	must	MD	MD	-	17	VMOD	-	-
+10	face	face	VB	VB	-	9	VC	-	-
+11	downhill	downhill	NN	NN	-	10	OBJ	-	-
+12	,	,	,	,	-	17	P	-	-
+13	and	and	CC	CC	-	17	VMOD	-	-
+14	the	the	DT	DT	-	16	NMOD	-	-
+15	steepest	steepest	JJS	JJS	-	16	NMOD	-	-
+16	slopes	slopes	NNS	NNS	-	17	SUB	-	-
+17	climbed	climbed	VBD	VBD	-	0	ROOT	-	-
+18	using	using	VBG	VBG	-	17	VMOD	-	-
+19	this	this	DT	DT	-	20	NMOD	-	-
+20	technique	technique	NN	NN	-	18	OBJ	-	-
+21	would	would	MD	MD	-	17	VMOD	-	-
+22	be	be	VB	VB	-	21	VC	-	-
+23	ascended	ascended	JJ	JJ	-	24	NMOD	-	-
+24	backwards	backwards	NNS	NNS	-	22	PRD	-	-
+25	.	.	.	.	-	17	P	-	-
+

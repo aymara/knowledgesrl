@@ -1,0 +1,25 @@
+1	where	where	WRB	WRB	-	2	NMOD	-	-
+2	pipes	pipes	NNS	NNS	-	3	SUB	-	-
+3	exit	exit	NN	NN	-	9	SUB	-	-
+4	through	through	IN	IN	-	3	VMOD	-	-
+5	an	an	DT	DT	-	7	NMOD	-	-
+6	external	external	JJ	JJ	-	7	NMOD	-	-
+7	wall	wall	NN	NN	-	4	PMOD	-	-
+8	,	,	,	,	-	3	P	-	-
+9	use	use	VBP	VBP	-	0	ROOT	-	-
+10	an	an	DT	DT	-	13	NMOD	-	-
+11	expanding	expanding	VBG	VBG	-	13	NMOD	-	-
+12	form	form	NN	NN	-	13	NMOD	-	-
+13	filler	filler	NN	NN	-	9	OBJ	-	-
+14	both	both	CC	CC	-	9	VMOD	-	-
+15	to	to	TO	TO	-	16	VMOD	-	-
+16	seal	seal	VB	VB	-	9	VMOD	-	-
+17	the	the	DT	DT	-	18	NMOD	-	-
+18	hole	hole	NN	NN	-	16	OBJ	-	-
+19	and	and	CC	CC	-	16	VMOD	-	-
+20	to	to	TO	TO	-	21	VMOD	-	-
+21	insulate	insulate	VB	VB	-	16	VMOD	-	-
+22	the	the	DT	DT	-	23	NMOD	-	-
+23	pipes	pipes	NNS	NNS	-	21	OBJ	-	-
+24	.	.	.	.	-	9	P	-	-
+

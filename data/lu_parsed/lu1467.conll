@@ -1,0 +1,40 @@
+1	there	there	EX	EX	-	2	SUB	-	-
+2	was	was	VBD	VBD	-	0	ROOT	-	-
+3	also	also	RB	RB	-	2	VMOD	-	-
+4	electrical	electrical	JJ	JJ	-	5	NMOD	-	-
+5	power	power	NN	NN	-	2	PRD	-	-
+6	,	,	,	,	-	2	P	-	-
+7	though	though	IN	IN	-	2	VMOD	-	-
+8	some	some	DT	DT	-	10	NMOD	-	-
+9	loose	loose	JJ	JJ	-	10	NMOD	-	-
+10	cables	cables	NNS	NNS	-	7	PMOD	-	-
+11	sizzled	sizzled	VBN	VBN	-	10	NMOD	-	-
+12	as	as	IN	IN	-	11	VMOD	-	-
+13	they	they	PRP	PRP	-	14	SUB	-	-
+14	whipped	whipped	VBD	VBD	-	12	SBAR	-	-
+15	about	about	RB	RB	-	14	OBJ	-	-
+16	in	in	IN	IN	-	14	VMOD	-	-
+17	the	the	DT	DT	-	18	NMOD	-	-
+18	rain	rain	NN	NN	-	16	PMOD	-	-
+19	.	.	.	.	-	2	P	-	-
+
+1	chicken	chicken	VBN	VBN	-	0	ROOT	-	-
+2	with	with	IN	IN	-	1	VMOD	-	-
+3	hot	hot	JJ	JJ	-	4	NMOD	-	-
+4	sauce	sauce	NN	NN	-	2	PMOD	-	-
+5	sizzled	sizzled	VBN	VBN	-	4	NMOD	-	-
+6	on	on	IN	IN	-	5	VMOD	-	-
+7	grills	grills	NNS	NNS	-	6	PMOD	-	-
+8	.	.	.	.	-	1	P	-	-
+
+1	nearby	nearby	RB	RB	-	5	VMOD	-	-
+2	,	,	,	,	-	5	P	-	-
+3	a	a	DT	DT	-	4	NMOD	-	-
+4	steak	steak	NN	NN	-	5	SUB	-	-
+5	sizzled	sizzled	VBN	VBN	-	0	ROOT	-	-
+6	on	on	IN	IN	-	5	VMOD	-	-
+7	his	his	PRP$	PRP$	-	9	NMOD	-	-
+8	small	small	JJ	JJ	-	9	NMOD	-	-
+9	grill	grill	NN	NN	-	6	PMOD	-	-
+10	.	.	.	.	-	5	P	-	-
+

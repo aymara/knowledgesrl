@@ -1,0 +1,17 @@
+1	he	he	PRP	PRP	-	2	SUB	-	-
+2	sprawled	sprawled	VBD	VBD	-	0	ROOT	-	-
+3	out	out	RP	RP	-	2	VMOD	-	-
+4	in	in	IN	IN	-	2	VMOD	-	-
+5	his	his	PRP$	PRP$	-	6	NMOD	-	-
+6	shorts	shorts	NNS	NNS	-	4	PMOD	-	-
+7	and	and	CC	CC	-	2	VMOD	-	-
+8	drank	drank	VB	VB	-	2	VMOD	-	-
+9	thirstily	thirstily	RB	RB	-	8	VMOD	-	-
+10	before	before	IN	IN	-	8	VMOD	-	-
+11	fervently	fervently	RB	RB	-	12	VMOD	-	-
+12	putting	putting	VBG	VBG	-	10	PMOD	-	-
+13	down	down	RP	RP	-	12	VMOD	-	-
+14	her	her	PRP$	PRP$	-	15	NMOD	-	-
+15	suggestion	suggestion	NN	NN	-	12	OBJ	-	-
+16	.	.	.	.	-	2	P	-	-
+

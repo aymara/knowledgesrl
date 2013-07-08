@@ -1,0 +1,15 @@
+1	but	but	CC	CC	-	3	VMOD	-	-
+2	it	it	PRP	PRP	-	3	SUB	-	-
+3	remains	remains	VBZ	VBZ	-	0	ROOT	-	-
+4	to	to	TO	TO	-	5	VMOD	-	-
+5	be	be	VB	VB	-	3	VMOD	-	-
+6	seen	seen	VBN	VBN	-	5	VC	-	-
+7	whether	whether	IN	IN	-	6	VMOD	-	-
+8	that	that	WDT	WDT	-	9	SUB	-	-
+9	will	will	MD	MD	-	7	SBAR	-	-
+10	prove	prove	VB	VB	-	9	VC	-	-
+11	a	a	DT	DT	-	13	NMOD	-	-
+12	significant	significant	JJ	JJ	-	13	NMOD	-	-
+13	omission	omission	NN	NN	-	10	OBJ	-	-
+14	.	.	.	.	-	3	P	-	-
+

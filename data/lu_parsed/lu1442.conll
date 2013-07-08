@@ -1,0 +1,26 @@
+1	one	one	CD	CD	-	13	SUB	-	-
+2	after	after	IN	IN	-	13	VMOD	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	other	other	JJ	JJ	-	2	PMOD	-	-
+5	,	,	,	,	-	13	P	-	-
+6	the	the	DT	DT	-	8	NMOD	-	-
+7	bubbles	bubbles	NNS	NNS	-	8	NMOD	-	-
+8	plop	plop	NN	NN	-	12	NMOD	-	-
+9	and	and	CC	CC	-	12	NMOD	-	-
+10	the	the	DT	DT	-	12	NMOD	-	-
+11	rough	rough	JJ	JJ	-	12	NMOD	-	-
+12	edges	edges	NNS	NNS	-	13	SUB	-	-
+13	sizzle	sizzle	VBP	VBP	-	0	ROOT	-	-
+14	back	back	RB	RB	-	13	VMOD	-	-
+15	just	just	RB	RB	-	16	PMOD	-	-
+16	like	like	IN	IN	-	13	VMOD	-	-
+17	they	they	PRP	PRP	-	18	SUB	-	-
+18	're	're	VBP	VBP	-	16	SBAR	-	-
+19	being	being	VBG	VBG	-	18	VC	-	-
+20	eaten	eaten	VBN	VBN	-	19	VC	-	-
+21	away	away	RB	RB	-	20	VMOD	-	-
+22	by	by	IN	IN	-	20	VMOD	-	-
+23	invisible	invisible	JJ	JJ	-	24	NMOD	-	-
+24	acid	acid	NN	NN	-	22	PMOD	-	-
+25	.	.	.	.	-	13	P	-	-
+

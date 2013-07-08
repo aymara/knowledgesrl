@@ -1,0 +1,20 @@
+1	the	the	DT	DT	-	3	NMOD	-	-
+2	ferry	ferry	NN	NN	-	3	NMOD	-	-
+3	timetable	timetable	NN	NN	-	4	SUB	-	-
+4	runs	runs	VBZ	VBZ	-	0	ROOT	-	-
+5	on	on	IN	IN	-	4	VMOD	-	-
+6	a	a	DT	DT	-	7	NMOD	-	-
+7	winter	winter	NN	NN	-	5	PMOD	-	-
+8	(	(	-LRB-	-LRB-	-	9	P	-	-
+9	read	read	VB	VB	-	4	VMOD	-	-
+10	curtailed	curtailed	VBN	VBN	-	9	VC	-	-
+11	)	)	-RRB-	-RRB-	-	10	P	-	-
+12	service	service	NN	NN	-	10	OBJ	-	-
+13	until	until	IN	IN	-	10	VMOD	-	-
+14	the	the	DT	DT	-	16	NMOD	-	-
+15	first	first	JJ	JJ	-	16	NMOD	-	-
+16	week	week	NN	NN	-	13	PMOD	-	-
+17	in	in	IN	IN	-	10	VMOD	-	-
+18	may	may	MD	MD	-	17	PMOD	-	-
+19	.	.	.	.	-	4	P	-	-
+

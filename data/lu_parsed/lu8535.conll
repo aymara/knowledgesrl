@@ -1,0 +1,36 @@
+1	an	an	DT	DT	-	3	NMOD	-	-
+2	outstretched	outstretched	JJ	JJ	-	3	NMOD	-	-
+3	fist	fist	NN	NN	-	4	SUB	-	-
+4	could	could	MD	MD	-	0	ROOT	-	-
+5	eclipse	eclipse	VB	VB	-	4	VC	-	-
+6	the	the	DT	DT	-	7	NMOD	-	-
+7	sun	sun	NN	NN	-	5	OBJ	-	-
+8	that	that	WDT	WDT	-	7	NMOD	-	-
+9	burned	burned	VBD	VBD	-	8	SBAR	-	-
+10	them	them	PRP	PRP	-	9	OBJ	-	-
+11	by	by	IN	IN	-	5	VMOD	-	-
+12	day	day	NN	NN	-	11	PMOD	-	-
+13	.	.	.	.	-	4	P	-	-
+
+1	gold-edged	gold-edged	JJ	JJ	-	2	NMOD	-	-
+2	clouds	clouds	NNS	NNS	-	3	SUB	-	-
+3	sailed	sailed	VBN	VBN	-	0	ROOT	-	-
+4	in	in	IN	IN	-	3	VMOD	-	-
+5	a	a	DT	DT	-	6	NMOD	-	-
+6	sea	sea	NN	NN	-	4	PMOD	-	-
+7	of	of	IN	IN	-	6	NMOD	-	-
+8	cold	cold	JJ	JJ	-	10	NMOD	-	-
+9	blue	blue	JJ	JJ	-	10	NMOD	-	-
+10	sky	sky	NN	NN	-	7	PMOD	-	-
+11	,	,	,	,	-	10	P	-	-
+12	violently	violently	RB	RB	-	13	VMOD	-	-
+13	eclipsed	eclipsed	VBN	VBN	-	10	NMOD	-	-
+14	by	by	IN	IN	-	13	VMOD	-	-
+15	sleet-scudding	sleet-scudding	JJ	JJ	-	16	NMOD	-	-
+16	showers	showers	NNS	NNS	-	14	PMOD	-	-
+17	slashing	slashing	VBG	VBG	-	16	NMOD	-	-
+18	up	up	RP	RP	-	17	VMOD	-	-
+19	loch	loch	JJ	JJ	-	20	NMOD	-	-
+20	torridon	torridon	NN	NN	-	17	OBJ	-	-
+21	.	.	.	.	-	3	P	-	-
+

@@ -1,0 +1,16 @@
+1	our	our	PRP$	PRP$	-	3	NMOD	-	-
+2	first	first	JJ	JJ	-	3	NMOD	-	-
+3	sight	sight	NN	NN	-	7	SUB	-	-
+4	of	of	IN	IN	-	3	NMOD	-	-
+5	the	the	DT	DT	-	6	NMOD	-	-
+6	restaurant	restaurant	NN	NN	-	4	PMOD	-	-
+7	was	was	VBD	VBD	-	0	ROOT	-	-
+8	one	one	CD	CD	-	7	PRD	-	-
+9	of	of	IN	IN	-	8	NMOD	-	-
+10	lanterns	lanterns	NNS	NNS	-	9	PMOD	-	-
+11	twinkling	twinkling	VBG	VBG	-	10	NMOD	-	-
+12	through	through	IN	IN	-	11	VMOD	-	-
+13	the	the	DT	DT	-	14	NMOD	-	-
+14	dusk	dusk	NN	NN	-	12	PMOD	-	-
+15	.	.	.	.	-	7	P	-	-
+

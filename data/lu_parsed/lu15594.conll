@@ -1,0 +1,23 @@
+1	if	if	IN	IN	-	7	VMOD	-	-
+2	he	he	PRP	PRP	-	3	SUB	-	-
+3	loses	loses	VBZ	VBZ	-	1	SBAR	-	-
+4	,	,	,	,	-	7	P	-	-
+5	your	your	PRP$	PRP$	-	6	NMOD	-	-
+6	shares	shares	NNS	NNS	-	7	SUB	-	-
+7	are	are	VBP	VBP	-	0	ROOT	-	-
+8	worthless	worthless	JJ	JJ	-	7	PRD	-	-
+9	.	.	.	.	-	7	P	-	-
+
+1	and	and	CC	CC	-	3	VMOD	-	-
+2	it	it	PRP	PRP	-	3	SUB	-	-
+3	lost	lost	VBD	VBD	-	0	ROOT	-	-
+4	well	well	RB	RB	-	3	VMOD	-	-
+5	that	that	WDT	WDT	-	3	VMOD	-	-
+6	was	was	VBD	VBD	-	5	SBAR	-	-
+7	decided	decided	VBN	VBN	-	6	VC	-	-
+8	by	by	IN	IN	-	7	VMOD	-	-
+9	a	a	DT	DT	-	12	NMOD	-	-
+10	very	very	RB	RB	-	11	AMOD	-	-
+11	small	small	JJ	JJ	-	12	NMOD	-	-
+12	margin	margin	NN	NN	-	8	PMOD	-	-
+

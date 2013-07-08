@@ -1,0 +1,25 @@
+1	even	even	RB	RB	-	2	PMOD	-	-
+2	at	at	IN	IN	-	8	VMOD	-	-
+3	the	the	DT	DT	-	4	NMOD	-	-
+4	best	best	JJS	JJS	-	2	PMOD	-	-
+5	of	of	IN	IN	-	4	NMOD	-	-
+6	times	times	NNS	NNS	-	5	PMOD	-	-
+7	it	it	PRP	PRP	-	8	SUB	-	-
+8	was	was	VBD	VBD	-	18	VMOD	-	-
+9	seldom	seldom	RB	RB	-	8	VMOD	-	-
+10	working	working	VBG	VBG	-	8	VC	-	-
+11	,	,	,	,	-	18	P	-	-
+12	and	and	CC	CC	-	18	VMOD	-	-
+13	at	at	IN	IN	-	18	VMOD	-	-
+14	present	present	RB	RB	-	13	PMOD	-	-
+15	the	the	DT	DT	-	17	NMOD	-	-
+16	electric	electric	JJ	JJ	-	17	NMOD	-	-
+17	current	current	NN	NN	-	18	SUB	-	-
+18	was	was	VBD	VBD	-	0	ROOT	-	-
+19	cut	cut	VBN	VBN	-	18	VC	-	-
+20	off	off	RP	RP	-	19	VMOD	-	-
+21	during	during	IN	IN	-	19	VMOD	-	-
+22	daylight	daylight	JJ	JJ	-	23	NMOD	-	-
+23	hours	hours	NNS	NNS	-	21	PMOD	-	-
+24	.	.	.	.	-	18	P	-	-
+

@@ -1,0 +1,23 @@
+1	pour	pour	VBP	VBP	-	0	ROOT	-	-
+2	half	half	NN	NN	-	1	OBJ	-	-
+3	into	into	IN	IN	-	1	VMOD	-	-
+4	a	a	DT	DT	-	7	NMOD	-	-
+5	charlotte	charlotte	NN	NN	-	7	NMOD	-	-
+6	russe	russe	NN	NN	-	7	NMOD	-	-
+7	tin	tin	NN	NN	-	3	PMOD	-	-
+8	or	or	CC	CC	-	1	VMOD	-	-
+9	a	a	DT	DT	-	19	NMOD	-	-
+10	<num>	<num>	CD	CD	-	11	NMOD	-	-
+11	cm	cm	NN	NN	-	19	NMOD	-	-
+12	(	(	-LRB-	-LRB-	-	14	P	-	-
+13	<num>	<num>	CD	CD	-	14	NMOD	-	-
+14	″	″	NN	NN	-	19	NMOD	-	-
+15	)	)	-RRB-	-RRB-	-	19	P	-	-
+16	cake	cake	NN	NN	-	19	NMOD	-	-
+17	tin	tin	NN	NN	-	19	NMOD	-	-
+18	and	and	CC	CC	-	19	NMOD	-	-
+19	leave	leave	NN	NN	-	1	OBJ	-	-
+20	to	to	TO	TO	-	21	VMOD	-	-
+21	set	set	VB	VB	-	19	NMOD	-	-
+22	.	.	.	.	-	1	P	-	-
+
