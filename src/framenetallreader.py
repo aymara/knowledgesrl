@@ -31,7 +31,7 @@ class FNAllReader:
         "'m", "'re", "'s"]
     
     def __init__(self, corpus_path, annotation_path,
-        core_args_only = False, keep_unannotated = False):
+        core_args_only = False, keep_unannotated = False, filename=None):
         self.annotations_path = annotation_path
         self.corpus_path = corpus_path
         self.core_args_only = core_args_only
@@ -39,14 +39,19 @@ class FNAllReader:
         
         self.trees = []
         self.sentences_syntax = []
+        self.filename = filename
         
         self.stats = {
             "files":0
         }
-
+    
     def iter_frames(self):
         """Read the corpus and yield every valid frame"""
-        files = os.listdir(self.corpus_path)
+        
+        if self.filename == None:
+            files = os.listdir(self.corpus_path)
+        else:
+            files = [self.filename.replace(".conll", ".xml")]
         
         for filename in sorted(files):
             if not filename[-4:] == ".xml": continue
@@ -55,19 +60,17 @@ class FNAllReader:
             
             if not self.load_syntax_file(filename): continue
             
+            self.stats["files"] += 1
+            
             reader = framenetreader.FulltextReader(
                 self.corpus_path + filename,
                 core_args_only = self.core_args_only,
                 keep_unannotated = self.keep_unannotated,
                 trees = self.trees)
             
-            self.stats["files"] += 1
-
             for frame in reader.frames:
                 if self.handle_frame(frame):
                     yield frame
-        
-        print("")
     
     def load_syntax_file(self, filename):
         """Load the data of the syntax annotations files.

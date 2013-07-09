@@ -75,6 +75,22 @@ class ArgGuesser(FNParsedReader):
         FNParsedReader.__init__(self, path)
         self.verbnet_index = verbnet_index
         self.base_forms = {}
+        
+        self.filelist = os.listdir(self.annotations_path)
+        self.filelist = [x for x in self.filelist if x[-6:] == ".conll"]
+        self.filelist = sorted(self.filelist)
+
+    def handle_next_file(self):
+        for frame in self._handle_file(self.filelist[0]):
+            yield frame
+        del(self.filelist[0])
+
+    def file_remains(self):
+        return len(self.filelist) > 0
+
+    def current_file(self):
+        if self.file_remains(): return self.filelist[0]
+        return None
 
     def handle_corpus(self):
         """ Extracts frames from the corpus and iterate over them """
@@ -84,15 +100,9 @@ class ArgGuesser(FNParsedReader):
         
         print("Extracting frames and arguments...")
         
-        # Read the corpus a second time to build frames
-        for filename in sorted(os.listdir(self.annotations_path)):
-            if not filename[-6:] == ".conll": continue
-
-       
-            for frame in self._handle_file(filename):
+        while self.file_remains():
+            for frame in self.handle_next_file():
                 yield frame
-            print(".", file=sys.stderr, end="", flush=True)
-        print()
 
     def _extract_verbs(self):
         """ Computes the set of every verbs in the corpus

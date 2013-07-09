@@ -17,7 +17,7 @@ import re
 using the annotated FrameNet data.
 """
 
-def fill_roles(extracted_frames, verbnet_classes, role_matcher):
+def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
     """Fills the roles of some frames argument, when possible.
     Note : extracted_frames must be sorted by file.
     Note : extracted_frames is altered, even if the final result is returned.
@@ -35,10 +35,11 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     
     fn_reader = framenetallreader.FNAllReader(
             options.fulltext_corpus, options.framenet_parsed,
-            core_args_only = True, keep_unannotated = True)
+            core_args_only = True, keep_unannotated = True, filename=filename)
     
     previous_id = -1
     sentence_frames = []
+    good_frames = 0
     for frame in fn_reader.iter_frames():
         stats_data["args_instanciated"] += len(
             [x for x in frame.args if x.instanciated])
@@ -65,7 +66,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
         for extracted_frame in sentence_frames:
             # See if we have the two "same" frames
             if predicate_match(extracted_frame.predicate, frame.predicate):
-                stats_data["frame_extracted_good"] += 1
+                good_frames += 1
                 handle_frame(extracted_frame, frame)
                 frame_found = True
                 break
@@ -79,8 +80,8 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
             stats_data["arg_not_extracted"] += num_args
         previous_id = frame.sentence_id_fn_parsed
 
-    stats_data["frame_extracted_bad"] = (
-        len(extracted_frames) - stats_data["frame_extracted_good"])
+    stats_data["frame_extracted_bad"] += len(extracted_frames) - good_frames
+    stats_data["frame_extracted_good"] += good_frames
     #stats_data["arg_extracted_bad"] += sum(
     #    [len(x.args) for x in extracted_frames if x.frame_name == ""])
     
