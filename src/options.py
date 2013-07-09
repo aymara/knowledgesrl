@@ -18,19 +18,20 @@ dump = False
 dump_file = ""
 passive = True
 use_test_set = False
+corpus_lu = False
 fulltext_corpus = paths.FRAMENET_FULLTEXT
 framenet_parsed = paths.FRAMENET_PARSED
 
 options = getopt.getopt(sys.argv[1:], "d:",
     ["baseline", "fmatching-algo=", "add-non-core-args", "help",
      "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump",
-     "no-passive", "baseline", "test-set"])
+     "no-passive", "baseline", "test-set", "lu"])
 
 display_syntax = False
 syntax_str = ("main.py [--baseline] [-d num_sample] [--fmatching-algo=algo] "
               "[--model=probability_model] [--add-non-core-args] "
-              "[--bootstrap] [--no-gold-args [--heuristic-rules]] "
-              "[--dump filename] [--no-passive] [--test-set] [--help]")
+              "[--bootstrap] [--no-gold-args] [--heuristic-rules]] "
+              "[--dump filename] [--no-passive] [--test-set] [--lu] [--help]")
 
 for opt,value in options[0]:
     # Removes our enhancements
@@ -68,6 +69,10 @@ for opt,value in options[0]:
         use_test_set = True
         fulltext_corpus = paths.FRAMENET_FULLTEXT_EVALUATION
         framenet_parsed = paths.FRAMENET_PARSED_EVALUATION
+    if opt == "--lu":
+        corpus_lu = True
+        fulltext_corpus = paths.FRAMENET_LU
+        framenet_parsed = paths.FRAMENET_LU_PARSED
     if opt == "--help":
         display_syntax = True
             
