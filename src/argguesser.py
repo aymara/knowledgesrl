@@ -81,6 +81,9 @@ class ArgGuesser(FNParsedReader):
         self.filelist = sorted(self.filelist)
 
     def handle_next_file(self):
+        if len(self.base_forms) == 0:
+            self._compute_base_forms()
+        
         for frame in self._handle_file(self.filelist[0]):
             yield frame
         del(self.filelist[0])

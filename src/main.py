@@ -66,16 +66,14 @@ if __name__ == "__main__":
         
         print("Extracting frames and matching them with real frames...")
         annotated_frames = []
-        l = 0
+        
         while arg_guesser.file_remains():
             filename = arg_guesser.current_file()
             extracted_frames = [x for x in arg_guesser.handle_next_file()]
-            l += len(extracted_frames)
             annotated_frames += roleextractor.fill_roles(
                 extracted_frames, verbnet_classes, role_matcher, filename)
-        print(l)
-        print(len(annotated_frames))
-        print("Building VerbNet-like structures...")
+        
+        print("\nBuilding VerbNet-like structures...")
         for frame in annotated_frames:
             converted_frame = VerbnetFrame.build_from_frame(frame)
             vn_frames.append(converted_frame)
