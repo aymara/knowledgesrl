@@ -85,7 +85,10 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
     #stats_data["arg_extracted_bad"] += sum(
     #    [len(x.args) for x in extracted_frames if x.frame_name == ""])
     
-    # Discard every frame for which there was no match
+    # For LUCorpus, discard every frame for which there was no match
+    if options.corpus_lu:
+        extracted_frames = [x for x in extracted_frames if x.frame_name != ""]
+        
     return extracted_frames
 
 def correct_num_tags(extracted_frame, original_sentence):
