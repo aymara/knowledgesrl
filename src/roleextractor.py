@@ -39,7 +39,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     
     previous_id = -1
     sentence_frames = []
-    for frame in fn_reader.frames:
+    for frame in fn_reader.iter_frames():
         stats_data["args_instanciated"] += len(
             [x for x in frame.args if x.instanciated])
         

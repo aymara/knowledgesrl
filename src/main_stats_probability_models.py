@@ -37,7 +37,7 @@ if __name__ == "__main__":
             options.fulltext_corpus, options.framenet_parsed,
             core_args_only=options.core_args_only)
             
-    for frame in fn_reader.frames:
+    for frame in fn_reader.iter_frames():
         stats_data["args"] += len(frame.args)
         stats_data["frames"] += 1
 

@@ -39,16 +39,13 @@ class FNAllReader:
         
         self.trees = []
         self.sentences_syntax = []
-        self.frames = []
         
         self.stats = {
             "files":0
         }
-        
-        self.handle_corpus()
 
-    def handle_corpus(self):
-        """Read the corpus and fill self.frames"""
+    def iter_frames(self):
+        """Read the corpus and yield every valid frame"""
         files = os.listdir(self.corpus_path)
         
         for filename in sorted(files):
@@ -68,7 +65,8 @@ class FNAllReader:
 
             for frame in reader.frames:
                 if self.handle_frame(frame):
-                    self.frames.append(frame)
+                    yield frame
+        
         print("")
     
     def load_syntax_file(self, filename):
@@ -111,8 +109,8 @@ class FNAllReader:
                 found = True
                 break
         if not found:
-            print("\nframenetparsedreader : predicate \"{}\" not found in "
-                "sentence {}".format(search, frame.tree.flat()))
+            #print("\nframenetparsedreader : predicate \"{}\" not found in "
+            #    "sentence {}".format(search, frame.tree.flat()))
             return False
         
         frame.passive = FNAllReader.is_passive(node)
@@ -138,15 +136,16 @@ class FNAllReaderTest(unittest.TestCase):
         print("Checking FrameNetAllReader")
         extractor = FNAllReader(options.fulltext_corpus, options.framenet_parsed)
 
-        frame = extractor.frames[26]
-        self.assertTrue(frame.sentence == ("A few months ago "
+        frames = [x for x in extractor.iter_frames()]
+        frame = frames[28]
+        self.assertTrue(frame.sentence == ("a few months ago "
             "you received a letter from me telling the success stories of "
-            "people who got jobs with Goodwill 's help ."))
+            "people who got jobs with goodwill 's help ."))
         self.assertTrue(frame.predicate.lemma == "receive")
         self.assertTrue(frame.passive == False)
         self.assertTrue(frame.tree.flat() == frame.sentence)
         
-        frame = extractor.frames[40]
+        frame = frames[42]
         self.assertTrue(frame.predicate.lemma == "use")
         self.assertTrue(frame.passive == True)
 

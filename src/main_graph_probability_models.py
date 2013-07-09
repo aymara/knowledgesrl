@@ -47,7 +47,7 @@ if __name__ == "__main__":
             corpus_path, options.framenet_parsed,
             core_args_only=options.core_args_only)
 
-    for frame in fn_reader.frames:
+    for frame in fn_reader.iter_frames():
         if not frame.predicate.lemma in verbnet: continue
             
         annotated_frames.append(frame)
