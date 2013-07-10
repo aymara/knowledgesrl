@@ -14,6 +14,16 @@ import verbnetprepclasses
 import paths
 
 class VNRestriction:
+
+    """ A semantic condition associated to a role in VerbNet
+    
+    :var type: str | None -- The semantic class associated with the restriction
+    :var children: VNRestriction List -- For compound condition, the list of children
+    :var logical_rel: str -- The logical relation between the children
+    
+    """
+    
+    # List of possible values for :type
     possible_types = {
         "abstract", "animal", "animate", "body_part", "comestible",
         "communication", "concrete", "currency", "elongated", "force",
@@ -22,72 +32,103 @@ class VNRestriction:
         "sound", "substance", "time", "vehicle"
     }
     
-    def __init__(self, restr_type=None, child1=None, child2=None,
-        logical_rel=None, empty=False
+    def __init__(self, restr_type=None, children=[],
+        logical_rel=None
     ):
         if restr_type != None and not restr_type in VNRestriction.possible_types:
             raise Exception("VNRestriction : unhandled restriction "+restr_type)
         
-        if child1 != None and not isinstance(child1, self.__class__):
-            raise Exception("VNRestriction : invalid argument for logical relation")
-        if child2 != None and not isinstance(child2, self.__class__):
-            raise Exception("VNRestriction : invalid argument for logical relation")
+        for child in children:
+            if not isinstance(child, self.__class__):
+                raise Exception("VNRestriction : invalid child")
             
         self.type = restr_type
-        self.child1 = child1
-        self.child2 = child2
+        self.children = children
         self.logical_rel = logical_rel
-        self.empty = empty
     
     def __str__(self):
-        if self.empty:
+        if self._is_empty_restr():
             return "NORESTR"
         if self.logical_rel == None:
             return self.type
         if self.logical_rel == "NOT":
-            return "(NOT "+str(self.child1)+")"
-        return "("+str(self.child1)+" "+self.logical_rel+" "+str(self.child2)+")"
+            return "(NOT "+str(self.children[0])+")"
+        return "("+(") "+self.logical_rel+" (").join([str(x) for x in self.children])+")"
     
     def __repr__(self):
         return self.__str__()
     
+    def __eq__(self, other):
+        # Technically, this does not return True for any couple of equivalent
+        # restrictions, such as (NOT(NOT a AND NOT b)), (a OR b), but this
+        # does not matter since VerbNet logic statements are very simple
+        
+        if not isinstance(other, self.__class__): return False
+        if self.type != None or other.type != None: return self.type == other.type
+        if self.logical_rel != other.logical_rel: return False
+        
+        # We cannot use Python's buildin unordered sets, since
+        # VNRestriction are not hashable
+        return (all([x in other.children for x in self.children]) and
+                all([x in self.children for x in other.children]))
+    
+    def _is_empty_restr(self):
+        return self.logical_rel == "AND" and len(self.children) == 0
+    
     def _simple_match(self, word):
         """ Not implemented """
         pass
-        
+    
     def match(self, word):
-        if self.empty: return True
-        
         if self.logical_rel == None:
             return self._simple_match(word)
         elif self.logical_rel == "NOT":
-            return not self.child1.match(word)
+            return not self.children[0].match(word)
         elif self.logical_rel == "AND":
-            return self.child1.match(word) and self.child2.match(word)
+            return all([x.match(word) for x in self.children])
         elif self.logical_rel == "OR":
-            return self.child1.match(word) or self.child2.match(word)
+            return any([x.match(word) for x in self.children])
         else:
             raise Exception("VNRestriction.match : invalid logical relation")
+
+    def get_atomic_restrictions(self):
+        """ Returns the list of """
+        if self.empty: return set()
+        if self.child1 == None: return {self.type}
+        if self.child2 == None: return self.child1.get_atomic_restrictions()
+        return (self.child1.get_atomic_restrictions() |
+            self.child2.get_atomic_restrictions())
     
+    @staticmethod
+    def _build_keyword(r1, r2, kw):
+        if r1.logical_rel == kw and r2.logical_rel == kw:
+            return VNRestriction(children=r1.children + r2.children, logical_rel=kw)
+        if r1.logical_rel == kw:
+            return VNRestriction(children=r1.children + [r2], logical_rel=kw)
+        if r2.logical_rel == kw:
+            return VNRestriction(children=[r1] + r2.children, logical_rel=kw)
+        else:
+            return VNRestriction(children=[r1, r2], logical_rel=kw)
+        
     @staticmethod
     def build(restr_type):
         return VNRestriction(restr_type=restr_type)
-    
+
     @staticmethod
     def build_and(r1, r2):
-        return VNRestriction(child1=r1, child2=r2, logical_rel="AND")
+        return VNRestriction._build_keyword(r1, r2, "AND")
     
     @staticmethod
     def build_or(r1, r2):
-        return VNRestriction(child1=r1, child2=r2, logical_rel="OR")
+        return VNRestriction._build_keyword(r1, r2, "OR")
     
     @staticmethod
     def build_not(r):
-        return VNRestriction(child1=r, logical_rel="NOT")
+        return VNRestriction(children=[r], logical_rel="NOT")
         
     @staticmethod
     def build_empty():
-        return VNRestriction(empty=True)
+        return VNRestriction(children=[], logical_rel="AND")
     
     @staticmethod 
     def build_from_xml(xml):
@@ -115,13 +156,6 @@ class VNRestriction:
             else:
                 result = VNRestriction.build_and(result, restr)
         return result
-    
-    def get_atomic_restrictions(self):
-        if self.empty: return set()
-        if self.child1 == None: return {self.type}
-        if self.child2 == None: return self.child1.get_atomic_restrictions()
-        return (self.child1.get_atomic_restrictions() |
-            self.child2.get_atomic_restrictions())
 
 class VerbnetReader:
 
@@ -487,9 +521,9 @@ class VerbnetReaderTest(unittest.TestCase):
         ]
         restrictions_str = {
             "sparkle":["(NOT animate)", "NORESTR"],
-            "employ":["(animate OR organization)", "NORESTR"],
+            "employ":["(animate) OR (organization)", "NORESTR"],
             "break":["solid"],
-            "suggest":["(animate OR organization)", "communication"],
+            "suggest":["(animate) OR (organization)", "communication"],
             "snooze":["animate"]
         }
         
