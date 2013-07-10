@@ -186,7 +186,7 @@ class VerbnetFrame:
         # Transform the structure into a list
         structure = structure.split(" ")
         #structure = VerbnetFrame._strip_leftpart_keywords(structure)
-                
+        
         result = VerbnetFrame(structure, [], predicate=frame.predicate.lemma)
         result.num_slots = num_slots
         
@@ -301,8 +301,8 @@ class VerbnetFrame:
             if (phrase_type == "PP" and
                 arg_first_word in verbnetprepclasses.sub_pronouns
             ):
-                added_length = 6 + len(arg_first_word)
-                structure = "{}|| {} S|{}".format(before, arg_first_word, after)
+                added_length = 8 + len(arg_first_word)
+                structure = "{} || {} S| {}".format(before, arg_first_word, after)
             # Replace every "PP" by "prep NP"
             elif phrase_type == "PP":
                 prep = ""
@@ -313,8 +313,8 @@ class VerbnetFrame:
                 if prep == "":
                     prep = arg_first_word
                          
-                added_length = 7 + len(prep)
-                structure = "{}|| {} NP|{}".format(before, prep, after)
+                added_length = 9 + len(prep)
+                structure = "{} || {} NP| {}".format(before, prep, after)
             # Replace every "PPing" by "prep S_ING",
             elif phrase_type == "PPing":
                 prep = ""
@@ -325,15 +325,15 @@ class VerbnetFrame:
                 if prep == "":
                     prep = arg_first_word
                          
-                added_length = 10 + len(prep)
-                structure = "{}|| {} S_ING|{}".format(before, prep, after)
+                added_length = 12 + len(prep)
+                structure = "{} || {} S_ING| {}".format(before, prep, after)
             # Replace every "Swhether" and "S" by "that S", "if S", ...
             elif phrase_type in ["Swhether", "Sub"]:
-                added_length = 6 + len(arg_first_word)
-                structure = "{}|| {} S|{}".format(before, arg_first_word, after)
+                added_length = 8 + len(arg_first_word)
+                structure = "{} || {} S| {}".format(before, arg_first_word, after)
             else:
-                added_length = 4 + len(phrase_type)
-                structure = "{}|| {}|{}".format(before, phrase_type, after)
+                added_length = 6 + len(phrase_type)
+                structure = "{} || {}| {}".format(before, phrase_type, after)
             
             # Compute the new position of the predicate if we reduced an argument before it
             if argument.begin - new_begin < predicate_begin:
@@ -341,7 +341,7 @@ class VerbnetFrame:
                 predicate_begin -= offset
                 predicate_end -= offset
 
-        structure = "{}|| V|{}".format(
+        structure = "{} || V| {}".format(
             structure[0:predicate_begin], structure[1+predicate_end:])
          
         return structure
