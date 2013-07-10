@@ -3,6 +3,24 @@
 
 import unittest
 
+class NoHashDefaultDict:
+    def __init__(self, builder):
+        self.keys = []
+        self.values = []
+        self.builder = builder
+        
+    def __getitem__(self, key):
+        #print("__getitem__(self, {})".format(key))
+        try:
+            return self.values[self.keys.index(key)]
+        except Exception:
+            self.keys.append(key)
+            self.values.append(self.builder())
+            return self.values[-1]
+    
+    def __iter__(self):
+        return self.keys.__iter__()
+
 class VNRestriction:
 
     """ A semantic condition associated to a role in VerbNet
@@ -28,12 +46,14 @@ class VNRestriction:
         if restr_type != None and not restr_type in VNRestriction.possible_types:
             raise Exception("VNRestriction : unhandled restriction "+restr_type)
         
-        for child in children:
+        keep = [True] * len(children)
+        for i, child in enumerate(children):
             if not isinstance(child, self.__class__):
                 raise Exception("VNRestriction : invalid child")
+            keep[i] = (children.index(child) == i)
             
         self.type = restr_type
-        self.children = children
+        self.children = [children[i] for i in range(len(children)) if keep[i]]
         self.logical_rel = logical_rel
     
     def __str__(self):
@@ -95,6 +115,7 @@ class VNRestriction:
     def _build_keyword(r1, r2, kw):
         if r1._is_empty_restr(): return r2
         if r2._is_empty_restr(): return r1
+        if r1 == r2: return r1
         
         if r1.logical_rel == kw and r2.logical_rel == kw:
             return VNRestriction(children=r1.children + r2.children, logical_rel=kw)
