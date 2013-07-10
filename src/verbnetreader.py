@@ -9,153 +9,9 @@ import os
 import sys
 
 from framestructure import *
-from framematcher import FrameMatcher
+from verbnetrestrictions import VNRestriction
 import verbnetprepclasses
 import paths
-
-class VNRestriction:
-
-    """ A semantic condition associated to a role in VerbNet
-    
-    :var type: str | None -- The semantic class associated with the restriction
-    :var children: VNRestriction List -- For compound condition, the list of children
-    :var logical_rel: str -- The logical relation between the children
-    
-    """
-    
-    # List of possible values for :type
-    possible_types = {
-        "abstract", "animal", "animate", "body_part", "comestible",
-        "communication", "concrete", "currency", "elongated", "force",
-        "garment", "human", "int_control", "location", "machine", "nonrigid",
-        "organization", "plural", "pointy", "refl", "region", "scalar", "solid",
-        "sound", "substance", "time", "vehicle"
-    }
-    
-    def __init__(self, restr_type=None, children=[],
-        logical_rel=None
-    ):
-        if restr_type != None and not restr_type in VNRestriction.possible_types:
-            raise Exception("VNRestriction : unhandled restriction "+restr_type)
-        
-        for child in children:
-            if not isinstance(child, self.__class__):
-                raise Exception("VNRestriction : invalid child")
-            
-        self.type = restr_type
-        self.children = children
-        self.logical_rel = logical_rel
-    
-    def __str__(self):
-        if self._is_empty_restr():
-            return "NORESTR"
-        if self.logical_rel == None:
-            return self.type
-        if self.logical_rel == "NOT":
-            return "(NOT "+str(self.children[0])+")"
-        return "("+(") "+self.logical_rel+" (").join([str(x) for x in self.children])+")"
-    
-    def __repr__(self):
-        return self.__str__()
-    
-    def __eq__(self, other):
-        # Technically, this does not return True for any couple of equivalent
-        # restrictions, such as (NOT(NOT a AND NOT b)), (a OR b), but this
-        # does not matter since VerbNet logic statements are very simple
-        
-        if not isinstance(other, self.__class__): return False
-        if self.type != None or other.type != None: return self.type == other.type
-        if self.logical_rel != other.logical_rel: return False
-        
-        # We cannot use Python's buildin unordered sets, since
-        # VNRestriction are not hashable
-        return (all([x in other.children for x in self.children]) and
-                all([x in self.children for x in other.children]))
-    
-    def _is_empty_restr(self):
-        return self.logical_rel == "AND" and len(self.children) == 0
-    
-    def _simple_match(self, word):
-        """ Not implemented """
-        pass
-    
-    def match(self, word):
-        if self.logical_rel == None:
-            return self._simple_match(word)
-        elif self.logical_rel == "NOT":
-            return not self.children[0].match(word)
-        elif self.logical_rel == "AND":
-            return all([x.match(word) for x in self.children])
-        elif self.logical_rel == "OR":
-            return any([x.match(word) for x in self.children])
-        else:
-            raise Exception("VNRestriction.match : invalid logical relation")
-
-    def get_atomic_restrictions(self):
-        """ Returns the list of """
-        if self.empty: return set()
-        if self.child1 == None: return {self.type}
-        if self.child2 == None: return self.child1.get_atomic_restrictions()
-        return (self.child1.get_atomic_restrictions() |
-            self.child2.get_atomic_restrictions())
-    
-    @staticmethod
-    def _build_keyword(r1, r2, kw):
-        if r1.logical_rel == kw and r2.logical_rel == kw:
-            return VNRestriction(children=r1.children + r2.children, logical_rel=kw)
-        if r1.logical_rel == kw:
-            return VNRestriction(children=r1.children + [r2], logical_rel=kw)
-        if r2.logical_rel == kw:
-            return VNRestriction(children=[r1] + r2.children, logical_rel=kw)
-        else:
-            return VNRestriction(children=[r1, r2], logical_rel=kw)
-        
-    @staticmethod
-    def build(restr_type):
-        return VNRestriction(restr_type=restr_type)
-
-    @staticmethod
-    def build_and(r1, r2):
-        return VNRestriction._build_keyword(r1, r2, "AND")
-    
-    @staticmethod
-    def build_or(r1, r2):
-        return VNRestriction._build_keyword(r1, r2, "OR")
-    
-    @staticmethod
-    def build_not(r):
-        return VNRestriction(children=[r], logical_rel="NOT")
-        
-    @staticmethod
-    def build_empty():
-        return VNRestriction(children=[], logical_rel="AND")
-    
-    @staticmethod 
-    def build_from_xml(xml):
-        disjunction = "logic" in xml.attrib and xml.attrib["logic"] == "or"
-        
-        restr_list = []
-        for xml_restr in xml:
-            if xml_restr.tag == "SELRESTRS":
-                restr_list.append(VNRestriction.build_from_xml(xml_restr))
-            elif xml_restr.tag == "SELRESTR":
-                restr = VNRestriction.build(xml_restr.attrib["type"])
-                if xml_restr.attrib["Value"] == "-":
-                    restr_list.append(VNRestriction.build_not(restr))
-                else:
-                    restr_list.append(restr)
-            else:
-                raise Exception("Unknown tag in restrictions : "+xml_restr.tag)
-        
-        result = VNRestriction.build_empty()
-        for i, restr in enumerate(restr_list):
-            if i == 0:
-                result = restr
-            elif disjunction:
-                result = VNRestriction.build_or(result, restr)
-            else:
-                result = VNRestriction.build_and(result, restr)
-        return result
 
 class VerbnetReader:
 
@@ -497,7 +353,7 @@ class VerbnetReader:
 class VerbnetReaderTest(unittest.TestCase):
 
     """Unit test class"""
-
+    
     def test_global(self):
         path = paths.VERBNET_PATH
         reader = VerbnetReader(path)
