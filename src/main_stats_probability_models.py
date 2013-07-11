@@ -17,6 +17,7 @@ if __name__ == "__main__":
     import rolematcher
     import probabilitymodel
     import headwordextractor
+    from verbnetrestrictions import NoHashDefaultDict
     from bootstrap import *
     import paths
 
@@ -51,13 +52,20 @@ if __name__ == "__main__":
         converted_frame = VerbnetFrame.build_from_frame(frame)
         vn_frames.append(converted_frame)
     stats_data["files"] += fn_reader.stats["files"]
+    
+    hw_extractor = headwordextractor.HeadWordExtractor(options.framenet_parsed)
 
+    print("Extracting arguments headwords...", file=sys.stderr)
+    hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
+    
 
     print("\nLoading FrameNet and VerbNet roles associations...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
     model = probabilitymodel.ProbabilityModel()
 
     print("Frame matching...", file=sys.stderr)
+    all_matcher = []
+    data_restr = NoHashDefaultDict(lambda : Counter())
     for good_frame, frame in zip(annotated_frames, vn_frames):
         num_instanciated = len([x for x in good_frame.args if x.instanciated])
         predicate = good_frame.predicate.lemma
@@ -68,16 +76,33 @@ if __name__ == "__main__":
      
         try:
             matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
+            all_matcher.append(matcher)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue
 
         stats_data["frames_mapped"] += 1
-
+        
         # Actual frame matching
         for test_frame in verbnet[predicate]:
-            matcher.new_match(test_frame)
+            if options.passive and good_frame.passive:
+                try:
+                    for passivized_frame in test_frame.passivize():
+                        matcher.new_match(passivized_frame)
+                except:
+                    pass
+            else:
+                matcher.new_match(test_frame)
+        
         frame.roles = matcher.possible_distribs()
+        
+        # Update semantic restrictions data
+        for word, restr in matcher.get_matched_restrictions().items():
+            if restr.logical_rel == "AND":
+                for subrestr in restr.children:
+                    data_restr[subrestr].update([word])
+            else:
+                data_restr[restr].update([word])
         
         # Update probability model
         for roles, slot_type, prep in zip(frame.roles, frame.slot_types, frame.slot_preps):
@@ -100,8 +125,8 @@ if __name__ == "__main__":
     print("{:>15} {:>15} {:>20} {:>10} {:>15}".format(
            "Model", "Precision", "Total precision", "Cover", "Total cover"))
            
-    for probability_model in ["FM", "default", "slot_class", "slot", "predicate_slot"]:
-        if probability_model != "FM":
+    for probability_model in ["FM", "default", "slot_class", "slot", "predicate_slot", "semantic"]:
+        if probability_model not in ["FM", "semantic"]:
             for frame in vn_frames:
                 for i in range(0, len(frame.roles)):
                     if len(frame.roles[i]) > 1:
@@ -110,9 +135,15 @@ if __name__ == "__main__":
                             frame.predicate, probability_model)
                         if new_role != None:
                             frame.roles[i] = set([new_role])
+        if probability_model == "semantic":
+            for matcher in all_matcher:
+                matcher.handle_semantic_restrictions(data_restr)
+                matcher.frame.roles = matcher.possible_distribs()
+
+        
         stats_quality(annotated_frames, vn_frames, role_matcher,
             verbnet_classes, options.gold_args)
-
+        
         good = stats_data["one_correct_role"]
         bad = stats_data["one_bad_role"]
         resolved = stats_data["one_role"]
