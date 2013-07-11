@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+from collections import Counter
 
 class NoHashDefaultDict:
     def __init__(self, builder):
@@ -85,30 +86,40 @@ class VNRestriction:
     def _is_empty_restr(self):
         return self.logical_rel == "AND" and len(self.children) == 0
     
-    def _simple_match(self, word):
-        """ Not implemented """
-        pass
-    
-    def match(self, word):
-        if self.logical_rel == None:
-            return self._simple_match(word)
-        elif self.logical_rel == "NOT":
-            return not self.children[0].match(word)
-        elif self.logical_rel == "AND":
-            return all([x.match(word) for x in self.children])
-        elif self.logical_rel == "OR":
-            return any([x.match(word) for x in self.children])
-        else:
-            raise Exception("VNRestriction.match : invalid logical relation")
-
-    def get_atomic_restrictions(self):
-        """ Return the list of basic restrictions needed to compute this restriction """
-        if self._is_empty_restr(): return set()
-        if len(self.children) == 0: return {self.type}
+    def match_score(self, word, data):
+        base_score = 0
+        if word in data[self]: base_score = data[self][word]
         
-        result = set()
+        if self.logical_rel == None:
+            children_score = 0
+        elif self.logical_rel == "NOT":
+            children_score = (-1) * self.children[0].match_score(word, data)
+            
+            # Attribute a score of 1 for finding no match
+            if children_score == 0: children_score = 1
+        elif self.logical_rel == "OR":
+            children_score = max(
+                [x.match_score(word, data) for x in self.children])
+        elif self.logical_rel == "AND":
+            children_score = min(
+                [x.match_score(word, data) for x in self.children])
+        else:
+            raise Exception("VNRestriction.match_score : invalid logical relation")
+        
+        return base_score + children_score
+
+    def get_atomic_restrictions(self, as_str=True):
+        """ Return the list of basic restrictions needed to compute this restriction """
+        if self._is_empty_restr(): return set() if as_str else []
+        if len(self.children) == 0: 
+            return {self.type} if as_str else [self]
+        
+        result = set() if as_str else []
         for child in self.children:
-            result |= child.get_atomic_restrictions()
+            if as_str:
+                result |= child.get_atomic_restrictions()
+            else:
+                result += child.get_atomic_restrictions(as_str=False)
         return result
     
     @staticmethod
@@ -195,6 +206,36 @@ class VNRestrictionTest(unittest.TestCase):
         subrestr = restr6.get_atomic_restrictions()
         self.assertEqual(subrestr, set(["human", "animal", "solid"]))
         self.assertTrue(str(restr8) == str(restr7))
+        
+    def test_scores(self):
+        restr1 = VNRestriction.build("human")
+        restr2 = VNRestriction.build("animal")
+        
+        restr3 = VNRestriction.build_or(restr1, restr2)
+        restr4 = VNRestriction.build_and(restr1, restr2)
+        restr5 = VNRestriction.build_not(restr3)
+        
+        data = NoHashDefaultDict(lambda : Counter())
+        data[restr1].update({"people":4, "president":10, "them":1})
+        data[restr2].update({"dog":5, "cat":8, "them":2})
+        data[restr3].update({"people":2})
+        
+        # Tests on basic restrictions
+        self.assertEqual(restr1.match_score("people", data), 4)
+        self.assertEqual(restr1.match_score("cat", data), 0)
+        self.assertEqual(restr2.match_score("dog", data), 5)
+        
+        # OR relations must take the max score of the children
+        self.assertEqual(restr3.match_score("president", data), 10)
+        self.assertEqual(restr3.match_score("them", data), 2)
+        # and use data explictly associated with them
+        self.assertEqual(restr3.match_score("people", data), 6)
+        
+        # AND relations must take the min score of the children
+        self.assertEqual(restr4.match_score("people", data), 0)
+        
+        # NOT relations must take the opposite score of their child
+        self.assertEqual(restr5.match_score("people", data), -6)
         
 if __name__ == "__main__":
     unittest.main()
