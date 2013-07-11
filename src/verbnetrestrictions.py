@@ -87,6 +87,9 @@ class VNRestriction:
         return self.logical_rel == "AND" and len(self.children) == 0
     
     def match_score(self, word, data):
+        # Give a very small score for matching NORESTR
+        if self._is_empty_restr(): return 1 / 100
+    
         base_score = 0
         if word in data[self]: base_score = data[self][word]
         
@@ -214,6 +217,7 @@ class VNRestrictionTest(unittest.TestCase):
         restr3 = VNRestriction.build_or(restr1, restr2)
         restr4 = VNRestriction.build_and(restr1, restr2)
         restr5 = VNRestriction.build_not(restr3)
+        restr6 = VNRestriction.build_empty()
         
         data = NoHashDefaultDict(lambda : Counter())
         data[restr1].update({"people":4, "president":10, "them":1})
@@ -236,6 +240,9 @@ class VNRestrictionTest(unittest.TestCase):
         
         # NOT relations must take the opposite score of their child
         self.assertEqual(restr5.match_score("people", data), -6)
+        self.assertEqual(restr5.match_score("building", data), 1)
+        
+        self.assertEqual(restr6.match_score("building", data), 1 / 100)
         
 if __name__ == "__main__":
     unittest.main()
