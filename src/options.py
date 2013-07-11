@@ -19,19 +19,21 @@ dump_file = ""
 passive = True
 use_test_set = False
 corpus_lu = False
+semrestr = False
 fulltext_corpus = paths.FRAMENET_FULLTEXT
 framenet_parsed = paths.FRAMENET_PARSED
 
 options = getopt.getopt(sys.argv[1:], "d:",
     ["baseline", "fmatching-algo=", "add-non-core-args", "help",
      "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump",
-     "no-passive", "baseline", "test-set", "lu"])
+     "no-passive", "baseline", "test-set", "lu", "semantic-restrictions"])
 
 display_syntax = False
 syntax_str = ("main.py [--baseline] [-d num_sample] [--fmatching-algo=algo] "
               "[--model=probability_model] [--add-non-core-args] "
               "[--bootstrap] [--no-gold-args] [--heuristic-rules]] "
-              "[--dump filename] [--no-passive] [--test-set] [--lu] [--help]")
+              "[--dump filename] [--no-passive] [--test-set] [--lu] "
+              "[--semantic-restrictions] [--help]")
 
 for opt,value in options[0]:
     # Removes our enhancements
@@ -73,6 +75,8 @@ for opt,value in options[0]:
         corpus_lu = True
         fulltext_corpus = paths.FRAMENET_LU
         framenet_parsed = paths.FRAMENET_LU_PARSED
+    if opt == "--semantic-restrictions":
+        semrestr = True
     if opt == "--help":
         display_syntax = True
             

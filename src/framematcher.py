@@ -20,6 +20,7 @@ subject.
 
 from framestructure import *
 from collections import defaultdict
+from verbnetrestrictions import VNRestriction
 import unittest
 import sys
 import pickle
@@ -60,12 +61,145 @@ class FrameMatcher():
             raise EmptyFrameError(frame)
 
         self.frame = frame
-        self.best_score = 0
-        self.best_frames = []
-        self.num_new_match = 0
-        self.possible_roles = [{} for x in range(self.frame.num_slots)]
         self.algo = algo
-        self.semantic_restrictions = defaultdict(lambda : {})
+        
+        self.best_score = 0
+        # (VerbnetFrame, int Dict) List
+        self.best_data = []
+    
+    def handle_semantic_restrictions(self, data):
+        final_data = []
+        
+        scores = [self.frame_semantic_score(x, data) for x in self.best_data]
+        best_score = max(scores)
+        self.best_data = [self.best_data[i] for i in range(0, len(scores))
+            if scores[i] == best_score]
+    
+    def frame_semantic_score(self, frame_data, semantic_data):
+        frame, mapping = frame_data
+        score = 0
+        for slot1, slot2 in enumerate(mapping):
+            if slot2 == None: continue
+            if slot2 >= len(frame.role_restrictions): continue
+            word = self.frame.headwords[slot1]
+            restr = frame.role_restrictions[slot2]
+            score += restr.match_score(word, semantic_data)
+            
+        return score
+    
+    def get_matched_restrictions(self):
+        result = {}
+        
+        slots = self.possible_distribs()
+        for i, slot in enumerate(slots):
+            if slot == None or len(slot) != 1: continue
+            
+            restr = VNRestriction.build_empty()
+            for frame, mapping in self.best_data:
+                if mapping[i] == None: continue
+                if mapping[i] >= len(frame.role_restrictions): continue
+                restr = VNRestriction.build_or(restr,
+                    frame.role_restrictions[mapping[i]])
+            result[self.frame.headwords[i]] = restr
+            
+        return result
+    
+    def _matching_baseline(self, test_frame, slots_associations):
+        # As slots are not attributed in order, we need to keep a list
+        # of the slots that have not been attributed yet
+        available_slots = []
+        num_match = 0
+
+        for i, x in enumerate(test_frame.slot_types):
+            available_slots.append(
+                {"slot_type":x, "pos":i, "prep":test_frame.slot_preps[i]}
+            )
+
+        for slot_pos, slot_type in enumerate(self.frame.slot_types):
+            # For every slot, try to find a matching slot in available_slots
+            i, matching_slot = -1, -1
+                
+            for test_slot_data in available_slots:
+                # Could have used enumerate, but it looks better like this
+                # as i is used after the loop
+                i += 1
+
+                # We want a slot that has the same type and the same prep
+                # (or a list slot preps containing our preposition)
+                if test_slot_data["slot_type"] != slot_type:
+                    continue
+                if (slot_type == VerbnetFrame.slot_types["prep_object"] and
+                    not VerbnetFrame._is_a_match(
+                        self.frame.slot_preps[slot_pos],
+                        test_slot_data["prep"])
+                ):
+                    continue
+                matching_slot = test_slot_data["pos"]
+                break # Stop at the first good slot we find
+                
+            if matching_slot != -1:
+                del available_slots[i] # Slot i has been attributed
+                #FIXME : we need to check that enough roles were given in VerbNet
+                if len(test_frame.roles) > matching_slot:
+                    slots_associations[slot_pos] = matching_slot
+                        
+                num_match += 1
+        return num_match
+        
+    def _matching_sync_predicates(self, test_frame, slots_associations):
+        num_match = 0
+        i, j = 0, 0
+        index_v_1 = self.frame.structure.index("V")
+        index_v_2 = test_frame.structure.index("V")
+        slot_1, slot_2 = 0, 0
+        num_slots_before_v_1 = 0
+        num_slots_before_v_2 = 0
+            
+        for elem in self.frame.structure:
+            if VerbnetFrame._is_a_slot(elem):
+                num_slots_before_v_1 += 1
+            elif elem == "V": break
+        for elem in test_frame.structure:
+            if VerbnetFrame._is_a_slot(elem):
+                num_slots_before_v_2 += 1
+            elif elem == "V": break
+
+        while i < len(self.frame.structure) and j < len(test_frame.structure):
+            elem1 = self.frame.structure[i]
+            elem2 = test_frame.structure[j]
+            
+            if VerbnetFrame._is_a_match(elem1, elem2):
+                if VerbnetFrame._is_a_slot(elem1):
+                    num_match += 1
+                    # test_frame.roles can be too short. This will for instance
+                    # happen in the "NP V NP S_INF" structure of want-32.1,
+                    # where S_INF is given no role
+                    if slot_2 < len(test_frame.roles):
+                        slots_associations[slot_1] = slot_2
+                        slot_1, slot_2 = slot_1 + 1, slot_2 + 1
+            elif i < index_v_1 or j < index_v_2:
+                # If we have not encountered the verb yet, we continue the matching
+                # with everything that follows the verb
+                # This is for instance to prevent a "NP NP V" construct
+                # from interrupting the matching early
+                i, j = index_v_1, index_v_2
+                slot_1, slot_2 = num_slots_before_v_1, num_slots_before_v_2
+            else: break
+            
+            i, j = i + 1, j + 1
+        return num_match
+        
+    def _matching_stop_on_fail(self, test_frame, slots_associations):
+        num_match = 0
+        for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
+            if VerbnetFrame._is_a_match(elem1, elem2):
+                if VerbnetFrame._is_a_slot(elem1):
+                    num_match += 1
+                    if num_match - 1 < len(test_frame.roles):
+                        slot_associations[num_match - 1] = num_match - 1
+            else: break
+        
+        return num_match
     
     def new_match(self, test_frame):
         """Compute the matching score and update the possible roles distribs
@@ -74,128 +208,33 @@ class FrameMatcher():
         :type test_frame: VerbnetFrame.
             
         """
-        self.num_new_match += 1
         slots_associations = [None for x in range(self.frame.num_slots)]
-        num_match = 0
-
+        
         if self.algo == "baseline":
-            # As slots are not attributed in order, we need to keep a list
-            # of the slots that have not been attributed yet
-            available_slots = []
-
-            for i, x in enumerate(test_frame.slot_types):
-                available_slots.append(
-                    {"slot_type":x, "pos":i, "prep":test_frame.slot_preps[i]}
-                )
-
-            for slot_pos, slot_type in enumerate(self.frame.slot_types):
-                # For every slot, try to find a matching slot in available_slots
-                i, matching_slot = -1, -1
-                
-                for test_slot_data in available_slots:
-                    # Could have used enumerate, but it looks better like this
-                    # as i is used after the loop
-                    i += 1
-
-                    # We want a slot that has the same type and the same prep
-                    # (or a list slot preps containing our preposition)
-                    if test_slot_data["slot_type"] != slot_type:
-                        continue
-                    if (slot_type == VerbnetFrame.slot_types["prep_object"] and
-                        not VerbnetFrame._is_a_match(
-                            self.frame.slot_preps[slot_pos],
-                            test_slot_data["prep"])
-                    ):
-                        continue
-                    matching_slot = test_slot_data["pos"]
-                    break # Stop at the first good slot we find
-                
-                if matching_slot != -1:
-                    del available_slots[i] # Slot i has been attributed
-                    #FIXME : we need to check that enough roles were given in VerbNet
-                    if len(test_frame.roles) > matching_slot:
-                        slots_associations[slot_pos] = matching_slot
-                        
-                    num_match += 1
-            
+            matching_function = self._matching_baseline
         elif self.algo == "sync_predicates":
-            """ New algorithm """
-            i, j = 0, 0
-            index_v_1 = self.frame.structure.index("V")
-            index_v_2 = test_frame.structure.index("V")
-            slot_1, slot_2 = 0, 0
-            num_slots_before_v_1 = 0
-            num_slots_before_v_2 = 0
-            
-            for elem in self.frame.structure:
-                if VerbnetFrame._is_a_slot(elem):
-                    num_slots_before_v_1 += 1
-                elif elem == "V": break
-            for elem in test_frame.structure:
-                if VerbnetFrame._is_a_slot(elem):
-                    num_slots_before_v_2 += 1
-                elif elem == "V": break
-
-            while i < len(self.frame.structure) and j < len(test_frame.structure):
-                elem1 = self.frame.structure[i]
-                elem2 = test_frame.structure[j]
-
-                if VerbnetFrame._is_a_match(elem1, elem2):
-                    if VerbnetFrame._is_a_slot(elem1):
-                        num_match += 1
-                        # test_frame.roles can be too short. This will for instance
-                        # happen in the "NP V NP S_INF" structure of want-32.1,
-                        # where S_INF is given no role
-                        if slot_2 < len(test_frame.roles):
-                            slots_associations[slot_1] = slot_2
-                            slot_1, slot_2 = slot_1 + 1, slot_2 + 1
-                elif i < index_v_1 or j < index_v_2:
-                    # If we have not encountered the verb yet, we continue the matching
-                    # with everything that follows the verb
-                    # This is for instance to prevent a "NP NP V" construct
-                    # from interrupting the matching early
-                    i, j = index_v_1, index_v_2
-                    slot_1, slot_2 = num_slots_before_v_1, num_slots_before_v_2
-                else: break
-                   
-                i, j = i + 1, j + 1
+            matching_function = self._matching_sync_predicates
         elif self.algo == "stop_on_fail":
-            """ Former less permissive algorithm """
-            for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
-                if VerbnetFrame._is_a_match(elem1, elem2):
-                    if VerbnetFrame._is_a_slot(elem1):
-                        num_match += 1
-                        if num_match - 1 < len(test_frame.roles):
-                            slot_associations[num_match - 1] = num_match - 1
-                else: break
+            matching_function = self._matching_stop_on_fail
         else:
             raise Exception("Unknown matching algorithm : {}".format(self.algo))
+        
+        num_match = matching_function(test_frame, slots_associations)
 
+        # Score computation
         ratio_1 = num_match / self.frame.num_slots
         if test_frame.num_slots == 0:
             ratio_2 = 1
         else:
             ratio_2 = num_match / test_frame.num_slots
-
         score = int(100 * (ratio_1 + ratio_2))
 
         if score > self.best_score:
-            self.possible_roles = [{} for x in range(self.frame.num_slots)]
-            self.semantic_restrictions = defaultdict(lambda: {})
-            self.best_frames = []
+            # This frame is better than any previous one : reset everything
+            self.best_data = []
         if score >= self.best_score:
-            for slot1, slot2 in enumerate(slots_associations):
-                if slot2 != None:
-                    index = "{}_{}".format(test_frame.vnclass, self.num_new_match)
-                    role = next(iter(test_frame.roles[slot2]))
-                    vn_restriction = test_frame.role_restrictions[slot2]
-                    headword = self.frame.headwords[slot1]
-                    
-                    self.possible_roles[slot1][index] = role
-                    for restriction in vn_restriction.get_atomic_restrictions():
-                        self.semantic_restrictions[restriction][headword] = 0
-            
-            self.best_frames.append(test_frame)
+            # This frame got the best score : add its data
+            self.best_data.append((test_frame, slots_associations))
             self.best_score = score
     
     def possible_distribs(self):
@@ -203,21 +242,16 @@ class FrameMatcher():
         
         :returns: str set list -- The lists of possible roles for each slot
         """
-        return [set(x.values()) for x in self.possible_roles]
-    
-    @staticmethod
-    def compute_all_restrictions(semantic_restrictions):
-        """Fills semantic_restrictions by asking the Python2 script"""
-        with open("semantic_restrictions", "wb") as picklefile:
-            pickle.dump(semantic_restrictions, picklefile, 2)
         
-        os.system("python2.7 wordclassesloader.py --restr")
+        result = [set() for x in range(self.frame.num_slots)]
         
-        with open("semantic_restrictions_answer", "rb") as picklefile:
-            semantic_restrictions.update(pickle.load(picklefile))
-            
-        os.remove("semantic_restrictions")
-        os.remove("semantic_restrictions_answer")
+        for frame, mapping in self.best_data:
+            for slot1, slot2 in enumerate(mapping):
+                if slot2 == None: continue
+                role = next(iter(frame.roles[slot2]))
+                result[slot1].add(role)
+        
+        return result
         
 class frameMatcherTest(unittest.TestCase):
     def test_1(self):
@@ -279,7 +313,7 @@ class frameMatcherTest(unittest.TestCase):
         matcher = FrameMatcher(frame, "baseline")
         for test_frame in test_frames:
             matcher.new_match(test_frame)
-        self.assertEqual(matcher.possible_distribs(), [{"R1"}, {"R2", "R4"}, set(), {"R5"}])
+        self.assertEqual(matcher.possible_distribs(), [{"R1"}, {"R4"}, set(), {"R5"}])
        
 if __name__ == "__main__":
     unittest.main()

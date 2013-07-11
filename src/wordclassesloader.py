@@ -11,31 +11,12 @@ import pickle
 import getopt
 import sys
 
-def match_restriction(word, restr):
-    return False
-
 # Read the arguments to know which of the two tasks we have to do
 handle_wordclasses, handle_morph, handle_restr = True, False, False
-options = getopt.getopt(sys.argv[1:], "", ["morph", "restr"])
+options = getopt.getopt(sys.argv[1:], "", ["morph"])
 for opt,value in options[0]:
     if opt == "--morph":
         handle_wordclasses, handle_morph = False, True
-    if opt == "--restr":
-        handle_wordclasses, handle_restr = False, True
-
-if handle_restr:
-    # Load input data
-    with open("semantic_restrictions", "rb") as picklefile:
-        restrictions = pickle.load(picklefile)
-    
-    for restr in restrictions:
-        for word in restrictions[restr]:
-            if match_restriction(word, restr):
-                restrictions[restr][word] = 1
-    
-    # Save output
-    with open("semantic_restrictions_answer", "wb") as picklefile:
-        pickle.dump(restrictions, picklefile)
 
 if handle_wordclasses:
     # The class of a word is the highest hypernym, except

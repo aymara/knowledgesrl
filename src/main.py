@@ -10,6 +10,7 @@ from framestructure import *
 from stats import *
 from errorslog import *
 from bootstrap import bootstrap_algorithm
+from verbnetrestrictions import NoHashDefaultDict
 import options
 import argguesser
 import roleextractor
@@ -84,8 +85,8 @@ if __name__ == "__main__":
     hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
     
     print("Frame matching...", file=sys.stderr)
-    semantic_restrictions = {}
     all_matcher = []
+    data_restr = NoHashDefaultDict(lambda : Counter())
     for good_frame, frame in zip(annotated_frames, vn_frames):
         num_instanciated = len([x for x in good_frame.args if x.instanciated])
         predicate = good_frame.predicate.lemma
@@ -113,16 +114,20 @@ if __name__ == "__main__":
                     for passivized_frame in test_frame.passivize():
                         matcher.new_match(passivized_frame)
                 except:
-                    #print(good_frame.sentence)
                     pass
             else:
                 matcher.new_match(test_frame)
-        frame.roles = matcher.possible_distribs()
-        for restr, words in matcher.semantic_restrictions.items():
-            if not restr in semantic_restrictions:
-                semantic_restrictions[restr] = {}
-            semantic_restrictions[restr].update(words)
         
+        frame.roles = matcher.possible_distribs()
+        
+        # Update semantic restrictions data
+        for word, restr in matcher.get_matched_restrictions().items():
+            if restr.logical_rel == "AND":
+                for subrestr in restr.children:
+                    data_restr[subrestr].update([word])
+            else:
+                data_restr[restr].update([word])
+            
         # Update probability model
         if not options.bootstrap:
             for roles, slot_type, prep in zip(
@@ -134,8 +139,6 @@ if __name__ == "__main__":
         if options.debug and set() in frame.roles:
             log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
     
-    framematcher.FrameMatcher.compute_all_restrictions(semantic_restrictions)
-    
     if options.dump:
         dumper.add_data_frame_matching(annotated_frames, vn_frames,
             role_matcher, verbnet_classes,
@@ -145,6 +148,14 @@ if __name__ == "__main__":
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)
 
+    if options.semrestr:
+        for matcher in all_matcher:
+            matcher.handle_semantic_restrictions(data_restr)
+            matcher.frame.roles = matcher.possible_distribs()
+
+        stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
+        display_stats(options.gold_args)
+        
     if options.bootstrap:
         print("Computing headwords classes...", file=sys.stderr);
         hw_extractor.compute_word_classes()

@@ -11,7 +11,6 @@ class NoHashDefaultDict:
         self.builder = builder
         
     def __getitem__(self, key):
-        #print("__getitem__(self, {})".format(key))
         try:
             return self.values[self.keys.index(key)]
         except Exception:
