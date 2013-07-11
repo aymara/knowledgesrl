@@ -45,14 +45,10 @@ class EmptyFrameError(Exception):
 class FrameMatcher():
     """Handle frame matching for a given frame that we want to annotate.
     
-    :var predicate: str -- The frame's predicate (for debug purposes)
     :var frame: VerbnetFrame -- The frame to annotate
     :var best_score: int -- The best score encountered among all the matches
-    :var best_frames: VerbnetFrame List -- The frames that achieved this best score (for debug purposes)
-    :var num_new_match: int -- The total number of calls to new_match
-    :var possible_roles: str Dict List -- A map of possible roles for every slot (the keys contains the VerbNet class from which each role comes)
+    :var best_data: (VerbnetFrame, int List) List -- The frames that achieved this best score + the mapping between the slots of :frame and this frame
     :var algo: str -- The algorithm that we want to use
-    :var semantic_restrictions
     
     """
     
@@ -64,10 +60,17 @@ class FrameMatcher():
         self.algo = algo
         
         self.best_score = 0
-        # (VerbnetFrame, int Dict) List
         self.best_data = []
     
     def handle_semantic_restrictions(self, data):
+        """Keep only frames for which the syntactic restriction are
+        the best matched
+        
+        :param data: The gathered relations between restrictions and words
+        :type data: (VNRestriction -> (str Counter)) NoHashDefaultDict
+        
+        """
+        
         final_data = []
         
         scores = [self.frame_semantic_score(x, data) for x in self.best_data]
@@ -76,6 +79,17 @@ class FrameMatcher():
             if scores[i] == best_score]
     
     def frame_semantic_score(self, frame_data, semantic_data):
+        """For a given frame from VerbNet, compute a semantic score between
+        this frame and the headwords of the real frame associated with
+        FrameMatcher.
+        
+        :param frame_data: The frame and the associated mapping
+        :type frame_data: (VerbnetFrame, int List)
+        :param semantic_data: The gathered relations between restrictions and words
+        :type semantic_data: (VNRestriction -> (str Counter)) NoHashDefaultDict
+        
+        """
+        
         frame, mapping = frame_data
         score = 0
         for slot1, slot2 in enumerate(mapping):
@@ -88,6 +102,15 @@ class FrameMatcher():
         return score
     
     def get_matched_restrictions(self):
+        """Returns the list of restrictions for which we know a given word
+        was a match. Only headwords of arguments for which we attributed exactly
+        one possible role are taken into account. The restriction associated to
+        them is the OR the restrictions associated to this slot in every possible
+        frame.
+        
+        :returns: VNRestriction Dict -- a mapping between head words and the restriction they match 
+        
+        """
         result = {}
         
         slots = self.possible_distribs()
@@ -105,6 +128,7 @@ class FrameMatcher():
         return result
     
     def _matching_baseline(self, test_frame, slots_associations):
+        """ Matching algorithm that is the closest to the article's method """
         # As slots are not attributed in order, we need to keep a list
         # of the slots that have not been attributed yet
         available_slots = []
@@ -147,6 +171,10 @@ class FrameMatcher():
         return num_match
         
     def _matching_sync_predicates(self, test_frame, slots_associations):
+        """ Stop the algorithm at the first mismatch encountered after the verb,
+        restart at the verb's position if a mismatch is encountered before the
+        verb """
+        
         num_match = 0
         i, j = 0, 0
         index_v_1 = self.frame.structure.index("V")
@@ -190,6 +218,7 @@ class FrameMatcher():
         return num_match
         
     def _matching_stop_on_fail(self, test_frame, slots_associations):
+        """ Stop the algorithm at the first mismatch encountered """
         num_match = 0
         for elem1,elem2 in zip(self.frame.structure, test_frame.structure):
             if VerbnetFrame._is_a_match(elem1, elem2):

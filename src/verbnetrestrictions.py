@@ -5,7 +5,14 @@ import unittest
 from collections import Counter
 
 class NoHashDefaultDict:
+
+    """Basic reimplementation of defaultdict objects that tolerate indexation
+    by non-hashable objects.
+    """
+
     def __init__(self, builder):
+        """ Same constructor as collections.defaultdict """
+        
         self.keys = []
         self.values = []
         self.builder = builder
@@ -23,7 +30,7 @@ class NoHashDefaultDict:
 
 class VNRestriction:
 
-    """ A semantic condition associated to a role in VerbNet
+    """A semantic condition associated to a role in VerbNet
     
     :var type: str | None -- The semantic class associated with the restriction
     :var children: VNRestriction List -- For compound condition, the list of children
@@ -43,15 +50,23 @@ class VNRestriction:
     def __init__(self, restr_type=None, children=[],
         logical_rel=None
     ):
+        """Private constructor. Use the build* static methods to instanciate 
+        VNRestricitons.
+        Takes care of deleting children that could occurs several time in the
+        list given as argument.
+        
+        """
+        
         if restr_type != None and not restr_type in VNRestriction.possible_types:
             raise Exception("VNRestriction : unhandled restriction "+restr_type)
         
+        # See what children can be discarded (because they occur several times)
         keep = [True] * len(children)
         for i, child in enumerate(children):
             if not isinstance(child, self.__class__):
                 raise Exception("VNRestriction : invalid child")
             keep[i] = (children.index(child) == i)
-            
+        
         self.type = restr_type
         self.children = [children[i] for i in range(len(children)) if keep[i]]
         self.logical_rel = logical_rel
@@ -83,9 +98,19 @@ class VNRestriction:
                 all([x in self.children for x in other.children]))
     
     def _is_empty_restr(self):
+        """ Tell whether this is the empty restriciotn """
         return self.logical_rel == "AND" and len(self.children) == 0
     
     def match_score(self, word, data):
+        """Compute an affinity score between a given word and this restriction.
+        
+        :param word: The word
+        :type word: str
+        :param data: The gathered relations between restrictions and words
+        :type data: (VNRestriction -> (str Counter)) NoHashDefaultDict
+        
+        """
+        
         # Give a very small score for matching NORESTR
         if self._is_empty_restr(): return 1 / 100
     
@@ -110,18 +135,18 @@ class VNRestriction:
         
         return base_score + children_score
 
-    def get_atomic_restrictions(self, as_str=True):
-        """ Return the list of basic restrictions needed to compute this restriction """
-        if self._is_empty_restr(): return set() if as_str else []
-        if len(self.children) == 0: 
-            return {self.type} if as_str else [self]
+    def get_atomic_restrictions(self):
+        """Return the list of basic (one keyword without logical relations)
+        restrictions needed to compute this restriction.
         
-        result = set() if as_str else []
+        This function is no longer used.
+        """
+        if self._is_empty_restr(): return set()
+        if len(self.children) == 0: return {self.type}
+        
+        result = set()
         for child in self.children:
-            if as_str:
-                result |= child.get_atomic_restrictions()
-            else:
-                result += child.get_atomic_restrictions(as_str=False)
+            result |= child.get_atomic_restrictions()
         return result
     
     @staticmethod
@@ -141,26 +166,57 @@ class VNRestriction:
         
     @staticmethod
     def build(restr_type):
+        """Returns a restriction with only a keyword 
+        
+        :returns: VNRestriction -- the resulting restriction
+        """
+        
         return VNRestriction(restr_type=restr_type)
 
     @staticmethod
     def build_and(r1, r2):
+        """Link two restrictions with an AND relation 
+        
+        :returns: VNRestriction -- the resulting restriction
+        """
+        
         return VNRestriction._build_keyword(r1, r2, "AND")
     
     @staticmethod
     def build_or(r1, r2):
+        """Link two restrictions with an OR relation 
+         
+        :returns: VNRestriction -- the resulting restriction
+        """
+         
         return VNRestriction._build_keyword(r1, r2, "OR")
     
     @staticmethod
     def build_not(r):
+        """Apply a NOT operator to a restriction 
+         
+        :returns: VNRestriction -- the resulting restriction
+        """
+         
         return VNRestriction(children=[r], logical_rel="NOT")
         
     @staticmethod
     def build_empty():
+        """Return NORESTR 
+        
+        :returns: VNRestriction -- the resulting empty restriction
+        """
+        
         return VNRestriction(children=[], logical_rel="AND")
     
     @staticmethod 
     def build_from_xml(xml):
+        """Build a restriction matching an XML representation of VerbNet
+        
+        :param xml: The XML representing the restriction in VerbNet
+        :type xml: xml.etree.ElementTree.Element
+        :returns: VNRestriction -- the resulting restriction
+        """
         disjunction = "logic" in xml.attrib and xml.attrib["logic"] == "or"
         
         restr_list = []
@@ -208,6 +264,8 @@ class VNRestrictionTest(unittest.TestCase):
         subrestr = restr6.get_atomic_restrictions()
         self.assertEqual(subrestr, set(["human", "animal", "solid"]))
         self.assertTrue(str(restr8) == str(restr7))
+        self.assertTrue(str(restr4) == "(human) AND (animal)")
+        self.assertTrue(str(restr7) == "(animal) AND (solid) AND (human)")
         
     def test_scores(self):
         restr1 = VNRestriction.build("human")
