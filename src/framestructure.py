@@ -48,11 +48,11 @@ class Frame:
 class VerbnetFrame:
     """A representation of a frame syntaxic structure
     
-    :var structure: String list containing a VerbNet-style representation of the structure
-    :var roles: List of the possible VerbNet roles for each structure's slot
-    :var num_slots: Number of argument slots in :structure
-    :var verbnet_class: For VerbNet-extracted frames, the class number, eg. 9.10
-    :var predicate: For FrameNet-extracted frames, the predicate
+    :var structure: (str | str Set) List -- representation of the structure
+    :var roles: List -- possible VerbNet roles for each structure's slot
+    :var num_slots: int -- number of argument slots in :structure
+    :var verbnet_class: str -- For VerbNet-extracted frames, the class number, eg. 9.10
+    :var predicate: str -- For FrameNet-extracted frames, the predicate
     
     """
     
@@ -116,7 +116,7 @@ class VerbnetFrame:
         for element in self.structure:
             if element == "V":
                 next_expected = VerbnetFrame.slot_types["object"]
-            elif element[0].isupper(): # If this is a slot
+            elif self._is_a_slot(element):
                 if preposition != "":
                     self.slot_types.append(VerbnetFrame.slot_types["prep_object"])
                     self.slot_preps.append(preposition)
@@ -126,7 +126,7 @@ class VerbnetFrame:
                     self.slot_preps.append(None)
                     if next_expected == VerbnetFrame.slot_types["object"]:
                         next_expected = VerbnetFrame.slot_types["indirect_object"]
-            elif isinstance(element, list) or element in verbnetprepclasses.all_preps:
+            elif isinstance(element, set) or element in verbnetprepclasses.all_preps:
                 preposition = element
             
     @staticmethod
@@ -138,7 +138,7 @@ class VerbnetFrame:
         :returns: bool -- True if elem represents a slot, False otherwise
         """
         
-        return elem[0].isupper() and elem != "V"
+        return isinstance(elem, str) and elem[0].isupper() and elem != "V"
 
     @staticmethod
     def _is_a_match(elem1, elem2):
@@ -151,7 +151,7 @@ class VerbnetFrame:
         :returns: bool -- True if this is a match, False otherwise
         """
         
-        return ((isinstance(elem2, list) and elem1 in elem2) or
+        return ((isinstance(elem2, set) and elem1 in elem2) or
             elem1 == elem2)
     
     @staticmethod
@@ -239,7 +239,8 @@ class VerbnetFrame:
         i = new_index_v
         slot = slot_position - 1
         while i < len(frame_without_agent.structure):
-            if frame_without_agent.structure[i][0].isupper():
+            elem = frame_without_agent.structure[i]
+            if self._is_a_slot(elem) or elem == "V":
                 passivizedframes.append(VerbnetFrame(
                     (frame_without_agent.structure[0:i+1] +
                         ["by"] + self.structure[0:old_sbj_end+1] +

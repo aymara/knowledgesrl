@@ -95,7 +95,7 @@ class VerbnetReader:
         # Lexeme at the beginning of a structure are capitalized.
         # We need to them to be completely lowercase to match them against syntax item.
         element = base_structure[0]
-        if element[0].isupper and element.split(".")[0].upper() != element.split(".")[0]:
+        if element[0].isupper() and element.split(".")[0].upper() != element.split(".")[0]:
             base_structure[0] = element.lower()
             
         syntax_data = xml_frame.find("SYNTAX")
@@ -173,8 +173,8 @@ class VerbnetReader:
                 structure = structure + replacements[element]
             # Handle the "a/b" syntax (which means "a" or "b")
             elif "/" in element:
-                structure.append(element.split("/"))
-            # Replace PP by "[preposition list] + NP"
+                structure.append(set(element.split("/")))
+            # Replace PP by "{preposition set} + NP"
             elif element == "PP":
                 new_index, prep = self._read_syntax_data(
                     index_xml, syntax_data, "keyword", base_structure)
@@ -185,9 +185,9 @@ class VerbnetReader:
                         "data":"No syntax data found"
                     })
                     if len(full_element) > 1 and full_element[1] == "location":
-                        structure += [list(verbnetprepclasses.prep["loc"]), "NP"]
+                        structure += [verbnetprepclasses.prep["loc"], "NP"]
                     else:
-                        structure += [list(verbnetprepclasses.all_preps), "NP"]
+                        structure += [verbnetprepclasses.all_preps, "NP"]
                 else:
                     index_xml = new_index
                     structure += [prep, "NP"]
@@ -330,7 +330,7 @@ class VerbnetReader:
                     if (restr.attrib["Value"] == "+"
                         and restr.attrib["type"] in verbnetprepclasses.prep
                     ):
-                        return list(verbnetprepclasses.prep[restr.attrib["type"]])
+                        return verbnetprepclasses.prep[restr.attrib["type"]]
                     else:
                         self.unhandled.append({
                             "file":self.filename,
@@ -345,7 +345,7 @@ class VerbnetReader:
                     "data":"Unknown restriction : {}".format(restr_group.tag)
                 })
         if "value" in xml.attrib:
-            return xml.attrib["value"].split(" ")
+            return set(xml.attrib["value"].split(" "))
         else:
             return ""
 
@@ -362,7 +362,7 @@ class VerbnetReaderTest(unittest.TestCase):
         test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
         test_frames = [
             VerbnetFrame(
-                ['there', 'V', 'NP', list(verbnetprepclasses.prep["loc"]), 'NP'],
+                ['there', 'V', 'NP', verbnetprepclasses.prep["loc"], 'NP'],
                 ['Theme', 'Location'], "43.1"),
             VerbnetFrame(
                 ["NP", "V", "NP", "ADV"],
@@ -395,13 +395,13 @@ class VerbnetReaderTest(unittest.TestCase):
         reader._handle_class(root.getroot(), [], [], [])
         
         list1 = [
-            VerbnetFrame(['NP', 'V', 'NP', ['from'], 'NP'], ['Agent', 'Patient', 'Co-Patient']),
+            VerbnetFrame(['NP', 'V', 'NP', {'from'}, 'NP'], ['Agent', 'Patient', 'Co-Patient']),
             VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
             VerbnetFrame(['NP', 'V'], ['Patient']),
-            VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient']),
+            VerbnetFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient']),
             VerbnetFrame(['NP', 'V'], ['Patient'])]
-        list2 = [VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Patient', 'Co-Patient'])]
-        list3 = [VerbnetFrame(['NP', 'V', ['from'], 'NP'], ['Patient', 'Co-Patient'])]
+        list2 = [VerbnetFrame(['NP', 'V', {'with'}, 'NP'], ['Patient', 'Co-Patient'])]
+        list3 = [VerbnetFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient'])]
         expected_result = {
             'dissociate': list1+list2,
             'disconnect': list1+list2,
