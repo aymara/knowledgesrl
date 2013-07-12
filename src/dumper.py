@@ -39,8 +39,8 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher,
             except framematcher.EmptyFrameError:
                 pass
 
-            best_match_structures = [x.structure[0] for x in matcher.best_data]
-            best_match_roles = [x.roles[0] for x in matcher.best_data]
+            best_match_structures = [x[0].structure for x in matcher.best_data]
+            best_match_roles = [x[0].roles for x in matcher.best_data]
                
         for i, slot in enumerate(found_vn_frame.roles):
             status = "?"
