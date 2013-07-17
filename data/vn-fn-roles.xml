@@ -4022,6 +4022,110 @@
       <role fnrole='Topic' vnrole='Theme'/>
     </roles>
   </vncls>
+  <vncls class='100' fnframe='Possession'>
+    <roles>
+        <role fnrole='Possession' vnrole='Theme'/>
+        <role fnrole='Owner' vnrole='Pivot'/>
+    </roles>
+  </vncls>
+  <vncls class='103' fnframe='Needing'>
+    <roles>
+        <role fnrole='Requirement' vnrole='Theme'/>
+        <role fnrole='Cognizer' vnrole='Pivot'/>
+    </roles>
+  </vncls>
+  <vncls class='105' fnframe='Using'>
+    <roles>
+        <role fnrole='Instrument' vnrole='Theme'/>
+        <role fnrole='Purpose' vnrole='Predicate'/>
+        <role fnrole='Agent' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='109' fnframe='Appearance'>
+    <roles>
+        <role fnrole='Phenomenon' vnrole='Theme'/>
+        <role fnrole='Inference' vnrole='Attribute'/>
+        <role fnrole='Phenomenon' vnrole='Theme'/>
+    </roles>
+  </vncls>
+  <vncls class='11.1' fnframe='Delivery'>
+    <roles>
+        <role fnrole='Theme' vnrole='Theme'/>
+    </roles>
+  </vncls>
+  <vncls class='13.1-1' fnframe='Commerce_sell'>
+    <roles>
+        <role fnrole='Buyer' vnrole='Recipient'/>
+    </roles>
+  </vncls>
+  <vncls class='13.4.1' fnframe='Supply'>
+    <roles>
+        <role fnrole='Theme' vnrole='Theme'/>
+        <role fnrole='Supplier' vnrole='Agent'/>
+        <role fnrole='Recipient' vnrole='Recipient'/>
+    </roles>
+  </vncls>
+  <vncls class='13.5.2' fnframe='Receiving'>
+    <roles>
+        <role fnrole='Recipient' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='26.1' fnframe='Cause_to_make_progress'>
+    <roles>
+        <role fnrole='Agent' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='29.9-2' fnframe='Opinion'>
+    <roles>
+        <role fnrole='Opinion' vnrole='Theme'/>
+        <role fnrole='Cognizer' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='47.1-1' fnframe='State_continue'>
+    <roles>
+        <role fnrole='Entity' vnrole='Theme'/>
+    </roles>
+  </vncls>
+  <vncls class='55.2' fnframe='Activity_finish'>
+    <roles>
+        <role fnrole='Activity' vnrole='Theme'/>
+        <role fnrole='Agent' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='55.3' fnframe='Process_continue'>
+    <roles>
+        <role fnrole='Event' vnrole='Theme'/>
+    </roles>
+  </vncls>
+  <vncls class='55.3' fnframe='Activity_ongoing'>
+    <roles>
+        <role fnrole='Activity' vnrole='Theme'/>
+        <role fnrole='Agent' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='55.5-1' fnframe='Intentionally_create'>
+    <roles>
+        <role fnrole='Created_entity' vnrole='Theme'/>
+        <role fnrole='Creator' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='61' fnframe='Attempt'>
+    <roles>
+        <role fnrole='Goal' vnrole='Theme'/>
+        <role fnrole='Agent' vnrole='Agent'/>
+    </roles>
+  </vncls>
+  <vncls class='65' fnframe='Inclusion'>
+    <roles>
+        <role fnrole='Part' vnrole='Theme'/>
+    </roles>
+  </vncls>
+  <vncls class='84' fnframe='Locating'>
+    <roles>
+        <role fnrole='Sought_entity' vnrole='Theme'/>
+        <role fnrole='Perceiver' vnrole='Agent'/>
+    </roles>
+  </vncls>
 </verbnetRoles-framenetFEs_RoleMappingData>
 
 
