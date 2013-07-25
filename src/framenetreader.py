@@ -42,6 +42,8 @@ class FulltextReader:
     core_arg_finder = None
     predicate_pos = ["md", "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
     "VH", "VHD", "VHG", "VHN", "VHP", "VHZ"]
+    # etree will add the xmlns string before every tag name
+    framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
     
     def __init__(self, filename, core_args_only = False, keep_unannotated = False,
         trees = None):
@@ -49,7 +51,12 @@ class FulltextReader:
         
         :param filename: Path to the file to read.
         :type filename: str.
-        
+        :param core_args_only: Whether we should discard non core args.
+        :type core_args_only: boolean.
+        :param keep_unannotated: Whether we should keep frames without annotated args.
+        :type keep_unannotated: boolean.
+        :param trees: Syntactic trees for the frames (must be same order as in the corpus)
+        :type trees: None | SyntacticTreeNode List
         """
         
         if FulltextReader.core_arg_finder == None and core_args_only:
@@ -57,18 +64,10 @@ class FulltextReader:
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
             FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
         
-        root = ET.ElementTree(file=filename)
-
+        self.frames = []
+        
         self.core_args_only = core_args_only
         self.keep_unannotated = keep_unannotated
-                
-        # etree will add the xmlns string before every tag name
-        self._xmlns = "{http://framenet.icsi.berkeley.edu}"
-
-        self.frames = []
-        self.fulltext_corpus = False
-        self.constant_predicate = ""
-        self.constant_frame = ""
 
         # Debug data
         self.filename = filename.split('/')[-1]
@@ -78,27 +77,75 @@ class FulltextReader:
         self.missing_predicate_data = []
         self.non_existing_frame_name = []
         
-        if root.find(self._xmlns+"valences") == None:
-            # This is a frameNet fulltext annotation file
-            self.fulltext_corpus = True
-            self.sentence_pattern = self._xmlns + "sentence"
-            self.frame_pattern = self._xmlns + "annotationSet[@luName]"
+        root = ET.ElementTree(file=filename)
+        if not self._init_file_data(root): return
+        self._parse_xml(root, trees)
+    
+    def _init_file_data(self, root):
+        if root.getroot().tag == "corpus":
+            self._init_semafor_data()
+        elif root.find(FulltextReader.framenet_xmlns+"valences") == None:
+            self._init_fulltext_data()
         else:
-            # This is a lexical unit annotation file
-            self.sentence_pattern = self._xmlns + "subCorpus/" + self._xmlns + "sentence"
-            self.frame_pattern = self._xmlns + "annotationSet"
+            return self._init_lu_data(root)
+        return True
+    
+    def _init_fulltext_data(self):
+        self.corpus = "fulltext"
+        self._xmlns = FulltextReader.framenet_xmlns
+        self.all_annotated = False
+        self.constant_predicate = ""
+        self.constant_frame = ""
+        self.patterns = {
+            "sentence":self._xmlns + "sentence",
+            "frame":self._xmlns + "annotationSet[@luName]",
+            "predicate":self._xmlns+"layer[@name='Target']",
+            "arg":"{}layer[@name='FE'][@rank='{}']/*",
+            "pt":"{}layer[@name='PT'][@rank='{}']/*"
+        }
+ 
+    def _init_lu_data(self, root):
+        self.corpus = "lu"
+        self._xmlns = FulltextReader.framenet_xmlns
+        self.all_annotated = False
             
-            # keep_unannotated has no sense for LUCorpus
-            self.keep_unannotated = False
+        # keep_unannotated has no sense for LUCorpus
+        self.keep_unannotated = False
             
-            predicate_data = root.getroot().attrib["name"].split(".")
-            if predicate_data[1] != "v":
-                return
-            self.constant_predicate = predicate_data[0]
-            self.constant_frame = root.getroot().attrib["frame"]
-                    
+        predicate_data = root.getroot().attrib["name"].split(".")
+        if predicate_data[1] != "v":
+            return False
+        self.constant_predicate = predicate_data[0]
+        self.constant_frame = root.getroot().attrib["frame"]
         
-        for i, sentence in enumerate(root.findall(self.sentence_pattern)):
+        self.patterns = {
+            "sentence":(self._xmlns + "subCorpus/" +
+            self._xmlns + "sentence"),
+            "frame":self._xmlns + "annotationSet",
+            "predicate":self._xmlns+"layer[@name='Target']",
+            "arg":"{}layer[@name='FE'][@rank='{}']/*",
+            "pt":"{}layer[@name='PT'][@rank='{}']/*"
+        }
+        
+        return True
+ 
+    def _init_semafor_data(self):
+        self.corpus = "semafor"
+        self._xmlns = ""
+        self.all_annotated = True
+        self.constant_predicate = ""
+        self.constant_frame = ""
+        
+        self.patterns = {
+            "sentence":("documents/document/paragraphs/paragraph"
+                "/sentences/sentence"),
+            "frame":"annotationSets/annotationSet",
+            "predicate":"layers/layer[@name='Target']/labels",
+            "arg":"layers/layer[@name='FE']/labels/*"
+        }
+        
+    def _parse_xml(self, root, trees):
+        for i, sentence in enumerate(root.findall(self.patterns["sentence"])):
             for frame in self._parse_sentence(sentence):
                 frame.sentence_id = i
                 if trees != None: frame.tree = trees[i]
@@ -128,10 +175,13 @@ class FulltextReader:
                               label.attrib["name"]))
         
         already_annotated = []
-        for potential_frame in sentence.findall(self.frame_pattern):
+        for potential_frame in sentence.findall(self.patterns["frame"]):
             # We keep only annotated verbal frames
+            
             annotated = ("status" in potential_frame.attrib and
                 potential_frame.attrib["status"] != "UNANN")
+            annotated = annotated or self.all_annotated
+            
             if not (annotated or self.keep_unannotated): continue
             frame = self._parse_frame(
                 text, words, potential_frame, annotated, predicate_starts)
@@ -152,7 +202,7 @@ class FulltextReader:
         predicate = self._build_predicate(sentence_text, frame)
         
         if (predicate == None or
-            (self.fulltext_corpus and not predicate.begin in predicate_starts)
+            (self.corpus == "fulltext" and not predicate.begin in predicate_starts)
         ):
             return
         
@@ -198,13 +248,14 @@ class FulltextReader:
         rank = 1
         stop = False
         is_relative = False
+        phrase_data = None
         while not stop:
-            arg_search_str = "{}layer[@name='FE'][@rank='{}']/*".format(
-                self._xmlns, rank)
-            phrase_search_str = "{}layer[@name='PT'][@rank='{}']/*".format(
-                self._xmlns, rank)
+            arg_search_str = self.patterns["arg"].format(self._xmlns, rank)
             arg_data = frame.findall(arg_search_str)
-            phrase_data = frame.findall(phrase_search_str)
+            
+            if not self.corpus == "semafor":
+                phrase_search_str = self.patterns["pt"].format(self._xmlns, rank)
+                phrase_data = frame.findall(phrase_search_str)
             
             # Stop if we have reached a non argument-annotated layer
             if len(arg_data) == 0: break
@@ -236,6 +287,10 @@ class FulltextReader:
                     args.append(new_arg)
                 
             rank += 1
+            
+            # We need to "bypass" the argument layer system for Semafor output
+            # because there is always only one layer
+            if self.corpus == "semafor": stop = True
 
         return args, is_relative
     
@@ -243,30 +298,32 @@ class FulltextReader:
         # Checks wether the argument is instanciated
         if "itype" in arg.attrib:
             return False, Arg(0, -1, "", arg.attrib["name"], False, "")
-        else:
-            # Stop if we have reached a non phrase-type-annotated layer
-            # with at least one instanciated argument
-            if len(phrase_data) == 0:
-                self.ignored_layers.append({
-                    "file":self.filename,
-                    "predicate":predicate.lemma,
-                    "sentence": sentence_text,
-                    "layer":rank
-                })
-                return True, None
-                           
+        else:          
             arg_start = int(arg.attrib["start"])
             arg_end = int(arg.attrib["end"])
             
-            phrase_found = False
-            phrase_type = ""
-            for phrase in phrase_data:
-                phrase_found = (
-                    int(phrase.attrib["start"]) == arg_start and
-                    int(phrase.attrib["end"]) == arg_end)
-                if phrase_found:
-                    phrase_type = phrase.attrib["name"]
-                    break
+            if self.corpus == "semafor":
+                phrase_found, phrase_type = True, ""
+            else:
+                # Stop if we have reached a non phrase-type-annotated layer
+                # with at least one instanciated argument
+                if len(phrase_data) == 0:
+                    self.ignored_layers.append({
+                        "file":self.filename,
+                        "predicate":predicate.lemma,
+                        "sentence": sentence_text,
+                        "layer":rank
+                    })
+                    return True, None
+                
+                phrase_found, phrase_type = False, ""
+                for phrase in phrase_data:
+                    phrase_found = (
+                        int(phrase.attrib["start"]) == arg_start and
+                        int(phrase.attrib["end"]) == arg_end)
+                    if phrase_found:
+                        phrase_type = phrase.attrib["name"]
+                        break
             
             # If the argument and the predicate overlap, mark the argument as NI
             if arg_start <= predicate.end and arg_end >= predicate.begin:
@@ -301,12 +358,13 @@ class FulltextReader:
         :returns: Predicate -- the built predicate
         """
         
-        if self.constant_predicate == "":
+        predicate_lemma = None
+        if self.constant_predicate == "" and "luName" in frame.attrib:
             predicate_lemma = frame.attrib["luName"].split(".")[0]
         else:
             predicate_lemma = self.constant_predicate
             
-        predicate_data = frame.findall(self._xmlns+"layer[@name='Target']")[0]
+        predicate_data = frame.findall(self.patterns["predicate"])[0]
         
         # This test handles the only self-closed layer tag that exists in the corpus
         if len(predicate_data) == 0:
