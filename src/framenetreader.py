@@ -69,7 +69,6 @@ class FulltextReader:
         self.fulltext_corpus = False
         self.constant_predicate = ""
         self.constant_frame = ""
-        self.core_args = []
 
         # Debug data
         self.filename = filename.split('/')[-1]
@@ -89,7 +88,7 @@ class FulltextReader:
             self.sentence_pattern = self._xmlns + "subCorpus/" + self._xmlns + "sentence"
             self.frame_pattern = self._xmlns + "annotationSet"
             
-            # keep_unannotated has non sense for LUCorpus
+            # keep_unannotated has no sense for LUCorpus
             self.keep_unannotated = False
             
             predicate_data = root.getroot().attrib["name"].split(".")
@@ -97,12 +96,7 @@ class FulltextReader:
                 return
             self.constant_predicate = predicate_data[0]
             self.constant_frame = root.getroot().attrib["frame"]
-            
-            # Remember which arguments are core aguments
-            arg_pattern = "{0}header/{0}frame/{0}FE".format(self._xmlns)
-            for arg in root.findall(arg_pattern):
-                if arg.attrib["type"] == "Core":
-                    self.core_args.append(arg.attrib["name"])
+                    
         
         for i, sentence in enumerate(root.findall(self.sentence_pattern)):
             for frame in self._parse_sentence(sentence):
@@ -136,7 +130,8 @@ class FulltextReader:
         already_annotated = []
         for potential_frame in sentence.findall(self.frame_pattern):
             # We keep only annotated verbal frames
-            annotated = (potential_frame.attrib["status"] != "UNANN")
+            annotated = ("status" in potential_frame.attrib and
+                potential_frame.attrib["status"] != "UNANN")
             if not (annotated or self.keep_unannotated): continue
             frame = self._parse_frame(
                 text, words, potential_frame, annotated, predicate_starts)
@@ -220,13 +215,11 @@ class FulltextReader:
                     
                 if new_arg == None: continue
                 
-                if self.core_args_only:
-                    if self.fulltext_corpus:
-                        if not FulltextReader.core_arg_finder.is_core_role(
-                            new_arg.role, frame_name):
-                            continue
-                    elif not arg.attrib["name"] in self.core_args:
-                        continue
+                if (self.core_args_only and not
+                    FulltextReader.core_arg_finder.is_core_role(
+                        new_arg.role, frame_name)
+                ):
+                    continue
                     
                 add = True
                 for arg in args[:]:
