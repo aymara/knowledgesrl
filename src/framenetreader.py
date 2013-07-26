@@ -472,7 +472,7 @@ class FulltextReaderTest(unittest.TestCase):
             "LUCorpus-v0.3__20000424_nyt-NEW.xml":(5,13),
             "LUCorpus-v0.3__602CZL285-1.xml":(22,59),
             "LUCorpus-v0.3__CNN_AARONBROWN_ENG_20051101_215800.partial-NEW.xml":(89,219),
-            "KBEval__MIT.xml":(77,205),
+            "KBEval__MIT.xml":(77,204),
             "KBEval__utd-icsi.xml":(107,245),
             "ANC__IntroHongKong.xml":(40,97),
             "LUCorpus-v0.3__20000416_xin_eng-NEW.xml":(38,106),
@@ -500,8 +500,8 @@ class FulltextReaderTest(unittest.TestCase):
         
         self.tested_frames = [
             Frame(
-                "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
-                " a freer flow of food and medicine into Iraq .",
+                ("Rep . Tony Hall , D- Ohio , urges the United Nations to allow"
+                " a freer flow of food and medicine into Iraq .").lower(),
                 Predicate(28, 32, "urges", "urge"),
                 [
                     Arg(34, 51, "the United Nations", "Addressee", True, "NP"),
@@ -522,8 +522,8 @@ class FulltextReaderTest(unittest.TestCase):
                 ],
                 "Attempt_suasion" ),
             Frame(
-                "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
-                " a freer flow of food and medicine into Iraq .",
+                ("Rep . Tony Hall , D- Ohio , urges the United Nations to allow"
+                " a freer flow of food and medicine into Iraq .").lower(),
                  Predicate(56, 60, "allow", "allow"),
                  [
                     Arg(62, 104,
@@ -604,7 +604,7 @@ class FulltextReaderTest(unittest.TestCase):
         path = options.fulltext_corpus + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         conll_sentence = next(reader.to_conll_format()).splitlines()
-        self.assertEqual(conll_sentence[2], "3\tTony\tTony\tNNP\tNNP\t_\t0\t \t")
+        self.assertEqual(conll_sentence[2], "3\ttony\ttony\tNNP\tNNP\t_\t0\t \t")
         self.assertEqual(conll_sentence[23], "24\t.\t.\t.\t.\t_\t0\t \t")
         
 import glob
