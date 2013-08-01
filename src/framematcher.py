@@ -71,8 +71,10 @@ class FrameMatcher():
         
         """
         
-        final_data = []
-        
+        # Nothing to do if no matching have been done yet.
+        # Returns early to avoid taking the max of an empty list.
+        if len(self.best_data) == 0: return
+
         scores = [self.frame_semantic_score(x, data) for x in self.best_data]
         best_score = max(scores)
         self.best_data = [self.best_data[i] for i in range(0, len(scores))
@@ -321,8 +323,8 @@ class frameMatcherTest(unittest.TestCase):
             VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
             VerbnetFrame(['NP', 'V'], ['Theme']),
             VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Theme']),
-            VerbnetFrame(['NP', 'V', ['with'], 'NP'], ['Theme', 'Instrument']),
-            VerbnetFrame(['NP', 'V', 'NP', ['with'], 'NP'], ['Agent', 'Theme', 'Instrument']),
+            VerbnetFrame(['NP', 'V', {'with'}, 'NP'], ['Theme', 'Instrument']),
+            VerbnetFrame(['NP', 'V', 'NP', {'with'}, 'NP'], ['Agent', 'Theme', 'Instrument']),
             VerbnetFrame(['NP', 'V', 'NP'], ['Instrument', 'Theme'])
         ]
         for test_frame in test_frames:
@@ -337,7 +339,7 @@ class frameMatcherTest(unittest.TestCase):
         
         test_frames = [
             VerbnetFrame(['NP', 'V', 'NP', 'by', 'NP'], ['R1', 'R2', 'R3']),
-            VerbnetFrame(['NP', 'V', 'NP', ['for', 'as'], 'NP'], ['R1', 'R4', 'R5'])
+            VerbnetFrame(['NP', 'V', 'NP', {'for', 'as'}, 'NP'], ['R1', 'R4', 'R5'])
         ]
         matcher = FrameMatcher(frame, "baseline")
         for test_frame in test_frames:
