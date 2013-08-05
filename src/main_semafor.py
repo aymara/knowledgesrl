@@ -30,7 +30,7 @@ for filename in sorted(files):
     annotated_frames += reader.frames
 
 num_annotated_frames = len(annotated_frames)
-num_annotated_args = sum([len(x.args) for x in annotated_frames])
+num_annotated_args = sum([len([y for y in x.args if y.instanciated]) for x in annotated_frames])
 
 num_good, num_bad = 0, 0
 num_correct, num_incorrect = 0, 0    
@@ -62,7 +62,9 @@ for frame in semafor_frames:
             frame_found = False
             break
         i += 1
-    if not frame_found: continue
+    if not frame_found:
+        num_bad += len(frame.args)
+        continue
     
     for arg in frame.args:
         arg_found = False
