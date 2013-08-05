@@ -148,8 +148,7 @@ if __name__ == "__main__":
         print("Frame matching stats...", file=sys.stderr)
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)
-    print(model.data_vnclass_slot)
-    exit()
+    
     if options.semrestr:
         for matcher in all_matcher:
             matcher.handle_semantic_restrictions(data_restr)
