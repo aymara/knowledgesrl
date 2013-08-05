@@ -25,7 +25,8 @@ for filename in sorted(files):
     reader = framenetreader.FulltextReader(
         semafor_corpus + filename,
         core_args_only = True,
-        keep_unannotated = True)
+        keep_unannotated = True,
+        keep_nonverbal = True)
     annotated_frames += reader.frames
 
 num_annotated_frames = len(annotated_frames)
@@ -36,6 +37,7 @@ num_correct, num_incorrect = 0, 0
 
 sentence_position = 0
 last_sentence = ""
+
 for frame in semafor_frames:
     if last_sentence != frame.sentence:
         sentence_found = True
@@ -76,5 +78,23 @@ for frame in semafor_frames:
         if not arg_found:
             num_bad += 1
 
-print(num_annotated_args)
-print("{} {} {} {}".format(num_good, num_bad, num_correct, num_incorrect))
+print(
+    "Total arguments (corpus) : {} \n"
+    "Idenfied correct arguments : {} \n"
+    "Bad arguments : {} \n"
+    "Good roles : {} \n"
+    "Bad roles : {}"
+    "\n".format(num_annotated_args, num_good, num_bad,
+        num_correct, num_incorrect)
+)
+
+precision = num_correct / (num_good + num_bad)
+recall = num_correct / num_annotated_args
+f1 = 2 * (precision * recall) / (precision + recall)
+
+print(
+    "Precision : {:.2%} \n"
+    "Recall : {:.2%} \n"
+    "F1 : {:.2%} \n".format(
+    precision, recall, f1)
+)

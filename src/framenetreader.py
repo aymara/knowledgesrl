@@ -46,7 +46,7 @@ class FulltextReader:
     framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
     
     def __init__(self, filename, core_args_only = False, keep_unannotated = False,
-        trees = None):
+        trees = None, keep_nonverbal = False):
         """Read a file and update the collected frames list.
         
         :param filename: Path to the file to read.
@@ -68,6 +68,7 @@ class FulltextReader:
         
         self.core_args_only = core_args_only
         self.keep_unannotated = keep_unannotated
+        self.keep_nonverbal = keep_nonverbal
 
         # Debug data
         self.filename = filename.split('/')[-1]
@@ -167,7 +168,9 @@ class FulltextReader:
         pos_annotation = "{0}annotationSet/{0}layer[@name='PENN']/" \
                          "{0}label".format(self._xmlns)
         for label in sentence.findall(pos_annotation):
-            if label.attrib["name"] in FulltextReader.predicate_pos:
+            if (label.attrib["name"] in FulltextReader.predicate_pos
+                or self.keep_nonverbal
+            ):
                 predicate_starts.append(int(label.attrib["start"]))
             
             words.append(Word(int(label.attrib["start"]),
