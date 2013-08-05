@@ -19,6 +19,7 @@
 """
 
 import unittest
+import math
 from framestructure import *
 from collections import defaultdict
 from functools import reduce
@@ -159,6 +160,36 @@ class ProbabilityModel:
 
         # Second backoff level
         self.data_slot_class[slot_class][role] += 1
+
+    def stats_vnclass(self):
+        sums = defaultdict(int)
+        weights = defaultdict(int)
+    
+        num_encountered = 0
+        for verb, vnclasses in self.data_vnclass.items():
+            total = sum([x for x in vnclasses.values()])
+            if total == 0: continue
+            
+            num_encountered += 1
+            
+            if len(vnclasses) < 2: continue
+            
+            freq = [x / total for x in vnclasses.values()]
+            v = sum([(x - (1 / len(vnclasses))) ** 2 for x in freq]) / len(vnclasses)
+            std = math.sqrt(v)
+            
+            sums[len(vnclasses)] += std
+            weights[len(vnclasses)] += 1
+            """print(vnclasses)
+            for vnclass, n in vnclasses.items():
+                print("{:.2%}".format(n / total))"""
+        print(
+            "{} verbs in VerbNet\n"
+            "{} verbs encountered\n".format(
+                len(self.data_vnclass), num_encountered))
+                
+        for n, sigma in sums.items():
+            print("{} : {}".format(n, sigma / weights[n]))
 
     def add_data_vnclass(self, matcher):
         """Fill data_vnclass using the data of a framematcher object
