@@ -10,11 +10,16 @@ import paths
 import options
 
 
-semafor_file = "../data/semafor/semafor_testset.out"
-semafor_corpus = "../data/semafor/testset/"
+semafor_file = "../data/semafor/all_evaluation.out"
+semafor_corpus = "../data/fndata-1.5/fulltext/evaluation/"
+semafor_pos = "../data/semafor/all_evaluation_pos"
+#semafor_file = "../data/semafor/semafor_testset.out"
+#semafor_corpus = "../data/semafor/testset/"
+#semafor_pos = "../data/semafor/semafor_testset_pos"
 
 reader = framenetreader.FulltextReader(
-semafor_file, core_args_only = True)
+semafor_file, core_args_only = True, pos_file = semafor_pos,
+keep_nonverbal = False)
 semafor_frames = reader.frames
 semafor_roles = [[y.role for y in x.args] for x in semafor_frames]
 
@@ -26,7 +31,7 @@ for filename in sorted(files):
         semafor_corpus + filename,
         core_args_only = True,
         keep_unannotated = True,
-        keep_nonverbal = True)
+        keep_nonverbal = False)
     annotated_frames += reader.frames
 
 num_annotated_frames = len(annotated_frames)

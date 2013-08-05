@@ -40,13 +40,27 @@ class FulltextReader:
     """
     
     core_arg_finder = None
-    predicate_pos = ["md", "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
-    "VH", "VHD", "VHG", "VHN", "VHP", "VHZ"]
+    predicate_pos = ["md", "MD", 
+        "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", 
+        "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
+        "VH", "VHD", "VHG", "VHN", "VHP", "VHZ"]
+    
+    pos_mapping = {
+        # Nouns
+        "NP": "NNP", "NPS": "NNPS",
+        # Preposition
+        "PP": "PRP", "PP$": "PRP$",
+        # Verbs
+        "VH": "VB", "VHD": "VBD", "VHG": "VBG", "VHP": "VBP", "VHN": "VBN",
+        "VHZ": "VBZ", "VV": "VB", "VVD": "VBD", "VVG": "VBG", "VVN": "VBN",
+        "VVP": "VBP", "VVZ": "VBZ"
+    }
+    
     # etree will add the xmlns string before every tag name
     framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
     
     def __init__(self, filename, core_args_only = False, keep_unannotated = False,
-        trees = None, keep_nonverbal = False):
+        trees = None, keep_nonverbal = False, pos_file = None):
         """Read a file and update the collected frames list.
         
         :param filename: Path to the file to read.
@@ -69,6 +83,12 @@ class FulltextReader:
         self.core_args_only = core_args_only
         self.keep_unannotated = keep_unannotated
         self.keep_nonverbal = keep_nonverbal
+        
+        self.pos_file = pos_file
+        self.pos_data = None
+        if self.pos_file != None:
+            pos_file_content = open(pos_file).read()
+            self.pos_data = pos_file_content.split("\n\n")
 
         # Debug data
         self.filename = filename.split('/')[-1]
@@ -147,13 +167,13 @@ class FulltextReader:
         
     def _parse_xml(self, root, trees):
         for i, sentence in enumerate(root.findall(self.patterns["sentence"])):
-            for frame in self._parse_sentence(sentence):
+            for frame in self._parse_sentence(sentence, i):
                 frame.sentence_id = i
                 if trees != None: frame.tree = trees[i]
                 
                 self.frames.append(frame)
     
-    def _parse_sentence(self, sentence):
+    def _parse_sentence(self, sentence, sentence_number):
         """Handle the parsing of one sentence.
         
         :param sentence: XML representation of the sentence.
@@ -165,17 +185,35 @@ class FulltextReader:
 
         words = []
         predicate_starts = []
-        pos_annotation = "{0}annotationSet/{0}layer[@name='PENN']/" \
+        pos_data = []
+        if self.pos_data == None:
+            pos_annotation = "{0}annotationSet/{0}layer[@name='PENN']/" \
                          "{0}label".format(self._xmlns)
-        for label in sentence.findall(pos_annotation):
-            if (label.attrib["name"] in FulltextReader.predicate_pos
+            for label in sentence.findall(pos_annotation):
+                pos_data.append({
+                    "start":label.attrib["start"],
+                    "end":label.attrib["end"],
+                    "pos":label.attrib["name"]
+                })
+        else:
+            start = 0
+            for line in self.pos_data[sentence_number].split("\n"):
+                if line == "": continue
+                line = line.split("\t")
+                pos_data.append({
+                    "start":start,
+                    "end":start+len(line[1]) - 1,
+                    "pos":line[3]
+                })
+                start += len(line[1]) + 1
+        
+        for word in pos_data:
+            if (word["pos"] in FulltextReader.predicate_pos
                 or self.keep_nonverbal
             ):
-                predicate_starts.append(int(label.attrib["start"]))
+                predicate_starts.append(int(word["start"]))
             
-            words.append(Word(int(label.attrib["start"]),
-                              int(label.attrib["end"]),
-                              label.attrib["name"]))
+            words.append(Word(int(word["start"]), int(word["end"]), word["pos"]))
         
         already_annotated = []
         for potential_frame in sentence.findall(self.patterns["frame"]):
@@ -205,7 +243,7 @@ class FulltextReader:
         predicate = self._build_predicate(sentence_text, frame)
         
         if (predicate == None or
-            (self.corpus == "fulltext" and not predicate.begin in predicate_starts)
+            (self.corpus in ["fulltext", "semafor"] and not predicate.begin in predicate_starts)
         ):
             return
         
@@ -396,17 +434,6 @@ class FulltextReader:
 
         last_sentence = ""
 
-        pos_mapping = {
-            # Nouns
-            "NP": "NNP", "NPS": "NNPS",
-            # Preposition
-            "PP": "PRP", "PP$": "PRP$",
-            # Verbs
-            "VH": "VB", "VHD": "VBD", "VHG": "VBG", "VHP": "VBP", "VHN": "VBN",
-            "VHZ": "VBZ", "VV": "VB", "VVD": "VBD", "VVG": "VBG", "VVN": "VBN",
-            "VVP": "VBP", "VVZ": "VBZ"
-        }
-
         for frame in self.frames:
             if frame.sentence != last_sentence:
                 frame_conll = ""
@@ -414,7 +441,7 @@ class FulltextReader:
                 for w in frame.words:
                     i += 1
                     frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\t \t\n".format(
-                            i, frame.get_word(w), pos_mapping.get(w.pos, w.pos))
+                            i, frame.get_word(w), self.pos_mapping.get(w.pos, w.pos))
 
                 yield frame_conll + "\n"
 
