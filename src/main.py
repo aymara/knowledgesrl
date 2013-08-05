@@ -117,8 +117,7 @@ if __name__ == "__main__":
                     pass
             else:
                 matcher.new_match(test_frame)
-        
-        model.add_data_vnclass(matcher)
+                
         frame.roles = matcher.possible_distribs()
         
         # Update semantic restrictions data
@@ -130,12 +129,13 @@ if __name__ == "__main__":
                 data_restr[restr].update([word])
             
         # Update probability model
+        vnclass = model.add_data_vnclass(matcher)
         if not options.bootstrap:
             for roles, slot_type, prep in zip(
                 frame.roles, frame.slot_types, frame.slot_preps
             ):
                 if len(roles) == 1:
-                    model.add_data(slot_type, next(iter(roles)), prep, predicate)
+                    model.add_data(slot_type, next(iter(roles)), prep, predicate, vnclass)
                     
         if options.debug and set() in frame.roles:
             log_debug_data(good_frame, frame, matcher, frame.roles, verbnet_classes)
@@ -148,7 +148,8 @@ if __name__ == "__main__":
         print("Frame matching stats...", file=sys.stderr)
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)
-
+    print(model.data_vnclass_slot)
+    exit()
     if options.semrestr:
         for matcher in all_matcher:
             matcher.handle_semantic_restrictions(data_restr)

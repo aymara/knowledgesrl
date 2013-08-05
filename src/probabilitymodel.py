@@ -83,6 +83,7 @@ class ProbabilityModel:
         self.data_bootstrap_p1_sum = multi_default_dict(2)
         self.data_bootstrap_p2_sum = multi_default_dict(2)
         self.data_bootstrap_p3_sum = multi_default_dict(3)
+        self.data_vnclass_slot = multi_default_dict(4)
         
         if vn_classes != None and vn_init_value != None:
             self.data_vnclass = defaultdict(lambda : {})
@@ -91,7 +92,7 @@ class ProbabilityModel:
                     vnclass = root_vnclass(vnclass)
                     self.data_vnclass[verb][vnclass] = vn_init_value
 
-    def add_data(self, slot_class, role, prep, predicate):
+    def add_data(self, slot_class, role, prep, predicate, vnclass):
         """Use one known occurence of a role in a given context to update the data
         of every model
         
@@ -109,9 +110,13 @@ class ProbabilityModel:
         if slot_class == VerbnetFrame.slot_types["prep_object"]:
             self.data_slot[slot_class][prep][role] += 1
             self.data_predicate_slot[predicate][slot_class][prep][role] += 1
+            if vnclass != None:
+                self.data_vnclass_slot[vnclass][slot_class][prep][role] += 1
         else:
             self.data_slot[slot_class][NO_PREP][role] += 1
             self.data_predicate_slot[predicate][slot_class][NO_PREP][role] += 1
+            if vnclass != None:
+                self.data_vnclass_slot[vnclass][slot_class][NO_PREP][role] += 1
 
     def add_data_bootstrap(self, role, predicate, predicate_classes,
         slot_class, prep, headword, headword_class):
@@ -176,6 +181,8 @@ class ProbabilityModel:
         if vnclass != None:
             vnclass = root_vnclass(vnclass)
             self.data_vnclass[verb][vnclass] += 1
+            
+        return vnclass
     
     def best_role(self, role_set, slot_class, prep, predicate, model):
         """Apply one probability model to resolve one slot
