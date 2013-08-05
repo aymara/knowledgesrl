@@ -29,6 +29,8 @@ class VerbnetReader:
         """
         self.verbs = {}
         self.classes = {}
+        self.roles = {}
+        self.cnames = {}
 
         # Debug data
         self.filename = ""
@@ -56,11 +58,14 @@ class VerbnetReader:
         
         # Use the format of the vn/fn mapping
         vnclass = "-".join(xml_class.attrib["ID"].split('-')[1:])
+        self.cnames[vnclass] = self.filename
         
         for xml_role in xml_class.find("THEMROLES"):
             role_list.append(xml_role.attrib["type"])
             restrictions.append(
                 VNRestriction.build_from_xml(xml_role.find("SELRESTRS")))
+        
+        self.roles[vnclass] = role_list
 
         for xml_frame in xml_class.find("FRAMES"):
             frames += self._build_frame(xml_frame, vnclass, role_list, restrictions)

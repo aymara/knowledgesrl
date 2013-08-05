@@ -48,6 +48,11 @@ def check_depth(data, depth):
     if depth == 0: return is_scalar
     if is_scalar: return False
     return all([check_depth(x, depth - 1) for x in data.values()])
+
+def root_vnclass(vnclass):
+    position = vnclass.find("-")
+    if position == -1: return vnclass
+    return vnclass[0:position]
   
 class ProbabilityModel:
 
@@ -60,7 +65,7 @@ class ProbabilityModel:
     
     """
     
-    def __init__(self):
+    def __init__(self, vn_classes = None, vn_init_value = None):
         self.data_default = {
             VerbnetFrame.slot_types["subject"]:"Agent",
             VerbnetFrame.slot_types["object"]:"Theme",
@@ -78,6 +83,13 @@ class ProbabilityModel:
         self.data_bootstrap_p1_sum = multi_default_dict(2)
         self.data_bootstrap_p2_sum = multi_default_dict(2)
         self.data_bootstrap_p3_sum = multi_default_dict(3)
+        
+        if vn_classes != None and vn_init_value != None:
+            self.data_vnclass = defaultdict(lambda : {})
+            for verb, verb_vnclass in vn_classes.items():
+                for vnclass in verb_vnclass:
+                    vnclass = root_vnclass(vnclass)
+                    self.data_vnclass[verb][vnclass] = vn_init_value
 
     def add_data(self, slot_class, role, prep, predicate):
         """Use one known occurence of a role in a given context to update the data
@@ -143,7 +155,28 @@ class ProbabilityModel:
         # Second backoff level
         self.data_slot_class[slot_class][role] += 1
 
+    def add_data_vnclass(self, matcher):
+        """Fill data_vnclass using the data of a framematcher object
         
+        :param matcher: A frame matcher after at least one matching
+        :type matcher: FrameMatcher
+        
+        """
+        
+        verb = matcher.frame.predicate
+        
+        vnclass = None
+        for frame, junk in matcher.best_data:
+            if vnclass == None:
+                vnclass = root_vnclass(frame.vnclass)
+            elif vnclass != root_vnclass(frame.vnclass):
+                vnclass = None
+                break
+                
+        if vnclass != None:
+            vnclass = root_vnclass(vnclass)
+            self.data_vnclass[verb][vnclass] += 1
+    
     def best_role(self, role_set, slot_class, prep, predicate, model):
         """Apply one probability model to resolve one slot
         

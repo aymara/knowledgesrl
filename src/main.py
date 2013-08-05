@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
-    model = probabilitymodel.ProbabilityModel()
+    model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
  
     annotated_frames = []
     vn_frames = []
@@ -118,6 +118,7 @@ if __name__ == "__main__":
             else:
                 matcher.new_match(test_frame)
         
+        model.add_data_vnclass(matcher)
         frame.roles = matcher.possible_distribs()
         
         # Update semantic restrictions data
