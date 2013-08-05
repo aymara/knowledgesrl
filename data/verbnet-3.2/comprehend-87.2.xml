@@ -8,7 +8,7 @@
          <MEMBER name="misapprehend" wn="misapprehend%2:31:01" grouping=""/>
     </MEMBERS>
     <THEMROLES>
-        <THEMROLE type="Agent">
+        <THEMROLE type="Experiencer">
             <SELRESTRS logic="or">
                 <SELRESTR Value="+" type="animate"/>
                 <SELRESTR Value="+" type="organization"/>
