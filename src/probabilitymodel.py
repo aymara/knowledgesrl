@@ -26,7 +26,7 @@ from functools import reduce
 
 NO_PREP = "no_prep_magic_value"
 
-models = ["default", "slot_class", "slot", "predicate_slot"]
+models = ["default", "slot_class", "slot", "predicate_slot", "vnclass_slot"]
 
 def multi_get(d, l, default = None):
     """Traverses multiple levels of a dictionary to get a key or None"""
@@ -164,7 +164,7 @@ class ProbabilityModel:
     def stats_vnclass(self):
         sums = defaultdict(int)
         weights = defaultdict(int)
-    
+
         num_encountered = 0
         for verb, vnclasses in self.data_vnclass.items():
             total = sum([x for x in vnclasses.values()])
@@ -180,16 +180,15 @@ class ProbabilityModel:
             
             sums[len(vnclasses)] += std
             weights[len(vnclasses)] += 1
-            """print(vnclasses)
-            for vnclass, n in vnclasses.items():
-                print("{:.2%}".format(n / total))"""
+        
         print(
             "{} verbs in VerbNet\n"
             "{} verbs encountered\n".format(
                 len(self.data_vnclass), num_encountered))
                 
         for n, sigma in sums.items():
-            print("{} : {}".format(n, sigma / weights[n]))
+            print("Verbes à {} classes ({} verbes) : {}".format(
+                n, weights[n], sigma / weights[n]))
 
     def add_data_vnclass(self, matcher):
         """Fill data_vnclass using the data of a framematcher object
@@ -242,6 +241,17 @@ class ProbabilityModel:
             data = multi_get(self.data_slot, [slot_class, final_prep])
         elif model == "predicate_slot":
             data = multi_get(self.data_predicate_slot, [predicate, slot_class, final_prep])
+        elif model == "vnclass_slot":
+            data = defaultdict(int)
+            total_vnclass = sum(self.data_vnclass[predicate].values())
+            if total_vnclass == 0: return None
+
+            for vnclass, n_vnclass in self.data_vnclass[predicate].items():
+                subdata = multi_get(self.data_vnclass_slot,
+                    [vnclass, slot_class, final_prep], {})
+                total_role = sum(subdata.values())
+                for role, n_role in subdata.items():
+                    data[role] += (n_role / total_role) * (n_vnclass / total_vnclass)
         else:
             raise Exception("Unknown model {}".format(model))
                 
