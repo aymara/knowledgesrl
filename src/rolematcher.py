@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 import re
 
 import paths
+from collections import defaultdict
 
 # VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [
@@ -68,7 +69,7 @@ class VnFnRoleMatcher():
         }
         
         self._build_mapping(path)
-
+    
     def _build_mapping(self, path):
         root = ET.ElementTree(file=path)
 
@@ -193,6 +194,18 @@ class VnFnRoleMatcher():
         """
         
         return vn_role in self.possible_vn_roles(fn_role, fn_frame, vn_classes)
+
+
+    def build_frames_vnclasses_mapping(self):
+        """ Builds a mapping between framenet frames and associated verbnet classes """
+        self.fn_frames = defaultdict(lambda : set())
+        for fn_role in self.fn_roles:
+            if fn_role == "all": continue
+            for fn_frame in self.fn_roles[fn_role]:
+                if fn_frame == "all": continue
+                for vn_class in self.fn_roles[fn_role][fn_frame]:
+                    if vn_class == "all": continue
+                    self.fn_frames[fn_frame].add(vn_class)
 
 class VnFnRoleMatcherTest(unittest.TestCase):
     def test_parsing(self):

@@ -21,7 +21,7 @@
 import unittest
 import math
 from framestructure import *
-from collections import defaultdict
+from collections import defaultdict, Counter
 from functools import reduce
 
 NO_PREP = "no_prep_magic_value"
@@ -66,6 +66,10 @@ class ProbabilityModel:
     
     """
     
+    guess_good = 1
+    guess_unknown = 0
+    guess_bad = -1
+    
     def __init__(self, vn_classes = None, vn_init_value = None):
         self.data_default = {
             VerbnetFrame.slot_types["subject"]:"Agent",
@@ -93,7 +97,7 @@ class ProbabilityModel:
                     vnclass = root_vnclass(vnclass)
                     self.data_vnclass[verb][vnclass] = vn_init_value
 
-    def add_data(self, slot_class, role, prep, predicate, vnclass):
+    def add_data(self, slot_class, role, prep, predicate, vnclass = None):
         """Use one known occurence of a role in a given context to update the data
         of every model
         
@@ -105,6 +109,8 @@ class ProbabilityModel:
         :type prep: str
         :param predicate: The predicate of which the slot was an argument
         :type predicate: str
+        :param vnclass: The VerbNet class of the predicate
+        :type vnclass: None | str
         """
         self.data_slot_class[slot_class][role] += 1
         
@@ -163,8 +169,9 @@ class ProbabilityModel:
 
     def stats_vnclass(self):
         sums = defaultdict(int)
+        f_max = defaultdict(int)
         weights = defaultdict(int)
-
+        
         num_encountered = 0
         for verb, vnclasses in self.data_vnclass.items():
             total = sum([x for x in vnclasses.values()])
@@ -179,6 +186,7 @@ class ProbabilityModel:
             std = math.sqrt(v)
             
             sums[len(vnclasses)] += std
+            f_max[len(vnclasses)] += max(freq)
             weights[len(vnclasses)] += 1
         
         print(
@@ -187,8 +195,11 @@ class ProbabilityModel:
                 len(self.data_vnclass), num_encountered))
                 
         for n, sigma in sums.items():
-            print("Verbes à {} classes ({} verbes) : {}".format(
-                n, weights[n], sigma / weights[n]))
+            print("Verbes à {} classes ({} verbes) : std={}, fmax={}".format(
+                n, weights[n], sigma / weights[n], f_max[n] / weights[n]))
+        
+        print("Fréquence max moyenne : {}".format(
+            sum(f_max.values()) / sum(weights.values())))
 
     def add_data_vnclass(self, matcher):
         """Fill data_vnclass using the data of a framematcher object
@@ -213,6 +224,18 @@ class ProbabilityModel:
             self.data_vnclass[verb][vnclass] += 1
             
         return vnclass
+    
+    def check_vnclass_guess(self, predicate, frame_name, role_matcher):
+        class_data = self.data_vnclass[predicate]
+        guess = max(class_data, key=class_data.get)
+        
+        frame_data = role_matcher.fn_frames[frame_name]
+        
+        if guess in frame_data:
+            return ProbabilityModel.guess_good
+        if any([x in frame_data for x in class_data.keys()]):
+            return ProbabilityModel.guess_bad
+        return ProbabilityModel.guess_unknown
     
     def best_role(self, role_set, slot_class, prep, predicate, model):
         """Apply one probability model to resolve one slot
