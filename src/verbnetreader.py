@@ -20,13 +20,19 @@ class VerbnetReader:
     :var verbs: Dictionary of VerbnetFrame lists representing VerbNet.
     """
     
-    def __init__(self, path):
+    def __init__(self, path, normalize = False):
         """Read VerbNet and fill verbs with its content.
         
         :param path: Path to VerbNet.
         :type path: str.
+        :param normalize: Either stick to VerbNet content closely or make it
+            easier for the frame matching to proceed.
+        :type normalize: boolean.
         
         """
+        
+        self.normalize = normalize
+        
         self.verbs = {}
         self.classes = {}
         self.roles = {}
@@ -42,6 +48,43 @@ class VerbnetReader:
             self.filename = filename
             root = ET.ElementTree(file=path+self.filename)
             self._handle_class(root.getroot(), [], [], [])
+
+        if self.normalize:
+            return self._normalized()
+    
+    def _normalized(self):
+        self.files = {}
+        
+        for verb, verb_data in self.verbs.items():
+            for vnframe in verb_data:
+                filename = self.cnames[vnframe.vnclass][:-4]
+                
+                if not filename in self.files: self.files[filename] = {
+                    "children": [], "roles": set(), "members": [],
+                    "frames": [], "name":vnframe.vnclass.split("-")[0]}
+                    
+                current_class = self.files[filename]
+                if "-" in vnframe.vnclass:
+                    for subclass in vnframe.vnclass.split("-")[1:]:
+                        new_name = current_class["name"]+"-"+subclass
+                        
+                        matching_class = None
+                        for child_class in current_class["children"]:
+                            if child_class["name"] == new_name:
+                                matching_class = child_class
+                        if matching_class == None:
+                            new_class = {
+                                "children": [], "roles": set(), "members": [],
+                                "frames": [], "name":new_name}
+                            current_class["children"].append(new_class)
+                            matching_class = new_class
+                            
+                        current_class = matching_class
+                
+                current_class["members"].append(verb)
+                current_class["frames"].append(vnframe)
+                for role in vnframe.roles:
+                    current_class["roles"].add(next(role.__iter__()))
     
     def _handle_class(self, xml_class, parent_frames, role_list, restrictions):
         """Parse one class of verbs and all its subclasses.
@@ -109,8 +152,22 @@ class VerbnetReader:
             base_structure, syntax_data, vnclass, role_list)
 
         role_restr = [[restrictions[role_list.index(x)] for x in y] for y in roles]
-        return [VerbnetFrame(y, x, vnclass, role_restrictions=z)
+        
+        result = [VerbnetFrame(y, x, vnclass, role_restrictions=z)
             for x, y, z in zip(roles, structures, role_restr)]
+        
+        if self.normalize:
+            example = xml_frame.find("EXAMPLES/EXAMPLE").text
+            semantics = self._build_semantics(xml_frame.find("SEMANTICS"))
+            syntax = xml_frame.find("DESCRIPTION").get("primary")
+            syntax_roles = self._format_syntax_roles(xml_frame.find("SYNTAX"))
+            
+            for frame in result:
+                frame.example = example
+                frame.semantics = semantics
+                frame.syntax = syntax_roles
+        
+        return result
   
     def _build_structure(self, base_structure, syntax_data, vnclass, role_list):
         """ Build the final structure from base_structure
@@ -353,7 +410,42 @@ class VerbnetReader:
             return set(xml.attrib["value"].split(" "))
         else:
             return ""
+    
+    def _format_syntax_roles(self, xml_syntax):
+        result = []
+        for node in xml_syntax:
+            if node.tag == "NP":
+                result.append(node.get("value"))
+            elif node.tag == "VERB":
+                result.append("V")
+            elif node.tag == "LEX":
+                result.append(node.get("value"))
+            elif node.tag == "PREP":
+                if node.get("value"):
+                    result.append("{{{}}}".format(node.get("value")))
+                else:
+                    restr = node.find("SELRESTRS/SELRESTR")
+                    result.append("{{{{{}{}}}}}".format(restr.get("Value"), restr.get("type")))
 
+            if node.find("SYNRESTRS"):
+                restr = node.find("SYNRESTRS/SYNRESTR")
+                result.append("<{}{}>".format(restr.get("Value"), restr.get("type")))
+
+        return " ".join(result)
+
+    def _build_semantics(self, xml_semantics):
+        pred_strings = []
+        for pred in xml_semantics.findall("PRED"):
+            pred_string = "{}({})".format(
+                pred.get("value"),
+                ", ".join([arg.get("value") for arg in pred.findall("ARGS/ARG")])
+            )
+            if pred.get("bool") == "!":
+                pred_string = "not({})".format(pred_string)
+
+            pred_strings.append(pred_string)
+
+        return " ".join(pred_strings)
         
 class VerbnetReaderTest(unittest.TestCase):
 

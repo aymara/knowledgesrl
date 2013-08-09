@@ -12,6 +12,8 @@ class VerbnetFrame:
     :var num_slots: int -- number of argument slots in :structure
     :var verbnet_class: str -- For VerbNet-extracted frames, the class number, eg. 9.10
     :var predicate: str -- For FrameNet-extracted frames, the predicate
+    :var example: str -- An example sentence that illustrates the frame
+    :var semantics: str -- The semantic as it appears in VerbNet
     
     """
     
@@ -30,7 +32,11 @@ class VerbnetFrame:
         role_restrictions = []):
         self.structure = structure
         self.predicate = predicate
-        
+         
+        self.example = None
+        self.semantics = None
+        self.synatx = None
+               
         # Transform "a" in {"a"} and keep everything else unchanged
         self.roles = [{x} if isinstance(x, str) else x for x in roles]
         self.role_restrictions = role_restrictions
