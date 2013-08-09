@@ -9,7 +9,7 @@ if __name__ == "__main__":
     from errorslog import *
 
     import framenetallreader
-    from framestructure import *
+    from verbnetframe import *
     from stats import *
     import options
     import verbnetreader

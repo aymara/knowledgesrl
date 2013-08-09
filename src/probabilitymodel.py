@@ -20,7 +20,7 @@
 
 import unittest
 import math
-from framestructure import *
+from verbnetframe import *
 from collections import defaultdict, Counter
 from functools import reduce
 

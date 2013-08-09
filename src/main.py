@@ -6,7 +6,7 @@ import sys
 import random
 from errorslog import *
 import framenetallreader
-from framestructure import *
+from verbnetframe import *
 from stats import *
 from errorslog import *
 from bootstrap import bootstrap_algorithm

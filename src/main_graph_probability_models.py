@@ -10,7 +10,7 @@ if __name__ == "__main__":
     import copy
 
     import framenetallreader
-    from framestructure import *
+    from verbnetframe import *
     from stats import *
     import options
     import verbnetreader

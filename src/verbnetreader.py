@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 import os
 import sys
 
-from framestructure import *
+from verbnetframe import *
 from verbnetrestrictions import VNRestriction
 import verbnetprepclasses
 import paths

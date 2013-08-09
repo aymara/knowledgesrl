@@ -18,7 +18,7 @@ NP with NP", what do you do? We decided, for now, to only match the syntactic
 subject.
 """
 
-from framestructure import *
+from verbnetframe import *
 from collections import defaultdict
 from verbnetrestrictions import VNRestriction
 import unittest
