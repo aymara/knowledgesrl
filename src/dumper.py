@@ -4,8 +4,9 @@
 import pickle
 import sys
 import getopt
+
 import framematcher
-from copy import deepcopy
+
 
 data = {
     "frame_matching":[],
@@ -53,7 +54,7 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher,
                     fn_frame=gold_fn_frame.frame_name,
                     vn_classes=verbnet_classes[gold_fn_frame.predicate.lemma]
                     )
-            except Exception as e:
+            except Exception:
                 status = "mapping_impossible"
 
             if status == "?":

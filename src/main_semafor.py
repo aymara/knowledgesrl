@@ -3,11 +3,6 @@
 
 import framenetreader
 import os
-import roleextractor
-import verbnetreader
-import rolematcher
-import paths
-import options
 
 
 semafor_file = "../data/semafor/all_evaluation.out"

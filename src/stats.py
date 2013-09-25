@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from collections import Counter
+
 from rolematcher import RoleMatchingError
-from errorslog import *
+from errorslog import log_ambiguous_role_conversion
 import options
+
 
 stats_data = {
     # Total number of files in the corpus
@@ -258,7 +260,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
                     fn_frame=gold_fn_frame.frame_name,
                     vn_classes=verbnet_classes[gold_fn_frame.predicate.lemma]
                     )
-            except RoleMatchingError as e:
+            except RoleMatchingError:
                 stats_data["impossible_mapping"] += 1
                 continue
   
@@ -282,7 +284,6 @@ def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     good = stats_data["one_correct_role"]
     bad = stats_data["one_bad_role"]
     resolved = stats_data["one_role"]
-    not_resolved = stats_data["args_kept"] - (stats_data["one_role"] + stats_data["no_role"])
     good_model = stats_data["one_correct_role"] - good_fm
     bad_model = stats_data["one_bad_role"] - bad_fm
     resolved_model = stats_data["one_role"] - resolved_fm

@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
+import random
+import itertools
+import copy
+
+import framenetallreader
+from verbnetframe import VerbnetFrame
+from stats import stats_data, stats_quality
+from errorslog import errors
+import options
+import verbnetreader
+import framematcher
+import rolematcher
+import probabilitymodel
+import paths
+
+
 if __name__ == "__main__":
-    import os
-    import sys
-    import random
-    from errorslog import *
-    import itertools
-    import copy
-
-    import framenetallreader
-    from verbnetframe import *
-    from stats import *
-    import options
-    import verbnetreader
-    import framematcher
-    import rolematcher
-    import probabilitymodel
-    import paths
-
     corpus_path = "../data/fndata-1.5/fulltext/"
     test_corpus_path = "../data/fndata-1.5/fulltext/"
 

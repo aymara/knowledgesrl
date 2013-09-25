@@ -6,9 +6,11 @@ of a syntax-annotated sentence described in:
 Lang & Lapata, 2011 "Unsupervised Semantic Role Induction via Split-Merge Clustering"
 """
 
-from conllreader import SyntacticTreeBuilder
 from functools import reduce
 import unittest
+
+from conllreader import SyntacticTreeBuilder
+
 
 class InvalidRelationError(Exception):
     """Exception raised when trying to build a relation with invalid keywords

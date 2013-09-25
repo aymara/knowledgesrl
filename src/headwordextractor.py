@@ -6,17 +6,14 @@
 import os
 import sys
 import unittest
-from collections import defaultdict
 import random
 import pickle
 import getopt
 
-from conllreader import SyntacticTreeBuilder, SyntacticTreeNode
 from framenetparsedreader import FNParsedReader
-from framenetallreader import FNAllReader
 import framenetreader
-import paths
 import options
+
 
 class HeadWordExtractor(FNParsedReader):
     """This object usess syntactic annotations of FrameNet to retrieve the headwords of
@@ -99,8 +96,6 @@ class HeadWordExtractor(FNParsedReader):
         :param vn_frames: The frames that we have to complete with headwords.
         :type vn_frames: VerbnetFrame List.
         """
-        old_filename = ""
-        previous_sentence = 0
         
         for frame, vn_frame in zip(frames, vn_frames):
             self.tree = frame.tree

@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import os
 import paths
 
+
 class NoSuchFrameError(Exception):
     """ Trying to determine if a role is a core role of a frame that does not exist.
     

@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 prep = {
     "src":{"from", "out", "out_of", "off", "off_of"},
     "dest_conf": {"into", "onto"},

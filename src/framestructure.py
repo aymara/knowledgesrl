@@ -3,9 +3,6 @@
 
 """Frames, arguments and predicates."""
 
-import unittest
-import verbnetprepclasses
-
 class Frame:
     """A frame extracted from the corpus
     

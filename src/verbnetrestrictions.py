@@ -4,6 +4,7 @@
 import unittest
 from collections import Counter
 
+
 class NoHashDefaultDict:
 
     """Basic reimplementation of defaultdict objects that tolerate indexation

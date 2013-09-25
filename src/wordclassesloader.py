@@ -6,10 +6,11 @@
   * retrieve the infinitive forms of verbs for the argguesser module
 """
 
-from nltk.corpus import wordnet as wn
 import pickle
 import getopt
 import sys
+
+from nltk.corpus import wordnet as wn
 
 # Read the arguments to know which of the two tasks we have to do
 handle_wordclasses, handle_morph, handle_restr = True, False, False

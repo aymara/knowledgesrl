@@ -3,13 +3,14 @@
 
 """Reads the files containing the syntactic parser output"""
 
-import framenetreader
-from conllreader import SyntacticTreeBuilder
 import unittest
-import paths
 import options
 import os
 import sys
+
+import framenetreader
+from conllreader import SyntacticTreeBuilder
+
 
 class FNParsedReader:
     """A simple object that can read the syntactic parser output and

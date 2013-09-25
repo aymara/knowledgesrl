@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
+import copy
+from collections import Counter
+
+from errorslog import errors, log_vn_missing, log_frame_without_slot
+from verbnetframe import VerbnetFrame
+from stats import stats_data, stats_quality, stats_precision_cover, stats_ambiguous_roles
+from bootstrap import bootstrap_algorithm
+import framenetallreader
+import options
+import verbnetreader
+import framematcher
+import rolematcher
+import probabilitymodel
+import headwordextractor
+from verbnetrestrictions import NoHashDefaultDict
+import paths
+
+
 if __name__ == "__main__":
-    import os
-    import sys
-    import random
-    import copy
-    from errorslog import *
-
-    import framenetallreader
-    from verbnetframe import *
-    from stats import *
-    import options
-    import verbnetreader
-    import framematcher
-    import rolematcher
-    import probabilitymodel
-    import headwordextractor
-    from verbnetrestrictions import NoHashDefaultDict
-    from bootstrap import *
-    import paths
-
     def init_verbnet(path):
         print("Loading VerbNet data...", file=sys.stderr)
         reader = verbnetreader.VerbnetReader(path)

@@ -24,12 +24,14 @@ import unittest
 import xml.etree.ElementTree as ET
 import os
 import sys
-from framestructure import *
-from collections import Counter
+import glob
+
+from framestructure import Predicate, Frame, Word, Arg
 from verbnetprepclasses import rel_pronouns
 import framenetcoreargs
 import paths
 import options
+
 
 class FulltextReader:
 
@@ -636,10 +638,6 @@ class FulltextReaderTest(unittest.TestCase):
         conll_sentence = next(reader.to_conll_format()).splitlines()
         self.assertEqual(conll_sentence[2], "3\ttony\ttony\tNNP\tNNP\t_\t0\t \t")
         self.assertEqual(conll_sentence[23], "24\t.\t.\t.\t.\t_\t0\t \t")
-        
-import glob
-import os
-import sys
 
 if __name__ == "__main__":
     if 'conll' in sys.argv:

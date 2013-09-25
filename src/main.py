@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import sys
-import random
-from errorslog import *
+from collections import Counter
+
 import framenetallreader
-from verbnetframe import *
-from stats import *
-from errorslog import *
+from verbnetframe import VerbnetFrame
+from stats import stats_quality, display_stats, stats_data, stats_ambiguous_roles
+from errorslog import errors, log_debug_data, log_vn_missing, display_debug, log_frame_without_slot
 from bootstrap import bootstrap_algorithm
 from verbnetrestrictions import NoHashDefaultDict
 import options
@@ -21,6 +20,7 @@ import probabilitymodel
 import headwordextractor
 import paths
 import dumper
+
 
 def init_verbnet(path):
     print("Loading VerbNet data...", file=sys.stderr)

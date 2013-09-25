@@ -7,6 +7,7 @@ import paths
 import getopt
 import sys
 
+
 matching_algorithm = "sync_predicates"
 core_args_only = True
 gold_args = True

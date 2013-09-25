@@ -3,15 +3,14 @@
 
 """Reads the files containing the syntactic parser output"""
 
-import framenetreader
-from conllreader import SyntacticTreeBuilder
-import framenetreader
 import unittest
-import paths
 import options
 import os
 import sys
-import time
+
+import framenetreader
+from conllreader import SyntacticTreeBuilder
+
 
 class FNAllReader:
     """ Reads simultaneously the fulltext corpus and framenet_parsed

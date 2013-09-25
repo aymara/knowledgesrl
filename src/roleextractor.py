@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from collections import defaultdict
+import unittest
+import re
+
 import framenetallreader
 import paths
 import options
 from stats import stats_data
-from framestructure import *
-from collections import defaultdict
-from collections import Counter
-import os
-import sys
-import unittest
-import re
+from framestructure import Predicate, Arg, Frame
+
 
 """Fill the roles of some frames extracted from the syntactic parser output
 using the annotated FrameNet data.

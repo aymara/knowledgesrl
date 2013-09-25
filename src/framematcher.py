@@ -18,13 +18,11 @@ NP with NP", what do you do? We decided, for now, to only match the syntactic
 subject.
 """
 
-from verbnetframe import *
-from collections import defaultdict
-from verbnetrestrictions import VNRestriction
 import unittest
-import sys
-import pickle
-import os
+
+from verbnetframe import VerbnetFrame
+from verbnetrestrictions import VNRestriction
+
 
 matching_algorithm = "sync_predicates"
 
@@ -334,7 +332,6 @@ class frameMatcherTest(unittest.TestCase):
      
                  
     def test_baseline_alg(self):
-        matching_algorithm = "baseline"
         frame = VerbnetFrame(['NP', 'V', 'NP', 'NP', 'for', 'NP'], [None, None, None, None])
         
         test_frames = [

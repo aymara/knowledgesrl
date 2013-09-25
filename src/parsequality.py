@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from framenetreader import FulltextReader
-from conllreader import SyntacticTreeBuilder, SyntacticTreeNode
+from conllreader import SyntacticTreeBuilder
 import glob
 import os
-import paths
 import options
 
 

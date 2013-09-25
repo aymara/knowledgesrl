@@ -3,19 +3,20 @@
 
 """ Extract frames, predicates and arguments from a corpus, using only syntactic annotations """
 
-import verbnetreader
-from framenetparsedreader import FNParsedReader
-from framestructure import *
-import options
-from conllreader import SyntacticTreeBuilder
-from verbnetprepclasses import all_preps
-from argheuristic import find_args
-import framenetreader
 import unittest
 import paths
 import pickle
 import os
 import sys
+
+from framestructure import Predicate, Frame, Word, Arg
+import verbnetreader
+from framenetparsedreader import FNParsedReader
+import options
+from conllreader import SyntacticTreeBuilder
+from verbnetprepclasses import all_preps
+from argheuristic import find_args
+
 
 class ArgGuesser(FNParsedReader):
     """
@@ -160,7 +161,6 @@ class ArgGuesser(FNParsedReader):
     
     def _handle_sentence(self):
         """ Extracts frames from one sentence and iterate over them """
-        found_one_frame = False
         for node in self.tree:
             # For every verb, looks for its infinitive form in verbnet, and
             # builds a new frame if it is found
@@ -171,7 +171,6 @@ class ArgGuesser(FNParsedReader):
                 continue
 
             if self._is_predicate(node):
-                found_one_frame = True
                 #Si deprel = VC, prendre le noeud du haut pour les args
                 #Si un child est VC -> ne rien faire avec ce node
                 predicate = Predicate(

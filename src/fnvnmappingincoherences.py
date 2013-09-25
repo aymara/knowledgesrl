@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import xml.etree.ElementTree as ET
-import re
 import os
 import sys
 import getopt
 from distutils.version import LooseVersion
 
-import framenetreader
 import paths
+
 
 display_framenet = False
 display_verbnet = False

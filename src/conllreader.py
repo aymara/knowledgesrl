@@ -5,6 +5,7 @@
 
 import unittest
 
+
 class ConllInvalidPositionError(Exception):
     """Trying to build a subtree from a node that does not exist
     

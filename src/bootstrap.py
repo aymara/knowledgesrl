@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest
-import probabilitymodel
 from math import log
 from functools import reduce
+
 
 def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes):
     # See Swier and Stevenson, Unsupervised Semantic Role Labelling, 2004, 5.4

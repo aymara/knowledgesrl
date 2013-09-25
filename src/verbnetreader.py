@@ -6,12 +6,12 @@
 import unittest
 import xml.etree.ElementTree as ET
 import os
-import sys
 
-from verbnetframe import *
+from verbnetframe import VerbnetFrame
 from verbnetrestrictions import VNRestriction
 import verbnetprepclasses
 import paths
+
 
 class VerbnetReader:
 
@@ -159,7 +159,6 @@ class VerbnetReader:
         if self.normalize:
             example = xml_frame.find("EXAMPLES/EXAMPLE").text
             semantics = self._build_semantics(xml_frame.find("SEMANTICS"))
-            syntax = xml_frame.find("DESCRIPTION").get("primary")
             syntax_roles = self._format_syntax_roles(xml_frame.find("SYNTAX"))
             
             for frame in result:

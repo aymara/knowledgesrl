@@ -5,10 +5,10 @@
 
 import unittest
 import xml.etree.ElementTree as ET
-import re
 
 import paths
 from collections import defaultdict
+
 
 # VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [

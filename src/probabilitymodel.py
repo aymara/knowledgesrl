@@ -20,9 +20,11 @@
 
 import unittest
 import math
-from verbnetframe import *
-from collections import defaultdict, Counter
+
+from verbnetframe import VerbnetFrame
+from collections import defaultdict
 from functools import reduce
+
 
 NO_PREP = "no_prep_magic_value"
 

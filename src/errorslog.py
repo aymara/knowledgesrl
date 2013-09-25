@@ -3,6 +3,7 @@
 
 import random
 
+
 errors = {
    "vn_parsing":[],
    "vn_missing":[],

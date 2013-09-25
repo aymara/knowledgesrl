@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from framestructure import *
+
+from framestructure import Frame, Predicate, Arg, Word
+import verbnetprepclasses
+
 
 class VerbnetFrame:
     """A representation of a frame syntaxic structure
