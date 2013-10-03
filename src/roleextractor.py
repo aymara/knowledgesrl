@@ -101,7 +101,7 @@ def correct_num_tags(extracted_frame, original_sentence):
     
     """
     
-    p = re.compile('[0-9]+')
+    p = re.compile('[0-9,]+')
     numbers = p.findall(original_sentence)
     
     frame_replace_all(extracted_frame, "<num> , <num>", "<num>,<num>")
@@ -132,7 +132,7 @@ def frame_replace_one(frame, search, replace):
     return True
     
 def frame_replace_all(frame, search, replace):
-    """ Replace very occurence of a word by another word in a frame"""
+    """ Replace every occurence of a word by another word in a frame"""
     if search in replace:
         raise Exception("frame_replace_all : cannot handle cases where :search"
             " is a substring of :replace")
