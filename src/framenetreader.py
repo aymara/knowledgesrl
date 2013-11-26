@@ -460,7 +460,7 @@ class FulltextReaderTest(unittest.TestCase):
             "ANC__HistoryOfLasVegas.xml":(194,511),
             "NTI__WMDNews_062606.xml":(170,443),
             "NTI__Iran_Missile.xml":(249,662),
-            "NTI__NorthKorea_Introduction.xml":(132,355),
+            "NTI__NorthKorea_Introduction.xml":(133,358),
             "LUCorpus-v0.3__enron-thread-159550.xml":(67,193),
             "ANC__110CYL069.xml":(1,2),
             "NTI__NorthKorea_NuclearCapabilities.xml":(61,158),
@@ -498,8 +498,8 @@ class FulltextReaderTest(unittest.TestCase):
             "NTI__Iran_Chemical.xml":(246,682),
             "NTI__Taiwan_Introduction.xml":(48,127),
             "LUCorpus-v0.3__wsj_1640.mrg-NEW.xml":(43,100),
-            "QA__IranRelatedQuestions.xml":(458,1169),
-            "ANC__EntrepreneurAsMadonna.xml":(66,174),
+            "QA__IranRelatedQuestions.xml":(460,1172),
+            "ANC__EntrepreneurAsMadonna.xml":(67,175),
             "KBEval__LCC-M.xml":(81,217),
             "LUCorpus-v0.3__20000424_nyt-NEW.xml":(5,13),
             "LUCorpus-v0.3__602CZL285-1.xml":(22,59),
@@ -527,7 +527,7 @@ class FulltextReaderTest(unittest.TestCase):
             "PropBank__ElectionVictory.xml":(58,151),
             "LUCorpus-v0.3__AFGP-2002-600045-Trans.xml":(80,190),
             "LUCorpus-v0.3__20000410_nyt-NEW.xml":(27,69),
-            "LUCorpus-v0.3__IZ-060316-01-Trans-1.xml":(77,184)
+            "LUCorpus-v0.3__IZ-060316-01-Trans-1.xml":(78,186)
         }
         
         self.tested_frames = [
