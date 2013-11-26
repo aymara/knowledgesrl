@@ -32,6 +32,7 @@ if __name__ == '__main__':
 
         # for each argument, see if it is in a parse tree. if yes +1
         for frame in reader.frames:
+            print('.', end='')
             frame_text = " ".join([frame.get_word(w) for w in frame.words])
             for t in trees:
                 if t.flat() == frame_text:
@@ -44,6 +45,7 @@ if __name__ == '__main__':
                             if t.contains(arg.text):
                                 correct += 1
                     break
+        print()
         
     print("{}/{} = {}".format(correct, total, correct/total))
     print("{}/{} = {}".format(partial_credit, total, partial_credit/total))
