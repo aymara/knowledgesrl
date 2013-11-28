@@ -40,6 +40,9 @@ if __name__ == "__main__":
     vn_frames = []
    
     if options.gold_args:
+        #
+        # Load gold arguments
+        #
         print("Loading frames...", file=sys.stderr)
         fn_reader = framenetallreader.FNAllReader(
             options.fulltext_corpus, options.framenet_parsed,
@@ -64,6 +67,9 @@ if __name__ == "__main__":
             vn_frames.append(converted_frame)
         stats_data["files"] += fn_reader.stats["files"]
     else:
+        #
+        # Argument identification
+        #
         arg_guesser = argguesser.ArgGuesser(options.framenet_parsed, verbnet_classes)
         
         print("Extracting frames and matching them with real frames...")
@@ -85,6 +91,9 @@ if __name__ == "__main__":
     print("Extracting arguments headwords...", file=sys.stderr)
     hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
     
+    #
+    # Frame matching
+    #
     print("Frame matching...", file=sys.stderr)
     all_matcher = []
     data_restr = NoHashDefaultDict(lambda : Counter())
@@ -159,6 +168,9 @@ if __name__ == "__main__":
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)
         
+    #
+    # Probability model
+    #
     if options.bootstrap:
         print("Computing headwords classes...", file=sys.stderr);
         hw_extractor.compute_word_classes()
@@ -166,7 +178,7 @@ if __name__ == "__main__":
         print("Bootstrap algorithm...", file=sys.stderr)
         bootstrap_algorithm(vn_frames, model, hw_extractor, verbnet_classes)
     else:
-        print("Applying probabilistic model...", file=sys.stderr)
+        print("Applying probabilty model...", file=sys.stderr)
         for frame in vn_frames:
             for i in range(0, len(frame.roles)):
                 if len(frame.roles[i]) > 1:

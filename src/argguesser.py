@@ -352,5 +352,6 @@ class ArgGuesserTest(unittest.TestCase):
         arg_finder = ArgGuesser(options.framenet_parsed, verbnet)
 
         self.assertEqual(arg_finder._find_args(tree), args)
+
 if __name__ == "__main__":
     unittest.main()
