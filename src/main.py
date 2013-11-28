@@ -7,6 +7,7 @@ from collections import Counter
 import framenetallreader
 from verbnetframe import VerbnetFrame
 from stats import stats_quality, display_stats, stats_data, stats_ambiguous_roles
+import errorslog
 from errorslog import errors, log_debug_data, log_vn_missing, display_debug, log_frame_without_slot
 from bootstrap import bootstrap_algorithm
 from verbnetrestrictions import NoHashDefaultDict
@@ -101,6 +102,7 @@ if __name__ == "__main__":
         try:
             matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
             all_matcher.append(matcher)
+            errorslog.log_frame_with_slot(good_frame, frame)
         except framematcher.EmptyFrameError:
             log_frame_without_slot(good_frame, frame)
             continue
@@ -183,5 +185,5 @@ if __name__ == "__main__":
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)
 
-    if options.debug: display_debug(options.n_debug)
-
+    if options.debug:
+        display_debug(options.n_debug)

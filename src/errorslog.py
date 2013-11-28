@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import random
+from collections import Counter
 
 
 errors = {
    "vn_parsing":[],
    "vn_missing":[],
    "frame_without_slot":[],
+   "frame_with_slot":[],
    "impossible_role_matching":[],
    "ambiguous_role":[]
 }
@@ -29,6 +31,13 @@ def log_vn_missing(frame):
     errors["vn_missing"].append({
         "file":frame.filename,"sentence":frame.sentence,
         "predicate":frame.predicate.lemma,
+    })
+
+def log_frame_with_slot(frame, converted_frame):
+    errors["frame_with_slot"].append({
+        "file":frame.filename,"sentence":frame.sentence,
+        "predicate":frame.predicate.lemma,
+        "structure":converted_frame.structure
     })
 
 def log_frame_without_slot(frame, converted_frame):
@@ -74,6 +83,14 @@ def display_errors_num():
             len(errors["missing_phrase_type"]), len(errors["vn_missing"]),
             len(errors["frame_without_slot"]), len(errors["impossible_role_matching"]))
     )
+
+def display_mapping_errors():
+    predicate_errors = Counter()
+    for data in errors['frame_without_slot']:
+        print(data)
+        predicate_errors[data['predicate']] += 1
+    print(predicate_errors.most_common(10))
+    print("Mapping errors for {} of {} predicates.".format(len(errors['frame_without_slot']), len(errors['frame_without_slot']) + len(errors['frame_with_slot'])))
 
 def display_error_details():
     #for data in errors["vn_parsing"]: print(data)
