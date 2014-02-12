@@ -22,7 +22,7 @@ class FNAllReader:
     :var corpus_path: str -- Path to framenet fulltext
     :var core_args_only: boolean -- Indicates whether we want only core args
     :var keep_unannotated: boolean -- Indicates whether we want to keep frames without arg annotations
-    :var frames: Frame List -- The collected frames
+    :var frames: FrameInstance List -- The collected frames
     """
     
     predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
@@ -67,9 +67,9 @@ class FNAllReader:
                 keep_unannotated = self.keep_unannotated,
                 trees = self.trees)
             
-            for frame in reader.frames:
-                if self.handle_frame(frame):
-                    yield frame
+            for frame_instance in reader.frames:
+                if self.handle_frame(frame_instance):
+                    yield frame_instance
     
     def load_syntax_file(self, filename):
         """Load the data of the syntax annotations files.
@@ -101,7 +101,7 @@ class FNAllReader:
         """Add information to a frame using the syntax annotation
         
         :param frame: The frame
-        :type frame: Frame
+        :type frame: FrameInstance
         """
         
         search = frame.predicate.text.split()[0].lower()

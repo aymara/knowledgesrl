@@ -11,11 +11,11 @@ import options
 stats_data = {
     # Total number of files in the corpus
     "files":0,
-    # Number of annotated verbal frames in the corpus
+    # Number of annotated verbal frame instances in the corpus
     "frames":0,
-    # Number of annotated verbal frames which have a predicate in VerbNet
+    # Number of annotated verbal frame instances which have a predicate in VerbNet
     "frames_with_predicate_in_verbnet":0,
-    # Number of frames for which frame-matching is possible (at least one slot)
+    # Number of frame instances for which frame-matching is possible (at least one slot)
     "frames_mapped":0,
     # Number of args belonging to an annotated verbal frame in the corpus
     "args":0,
@@ -56,15 +56,15 @@ stats_data = {
     # Idem only on slots where role mapping is ok
     "attributed_roles_mapping_ok":0,
     
-    # Frame and argument extraction from raw text
+    # Frame instances and argument extraction from raw text
     
-    # Number of correct extracted frames
+    # Number of correct extracted frame instances
     "frame_extracted_good":0,
-    # Number of incorrect (no annotations) extracted frames
+    # Number of incorrect (no annotations) extracted frame instances
     "frame_extracted_bad":0,
-    # Number of non-extracted annotated frames
+    # Number of non-extracted annotated frame instances
     "frame_not_extracted":0,
-    # Number of non-extracted annotated frames which do not have a predicate in VerbNet
+    # Number of non-extracted annotated frame instances which do not have a predicate in VerbNet
     "frame_not_extracted_not_verbnet":0,
     # Number of correct extracted arguments
     "arg_extracted_good":0,
@@ -118,8 +118,8 @@ def display_stats(gold_args):
     
     if gold_args:
         print(
-            "\n\nFiles: {} - annotated frames: {} - annotated args: {}\n"
-            "Frames with predicate in VerbNet: {} frames ({} args)\n".format(
+            "\n\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"
+            "Frame instances with predicate in VerbNet: {} frame instances ({} args)\n".format(
             s["files"], s["frames"], s["args"],
             s["frames_with_predicate_in_verbnet"],  s["args_kept"]
         ))
@@ -138,7 +138,7 @@ def display_stats(gold_args):
         
     if not options.use_test_set:
         print(
-            "Frames mapped: {} frames\n"
+            "Frame instances mapped: {} frames\n"
             
             "\nFrame matching:\n"
             "{} args not matched ({} not annotated)\n"

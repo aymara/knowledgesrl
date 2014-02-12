@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Frames, arguments and predicates."""
+"""Frames instances, its arguments and predicates."""
 
-class Frame:
+class FrameInstance:
     """A frame extracted from the corpus
     
     :var sentence: Sentence in which the frame appears
@@ -39,7 +39,7 @@ class Frame:
             self.words == other.words)
 
     def __repr__(self):
-        return "Frame({}, {}, {})".format(
+        return "FrameInstance({}, {}, {})".format(
                 self.predicate, self.args, self.frame_name)
 
     

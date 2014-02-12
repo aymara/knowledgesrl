@@ -92,7 +92,7 @@ class HeadWordExtractor(FNParsedReader):
         """ Fills frame data with the headwords of the arguments.
         
         :param frames: The FrameNet frames as returned by a FrameNetReader.
-        :type frames: Frame List.
+        :type frames: FrameInstance List.
         :param vn_frames: The frames that we have to complete with headwords.
         :type vn_frames: VerbnetFrame List.
         """

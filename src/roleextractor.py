@@ -9,7 +9,7 @@ import framenetallreader
 import paths
 import options
 from stats import stats_data
-from framestructure import Predicate, Arg, Frame
+from framestructure import FrameInstance, Predicate, Arg
 
 
 """Fill the roles of some frames extracted from the syntactic parser output
@@ -22,7 +22,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
     Note : extracted_frames is altered, even if the final result is returned.
     
     :param extracted_frames: The frames.
-    :type extracted_frames: Frame List.
+    :type extracted_frames: FrameInstance List.
     :param verbnet_classes: The VerbNet lexicon, used to determine which frames
     from the corpus we should have extracted.
     :type verbnet_classes: Str Dict.
@@ -95,7 +95,7 @@ def correct_num_tags(extracted_frame, original_sentence):
     and update begin/end attributes where necessary.
     
     :param extracted_frame: The frame that contains <num> tags
-    :type extracted_frame: Frame
+    :type extracted_frame: FrameInstance
     :param original_sentence: The original unaltered sentence of the frame
     :type original_sentence: str
     
@@ -209,7 +209,7 @@ class RoleExtractorTest(unittest.TestCase):
         ]
         words = []
         
-        frame = Frame(initial_sentence, initial_predicate, initial_args,
+        frame = FrameInstance(initial_sentence, initial_predicate, initial_args,
             words, "fn_frame_name")
         
         correct_num_tags(frame, final_sentence)

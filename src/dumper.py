@@ -118,7 +118,7 @@ def print_slot(slot_data):
         "Sentence: {}\n"
         "Predicate: {}\n"
         "Argument: {}\n"
-        "Frame structure: {}\n"
+        "Frame instance structure: {}\n"
         "Frame name: {}\n"
         "Role list: {}\n"
         "Correct role: {} (FrameNet) -> {} (VerbNet)\n"

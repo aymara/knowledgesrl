@@ -38,7 +38,7 @@ class RoleMatchingError(Exception):
         return ("Error : {}".format(self.msg))
 
 class VnFnRoleMatcher():
-    """This read the mapping between VN and FN roles, and can then be used to compare them
+    """Reads the mapping between VN and FN roles, and can then be used to compare them
     
     :var fn_roles: data structure used to store the mapping between VN and FN roles
     :var mappings: associate possible mapping (FN roles -> VN roles) to every FN frames
@@ -48,7 +48,7 @@ class VnFnRoleMatcher():
     def __init__(self, path):
         # 4-dimensions matrix :
         # self.fn_roles[fn_role][fn_frame][vn_class][i] is the
-        # i-th possible VN roles associated to fn_role for the frame fn_frame
+        # i-th possible VN role associated to fn_role for the frame fn_frame
         # and a verb in vn_class.
         self.fn_roles = {}
         
@@ -56,11 +56,11 @@ class VnFnRoleMatcher():
         self.mappings = {}
         
         self.issues = {
-            # VN roles stored in vn_roles_additionnal
+            # VerbNet roles stored in vn_roles_additionnal
             "new_vn_roles":{},
-            # Frames to which are associated different FN/VN roles mappings
+            # FrameNet frames with various VerbNet classes attached
             "vbclass_dependent":0,
-            # Frames to which are associated contradictory FN/VN roles mappings
+            # FrameNet frames with contradictory role mappings (depending on VerbNet class)
             "vbclass_contradictory":0,
             # FN roles that can correspond to several VN roles for the same frame
             "ambiguities":0,

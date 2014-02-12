@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Match Frame to appropriate VerbNet structures
+"""Match FrameInstance to appropriate VerbNetFrame structure
 
 Based on the 2004 Swier & Stevenson paper: Unsupervised Semantic Role Labeling.
 

@@ -9,7 +9,7 @@ import pickle
 import os
 import sys
 
-from framestructure import Predicate, Frame, Word, Arg
+from framestructure import FrameInstance, Predicate, Word, Arg
 import verbnetreader
 from framenetparsedreader import FNParsedReader
 import options
@@ -184,7 +184,7 @@ class ArgGuesser(FNParsedReader):
 
                 args = [x for x in args if self._is_good_pt(x.phrase_type)]
                 
-                yield Frame(
+                yield FrameInstance(
                     sentence=self.tree.flat(),
                     predicate=predicate,
                     args=args,

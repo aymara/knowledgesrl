@@ -3,7 +3,7 @@
 
 import unittest
 
-from framestructure import Frame, Predicate, Arg, Word
+from framestructure import FrameInstance, Predicate, Arg, Word
 import verbnetprepclasses
 
 
@@ -17,7 +17,11 @@ class VerbnetFrame:
     :var predicate: str -- For FrameNet-extracted frames, the predicate
     :var example: str -- An example sentence that illustrates the frame
     :var semantics: str -- The semantic as it appears in VerbNet
-    
+
+    TODO: Currently, VerbnetFrame can hold two kinds of frames: a real frame
+    from VerbNet with semantics and so on, and a FrameNet frame instance with
+    automatically assigned VerbNet roles. This is confusing and those two
+    concerns should probably be separated.
     """
     
     slot_types = {
@@ -124,10 +128,10 @@ class VerbnetFrame:
     
     @staticmethod
     def build_from_frame(frame):
-        """Build a VerbNet frame from a Frame object
+        """Build a VerbNet frame from a FrameInstance object
         
-        :param frame: The original Frame.
-        :type frame: Frame.
+        :param frame: The original frame instance.
+        :type frame: FrameInstance.
         :returns: VerbnetFrame -- the built frame, without the roles
         """
         
@@ -371,7 +375,7 @@ class VerbnetFrame:
 class VerbnetFrameTest(unittest.TestCase):
     def test_conversion(self):
         tested_frames = [
-            Frame(
+            FrameInstance(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
                 " a freer flow of food and medicine into Iraq .",
                 Predicate(28, 32, "urges", "urge"),
@@ -393,7 +397,7 @@ class VerbnetFrameTest(unittest.TestCase):
                     Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
                 ],
                 "Attempt_suasion" ),
-            Frame(
+            FrameInstance(
                 "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"+\
                 " a freer flow of food and medicine into Iraq .",
                  Predicate(56, 60, "allow", "allow"),

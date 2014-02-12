@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Parse FrameNet fulltext annotation into Frame, Arg and Predicate objects.
+"""Parse FrameNet fulltext annotation into FrameInstance, Arg and Predicate objects.
 
 Notes:
 
@@ -26,7 +26,7 @@ import os
 import sys
 import glob
 
-from framestructure import Predicate, Frame, Word, Arg
+from framestructure import FrameInstance, Predicate, Word, Arg
 from verbnetprepclasses import rel_pronouns
 import framenetcoreargs
 import paths
@@ -37,7 +37,7 @@ class FulltextReader:
 
     """Class used to parse one file of the FrameNet fulltext corpus
 
-    :var frames: Frame list of every frame collected
+    :var frames: FrameInstance list of every frame collected
     
     """
     
@@ -269,7 +269,7 @@ class FulltextReader:
         else:
             args, relative = [], False
         
-        return Frame(sentence_text, predicate, args, words, frame_name,
+        return FrameInstance(sentence_text, predicate, args, words, frame_name,
             filename=self.filename, arg_annotated=annotated,
             relative=relative)
     
@@ -531,7 +531,7 @@ class FulltextReaderTest(unittest.TestCase):
         }
         
         self.tested_frames = [
-            Frame(
+            FrameInstance(
                 ("Rep . Tony Hall , D- Ohio , urges the United Nations to allow"
                 " a freer flow of food and medicine into Iraq .").lower(),
                 Predicate(28, 32, "urges", "urge"),
@@ -553,7 +553,7 @@ class FulltextReaderTest(unittest.TestCase):
                     Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
                 ],
                 "Attempt_suasion" ),
-            Frame(
+            FrameInstance(
                 ("Rep . Tony Hall , D- Ohio , urges the United Nations to allow"
                 " a freer flow of food and medicine into Iraq .").lower(),
                  Predicate(56, 60, "allow", "allow"),
