@@ -57,7 +57,7 @@ class FNAllReader:
             
             print(".", file=sys.stderr, end="", flush=True)
             
-            if not self.load_syntax_file(filename): continue
+            self.load_syntactic_parses(filename[:-4])
             
             self.stats["files"] += 1
             
@@ -68,20 +68,20 @@ class FNAllReader:
                 trees = self.trees)
             
             for frame_instance in reader.frames:
-                if self.handle_frame(frame_instance):
+                if self.add_syntactic_information(frame_instance):
                     yield frame_instance
     
-    def load_syntax_file(self, filename):
-        """Load the data of the syntax annotations files.
+    def load_syntactic_parses(self, filename):
+        """Load the syntactic annotations files.
         Not affected by newlines at the end of the file.
         
-        :param filename: The file to load.
+        :param filename: The FrameNet file name, eg. ANC__110CYL072
         :type filename: str.
         :returns: boolean -- True if the file was correctly loaded, False otherwise.
         """
         self.trees, self.sentences_syntax = [], []
         
-        path = self.annotations_path + filename.replace(".xml", ".conll")
+        path = self.annotations_path + filename + ".conll"
         
         if not os.path.exists(path):
             return False
@@ -97,9 +97,18 @@ class FNAllReader:
             
         return True
         
-    def handle_frame(self, frame):
-        """Add information to a frame using the syntax annotation
+    def add_syntactic_information(self, frame):
+        """
+        Add information to a frame using the syntactic annotation: whether it is
+        passive or not, and whether the predicate has been found in the tree.
         
+        In some cases (five for the training set), our parser produces
+        multiple roots, which mean the resulting tree could only cover one
+        part of the sentence.
+
+        In those cases, the function returns False and the frame is not handled
+        by our labeler.
+
         :param frame: The frame
         :type frame: FrameInstance
         """
@@ -109,13 +118,15 @@ class FNAllReader:
         for node in frame.tree:
             if node.word == search:
                 found = True
+                predicate_node = node
                 break
+
         if not found:
             #print("\nframenetparsedreader : predicate \"{}\" not found in "
             #    "sentence {}".format(search, frame.tree.flat()))
             return False
         
-        frame.passive = FNAllReader.is_passive(node)
+        frame.passive = FNAllReader.is_passive(predicate_node)
         frame.sentence_id_fn_parsed = 0
         
         return True

@@ -171,7 +171,8 @@ class FulltextReader:
         for i, sentence in enumerate(root.findall(self.patterns["sentence"])):
             for frame in self._parse_sentence(sentence, i):
                 frame.sentence_id = i
-                if trees != None: frame.tree = trees[i]
+                if trees != None:
+                    frame.tree = trees[i]
                 
                 self.frames.append(frame)
     
@@ -198,6 +199,7 @@ class FulltextReader:
                     "pos":label.attrib["name"]
                 })
         else:
+            # We can use the existing automatic SEMAFOR part-of-speech annotation
             start = 0
             for line in self.pos_data[sentence_number].split("\n"):
                 if line == "": continue
