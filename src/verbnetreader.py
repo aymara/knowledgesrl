@@ -6,7 +6,9 @@
 import unittest
 import xml.etree.ElementTree as ET
 import os
+import sys
 
+from errorslog import errors
 from verbnetframe import VerbnetFrame
 from verbnetrestrictions import VNRestriction
 import verbnetprepclasses
@@ -33,7 +35,7 @@ class VerbnetReader:
         
         self.normalize = normalize
         
-        self.verbs = {}
+        self.frames_for_verb = {}
         self.classes = {}
         self.roles = {}
         self.cnames = {}
@@ -55,7 +57,7 @@ class VerbnetReader:
     def _normalized(self):
         self.files = {}
         
-        for verb, verb_data in self.verbs.items():
+        for verb, verb_data in self.frames_for_verb.items():
             for vnframe in verb_data:
                 filename = self.cnames[vnframe.vnclass][:-4]
                 
@@ -115,11 +117,11 @@ class VerbnetReader:
         
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
-            if not verb in self.verbs:
-                self.verbs[verb] = []
+            if not verb in self.frames_for_verb:
+                self.frames_for_verb[verb] = []
                 self.classes[verb] = []
                 
-            self.verbs[verb] += frames
+            self.frames_for_verb[verb] += frames
             self.classes[verb].append(vnclass)
             
         for subclass in xml_class.find("SUBCLASSES"):
@@ -453,7 +455,7 @@ class VerbnetReaderTest(unittest.TestCase):
     def test_global(self):
         path = paths.VERBNET_PATH
         reader = VerbnetReader(path)
-        self.assertEqual(len(reader.verbs), 4154)
+        self.assertEqual(len(reader.frames_for_verb), 4154)
 
         test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
         test_frames = [
@@ -480,13 +482,13 @@ class VerbnetReaderTest(unittest.TestCase):
         }
         
         for verb, frame in zip(test_verbs, test_frames):
-            self.assertIn(verb, reader.verbs)
-            self.assertIn(frame, reader.verbs[verb])
-            vnframe = reader.verbs[verb][reader.verbs[verb].index(frame)]
+            self.assertIn(verb, reader.frames_for_verb)
+            self.assertIn(frame, reader.frames_for_verb[verb])
+            vnframe = reader.frames_for_verb[verb][reader.frames_for_verb[verb].index(frame)]
             self.assertEqual(
                 [str(x) for x in vnframe.role_restrictions], restrictions_str[verb])
         
-        reader.verbs = {}
+        reader.frames_for_verb = {}
         root = ET.ElementTree(file=path+"separate-23.1.xml")
         reader._handle_class(root.getroot(), [], [], [])
         
@@ -516,17 +518,23 @@ class VerbnetReaderTest(unittest.TestCase):
         }
         
         for verb in expected_result:
-            if expected_result[verb] != reader.verbs[verb]:
+            if expected_result[verb] != reader.frames_for_verb[verb]:
                 print("Error :")
                 print(verb)
                 for data in expected_result[verb]:
                     print(data)
                 print("\n")
-                for data in reader.verbs[verb]:
+                for data in reader.frames_for_verb[verb]:
                     print(data)
                 print("\n")
             
-        self.assertEqual(reader.verbs, expected_result)
+        self.assertEqual(reader.frames_for_verb, expected_result)
+
+def init_verbnet(path):
+    print("Loading VerbNet data...", file=sys.stderr)
+    reader = VerbnetReader(path)
+    errors["vn_parsing"] = reader.unhandled
+    return reader.frames_for_verb, reader.classes
         
 if __name__ == "__main__":
     unittest.main()

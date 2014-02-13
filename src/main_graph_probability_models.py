@@ -26,15 +26,8 @@ if __name__ == "__main__":
     models = ["predicate_slot"]
     step = 10
     num_same = 5
-
-    def init_verbnet(path):
-        print("Loading VerbNet data...", file=sys.stderr)
-        reader = verbnetreader.VerbnetReader(path)
-        errors["vn_parsing"] = reader.unhandled
-        return reader.verbs, reader.classes
-
        
-    verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
+    frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
 
     # Read data that will be used to feed the probability model
 
@@ -48,7 +41,7 @@ if __name__ == "__main__":
             core_args_only=options.core_args_only)
 
     for frame in fn_reader.iter_frames():
-        if not frame.predicate.lemma in verbnet: continue
+        if not frame.predicate.lemma in frames_for_verb: continue
             
         annotated_frames.append(frame)
             
@@ -70,7 +63,7 @@ if __name__ == "__main__":
         except framematcher.EmptyFrameError:
             continue
 
-        for test_frame in verbnet[predicate]:
+        for test_frame in frames_for_verb[predicate]:
             matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
         
@@ -89,7 +82,7 @@ if __name__ == "__main__":
         stats_data["args"] += len(frame.args)
         stats_data["frames"] += 1
 
-        if not frame.predicate.lemma in verbnet:
+        if not frame.predicate.lemma in frames_for_verb:
             #log_vn_missing(filename, frame)
             continue
         
@@ -117,7 +110,7 @@ if __name__ == "__main__":
         stats_data["frames_mapped"] += 1
 
         # Actual frame matching
-        for test_frame in verbnet[predicate]:
+        for test_frame in frames_for_verb[predicate]:
             matcher.new_match(test_frame)
         frame.roles = matcher.possible_distribs()
 

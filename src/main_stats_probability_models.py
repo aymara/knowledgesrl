@@ -21,13 +21,7 @@ import paths
 
 
 if __name__ == "__main__":
-    def init_verbnet(path):
-        print("Loading VerbNet data...", file=sys.stderr)
-        reader = verbnetreader.VerbnetReader(path)
-        errors["vn_parsing"] = reader.unhandled
-        return reader.verbs, reader.classes
-
-    verbnet, verbnet_classes = init_verbnet(paths.VERBNET_PATH)
+    frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
 
     print("Loading frames...", file=sys.stderr)
 
@@ -42,7 +36,7 @@ if __name__ == "__main__":
         stats_data["args"] += len(frame.args)
         stats_data["frames"] += 1
 
-        if not frame.predicate.lemma in verbnet:
+        if not frame.predicate.lemma in frames_for_verb:
             log_vn_missing(frame)
             continue
         stats_data["frames_with_predicate_in_verbnet"] += 1
@@ -84,7 +78,7 @@ if __name__ == "__main__":
         stats_data["frames_mapped"] += 1
         
         # Actual frame matching
-        for test_frame in verbnet[predicate]:
+        for test_frame in frames_for_verb[predicate]:
             if options.passive and good_frame.passive:
                 try:
                     for passivized_frame in test_frame.passivize():
