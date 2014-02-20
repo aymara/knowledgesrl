@@ -98,7 +98,7 @@ if __name__ == "__main__":
         stats_ambiguous_roles(good_frame, num_instanciated,
             role_matcher, verbnet_classes)
      
-        # Find FrameNet frame instance <-> VerbNet class mapping
+        # Check that FrameNet frame slots have been mapped to VerbNet-style slots
         try:
             matcher = framematcher.FrameMatcher(frame, options.matching_algorithm)
             all_matcher.append(matcher)

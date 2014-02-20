@@ -8,12 +8,12 @@ import verbnetprepclasses
 
 
 class VerbnetFrame:
-    """A representation of a frame syntaxic structure
+    """A representation of a frame syntactic structure
     
     :var structure: (str | str Set) List -- representation of the structure
     :var roles: List -- possible VerbNet roles for each structure's slot
     :var num_slots: int -- number of argument slots in :structure
-    :var verbnet_class: str -- For VerbNet-extracted frames, the class number, eg. 9.10
+    :var vnclass: str -- For VerbNet-extracted frames, the class number, eg. 9.10
     :var predicate: str -- For FrameNet-extracted frames, the predicate
     :var example: str -- An example sentence that illustrates the frame
     :var semantics: str -- The semantic as it appears in VerbNet
