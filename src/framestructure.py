@@ -117,8 +117,8 @@ class Predicate:
         self.text = text
         self.lemma = lemma
 
-    def __str__(self):
-        return self.lemma
+    def __repr__(self):
+        return "Predicate({}, {})".format(self.text, self.lemma)
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
