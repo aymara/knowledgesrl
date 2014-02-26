@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE dico_verbnet_rolemapping [
+  <!ELEMENT dico_verbnet_rolemapping (lexie+)>
+  <!ELEMENT lexie  (role+)>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST lexie name  CDATA #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST role  dico  CDATA #REQUIRED>
+  <!ATTLIST role  vn    CDATA #REQUIRED>
+]>
+<dico_verbnet_rolemapping>
+    <lexie name='accelerate.1b' vn='other_cos-45.4'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='conserve.1'>
+        only sense wn4 in VN (but OntoNotes gruops them all!)
+    </lexie>
+    <lexie name='cool.1b' vn='other_cos-45.4'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+        <role dico='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='deposit.2' vn='put-9.1'>
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='migrate.2'>
+    </lexie>
+    <lexie name='pollute.1b' vn='fill-9.8'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Destination' vn='Destination' />
+        <role dico='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='reflect.1'>
+        only figurative sense in VerbNet
+    </lexie>
+    <lexie name='shift.1' vn='calibratable_cos-45.4'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='stabilize.1b'>
+    </lexie>
+    <lexie name='warm.1b'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+</dico_verbnet_rolemapping>

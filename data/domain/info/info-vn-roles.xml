@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE dico_verbnet_rolemapping [
+  <!ELEMENT dico_verbnet_rolemapping (lexie+)>
+  <!ELEMENT lexie  (role+)>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST lexie name  CDATA #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST role  dico  CDATA #REQUIRED>
+  <!ATTLIST role  vn    CDATA #REQUIRED>
+]>
+<dico_verbnet_rolemapping>
+    <lexie name='debug.1' vn='debone-10.8'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Source' vn='Source' />
+    </lexie>
+    <lexie name='download.1' />
+    <lexie name='edit.1' />
+    <lexie name='insert.2' vn='put-9.1-1'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='launch.1b' vn='establish-55.5'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='launch.2' vn='establish-55.5'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='open.1'>
+        No OntoNotes sense #7 in VerbNet
+    </lexie>
+    <lexie name='query.3'>
+    </lexie>
+    <lexie name='read.1' vn='transfer_msg-37.1'><!-- TODO fits? -->
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Topic' />
+        <role dico='Destination' vn='Source' />
+    </lexie>
+    <lexie name='read.2' vn='learn-14'><!-- TODO fits? -->
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Topic' />
+    </lexie>
+</dico_verbnet_rolemapping>

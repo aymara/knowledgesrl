@@ -10,6 +10,7 @@ from colorama import Fore
 
 import paths
 import verbnet
+from rolemapping import RoleMapping
 
 
 def deindent_text(sentence_text):
@@ -109,30 +110,6 @@ def retrieve_constructs(dico, xmlns):
 
     return frames_for_lexie
 
-to_verbnet = {
-    'verb.1': {
-        'other_cos-45.4': {'Agent': {}, 'Patient': {'Patient'}},
-        'coil-9.6': {'Agent': {}, 'Patient': {'Patient'}}
-    },
-    'read.1': {'Agent': 'Agent', 'Patient': 'Topic', 'Destination': 'Source'},
-    #'reflect.1', only figurative sense in VerbNet
-    'warm.1b': {'Agent': 'Agent', 'Cause': 'Agent', 'Patient': 'Patient'},
-    'accelerate.1b': {'Cause': 'Agent', 'Patient': 'Patient'},  # other_cos-45.4
-    'cool.1b': {'Cause': 'Agent', 'Patient': 'Patient', 'Agent': 'Agent'},  # other_cos45.4
-    'deposit.2': {'Patient': 'Theme', 'Destination': 'Destination'},  # put-9.1
-    'shift.1': {'Patient': 'Patient'},  # calibratable_cos-45.4
-    'pollute.1b': {'Cause': 'Agent', 'Destination': 'Destination', 'Agent': 'Agent'},  # fill-9.8
-    # 'conserve.1': {} only sense wn 4 in VN (but OntoNotes groups them all!
-
-    'launch.1b': {'Agent': 'Agent', 'Patient': 'Theme'},  # establish-55.5
-    'launch.2': {'Instrument': 'Agent', 'Patient': 'Theme'},
-    'debug.1': {'Agent': 'Agent', 'Source': 'Source'},  # debone-10.8
-    # 'open.1' no OntoNotes sense #7 in VerbNet, 
-    'read.1': {'Agent': 'Agent', 'Patient': 'Topic', 'Destination': 'Source'}, # transfer_msg 37.1, but doesn't really fit
-    'read.2': {'Agent': 'Agent', 'Patient': 'Topic'},  # a bit weird, based on learn-14
-    'insert.2': {'Agent': 'Agent', 'Patient': 'Theme', 'Destination': 'Destination'},
-}
-
 def debug(should_debug, stuff, end='\n'):
     if should_debug:
         if stuff:
@@ -146,7 +123,7 @@ def matches_verbnet_frame(dico_frame, vn_frame):
 
     return dico_subcat == vn_subcat
 
-def analyze_constructs(frames_for_lexie, classes_for_predicate):
+def analyze_constructs(frames_for_lexie, classes_for_predicate, to_verbnet):
     annotated_sentences = 0
     lemma_in_vn = 0
 
@@ -214,10 +191,10 @@ if __name__ == '__main__':
     #vn_reader = verbnetreader.VerbnetReader(paths.VERBNET_PATH, replace_pp = False)
     #normalized_frames = normalize_vn_frames(vn_reader.frames_for_verb)
 
-    for dico, xmlns in paths.DICOS:
+    for dico, xmlns, mappingfile in paths.DICOS:
         print(dico)
         frames_for_lexie = retrieve_constructs(dico, xmlns)
-        analyze_constructs(frames_for_lexie, verbnet.classes_for_predicate)
+        analyze_constructs(frames_for_lexie, verbnet.classes_for_predicate, RoleMapping(mappingfile))
         
 
 class ParseDicoText(unittest.TestCase):
