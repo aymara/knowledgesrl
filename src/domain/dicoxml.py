@@ -33,7 +33,7 @@ def deindent_text(sentence_text):
 
 
 def get_all_text(elem, get_tail=False):
-    if not elem:
+    if elem is None:
         return ''
 
     all_text = elem.text if elem.text else ''
