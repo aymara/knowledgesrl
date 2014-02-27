@@ -4,6 +4,7 @@ import collections
 import re
 import os.path
 from xml.etree import ElementTree as ET
+import pickle
 
 import colorama
 from colorama import Fore
@@ -84,29 +85,25 @@ def matches_verbnet_frame(dico_frame, vn_frame):
     return dico_subcat == vn_subcat
 
 
-def analyze_constructs(frames_for_lexie, classes_for_predicate, to_verbnet):
-    annotated_sentences = 0
-    lemma_in_vn = 0
-
+def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to_verbnet):
+    annotated_sentences, lemma_in_vn = 0, 0
     valid_frames, missing_frames = 0, 0
     n_correct_roles, n_wrong_roles = 0, 0
 
     for lexie in frames_for_lexie:
-        d = (lexie in ['open.1', 'launch.2', 'download.1', 'read.1', 'insert.2', 'debug.1', 'edit.1', 'launch.1b', 'query.3', 'read.2'] or
-             lexie in ['accelerate.1b', 'conserve.1', 'warm.1b', 'migrate.2', 'shift.1', 'pollute.1b', 'stabilize.1b', 'cool.1b', 'deposit.2', 'reflect.1'])
+        d = lexie in lexie_groups['train']  # debug?
+        c = lexie in lexie_groups['train']  # score?
 
         debug(d, ('? ', lexie))
         lemma = lexie.split('.')[0]
-        annotated_sentences += len(frames_for_lexie[lexie])
+        if c: annotated_sentences += len(frames_for_lexie[lexie])
 
         # First possible error: lemma does not exist in VerbNet
         if lemma not in classes_for_predicate:
             continue
 
-        #debug(d, (lemma, classes_for_predicate[lemma]))
-
         for dico_frame in frames_for_lexie[lexie]:
-            lemma_in_vn += 1
+            if c: lemma_in_vn += 1
 
             vn_frame_matches = []
 
@@ -118,30 +115,27 @@ def analyze_constructs(frames_for_lexie, classes_for_predicate, to_verbnet):
             # Second possible error: syntactic pattern is not in VerbNet
             if not vn_frame_matches:
                 debug(d, (":( ", lemma, Fore.RED, dico_frame, Fore.RESET))
-                missing_frames += 1
+                if c: missing_frames += 1
                 continue
 
             debug(d, (":) ", lemma, Fore.GREEN, dico_frame, Fore.RESET))
-            valid_frames += 1
+            if c: valid_frames += 1
 
             debug(d, ('       ', dico_frame, vn_frame_matches))
 
             for i, correct_syntax in enumerate(dico_frame):
-                if 'role' in correct_syntax:
+                if 'role' in correct_syntax:  # this is a 'frame element'
                     candidate_roles = set()
 
                     for frame in vn_frame_matches:
-                        role = frame.syntax[i]['role']
-                        if lexie in to_verbnet:
-                            converted_role = to_verbnet[lexie].get(role, role)
-                        else:
-                            converted_role = role
-                        candidate_roles.add(converted_role)
+                        candidate_roles.add(frame.syntax[i]['role'])
 
-                    if correct_syntax.get('role') in candidate_roles:
-                        n_correct_roles += 1 / len(candidate_roles)
+                    if to_verbnet[lexie] == {}: # TODO think about how it impacts scores
+                        print('impossible')
+                    elif to_verbnet[lexie][correct_syntax.get('role')] in candidate_roles:
+                        if c: n_correct_roles += 1 / len(candidate_roles)
                     else:
-                        n_wrong_roles += 1
+                        if c: n_wrong_roles += 1
 
     print('{:.2%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('For these tokens, {:.2%} of constructions are here'.format(valid_frames/(valid_frames + missing_frames)))
@@ -154,7 +148,14 @@ if __name__ == '__main__':
 
     for dico in paths.DICOS:
         print(dico['xml'])
+        lexies = {
+            'train': pickle.load(open(os.path.join(dico['root'], dico['train']), 'rb')),
+            'dev': pickle.load(open(os.path.join(dico['root'], dico['dev']), 'rb')),
+            'test': pickle.load(open(os.path.join(dico['root'], dico['test']), 'rb'))
+        }
+
         frames_for_lexie = retrieve_constructs(os.path.join(dico['root'], dico['xml']), dico['xmlns'])
-        analyze_constructs(frames_for_lexie,
+        analyze_constructs(lexies,
+                           frames_for_lexie,
                            verbnet.classes_for_predicate,
                            RoleMapping(os.path.join(dico['root'], dico['mapping'])))

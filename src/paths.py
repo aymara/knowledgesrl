@@ -27,13 +27,22 @@ DICOS = [
         'xml': 'dicoinfo_en.xml',
         'xmlns': _dicoinfo_xmlns,
         'mapping': 'info-vn-roles.xml',
+        'train': 'train_info_en.pickle',
+        'dev': 'test_info_en.pickle',
+        'test': 'test_info_en.pickle',
     },
+
     # TODO french info
+
     {
         'root': ROOT + 'domain/enviro',
         'xml': 'dicoenviro_en.xml',
         'xmlns': _dicoenviro_xmlns,
         'mapping':  'enviro-vn-roles.xml',
+        'train': 'train_enviro_en.pickle',
+        'dev': 'test_enviro_en.pickle',
+        'test': 'test_enviro_en.pickle',
     },
+
     # TODO french enviro
 ]
