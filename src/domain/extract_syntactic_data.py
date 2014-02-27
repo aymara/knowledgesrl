@@ -3,7 +3,6 @@
 import collections
 import re
 import os.path
-import unittest
 from xml.etree import ElementTree as ET
 
 import colorama
@@ -30,7 +29,8 @@ def retrieve_constructs(dico, xmlns):
 
             for child in contexte:
                 # predicate (TODO auxiliaires)
-                if child.tag == '{{{0}}}lexie-att'.format(xmlns) and not 'auxiliaire' in child.attrib:
+                if (child.tag == '{{{0}}}lexie-att'.format(xmlns) and
+                        not 'auxiliaire' in child.attrib):
                     predicate_lemma = child.get("lemme", deindent_text(child.text))
                     predicate_lemma = predicate_lemma.lower().strip()
                     subcategorization_frame.append({'type': 'V'})
@@ -68,6 +68,7 @@ def retrieve_constructs(dico, xmlns):
 
     return frames_for_lexie
 
+
 def debug(should_debug, stuff, end='\n'):
     if should_debug:
         if stuff:
@@ -75,11 +76,13 @@ def debug(should_debug, stuff, end='\n'):
                 print(part, end=' ')
         print(end=end)
 
+
 def matches_verbnet_frame(dico_frame, vn_frame):
     vn_subcat = [syntax_part['type'] for syntax_part in vn_frame.syntax]
     dico_subcat = [syntax_part['type'] for syntax_part in dico_frame]
 
     return dico_subcat == vn_subcat
+
 
 def analyze_constructs(frames_for_lexie, classes_for_predicate, to_verbnet):
     annotated_sentences = 0
@@ -90,7 +93,7 @@ def analyze_constructs(frames_for_lexie, classes_for_predicate, to_verbnet):
 
     for lexie in frames_for_lexie:
         d = (lexie in ['open.1', 'launch.2', 'download.1', 'read.1', 'insert.2', 'debug.1', 'edit.1', 'launch.1b', 'query.3', 'read.2'] or
-            lexie in ['accelerate.1b', 'conserve.1', 'warm.1b', 'migrate.2', 'shift.1', 'pollute.1b', 'stabilize.1b', 'cool.1b', 'deposit.2', 'reflect.1'])
+             lexie in ['accelerate.1b', 'conserve.1', 'warm.1b', 'migrate.2', 'shift.1', 'pollute.1b', 'stabilize.1b', 'cool.1b', 'deposit.2', 'reflect.1'])
 
         debug(d, ('? ', lexie))
         lemma = lexie.split('.')[0]
@@ -155,41 +158,3 @@ if __name__ == '__main__':
         analyze_constructs(frames_for_lexie,
                            verbnet.classes_for_predicate,
                            RoleMapping(os.path.join(dico['root'], dico['mapping'])))
-        
-
-class ParseDicoText(unittest.TestCase):
-    def test_getalltext(self):
-        ab_text = ET.fromstring("<a>text1 <b>text2</b> text3 <b>text4</b> text5</a>")
-        self.assertEqual(get_all_text(ab_text), "text1 text2 text3 text4 text5")
-
-        dico_text = ET.fromstring("""
-                <participant type="Act" role="Patient">
-                    <fonction-syntaxique nom="Object">
-                        <groupe-syntaxique nom="NP">
-                a
-                            <realisation>file</realisation>
-                        </groupe-syntaxique>
-                    </fonction-syntaxique>
-                </participant>
-        """)
-        self.assertEqual(get_all_text(dico_text), "a file")
-
-    def test_deindent(self):
-        indented_sentence = """Anyone who downloaded the document and
-                    opened it would trigger the virus."""
-        self.assertEqual(deindent_text(indented_sentence), "Anyone who downloaded the document and opened it would trigger the virus.")
-
-        indented_sentence = """La protection
-                    et le renforcement des puits et des réservoirs de gaz à effet de serre figure
-                    parmi les méthodes recensées par le Protocole de Kyoto pour lutter contre les
-                    émissions de gaz à effet de serre, ainsi que la promotion des méthodes durables
-                    de gestion forestière, de boisement et de reboisement."""
-
-        self.assertEqual(deindent_text(indented_sentence), "La protection et le renforcement des puits et des réservoirs de gaz à effet de serre figure parmi les méthodes recensées par le Protocole de Kyoto pour lutter contre les émissions de gaz à effet de serre, ainsi que la promotion des méthodes durables de gestion forestière, de boisement et de reboisement.")
-
-        indented_sentence = "This is short\tsentence."
-        self.assertEqual(deindent_text(indented_sentence), indented_sentence)
-
-        indented_sentence = """
-                    Starts with a newline"""
-        self.assertEqual(deindent_text(indented_sentence), "Starts with a newline")
