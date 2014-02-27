@@ -22,8 +22,18 @@ _dicoenviro_xmlns = 'http://olst.ling.umontreal.ca/dicoenviro/'
 _dicoinfo_xmlns = 'http://olst.ling.umontreal.ca/dicoinfo/'
 
 DICOS = [
-    (ROOT + 'domain/info/dicoinfo_en.xml', _dicoinfo_xmlns, ROOT + 'domain/info/info-vn-roles.xml'),
-    #(ROOT + 'domain/info/dicoinfo_fr.xml', _dicoinfo_xmlns),
-    (ROOT + 'domain/enviro/dicoenviro_en.xml', _dicoenviro_xmlns, ROOT + 'domain/enviro/enviro-vn-roles.xml'),
-    #(ROOT + 'domain/enviro/' + 'dicoenviro_fr.xml', _dicoenviro_xmlns),
+    {
+        'root': ROOT + 'domain/info/',
+        'xml': 'dicoinfo_en.xml',
+        'xmlns': _dicoinfo_xmlns,
+        'mapping': 'info-vn-roles.xml',
+    },
+    # TODO french info
+    {
+        'root': ROOT + 'domain/enviro',
+        'xml': 'dicoenviro_en.xml',
+        'xmlns': _dicoenviro_xmlns,
+        'mapping':  'enviro-vn-roles.xml',
+    },
+    # TODO french enviro
 ]

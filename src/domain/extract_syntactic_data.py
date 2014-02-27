@@ -2,6 +2,7 @@
 
 import collections
 import re
+import os.path
 import unittest
 from xml.etree import ElementTree as ET
 
@@ -148,10 +149,12 @@ if __name__ == '__main__':
     #vn_reader = verbnetreader.VerbnetReader(paths.VERBNET_PATH, replace_pp = False)
     #normalized_frames = normalize_vn_frames(vn_reader.frames_for_verb)
 
-    for dico, xmlns, mappingfile in paths.DICOS:
-        print(dico)
-        frames_for_lexie = retrieve_constructs(dico, xmlns)
-        analyze_constructs(frames_for_lexie, verbnet.classes_for_predicate, RoleMapping(mappingfile))
+    for dico in paths.DICOS:
+        print(dico['xml'])
+        frames_for_lexie = retrieve_constructs(os.path.join(dico['root'], dico['xml']), dico['xmlns'])
+        analyze_constructs(frames_for_lexie,
+                           verbnet.classes_for_predicate,
+                           RoleMapping(os.path.join(dico['root'], dico['mapping'])))
         
 
 class ParseDicoText(unittest.TestCase):
