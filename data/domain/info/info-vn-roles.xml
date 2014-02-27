@@ -8,13 +8,30 @@
   <!ATTLIST role  dico  CDATA #REQUIRED>
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
-<dico_verbnet_rolemapping>
+<dico_verbnet_rolemapping vn='3.2'>
+    <lexie name='attach.1' vn='shake-22.3' quality=''>
+        This is the correct OntoNote sense (#1), but is a bit far-fetched compared to other members
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+        <role dico='Destination' vn='Co-Patient' />
+    </lexie>
+    <lexie name='click.1'>
+        There is no corresponding sense in WordNet, and it is not in VerbNet either.
+    </lexie>
+    <lexie name='crash.1a' vn='break-45.1' quality='partial'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
     <lexie name='debug.1' vn='debone-10.8'>
         <role dico='Agent' vn='Agent' />
         <role dico='Source' vn='Source' />
     </lexie>
     <lexie name='download.1' />
     <lexie name='edit.1' />
+    <lexie name='forward.1' vn='send-11.1-1'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
     <lexie name='insert.2' vn='put-9.1-1'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
@@ -28,8 +45,18 @@
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
     </lexie>
+    <lexie name='load.1b' vn='spray-9.7-2'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
     <lexie name='open.1'>
         No OntoNotes sense #7 in VerbNet
+    </lexie>
+    <lexie name='partition.2' vn='disassemble-23.2' quality='partial'>
+        The NP V NP PP.Co-Patient frame is not in partition.2, otherwise it fits nicely.
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
     </lexie>
     <lexie name='query.3'>
     </lexie>
@@ -41,5 +68,49 @@
     <lexie name='read.2' vn='learn-14'><!-- TODO fits? -->
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Topic' />
+    </lexie>
+    <lexie name='run.1b' quality='missing'>
+        Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
+    </lexie>
+    <lexie name='run.2b' quality='missing'>
+        Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
+    </lexie>
+    <lexie name='save.1' vn='get-13.5.1-1' quality='partial'>
+        Wanted sense: on#2, more specifically on#2. But VerbNet sense is not so close to on#2.
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='N/A' />
+    </lexie>
+    <lexie name='translate.1' vn='turn-26.6.1' quality='good'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+        <role dico='Result' vn='Result' />
+    </lexie>
+    <lexie name='view.1' vn='sight-30.2' quality='partial'>
+        <role dico='Agent' vn='Experiencer' />
+        <role dico='Patient' vn='Stimulus' />
+        <role dico='Destination' vn='N/A' />
+    </lexie>
+    <lexie name='print.1a' vn='scribble-25.2' quality='partial'>
+        dicoinfo has no 'Destination', because we only print to paper anyway
+        <role dico='Instrument' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='print.1b' vn='scribble-25.2' quality='partial'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Instrument' vn='N/A' />
+    </lexie>
+    <lexie name='write.1' vn='scribble-25.2' quality='good'>
+        Is perfect if +loc|+dest_conf describes all required preposition (on, at, to)
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='write.2' vn='create-26.4' quality='partial'>
+        The VN class at least subsumes the dicoinfo class.
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Result' />
+        <role dico='Material' vn='Material' />
     </lexie>
 </dico_verbnet_rolemapping>
