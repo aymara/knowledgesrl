@@ -9,36 +9,284 @@
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
 <dico_verbnet_rolemapping>
-    <lexie name='accelerate.1b' vn='other_cos-45.4'>
+    <lexie name='abate.1' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='accelerate.1a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='accelerate.1b' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
         <role dico='Cause' vn='Agent' />
         <role dico='Patient' vn='Patient' />
     </lexie>
+    <lexie name='accumulate.1' vn='herd-47.5.2' sense='ok' alternations='ok' roles='missing more'>
+        <role dico='Patient' vn='Theme' />
+        <role dico='Location' vn='N/A' />
+    </lexie>
+    <lexie name='adapt.1' vn='adjut-26.9' sense='ok' alternations='more' roles='more'>
+        VerbNet uses two roles for 'He.Agent adapted himself.Patient' while DicoEnviro would have used an indirect link.
+        <role dico='Patient' vn='Agent' />
+        <role dico='Cause' vn='Goal' />
+    </lexie>
+    <lexie name='affect.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='alter.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='amplify.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='burn.2' vn='other_cos-45.4-1' sense='ok' alternations='more' roles='more'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='capture.1' vn='steal-10.5' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Destination' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='capture.3' vn='steal-10.5' sense='ok' alternations='more' roles='more'>
+        <role dico='Destination' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='change.1a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='change.1b' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='compensate.1'>
+        We're talking about the very specific 'make up for' sense, which is not in VerbNet even though VerbNet says it is in judgment-33. Am I being too strict here?
+    </lexie>
     <lexie name='conserve.1'>
         only sense wn4 in VN (but OntoNotes gruops them all!)
+    </lexie>
+    <lexie name='consume.1' vn='consume-66' sense='ok' alternations='ok' roles='more'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Asset' />
+    </lexie>
+    <lexie name='convert.1' vn='turn-26.6.1' sense='ok' alternations='ok' roles='more'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+        <role dico='Result' vn='Result' />
+    </lexie>
+    <lexie name='cool.1a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
     </lexie>
     <lexie name='cool.1b' vn='other_cos-45.4'>
         <role dico='Cause' vn='Agent' />
         <role dico='Patient' vn='Patient' />
         <role dico='Agent' vn='Agent' />
     </lexie>
+    <lexie name='damage.2' vn='destroy-44' sense='ok' alternations='ok' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='decline.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='decrease.1a' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='decrease.1b' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='degrade.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='deplete.1' vn='cheat-10.6' sense='ok' alternations='more' roles='more'>
+        I'm not sure if 10.6 is the correct place for deplete.
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Agent' vn='Agent' />
+    </lexie>
     <lexie name='deposit.2' vn='put-9.1'>
         <role dico='Patient' vn='Theme' />
         <role dico='Destination' vn='Destination' />
     </lexie>
+    <lexie name='disappear.1' vn='disappearance-48.2' sense='ok' alernations='more' roles='more'>
+        In this case, we do have a 'Initial_Location' role which is why VerbNet has more alternations and more roles, but this probably does not warrant creating a new class.
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='erode.1a' vn='entity_specific_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='evaporate.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more missing'>
+        <role dico='Patient' vn='Patient' />
+        <role dico='Source' vn='N/A' />
+    </lexie>
+    <lexie name='fluctuate.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='freeze.1' vn='other_cos-45.4-1' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='generate.1a' vn='engender-27'>
+        <role dico='Instrument' vn='Cause' />
+        <role dico='Patient' vn='Theem' />
+    </lexie>
+    <lexie name='generate.1b' vn='engender-27' sense='ok' alternations='more' roles='more'>
+        <role dico='Agent' vn='Cause' />
+        <role dico='Instrument' vn='Cause' />
+        <role dico='Natural_force' vn='Cause' />
+        <role dico='Means' vn='Cause' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='grow.1' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='heat.2' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Instrument' vn='Instrument' />
+        <role dico='Means' vn='Instrument' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='increase.1a' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='increase.1b' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='influence.2' vn='force-59-1' sense='ok' alternations='more' roles='more'>
+        As in release.1a, Cause and Agent are actually Agent. Why the distinction?
+        <role dico='Cause' vn='Agent' />
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='measure.1a' vn='register-54.1' sense='ok' alternations='ok' roles='more'>
+        <role dico='Instrument' vn='Agent ' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Means' vn='Agent' />
+    </lexie>
+    <lexie name='measure.1b' vn='register-54.1' sense='ok' alternations='ok' roles='more'>
+        <role dico='Instrument' vn='Agent ' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Means' vn='Agent' />
+        <role dico='Method' vn='Agent' />
+    </lexie>
+    <lexie name='melt.1a' vn='other_cos-45.4-1' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='melt.1b' vn='other_cos-45.4-1' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
     <lexie name='migrate.2'>
+    </lexie>
+    <lexie name='mitigate.1' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='monitor.1' sense='ok' alternations='ok' roles='more'>
+        <role dico='Method' vn='Theme' />
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Agent' />
     </lexie>
     <lexie name='pollute.1b' vn='fill-9.8'>
         <role dico='Cause' vn='Agent' />
         <role dico='Destination' vn='Destination' />
         <role dico='Agent' vn='Agent' />
     </lexie>
+    <lexie name='predict.1a' vn='indicate-78' sense='ok' alternations='more' roles='more'>
+        <role dico='Method' vn='Cause' />
+        <role dico='Patient' vn='Topic' />
+    </lexie>
+    <lexie name='predict.1b' vn='indicate-78' sense='ok' alternations='more' roles='more'>
+        <role dico='Method' vn='Agent' />
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Topic' />
+    </lexie>
+    <lexie name='project.1a' vn='estimate-34.2' sense='ok' alternations='more' roles='more'>
+        <role dico='Method' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='project.1b' vn='estimate-34.2' sense='ok' alternations='more' roles='more'>
+        <role dico='Method' vn='Agent' />
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='protect.1' vn='defend-85' sense='ok' alternations='missing more' roles='ok'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Threat' vn='Co-Theme' />
+    </lexie>
+    <lexie name='release.1a'>
+        free-80 is close semantically, but none of the alternations we're interested in are here.
+        Also, there's an issue with Cause and Agent which 1/ would both be 'Agent' in VerbNet's case 2/ sometimes cause is more like a Circonstant.
+    </lexie>
     <lexie name='reflect.1'>
         only figurative sense in VerbNet
     </lexie>
-    <lexie name='shift.1' vn='calibratable_cos-45.4'>
+    <lexie name='retreat.1' vn='escape-51.1' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    In those two cases, the issue is simply that VerbNet roles are found in Circonstant, and 'Patient' is the only 'Actant'
+    <lexie name='rise.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='ok' roles='more'>
         <role dico='Patient' vn='Patient' />
     </lexie>
-    <lexie name='stabilize.1b'>
+    <lexie name='rise.2' vn='calibratable_cos-45.6-1' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='sequester.1' vn='steal-10.5' sense='far_fetched' alternations='ok' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='shift.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='ok' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='simulate.1'>
+        I didn't find a fitting class yet.
+    </lexie>
+    <lexie name='sink.1'>
+        Missing sense: this sense is about sinking to the ground (the real sense), while VerbNet only covers the metaphorical sense in class 45.
+    </lexie>
+    <lexie name='stabilize.1a' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='stabilize.1b' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
+        <role dico='Means' vn='Instrument' />
+    </lexie>
+    <lexie name='supply.1' vn='fulfillig-13.4.1' sense='ok' alternations='ok' roles='ok'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Recipient' vn='Recipient' />
+        <role dico='Cause' vn='Agent' />
+    </lexie>
+    <lexie name='store.1a' vn='keep-15.2' sense='ok' alternations='ok' roles='more'>
+        This is an interesting case of subtle polysemy in VerbNet: keep-15.2 is about storing, while fit-54.3 is about the possibility to store, ie. fitting. Since the alternations show this difference, the two senses are in VerbNet while they're only one sense in WordNet and OntoNotes.
+        <role dico='Destination' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='thaw.1a' vn='other_cos-45.4-1' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='threaten.1' vn='amuse-31.1' sense='ok' alternations='more' roles='more'>
+        <role dico='Cause' vn='Stimulus' />
+        <role dico='Patient' vn='Experiencer' />
+    </lexie>
+    <lexie name='transport.1' vn='send-11.1' sense='ok' alternations='ok' roles='ok'>
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+        <role dico='Source' vn='Initial_Location' />
+        <role dico='Cause' vn='Agent' />
+    </lexie>
+    <lexie name='vary.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='warm.1a' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
+        <role dico='Patient' vn='Patient' />
     </lexie>
     <lexie name='warm.1b'>
         <role dico='Agent' vn='Agent' />

@@ -9,25 +9,109 @@
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
 <dico_verbnet_rolemapping vn='3.2'>
+    <lexie name='activate.1b' vn='other_cos-45.4'>
+        other_cos-45.4 is a huge class, this is not too informative.
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='allocate.1' vn='future_having-13.3' quality='good'>
+        <role dico='Patient' vn='Theme' />
+        <role dico='Recipient' vn='Goal' />
+        <role dico='Agent' vn='Agent' />
+    </lexie>
     <lexie name='attach.1' vn='shake-22.3' quality=''>
         This is the correct OntoNote sense (#1), but is a bit far-fetched compared to other members
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Patient' />
         <role dico='Destination' vn='Co-Patient' />
     </lexie>
+    <lexie name='boot.1b' quality='missing sense'>
+        The 'boot a computer' sense of boot comes from bootstrap and is missing from VerbNet
+    </lexie>
+    <lexie name='chat.1' vn='chit_chat-37.6' quality='good subsumes'>
+        <role dico='Agent-a' vn='Agent' />
+        <role dico='Agent-b' vn='Co-Agent' />
+    </lexie>
     <lexie name='click.1'>
         There is no corresponding sense in WordNet, and it is not in VerbNet either.
     </lexie>
+    <lexie name='configure.1' vn='remedy-45.7' quailty='good'>
+        VerbNet's instrument matches loosely with Circonstant 'Means', and Circonstant 'Manner' is attested in VerbNet's NP V ADV-Middle frame. Still, it's a large VerbNet class that looks like it could be broken up.
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='connect.1' vn='mix-22.1-2-1' quality='good'>
+        <role dico='Agent' vn='Patient' />
+        <role dico='Destination' vn='Co-Patient' />
+    </lexie>
+    The difference between copy.1 and copy.2 is unclear. It doesn't appear to be Agent-Instrument alternation
+    <lexie name='copy.1' vn='transcribe-25.4' quality='good'>
+        The Initial_Location is missing from VerbNet, but it's a Circonstant (Source) in DicoInfo anyway
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='copy.2' vn='transcribe-25.4' quality='good'>
+        The Initial_Location is missing from VerbNet, but it's a Circonstant (Source) in DicoInfo anyway
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
     <lexie name='crash.1a' vn='break-45.1' quality='partial'>
         <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='create.1' vn='create-26.4' quality='subsumes'>
+        Many more roles in VN, which don't really map to the four circonstants.
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Result' />
     </lexie>
     <lexie name='debug.1' vn='debone-10.8'>
         <role dico='Agent' vn='Agent' />
         <role dico='Source' vn='Source' />
     </lexie>
+    <lexie name='delete.1' vn='remove-10.1' quality='good'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Source' vn='Source' />
+    </lexie>
+    <lexie name='define.1' vn='characterize-29.2' quality='subsumes'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
     <lexie name='download.1' />
     <lexie name='edit.1' />
+    <lexie name='enter.1' newvn='put-9.1'>
+        (put-9.1 should include this sense of 'enter')
+    </lexie>
+    <lexie name='execute.1b'>
+        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
+        VerbNet only contains the first sense
+    </lexie>
+    <lexie name='execute.2b'>
+        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
+        VerbNet only contains the first sense
+    </lexie>
+    <lexie name='fail.1' vn='succeed-74-2' quality='subsumed'>
+        <role dico='Patient' vn='Agent' />
+    </lexie>
+    <lexie name='fail.2' vn='succeed-74-2' quality='subsumed'>
+        <role dico='Patient' vn='Agent' />
+    </lexie>
     <lexie name='forward.1' vn='send-11.1-1'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='generate.1' vn='grow-26.2' quality='subsumes metaphor'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Product' />
+    </lexie>
+    <lexie name='highlight.1' vn='braid-41.2.2' quality='far_fetched'>
+        The semantics are of, the roles are of (Patient should be 'body part'), but it's really where it should be: NP V NP is really the only option (along with V NP, of course).
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='infect.1' vn='fill-9.8' quality='subsumes'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
         <role dico='Destination' vn='Destination' />
@@ -36,6 +120,16 @@
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
         <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='install.1' vn='appoint-29.1' quality='subsumes verbnet_synonymy'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='install.2' vn='appoint-29.1' quality='subsumes verbnet_synonymy'>
+        Location suddenly becomes an Actant
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Result' />
     </lexie>
     <lexie name='launch.1b' vn='establish-55.5'>
         <role dico='Agent' vn='Agent' />
@@ -58,6 +152,20 @@
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Patient' />
     </lexie>
+    <lexie name='print.1a' vn='scribble-25.2' quality='partial'>
+        dicoinfo has no 'Destination', because we only print to paper anyway
+        <role dico='Instrument' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='print.1b' vn='scribble-25.2' quality='partial'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Instrument' vn='N/A' />
+    </lexie>
+    <lexie name='press.1' vn='push-12-1-1' quality='subsumes'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+    </lexie>
     <lexie name='query.3'>
     </lexie>
     <lexie name='read.1' vn='transfer_msg-37.1'><!-- TODO fits? -->
@@ -69,11 +177,21 @@
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Topic' />
     </lexie>
+    <lexie name='run.1a' quality='missing'>
+        Wanted sense: on#2
+        Not sure all WN senses apply
+    </lexie>
     <lexie name='run.1b' quality='missing'>
         Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
+        Not sure all WN senses apply
+    </lexie>
+    <lexie name='run.2a' quality='missing'>
+        Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
+        Not sure all WN senses apply
     </lexie>
     <lexie name='run.2b' quality='missing'>
         Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
+        Not sure all WN senses apply
     </lexie>
     <lexie name='save.1' vn='get-13.5.1-1' quality='partial'>
         Wanted sense: on#2, more specifically on#2. But VerbNet sense is not so close to on#2.
@@ -81,25 +199,50 @@
         <role dico='Patient' vn='Theme' />
         <role dico='Destination' vn='N/A' />
     </lexie>
+    <lexie name='search.1' vn='search-35.2' quality='good'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Goal' vn='Theme' />
+        <role dico='Destination' vn='Location' />
+    </lexie>
+    <lexie name='send.1' vn='send-11.1-1' quality='subsumed'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='send.2' vn='send-11.1-1' quality='subsumed missing_vn_role'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Destination' vn='Destination' />
+        <role dico='Instrument' vn='N/A' />
+    </lexie>
     <lexie name='translate.1' vn='turn-26.6.1' quality='good'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Patient' />
         <role dico='Result' vn='Result' />
     </lexie>
+    <lexie name='tweak.1' vn='touch-20' quality='subsumes'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Experiencer' />
+    </lexie>
+    <lexie name='type.1' vn='transcribe-25.4' quality='good missing'>
+        Levin's book allows us to distinguish between transcribe-25.4 and scribble-25.2. transcribe-25.4 verbs take as their objects a 'representation source' and often have (zero-)related nominals.
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Instrument' vn='N/A' />
+    </lexie>
+    <lexie name='update.1' vn='tell-37.2' quality='far_fetched'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Recipient' />
+    </lexie>
+    <lexie name='upgrade.1' vn='appoint-29.1' quality='good'>
+        <role dico='Agent' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
+        <role dico='Substitute' vn='Result' />
+    </lexie>
     <lexie name='view.1' vn='sight-30.2' quality='partial'>
         <role dico='Agent' vn='Experiencer' />
         <role dico='Patient' vn='Stimulus' />
         <role dico='Destination' vn='N/A' />
-    </lexie>
-    <lexie name='print.1a' vn='scribble-25.2' quality='partial'>
-        dicoinfo has no 'Destination', because we only print to paper anyway
-        <role dico='Instrument' vn='Agent' />
-        <role dico='Patient' vn='Theme' />
-    </lexie>
-    <lexie name='print.1b' vn='scribble-25.2' quality='partial'>
-        <role dico='Agent' vn='Agent' />
-        <role dico='Patient' vn='Theme' />
-        <role dico='Instrument' vn='N/A' />
     </lexie>
     <lexie name='write.1' vn='scribble-25.2' quality='good'>
         Is perfect if +loc|+dest_conf describes all required preposition (on, at, to)
