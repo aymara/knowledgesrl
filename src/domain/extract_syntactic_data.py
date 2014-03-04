@@ -5,6 +5,7 @@ import re
 import os.path
 from xml.etree import ElementTree as ET
 import pickle
+from hashlib import sha256
 
 import colorama
 from colorama import Fore
@@ -25,6 +26,7 @@ def retrieve_constructs(dico, xmlns):
 
             indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
             sentence_text = deindent_text(indented_sentence_text)
+            sentence_hash = sha256(sentence_text.encode('utf-8')).hexdigest()
 
             subcategorization_frame = verbnet.Syntax()
 
@@ -65,7 +67,7 @@ def retrieve_constructs(dico, xmlns):
                         else:
                             subcategorization_frame.append({'type': phrase_type, 'role': role})
 
-            frames_for_lexie[frame_name].append(subcategorization_frame)
+            frames_for_lexie[frame_name].append((sentence_hash, subcategorization_frame))
 
     return frames_for_lexie
 
@@ -91,18 +93,18 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
     n_correct_roles, n_wrong_roles = 0, 0
 
     for lexie in frames_for_lexie:
-        d = lexie in lexie_groups['train']  # debug
-        c = lexie in lexie_groups['test']  # score
+        for sentence_hash, dico_frame in frames_for_lexie[lexie]:
+            d = sentence_hash in lexie_groups['train']  # debug
+            c = sentence_hash in lexie_groups['test']  # score
 
-        debug(d, ('? ', lexie))
-        lemma = lexie.split('.')[0]
-        if c: annotated_sentences += len(frames_for_lexie[lexie])
+            debug(d, ('? ', lexie))
+            lemma = lexie.split('.')[0]
+            if c: annotated_sentences += 1
 
-        # First possible error: lemma does not exist in VerbNet
-        if lemma not in classes_for_predicate:
-            continue
+            # First possible error: lemma does not exist in VerbNet
+            if lemma not in classes_for_predicate:
+                continue
 
-        for dico_frame in frames_for_lexie[lexie]:
             if c: lemma_in_vn += 1
 
             vn_frame_matches = []
@@ -150,7 +152,6 @@ if __name__ == '__main__':
         print(dico['xml'])
         lexies = {
             'train': pickle.load(open(os.path.join(dico['root'], dico['train']), 'rb')),
-            'dev': pickle.load(open(os.path.join(dico['root'], dico['dev']), 'rb')),
             'test': pickle.load(open(os.path.join(dico['root'], dico['test']), 'rb'))
         }
 
