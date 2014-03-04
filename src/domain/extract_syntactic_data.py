@@ -91,8 +91,8 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
     n_correct_roles, n_wrong_roles = 0, 0
 
     for lexie in frames_for_lexie:
-        d = lexie in lexie_groups['train']  # debug?
-        c = lexie in lexie_groups['train']  # score?
+        d = lexie in lexie_groups['train']  # debug
+        c = lexie in lexie_groups['test']  # score
 
         debug(d, ('? ', lexie))
         lemma = lexie.split('.')[0]
@@ -131,15 +131,15 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
                         candidate_roles.add(frame.syntax[i]['role'])
 
                     if to_verbnet[lexie] == {}: # TODO think about how it impacts scores
-                        print('impossible')
+                        if d: print('impossible')
                     elif to_verbnet[lexie][correct_syntax.get('role')] in candidate_roles:
                         if c: n_correct_roles += 1 / len(candidate_roles)
                     else:
                         if c: n_wrong_roles += 1
 
-    print('{:.2%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
-    print('For these tokens, {:.2%} of constructions are here'.format(valid_frames/(valid_frames + missing_frames)))
-    print('For those constructions, {:.2%} of roles are correct'.format(n_correct_roles/(n_correct_roles+n_wrong_roles)))
+    print('{:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
+    print('For these tokens, {:.1%} of constructions are here'.format(valid_frames/(valid_frames + missing_frames)))
+    print('For those constructions, {:.1%} of roles are correct'.format(n_correct_roles/(n_correct_roles+n_wrong_roles)))
 
 if __name__ == '__main__':
     colorama.init()
