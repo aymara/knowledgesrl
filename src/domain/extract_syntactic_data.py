@@ -93,51 +93,57 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
     n_correct_roles, n_wrong_roles = 0, 0
 
     for lexie in frames_for_lexie:
+        lemma = lexie.split('.')[0]
+
         for sentence_hash, dico_frame in frames_for_lexie[lexie]:
             d = sentence_hash in lexie_groups['train']  # debug
-            c = sentence_hash in lexie_groups['test']  # score
+            test_context = sentence_hash in lexie_groups['test']  # score
 
-            debug(d, ('? ', lexie))
-            lemma = lexie.split('.')[0]
-            if c: annotated_sentences += 1
+            debug(d, [lexie])
+            if test_context:
+                annotated_sentences += 1
 
             # First possible error: lemma does not exist in VerbNet
             if lemma not in classes_for_predicate:
                 continue
 
-            if c: lemma_in_vn += 1
+            if test_context:
+                lemma_in_vn += 1
 
-            vn_frame_matches = []
-
+            vn_frame_matches = set()
             for vn_class in classes_for_predicate[lemma]:
                 for vn_frame in vn_class.all_frames():
                     if matches_verbnet_frame(dico_frame, vn_frame):
-                        vn_frame_matches.append(vn_frame)
+                        vn_frame_matches.add(vn_frame)
 
             # Second possible error: syntactic pattern is not in VerbNet
             if not vn_frame_matches:
-                debug(d, (":( ", lemma, Fore.RED, dico_frame, Fore.RESET))
-                if c: missing_frames += 1
+                debug(d, ['    ', Fore.RED, dico_frame, Fore.RESET])
+                if test_context:
+                    missing_frames += 1
                 continue
 
-            debug(d, (":) ", lemma, Fore.GREEN, dico_frame, Fore.RESET))
-            if c: valid_frames += 1
-
-            debug(d, ('       ', dico_frame, vn_frame_matches))
+            debug(d, ['    ', Fore.GREEN, dico_frame, Fore.RESET, vn_frame_matches])
+            if test_context:
+                valid_frames += 1
 
             for i, correct_syntax in enumerate(dico_frame):
-                if 'role' in correct_syntax:  # this is a 'frame element'
+                # if this is a 'frame element', not a V or anything else
+                if 'role' in correct_syntax:
                     candidate_roles = set()
 
                     for frame in vn_frame_matches:
                         candidate_roles.add(frame.syntax[i]['role'])
 
-                    if to_verbnet[lexie] == {}: # TODO think about how it impacts scores
-                        if d: print('impossible')
+                    if to_verbnet[lexie] == {}:
+                        if test_context:
+                            n_wrong_roles += 1
                     elif to_verbnet[lexie][correct_syntax.get('role')] in candidate_roles:
-                        if c: n_correct_roles += 1 / len(candidate_roles)
+                        if test_context:
+                            n_correct_roles += 1 / len(candidate_roles)
                     else:
-                        if c: n_wrong_roles += 1
+                        if test_context:
+                            n_wrong_roles += 1
 
     print('{:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('For these tokens, {:.1%} of constructions are here'.format(valid_frames/(valid_frames + missing_frames)))
