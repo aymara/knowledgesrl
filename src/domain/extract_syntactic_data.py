@@ -141,6 +141,8 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
                     if to_verbnet[lexie] == {}:
                         if test_context:
                             n_wrong_roles += 1
+                    elif correct_syntax.get('role') not in to_verbnet[lexie]:
+                        raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
                     elif to_verbnet[lexie][correct_syntax.get('role')] in candidate_roles:
                         if test_context:
                             n_correct_roles += 1 / len(candidate_roles)

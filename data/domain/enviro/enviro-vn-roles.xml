@@ -138,7 +138,7 @@
     </lexie>
     <lexie name='flood.2' vn='fill-9.8' sense='ok' alternations='ok' roles='more'>
         <role dico='Cause' vn='Agent' />
-        <role dico='Destination' vn='Destination' />
+        <role dico='Location' vn='Destination' />
     </lexie>
     <lexie name='fluctuate.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='more' roles='more'>
         <role dico='Patient' vn='Patient' />
@@ -188,6 +188,7 @@
     </lexie>
     <lexie name='measure.1b' vn='register-54.1' sense='ok' alternations='ok' roles='more'>
         <role dico='Instrument' vn='Agent ' />
+        <role dico='Agent' vn='Agent ' />
         <role dico='Patient' vn='Theme' />
         <role dico='Means' vn='Agent' />
         <role dico='Method' vn='Agent' />
