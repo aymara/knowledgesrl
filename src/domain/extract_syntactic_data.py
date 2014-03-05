@@ -12,8 +12,63 @@ from colorama import Fore
 
 import paths
 import verbnet
-from rolemapping import RoleMapping
-from dicoxml import deindent_text, get_all_text
+from .rolemapping import RoleMapping
+from .dicoxml import deindent_text, get_all_text
+
+def xmlcontext_to_frame(xmlns, lexie, contexte):
+    indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
+    sentence_text = deindent_text(indented_sentence_text)
+    sentence_hash = sha256(sentence_text.encode('utf-8')).hexdigest()
+
+    subcategorization_frame = verbnet.Syntax()
+    role = None
+
+    for child in contexte:
+        last_role = role
+        role = None
+
+        # predicate (TODO auxiliaires)
+        if (child.tag == '{{{0}}}lexie-att'.format(xmlns) and
+                not 'auxiliaire' in child.attrib):
+            predicate_lemma = child.get("lemme", deindent_text(child.text))
+            predicate_lemma = predicate_lemma.lower().strip()
+            subcategorization_frame.append({'type': 'V'})
+
+        # frame element
+        elif child.tag == '{{{0}}}participant'.format(xmlns) and child.get('type') == 'Act':
+            role = child.get('role')
+
+            # Dico* adds various frame elements when they're separated
+            # by coordinating conjunctions as in 'I bought umbrellas
+            # and pens'
+            if role == last_role:
+                continue
+
+            groupe_syntaxique = child.find(
+                "{{{0}}}fonction-syntaxique/{{{0}}}groupe-syntaxique".format(xmlns))
+            phrase_type = groupe_syntaxique.get('nom')
+
+            role_filler = get_all_text(child)
+
+            if phrase_type == 'Pro':
+                phrase_type = 'NP'
+            elif phrase_type == 'AdvP':
+                phrase_type = 'ADV'
+            elif phrase_type == 'Clause':
+                # TODO analysis to write info in SYNRESTRS maybe
+                phrase_type = 'NP'
+
+            if phrase_type == 'PP':
+                assert 'preposition' in groupe_syntaxique.attrib
+                subcategorization_frame.append({
+                    'type': 'PREP',
+                    'value': groupe_syntaxique.get('preposition')
+                })
+                subcategorization_frame.append({'type': 'NP', 'role': role})
+            else:
+                subcategorization_frame.append({'type': phrase_type, 'role': role})
+
+    return sentence_hash, subcategorization_frame
 
 
 def retrieve_constructs(dico, xmlns):
@@ -23,50 +78,7 @@ def retrieve_constructs(dico, xmlns):
     for lexie in xml_dico.findall('lexie'):
         frame_name = '{}.{}'.format(lexie.get('id'), lexie.get('no'))
         for contexte in lexie.findall('contextes/{{{0}}}contexte'.format(xmlns)):
-
-            indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
-            sentence_text = deindent_text(indented_sentence_text)
-            sentence_hash = sha256(sentence_text.encode('utf-8')).hexdigest()
-
-            subcategorization_frame = verbnet.Syntax()
-
-            for child in contexte:
-                # predicate (TODO auxiliaires)
-                if (child.tag == '{{{0}}}lexie-att'.format(xmlns) and
-                        not 'auxiliaire' in child.attrib):
-                    predicate_lemma = child.get("lemme", deindent_text(child.text))
-                    predicate_lemma = predicate_lemma.lower().strip()
-                    subcategorization_frame.append({'type': 'V'})
-
-                # frame element
-                elif child.tag == '{{{0}}}participant'.format(xmlns):
-                    groupe_syntaxique = child.find(
-                        "{{{0}}}fonction-syntaxique/{{{0}}}groupe-syntaxique".format(xmlns))
-                    phrase_type = groupe_syntaxique.get('nom')
-
-                    role = child.get('role')
-                    core = True if child.get('type') == 'Act' else False
-                    role_filler = get_all_text(child)
-
-                    if phrase_type == 'Pro':
-                        phrase_type = 'NP'
-                    elif phrase_type == 'AdvP':
-                        phrase_type = 'ADV'
-                    elif phrase_type == 'Clause':
-                        # TODO analysis to write info in SYNRESTRS maybe
-                        phrase_type = 'NP'
-
-                    if core:
-                        if phrase_type == 'PP':
-                            assert 'preposition' in groupe_syntaxique.attrib
-                            subcategorization_frame.append({
-                                'type': 'PREP',
-                                'value': groupe_syntaxique.get('preposition')
-                            })
-                            subcategorization_frame.append({'type': 'NP', 'role': role})
-                        else:
-                            subcategorization_frame.append({'type': phrase_type, 'role': role})
-
+            sentence_hash, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
             frames_for_lexie[frame_name].append((sentence_hash, subcategorization_frame))
 
     return frames_for_lexie
