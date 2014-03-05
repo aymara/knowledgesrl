@@ -12,6 +12,8 @@
     <lexie name='abate.1' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
         <role dico='Patient' vn='Patient' />
     </lexie>
+    <lexie name='absorb.1' sense='missing' on='absorb.1' wn='absorb#4 absorb#6'>
+    </lexie>
     <lexie name='accelerate.1a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
         <role dico='Patient' vn='Patient' />
     </lexie>
@@ -72,6 +74,9 @@
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Asset' />
     </lexie>
+    <lexie name='contaminate.1' sense='missing' on='contaminate.1'>
+        DicoEnviro only has one context.
+    </lexie>
     <lexie name='convert.1' vn='turn-26.6.1' sense='ok' alternations='ok' roles='more'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Patient' />
@@ -118,12 +123,22 @@
         In this case, we do have a 'Initial_Location' role which is why VerbNet has more alternations and more roles, but this probably does not warrant creating a new class.
         <role dico='Patient' vn='Patient' />
     </lexie>
+    <lexie name='endanger.1' sense='missing' on='endanger.1'>
+    </lexie>
+    <lexie name='emit.1' sense='missing' on='emit.1'>
+    </lexie>
+    <lexie name='emit.2' sense='missing' on='emit.1'>
+    </lexie>
     <lexie name='erode.1a' vn='entity_specific_cos-45.4' sense='ok' alternations='ok' roles='ok'>
         <role dico='Patient' vn='Patient' />
     </lexie>
     <lexie name='evaporate.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more missing'>
         <role dico='Patient' vn='Patient' />
         <role dico='Source' vn='N/A' />
+    </lexie>
+    <lexie name='flood.2' vn='fill-9.8' sense='ok' alternations='ok' roles='more'>
+        <role dico='Cause' vn='Agent' />
+        <role dico='Destination' vn='Destination' />
     </lexie>
     <lexie name='fluctuate.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='more' roles='more'>
         <role dico='Patient' vn='Patient' />
@@ -149,6 +164,8 @@
         <role dico='Instrument' vn='Instrument' />
         <role dico='Means' vn='Instrument' />
         <role dico='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='impact.2' sense='missing' on='impact.1'>
     </lexie>
     <lexie name='increase.1a' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
         <role dico='Cause' vn='Agent' />
@@ -182,7 +199,11 @@
         <role dico='Cause' vn='Agent' />
         <role dico='Patient' vn='Patient' />
     </lexie>
+    <lexie name='migrate.1' sense='missing' on='migrate.1'>
+        The OntoNotes sense #2 isn't clear. From the examples, it seems to apply to 'digital' senses.
+    </lexie>
     <lexie name='migrate.2'>
+        The OntoNotes sense #2 isn't clear. From the examples, it seems to apply to 'digital' senses.
     </lexie>
     <lexie name='mitigate.1' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
         <role dico='Cause' vn='Agent' />
@@ -221,7 +242,13 @@
         <role dico='Patient' vn='Theme' />
         <role dico='Threat' vn='Co-Theme' />
     </lexie>
-    <lexie name='release.1a'>
+    <lexie name='recycle.1' sense='missing' on='recycle.1'>
+    </lexie>
+    <lexie name='release.1a' sense='missing' on='release.3' wn='release#5'>
+        free-80 is close semantically, but none of the alternations we're interested in are here.
+        Also, there's an issue with Cause and Agent which 1/ would both be 'Agent' in VerbNet's case 2/ sometimes cause is more like a Circonstant.
+    </lexie>
+    <lexie name='release.1b' sense='missing' on='release.3' wn='release#5'>
         free-80 is close semantically, but none of the alternations we're interested in are here.
         Also, there's an issue with Cause and Agent which 1/ would both be 'Agent' in VerbNet's case 2/ sometimes cause is more like a Circonstant.
     </lexie>
@@ -245,6 +272,9 @@
     <lexie name='shift.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='ok' roles='more'>
         <role dico='Patient' vn='Patient' />
     </lexie>
+    <lexie name='shift.2' sense='missing'>
+        Not clear what sense this is. TODO along with shift.1
+    </lexie>
     <lexie name='simulate.1'>
         I didn't find a fitting class yet.
     </lexie>
@@ -263,6 +293,11 @@
         <role dico='Patient' vn='Theme' />
         <role dico='Recipient' vn='Recipient' />
         <role dico='Cause' vn='Agent' />
+    </lexie>
+    <lexie name='store.1b' vn='keep-15.2' sense='ok' alternations='ok' roles='more'>
+        This is an interesting case of subtle polysemy in VerbNet: keep-15.2 is about storing, while fit-54.3 is about the possibility to store, ie. fitting. Since the alternations show this difference, the two senses are in VerbNet while they're only one sense in WordNet and OntoNotes.
+        <role dico='Destination' vn='Agent' />
+        <role dico='Patient' vn='Theme' />
     </lexie>
     <lexie name='store.1a' vn='keep-15.2' sense='ok' alternations='ok' roles='more'>
         This is an interesting case of subtle polysemy in VerbNet: keep-15.2 is about storing, while fit-54.3 is about the possibility to store, ie. fitting. Since the alternations show this difference, the two senses are in VerbNet while they're only one sense in WordNet and OntoNotes.

@@ -95,6 +95,9 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
     for lexie in frames_for_lexie:
         lemma = lexie.split('.')[0]
 
+        if not lexie in to_verbnet:
+            raise Exception(lexie)
+
         for sentence_hash, dico_frame in frames_for_lexie[lexie]:
             d = sentence_hash in lexie_groups['train']  # debug
             test_context = sentence_hash in lexie_groups['test']  # score

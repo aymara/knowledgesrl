@@ -9,6 +9,10 @@
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
 <dico_verbnet_rolemapping vn='3.2'>
+    <lexie name='access.1' sense='missinglemma' on='access.1' wn='access#1'>
+    </lexie>
+    <lexie name='access.2' sense='missinglemma' on='access.1' wn='access#1'>
+    </lexie>
     <lexie name='activate.1b' vn='other_cos-45.4'>
         other_cos-45.4 is a huge class, this is not too informative.
         <role dico='Agent' vn='Agent' />
@@ -25,8 +29,18 @@
         <role dico='Patient' vn='Patient' />
         <role dico='Destination' vn='Co-Patient' />
     </lexie>
+    <lexie name='automate.1' sense='missing' on='automate#1'>
+    </lexie>
+    <lexie name='boot.1a' quality='missing sense'>
+        The 'boot a computer' sense of boot comes from bootstrap and both are missing from VerbNet.
+    </lexie>
     <lexie name='boot.1b' quality='missing sense'>
-        The 'boot a computer' sense of boot comes from bootstrap and is missing from VerbNet
+        The 'boot a computer' sense of boot comes from bootstrap and both are missing from VerbNet.
+    </lexie>
+    <lexie name='browse.1' sense='missing' on='browse.1' wn='browse#2'>
+    </lexie>
+    <lexie name='cancel.1' sense='missing' on='cancel.2 cancel.3' wn='cancel.1'>
+        OntoNotes differentiates 'cancel something that has already started' and 'cancel something that never started' (eg. cancel a vacation). I guess that DicoInfo is more about the first one but there's no way to be sure since we only have two contexts anyway.
     </lexie>
     <lexie name='chat.1' vn='chit_chat-37.6' quality='good subsumes'>
         <role dico='Agent-a' vn='Agent' />
@@ -83,11 +97,24 @@
     <lexie name='enter.1' newvn='put-9.1'>
         (put-9.1 should include this sense of 'enter')
     </lexie>
-    <lexie name='execute.1b'>
+    <lexie name='encrypt.1' sense='missing' on='missing' wn='encrypt#1'>
+    </lexie>
+    <lexie name='enter.2' newvn='put-9.1'>
+        (put-9.1 should include this sense of 'enter')
+    </lexie>
+    <lexie name='execute.1a' sense='missing' on='execute.2' wn='execute#5'>
         Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
         VerbNet only contains the first sense
     </lexie>
-    <lexie name='execute.2b'>
+    <lexie name='execute.1b' sense='missing' on='execute.2' wn='execute#5'>
+        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
+        VerbNet only contains the first sense
+    </lexie>
+    <lexie name='execute.2a' sense='missing' on='execute.2' wn='execute#5'>
+        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
+        VerbNet only contains the first sense
+    </lexie>
+    <lexie name='execute.2b' sense='missing' on='execute.2' wn='execute#5'>
         Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
         VerbNet only contains the first sense
     </lexie>
@@ -121,6 +148,9 @@
         <role dico='Patient' vn='Theme' />
         <role dico='Destination' vn='Destination' />
     </lexie>
+    <lexie name='interpret.1' sense='missing' on='interpet#1'>
+        The OntoNotes is a bit far from the DicoInfo one, but the frames would likely be the same?
+    </lexie>
     <lexie name='install.1' vn='appoint-29.1' quality='subsumes verbnet_synonymy'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
@@ -131,6 +161,9 @@
         <role dico='Patient' vn='Theme' />
         <role dico='Destination' vn='Result' />
     </lexie>
+    <lexie name='launch.1a' vn='establish-55.5'>
+        <role dico='Patient' vn='Theme' />
+    </lexie>
     <lexie name='launch.1b' vn='establish-55.5'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
@@ -139,10 +172,15 @@
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
     </lexie>
+    <lexie name='load.1a' vn='spray-9.7-2'>
+        <role dico='Patient' vn='Theme' />
+    </lexie>
     <lexie name='load.1b' vn='spray-9.7-2'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
         <role dico='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='log on.1' sense='missing' wn='log on#1'>
     </lexie>
     <lexie name='open.1'>
         No OntoNotes sense #7 in VerbNet
@@ -165,6 +203,11 @@
     <lexie name='press.1' vn='push-12-1-1' quality='subsumes'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='process.1' sense='missing' on='process.3'>
+        The 'according to procedure' in ON part is import here.
+    </lexie>
+    <lexie name='program.3' sense='missing' on='program#2'>
     </lexie>
     <lexie name='query.3'>
     </lexie>
@@ -215,6 +258,9 @@
         <role dico='Destination' vn='Destination' />
         <role dico='Instrument' vn='N/A' />
     </lexie>
+    <lexie name='subscribe.1' sense='missing' on='subscribe.1'>
+        The WordNet sense don't really map to the newsletter sense, ON is really better here.
+    </lexie>
     <lexie name='translate.1' vn='turn-26.6.1' quality='good'>
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Patient' />
@@ -229,6 +275,8 @@
         <role dico='Agent' vn='Agent' />
         <role dico='Patient' vn='Theme' />
         <role dico='Instrument' vn='N/A' />
+    </lexie>
+    <lexie name='uninstall.1' sense='missing' on='missing' wn='missing'>
     </lexie>
     <lexie name='update.1' vn='tell-37.2' quality='far_fetched'>
         <role dico='Agent' vn='Agent' />
