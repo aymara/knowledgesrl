@@ -72,17 +72,13 @@ def xmlcontext_to_frame(xmlns, lexie, contexte):
     return sentence_hash, subcategorization_frame
 
 
-def retrieve_constructs(dico, xmlns):
-    frames_for_lexie = collections.defaultdict(list)
-
+def get_dico_examples(dico, xmlns):
     xml_dico = ET.ElementTree(file=dico)
     for lexie in xml_dico.findall('lexie'):
         frame_name = '{}.{}'.format(lexie.get('id'), lexie.get('no'))
         for contexte in lexie.findall('contextes/{{{0}}}contexte'.format(xmlns)):
             sentence_hash, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
-            frames_for_lexie[frame_name].append((sentence_hash, subcategorization_frame))
-
-    return frames_for_lexie
+            yield (frame_name, lexie.get('id'), sentence_hash, subcategorization_frame)
 
 
 def debug(should_debug, stuff, end='\n'):
@@ -93,9 +89,9 @@ def debug(should_debug, stuff, end='\n'):
         print(end=end)
 
 
-def matches_verbnet_frame(dico_frame, vn_frame):
-    vn_subcat = [syntax_part['type'] for syntax_part in vn_frame.syntax]
-    dico_subcat = [syntax_part['type'] for syntax_part in dico_frame]
+def matches_verbnet_frame(dico_syntax, vn_syntax):
+    vn_subcat = [syntax_part['type'] for syntax_part in vn_syntax]
+    dico_subcat = [syntax_part['type'] for syntax_part in dico_syntax]
 
     return dico_subcat == vn_subcat
 
@@ -113,76 +109,70 @@ def remove_before_v(frame):
     frame.syntax = new_syntax
     return frame
 
-def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to_verbnet):
+def analyze_constructs(dico_examples, role_mapping, evaluation_sets):
     annotated_sentences, lemma_in_vn = 0, 0
     valid_frames, missing_frames = 0, 0
     n_correct_roles, n_wrong_roles = 0, 0
 
-    for lexie in frames_for_lexie:
-        lemma = lexie.split('.')[0]
+    for lexie, lemma, sentence_hash, dico_syntax in dico_examples:
+        d = sentence_hash in evaluation_sets['train']  # debug
+        test_context = sentence_hash in evaluation_sets['test']  # score
 
-        if not lexie in to_verbnet:
-            raise Exception(lexie)
+        debug(d, [lexie])
+        if test_context:
+            annotated_sentences += 1
 
-        for sentence_hash, dico_frame in frames_for_lexie[lexie]:
-            d = sentence_hash in lexie_groups['train']  # debug
-            test_context = sentence_hash in lexie_groups['test']  # score
+        # First possible error: lemma does not exist in VerbNet
+        if lemma not in verbnet.classes_for_predicate:
+            continue
 
-            debug(d, [lexie])
+        if test_context:
+            lemma_in_vn += 1
+
+        considered_syntax = []
+        # TODO assign class too
+        for vn_class in verbnet.classes_for_predicate[lemma]:
+            for vn_frame in vn_class.all_frames():
+                if dico_syntax[0]['type'] == 'V':
+                    # Remove anything that's before the verb in VerbNet
+                    vn_frame = remove_before_v(vn_frame)
+                considered_syntax.append(vn_frame.syntax)
+
+        vn_syntax_matches = []
+        for vn_syntax in considered_syntax:
+            if matches_verbnet_frame(dico_syntax, vn_syntax) and not vn_syntax in vn_syntax_matches:
+                vn_syntax_matches.append(vn_syntax)
+
+        # Second possible error: syntactic pattern is not in VerbNet
+        if not vn_syntax_matches:
+            debug(d, ['    ', Fore.RED, dico_syntax, Fore.RESET])
             if test_context:
-                annotated_sentences += 1
+                missing_frames += 1
+            continue
 
-            # First possible error: lemma does not exist in VerbNet
-            if lemma not in classes_for_predicate:
-                continue
+        debug(d, ['    ', Fore.GREEN, dico_syntax, Fore.RESET, vn_syntax_matches])
+        if test_context:
+            valid_frames += 1
 
-            if test_context:
-                lemma_in_vn += 1
+        for i, correct_syntax in enumerate(dico_syntax):
+            # if this is a 'frame element', not a V or anything else
+            if 'role' in correct_syntax:
+                candidate_roles = set()
 
-            considered_frames = []
-            for vn_class in classes_for_predicate[lemma]:
-                for vn_frame in vn_class.all_frames():
-                    if dico_frame[0]['type'] == 'V':
-                        # Remove anything that's before the verb in VerbNet
-                        vn_frame = remove_before_v(vn_frame)
-                    considered_frames.append(vn_frame)
+                for syntax in vn_syntax_matches:
+                    candidate_roles.add(syntax[i]['role'])
 
-
-            vn_frame_matches = set()
-            for vn_frame in considered_frames:
-                if matches_verbnet_frame(dico_frame, vn_frame):
-                    vn_frame_matches.add(vn_frame)
-
-            # Second possible error: syntactic pattern is not in VerbNet
-            if not vn_frame_matches:
-                debug(d, ['    ', Fore.RED, dico_frame, Fore.RESET])
-                if test_context:
-                    missing_frames += 1
-                continue
-
-            debug(d, ['    ', Fore.GREEN, dico_frame, Fore.RESET, vn_frame_matches])
-            if test_context:
-                valid_frames += 1
-
-            for i, correct_syntax in enumerate(dico_frame):
-                # if this is a 'frame element', not a V or anything else
-                if 'role' in correct_syntax:
-                    candidate_roles = set()
-
-                    for frame in vn_frame_matches:
-                        candidate_roles.add(frame.syntax[i]['role'])
-
-                    if to_verbnet[lexie] == {}:
-                        if test_context:
-                            n_wrong_roles += 1
-                    elif correct_syntax.get('role') not in to_verbnet[lexie]:
-                        raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
-                    elif to_verbnet[lexie][correct_syntax.get('role')] in candidate_roles:
-                        if test_context:
-                            n_correct_roles += 1 / len(candidate_roles)
-                    else:
-                        if test_context:
-                            n_wrong_roles += 1
+                if role_mapping[lexie] == {}:
+                    if test_context:
+                        n_wrong_roles += 1
+                elif correct_syntax.get('role') not in role_mapping[lexie]:
+                    raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
+                elif role_mapping[lexie][correct_syntax.get('role')] in candidate_roles:
+                    if test_context:
+                        n_correct_roles += 1 / len(candidate_roles)
+                else:
+                    if test_context:
+                        n_wrong_roles += 1
 
     print('{:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('For these tokens, {:.1%} of constructions are here'.format(valid_frames/(valid_frames + missing_frames)))
@@ -190,18 +180,16 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
 
 if __name__ == '__main__':
     colorama.init()
-    #vn_reader = verbnetreader.VerbnetReader(paths.VERBNET_PATH, replace_pp = False)
-    #normalized_frames = normalize_vn_frames(vn_reader.frames_for_verb)
 
+    # DicoInfo, DicoEnviro
     for dico in paths.DICOS:
         print(dico['xml'])
-        lexies = {
+        evaluation_sets = {
             'train': pickle.load(open(os.path.join(dico['root'], dico['train']), 'rb')),
             'test': pickle.load(open(os.path.join(dico['root'], dico['test']), 'rb'))
         }
 
-        frames_for_lexie = retrieve_constructs(os.path.join(dico['root'], dico['xml']), dico['xmlns'])
-        analyze_constructs(lexies,
-                           frames_for_lexie,
-                           verbnet.classes_for_predicate,
-                           RoleMapping(os.path.join(dico['root'], dico['mapping'])))
+        dico_examples = get_dico_examples(os.path.join(dico['root'], dico['xml']), dico['xmlns'])
+        role_mapping = RoleMapping(os.path.join(dico['root'], dico['mapping']))
+
+        analyze_constructs(dico_examples, role_mapping, evaluation_sets)

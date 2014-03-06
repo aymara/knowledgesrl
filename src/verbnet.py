@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import unittest
 from xml.etree import ElementTree as ET
 import glob
 import collections
@@ -153,9 +152,8 @@ class Syntax(collections.UserList):
     def __str__(self):
         return ' '.join([self._string_of_syntax(part) for part in self.data])
 
-class VerbnetFrameTest(unittest.TestCase):
-    def test(self):
-        self.assertEqual(1, 1)
+    def __repr__(self):
+        return str(self)
 
 # If we're loading this module, this is because we want to load VerbNet
 for filename in sorted(glob.glob(paths.VERBNET_PATH + '/*.xml'),
