@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import copy
 import collections
 import re
 import os.path
@@ -98,6 +99,19 @@ def matches_verbnet_frame(dico_frame, vn_frame):
 
     return dico_subcat == vn_subcat
 
+def remove_before_v(frame):
+    frame = copy.deepcopy(frame)
+    new_syntax = verbnet.Syntax()
+
+    found_v = False
+    for part in frame.syntax:
+        if part['type'] == 'V':
+            found_v = True
+        if found_v:
+            new_syntax.append(part)
+
+    frame.syntax = new_syntax
+    return frame
 
 def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to_verbnet):
     annotated_sentences, lemma_in_vn = 0, 0
@@ -125,11 +139,19 @@ def analyze_constructs(lexie_groups, frames_for_lexie, classes_for_predicate, to
             if test_context:
                 lemma_in_vn += 1
 
-            vn_frame_matches = set()
+            considered_frames = []
             for vn_class in classes_for_predicate[lemma]:
                 for vn_frame in vn_class.all_frames():
-                    if matches_verbnet_frame(dico_frame, vn_frame):
-                        vn_frame_matches.add(vn_frame)
+                    if dico_frame[0]['type'] == 'V':
+                        # Remove anything that's before the verb in VerbNet
+                        vn_frame = remove_before_v(vn_frame)
+                    considered_frames.append(vn_frame)
+
+
+            vn_frame_matches = set()
+            for vn_frame in considered_frames:
+                if matches_verbnet_frame(dico_frame, vn_frame):
+                    vn_frame_matches.add(vn_frame)
 
             # Second possible error: syntactic pattern is not in VerbNet
             if not vn_frame_matches:
