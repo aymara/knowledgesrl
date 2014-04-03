@@ -10,4 +10,4 @@ class RoleMapping(UserDict):
         for lexie in tree.findall('lexie'):
             self.data[lexie.get('name')] = {}
             for role in lexie.findall('role'):
-                self.data[lexie.get('name')][role.get('dico')] = role.get('vn')
+                self.data[lexie.get('name')][role.get('name')] = role.get('vn')

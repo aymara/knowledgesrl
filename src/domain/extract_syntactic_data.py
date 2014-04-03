@@ -15,6 +15,7 @@ import paths
 import verbnet
 from .rolemapping import RoleMapping
 from .dicoxml import deindent_text, get_all_text
+from .kicktionary import kicktionary_frames
 
 def xmlcontext_to_frame(xmlns, lexie, contexte):
     indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
@@ -109,16 +110,16 @@ def remove_before_v(frame):
     frame.syntax = new_syntax
     return frame
 
-def analyze_constructs(dico_examples, role_mapping, evaluation_sets):
+def analyze_constructs(examples, role_mapping, evaluation_sets):
     annotated_sentences, lemma_in_vn = 0, 0
     valid_frames, missing_frames = 0, 0
-    n_correct_roles, n_wrong_roles = 0, 0
+    n_correct_roles, n_roles = 0, 0
 
-    for lexie, lemma, sentence_hash, dico_syntax in dico_examples:
+    for lexie, lemma, sentence_hash, dico_syntax in examples:
         d = sentence_hash in evaluation_sets['train']  # debug
         test_context = sentence_hash in evaluation_sets['test']  # score
 
-        debug(d, [lexie])
+        debug(d, [lexie, lemma])
         if test_context:
             annotated_sentences += 1
 
@@ -157,29 +158,37 @@ def analyze_constructs(dico_examples, role_mapping, evaluation_sets):
         for i, correct_syntax in enumerate(dico_syntax):
             # if this is a 'frame element', not a V or anything else
             if 'role' in correct_syntax:
-                candidate_roles = set()
+                if test_context:
+                    n_roles += 1
 
+                candidate_roles = set()
                 for syntax in vn_syntax_matches:
                     candidate_roles.add(syntax[i]['role'])
 
                 if role_mapping[lexie] == {}:
-                    if test_context:
-                        n_wrong_roles += 1
+                    # missing sense
+                    pass
                 elif correct_syntax.get('role') not in role_mapping[lexie]:
                     raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
                 elif role_mapping[lexie][correct_syntax.get('role')] in candidate_roles:
                     if test_context:
                         n_correct_roles += 1 / len(candidate_roles)
-                else:
-                    if test_context:
-                        n_wrong_roles += 1
 
     print('{:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('For these tokens, {:.1%} of constructions are here'.format(valid_frames/(valid_frames + missing_frames)))
-    print('For those constructions, {:.1%} of roles are correct'.format(n_correct_roles/(n_correct_roles+n_wrong_roles)))
+    print('For those constructions, {:.1%} of roles are correct'.format(n_correct_roles/n_roles))
 
 if __name__ == '__main__':
     colorama.init()
+
+    # Kicktionary
+    kicktionary_evaluation = {
+        'train': pickle.load(open(paths.KICKTIONARY_SETS.format('train', 'en'), 'rb')),
+        'test': pickle.load(open(paths.KICKTIONARY_SETS.format('test', 'en'), 'rb')),
+    }
+    kicktionary_examples = kicktionary_frames('en')
+    role_mapping = RoleMapping(paths.KICKTIONARY_ROLES)
+    analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation)
 
     # DicoInfo, DicoEnviro
     for dico in paths.DICOS:

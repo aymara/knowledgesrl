@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!DOCTYPE kicktionary_verbnet_rolemapping [
+  <!ELEMENT kicktionary_verbnet_rolemapping (lexie+)>
+  <!ELEMENT lexie  (role+)>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST lexie name  CDATA #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST role  frame  CDATA #REQUIRED>
+  <!ATTLIST role  vn    CDATA #REQUIRED>
+]>
+<kicktionary_verbnet_rolemapping>
+    <lexie name='Deny' vn='steal-10.5' sense='ok' alternations='more missing' roles='missing more'>
+        We don't steal the ball for ourselves so that doesn't appear in VerbNet.
+        Area can be considered as a non-core role.
+        Action and Challenge are domain-specific roles that don't appear in VerbNet.
+        <role name='Area' vn='N/A' />
+        <role name='Opponent_Player' vn='Agent' />
+        <role name='Player_With_Ball' vn='Source' />
+        <role name='Action' vn='N/A' />
+        <role name='Challenge' vn='N/A' />
+        <role name='Ball' vn='Theme' />
+    </lexie>
+    <lexie name='Elimination' vn='withdraw-82' sense='ok' alternations='more missing' roles='missing'>
+        <role name='Competition' vn='Source' />
+        <role name='Loser' vn='Agent' />
+        <role name='Winner' vn='N/A' />
+    </lexie>
+    <lexie name='Progression' sense='missing'>
+        It's an interesting frame where advance (to next round) and eliminate (from competition) are both here. How should they be separated? How does VerbNet does this with Commerce_buy? Two mapping? Sense is missing anyway.
+    </lexie>
+    <lexie name='Trail' sense='missing'>
+        chase-51.6 is interestingly close but the alternations are different.
+        We only need "Trailer trailed Score to Leader" which is not in VerbNet at all and would not fit.
+    </lexie>
+    <lexie name='Lead' sense='missing'>
+    </lexie>
+    <lexie name='Deploy' sense='missing'>
+    </lexie>
+    <lexie name='Start' sense='missing multiple'>
+        'missing' means that some verb senses of the Start frame is missing, eg. deputize 
+        'multiple' is the real issue: multiple senses are covered in that frame
+    </lexie>
+    <lexie name='Home_Game' sense='ok' roles='ok' alternations='ok'>
+        <role name='Host' vn='Agent' />
+        <role name='Visitor' vn='Theme' />
+        <role name='Match_Location' vn='Location' />
+    </lexie> 
+    <lexie name='Away_Game' sense='missing'>
+        It also appears to be missing from OntoNotes. Domain specific?
+    </lexie>
+    <lexie name='Match' vn='confront-98' sense='ok' roles='missing more' alternations='ok'>
+        <role name='Team1' vn='Agent' />
+        <role name='Team2' vn='Theme' />
+        <role name='Time' vn='N/A' />
+        <role name='Match_Location' vn='N/A' />
+        <role name='Competition_Stage' vn='N/A' />
+        <role name='Competition' vn='N/A' />
+        <role name='Teams' vn='N/A' />
+        <role name='Match' vn='N/A' />
+    </lexie>
+    <lexie name='Defeat' sense='missing'>
+        Good example of missing sense which is intuitively important to a given domain.
+    </lexie>
+    <lexie name='Draw' sense='missing'>
+        Good example of missing sense which is intuitively important to a given domain.
+    </lexie>
+    <lexie name='Victory' sense='missing'>
+        Good example of missing sense which is intuitively important to a given domain.
+    </lexie>
+    <lexie name='Challenge' sense='ok' role='missing' alternations='ok'>
+        Interestingly, it's the same frame than for Match, but at a different level. 
+        <role name='Player_With_Ball' vn='Theme' />
+        <role name='Opponent_Player' vn='Agent' />
+        <role name='Area' vn='N/A' />
+        <role name='Challenge' vn='N/A' />
+        <role name='Ball' vn='N/A' />
+        <role name='Players' vn='Agent' />
+        <role name='Distance' vn='N/A' />
+        <role name='Opponent_Players' vn='Theme' />
+        <role name='Target' vn='N/A' />
+    </lexie>
+    <lexie name='One_on_One' sense='missing'>
+    </lexie>
+    <lexie name='Beat' sense='multiple missing'>
+    </lexie>
+    <lexie name='Mark' sense='missing'>
+    </lexie>
+    <lexie name='Pass' sense='ok' vn='throw-17.1-1' roles='ok'>
+        <role name='Passer' vn='Agent' />
+        <role name='Recipient' vn='Destination' />
+        <role name='Ball' vn='Theme' />
+        <role name='Part_of_Body' vn='N/A' />
+        <role name='Target' vn='Destination' />
+    </lexie> 
+    <lexie name='Connect' sense='missing' domain='true'>
+    </lexie>
+    <lexie name='Control' sense='missing' domain='true'>
+    </lexie>
+</kicktionary_verbnet_rolemapping>

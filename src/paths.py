@@ -22,16 +22,6 @@ _dicoenviro_xmlns = 'http://olst.ling.umontreal.ca/dicoenviro/'
 _dicoinfo_xmlns = 'http://olst.ling.umontreal.ca/dicoinfo/'
 
 DICOS = [
-    {
-        'name': 'info_en',
-        'root': ROOT + 'domain/info/',
-        'xml': 'dicoinfo_en.xml',
-        'xmlns': _dicoinfo_xmlns,
-        'mapping': 'info-vn-roles.xml',
-        'train': 'train_info_en.pickle',
-        'test': 'test_info_en.pickle',
-    },
-
     # TODO french info
 
     {
@@ -44,5 +34,19 @@ DICOS = [
         'test': 'test_enviro_en.pickle',
     },
 
+    {
+        'name': 'info_en',
+        'root': ROOT + 'domain/info/',
+        'xml': 'dicoinfo_en.xml',
+        'xmlns': _dicoinfo_xmlns,
+        'mapping': 'info-vn-roles.xml',
+        'train': 'train_info_en.pickle',
+        'test': 'test_info_en.pickle',
+    },
+
     # TODO french enviro
 ]
+
+ALL_LUS = ROOT + 'domain/All_LUs.xml'
+KICKTIONARY_SETS = ROOT + 'domain/kicktionary/{}_kicktionary_{}.pickle'
+KICKTIONARY_ROLES = ROOT + 'domain/kicktionary/kicktionary-vn-roles.xml'
