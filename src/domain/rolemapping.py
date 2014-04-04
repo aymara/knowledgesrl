@@ -8,6 +8,6 @@ class RoleMapping(UserDict):
         super().__init__()
         tree = ET.ElementTree(file=filename)
         for lexie in tree.findall('lexie'):
-            self.data[lexie.get('name')] = {}
+            self.data[lexie.get('name')] = {lexie.get('vn'): {}}
             for role in lexie.findall('role'):
-                self.data[lexie.get('name')][role.get('name')] = role.get('vn')
+                self.data[lexie.get('name')][lexie.get('vn')][role.get('name')] = role.get('vn')

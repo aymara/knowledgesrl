@@ -150,7 +150,10 @@ class Syntax(collections.UserList):
             raise Exception('Unknown type {}!'.format(s['type']))
 
     def __str__(self):
-        return ' '.join([self._string_of_syntax(part) for part in self.data])
+        if self.data:
+            return ' '.join([self._string_of_syntax(part) for part in self.data])
+        else:
+            return '-'
 
     def __repr__(self):
         return str(self)

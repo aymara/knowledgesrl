@@ -90,9 +90,9 @@ def debug(should_debug, stuff, end='\n'):
         print(end=end)
 
 
-def matches_verbnet_frame(dico_syntax, vn_syntax):
+def matches_verbnet_frame(gold_syntax, vn_syntax):
     vn_subcat = [syntax_part['type'] for syntax_part in vn_syntax]
-    dico_subcat = [syntax_part['type'] for syntax_part in dico_syntax]
+    dico_subcat = [syntax_part['type'] for syntax_part in gold_syntax]
 
     return dico_subcat == vn_subcat
 
@@ -110,12 +110,25 @@ def remove_before_v(frame):
     frame.syntax = new_syntax
     return frame
 
+def map_gold_frame(vn_id, gold_syntax, role_mapping_lexie):
+    if not vn_id in role_mapping_lexie:
+        return verbnet.Syntax()
+
+    mapped_gold_syntax = verbnet.Syntax()
+    for part in gold_syntax:
+        if 'role' in part:
+            mapped_gold_syntax.append({'role': role_mapping_lexie[vn_id][part['role']], 'type': part['type']})
+        else:
+            mapped_gold_syntax.append(part)
+    return mapped_gold_syntax
+
 def analyze_constructs(examples, role_mapping, evaluation_sets):
     annotated_sentences, lemma_in_vn = 0, 0
-    valid_frames, missing_frames = 0, 0
+    n_correct_frames, n_frames = 0, 0
     n_correct_roles, n_roles = 0, 0
+    n_correct_classes, n_classes = 0, 0
 
-    for lexie, lemma, sentence_hash, dico_syntax in examples:
+    for lexie, lemma, sentence_hash, gold_syntax in examples:
         d = sentence_hash in evaluation_sets['train']  # debug
         test_context = sentence_hash in evaluation_sets['test']  # score
 
@@ -129,58 +142,78 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
 
         if test_context:
             lemma_in_vn += 1
+            n_frames += 1
 
         considered_syntax = []
-        # TODO assign class too
         for vn_class in verbnet.classes_for_predicate[lemma]:
             for vn_frame in vn_class.all_frames():
-                if dico_syntax[0]['type'] == 'V':
-                    # Remove anything that's before the verb in VerbNet
+                # If sentence starts with a verb, remove anything that's before
+                # the verb in VerbNet
+                if gold_syntax[0]['type'] == 'V':
                     vn_frame = remove_before_v(vn_frame)
-                considered_syntax.append(vn_frame.syntax)
+                considered_syntax.append((vn_class, vn_frame.syntax))
 
         vn_syntax_matches = []
-        for vn_syntax in considered_syntax:
-            if matches_verbnet_frame(dico_syntax, vn_syntax) and not vn_syntax in vn_syntax_matches:
-                vn_syntax_matches.append(vn_syntax)
+        for vn_class, vn_syntax in considered_syntax:
+            if matches_verbnet_frame(gold_syntax, vn_syntax) and not vn_syntax in vn_syntax_matches:
+                vn_syntax_matches.append((vn_class, vn_syntax))
 
         # Second possible error: syntactic pattern is not in VerbNet
         if not vn_syntax_matches:
-            debug(d, ['    ', Fore.RED, dico_syntax, Fore.RESET])
-            if test_context:
-                missing_frames += 1
+            debug(d, ['   ', Fore.RED, gold_syntax, Fore.RESET])
             continue
 
-        debug(d, ['    ', Fore.GREEN, dico_syntax, Fore.RESET, vn_syntax_matches])
         if test_context:
-            valid_frames += 1
+            n_correct_frames += 1
+            n_classes += 1
 
-        for i, correct_syntax in enumerate(dico_syntax):
+        debug(d, ['    ', vn_class.vn_id, vn_syntax])
+        debug(d, ['   ',  Fore.GREEN, gold_syntax, Fore.RESET])
+        debug(d, ['   ',  Fore.GREEN, map_gold_frame(vn_class.vn_id, gold_syntax, role_mapping[lexie])])
+
+
+        # TODO better choice strategy?
+        vn_class, vn_syntax = vn_syntax_matches[0]
+
+        if not vn_class.vn_id in role_mapping[lexie]:
+            continue
+
+        if test_context:
+                n_correct_classes += 1
+
+        for i, correct_syntax in enumerate(gold_syntax):
             # if this is a 'frame element', not a V or anything else
             if 'role' in correct_syntax:
+                if role_mapping[lexie] == {}:
+                    # missing sense
+                    pass
+                elif not vn_class.vn_id in role_mapping[lexie]:
+                    break
+                    raise Exception('{} misses {} class'.format(lexie, vn_class.vn_id))
+                elif correct_syntax.get('role') not in role_mapping[lexie][vn_class.vn_id]:
+                    raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
+
+
                 if test_context:
                     n_roles += 1
 
                 candidate_roles = set()
-                for syntax in vn_syntax_matches:
-                    candidate_roles.add(syntax[i]['role'])
+                candidate_roles.add(vn_syntax[i]['role'])
 
-                if role_mapping[lexie] == {}:
-                    # missing sense
-                    pass
-                elif correct_syntax.get('role') not in role_mapping[lexie]:
-                    raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
-                elif role_mapping[lexie][correct_syntax.get('role')] in candidate_roles:
+                if role_mapping[lexie][vn_class.vn_id][correct_syntax.get('role')] in candidate_roles:
                     if test_context:
                         n_correct_roles += 1 / len(candidate_roles)
 
-    print('{:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
-    print('For these tokens, {:.1%} of constructions are here'.format(valid_frames/(valid_frames + missing_frames)))
-    print('For those constructions, {:.1%} of roles are correct'.format(n_correct_roles/n_roles))
+    print('                         {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
+    print('For these tokens,        {:.1%} of constructions are here'.format(n_correct_frames/n_frames))
+    print('For these constructions, {:.1%} of classes are here'.format(n_correct_classes/n_classes))
+    print('For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/n_roles))
+    print()
 
 if __name__ == '__main__':
     colorama.init()
 
+    print('--- {}'.format(paths.ALL_LUS))
     # Kicktionary
     kicktionary_evaluation = {
         'train': pickle.load(open(paths.KICKTIONARY_SETS.format('train', 'en'), 'rb')),
@@ -192,7 +225,7 @@ if __name__ == '__main__':
 
     # DicoInfo, DicoEnviro
     for dico in paths.DICOS:
-        print(dico['xml'])
+        print('--- {}'.format(dico['xml']))
         evaluation_sets = {
             'train': pickle.load(open(os.path.join(dico['root'], dico['train']), 'rb')),
             'test': pickle.load(open(os.path.join(dico['root'], dico['test']), 'rb'))
