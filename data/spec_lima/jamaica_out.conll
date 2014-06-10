@@ -1,5 +1,5 @@
 1	the	the	DT	DT	-	2	NMOD	-	-	-	-
-2	island	island	NN	NN	-	5	SUB	-	-	wish-62        -
+2	island	island	NN	NN	-	5	SUB	-	-	wish-62	-
 3	of	of	IN	IN	-	2	NMOD	-	-	-	-
 4	jamaica	jamaica	NNP	NNP	-	3	PMOD	-	-	-	-
 5	will	will	MD	MD	-	0	ROOT	-	-	-	-
@@ -34,11 +34,11 @@
 13	fine	fine	JJ	JJ	-	14	NMOD	-	-	-	-
 14	hotels	hotels	NNS	NNS	-	1	PMOD	-	-	-	-
 15	,	,	,	,	-	17	P	-	-	-	-
-16	it	it	PRP	PRP	-	17	SUB	-	-	-              Agent
+16	it	it	PRP	PRP	-	17	SUB	-	-	-	Agent
 17	is	is	VBZ	VBZ	-	0	ROOT	-	-	-	-
 18	guaranteed	guaranteed	VBN	VBN	-	17	VC	-	-	-	-
 19	to	to	TO	TO	-	20	VMOD	-	-	-	-
-20	provide	provide	VB	VB	-	18	VMOD	-	-	fullfilling-13.4.1-1          -
+20	provide	provide	VB	VB	-	18	VMOD	-	-	fullfilling-13.4.1-1	-
 21	a	a	DT	DT	-	25	NMOD	-	-	-	-
 22	little	little	JJ	JJ	-	25	NMOD	-	-	-	-
 23	rest	rest	NN	NN	-	25	NMOD	-	-	-	-
@@ -72,7 +72,7 @@
 24	deserted	deserted	JJ	JJ	-	25	NMOD	-	-	-
 25	island	island	NN	NN	-	22	PMOD	-	-	-
 26	.	.	.	.	-	18	P	-	-	-
-                                                                                                                                                       
+
 1	jamaica	jamaica	NNP	NNP	-	2	SUB	-	-	-
 2	is	is	VBZ	VBZ	-	0	ROOT	-	-	-
 3	not	not	RB	RB	-	2	VMOD	-	-	-
@@ -83,7 +83,7 @@
 8	is	is	VBZ	VBZ	-	6	NMOD	-	-	-
 9	an	an	DT	DT	-	10	NMOD	-	-	-
 10	experience	experience	NN	NN	-	8	PRD	-	-	-
-                                                                                                                                                       
+
 1	the	the	DT	DT	-	5	NMOD	-	-	-
 2	third	third	JJ	JJ	-	5	NMOD	-	-	-
 3	-	-	:	:	-	5	P	-	-	-
@@ -121,7 +121,7 @@
 35	widest	widest	JJS	JJS	-	36	NMOD	-	-	-
 36	point	point	NN	NN	-	33	PMOD	-	-	-
 37	.	.	.	.	-	16	P	-	-	-
-                                                                                                                                                       
+
 1	the	the	DT	DT	-	2	NMOD	-	-	-	-	-	-
 2	island	island	NN	NN	-	3	SUB	-	-	-	-	-	-
 3	is	is	VBZ	VBZ	-	0	ROOT	-	-	-	-	-	-
@@ -137,15 +137,15 @@
 13	water	water	NN	NN	-	11	PMOD	-	-	-	-	-	-
 14	so	so	RB	RB	-	15	DEP	-	-	-	-	-	-
 15	that	that	IN	IN	-	13	NMOD	-	-	-	-	-	-
-16	sunrise	sunrise	NN	NN	-	17	SUB	-	-	-	Agent          Agent	Agent
-17	wakes	wakes	VBZ	VBZ	-	15	SBAR	-	-	other_cos-45.6 -	-	-
+16	sunrise	sunrise	NN	NN	-	17	SUB	-	-	-	Agent	Agent	Agent
+17	wakes	wakes	VBZ	VBZ	-	15	SBAR	-	-	other_cos-45.6	-	-	-
 18	the	the	DT	DT	-	20	NMOD	-	-	-	-	-	-
 19	eastern	eastern	JJ	JJ	-	20	NMOD	-	-	-	-	-	-
-20	tip	tip	NN	NN	-	17	OBJ	-	-	-	Patient        -	-
+20	tip	tip	NN	NN	-	17	OBJ	-	-	-	Patient	-	-
 21	,	,	,	,	-	20	P	-	-	-	-	-	-
 22	proceeds	proceeds	VBZ	VBZ	-	20	NMOD	-	-	-	-	-	-
 23	to	to	TO	TO	-	24	VMOD	-	-	-	-	-	-
-24	caress	caress	VB	VB	-	22	VMOD	-	-	touch20-1      -	-	-
+24	caress	caress	VB	VB	-	22	VMOD	-	-	touch20-1	-	-	-
 25	the	the	DT	DT	-	26	NMOD	-	-	-	-	-	-
 26	length	length	NN	NN	-	24	OBJ	-	-	-	-	Experiencer	-
 27	of	of	IN	IN	-	26	NMOD	-	-	-	-	-	-
@@ -153,7 +153,7 @@
 29	island	island	NN	NN	-	27	PMOD	-	-	-	-	-	-
 30	,	,	,	,	-	17	P	-	-	-	-	-	-
 31	and	and	CC	CC	-	17	VMOD	-	-	-	-	-	-
-32	kisses	kisses	VBZ	VBZ	-	17	VMOD	-	-	touch-20	-	-              -
+32	kisses	kisses	VBZ	VBZ	-	17	VMOD	-	-	touch-20	-	-	-
 33	the	the	DT	DT	-	35	NMOD	-	-	-	-	-	-
 34	western	western	JJ	JJ	-	35	NMOD	-	-	-	-	-	-
 35	tip	tip	NN	NN	-	32	OBJ	-	-	-	-	-	Experiencer
