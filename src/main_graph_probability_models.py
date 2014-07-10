@@ -9,7 +9,6 @@ import copy
 import framenetallreader
 from verbnetframe import VerbnetFrame
 from stats import stats_data, stats_quality
-from errorslog import errors
 import options
 import verbnetreader
 import framematcher

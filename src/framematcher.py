@@ -225,7 +225,7 @@ class FrameMatcher():
                 if VerbnetFrame._is_a_slot(elem1):
                     num_match += 1
                     if num_match - 1 < len(test_frame.roles):
-                        slot_associations[num_match - 1] = num_match - 1
+                        slots_associations[num_match - 1] = num_match - 1
             else: break
         
         return num_match

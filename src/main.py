@@ -8,7 +8,7 @@ import framenetallreader
 from verbnetframe import VerbnetFrame
 from stats import stats_quality, display_stats, stats_data, stats_ambiguous_roles
 import errorslog
-from errorslog import errors, log_debug_data, log_vn_missing, display_debug, log_frame_without_slot
+from errorslog import log_debug_data, log_vn_missing, display_debug, log_frame_without_slot
 from bootstrap import bootstrap_algorithm
 from verbnetrestrictions import NoHashDefaultDict
 import options
