@@ -26,8 +26,8 @@ class HeadWordExtractor(FNParsedReader):
         
     """
     
-    def __init__(self, path):
-        FNParsedReader.__init__(self, path)
+    def __init__(self):
+        FNParsedReader.__init__(self)
         self.word_classes = {}
         self.special_classes = {}
         self.words = set()
@@ -118,8 +118,8 @@ class HeadWordExtractorTest(unittest.TestCase):
             
     def test_classes(self):
         filename = "ANC__110CYL067"
-        extractor = HeadWordExtractor(options.framenet_parsed)
-        extractor.load_file(filename+".conll")
+        extractor = HeadWordExtractor()
+        extractor.load_file(options.framenet_parsed + filename+".conll")
 
         reader = framenetreader.FulltextReader(options.fulltext_corpus+filename+".xml", False)
 
@@ -135,7 +135,6 @@ class HeadWordExtractorTest(unittest.TestCase):
         
         # get_class should return "unknown" for word that were not resolved by
         # the nltk script or that were never encountered
-        
         self.assertEqual(extractor.get_class("abcde"), "unknown")
         self.assertEqual(extractor.get_class("fghij"), "unknown")
 
@@ -154,9 +153,7 @@ class HeadWordExtractorTest(unittest.TestCase):
 
             if filename in self.bad_files: continue
             
-            print(filename, file=sys.stderr)
-            
-            extractor.load_file(filename)
+            extractor.load_file(options.framenet_parsed + filename)
             
             reader = framenetreader.FulltextReader(options.fulltext_corpus+filename, False)
             previous_sentence = 0
@@ -179,8 +176,8 @@ class HeadWordExtractorTest(unittest.TestCase):
     
     def test_1(self):
         filename = "ANC__110CYL067"
-        extractor = HeadWordExtractor(options.framenet_parsed)
-        extractor.load_file(filename+".conll")
+        extractor = HeadWordExtractor()
+        extractor.load_file(options.framenet_parsed + filename+".conll")
 
         reader = framenetreader.FulltextReader(options.fulltext_corpus+filename+".xml", False)
 

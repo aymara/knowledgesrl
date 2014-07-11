@@ -23,6 +23,7 @@ class ArgGuesser(FNParsedReader):
     """
     :var verbnet_index: VerbnetFrame Dict -- Used to know which predicates are in VerbNet.
     :var base_forms: str Dict -- The infinitives of the verbal forms we found in the corpus.
+    :var filename: str -- The name of the current CoNLL file.
     """
     
     predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
@@ -74,9 +75,10 @@ class ArgGuesser(FNParsedReader):
     complex_pos = ["IN", "WP"]
 
     def __init__(self, path, verbnet_index):
-        FNParsedReader.__init__(self, path)
+        FNParsedReader.__init__(self)
         self.verbnet_index = verbnet_index
         self.base_forms = {}
+        self.annotations_path = path
         
         self.filelist = os.listdir(self.annotations_path)
         self.filelist = [x for x in self.filelist if x[-6:] == ".conll"]
@@ -86,7 +88,7 @@ class ArgGuesser(FNParsedReader):
         if len(self.base_forms) == 0:
             self._compute_base_forms()
         
-        for frame in self._handle_file(self.filelist[0]):
+        for frame in self._handle_file(self.annotations_path + self.filelist[0]):
             yield frame
         del(self.filelist[0])
 
@@ -148,11 +150,11 @@ class ArgGuesser(FNParsedReader):
         self.load_file(filename)
         sentence_id = 0
         while self.select_sentence(sentence_id):
-            for frame in self._handle_sentence():
+            for frame in self._handle_sentence(filename):
                 yield frame
             sentence_id += 1
     
-    def _handle_sentence(self):
+    def _handle_sentence(self, filename):
         """ Extracts frames from one sentence and iterate over them """
         for node in self.tree:
             # For every verb, looks for its infinitive form in verbnet, and
@@ -184,7 +186,7 @@ class ArgGuesser(FNParsedReader):
                     words=[Word(x.begin, x.end, x.pos) for x in self.tree],
                     frame_name="",
                     sentence_id=self.sentence_id,
-                    filename=self.filename.replace(".conll", ".xml")
+                    filename=filename
                 )
     
     def _is_good_pt(self, phrase_type):

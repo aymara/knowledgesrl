@@ -47,7 +47,7 @@ if __name__ == "__main__":
         vn_frames.append(converted_frame)
     stats_data["files"] += fn_reader.stats["files"]
     
-    hw_extractor = headwordextractor.HeadWordExtractor(options.framenet_parsed)
+    hw_extractor = headwordextractor.HeadWordExtractor()
 
     print("Extracting arguments headwords...", file=sys.stderr)
     hw_extractor.compute_all_headwords(annotated_frames, vn_frames)

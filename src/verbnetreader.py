@@ -453,9 +453,8 @@ class VerbnetReaderTest(unittest.TestCase):
     """Unit test class"""
     
     def test_global(self):
-        path = paths.VERBNET_PATH
-        reader = VerbnetReader(path)
-        self.assertEqual(len(reader.frames_for_verb), 4154)
+        reader = VerbnetReader(paths.VERBNET_PATH)
+        self.assertEqual(len(reader.frames_for_verb), 4402)
 
         test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
         test_frames = [
@@ -489,7 +488,7 @@ class VerbnetReaderTest(unittest.TestCase):
                 [str(x) for x in vnframe.role_restrictions], restrictions_str[verb])
         
         reader.frames_for_verb = {}
-        root = ET.ElementTree(file=path+"separate-23.1.xml")
+        root = ET.ElementTree(file=paths.VERBNET_PATH + "separate-23.1.xml")
         reader._handle_class(root.getroot(), [], [], [])
         
         list1 = [

@@ -77,7 +77,7 @@ if __name__ == "__main__":
         for frame in annotated_frames:
             vn_frames.append(VerbnetFrame.build_from_frame(frame))
 
-    hw_extractor = headwordextractor.HeadWordExtractor(options.framenet_parsed)
+    hw_extractor = headwordextractor.HeadWordExtractor()
 
     print("Extracting arguments headwords...", file=sys.stderr)
     hw_extractor.compute_all_headwords(annotated_frames, vn_frames)

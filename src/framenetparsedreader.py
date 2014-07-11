@@ -19,15 +19,12 @@ class FNParsedReader:
     :var annotation_path: str -- The path to the annotated corpus.
     :var sentences_data: str List -- The parser output for each sentence in the current file.
     :var sentence_id: int -- The id of the current sentence (starting at 1 for the first sentence in the file).
-    :var filename: str -- The name of the current file.
     :var tree: SyntacticTreeNode -- The tree corresponding to the current sentence.
     """
     
-    def __init__(self, path):
-        self.annotations_path = path
+    def __init__(self):
         self.sentences_data = []
         self.sentence_id = 0
-        self.filename = None
         self.tree = None
 
     def load_file(self, filename):
@@ -38,19 +35,16 @@ class FNParsedReader:
         :type filename: str.
         :returns: boolean -- True if the file was correctly loaded, False otherwise.
         """
-        path = self.annotations_path + filename.replace(".xml", ".conll")
         
-        if not os.path.exists(path):
+        if not os.path.exists(filename):
             self.tree = None
             self.sentences_data = []
             return False
             
-        with open(path) as content:
+        with open(filename) as content:
             self.sentences_data = content.read().split("\n\n")
             if self.sentences_data[len(self.sentences_data) - 1] == "":
                 del self.sentences_data[len(self.sentences_data) - 1]
-        
-        self.filename=filename
             
         return True
         
@@ -104,7 +98,7 @@ class FNParsedReaderTest(unittest.TestCase):
     
     def test_sentences_match(self, num_sample = 0):
         print("Checking FrameNetParsedReader")
-        extractor = FNParsedReader(options.framenet_parsed)
+        extractor = FNParsedReader()
 
         for filename in sorted(os.listdir(options.fulltext_corpus)):
             if not filename[-4:] == ".xml": continue
@@ -123,7 +117,7 @@ class FNParsedReaderTest(unittest.TestCase):
                 if frame.sentence_id != previous_sentence:
                     extractor.select_sentence(frame.sentence_id)
                 
-                # FIXME : this is no longer guaranteed since framenet_parsed has
+                # TODO FIXME : this is no longer guaranteed since framenet_parsed has
                 # been replaced. Rewriting of bad_files and bad_sentences would
                 # be needed
                 #self.assertTrue(self.comp(frame.sentence, extractor.current_sentence()))
