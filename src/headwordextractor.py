@@ -13,6 +13,7 @@ import getopt
 from framenetparsedreader import FNParsedReader
 import framenetreader
 import options
+import wordclassesloader
 
 
 class HeadWordExtractor(FNParsedReader):
@@ -32,18 +33,9 @@ class HeadWordExtractor(FNParsedReader):
         self.words = set()
     
     def compute_word_classes(self):
-        """Fills word_classes by asking the Python2 script which can talk to nltk."""
-        with open("temp_wordlist", "wb") as picklefile:
-            pickle.dump(self.words, picklefile, 2)
-        
-        os.system("python2.7 wordclassesloader.py")
-        
-        with open("temp_wordclasses", "rb") as picklefile:
-            self.word_classes.update(pickle.load(picklefile))
-            
-        os.remove("temp_wordlist")
-        os.remove("temp_wordclasses")
-        
+        """Fills word_classes with wordclassesloader"""
+        base_forms = wordclassesloader.handle_wordclasses(self.words)
+        self.word_classes.update(base_forms)
         self.word_classes.update(self.special_classes)
     
     def headword(self, arg_text):

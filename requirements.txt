@@ -1,0 +1,7 @@
+nltk==3.0.0b1
+
+colorama==0.2.7
+
+pep8==1.5.7
+pyflakes==0.8.1
+

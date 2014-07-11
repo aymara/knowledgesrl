@@ -16,6 +16,7 @@ import options
 from conllreader import SyntacticTreeBuilder
 from verbnetprepclasses import all_preps
 from argheuristic import find_args
+import wordclassesloader
 
 
 class ArgGuesser(FNParsedReader):
@@ -135,21 +136,13 @@ class ArgGuesser(FNParsedReader):
         return result
 
     def _compute_base_forms(self):
-        """ Use the python2 script that can talk to nltk to compute the infinitive forms """
+        """ Use wordclassesloader to compute the infinitive forms """
     
-        with open("temp_wordlist", "wb") as picklefile:
-            pickle.dump(self._extract_verbs(), picklefile, 2)
-
         print("Computing predicates infinitive forms...")
         
-        os.system("python2.7 wordclassesloader.py --morph")
-
-        with open("temp_morph", "rb") as picklefile:
-            self.base_forms.update(pickle.load(picklefile))
+        wordclasses = wordclassesloader.handle_morph(self._extract_verbs())
+        self.base_forms.update(wordclasses)
                             
-        os.remove("temp_wordlist")
-        os.remove("temp_morph")
-
     def _handle_file(self, filename):
         """ Extracts frames from one file and iterate over them """
         self.load_file(filename)
