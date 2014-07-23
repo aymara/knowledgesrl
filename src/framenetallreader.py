@@ -18,7 +18,6 @@ class FNAllReader:
     This class will one day replace framenetparsedreader.
     
     :var annotations_path: str -- Path to framenet_parsed
-    :var corpus_path: str -- Path to framenet fulltext
     :var core_args_only: boolean -- Indicates whether we want only core args
     :var keep_unannotated: boolean -- Indicates whether we want to keep frames without arg annotations
     :var frames: FrameInstance List -- The collected frames
@@ -28,73 +27,62 @@ class FNAllReader:
     be_forms = ["am", "are", "be", "been", "being", "is", "was", "were",
         "'m", "'re", "'s"]
     
-    def __init__(self, corpus_path, annotation_path,
-        core_args_only = False, keep_unannotated = False, filename=None):
-        self.annotations_path = annotation_path
-        self.corpus_path = corpus_path
+    def __init__(self,
+        core_args_only = False, keep_unannotated = False):
         self.core_args_only = core_args_only
         self.keep_unannotated = keep_unannotated
-        
-        self.trees = []
-        self.sentences_syntax = []
-        self.filename = filename
         
         self.stats = {
             "files":0
         }
+
+    @staticmethod
+    def fulltext_annotations():
+        xml_filelist = os.listdir(options.fulltext_corpus)
+        xml_filelist = sorted([os.path.join(options.fulltext_corpus, x) for x in xml_filelist if x.endswith(".xml")])
+        return xml_filelist
+
+    @staticmethod
+    def fulltext_parses():
+        conll_filelist = os.listdir(options.framenet_parsed)
+        conll_filelist = sorted([x for x in conll_filelist if x.endswith(".conll")])
+        conll_filelist = [os.path.join(options.framenet_parsed, x) for x in conll_filelist]
+        return conll_filelist
     
-    def iter_frames(self):
+    # TODO loop should be outside of function
+    def iter_frames(self, annotation_list, parse_list):
         """Read the corpus and yield every valid frame"""
         
-        if self.filename == None:
-            files = os.listdir(self.corpus_path)
-        else:
-            files = [self.filename.replace(".conll", ".xml")]
-        
-        for filename in sorted(files):
-            if not filename[-4:] == ".xml": continue
-            
-            print(".", file=sys.stderr, end="", flush=True)
-            
-            self.load_syntactic_parses(filename[:-4])
-            
+        for annotation, parse in zip(annotation_list, parse_list):
             self.stats["files"] += 1
             
             reader = framenetreader.FulltextReader(
-                self.corpus_path + filename,
+                annotation,
                 core_args_only = self.core_args_only,
                 keep_unannotated = self.keep_unannotated,
-                trees = self.trees)
+                trees = self.read_syntactic_parses(parse))
             
             for frame_instance in reader.frames:
                 if self.add_syntactic_information(frame_instance):
                     yield frame_instance
     
-    def load_syntactic_parses(self, filename):
+    def read_syntactic_parses(self, parse_filename):
         """Load the syntactic annotations files.
         Not affected by newlines at the end of the file.
         
-        :param filename: The FrameNet file name, eg. ANC__110CYL072
+        :param parse_filename: The FrameNet filepath, eg. path/to/ANC__110CYL072.conll
         :type filename: str.
-        :returns: boolean -- True if the file was correctly loaded, False otherwise.
+        :returns: list of trees
         """
-        self.trees, self.sentences_syntax = [], []
-        
-        path = self.annotations_path + filename + ".conll"
-        
-        if not os.path.exists(path):
-            return False
-            
-        with open(path) as content:
+        with open(parse_filename) as content:
             sentences_data = content.read().split("\n\n")
             if sentences_data[-1] == "": del sentences_data[-1]
 
+        trees = []
         for one_sentence_data in sentences_data:
-            tree = SyntacticTreeBuilder(one_sentence_data).build_syntactic_tree()
-            self.trees.append(tree)
-            self.sentences_syntax.append(tree.flat())
+            trees.append(SyntacticTreeBuilder(one_sentence_data).build_syntactic_tree())
             
-        return True
+        return trees
         
     def add_syntactic_information(self, frame):
         """
@@ -146,9 +134,9 @@ class FNAllReaderTest(unittest.TestCase):
 
     def test_sentences_match(self, num_sample = 0):
         print("Checking FrameNetAllReader")
-        extractor = FNAllReader(options.fulltext_corpus, options.framenet_parsed)
+        extractor = FNAllReader()
 
-        frames = [x for x in extractor.iter_frames()]
+        frames = [x for x in extractor.iter_frames(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses())]
         frame = frames[28]
         self.assertTrue(frame.sentence == ("a few months ago "
             "you received a letter from me telling the success stories of "

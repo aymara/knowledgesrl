@@ -4,8 +4,12 @@
 from collections import defaultdict
 import unittest
 import re
+import os
+import sys
 
-import framenetallreader
+
+import argguesser
+from framenetallreader import FNAllReader
 import paths
 import options
 from stats import stats_data
@@ -16,9 +20,9 @@ from framestructure import FrameInstance, Predicate, Arg
 using the annotated FrameNet data.
 """
 
-def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
+def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     """Fills the roles of some frames argument, when possible.
-    Note : extracted_frames must be sorted by file.
+    Note : extracted_frames must be sorted by sentence order.
     Note : extracted_frames is altered, even if the final result is returned.
     
     :param extracted_frames: The frames.
@@ -28,18 +32,20 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
     :type verbnet_classes: Str Dict.
     """
     
-    frames = defaultdict(lambda : (defaultdict(lambda : []) ))
+    frames = defaultdict(lambda: defaultdict(list))
     for frame in extracted_frames:
-        frames[frame.filename][frame.sentence_id].append(frame)
-    
-    fn_reader = framenetallreader.FNAllReader(
-            options.fulltext_corpus, options.framenet_parsed,
-            core_args_only = True, keep_unannotated = True, filename=filename)
+        # /path/to/stuff.conll -> stuff
+        frames[os.path.basename(frame.filename)[:-6]][frame.sentence_id].append(frame)
+
+    fn_reader = FNAllReader(
+            core_args_only = True, keep_unannotated = True)
     
     previous_id = -1
     sentence_frames = []
     good_frames = 0
-    for frame in fn_reader.iter_frames():
+    print("Extracting roles", end='')
+    for frame in fn_reader.iter_frames(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+
         stats_data["args_instanciated"] += len(
             [x for x in frame.args if x.instanciated])
         
@@ -55,8 +61,8 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
                 stats_data["args_annotated_mapping_ok"] += 1
             
         if frame.sentence_id != previous_id:
-            sentence_frames = frames[frame.filename][frame.sentence_id]
-            
+            # /path/to/stuff.xml -> stuff
+            sentence_frames = frames[os.path.basename(frame.filename)[:-4]][frame.sentence_id]
             for extracted_frame in sentence_frames:
                 correct_num_tags(extracted_frame, frame.sentence)
         previous_id = frame.sentence_id
@@ -69,6 +75,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
                 handle_frame(extracted_frame, frame)
                 frame_found = True
                 break
+
         if not frame_found:
             num_args = len([x for x in frame.args if x.instanciated])
             if frame.predicate.lemma not in verbnet_classes:
@@ -88,6 +95,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher, filename=None):
     if options.corpus_lu:
         extracted_frames = [x for x in extracted_frames if x.frame_name != ""]
         
+    print(" done!")
     return extracted_frames
 
 def correct_num_tags(extracted_frame, original_sentence):
@@ -226,11 +234,13 @@ if __name__ == "__main__":
 
     role_matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
     verbnet_classes = verbnetreader.VerbnetReader(paths.VERBNET_PATH).classes
-    arg_finder = ArgGuesser(options.framenet_parsed, verbnet_classes)
+    arg_guesser = ArgGuesser(verbnet_classes)
 
-    frames = [x for x in arg_finder.handle_corpus()]
+    frames = []
+    for filename in FNAllReader.fulltext_parses():
+        for frame in arg_guesser._handle_file(filename):
+            frames.append(frame)
 
-    len_begin = len(frames)
     frames = fill_roles(frames, verbnet_classes, role_matcher)
 
     print("\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"

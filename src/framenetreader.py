@@ -76,9 +76,10 @@ class FulltextReader:
         """
         
         if FulltextReader.core_arg_finder == None and core_args_only:
-            print("Loading core arguments list for FrameNet frames...", file=sys.stderr)
+            print("Loading core arguments list for FrameNet frames... ", end="", file=sys.stderr)
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
             FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
+            print("done!", file=sys.stderr)
         
         self.frames = []
         
@@ -93,7 +94,7 @@ class FulltextReader:
             self.pos_data = pos_file_content.split("\n\n")
 
         # Debug data
-        self.filename = filename.split('/')[-1]
+        self.filename = filename
         self.ignored_layers = []
         self.predicate_is_arg = []
         self.phrase_not_found = []
