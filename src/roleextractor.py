@@ -109,7 +109,9 @@ def correct_num_tags(extracted_frame, original_sentence):
     
     """
     
-    p = re.compile('[0-9,]+')
+    # We don't want to include "," in numbers since 3,300 is actually to
+    # numbers: 3 and 300, separate by a comma
+    p = re.compile('[0-9]+')
     numbers = p.findall(original_sentence)
     
     frame_replace_all(extracted_frame, "<num> , <num>", "<num>,<num>")
@@ -117,6 +119,7 @@ def correct_num_tags(extracted_frame, original_sentence):
     
     for number in numbers:
         frame_replace_one(extracted_frame, "<num>", number)
+
 
 def frame_replace_one(frame, search, replace):
     """ Replace the first occurence of a word by another word in a frame """
@@ -193,7 +196,7 @@ def match_score(arg1, arg2):
 
 class RoleExtractorTest(unittest.TestCase):
     def test_num_replacements(self):
-        initial_sentence = ("She tells me that the <num> people we helped find"
+        initial_sentence = ("She tells me that the <num> , <num> people we helped find"
                             " jobs in <num> earned approximately $ <num>"
                             " million dollars .")
         final_sentence = ("She tells me that the 3,666 people we helped find"
@@ -201,7 +204,7 @@ class RoleExtractorTest(unittest.TestCase):
                           " million dollars .")
                           
         initial_predicate = Predicate(64, 69, "earned", "earn")
-        final_predicate = Predicate(63, 68, "earned", "earn")
+        final_predicate = Predicate(56, 61, "earned", "earn")
         
         initial_args = [
             Arg(18, 62, "the <num> people we helped find jobs in <num>",
@@ -210,9 +213,9 @@ class RoleExtractorTest(unittest.TestCase):
                 "role2", True, "phrase_type")
         ]
         final_args = [
-            Arg(18, 61, "the 3,666 people we helped find jobs in 1998",
+            Arg(18, 54, "the 3,666 people we helped find jobs in 1998",
                 "role1", True, "phrase_type"),
-            Arg(70, 103, "approximately $ 49 million dollars",
+            Arg(62, 95, "approximately $ 49 million dollars",
                 "role2", True, "phrase_type")
         ]
         words = []
