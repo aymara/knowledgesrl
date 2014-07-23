@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
 from collections import Counter
+import sys
 
-import framenetallreader
+from framenetallreader import FNAllReader
 from verbnetframe import VerbnetFrame
 from stats import stats_quality, display_stats, stats_data, stats_ambiguous_roles
 import errorslog
@@ -24,9 +24,10 @@ import dumper
 
 
 if __name__ == "__main__":
+    print("Loading VerbNet...", file=sys.stderr)
     frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
 
-    print("Loading FrameNet and VerbNet roles associations...", file=sys.stderr)
+    print("Loading FrameNet and VerbNet roles mappings...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
  
@@ -37,12 +38,11 @@ if __name__ == "__main__":
         #
         # Load gold arguments
         #
-        print("Loading frames...", file=sys.stderr)
-        fn_reader = framenetallreader.FNAllReader(
-            options.fulltext_corpus, options.framenet_parsed,
+        print("Loading frames...")
+        fn_reader = FNAllReader(
             core_args_only=options.core_args_only)
 
-        for frame in fn_reader.iter_frames():
+        for frame in fn_reader.iter_frames(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
             stats_data["args"] += len(frame.args)
             stats_data["args_instanciated"] += len(
                 [x for x in frame.args if x.instanciated])
@@ -62,16 +62,15 @@ if __name__ == "__main__":
         #
         # Argument identification
         #
-        arg_guesser = argguesser.ArgGuesser(options.framenet_parsed, verbnet_classes)
+        arg_guesser = argguesser.ArgGuesser(verbnet_classes)
         
         print("Extracting frames and matching them with real frames...")
-        annotated_frames = []
-        
-        while arg_guesser.file_remains():
-            filename = arg_guesser.current_file()
-            extracted_frames = [x for x in arg_guesser.handle_next_file()]
-            annotated_frames += roleextractor.fill_roles(
-                extracted_frames, verbnet_classes, role_matcher, filename)
+
+        extracted_frames = []
+        for filename in FNAllReader.fulltext_parses():
+            extracted_frames.extend([x for x in arg_guesser._handle_file(filename)])
+        annotated_frames = roleextractor.fill_roles(
+                extracted_frames, verbnet_classes, role_matcher)
         
         print("\nBuilding VerbNet-like structures...")
         for frame in annotated_frames:
@@ -79,7 +78,7 @@ if __name__ == "__main__":
 
     hw_extractor = headwordextractor.HeadWordExtractor()
 
-    print("Extracting arguments headwords...", file=sys.stderr)
+    print("Extracting arguments headwords...")
     hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
     
     #
@@ -88,6 +87,7 @@ if __name__ == "__main__":
     print("Frame matching...", file=sys.stderr)
     all_matcher = []
     data_restr = NoHashDefaultDict(lambda : Counter())
+    assert len(annotated_frames) == len(vn_frames)
     for good_frame, frame in zip(annotated_frames, vn_frames):
         num_instanciated = len([x for x in good_frame.args if x.instanciated])
         predicate = good_frame.predicate.lemma
@@ -183,7 +183,7 @@ if __name__ == "__main__":
         dumper.add_data_prob_model(annotated_frames, vn_frames, role_matcher, verbnet_classes)
         dumper.dump(options.dump_file)
     else:
-        print("Final stats...", file=sys.stderr)
+        print("Final stats...")
 
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)

@@ -7,11 +7,11 @@ import unittest
 import paths
 import pickle
 import os
-import sys
 
 from framestructure import FrameInstance, Predicate, Word, Arg
 import verbnetreader
 from framenetparsedreader import FNParsedReader
+from framenetallreader import FNAllReader
 import options
 from conllreader import SyntacticTreeBuilder
 from verbnetprepclasses import all_preps
@@ -74,89 +74,22 @@ class ArgGuesser(FNParsedReader):
     
     complex_pos = ["IN", "WP"]
 
-    def __init__(self, path, verbnet_index):
+    def __init__(self, verbnet_index):
         FNParsedReader.__init__(self)
         self.verbnet_index = verbnet_index
-        self.base_forms = {}
-        self.annotations_path = path
         
-        self.filelist = os.listdir(self.annotations_path)
-        self.filelist = [x for x in self.filelist if x[-6:] == ".conll"]
-        self.filelist = sorted(self.filelist)
-
-    def handle_next_file(self):
-        if len(self.base_forms) == 0:
-            self._compute_base_forms()
-        
-        for frame in self._handle_file(self.annotations_path + self.filelist[0]):
-            yield frame
-        del(self.filelist[0])
-
-    def file_remains(self):
-        return len(self.filelist) > 0
-
-    def current_file(self):
-        if self.file_remains(): return self.filelist[0]
-        return None
-
-    def handle_corpus(self):
-        """ Extracts frames from the corpus and iterate over them """
-        
-        # First, compute the infinitive form of every verb in the corpus
-        self._compute_base_forms()
-        
-        print("Extracting frames and arguments...")
-        
-        while self.file_remains():
-            for frame in self.handle_next_file():
-                yield frame
-
-    def _extract_verbs(self):
-        """ Computes the set of every verbs in the corpus
-        
-        :returns: str Set -- The set of every verbal form encountered in the corpus
-        
-        """
-        
-        result = set()
-        
-        print("Extracting predicates...")
-        for filename in sorted(os.listdir(self.annotations_path)):
-            if not filename[-6:] == ".conll": continue
-       
-            with open(self.annotations_path + filename) as content:
-                for line in content.readlines():
-                    data = line.split("\t")
-                    if len(data) < 2: continue
-                    word, pos = data[1], data[3]
-                    if pos in self.predicate_pos:
-                        result.add(word.lower())
-        
-            print(".", file=sys.stderr, end="", flush=True)
-        print()
-             
-        return result
-
-    def _compute_base_forms(self):
-        """ Use wordclassesloader to compute the infinitive forms """
-    
-        print("Computing predicates infinitive forms...")
-        
-        wordclasses = wordclassesloader.handle_morph(self._extract_verbs())
-        self.base_forms.update(wordclasses)
-                            
     def _handle_file(self, filename):
         """ Extracts frames from one file and iterate over them """
         self.load_file(filename)
         sentence_id = 0
-        while self.select_sentence(sentence_id):
-            for frame in self._handle_sentence(filename):
+        for sentence_id, tree in enumerate(self.sentence_trees()):
+            for frame in self._handle_sentence(sentence_id, tree, filename):
                 yield frame
             sentence_id += 1
     
-    def _handle_sentence(self, filename):
+    def _handle_sentence(self, sentence_id, tree, filename):
         """ Extracts frames from one sentence and iterate over them """
-        for node in self.tree:
+        for node in tree:
             # For every verb, looks for its infinitive form in verbnet, and
             # builds a new frame if it is found
             node.lemma = node.word.lower()
@@ -180,12 +113,12 @@ class ArgGuesser(FNParsedReader):
                 args = [x for x in args if self._is_good_pt(x.phrase_type)]
                 
                 yield FrameInstance(
-                    sentence=self.tree.flat(),
+                    sentence=tree.flat(),
                     predicate=predicate,
                     args=args,
-                    words=[Word(x.begin, x.end, x.pos) for x in self.tree],
+                    words=[Word(x.begin, x.end, x.pos) for x in tree],
                     frame_name="",
-                    sentence_id=self.sentence_id,
+                    sentence_id=sentence_id,
                     filename=filename
                 )
     
@@ -316,9 +249,12 @@ class ArgGuesser(FNParsedReader):
 class ArgGuesserTest(unittest.TestCase):
     def test_global(self):
         verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).frames_for_verb
-        arg_finder = ArgGuesser(options.framenet_parsed, verbnet)
+        arg_guesser = ArgGuesser(verbnet)
 
-        frames = [x for x in arg_finder.handle_corpus()]
+        frames = []
+        for filename in FNAllReader.fulltext_parses():
+            frames.extend([x for x in arg_guesser._handle_file(filename)])
+
         num_args = 0
         
         for frame in frames:
@@ -344,9 +280,9 @@ class ArgGuesserTest(unittest.TestCase):
         ]
         
         verbnet = verbnetreader.VerbnetReader(paths.VERBNET_PATH).frames_for_verb
-        arg_finder = ArgGuesser(options.framenet_parsed, verbnet)
+        arg_guesser = ArgGuesser(verbnet)
 
-        self.assertEqual(arg_finder._find_args(tree), args)
+        self.assertEqual(arg_guesser._find_args(tree), args)
 
 if __name__ == "__main__":
     unittest.main()
