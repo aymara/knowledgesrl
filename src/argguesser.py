@@ -5,7 +5,6 @@
 
 import unittest
 import paths
-import pickle
 import os
 
 from framestructure import FrameInstance, Predicate, Word, Arg
@@ -16,13 +15,12 @@ import options
 from conllreader import SyntacticTreeBuilder
 from verbnetprepclasses import all_preps
 from argheuristic import find_args
-import wordclassesloader
+from nltk.corpus import wordnet as wn
 
 
 class ArgGuesser(FNParsedReader):
     """
     :var verbnet_index: VerbnetFrame Dict -- Used to know which predicates are in VerbNet.
-    :var base_forms: str Dict -- The infinitives of the verbal forms we found in the corpus.
     :var filename: str -- The name of the current CoNLL file.
     """
     
@@ -92,9 +90,12 @@ class ArgGuesser(FNParsedReader):
         for node in tree:
             # For every verb, looks for its infinitive form in verbnet, and
             # builds a new frame if it is found
-            node.lemma = node.word.lower()
-            if node.lemma in self.base_forms:
-                node.lemma = self.base_forms[node.lemma]
+
+            if wn.morphy(node.word.lower(), 'v') is not None:
+                node.lemma = wn.morphy(node.word.lower(), 'v')
+            else:
+                node.lemma = node.word.lower()
+
             if not node.lemma in self.verbnet_index:
                 continue
 

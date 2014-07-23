@@ -163,7 +163,7 @@ if __name__ == "__main__":
     # Probability model
     #
     if options.bootstrap:
-        print("Computing headwords classes...", file=sys.stderr);
+        print("Computing headwords classes...", file=sys.stderr)
         hw_extractor.compute_word_classes()
         
         print("Bootstrap algorithm...", file=sys.stderr)

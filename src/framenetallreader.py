@@ -6,7 +6,6 @@
 import unittest
 import options
 import os
-import sys
 
 import framenetreader
 from conllreader import SyntacticTreeBuilder

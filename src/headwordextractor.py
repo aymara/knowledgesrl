@@ -10,33 +10,21 @@ import random
 import pickle
 import getopt
 
+from nltk.corpus import wordnet as wn
+
 from framenetparsedreader import FNParsedReader
+from framenetallreader import FNAllReader
 import framenetreader
 import options
-import wordclassesloader
 
 
 class HeadWordExtractor(FNParsedReader):
-    """This object usess syntactic annotations of FrameNet to retrieve the headwords of
-    arguments, and attributes them a WordNet class.
-        
-    :var word_classes: str Dict -- Retrieved WordNet classes of identified headwords.
-    :var special_classes: str Dict -- Special classes for non noun headwords.
-    :var words: str Set -- Set of words for which we need to compute the WordNet class.
-        
+    """This object uses syntactic annotations to retrieve the headwords of
+    arguments, and attributes them a WordNet top synset (currently called class).
     """
     
     def __init__(self):
         FNParsedReader.__init__(self)
-        self.word_classes = {}
-        self.special_classes = {}
-        self.words = set()
-    
-    def compute_word_classes(self):
-        """Fills word_classes with wordclassesloader"""
-        base_forms = wordclassesloader.handle_wordclasses(self.words)
-        self.word_classes.update(base_forms)
-        self.word_classes.update(self.special_classes)
     
     def headword(self, arg_text):
         """Returns the headword of an argument, assuming the proper sentence have
@@ -47,15 +35,10 @@ class HeadWordExtractor(FNParsedReader):
         :returns: str -- The headword
         
         """
-        if self.tree == None: return ""
-        
-        word, pos = self._get_headword(arg_text.lower())
-        
-        if pos == "PRP": self.special_classes[word] = "pronoun"
-        elif pos == "NNP": self.special_classes[word] = "proper_noun"
-        else: self.words.add(word)
-
-        return word
+        if self.tree == None:
+            return None
+        else:
+            return self.tree.closest_match_as_node(arg_text).word
         
     def best_node(self, arg_text):
         """Looks for the closest match of an argument in the syntactic tree.
@@ -74,11 +57,32 @@ class HeadWordExtractor(FNParsedReader):
         
         :param word: The word
         :type word: str.
-        :returns: str -- The class of the word or "unknown" if it was not found
+        :returns: str -- The class of the word or None if it was not found
         """
-        if word in self.word_classes:
-            return self.word_classes[word]
-        return "unknown"
+        # The class of a word is the highest hypernym, except
+        # when this is "entity". In this case, we take the second
+        # highest hypernym
+        entity_synset = "entity.n.01"
+
+        synsets = wn.synsets(word)
+        if not synsets:
+            return None
+
+        # Since WSD is complicated, we choose the first synset.
+        synset = synsets[0]
+        # We also choose the first hypernymy path: even when there are two
+        # paths, the top synset is very likely to be the same
+        hypernyms = synset.hypernym_paths()[0]
+
+        # TODO For PoS, not in WN, return PoS instead of synset
+        # see commented out test
+
+        if hypernyms[0].name() == entity_synset and len(hypernyms) > 1:
+            wordclass = hypernyms[1].name()
+        else:
+            wordclass = hypernyms[0].name()
+
+        return wordclass
     
     def compute_all_headwords(self, frames, vn_frames):
         """ Fills frame data with the headwords of the arguments.
@@ -94,10 +98,6 @@ class HeadWordExtractor(FNParsedReader):
             
             vn_frame.headwords = [
                 self.headword(x.text) for x in frame.args if x.instanciated]
-        
-    def _get_headword(self, arg_text):
-        node = self.tree.closest_match_as_node(arg_text)
-        return node.word, node.pos
   
 class HeadWordExtractorTest(unittest.TestCase):
     bad_files = [
@@ -121,22 +121,18 @@ class HeadWordExtractorTest(unittest.TestCase):
         extractor = HeadWordExtractor()
         extractor.load_file(options.framenet_parsed + filename+".conll")
 
-        reader = framenetreader.FulltextReader(options.fulltext_corpus+filename+".xml", False)
+        reader = framenetreader.FulltextReader(FNAllReader.fulltext_annotations(), False)
 
         for frame in reader.frames:
             extractor.select_sentence(frame.sentence_id)
             for arg in frame.args:
                 extractor.headword(arg.text)
 
-        extractor.words.add("abcde")
-        extractor.compute_word_classes()
         self.assertEqual(extractor.get_class("soda"), "physical_entity.n.01")
-        self.assertEqual(extractor.get_class("i"), "pronoun")
+        #self.assertEqual(extractor.get_class("i"), "pronoun")
         
-        # get_class should return "unknown" for word that were not resolved by
-        # the nltk script or that were never encountered
-        self.assertEqual(extractor.get_class("abcde"), "unknown")
-        self.assertEqual(extractor.get_class("fghij"), "unknown")
+        # get_class should return None for words out of WordNet
+        self.assertEqual(extractor.get_class("abcde"), None)
 
     def sample_args(self, num_sample = 10):
         """Not a unit test. Returns a random sample of argument/node/headword to help.
