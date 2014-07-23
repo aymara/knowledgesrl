@@ -454,7 +454,7 @@ class VerbnetReaderTest(unittest.TestCase):
     
     def test_global(self):
         reader = VerbnetReader(paths.VERBNET_PATH)
-        self.assertEqual(len(reader.frames_for_verb), 4402)
+        self.assertEqual(len(reader.frames_for_verb), 4154)
 
         test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
         test_frames = [
