@@ -13,7 +13,7 @@ class FrameInstance:
     """
     
     def __init__(self, sentence, predicate, args, words, frame_name,
-        sentence_id = -1, sentence_id_fn_parsed = -1, filename = "",
+        sentence_id = -1, filename = "",
         slot_type = "", arg_annotated = False, relative = False):
         self.frame_name = frame_name
         self.sentence = sentence

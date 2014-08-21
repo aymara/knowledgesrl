@@ -65,7 +65,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
             sentence_frames = frames[os.path.basename(frame.filename)[:-4]][frame.sentence_id]
             for extracted_frame in sentence_frames:
                 correct_num_tags(extracted_frame, frame.sentence)
-        previous_id = frame.sentence_id
+            previous_id = frame.sentence_id
         
         frame_found = False
         for extracted_frame in sentence_frames:
@@ -84,7 +84,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
 
             stats_data["frame_not_extracted"] += 1
             stats_data["arg_not_extracted"] += num_args
-        previous_id = frame.sentence_id_fn_parsed
+
 
     stats_data["frame_extracted_bad"] += len(extracted_frames) - good_frames
     stats_data["frame_extracted_good"] += good_frames

@@ -114,7 +114,6 @@ class FNAllReader:
             return False
         
         frame.passive = FNAllReader.is_passive(predicate_node)
-        frame.sentence_id_fn_parsed = 0
         
         return True
     
