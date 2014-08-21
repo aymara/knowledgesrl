@@ -24,7 +24,6 @@ class FNParsedReader:
     
     def __init__(self):
         self.sentences_data = []
-        self.tree = None
 
     def load_file(self, filename):
         """Set the current file to filename, and fill sentences_data
@@ -36,7 +35,6 @@ class FNParsedReader:
         
         self.filename = filename
         if not os.path.exists(filename):
-            self.tree = None
             self.sentences_data = []
             raise Exception('{} does not exit'.format(filename))
             
@@ -50,70 +48,59 @@ class FNParsedReader:
         for sentence in self.sentences_data:
             yield SyntacticTreeBuilder(sentence).build_syntactic_tree()
         
-    def current_sentence(self):
-        """Compute the text of the current sentence and returns it."""
-        if self.tree == None: return ""
-        return self.tree.flat()
-
-  
 class FNParsedReaderTest(unittest.TestCase):
     def comp(self, original, parsed):
         return all(
             [x == y or y == "<num>" for x,y in zip(original.split(), parsed.split())]
         )
 
-    # List of sentences and files for which the test would fail
-    # because of mistakes in the parser output
-    bad_files = [
-            "ANC__110CYL070.xml", "C-4__C-4Text.xml",
-            "NTI__BWTutorial_chapter1.xml", "NTI__LibyaCountry1.xml",
-            "NTI__NorthKorea_Introduction.xml"]
-    bad_sentences = [
-            ("LUCorpus-v0.3__sw2025-ms98-a-trans.ascii-1-NEW.xml", 9),
-            ("NTI__Iran_Chemical.xml", 6),
-            ("NTI__Iran_Chemical.xml", 62),
-            ("NTI__Iran_Nuclear.xml", 5),
-            ("NTI__Iran_Nuclear.xml", 49),
-            ("NTI__Iran_Nuclear.xml", 68),
-            ("NTI__Iran_Nuclear.xml", 82),
-            ("PropBank__ElectionVictory.xml", 5),
-            ("PropBank__ElectionVictory.xml", 9),
-            ("PropBank__LomaPrieta.xml", 18)]
-    
     def test_sentences_match(self, num_sample = 0):
+
+        # List of sentences and files for which the test would fail because of
+        # mistakes in the parser output
+
+        bad_files = ["ANC__110CYL", "ANC__HistoryOfJerusalem",
+                "ANC__HistoryOfLasVegas", "ANC__WhereToHongKong",
+                "C-4__C-4Text.xml", "KBEval", "LUCorpus-v0.3", "NTI",
+                "PropBank__BellRinging", "PropBank__LomaPrieta",
+                "IranRelatedQuestions"]
+
+        bad_sentences = [("Miscellaneous__SadatAssassination.xml", 0),
+                ("PropBank__AetnaLifeAndCasualty.xml", 0),
+                ("PropBank__ElectionVictory.xml", 0),
+                ("PropBank__TicketSplitting.xml", 0),
+                ("SemAnno__Text1.xml", 3)]
+
+
         print("Checking FrameNetParsedReader")
-        extractor = FNParsedReader()
+        parsed_reader = FNParsedReader()
 
-        for filename in FNAllReader.fulltext_annotations():
-            if not filename[-4:] == ".xml": continue
+        for annotation, parse in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+            # Skip unwanted files
+            if not annotation[-4:] == ".xml":
+                continue
+            if any([bad_file in annotation for bad_file in bad_files]):
+                continue
 
-            for bad_file in self.bad_files:
-                if bad_file in filename:
-                    continue
-            
-            
-            extractor.load_file(filename)
-            
-            reader = framenetreader.FulltextReader(filename, False)
+            parsed_reader.load_file(parse)
+            reader = framenetreader.FulltextReader(annotation, False)
             previous_sentence = 0
 
             for frame in reader.frames:
-                for bad_filename, bad_sentence_id in self.bad_sentences:
-                    if bad_filename in filename and bad_sentence_id == frame.sentence_id:
-                        continue
-   
+                # don't test bad files or bad sentences in files
+                if any(bad_annotation in annotation and bad_sentence_id == frame.sentence_id
+                        for bad_annotation, bad_sentence_id in bad_sentences):
+                    continue
+
+                # find the correct sentence
                 if frame.sentence_id != previous_sentence:
-                    for sentence_id, tree in enumerate(extractor.sentence_trees()):
+                    for sentence_id, tree in enumerate(parsed_reader.sentence_trees()):
                         if sentence_id == frame.sentence_id:
-                            extractor._handle_sentence(frame.sentence_id, tree, filename)
-                
-                # TODO FIXME : this is no longer guaranteed since framenet_parsed has
-                # been replaced. Rewriting of bad_files and bad_sentences would
-                # be needed
-                #self.assertTrue(self.comp(frame.sentence, extractor.current_sentence()))
-                previous_sentence = frame.sentence_id
-            print(".", file=sys.stderr, end="", flush=True)
-        print()
+                            sentence = tree.flat()
+                            previous_sentence = frame.sentence_id
+
+                # test the sentence
+                self.assertTrue(self.comp(frame.sentence, sentence))
 
 if __name__ == "__main__":
     unittest.main()
