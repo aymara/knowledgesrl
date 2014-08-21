@@ -49,22 +49,20 @@ class FNAllReader:
         conll_filelist = [os.path.join(options.framenet_parsed, x) for x in conll_filelist]
         return conll_filelist
     
-    # TODO loop should be outside of function
-    def iter_frames(self, annotation_list, parse_list):
+    def iter_frames(self, annotation_file, parse_file):
         """Read the corpus and yield every valid frame"""
+
+        self.stats["files"] += 1
+
+        reader = framenetreader.FulltextReader(
+            annotation_file,
+            core_args_only = self.core_args_only,
+            keep_unannotated = self.keep_unannotated,
+            trees = self.read_syntactic_parses(parse_file))
         
-        for annotation, parse in zip(annotation_list, parse_list):
-            self.stats["files"] += 1
-            
-            reader = framenetreader.FulltextReader(
-                annotation,
-                core_args_only = self.core_args_only,
-                keep_unannotated = self.keep_unannotated,
-                trees = self.read_syntactic_parses(parse))
-            
-            for frame_instance in reader.frames:
-                if self.add_syntactic_information(frame_instance):
-                    yield frame_instance
+        for frame_instance in reader.frames:
+            if self.add_syntactic_information(frame_instance):
+                yield frame_instance
     
     def read_syntactic_parses(self, parse_filename):
         """Load the syntactic annotations files.

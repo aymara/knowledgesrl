@@ -29,6 +29,7 @@ if __name__ == "__main__":
 
     print("Loading FrameNet and VerbNet roles mappings...", file=sys.stderr)
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
+
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
  
     annotated_frames = []
@@ -42,20 +43,21 @@ if __name__ == "__main__":
         fn_reader = FNAllReader(
             core_args_only=options.core_args_only)
 
-        for frame in fn_reader.iter_frames(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
-            stats_data["args"] += len(frame.args)
-            stats_data["args_instanciated"] += len(
-                [x for x in frame.args if x.instanciated])
-            stats_data["frames"] += 1
-            
-            if not frame.predicate.lemma in frames_for_verb:
-                log_vn_missing(frame)
-                continue
-
-            stats_data["frames_with_predicate_in_verbnet"] += 1
+        for annotation_file, parsed_conll_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+            for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
+                stats_data["args"] += len(frame.args)
+                stats_data["args_instanciated"] += len(
+                    [x for x in frame.args if x.instanciated])
+                stats_data["frames"] += 1
                 
-            annotated_frames.append(frame)
-            vn_frames.append(VerbnetFrame.build_from_frame(frame))
+                if not frame.predicate.lemma in frames_for_verb:
+                    log_vn_missing(frame)
+                    continue
+
+                stats_data["frames_with_predicate_in_verbnet"] += 1
+
+                annotated_frames.append(frame)
+                vn_frames.append(VerbnetFrame.build_from_frame(frame))
 
         stats_data["files"] += fn_reader.stats["files"]
     else:
@@ -66,11 +68,12 @@ if __name__ == "__main__":
         
         print("Extracting frames and matching them with real frames...")
 
-        extracted_frames = []
-        for filename in FNAllReader.fulltext_parses():
-            extracted_frames.extend([x for x in arg_guesser._handle_file(filename)])
-        annotated_frames = roleextractor.fill_roles(
-                extracted_frames, verbnet_classes, role_matcher)
+        annotated_frames = []
+        for annotation_file, parsed_conll_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+            extracted_frames = list(arg_guesser._handle_file(parsed_conll_file))
+            annotated_frames.extend(roleextractor.fill_roles(extracted_frames,
+                annotation_file, parsed_conll_file, verbnet_classes,
+                role_matcher))
         
         print("\nBuilding VerbNet-like structures...")
         for frame in annotated_frames:

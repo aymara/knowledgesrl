@@ -20,7 +20,7 @@ from framestructure import FrameInstance, Predicate, Arg
 using the annotated FrameNet data.
 """
 
-def fill_roles(extracted_frames, verbnet_classes, role_matcher):
+def fill_roles(extracted_frames, annotation_file, parsed_conll_file, verbnet_classes, role_matcher):
     """Fills the roles of some frames argument, when possible.
     Note : extracted_frames must be sorted by sentence order.
     Note : extracted_frames is altered, even if the final result is returned.
@@ -44,7 +44,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
     sentence_frames = []
     good_frames = 0
     print("Extracting roles", end='')
-    for frame in fn_reader.iter_frames(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+    for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
 
         stats_data["args_instanciated"] += len(
             [x for x in frame.args if x.instanciated])
@@ -86,7 +86,7 @@ def fill_roles(extracted_frames, verbnet_classes, role_matcher):
             stats_data["arg_not_extracted"] += num_args
 
 
-    stats_data["frame_extracted_bad"] += len(extracted_frames) - good_frames
+    stats_data["frame_extracted_bad"] += len(list(extracted_frames)) - good_frames
     stats_data["frame_extracted_good"] += good_frames
     #stats_data["arg_extracted_bad"] += sum(
     #    [len(x.args) for x in extracted_frames if x.frame_name == ""])
