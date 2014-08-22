@@ -133,7 +133,9 @@ class FNAllReaderTest(unittest.TestCase):
         print("Checking FrameNetAllReader")
         extractor = FNAllReader()
 
-        frames = [x for x in extractor.iter_frames(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses())]
+        frames = []
+        for annotation_file, parse_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+            frames.extend(extractor.iter_frames(annotation_file, parse_file))
         frame = frames[28]
         self.assertTrue(frame.sentence == ("a few months ago "
             "you received a letter from me telling the success stories of "
