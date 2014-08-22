@@ -43,7 +43,6 @@ def fill_roles(extracted_frames, annotation_file, parsed_conll_file, verbnet_cla
     previous_id = -1
     sentence_frames = []
     good_frames = 0
-    print("Extracting roles", end='')
     for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
 
         stats_data["args_instanciated"] += len(
@@ -95,7 +94,6 @@ def fill_roles(extracted_frames, annotation_file, parsed_conll_file, verbnet_cla
     if options.corpus_lu:
         extracted_frames = [x for x in extracted_frames if x.frame_name != ""]
         
-    print(" done!")
     return extracted_frames
 
 def correct_num_tags(extracted_frame, original_sentence):
