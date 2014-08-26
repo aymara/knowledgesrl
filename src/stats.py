@@ -118,14 +118,14 @@ def display_stats(gold_args):
     
     if gold_args:
         print(
-            "\n\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"
+            "\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"
             "Frame instances with predicate in VerbNet: {} frame instances ({} args)\n".format(
             s["files"], s["frames"], s["args"],
             s["frames_with_predicate_in_verbnet"],  s["args_kept"]
         ))
     else:
         print(
-            "\n\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
+            "\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
             "Did not extract {} annotated frames.\n"
             "Extracted {} correct, {} partial-match and {} incorrect arguments.\n"
             "Did not extract {} annotated arguments.\n".format(
@@ -165,8 +165,7 @@ def display_stats(gold_args):
 
     print(
         "Overall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
-        "\nOverall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n"
-        "\n".format(
+        "Overall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n\n".format(
             extrapolated_precision, extrapolated_recall,
             hmean(extrapolated_precision, extrapolated_recall),
             extrapolated_accuracy,

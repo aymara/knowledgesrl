@@ -36,9 +36,8 @@ if __name__ == "__main__":
     all_annotated_frames = []
     all_vn_frames = []
 
-    print("Loading FrameNet annotations...")
+    print("Loading FrameNet annotations and frame matching...")
     for annotation_file, parsed_conll_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
-        print(os.path.basename(parsed_conll_file))
         annotated_frames = []
         vn_frames = []
 
@@ -160,22 +159,21 @@ if __name__ == "__main__":
         all_vn_frames.extend(vn_frames)
         all_annotated_frames.extend(annotated_frames)
 
-    print("Frame matching stats...")
+    print("\n\n## Frame matching stats")
     stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
     display_stats(options.gold_args)
 
+    print("Applying probabilty model...")
     for annotation_file, parsed_conll_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
         #
         # Probability model
         #
         if options.bootstrap:
-            print("Computing headwords classes...")
+            # Compute headwords classes
             hw_extractor.compute_word_classes()
 
-            print("Bootstrap algorithm...")
             bootstrap_algorithm(all_vn_frames, model, hw_extractor, verbnet_classes)
         else:
-            #print("Applying probabilty model...")
             for frame in all_vn_frames:
                 for i in range(0, len(frame.roles)):
                     if len(frame.roles[i]) > 1:
@@ -192,6 +190,6 @@ if __name__ == "__main__":
         if options.debug:
             display_debug(options.n_debug)
 
-    print("Final stats...")
+    print("\n\n## Final stats")
     stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
     display_stats(options.gold_args)
