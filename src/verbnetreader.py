@@ -530,7 +530,7 @@ class VerbnetReaderTest(unittest.TestCase):
         self.assertEqual(reader.frames_for_verb, expected_result)
 
 def init_verbnet(path):
-    print("Loading VerbNet data...", file=sys.stderr)
+    print("Loading VerbNet data...")
     reader = VerbnetReader(path)
     errors["vn_parsing"] = reader.unhandled
     return reader.frames_for_verb, reader.classes

@@ -76,10 +76,10 @@ class FulltextReader:
         """
         
         if FulltextReader.core_arg_finder == None and core_args_only:
-            print("Loading core arguments list for FrameNet frames... ", end="", file=sys.stderr)
+            print("Loading core arguments list for FrameNet frames... ", end="")
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
             FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
-            print("done!", file=sys.stderr)
+            print("done!")
         
         self.frames = []
         

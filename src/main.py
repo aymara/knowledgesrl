@@ -24,10 +24,10 @@ import dumper
 
 
 if __name__ == "__main__":
-    print("Loading VerbNet...", file=sys.stderr)
+    print("Loading VerbNet...")
     frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
 
-    print("Loading FrameNet and VerbNet roles mappings...", file=sys.stderr)
+    print("Loading FrameNet and VerbNet roles mappings...")
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     #
     # Frame matching
     #
-    print("Frame matching...", file=sys.stderr)
+    print("Frame matching...")
     all_matcher = []
     data_restr = NoHashDefaultDict(lambda : Counter())
     assert len(annotated_frames) == len(vn_frames)
@@ -146,7 +146,7 @@ if __name__ == "__main__":
             role_matcher, verbnet_classes,
             frames_for_verb, options.matching_algorithm)
     else:       
-        print("Frame matching stats...", file=sys.stderr)
+        print("Frame matching stats...")
         stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
         display_stats(options.gold_args)
     
@@ -162,13 +162,13 @@ if __name__ == "__main__":
     # Probability model
     #
     if options.bootstrap:
-        print("Computing headwords classes...", file=sys.stderr)
+        print("Computing headwords classes...")
         hw_extractor.compute_word_classes()
         
-        print("Bootstrap algorithm...", file=sys.stderr)
+        print("Bootstrap algorithm...")
         bootstrap_algorithm(vn_frames, model, hw_extractor, verbnet_classes)
     else:
-        print("Applying probabilty model...", file=sys.stderr)
+        print("Applying probabilty model...")
         for frame in vn_frames:
             for i in range(0, len(frame.roles)):
                 if len(frame.roles[i]) > 1:
