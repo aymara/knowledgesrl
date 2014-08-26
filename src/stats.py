@@ -8,6 +8,7 @@ from errorslog import log_ambiguous_role_conversion
 import options
 
 
+# TODO separate computed values from measured values
 stats_data = {
     # Total number of files in the corpus
     "files":0,
@@ -100,7 +101,6 @@ def display_stats(gold_args):
     
     good_slots = s["one_correct_role"] + s["several_roles_ok"]
 
-    # Currently not displayed, but could be useful
     precision = good_slots / max(s["attributed_roles_mapping_ok"], 1)
     recall = good_slots / max(s["args_annotated_mapping_ok"], 1)
 
@@ -200,8 +200,8 @@ def display_stats_ambiguous_mapping():
     for v, n1 in Counter(ambiguous_mapping["verbs"]).most_common():
         n2 = count_with_frame[v] if v in count_with_frame else 0
         print("{:>12}: {:>3} - {:<3}".format(v, n1, n2))
-                    
-def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args):
+
+def reset_computed_stats():
     stats_data["one_correct_role"] = 0
     stats_data["several_roles_ok"] = 0
     stats_data["one_bad_role"] = 0
@@ -216,11 +216,15 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
     stats_data["attributed_roles"] = 0
     stats_data["attributed_roles_mapping_ok"] = 0
 
-    # This is variable is not handled here for non-gold args, because
-    # annotated_frame contains only extracted frames at this point
-    # and args_annotated_mapping_ok is related to gold annotated frames
-    if gold_args:
-        stats_data["args_annotated_mapping_ok"] = 0
+def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args):
+    # We first reset computed values to 0, eg. if we modified them before
+    reset_computed_stats()
+
+    # This variable is not handled here for non-gold args, because
+    # annotated_frame contains only extracted frames at this point and
+    # args_annotated_mapping_ok is related to gold annotated frames
+    if gold_args: stats_data["args_annotated_mapping_ok"] = 0
+    total_roles = 0
     
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
         # We don't know how to evaluate args that were extracted from a frame
@@ -234,6 +238,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
             continue
         
         for i, slot in enumerate(found_vn_frame.roles):
+            # Add number of possibles role for this slot (eg. the subject slot)
             stats_data["attributed_roles"] += len(slot)
             if len(slot) == 0:
                 stats_data["no_role"] += 1
@@ -250,8 +255,10 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
             # or associated with arguments that are not annotated
             # when they have at least one possible roles
             if not gold_fn_frame.args[i].annotated:
-                if len(slot) == 1: stats_data["one_bad_role"] += 1
-                elif len(slot) >= 1: stats_data["several_roles_bad"] += 1
+                if len(slot) == 1:
+                    stats_data["one_bad_role"] += 1
+                elif len(slot) >= 1:
+                    stats_data["several_roles_bad"] += 1
                 stats_data["attributed_roles_mapping_ok"] += len(slot)
                 continue
             try:
@@ -274,11 +281,15 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
                 stats_data["args_annotated_mapping_ok"] += 1
             
             if next(iter(possible_roles)) in slot:
-                if len(slot) == 1: stats_data["one_correct_role"] += 1
-                else: stats_data["several_roles_ok"] += 1
+                if len(slot) == 1:
+                    stats_data["one_correct_role"] += 1
+                else:
+                    stats_data["several_roles_ok"] += 1
             elif len(slot) >= 1:
-                if len(slot) == 1: stats_data["one_bad_role"] += 1
-                else: stats_data["several_roles_bad"] += 1
+                if len(slot) == 1:
+                    stats_data["one_bad_role"] += 1
+                else:
+                    stats_data["several_roles_bad"] += 1
     
 def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     good = stats_data["one_correct_role"]
