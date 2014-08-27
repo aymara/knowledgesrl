@@ -20,7 +20,7 @@ from nltk.corpus import wordnet as wn
 
 class ArgGuesser(FNParsedReader):
     """
-    :var verbnet_index: VerbnetFrame Dict -- Used to know which predicates are in VerbNet.
+    :var frames_for_verb: lemma -> VerbnetOfficialFrame list - Used to know which predicates are in VerbNet.
     :var filename: str -- The name of the current CoNLL file.
     """
     
@@ -72,9 +72,9 @@ class ArgGuesser(FNParsedReader):
     
     complex_pos = ["IN", "WP"]
 
-    def __init__(self, verbnet_index):
+    def __init__(self, frames_for_verb):
         FNParsedReader.__init__(self)
-        self.verbnet_index = verbnet_index
+        self.frames_for_verb = frames_for_verb
         
     def _handle_file(self, filename):
         """ Extracts frames from one file and iterate over them """
@@ -96,7 +96,7 @@ class ArgGuesser(FNParsedReader):
             else:
                 node.lemma = node.word.lower()
 
-            if not node.lemma in self.verbnet_index:
+            if not node.lemma in self.frames_for_verb:
                 continue
 
             if self._is_predicate(node):

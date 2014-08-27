@@ -21,7 +21,7 @@
 import unittest
 import math
 
-from verbnetframe import VerbnetFrame
+from verbnetframe import ComputeSlotTypeMixin
 from collections import defaultdict
 from functools import reduce
 
@@ -74,10 +74,10 @@ class ProbabilityModel:
     
     def __init__(self, vn_classes = None, vn_init_value = None):
         self.data_default = {
-            VerbnetFrame.slot_types["subject"]:"Agent",
-            VerbnetFrame.slot_types["object"]:"Theme",
-            VerbnetFrame.slot_types["indirect_object"]:"Recipient",
-            VerbnetFrame.slot_types["prep_object"]:"Location"
+            ComputeSlotTypeMixin.slot_types["subject"]:"Agent",
+            ComputeSlotTypeMixin.slot_types["object"]:"Theme",
+            ComputeSlotTypeMixin.slot_types["indirect_object"]:"Recipient",
+            ComputeSlotTypeMixin.slot_types["prep_object"]:"Location"
         }
         self.data_slot_class = multi_default_dict(2)
         self.data_slot = multi_default_dict(3)
@@ -116,7 +116,7 @@ class ProbabilityModel:
         """
         self.data_slot_class[slot_class][role] += 1
         
-        if slot_class == VerbnetFrame.slot_types["prep_object"]:
+        if slot_class == ComputeSlotTypeMixin.slot_types["prep_object"]:
             self.data_slot[slot_class][prep][role] += 1
             self.data_predicate_slot[predicate][slot_class][prep][role] += 1
             if vnclass != None:
@@ -147,7 +147,7 @@ class ProbabilityModel:
         param headword_class: The WordNet class of the headword
         :type headword_class: str:
         """
-        if not slot_class == VerbnetFrame.slot_types["prep_object"]:
+        if not slot_class == ComputeSlotTypeMixin.slot_types["prep_object"]:
             prep = NO_PREP
 
         # Most specific
@@ -211,7 +211,7 @@ class ProbabilityModel:
         
         """
         
-        verb = matcher.frame.predicate
+        verb = matcher.frame_occurrence.predicate
         
         vnclass = None
         for frame, junk in matcher.best_data:
@@ -253,7 +253,7 @@ class ProbabilityModel:
         :param model: The model that we want to apply
         :type model: str
         """
-        if slot_class != VerbnetFrame.slot_types["prep_object"]:
+        if slot_class != ComputeSlotTypeMixin.slot_types["prep_object"]:
             final_prep = NO_PREP
         else:
             final_prep = prep
@@ -313,7 +313,7 @@ class ProbabilityModel:
         
         :returns (str, str, float) -- The two roles and their probability ratio
         """
-        if not slot_class == VerbnetFrame.slot_types["prep_object"]:
+        if not slot_class == ComputeSlotTypeMixin.slot_types["prep_object"]:
             prep = NO_PREP
         
         if backoff_level == 0:

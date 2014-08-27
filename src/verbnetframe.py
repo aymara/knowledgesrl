@@ -2,103 +2,59 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+from abc import ABCMeta
 
 from framestructure import FrameInstance, Predicate, Arg, Word
 import verbnetprepclasses
 
 
-class VerbnetFrame:
-    """A representation of a frame syntactic structure
+# This is either a VerbNet frame representation (without a sentence) or a
+# FrameNet frame turned into a VerbNet frame *occurrences*. Frame matching
+# compares the two kinds of frame to get the best from-Verbnet frame for a
+# from-FrameNet frame.
 
-    :var structure: (str | str Set) List -- representation of the structure
-    :var roles: Set List -- possible VerbNet roles for each structure's slot
-    :var num_slots: int -- number of argument slots in :structure
-    :var vnclass: str -- For VerbNet-extracted frames, class number, eg. 9.10
-    :var predicate: str -- For FrameNet-extracted frames, the predicate
-    :var example: str -- An example sentence that illustrates the frame
-    :var semantics: str -- The semantic as it appears in VerbNet
+# We also want, somewhere, to store information for ConLL-extracted frames
+# (that is, VerbNet frame occurrences from ConLL files, to be able to put those
+# into a semantic ConLL file. For FrameNet extracted frame occurrences, this is
+# stored inside the gold annotation, so that doesn't work here. We also don't
+# have to replace the resulting annotation somewhere else.)
 
-    TODO: Currently, VerbnetFrame can hold two kinds of frames: a real frame
-    from VerbNet with semantics and so on, and a FrameNet frame instance with
-    automatically assigned VerbNet roles. This is confusing and those two
-    concerns should probably be separated.
-    """
-
+class ComputeSlotTypeMixin(metaclass=ABCMeta):
     slot_types = {
         "subject": "SBJ", "object": "OBJ",
         "indirect_object": "OBJI", "prep_object": "PPOBJ"
     }
 
-    phrase_replacements = {
-        "N": "NP", "Poss": "NP", "QUO": "S",
-        "Sinterrog": "S", "Sfin": "S",
-        "VPbrst": "S", "VPing": "S_ING", "VPto": "to S"
-    }
-
-    def __init__(self, structure, roles, vnclass=None, predicate=None,
-                 role_restrictions=[]):
-        self.structure = structure
-        self.predicate = predicate
-
-        self.example = None
-        self.semantics = None
-
-        # Transform "a" in {"a"} and keep everything else unchanged
-        self.roles = [{x} if isinstance(x, str) else x for x in roles]
-        self.role_restrictions = role_restrictions
-        self.slot_preps = []
-        self.slot_types = []
-        self.headwords = []
-
-        self.num_slots = len(self.roles)
-
-        # Used to retrieve vnclass and map roles to framenet roles
-        self.vnclass = vnclass
-
-        self.compute_slot_types()
-
-    def __eq__(self, other):
-        return (isinstance(other, self.__class__) and
-                self.structure == other.structure and
-                self.roles == other.roles and
-                self.num_slots == other.num_slots and
-                self.predicate == other.predicate and
-                (self.vnclass is None or other.vnclass is None or
-                self.vnclass == other.vnclass))
-
-    def __repr__(self):
-        return "VerbnetFrame({}, {}, {}, {})".format(
-            self.predicate, self.structure, self.roles, self.vnclass)
-
-    def compute_slot_types(self):
+    def compute_slot_types(self, structure):
         """Build the list of slot types for this frame"""
 
-        # Re-initialize in case we are called several times
-        self.slot_types, self.slot_preps = [], []
+        slot_types, slot_preps = [], []
 
         # The next slot we are expecting :
         # always subject before the verb, object immediatly after the verb
         # and indirect_object after we encoutered a slot for object
-        next_expected = VerbnetFrame.slot_types["subject"]
+        next_expected = ComputeSlotTypeMixin.slot_types["subject"]
         # If last structure element was a preposition, this will be filled
         # with the preposition and will "overwrite" :next_expected
         preposition = ""
 
-        for element in self.structure:
+        for element in structure:
             if element == "V":
-                next_expected = VerbnetFrame.slot_types["object"]
+                next_expected = ComputeSlotTypeMixin.slot_types["object"]
             elif self._is_a_slot(element):
                 if preposition != "":
-                    self.slot_types.append(VerbnetFrame.slot_types["prep_object"])
-                    self.slot_preps.append(preposition)
+                    slot_types.append(ComputeSlotTypeMixin.slot_types["prep_object"])
+                    slot_preps.append(preposition)
                     preposition = ""
                 else:
-                    self.slot_types.append(next_expected)
-                    self.slot_preps.append(None)
-                    if next_expected == VerbnetFrame.slot_types["object"]:
-                        next_expected = VerbnetFrame.slot_types["indirect_object"]
+                    slot_types.append(next_expected)
+                    slot_preps.append(None)
+                    if next_expected == ComputeSlotTypeMixin.slot_types["object"]:
+                        next_expected = ComputeSlotTypeMixin.slot_types["indirect_object"]
             elif isinstance(element, set) or element in verbnetprepclasses.all_preps:
                 preposition = element
+
+        return slot_types, slot_preps
 
     @staticmethod
     def _is_a_slot(elem):
@@ -111,39 +67,62 @@ class VerbnetFrame:
 
         return isinstance(elem, str) and elem[0].isupper() and elem != "V"
 
+class VerbnetFrameOccurrence(ComputeSlotTypeMixin): 
+    """A representation of a FrameNet frame occurrence converted to VerbNet
+    representation for easy comparison.
+
+    :var structure: (str | str set) list -- representation of the structure
+    :var roles: set list -- possible VerbNet roles for each structure's slot
+    :var num_slots: int -- number of argument slots in :structure
+    :var predicate: str -- the predicate
+    :var headwords: str -- the head word of each argument
+    """
+
+    phrase_replacements = {
+        "N": "NP", "Poss": "NP", "QUO": "S",
+        "Sinterrog": "S", "Sfin": "S",
+        "VPbrst": "S", "VPing": "S_ING", "VPto": "to S"
+    }
+
+    def __init__(self, structure, roles, predicate):
+        self.structure = structure
+        self.predicate = predicate
+
+        # Transform "a" in {"a"} and keep everything else unchanged
+        self.roles = [{x} if isinstance(x, str) else x for x in roles]
+        self.num_slots = len(self.roles)
+
+        self.slot_types, self.slot_preps = self.compute_slot_types(structure)
+        self.headwords = []
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                self.structure == other.structure and
+                self.roles == other.roles and
+                self.num_slots == other.num_slots and
+                self.predicate == other.predicate)
+
+    def __repr__(self):
+        return "VerbnetFrameOccurrence({}, {}, {})".format(
+            self.predicate, self.structure, self.roles)
+
     @staticmethod
-    def _is_a_match(elem1, elem2):
-        """Tell wether two elements can be considered as a match
-
-        :param elem1: first element.
-        :type elem1: str.
-        :param elem2: second element.
-        :type elem2: str.
-        :returns: bool -- True if this is a match, False otherwise
-        """
-
-        return ((isinstance(elem2, set) and elem1 in elem2) or
-                elem1 == elem2)
-
-    @staticmethod
-    def build_from_frame(frame):
+    def build_from_frame(framenet_instance):
         """Build a VerbNet frame from a FrameInstance object
 
-        :param frame: The original frame instance.
+        :param framenet_instance: The original FrameNet frame instance.
         :type frame: FrameInstance.
-        :returns: VerbnetFrame -- the built frame, without the roles
+        :returns: VerbnetFrameOccurrence -- the frame without the gold roles
+        converted to VerbNet-style representation
         """
-
-        # The main job is to build the VerbNet structure representation
-        # from the Frame object data
 
         num_slots = 0
 
         # First, delete everything that is before or after the frame
-        begin = frame.predicate.begin
-        end = frame.predicate.end
+        begin = framenet_instance.predicate.begin
+        end = framenet_instance.predicate.end
 
-        for argument in frame.args:
+        for argument in framenet_instance.args:
             if not argument.instanciated:
                 continue
             num_slots += 1
@@ -152,16 +131,16 @@ class VerbnetFrame:
             if argument.end > end:
                 end = argument.end
 
-        structure = frame.sentence[begin:end + 1]
+        structure = framenet_instance.sentence[begin:end + 1]
         # Then, replace the predicate/arguments by their phrase type
-        structure = VerbnetFrame._reduce_args(frame, structure, begin)
+        structure = VerbnetFrameOccurrence._reduce_args(framenet_instance, structure, begin)
         # And delete everything else, except some keywords
-        structure = VerbnetFrame._keep_only_keywords(structure)
+        structure = VerbnetFrameOccurrence._keep_only_keywords(structure)
         # Transform the structure into a list
         structure = structure.split(" ")
-        #structure = VerbnetFrame._strip_leftpart_keywords(structure)
+        #structure = VerbnetFrameOccurrence._strip_leftpart_keywords(structure)
 
-        result = VerbnetFrame(structure, [], predicate=frame.predicate.lemma)
+        result = VerbnetFrameOccurrence(structure, [], predicate=framenet_instance.predicate.lemma)
         result.num_slots = num_slots
 
         # Fill the role list with None value
@@ -169,91 +148,18 @@ class VerbnetFrame:
 
         return result
 
-    def passivize(self):
-        """
-        Based on current frame, return a list of possible passivizations
-        """
-        passivizedframes = []
+    # Initially used by build_from_frame, above. TODO still needed?
+    @staticmethod
+    def _strip_leftpart_keywords(sentence):
+        result = []
+        found_verb = False
+        for elem in sentence:
+            if elem == "V":
+                found_verb = True
+            if found_verb or elem[0].isupper():
+                result.append(elem)
 
-        # Find the position of the first slot following the verb and
-        # the last element of the first slot of the frame
-        slot_position = 0
-        old_sbj_end = 0
-        first_slot = True
-        for i, element in enumerate(self.structure):
-            if first_slot:
-                old_sbj_end = i
-            if VerbnetFrame._is_a_slot(element):
-                first_slot = False
-                slot_position += 1
-            if element == "V":
-                break
-
-        # Find the first and last element of the first slot following the verb
-        index_v = self.structure.index("V")
-        new_sbj_begin, new_sbj_end = index_v + 1, index_v + 1
-        while True:
-            if new_sbj_end >= len(self.structure):
-                return []
-            if VerbnetFrame._is_a_slot(self.structure[new_sbj_end]):
-                break
-            new_sbj_end += 1
-
-        # Build the passive frame without "by"
-        frame_without_agent = VerbnetFrame(
-            (self.structure[new_sbj_begin:new_sbj_end+1] +
-                self.structure[old_sbj_end+1:index_v] + ["V"] +
-                self.structure[new_sbj_end+1:]),
-            ([self.roles[slot_position]] + self.roles[1:slot_position] +
-                self.roles[slot_position+1:]),
-            vnclass=self.vnclass
-        )
-
-        passivizedframes.append(frame_without_agent)
-
-        # Add the frames obtained by inserting "by + the old subject"
-        # after the verb and every slot that follows it
-        new_index_v = frame_without_agent.structure.index("V")
-        i = new_index_v
-        slot = slot_position - 1
-        while i < len(frame_without_agent.structure):
-            elem = frame_without_agent.structure[i]
-            if self._is_a_slot(elem) or elem == "V":
-                passivizedframes.append(VerbnetFrame(
-                    (frame_without_agent.structure[0:i+1] +
-                        ["by"] + self.structure[0:old_sbj_end+1] +
-                        frame_without_agent.structure[i+1:]),
-                    (frame_without_agent.roles[0:slot+1] +
-                        [self.roles[0]] +
-                        frame_without_agent.roles[slot+1:]),
-                    vnclass=self.vnclass
-                ))
-                slot += 1
-            i += 1
-
-        return passivizedframes
-
-    def generate_relatives(self):
-        relatives = []
-        i_slot = 0
-        for i, element in enumerate(self.structure):
-            if VerbnetFrame._is_a_slot(element):
-                j = i - 1
-                while j >= 0 and self.structure[j][0].islower():
-                    j -= 1
-
-                structure = (self.structure[j+1:i+1] +
-                             self.structure[0:j+1] +
-                             self.structure[i+1:])
-                roles = ([self.roles[i_slot]] +
-                         self.roles[0:i_slot] +
-                         self.roles[i_slot+1:])
-
-                relatives.append(
-                    VerbnetFrame(structure, roles, vnclass=self.vnclass))
-                i_slot += 1
-
-        return relatives
+        return result
 
     @staticmethod
     def _reduce_args(frame, structure, new_begin):
@@ -276,8 +182,8 @@ class VerbnetFrame:
                 continue
 
             phrase_type = argument.phrase_type
-            if phrase_type in VerbnetFrame.phrase_replacements:
-                phrase_type = VerbnetFrame.phrase_replacements[phrase_type]
+            if phrase_type in VerbnetFrameOccurrence.phrase_replacements:
+                phrase_type = VerbnetFrameOccurrence.phrase_replacements[phrase_type]
 
             before = structure[0:argument.begin - new_begin]
             after = structure[1 + argument.end - new_begin:]
@@ -382,156 +288,124 @@ class VerbnetFrame:
 
         return result
 
-    @staticmethod
-    def _strip_leftpart_keywords(sentence):
-        result = []
-        found_verb = False
-        for elem in sentence:
-            if elem == "V":
-                found_verb = True
-            if found_verb or elem[0].isupper():
-                result.append(elem)
 
-        return result
+class VerbnetOfficialFrame(ComputeSlotTypeMixin):
+    """A representation of a frame syntactic structure
 
+    :var structure: (str | str set) List -- representation of the structure
+    :var roles: str list -- VerbNet roles for each structure's slot
+    :var num_slots: int -- number of argument slots in :structure
+    :var vnclass: str -- the class number, eg. 9.10
+    :var example: str -- An example sentence that illustrates the frame
+    """
 
-class VerbnetFrameTest(unittest.TestCase):
-    def test_conversion(self):
-        tested_frames = [
-            FrameInstance(
-                "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"
-                " a freer flow of food and medicine into Iraq .",
-                Predicate(28, 32, "urges", "urge"),
-                [
-                    Arg(34, 51, "the United Nations", "Addressee", True, "NP"),
-                    Arg(53, 104,
-                        "to allow a freer flow of food and medicine into Iraq",
-                        "Content", True, "VPto"),
-                    Arg(0, 26, "Rep . Tony Hall , D- Ohio", "Speaker", True, "NP")
-                ],
-                [
-                    Word(0, 2, "NN"), Word(4, 4, "."), Word(6, 9, "NP"),
-                    Word(11, 14, "NP"), Word(16, 16, ","), Word(18, 19, "NN"),
-                    Word(21, 24, "NP"), Word(26, 26, ","), Word(28, 32, "VVZ"),
-                    Word(34, 36, "DT"), Word(38, 43, "NP"), Word(45, 51, "NPS"),
-                    Word(53, 54, "TO"), Word(56, 60, "VV"), Word(62, 62, "DT"),
-                    Word(64, 68, "JJR"), Word(70, 73, "NN"), Word(75, 76, "IN"),
-                    Word(78, 81, "NN"), Word(83, 85, "CC"), Word(87, 94, "NN"),
-                    Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
-                ],
-                "Attempt_suasion"),
-            FrameInstance(
-                "Rep . Tony Hall , D- Ohio , urges the United Nations to allow"
-                " a freer flow of food and medicine into Iraq .",
-                Predicate(56, 60, "allow", "allow"),
-                [
-                    Arg(62, 104,
-                        "a freer flow of food and medicine into Iraq",
-                        "Action", True, "NP"),
-                    Arg(34, 51, "the United Nations", "Grantee", True, "NP"),
-                    Arg(0, -1, "", "Grantor", False, "")
-                ],
-                [
-                    Word(0, 2, "NN"), Word(4, 4, "."), Word(6, 9, "NP"),
-                    Word(11, 14, "NP"), Word(16, 16, ","), Word(18, 19, "NN"),
-                    Word(21, 24, "NP"), Word(26, 26, ","), Word(28, 32, "VVZ"),
-                    Word(34, 36, "DT"), Word(38, 43, "NP"), Word(45, 51, "NPS"),
-                    Word(53, 54, "TO"), Word(56, 60, "VV"), Word(62, 62, "DT"),
-                    Word(64, 68, "JJR"), Word(70, 73, "NN"), Word(75, 76, "IN"),
-                    Word(78, 81, "NN"), Word(83, 85, "CC"), Word(87, 94, "NN"),
-                    Word(96, 99, "IN"), Word(101, 104, "NP"), Word(106, 106, ".")
-                ],
-                "Grant_permission")]
+    def __init__(self, structure, roles, vnclass, role_restrictions):
+        self.structure = structure
 
-        vn_frames = [
-            VerbnetFrame(
-                ["NP", "V", "NP", "to", "S"],
-                [None, None, None], predicate="urge"),
-            VerbnetFrame(["NP", "V", "NP"], [None, None], predicate="allow"),
-            VerbnetFrame(
-                ["NP", "NP", "in", "NP", "V", "that", "S",
-                 "for", "NP", "NP", "after", "NP"],
-                [None, None, None, None, None, None, None])
-        ]
-        slot_preps = [
-            [None, None, "to"],
-            [None, None],
-            [None, None, "in", None, "for", None, "after"]
-        ]
-        st = VerbnetFrame.slot_types
-        slot_types = [
-            [st["subject"], st["object"], st["prep_object"]],
-            [st["subject"], st["object"]],
-            [st["subject"], st["subject"], st["prep_object"], st["object"],
-             st["prep_object"], st["indirect_object"], st["prep_object"]]
-        ]
+        # Transform "a" in {"a"} and keep everything else unchanged
+        self.roles = [{x} if isinstance(x, str) else x for x in roles]
+        self.num_slots = len(self.roles)
+        self.role_restrictions = role_restrictions
 
-        verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[0])
-        self.assertEqual(vn_frames[0], verbnet_frame)
-        self.assertEqual(verbnet_frame.slot_types, slot_types[0])
-        self.assertEqual(verbnet_frame.slot_preps, slot_preps[0])
+        self.slot_types, self.slot_preps = self.compute_slot_types(structure)
+        self.vnclass = vnclass
 
-        verbnet_frame = VerbnetFrame.build_from_frame(tested_frames[1])
-        self.assertEqual(vn_frames[1], verbnet_frame)
-        self.assertEqual(verbnet_frame.slot_types, slot_types[1])
-        self.assertEqual(verbnet_frame.slot_preps, slot_preps[1])
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                self.structure == other.structure and
+                self.roles == other.roles and
+                self.num_slots == other.num_slots and
+                self.vnclass == other.vnclass)
 
-        # compute_slot_types is idempotent
-        verbnet_frame = vn_frames[2]
-        verbnet_frame.compute_slot_types()
-        verbnet_frame.compute_slot_types()
-        self.assertEqual(verbnet_frame.slot_types, slot_types[2])
-        self.assertEqual(verbnet_frame.slot_preps, slot_preps[2])
+    def __repr__(self):
+        return "VerbnetOfficialFrame({}, {}, {})".format(
+            self.vnclass, self.structure, self.roles)
 
-    def test_passivize(self):
-        vn_frame_transitive = VerbnetFrame(
-            ["NP", "V", "NP"],
-            ["Agent", "Theme"])
-        self.assertEqual(vn_frame_transitive.passivize(), [
-            VerbnetFrame(["NP", "V"], ["Theme"]),
-            VerbnetFrame(["NP", "V", "by", "NP"], ["Theme", "Agent"])])
+    def passivize(self):
+        """
+        Based on current frame, return a list of possible passivizations
+        """
+        passivizedframes = []
 
-        vn_frame_ditransitive = VerbnetFrame(
-            ["NP", "V", "NP", "at", "NP"],
-            ["Agent", "Theme", "Value"])
-        self.assertEqual(vn_frame_ditransitive.passivize(), [
-            VerbnetFrame(
-                ["NP", "V", "at", "NP"],
-                ["Theme", "Value"]),
-            VerbnetFrame(
-                ["NP", "V", "by", "NP", "at", "NP"],
-                ["Theme", "Agent", "Value"]),
-            VerbnetFrame(
-                ["NP", "V", "at", "NP", "by", "NP"],
-                ["Theme", "Value", "Agent"])])
+        # Find the position of the first slot following the verb and
+        # the last element of the first slot of the frame
+        slot_position = 0
+        old_sbj_end = 0
+        first_slot = True
+        for i, element in enumerate(self.structure):
+            if first_slot:
+                old_sbj_end = i
+            if VerbnetOfficialFrame._is_a_slot(element):
+                first_slot = False
+                slot_position += 1
+            if element == "V":
+                break
 
-        vn_frame_strange = VerbnetFrame(
-            ["NP", "NP", "V", "S"],
-            ["Agent", "Theme", "Value"])
-        self.assertEqual(vn_frame_strange.passivize(), [
-            VerbnetFrame(
-                ["S", "NP", "V"],
-                ["Value", "Theme"]),
-            VerbnetFrame(
-                ["S", "NP", "V", "by", "NP"],
-                ["Value", "Theme", "Agent"])])
+        # Find the first and last element of the first slot following the verb
+        index_v = self.structure.index("V")
+        new_sbj_begin, new_sbj_end = index_v + 1, index_v + 1
+        while True:
+            if new_sbj_end >= len(self.structure):
+                return []
+            if VerbnetOfficialFrame._is_a_slot(self.structure[new_sbj_end]):
+                break
+            new_sbj_end += 1
 
-    def test_relatives(self):
-        test_frame = VerbnetFrame(
-            ["NP", "V", "NP", "for", "NP"],
-            ["Agent", "Theme", "Beneficiary"])
+        # Build the passive frame without "by"
+        frame_without_agent = VerbnetOfficialFrame(
+            (self.structure[new_sbj_begin:new_sbj_end+1] +
+                self.structure[old_sbj_end+1:index_v] + ["V"] +
+                self.structure[new_sbj_end+1:]),
+            ([self.roles[slot_position]] + self.roles[1:slot_position] +
+                self.roles[slot_position+1:]),
+            vnclass=self.vnclass,
+            role_restrictions=self.role_restrictions
+        )
 
-        self.assertEqual(test_frame.generate_relatives(), [
-            VerbnetFrame(
-                ["NP", "V", "NP", "for", "NP"],
-                ["Agent", "Theme", "Beneficiary"]),
-            VerbnetFrame(
-                ["NP", "NP", "V", "for", "NP"],
-                ["Theme", "Agent", "Beneficiary"]),
-            VerbnetFrame(
-                ["for", "NP", "NP", "V", "NP"],
-                ["Beneficiary", "Agent", "Theme"])
-        ])
+        passivizedframes.append(frame_without_agent)
 
-if __name__ == "__main__":
-    unittest.main()
+        # Add the frames obtained by inserting "by + the old subject"
+        # after the verb and every slot that follows it
+        new_index_v = frame_without_agent.structure.index("V")
+        i = new_index_v
+        slot = slot_position - 1
+        while i < len(frame_without_agent.structure):
+            elem = frame_without_agent.structure[i]
+            if self._is_a_slot(elem) or elem == "V":
+                passivizedframes.append(VerbnetOfficialFrame(
+                    (frame_without_agent.structure[0:i+1] +
+                        ["by"] + self.structure[0:old_sbj_end+1] +
+                        frame_without_agent.structure[i+1:]),
+                    (frame_without_agent.roles[0:slot+1] +
+                        [self.roles[0]] +
+                        frame_without_agent.roles[slot+1:]),
+                    vnclass=self.vnclass,
+                    role_restrictions=self.role_restrictions
+                ))
+                slot += 1
+            i += 1
+
+        return passivizedframes
+
+    def generate_relatives(self):
+        relatives = []
+        i_slot = 0
+        for i, element in enumerate(self.structure):
+            if VerbnetOfficialFrame._is_a_slot(element):
+                j = i - 1
+                while j >= 0 and self.structure[j][0].islower():
+                    j -= 1
+
+                structure = (self.structure[j+1:i+1] +
+                             self.structure[0:j+1] +
+                             self.structure[i+1:])
+                roles = ([self.roles[i_slot]] +
+                         self.roles[0:i_slot] +
+                         self.roles[i_slot+1:])
+
+                relatives.append(
+                    VerbnetOfficialFrame(structure, roles, vnclass=self.vnclass,
+                                 role_restrictions=self.role_restrictions))
+                i_slot += 1
+
+        return relatives

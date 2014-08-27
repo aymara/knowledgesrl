@@ -3,7 +3,8 @@
 import unittest
 import verbnet
 
-class VerbnetFrameTest(unittest.TestCase):
+# TODO complete when unifying VerbNet parsing across projects
+class VerbnetSyntax(unittest.TestCase):
     def test_equality(self):
         v1 = verbnet.Syntax([{'type': 'V'}])
         v2 = verbnet.Syntax([{'type': 'V'}])

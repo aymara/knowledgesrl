@@ -5,7 +5,7 @@ from collections import Counter
 import sys
 
 from framenetallreader import FNAllReader
-from verbnetframe import VerbnetFrame
+from verbnetframe import VerbnetFrameOccurrence
 from stats import stats_quality, display_stats, stats_data, stats_ambiguous_roles
 import errorslog
 from errorslog import log_debug_data, log_vn_missing, display_debug, log_frame_without_slot
@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 stats_data["frames_with_predicate_in_verbnet"] += 1
 
                 annotated_frames.append(frame)
-                vn_frames.append(VerbnetFrame.build_from_frame(frame))
+                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(frame))
 
             stats_data["files"] += fn_reader.stats["files"]
         else:
@@ -77,7 +77,7 @@ if __name__ == "__main__":
             
             for frame in new_annotated_frames:
                 annotated_frames.append(frame)
-                vn_frames.append(VerbnetFrame.build_from_frame(frame))
+                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(frame))
 
 
         # Extract arguments headwords

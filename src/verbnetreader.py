@@ -9,7 +9,7 @@ import os
 import sys
 
 from errorslog import errors
-from verbnetframe import VerbnetFrame
+from verbnetframe import VerbnetOfficialFrame
 from verbnetrestrictions import VNRestriction
 import verbnetprepclasses
 import paths
@@ -19,7 +19,7 @@ class VerbnetReader:
 
     """Class used to parse VerbNet and build its representation in memory.
     
-    :var verbs: Dictionary of VerbnetFrame lists representing VerbNet.
+    :var verbs: Dictionary of VerbnetOfficialFrame lists representing VerbNet.
     """
     
     def __init__(self, path, normalize = False):
@@ -94,7 +94,7 @@ class VerbnetReader:
         :param xml_class: XML representation of the class of verbs.
         :type xml_class: xml.etree.ElementTree.Element.
         :param parent_frames: the frame inherited from the parent class.
-        :type parent_frames: VerbnetFrame list.
+        :type parent_frames: VerbnetOfficialFrame list.
         
         """
         frames = parent_frames[:]
@@ -155,7 +155,7 @@ class VerbnetReader:
 
         role_restr = [[restrictions[role_list.index(x)] for x in y] for y in roles]
         
-        result = [VerbnetFrame(y, x, vnclass, role_restrictions=z)
+        result = [VerbnetOfficialFrame(y, x, vnclass, role_restrictions=z)
             for x, y, z in zip(roles, structures, role_restr)]
         
         if self.normalize:
@@ -271,7 +271,7 @@ class VerbnetReader:
             if new_index != -1:
                 index_xml = new_index
             
-            if VerbnetFrame._is_a_slot(element): roles.append(None)
+            if VerbnetOfficialFrame._is_a_slot(element): roles.append(None)
 
             if len(full_element) > 1:
                 potential_role = "-".join([x.title() for x in full_element[1].split('-')])
@@ -458,19 +458,26 @@ class VerbnetReaderTest(unittest.TestCase):
 
         test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
         test_frames = [
-            VerbnetFrame(
+            VerbnetOfficialFrame(
                 ['there', 'V', 'NP', verbnetprepclasses.prep["loc"], 'NP'],
-                ['Theme', 'Location'], "43.1"),
-            VerbnetFrame(
+                ['Theme', 'Location'],
+                "43.1", []),
+            VerbnetOfficialFrame(
                 ["NP", "V", "NP", "ADV"],
-                ["Agent", "Theme"], "105"),
-            VerbnetFrame(
+                ["Agent", "Theme"],
+                "105", []),
+            VerbnetOfficialFrame(
                 ["NP", "V"],
-                ["Patient"], "45.1"),
-            VerbnetFrame(
+                ["Patient"],
+                "45.1", []),
+            VerbnetOfficialFrame(
                 ["NP", "V", "how", "to", "S"],
-                ["Agent", "Topic"], "37.7"),
-            VerbnetFrame(["NP", "V"], ["Agent"], "40.4")
+                ["Agent", "Topic"],
+                "37.7", []),
+            VerbnetOfficialFrame(
+                ["NP", "V"],
+                ["Agent"],
+                "40.4", [])
         ]
         restrictions_str = {
             "sparkle":["(NOT animate)", "NORESTR"],
@@ -492,28 +499,43 @@ class VerbnetReaderTest(unittest.TestCase):
         reader._handle_class(root.getroot(), [], [], [])
         
         list1 = [
-            VerbnetFrame(['NP', 'V', 'NP', {'from'}, 'NP'], ['Agent', 'Patient', 'Co-Patient']),
-            VerbnetFrame(['NP', 'V', 'NP'], ['Agent', 'Patient']),
-            VerbnetFrame(['NP', 'V'], ['Patient']),
-            VerbnetFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient']),
-            VerbnetFrame(['NP', 'V'], ['Patient'])]
-        list2 = [VerbnetFrame(['NP', 'V', {'with'}, 'NP'], ['Patient', 'Co-Patient'])]
-        list3 = [VerbnetFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient'])]
+            VerbnetOfficialFrame(
+                ['NP', 'V', 'NP', {'from'}, 'NP'],
+                ['Agent', 'Patient', 'Co-Patient'],
+                "23.1", []),
+            VerbnetOfficialFrame(
+                ['NP', 'V', 'NP'],
+                ['Agent', 'Patient'],
+                "23.1", []),
+            VerbnetOfficialFrame(
+                ['NP', 'V'],
+                ['Patient'],
+                "23.1", []),
+            VerbnetOfficialFrame(
+                ['NP', 'V', {'from'}, 'NP'],
+                ['Patient', 'Co-Patient'],
+                "23.1", []),
+            VerbnetOfficialFrame(
+                ['NP', 'V'],
+                ['Patient'],
+                "23.1", [])]
+        list2 = [VerbnetOfficialFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient'], "23.1-1", [])]
+        list3 = [VerbnetOfficialFrame(['NP', 'V', {'with'}, 'NP'], ['Patient', 'Co-Patient'], "23.1-2", [])]
         expected_result = {
-            'dissociate': list1+list2,
-            'disconnect': list1+list2,
-            'divide': list1+list3,
+            'dissociate': list1+list3,
+            'disconnect': list1+list3,
+            'divide': list1+list2,
             'disassociate': list1,
-            'disentangle': list1+list3,
-            'divorce': list1+list3,
-            'separate': list1+list2,
-            'segregate': list1+list3,
-            'part': list1+list2,
-            'differentiate': list1+list3,
+            'disentangle': list1+list2,
+            'divorce': list1+list2,
+            'separate': list1+list3,
+            'segregate': list1+list2,
+            'part': list1+list3,
+            'differentiate': list1+list2,
             'uncoil': list1,
-            'decouple': list1+list3,
+            'decouple': list1+list2,
             'sever': list1,
-            'dissimilate': list1+list3
+            'dissimilate': list1+list2
         }
         
         for verb in expected_result:
