@@ -73,10 +73,12 @@ class FrameMatcher():
         # Returns early to avoid taking the max of an empty list.
         if len(self.best_data) == 0: return
 
+
         scores = [self.frame_semantic_score(x, data) for x in self.best_data]
-        best_score = max(scores)
-        self.best_data = [self.best_data[i] for i in range(0, len(scores))
-            if scores[i] == best_score]
+        assert len(scores) == len(self.best_data)
+
+        self.best_data = [data for data, score in zip(self.best_data, scores)
+                if score == max(scores)]
     
     def frame_semantic_score(self, frame_data, semantic_data):
         """For a given frame from VerbNet, compute a semantic score between

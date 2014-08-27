@@ -175,7 +175,7 @@ if __name__ == "__main__":
             bootstrap_algorithm(all_vn_frames, model, hw_extractor, verbnet_classes)
         else:
             for frame in all_vn_frames:
-                for i in range(0, len(frame.roles)):
+                for i, roles in enumerate(frame.roles):
                     if len(frame.roles[i]) > 1:
                         new_role = model.best_role(
                             frame.roles[i], frame.slot_types[i], frame.slot_preps[i],
