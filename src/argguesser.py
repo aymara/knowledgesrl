@@ -76,7 +76,7 @@ class ArgGuesser(FNParsedReader):
         FNParsedReader.__init__(self)
         self.frames_for_verb = frames_for_verb
         
-    def _handle_file(self, filename):
+    def frame_instances_from_file(self, filename):
         """ Extracts frames from one file and iterate over them """
         self.load_file(filename)
         sentence_id = 0
@@ -88,8 +88,8 @@ class ArgGuesser(FNParsedReader):
     def _handle_sentence(self, sentence_id, tree, filename):
         """ Extracts frames from one sentence and iterate over them """
         for node in tree:
-            # For every verb, looks for its infinitive form in verbnet, and
-            # builds a new frame if it is found
+            # For every verb, looks for its infinitive form in VerbNet, and
+            # builds a frame occurrence if it is found
 
             if wn.morphy(node.word.lower(), 'v') is not None:
                 node.lemma = wn.morphy(node.word.lower(), 'v')
@@ -254,7 +254,7 @@ class ArgGuesserTest(unittest.TestCase):
 
         frames = []
         for filename in FNAllReader.fulltext_parses():
-            frames.extend([x for x in arg_guesser._handle_file(filename)])
+            frames.extend([x for x in arg_guesser.frame_instances_from_file(filename)])
 
         num_args = 0
         

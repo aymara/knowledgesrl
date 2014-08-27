@@ -34,10 +34,7 @@ class FNParsedReader:
         """
         
         self.filename = filename
-        if not os.path.exists(filename):
-            self.sentences_data = []
-            raise Exception('{} does not exit'.format(filename))
-            
+
         with open(filename) as content:
             self.sentences_data = content.read().split("\n\n")
             if self.sentences_data[len(self.sentences_data) - 1] == "":

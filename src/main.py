@@ -36,8 +36,10 @@ if __name__ == "__main__":
     all_annotated_frames = []
     all_vn_frames = []
 
+    annotation_list, parsed_conll_list = FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()
+
     print("Loading FrameNet annotations and frame matching...")
-    for annotation_file, parsed_conll_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+    for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
         annotated_frames = []
         vn_frames = []
 
@@ -70,8 +72,8 @@ if __name__ == "__main__":
             #
             arg_guesser = argguesser.ArgGuesser(verbnet_classes)
             
-            extracted_frames = list(arg_guesser._handle_file(parsed_conll_file))
-            new_annotated_frames = roleextractor.fill_roles(extracted_frames,
+            frame_instances = list(arg_guesser.frame_instances_from_file(parsed_conll_file))
+            new_annotated_frames = roleextractor.fill_gold_roles(frame_instances,
                 annotation_file, parsed_conll_file, verbnet_classes,
                 role_matcher)
             
@@ -164,7 +166,7 @@ if __name__ == "__main__":
     display_stats(options.gold_args)
 
     print("Applying probabilty model...")
-    for annotation_file, parsed_conll_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+    for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
         #
         # Probability model
         #

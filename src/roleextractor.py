@@ -20,20 +20,20 @@ from framestructure import FrameInstance, Predicate, Arg
 using the annotated FrameNet data.
 """
 
-def fill_roles(extracted_frames, annotation_file, parsed_conll_file, verbnet_classes, role_matcher):
-    """Fills the roles of some frames argument, when possible.
-    Note : extracted_frames must be sorted by sentence order.
-    Note : extracted_frames is altered, even if the final result is returned.
+def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet_classes, role_matcher):
+    """Fills the roles of some frame instance arguments, when possible.
+    Note: frame_instances must be sorted by sentence order.
+    Note: frame_instances is altered, even if the final result is returned.
     
-    :param extracted_frames: The frames.
-    :type extracted_frames: FrameInstance List.
+    :param frame_instances: The frames.
+    :type frame_instances: FrameInstance List.
     :param verbnet_classes: The VerbNet lexicon, used to determine which frames
     from the corpus we should have extracted.
     :type verbnet_classes: Str Dict.
     """
     
     frames = defaultdict(lambda: defaultdict(list))
-    for frame in extracted_frames:
+    for frame in frame_instances:
         # /path/to/stuff.conll -> stuff
         frames[os.path.basename(frame.filename)[:-6]][frame.sentence_id].append(frame)
 
@@ -85,16 +85,14 @@ def fill_roles(extracted_frames, annotation_file, parsed_conll_file, verbnet_cla
             stats_data["arg_not_extracted"] += num_args
 
 
-    stats_data["frame_extracted_bad"] += len(list(extracted_frames)) - good_frames
+    stats_data["frame_extracted_bad"] += len(list(frame_instances)) - good_frames
     stats_data["frame_extracted_good"] += good_frames
-    #stats_data["arg_extracted_bad"] += sum(
-    #    [len(x.args) for x in extracted_frames if x.frame_name == ""])
     
     # For LUCorpus, discard every frame for which there was no match
     if options.corpus_lu:
-        extracted_frames = [x for x in extracted_frames if x.frame_name != ""]
+        frame_instances = [x for x in frame_instances if x.frame_name != ""]
         
-    return extracted_frames
+    return frame_instances
 
 def correct_num_tags(extracted_frame, original_sentence):
     """ Replace <num> tags by their real equivalents
@@ -237,10 +235,10 @@ if __name__ == "__main__":
 
     frames = []
     for filename in FNAllReader.fulltext_parses():
-        for frame in arg_guesser._handle_file(filename):
+        for frame in arg_guesser.frame_instances_from_file(filename):
             frames.append(frame)
 
-    frames = fill_roles(frames, verbnet_classes, role_matcher)
+    frames = fill_gold_roles(frames, verbnet_classes, role_matcher)
 
     print("\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
           "Did not extract {} annotated frames ({} had a predicate not in VerbNet).\n"

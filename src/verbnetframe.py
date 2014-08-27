@@ -7,18 +7,6 @@ from abc import ABCMeta
 from framestructure import FrameInstance, Predicate, Arg, Word
 import verbnetprepclasses
 
-
-# This is either a VerbNet frame representation (without a sentence) or a
-# FrameNet frame turned into a VerbNet frame *occurrences*. Frame matching
-# compares the two kinds of frame to get the best from-Verbnet frame for a
-# from-FrameNet frame.
-
-# We also want, somewhere, to store information for ConLL-extracted frames
-# (that is, VerbNet frame occurrences from ConLL files, to be able to put those
-# into a semantic ConLL file. For FrameNet extracted frame occurrences, this is
-# stored inside the gold annotation, so that doesn't work here. We also don't
-# have to replace the resulting annotation somewhere else.)
-
 class ComputeSlotTypeMixin(metaclass=ABCMeta):
     slot_types = {
         "subject": "SBJ", "object": "OBJ",
@@ -138,26 +126,12 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         structure = VerbnetFrameOccurrence._keep_only_keywords(structure)
         # Transform the structure into a list
         structure = structure.split(" ")
-        #structure = VerbnetFrameOccurrence._strip_leftpart_keywords(structure)
 
         result = VerbnetFrameOccurrence(structure, [], predicate=framenet_instance.predicate.lemma)
         result.num_slots = num_slots
 
         # Fill the role list with None value
         result.roles = [None] * num_slots
-
-        return result
-
-    # Initially used by build_from_frame, above. TODO still needed?
-    @staticmethod
-    def _strip_leftpart_keywords(sentence):
-        result = []
-        found_verb = False
-        for elem in sentence:
-            if elem == "V":
-                found_verb = True
-            if found_verb or elem[0].isupper():
-                result.append(elem)
 
         return result
 

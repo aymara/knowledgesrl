@@ -4,7 +4,8 @@
 """Frames instances, its arguments and predicates."""
 
 class FrameInstance:
-    """A frame extracted from the corpus
+    """A frame directly extracted from the FrameNet corpus or another CoNLL
+    file.
     
     :var sentence: Sentence in which the frame appears
     :var predicate: Predicate object representing the frame's predicate
