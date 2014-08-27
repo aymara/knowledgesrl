@@ -649,6 +649,3 @@ if __name__ == "__main__":
             with open('framenet_conll/{}.conll'.format(name), 'w') as conll_file:
                 for conll_sentence in FulltextReader(p).to_conll_format():
                     conll_file.write(conll_sentence)
-    else:
-        unittest.main()
-

@@ -315,7 +315,3 @@ class ArgHeuristicTest(unittest.TestCase):
         found = find_args(self.initial_tree.children[1])
         
         self.assertEqual(set([x.word for x in found]), expected)
-        
-
-if __name__ == "__main__":
-    unittest.main()

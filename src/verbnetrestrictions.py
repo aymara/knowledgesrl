@@ -301,6 +301,3 @@ class VNRestrictionTest(unittest.TestCase):
         self.assertEqual(restr5.match_score("building", data), 1)
         
         self.assertEqual(restr6.match_score("building", data), 1 / 100)
-        
-if __name__ == "__main__":
-    unittest.main()

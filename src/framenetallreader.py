@@ -147,6 +147,3 @@ class FNAllReaderTest(unittest.TestCase):
         frame = frames[42]
         self.assertTrue(frame.predicate.lemma == "use")
         self.assertTrue(frame.passive == True)
-
-if __name__ == "__main__":
-    unittest.main()

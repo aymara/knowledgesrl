@@ -284,6 +284,3 @@ class VnFnRoleMatcherTest(unittest.TestCase):
         with self.assertRaises(RoleMatchingError):
             matcher.match(
                 "Non_existing_fn_role", "Patient", "Grant_permission", ["60"])
-
-if __name__ == "__main__":
-    unittest.main()

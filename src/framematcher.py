@@ -358,7 +358,3 @@ class frameMatcherTest(unittest.TestCase):
         for verbnet_frame in verbnet_frames:
             matcher.new_match(verbnet_frame)
         self.assertEqual(matcher.possible_distribs(), [{"R1"}, {"R4"}, set(), {"R5"}])
-       
-if __name__ == "__main__":
-    unittest.main()
-        

@@ -179,5 +179,3 @@ if __name__ == "__main__":
         diff_status(data1["prob_model"], data2["prob_model"])
     else:
         diff_all(data1["prob_model"], data2["prob_model"])
-
-    

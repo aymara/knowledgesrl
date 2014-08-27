@@ -101,6 +101,3 @@ class FNParsedReaderTest(unittest.TestCase):
 
                 # test the sentence
                 self.assertTrue(self.comp(frame.sentence, sentence))
-
-if __name__ == "__main__":
-    unittest.main()

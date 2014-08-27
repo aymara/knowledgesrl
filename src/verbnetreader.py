@@ -556,7 +556,3 @@ def init_verbnet(path):
     reader = VerbnetReader(path)
     errors["vn_parsing"] = reader.unhandled
     return reader.frames_for_verb, reader.classes
-        
-if __name__ == "__main__":
-    unittest.main()
-

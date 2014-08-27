@@ -227,8 +227,6 @@ class RoleExtractorTest(unittest.TestCase):
         self.assertEqual(frame.args, final_args)
 
 if __name__ == "__main__":
-    #unittest.main()
-      
     import verbnetreader
     from argguesser import ArgGuesser
     from rolematcher import VnFnRoleMatcher
@@ -254,5 +252,3 @@ if __name__ == "__main__":
           stats_data["arg_extracted_bad"],
           stats_data["arg_not_extracted"], stats_data["arg_not_extracted_not_verbnet"]
     ))
-
-

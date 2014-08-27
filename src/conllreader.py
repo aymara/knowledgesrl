@@ -217,17 +217,14 @@ class TreeBuilderTest(unittest.TestCase):
 import sys
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        unittest.main()
-    else:
-        with open(sys.argv[1]) as conll_file:
-            conll_tree = ""
-            for l in conll_file.readlines():
-                if l != "\n":
-                    conll_tree += l
-                else:
-                    print("\n\n")
-                    print(conll_tree)
-                    print(SyntacticTreeBuilder(conll_tree).build_syntactic_tree())
-                    conll_tree = ""
+    with open(sys.argv[1]) as conll_file:
+        conll_tree = ""
+        for l in conll_file.readlines():
+            if l != "\n":
+                conll_tree += l
+            else:
+                print("\n\n")
+                print(conll_tree)
+                print(SyntacticTreeBuilder(conll_tree).build_syntactic_tree())
+                conll_tree = ""
                 

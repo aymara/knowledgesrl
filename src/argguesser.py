@@ -284,6 +284,3 @@ class ArgGuesserTest(unittest.TestCase):
         arg_guesser = ArgGuesser(verbnet)
 
         self.assertEqual(arg_guesser._find_args(tree), args)
-
-if __name__ == "__main__":
-    unittest.main()

@@ -427,6 +427,3 @@ class ProbabilityModelTest(unittest.TestCase):
             
         self.assertEqual(model.best_role(
             set(["Agent", "Theme"]), "SUBJ", "for", "eat", "predicate_slot"), "Theme")
-     
-if __name__ == "__main__":
-    unittest.main()

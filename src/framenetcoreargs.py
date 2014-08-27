@@ -76,6 +76,3 @@ class CoreArgsFinderTest(unittest.TestCase):
         
         with self.assertRaises(NoSuchFrameError):
             core_args_finder.is_core_role("Agent", "Non_existing_frame")
-
-if __name__ == "__main__":
-    unittest.main()

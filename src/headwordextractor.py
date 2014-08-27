@@ -206,5 +206,3 @@ if __name__ == "__main__":
         else:
             with open(filename, "wb") as picklefile:
                 pickle.dump(result, picklefile)
-    else:
-        unittest.main()
