@@ -24,36 +24,17 @@ from verbnetframe import ComputeSlotTypeMixin, VerbnetFrameOccurrence, VerbnetOf
 from verbnetrestrictions import VNRestriction
 
 
-matching_algorithm = "sync_predicates"
-
-class EmptyFrameError(Exception):
-    """Trying to use an empty frame in a FrameMatcher
-    
-    :var frame: VerbnetFrameOccurrence, the frame to be matched
-    :var predicate: str, predicate
-    """
-    
-    def __init__(self, frame_occurrence):
-        self.frame_occurrence = frame_occurrence
-
-    def __str__(self):
-        return ("Error: tried to perform frame matching with frame occurrence without any slot\n"
-               "frame: {}\npredicate: {}".format(self.frame_occurrence, self.frame_occurrence.predicate))
-               
 class FrameMatcher():
     """Handle frame matching for a given frame that we want to annotate.
     
-    :var frame: VerbnetFrameOccurrence -- The frame to annotate
+    :var frame_occurrence: VerbnetFrameOccurrence -- The frame to annotate
     :var best_score: int -- The best score encountered among all the matches
-    :var best_data: (VerbnetOfficialFrame, int List) List -- The frames that achieved this best score + the mapping between the slots of :frame and this frame
+    :var best_data: (VerbnetOfficialFrame, int List) List -- The frames that achieved this best score + the mapping between the slots of :frame_occurrence and these verbnet frames
     :var algo: str -- The algorithm that we want to use
     
     """
     
-    def __init__(self, frame_occurrence, algo = matching_algorithm):
-        if frame_occurrence.num_slots == 0:
-            raise EmptyFrameError(frame_occurrence)
-
+    def __init__(self, frame_occurrence, algo):
         self.frame_occurrence = frame_occurrence
         self.algo = algo
         
@@ -317,9 +298,7 @@ class frameMatcherTest(unittest.TestCase):
         frame_occurrence = VerbnetFrameOccurrence(["to", "be"], [], "a predicate")
         frame = VerbnetOfficialFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"], "X", [])
 
-        with self.assertRaises(EmptyFrameError):
-            matcher = FrameMatcher(frame_occurrence, "sync_predicates")
-            matcher.new_match(frame)
+        self.assertEqual(frame_occurrence.num_slots, 0)
             
     def test_3(self):
         frame_occurrence = VerbnetFrameOccurrence(["NP", "V", "with", "NP"], [None, None], "a predicate")
