@@ -104,7 +104,8 @@ class ArgGuesser(FNParsedReader):
                 #Si un child est VC -> ne rien faire avec ce node
                 predicate = Predicate(
                     node.begin_head, node.begin_head + len(node.word) - 1,
-                    node.word, node.lemma)
+                    node.word, node.lemma,
+                    node.word_id)
                 
                 if options.heuristic_rules:
                     args = [self._nodeToArg(x, node) for x in find_args(node)]
@@ -197,6 +198,7 @@ class ArgGuesser(FNParsedReader):
             text = root.flat()[begin:end+1]
             
         return Arg(
+            position=node.word_id,
             begin=begin,
             end=end,
             text=text,

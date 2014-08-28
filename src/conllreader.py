@@ -49,12 +49,13 @@ class SyntacticTreeNode:
     
     """
     
-    def __init__(self, word, position, pos, deprel, begin, end, begin_head, children):
+    def __init__(self, word, position, pos, deprel, begin, end, word_id, begin_head, children):
         self.word = word
         self.position = position
         self.pos = pos
         self.deprel = deprel
         self.children = children
+        self.word_id = word_id
         self.begin = begin
         self.end = end
         self.begin_head = begin_head
@@ -101,8 +102,8 @@ class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree
 
     :var words: second column of the CoNLL output, list of words
-    :var deprels: second line of the CoNLL output, list of deprels
-    :var parents: third line of the CoNLL output, position of each word's parent
+    :var deprels: second column of the CoNLL output, list of deprels
+    :var parents: third column of the CoNLL output, position of each word's parent
     
     """
     
@@ -115,11 +116,13 @@ class SyntacticTreeBuilder():
         """
         self.words, self.deprels, self.pos, self.parents = [], [], [], []
         self.word_begins = []
+        self.word_ids = []
         
         begin = 0
         for l in conll_tree.splitlines():
-            line_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
+            word_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
             
+            self.word_ids.append(int(word_id))
             self.words.append(form)
             self.deprels.append(deprel)
             self.pos.append(cpos)
@@ -178,7 +181,7 @@ class SyntacticTreeBuilder():
 
         result = SyntacticTreeNode(self.words[root - 1], root_position,
                                  self.pos[root - 1], self.deprels[root - 1],
-                                 begin, end, self.word_begins[root - 1], children)
+                                 begin, end, self.word_ids[root - 1], self.word_begins[root - 1], children)
         
         for child in result.children:
             child.father = result

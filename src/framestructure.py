@@ -56,20 +56,21 @@ class Arg:
     
     """
     
-    def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated = True):
+    def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated = True, position=None):
         self.begin = begin
         self.end = end
         self.text = text
         self.role = role
         self.instanciated = instanciated
         self.phrase_type = phrase_type
+        self.position = position
         
         # This can be false for extracted args which could not be matched with
         # annotated args from the fulltext corpus
         self.annotated = annotated
 
     def __repr__(self):
-        return self.role
+        return "Arg({}, {})".format(self.text, self.role)
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__)  and
@@ -112,11 +113,12 @@ class Predicate:
     
     """
     
-    def __init__(self, begin, end, text, lemma):
+    def __init__(self, begin, end, text, lemma, position=None):
         self.begin = begin
         self.end = end
         self.text = text
         self.lemma = lemma
+        self.position = position
 
     def __repr__(self):
         return "Predicate({}, {})".format(self.text, self.lemma)
