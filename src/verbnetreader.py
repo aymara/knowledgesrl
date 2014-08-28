@@ -101,8 +101,7 @@ class VerbnetReader:
         role_list = role_list[:]
         restrictions = restrictions[:]
         
-        # Use the format of the vn/fn mapping
-        vnclass = "-".join(xml_class.attrib["ID"].split('-')[1:])
+        vnclass = xml_class.attrib["ID"]
         self.cnames[vnclass] = self.filename
         
         for xml_role in xml_class.find("THEMROLES"):
@@ -461,23 +460,23 @@ class VerbnetReaderTest(unittest.TestCase):
             VerbnetOfficialFrame(
                 ['there', 'V', 'NP', verbnetprepclasses.prep["loc"], 'NP'],
                 ['Theme', 'Location'],
-                "43.1", []),
+                "light_emission-43.1", []),
             VerbnetOfficialFrame(
                 ["NP", "V", "NP", "ADV"],
                 ["Agent", "Theme"],
-                "105", []),
+                "use-105", []),
             VerbnetOfficialFrame(
                 ["NP", "V"],
                 ["Patient"],
-                "45.1", []),
+                "break-45.1", []),
             VerbnetOfficialFrame(
                 ["NP", "V", "how", "to", "S"],
                 ["Agent", "Topic"],
-                "37.7", []),
+                "say-37.7", []),
             VerbnetOfficialFrame(
                 ["NP", "V"],
                 ["Agent"],
-                "40.4", [])
+                "snooze-40.4", [])
         ]
         restrictions_str = {
             "sparkle":["(NOT animate)", "NORESTR"],
@@ -502,25 +501,25 @@ class VerbnetReaderTest(unittest.TestCase):
             VerbnetOfficialFrame(
                 ['NP', 'V', 'NP', {'from'}, 'NP'],
                 ['Agent', 'Patient', 'Co-Patient'],
-                "23.1", []),
+                "separate-23.1", []),
             VerbnetOfficialFrame(
                 ['NP', 'V', 'NP'],
                 ['Agent', 'Patient'],
-                "23.1", []),
+                "separate-23.1", []),
             VerbnetOfficialFrame(
                 ['NP', 'V'],
                 ['Patient'],
-                "23.1", []),
+                "separate-23.1", []),
             VerbnetOfficialFrame(
                 ['NP', 'V', {'from'}, 'NP'],
                 ['Patient', 'Co-Patient'],
-                "23.1", []),
+                "separate-23.1", []),
             VerbnetOfficialFrame(
                 ['NP', 'V'],
                 ['Patient'],
-                "23.1", [])]
-        list2 = [VerbnetOfficialFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient'], "23.1-1", [])]
-        list3 = [VerbnetOfficialFrame(['NP', 'V', {'with'}, 'NP'], ['Patient', 'Co-Patient'], "23.1-2", [])]
+                "separate-23.1", [])]
+        list2 = [VerbnetOfficialFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient'], "separate-23.1-1", [])]
+        list3 = [VerbnetOfficialFrame(['NP', 'V', {'with'}, 'NP'], ['Patient', 'Co-Patient'], "separate-23.1-2", [])]
         expected_result = {
             'dissociate': list1+list3,
             'disconnect': list1+list3,

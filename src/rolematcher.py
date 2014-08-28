@@ -162,6 +162,8 @@ class VnFnRoleMatcher():
         vn_roles = set()
 
         for vn_class in vn_classes:
+            # Use the format of the vn/fn mapping
+            vn_class = "-".join(vn_class.split('-')[1:])
             for frame in frames:
                 while True:
                     if vn_class in self.fn_roles[fn_role][frame]:
@@ -266,8 +268,8 @@ class VnFnRoleMatcherTest(unittest.TestCase):
         self.assertFalse(matcher.match("Fixed_location", "Agent"))
         self.assertTrue(matcher.match("Connector", "Patient", "Inchoative_attaching"))
         self.assertFalse(matcher.match("Speaker", "Patient", "Talking_into"))
-        self.assertTrue(matcher.match("Grantee", "Recipient", "Grant_permission", ["60"]))
-        self.assertFalse(matcher.match("Message", "Agent", "Communication_manner", ["40.2"]))
+        self.assertTrue(matcher.match("Grantee", "Recipient", "Grant_permission", ["order-60"]))
+        self.assertFalse(matcher.match("Message", "Agent", "Communication_manner", ["nonverbal_expression-40.2"]))
         
         with self.assertRaises(RoleMatchingError):
             matcher.match(
@@ -283,4 +285,4 @@ class VnFnRoleMatcherTest(unittest.TestCase):
                 "Purpose", "Agent", "Non_existing_fn_frame", ["66"])
         with self.assertRaises(RoleMatchingError):
             matcher.match(
-                "Non_existing_fn_role", "Patient", "Grant_permission", ["60"])
+                "Non_existing_fn_role", "Patient", "Grant_permission", ["order-60"])
