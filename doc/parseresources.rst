@@ -8,12 +8,12 @@ The parsing of VerbNet is done by the *verbnetreader* module. It reads every
 XML file in data/verbnet3-2, each of which represents a VerbNet root class and
 all its subclasses.
 
-For each frame found in every class and subclasses of a file, a *VerbNetFrame*
-object is instanciated and associated with every member verb of the class or
-one of its subclasses.
+For each frame found in every class and subclasses of a file, a
+*VerbnetOfficialFrame* object is instanciated and associated with every member
+verb of the class or one of its subclasses.
 
 The difficult part is to build the structure and the role list of the
-*VerbNetFrame*, that is, to convert the *primary* attribute of the
+*VerbnetOfficialFrame*, that is, to convert the *primary* attribute of the
 *DESCRIPTION* element to an acceptable (that is, compatible with FrameNet
 annotations) list of syntactic elements, and to retrieve the roles of the
 elements that have one.
