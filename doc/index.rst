@@ -35,6 +35,7 @@ Code documentation:
     probabilitymodel
     rolematcher
     verbnetreader
+    verbnetframe
 
 
 
