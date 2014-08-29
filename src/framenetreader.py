@@ -101,9 +101,11 @@ class FulltextReader:
         self.missing_predicate_data = []
         self.non_existing_frame_name = []
         
-        root = ET.ElementTree(file=filename)
-        if not self._init_file_data(root): return
-        self._parse_xml(root, trees)
+        # TODO Remove condition and reorganize caller code instead
+        if filename is not None:
+            root = ET.ElementTree(file=filename)
+            self._init_file_data(root)
+            self._parse_xml(root, trees)
     
     def _init_file_data(self, root):
         if root.getroot().tag == "corpus":

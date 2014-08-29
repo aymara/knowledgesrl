@@ -83,6 +83,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.slot_types, self.slot_preps = self.compute_slot_types(structure)
         self.headwords = []
 
+        self.best_classes = None
+
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
                 self.structure == other.structure and
@@ -95,10 +97,12 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
             self.predicate, self.structure, self.roles)
 
     @staticmethod
-    def build_from_frame(framenet_instance):
+    def build_from_frame(gold_framenet_instance, conll_frame_instance):
         """Build a VerbNet frame from a FrameInstance object
 
-        :param framenet_instance: The original FrameNet frame instance.
+        :param gold_framenet_instance: The gold FrameNet frame instance
+        :type frame: FrameInstance.
+        :param conll_frame_instance: The frame instance from CoNLL
         :type frame: FrameInstance.
         :returns: VerbnetFrameOccurrence -- the frame without the gold roles
         converted to VerbNet-style representation
@@ -106,11 +110,14 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 
         num_slots = 0
 
-        # First, delete everything that is before or after the frame
-        begin = framenet_instance.predicate.begin
-        end = framenet_instance.predicate.end
+        # The goal here is to translate a FrameInstance into a VerbnetFrameOccurrence.
+        # We do this in a number of steps
 
-        for argument in framenet_instance.args:
+        # First, only keep the text segments with arguments and predicates
+        begin = gold_framenet_instance.predicate.begin
+        end = gold_framenet_instance.predicate.end
+
+        for argument in gold_framenet_instance.args:
             if not argument.instanciated:
                 continue
             num_slots += 1
@@ -119,19 +126,29 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
             if argument.end > end:
                 end = argument.end
 
-        structure = framenet_instance.sentence[begin:end + 1]
+        structure = gold_framenet_instance.sentence[begin:end + 1]
+
         # Then, replace the predicate/arguments by their phrase type
-        structure = VerbnetFrameOccurrence._reduce_args(framenet_instance, structure, begin)
+        structure = VerbnetFrameOccurrence._reduce_args(gold_framenet_instance, structure, begin)
         # And delete everything else, except some keywords
         structure = VerbnetFrameOccurrence._keep_only_keywords(structure)
         # Transform the structure into a list
         structure = structure.split(" ")
 
-        result = VerbnetFrameOccurrence(structure, [], predicate=framenet_instance.predicate.lemma)
+        result = VerbnetFrameOccurrence(structure, [], predicate=gold_framenet_instance.predicate.lemma)
         result.num_slots = num_slots
 
-        # Fill the role list with None value
+        # Finally, fill the role list with None value
         result.roles = [None] * num_slots
+
+        # If the FrameInstance only comes from a CoNLL file and is not part of
+        # the corpus, we don't want to loose predicate/args position in the
+        # file so that we can add classes and roles later
+        # TODO remove this condition and reorganize caller code instead
+        if conll_frame_instance is not None:
+            result.predicate_position = conll_frame_instance.predicate.position
+            result.args = conll_frame_instance.args
+            result.sentence_id = conll_frame_instance.sentence_id
 
         return result
 

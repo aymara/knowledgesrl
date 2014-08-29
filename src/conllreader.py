@@ -91,7 +91,7 @@ class SyntacticTreeNode:
         children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
         return max([(root_match_len, self)] + children_results, key = lambda x: x[0])
         
-    def __str__(self):
+    def __repr__(self):
         if self.children:
             children = " " + " ".join([str(t) for t in self.children])
         else:
@@ -187,6 +187,52 @@ class SyntacticTreeBuilder():
             child.father = result
                                  
         return result
+
+
+class ConllSemanticAppender():
+    """Appends semantic information at the "right" of a ConLL file.
+
+    The input is a syntactic ConLL file, and the output a so-called semantic
+    CoNLL file.
+    """
+
+    def __init__(self, syntactic_conll_file):
+        self.conll_matrix = []
+
+        with open(syntactic_conll_file) as content:
+            sentences_data = content.read().split("\n\n")
+
+            for sentence in sentences_data:
+                sentence_matrix = []
+                for line in sentence.split('\n'):
+                    if len(line.split('\t')) == 1:
+                        continue
+                    # Put current line plus a line for potential frame annotations
+                    sentence_matrix.append(line.split('\t') + ['-'])
+                self.conll_matrix.append(sentence_matrix)
+
+    def add_new_column(self, sentence_id):
+        for line in self.conll_matrix[sentence_id]:
+            line.append('-')
+
+    def add_frame_annotation(self, frame_annotation):
+        # We could have multiple classes, so join them with |
+        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position-1][10] = '|'.join(frame_annotation.best_classes)
+        # Add new column to place the new roles
+        self.add_new_column(frame_annotation.sentence_id)
+
+        for roleset, arg in zip(frame_annotation.roles, frame_annotation.args):
+            roleset_str = '|'.join(roleset) if roleset else '_EMPTYROLE_'
+            self.conll_matrix[frame_annotation.sentence_id][arg.position-1][-1] = roleset_str
+
+    def dump_semantic_file(self, filename):
+        with open(filename, 'w') as semantic_file:
+            for i, sentence in enumerate(self.conll_matrix):
+                for line in sentence:
+                    print('\t'.join(line), file=semantic_file)
+                if i < len(self.conll_matrix) - 1:
+                    print(end='\n', file=semantic_file)
+
 
 class TreeBuilderTest(unittest.TestCase):
 

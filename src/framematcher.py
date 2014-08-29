@@ -40,6 +40,7 @@ class FrameMatcher():
         
         self.best_score = 0
         self.best_data = []
+        self.best_classes = set()
     
     def handle_semantic_restrictions(self, data):
         """Keep only frames for which the syntactic restriction are
@@ -258,10 +259,12 @@ class FrameMatcher():
         if score > self.best_score:
             # This frame is better than any previous one : reset everything
             self.best_data = []
+            self.best_classes = set()
         if score >= self.best_score:
+            self.best_score = score
             # This frame got the best score : add its data
             self.best_data.append((verbnet_frame, slots_associations))
-            self.best_score = score
+            self.best_classes.add(verbnet_frame.vnclass)
     
     def possible_distribs(self):
         """Compute the lists of possible roles for each slots

@@ -78,12 +78,12 @@ class VerbnetFrameOccurrenceTest(unittest.TestCase):
              st["prep_object"], st["indirect_object"], st["prep_object"]]
         ]
 
-        verbnet_frame = VerbnetFrameOccurrence.build_from_frame(tested_frames[0])
+        verbnet_frame = VerbnetFrameOccurrence.build_from_frame(tested_frames[0], None)
         self.assertEqual(vn_frames[0], verbnet_frame)
         self.assertEqual(verbnet_frame.slot_types, slot_types[0])
         self.assertEqual(verbnet_frame.slot_preps, slot_preps[0])
 
-        verbnet_frame = VerbnetFrameOccurrence.build_from_frame(tested_frames[1])
+        verbnet_frame = VerbnetFrameOccurrence.build_from_frame(tested_frames[1], conll_frame_instance=None)
         self.assertEqual(vn_frames[1], verbnet_frame)
         self.assertEqual(verbnet_frame.slot_types, slot_types[1])
         self.assertEqual(verbnet_frame.slot_preps, slot_preps[1])

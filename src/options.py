@@ -17,6 +17,10 @@ bootstrap = False
 probability_model = "predicate_slot"
 dump = False
 dump_file = ""
+
+conll_input = None
+conll_output = sys.stdout
+
 passive = True
 use_test_set = False
 corpus_lu = False
@@ -24,63 +28,75 @@ semrestr = False
 fulltext_corpus = paths.FRAMENET_FULLTEXT
 framenet_parsed = paths.FRAMENET_PARSED
 
-options = getopt.getopt(sys.argv[1:], "d:",
-    ["baseline", "fmatching-algo=", "add-non-core-args", "help",
-     "model=", "bootstrap", "no-gold-args", "heuristic-rules", "dump",
-     "no-passive", "baseline", "test-set", "lu", "semantic-restrictions"])
+options = getopt.getopt(sys.argv[1:], "d:", [
+    "baseline", "fmatching-algo=", "add-non-core-args", "help", "model=",
+    "bootstrap", "no-gold-args", "heuristic-rules", "dump", "conll_input=",
+    "conll_output=", "no-passive", "baseline", "test-set", "lu",
+    "semantic-restrictions"])
 
-display_syntax = False
-syntax_str = ("main.py [--baseline] [-d num_sample] [--fmatching-algo=algo] "
-              "[--model=probability_model] [--add-non-core-args] "
-              "[--bootstrap] [--no-gold-args] [--heuristic-rules]] "
-              "[--dump filename] [--no-passive] [--test-set] [--lu] "
-              "[--semantic-restrictions] [--help]")
+display_usage = False
 
-for opt,value in options[0]:
+usage_str = """Usage: main.py [--baseline] [-d num_sample]
+[--fmatching-algo=algo] [--model=probability_model] [--add-non-core-args]
+[--bootstrap] [--no-gold-args] [--heuristic-rules] [--dump filename]
+[--conll_input filename] [--conll_output filename] [--no-passive] [--test-set]
+[--lu] [--semantic-restrictions] [--help]"""
+
+for opt, value in options[0]:
     # Removes our enhancements
     if opt == "--baseline":
         passive = False
-
-    if opt == "-d":
+    elif opt == "-d":
         debug = True
         value = 0 if value == "" else int(value)
         if value > 0:
             n_debug = value
-    if opt == "--fmatching-algo":
+    elif opt == "--fmatching-algo":
         matching_algorithm = value
-    if opt == "--add-non-core-args":
+    elif opt == "--add-non-core-args":
         core_args_only = False
-    if opt == "--model":
+    elif opt == "--model":
         if not value in probabilitymodel.models:
             raise Exception("Unknown model {}".format(value))
         probability_model = value
-    if opt == "--bootstrap":
+    elif opt == "--bootstrap":
         bootstrap = True
-    if opt == "--no-gold-args":
+    elif opt == "--no-gold-args":
         gold_args = False
-    if opt == "--heuristic-rules":
+    elif opt == "--heuristic-rules":
         heuristic_rules = True
-    if opt == "--dump":
+
+    elif opt == "--conll_input":
+        conll_input = value
+        gold_args = False
+    elif opt == "--conll_output":
+        conll_output = value
+
+    elif opt == "--dump":
         if len(options[1]) > 0:
             dump = True
             dump_file = options[1][0]
         else:
-            display_syntax = True
-    if opt == "--no-passive":
+            display_usage = True
+    elif opt == "--no-passive":
         passive = False 
-    if opt == "--test-set":
+    elif opt == "--test-set":
         use_test_set = True
         fulltext_corpus = paths.FRAMENET_FULLTEXT_EVALUATION
         framenet_parsed = paths.FRAMENET_PARSED_EVALUATION
-    if opt == "--lu":
+    elif opt == "--lu":
         corpus_lu = True
         fulltext_corpus = paths.FRAMENET_LU
         framenet_parsed = paths.FRAMENET_LU_PARSED
-    if opt == "--semantic-restrictions":
+    elif opt == "--semantic-restrictions":
         semrestr = True
-    if opt == "--help":
-        display_syntax = True
+    elif opt == "--help":
+        display_usage = True
+
+if conll_input is not None and conll_output == sys.stdout:
+    print("--conll_input should be used with --conll_output. Aborting")
+    display_usage = True
             
-if display_syntax:
-    print(syntax_str)
-    exit(0)
+if display_usage:
+    print(usage_str)
+    sys.exit(-1)

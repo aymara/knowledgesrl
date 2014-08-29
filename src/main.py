@@ -6,6 +6,7 @@ import sys
 
 from framenetallreader import FNAllReader
 from verbnetframe import VerbnetFrameOccurrence
+from conllreader import ConllSemanticAppender
 from stats import stats_quality, display_stats, stats_data, stats_ambiguous_roles
 import errorslog
 from errorslog import log_debug_data, log_vn_missing, display_debug
@@ -36,7 +37,12 @@ if __name__ == "__main__":
     all_annotated_frames = []
     all_vn_frames = []
 
-    annotation_list, parsed_conll_list = FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()
+    if options.conll_input is not None:
+        annotation_list = [None]
+        parsed_conll_list = [options.conll_input]
+    else:
+        annotation_list = FNAllReader.fulltext_annotations()
+        parsed_conll_list = FNAllReader.fulltext_parses()
 
     print("Loading FrameNet annotations and frame matching...")
     for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
@@ -63,7 +69,7 @@ if __name__ == "__main__":
                 stats_data["frames_with_predicate_in_verbnet"] += 1
 
                 annotated_frames.append(frame)
-                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(frame))
+                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(frame, conll_frame_instance=None))
 
             stats_data["files"] += fn_reader.stats["files"]
         else:
@@ -72,14 +78,14 @@ if __name__ == "__main__":
             #
             arg_guesser = argguesser.ArgGuesser(verbnet_classes)
             
-            frame_instances = list(arg_guesser.frame_instances_from_file(parsed_conll_file))
-            new_annotated_frames = roleextractor.fill_gold_roles(frame_instances,
+            new_frame_instances = list(arg_guesser.frame_instances_from_file(parsed_conll_file))
+            new_annotated_frames = roleextractor.fill_gold_roles(new_frame_instances,
                 annotation_file, parsed_conll_file, verbnet_classes,
                 role_matcher)
             
-            for frame in new_annotated_frames:
-                annotated_frames.append(frame)
-                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(frame))
+            for gold_frame, frame_instance in zip(new_annotated_frames, new_frame_instances):
+                annotated_frames.append(gold_frame)
+                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(gold_frame, conll_frame_instance=frame_instance))
 
 
         # Extract arguments headwords
@@ -124,6 +130,7 @@ if __name__ == "__main__":
                     matcher.new_match(verbnet_frame)
 
             frame_occurrence.roles = matcher.possible_distribs()
+            frame_occurrence.best_classes = matcher.best_classes
 
             # Update semantic restrictions data
             for word, restr in matcher.get_matched_restrictions().items():
@@ -161,9 +168,10 @@ if __name__ == "__main__":
         all_vn_frames.extend(vn_frames)
         all_annotated_frames.extend(annotated_frames)
 
-    print("\n\n## Frame matching stats")
-    stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
-    display_stats(options.gold_args)
+    if options.conll_input is None:
+        print("\n\n## Frame matching stats")
+        stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
+        display_stats(options.gold_args)
 
     print("Applying probabilty model...")
     for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
@@ -192,6 +200,15 @@ if __name__ == "__main__":
         if options.debug:
             display_debug(options.n_debug)
 
-    print("\n\n## Final stats")
-    stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
-    display_stats(options.gold_args)
+    if options.conll_input is not None:
+        print("Dumping semantic CoNLL...")
+        semantic_appender = ConllSemanticAppender(options.conll_input)
+        for vn_frame in all_vn_frames:
+            if vn_frame.best_classes is not None:
+                semantic_appender.add_frame_annotation(vn_frame)
+        semantic_appender.dump_semantic_file(options.conll_output)
+
+    else:
+        print("\n\n## Final stats")
+        stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
+        display_stats(options.gold_args)
