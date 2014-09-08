@@ -1,4 +1,4 @@
-nltk==3.0.0b1
+nltk==3.0.0
 
 colorama==0.2.7
 
