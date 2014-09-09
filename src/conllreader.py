@@ -41,32 +41,50 @@ def LongestCommonSubstring(S1, S2):
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
     
+    :var word_id: int, the CoNLL word id (starts at 1)
+
     :var word: string, the word contained by the node
-    :var position: position of the root among the children (0 is before)
     :var pos: part-of-speech of the node
+
     :var deprel: string, function attributed by the parser to this word
-    :var children: -- SyntacticTreeNode list, the children of this node
+    :var father: SyntacticTreeBuilder, the father of this node
+    :var children: SyntacticTreeNode list, the children of this node
+
+    :var begin: int, the character position this phrase starts at (root would be 0)
+    :var end: int, the position this phrase ends at (root would be last character)
+    :var begin_word: int, the position this *word* begins at
     
     """
     
-    def __init__(self, word, position, pos, deprel, begin, end, word_id, begin_head, children):
-        self.word = word
-        self.position = position
-        self.pos = pos
-        self.deprel = deprel
-        self.children = children
+    def __init__(self, word_id, word, pos, deprel, begin_word):
         self.word_id = word_id
-        self.begin = begin
-        self.end = end
-        self.begin_head = begin_head
+
+        self.word = word
+        self.pos = pos
+
+        self.deprel = deprel
         self.father = None
+        self.children = []
+
+        self.begin_word = begin_word
+        self.begin, self.end = None, None
                 
+    def __repr__(self):
+        if self.children:
+            children = " " + " ".join([str(t) for t in self.children])
+        else:
+            children = ""
+
+        return "({}/{}/{}/{}/{} {}{})".format(self.pos, self.deprel, self.position, self.begin, self.end, self.word, children)
+
     def __iter__(self):
         for position, child in enumerate(self.children):
-            if position == self.position: yield(self)
+            if position == self.position:
+                yield(self)
             for node in child:
                 yield node
-        if self.position == len(self.children): yield self
+        if self.position == len(self.children):
+            yield self
     
     def flat(self):
         """Return the tokenized sentence from the parse tree."""
@@ -90,23 +108,17 @@ class SyntacticTreeNode:
                 (len(root_match) + len(arg.split())))
         children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
         return max([(root_match_len, self)] + children_results, key = lambda x: x[0])
-        
-    def __repr__(self):
-        if self.children:
-            children = " " + " ".join([str(t) for t in self.children])
-        else:
-            children = ""
-        return "({}/{}/{}/{}/{} {}{})".format(self.pos, self.deprel, self.position, self.begin, self.end, self.word, children)
 
 class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree
 
-    :var words: second column of the CoNLL output, list of words
-    :var deprels: second column of the CoNLL output, list of deprels
-    :var parents: third column of the CoNLL output, position of each word's parent
-    
+    :var node_dict: every SyntacticTreeNode available by CoNLL word id
+    :var father_ids: every dependency relation: child id -> father id
+    :var tree_list: every root node, that is every root subtree
+    :var sentence: the "sentence" (words separated by spaces)
+
     """
-    
+
     def __init__(self, conll_tree):
         """Extract the data provided
         
@@ -114,79 +126,62 @@ class SyntacticTreeBuilder():
         :type conll_tree: str
         
         """
-        self.words, self.deprels, self.pos, self.parents = [], [], [], []
-        self.word_begins = []
-        self.word_ids = []
+        self.node_dict, self.father_ids = {}, {}
+        self.tree_list = []
         
         begin = 0
         for l in conll_tree.splitlines():
             word_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
             
-            self.word_ids.append(int(word_id))
-            self.words.append(form)
-            self.deprels.append(deprel)
-            self.pos.append(cpos)
-            self.parents.append(int(head))
-            self.word_begins.append(begin)
+            word_id = int(word_id)
+            head = int(head) if head != '-' else None
+            deprel = deprel if deprel != '-' else 'ROOT'
+
+            self.father_ids[word_id] = head
+
+            self.node_dict[word_id] = SyntacticTreeNode(
+                word_id=word_id,
+                word=form, pos=cpos,
+                deprel=deprel,
+                begin_word=begin)
+
             begin += 1 + len(form)
-        
-    def build_syntactic_tree(self):
-        """ Build and return a the syntactic tree """
-        result = self.build_tree_from(0).children[0]
-        result.father = None
-        return result
 
-    def find_child_after(self, father, min_pos):
-        """Search the position (real offset + 1) of a node's child after a given position
-        
-        :param father: The node of which we are looking for a child
-        :type father: int
-        :param min_pos: The position at or after which we are looking for a child
-        :type min_pos: int
-        :returns:  int -- the position of the child or None if no child was found
-        
-        """
-        for i in range(min_pos - 1, len(self.parents)):
-            if father == self.parents[i]:
-                return i + 1
+        self.sentence = ' '.join([self.node_dict[word_id].word for word_id in sorted(self.node_dict.keys())])
 
-        return None
+        # Record father/child relationship
+        for word_id, father_id in self.father_ids.items():
+            if father_id is not None and father_id != 0:
+                self.node_dict[word_id].father = self.node_dict[father_id]
+                self.node_dict[father_id].children.append(self.node_dict[word_id])
 
-    def build_tree_from(self, root):
-        """Builds a subtree rooted at a given node
-        
-        :param root: The position of the node used as the subtree root
-        :type root: int
-        :returns: SyntacticTreeNode -- the subtree
-        
-        """
-        if root < 0 or root > len(self.words):
-            raise ConllInvalidPositionError(root, len(self.words) - 1)
+        # Record position: where is father among child? Important to flatten tree
+        for father in self.node_dict.values():
+            father.position = 0
+            for child_id, child in enumerate(father.children):
+                if child.begin_word > father.begin_word:
+                    father.position = child_id
+                    break
+                father.position = len(father.children)
 
-        root_position = 0
-        children = []
-        begin = self.word_begins[root - 1]
-        end = begin + len(self.words[root - 1]) - 1
+        for node in self.node_dict.values():
+            if node.father is None:
+                # Fill begin/end info
+                #import pudb; pu.db
+                self.fill_begin_end(node)
+                # Fill forest of tree
+                self.tree_list.append(node)
 
-        next_child_pos = self.find_child_after(root, 1)
-        while next_child_pos != None:
-            if next_child_pos < root:
-                root_position += 1
-
-            child = self.build_tree_from(next_child_pos)
-            children.append(child)
-            if child.begin < begin: begin = child.begin
-            if child.end > end: end = child.end
-            next_child_pos = self.find_child_after(root, next_child_pos + 1)
-
-        result = SyntacticTreeNode(self.words[root - 1], root_position,
-                                 self.pos[root - 1], self.deprels[root - 1],
-                                 begin, end, self.word_ids[root - 1], self.word_begins[root - 1], children)
-        
-        for child in result.children:
-            child.father = result
-                                 
-        return result
+    def fill_begin_end(self, node):
+        """Fill begin/end values of very subtree"""
+        begin_words = [node.begin_word]
+        end_words = [node.begin_word + len(node.word) - 1]
+        for child in node.children:
+            self.fill_begin_end(child)
+            begin_words.append(child.begin)
+            end_words.append(child.end)
+        node.begin = min(begin_words)
+        node.end = max(end_words)
 
 
 class ConllSemanticAppender():
@@ -237,7 +232,8 @@ class ConllSemanticAppender():
 class TreeBuilderTest(unittest.TestCase):
 
     def setUp(self):
-        conll_tree = """1	The	The	DT	DT	-	2	NMOD	-	-
+        conll_tree = \
+"""1	The	The	DT	DT	-	2	NMOD	-	-
 2	others	others	NNS	NNS	-	5	SBJ	-	-
 3	here	here	RB	RB	-	2	LOC	-	-
 4	today	today	RB	RB	-	3	TMP	-	-
@@ -245,35 +241,54 @@ class TreeBuilderTest(unittest.TestCase):
 6	elsewhere	elsewhere	RB	RB	-	5	LOC	-	-
 7	.	.	.	.	-	5	P	-	-"""
         treeBuilder = SyntacticTreeBuilder(conll_tree)
-        self.tree = treeBuilder.build_syntactic_tree()
-        self.assertEqual(self.tree.father, None)
-    
+        self.tree_list = treeBuilder.tree_list
+
+    def test_none_fathers(self):
+        for tree in self.tree_list:
+            self.assertEqual(tree.father, None)
+
     def test_tree_str(self):
         #The others here today live elsewhere .
         expected_str = "(VV/ROOT/1/0/37 live (NNS/SBJ/1/0/20 others (DT/NMOD/0/0/2 The) (RB/LOC/0/11/20 here (RB/TMP/0/16/20 today))) (RB/LOC/0/27/35 elsewhere) (./P/0/37/37 .))"
-        
-        self.assertEqual(str(self.tree), expected_str)
-        self.assertEqual(self.tree.flat(), "The others here today live elsewhere .")
+        self.assertEqual(str(self.tree_list[0]), expected_str)
+
+    def test_tree_flat(self):
+        self.assertEqual(self.tree_list[0].flat(), "The others here today live elsewhere .")
 
     def test_tree_contains(self):
-        self.assertTrue(self.tree.contains("here today"))
-        self.assertFalse(self.tree.contains("others here today"))
+        self.assertTrue(self.tree_list[0].contains("here today"))
+        self.assertFalse(self.tree_list[0].contains("others here today"))
 
     def test_tree_match(self):
-        self.assertEqual(self.tree.closest_match("others here today"),
+        self.assertEqual(self.tree_list[0].closest_match("others here today"),
                 ['The', 'others', 'here', 'today'])
-        
-import sys
 
-if __name__ == '__main__':
-    with open(sys.argv[1]) as conll_file:
-        conll_tree = ""
-        for l in conll_file.readlines():
-            if l != "\n":
-                conll_tree += l
-            else:
-                print("\n\n")
-                print(conll_tree)
-                print(SyntacticTreeBuilder(conll_tree).build_syntactic_tree())
-                conll_tree = ""
-                
+    def test_lima_tree(self):
+        conll_tree = \
+"""1	Jamaica	Jamaica	NNP	NNP	-	2	SUB	-	-
+2	is	be	VBZ	VBZ	-	-	-	-	-
+3	not	not	NOT	NOT	-	2	VMOD	-	-
+4	just	just	RB	RB	-	-	-	-	-
+5	a	a	DT	DT	-	6	NMOD	-	-
+6	destination	destination	NN	NN	-	2	OBJ 	-	-
+7	it	it	PRP	PRP	-	8	SUB	-	-
+8	is	be	VBZ	VBZ	-	6	NMOD	-	-
+9	an	a	DT	DT	-	10	NMOD	-	-
+10	experience	experience	NN	NN	-	8	OBJ 	-	-"""
+
+        treeBuilder = SyntacticTreeBuilder(conll_tree)
+        for tree in treeBuilder.tree_list:
+            self.assertEqual(tree.father, None)
+            print(str(tree))
+
+    def test_another_flat(self):
+        conll_tree = \
+"""1	a	a	DT	DT	-	3	NMOD	-	-
+2	few	few	JJ	JJ	-	3	NMOD	-	-
+3	months	months	NNS	NNS	-	4	AMOD	-	-
+4	ago	ago	IN	IN	-	6	VMOD	-	-
+5	you	you	PRP	PRP	-	6	SUB	-	-
+6	received	received	VBD	VBD	-	0	ROOT	-	-
+7	a	a	DT	DT	-	8	NMOD	-	-
+8	letter	letter	NN	NN	-	6	OBJ	-	-"""
+        self.assertEqual(SyntacticTreeBuilder(conll_tree).tree_list[0].flat(), 'a few months ago you received a letter')

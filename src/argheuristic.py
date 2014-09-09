@@ -230,8 +230,8 @@ def rule3(tree):
     
     for elem in tree:
         if (elem.node.deprel == "SBJ" and
-            elem.node.begin_head < tree.node.begin_head and
-            elem.node.begin_head > best_position
+            elem.node.begin_word < tree.node.begin_word and
+            elem.node.begin_word > best_position
         ):
             candidate, best_position = elem, elem.node.begin
     
@@ -240,7 +240,7 @@ def rule3(tree):
     found = False
     node = tree.node
     while node != None:
-        if node.begin_head == candidate.node.father.begin_head:
+        if node.begin_word == candidate.node.father.begin_word:
             found = True
             break
         node = node.father
@@ -263,7 +263,7 @@ def rule6(tree):
     for elem in tree.children:
         # Do not keep elem that are on the left of the predicate
         if (not elem.node is tree.node.father and
-        elem.node.begin_head > tree.node.begin_head):
+        elem.node.begin_word > tree.node.begin_word):
             elem.keep()
 
 def rule7(tree, root = True):
@@ -295,7 +295,7 @@ class ArgHeuristicTest(unittest.TestCase):
     
     def setUp(self):
         treeBuilder = SyntacticTreeBuilder(ArgHeuristicTest.parsed_sentence)
-        self.initial_tree = treeBuilder.build_syntactic_tree()
+        self.initial_tree_list = treeBuilder.tree_list
         
     def test_relation_tree(self):
         expected = (
@@ -305,13 +305,13 @@ class ArgHeuristicTest(unittest.TestCase):
             ")))"
         )
         
-        relation_tree = build_relation_tree(self.initial_tree.children[1])
+        relation_tree = build_relation_tree(self.initial_tree_list[0].children[1])
                
         self.assertEqual(str(relation_tree), expected)
 
     def test_rules(self):
         expected = set(["contribution", "more"])
         
-        found = find_args(self.initial_tree.children[1])
+        found = find_args(self.initial_tree_list[0].children[1])
         
         self.assertEqual(set([x.word for x in found]), expected)

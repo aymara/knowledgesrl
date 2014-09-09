@@ -62,7 +62,7 @@ class FulltextReader:
     framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
     
     def __init__(self, filename, core_args_only = False, keep_unannotated = False,
-        trees = None, keep_nonverbal = False, pos_file = None):
+        tree_dict = None, keep_nonverbal = False, pos_file = None):
         """Read a file and update the collected frames list.
         
         :param filename: Path to the file to read.
@@ -71,8 +71,8 @@ class FulltextReader:
         :type core_args_only: boolean.
         :param keep_unannotated: Whether we should keep frames without annotated args.
         :type keep_unannotated: boolean.
-        :param trees: Syntactic trees for the frames (must be same order as in the corpus)
-        :type trees: None | SyntacticTreeNode List
+        :param tree_dict: Syntactic trees for the frames (grouped by sentence in dict)
+        :type trees: None | SyntacticTreeNode Dict
         """
         
         if FulltextReader.core_arg_finder == None and core_args_only:
@@ -105,7 +105,7 @@ class FulltextReader:
         if filename is not None:
             root = ET.ElementTree(file=filename)
             self._init_file_data(root)
-            self._parse_xml(root, trees)
+            self._parse_xml(root, tree_dict)
     
     def _init_file_data(self, root):
         if root.getroot().tag == "corpus":
@@ -170,12 +170,13 @@ class FulltextReader:
             "arg":"layers/layer[@name='FE']/labels/*"
         }
         
-    def _parse_xml(self, root, trees):
+    def _parse_xml(self, root, tree_dict):
         for i, sentence in enumerate(root.findall(self.patterns["sentence"])):
             for frame in self._parse_sentence(sentence, i):
                 frame.sentence_id = i
-                if trees != None:
-                    frame.tree = trees[i]
+                if tree_dict is not None:
+                    # TODO don't use the first tree, but the correct one?
+                    frame.tree = tree_dict[i][0]
                 
                 self.frames.append(frame)
     

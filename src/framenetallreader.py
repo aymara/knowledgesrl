@@ -58,7 +58,7 @@ class FNAllReader:
             annotation_file,
             core_args_only = self.core_args_only,
             keep_unannotated = self.keep_unannotated,
-            trees = self.read_syntactic_parses(parse_file))
+            tree_dict = self.read_syntactic_parses(parse_file))
         
         for frame_instance in reader.frames:
             if self.add_syntactic_information(frame_instance):
@@ -76,11 +76,11 @@ class FNAllReader:
             sentences_data = content.read().split("\n\n")
             if sentences_data[-1] == "": del sentences_data[-1]
 
-        trees = []
-        for one_sentence_data in sentences_data:
-            trees.append(SyntacticTreeBuilder(one_sentence_data).build_syntactic_tree())
+        tree_dict = {}
+        for sentence_id, one_sentence_data in enumerate(sentences_data):
+            tree_dict[sentence_id] = SyntacticTreeBuilder(one_sentence_data).tree_list
             
-        return trees
+        return tree_dict
         
     def add_syntactic_information(self, frame):
         """

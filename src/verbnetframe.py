@@ -113,6 +113,14 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         # The goal here is to translate a FrameInstance into a VerbnetFrameOccurrence.
         # We do this in a number of steps
 
+        # TODO split the method for two usages
+        if conll_frame_instance is not None:
+            sentence = conll_frame_instance.sentence
+        elif gold_framenet_instance is not None:
+            sentence = gold_framenet_instance.sentence
+        else:
+            raise Exception('Either conll_frame_instance or gold_framenet_instance should exist.')
+
         # First, only keep the text segments with arguments and predicates
         begin = gold_framenet_instance.predicate.begin
         end = gold_framenet_instance.predicate.end
@@ -126,7 +134,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
             if argument.end > end:
                 end = argument.end
 
-        structure = gold_framenet_instance.sentence[begin:end + 1]
+        structure = sentence[begin:end + 1]
 
         # Then, replace the predicate/arguments by their phrase type
         structure = VerbnetFrameOccurrence._reduce_args(gold_framenet_instance, structure, begin)

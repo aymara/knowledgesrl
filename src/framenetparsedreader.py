@@ -42,8 +42,11 @@ class FNParsedReader:
         
     def sentence_trees(self):
         """Yield all sentence trees in order. To be used with enumerate()"""
-        for sentence in self.sentences_data:
-            yield SyntacticTreeBuilder(sentence).build_syntactic_tree()
+        for sentence_id, sentence in enumerate(self.sentences_data):
+            tree_builder = SyntacticTreeBuilder(sentence)
+            for tree in tree_builder.tree_list:
+                yield sentence_id, tree_builder.sentence, tree
+                break
         
 class FNParsedReaderTest(unittest.TestCase):
     def comp(self, original, parsed):
@@ -91,9 +94,10 @@ class FNParsedReaderTest(unittest.TestCase):
 
                 # find the correct sentence
                 if frame.sentence_id != previous_sentence:
-                    for sentence_id, tree in enumerate(parsed_reader.sentence_trees()):
+                    for sentence_id, builder_sentence, tree in parsed_reader.sentence_trees():
                         if sentence_id == frame.sentence_id:
                             sentence = tree.flat()
+                            self.assertEqual(builder_sentence, sentence)
                             previous_sentence = frame.sentence_id
 
                 # test the sentence
