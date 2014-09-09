@@ -46,7 +46,6 @@ class FNParsedReader:
             tree_builder = SyntacticTreeBuilder(sentence)
             for tree in tree_builder.tree_list:
                 yield sentence_id, tree_builder.sentence, tree
-                break
         
 class FNParsedReaderTest(unittest.TestCase):
     def comp(self, original, parsed):
