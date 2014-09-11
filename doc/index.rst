@@ -3,12 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Robert Swier SRL Baseline's documentation!
-=====================================================
+Welcome to knowledgesrl's documentation!
+========================================
 
-Our objective is to reproduce (Swier & Stevenson, 2005) results for recent
-versions of resources and NLP tools (MST Parser, latest VerbNet, FrameNet and
-VN-FN mappings).
+This repository contains:
+
+ * A reproduction of (Swier & Stevenson, 2005) results for recent versions of
+   resources and NLP tools (MST Parser, latest VerbNet, FrameNet and VN-FN
+   mappings).
+ * Some improvements of our own
+ * Experiments on domain-specific knowledge-based semantic role labeling
 
 Documentation:
 
@@ -20,24 +24,6 @@ Documentation:
     debug
     evaluation
     ideas
-
-Code documentation:
-
-.. toctree::
-    :maxdepth: 4
-
-    conllreader
-    framematcher
-    framenetcoreargs
-    framenetreader
-    framestructure
-    headwordextractor
-    probabilitymodel
-    rolematcher
-    verbnetreader
-    verbnetframe
-
-
 
 Indices and tables
 ==================
