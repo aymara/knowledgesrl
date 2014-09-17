@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """Regrouping all shared paths in one module to make maintenance easier"""
+import os
 
-ROOT = "../data/"
+ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/data/"
 
 FRAMENET = ROOT + "fndata-1.5/"
 FRAMENET_FULLTEXT = FRAMENET + "fulltext/"
