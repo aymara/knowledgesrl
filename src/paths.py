@@ -15,7 +15,7 @@ FRAMENET_PARSED = ROOT + "framenet_parsed/"
 FRAMENET_LU_PARSED = ROOT + "lu_parsed/"
 FRAMENET_PARSED_EVALUATION = ROOT + "framenet_parsed/evaluation/"
 
-VERBNET_PATH = ROOT + "verbnet-3.2/"
+VERBNET_PATH = ROOT + "verbnet/"
 
 VNFN_MATCHING = ROOT + "vn-fn-roles.xml"
 
