@@ -6,7 +6,6 @@ import re
 import os.path
 from xml.etree import ElementTree as ET
 import pickle
-from hashlib import sha256
 
 import colorama
 from colorama import Fore
@@ -70,7 +69,7 @@ def xmlcontext_to_frame(xmlns, lexie, contexte):
             else:
                 subcategorization_frame.append({'type': phrase_type, 'role': role})
 
-    return sentence_hash, subcategorization_frame
+    return sentence_text, sentence_text, subcategorization_frame
 
 
 def get_dico_examples(dico, xmlns):
@@ -78,8 +77,8 @@ def get_dico_examples(dico, xmlns):
     for lexie in xml_dico.findall('lexie'):
         frame_name = '{}.{}'.format(lexie.get('id'), lexie.get('no'))
         for contexte in lexie.findall('contextes/{{{0}}}contexte'.format(xmlns)):
-            sentence_hash, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
-            yield (frame_name, lexie.get('id'), sentence_hash, subcategorization_frame)
+            sentence_text, sentence_text, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
+            yield (frame_name, lexie.get('id'), sentence_text, sentence_text, subcategorization_frame)
 
 
 def debug(should_debug, stuff, end='\n'):
@@ -128,9 +127,13 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
     n_correct_roles, n_roles = 0, 0
     n_correct_classes, n_classes = 0, 0
 
-    for lexie, lemma, sentence_hash, gold_syntax in examples:
-        d = sentence_hash in evaluation_sets['train']  # debug
-        test_context = sentence_hash in evaluation_sets['test']  # score
+    for lexie, lemma, sentence_text, sentence_text, gold_syntax in examples:
+        d = sentence_text in [sentence for source, sentence in evaluation_sets['train']]
+        test_context = sentence_text in [sentence for source, sentence in evaluation_sets['test']]
+
+        if d == test_context:
+            print(d, test_context, sentence_text)
+        assert d != test_context
 
         debug(d, [lexie, lemma])
         if test_context:
