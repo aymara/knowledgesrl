@@ -43,6 +43,28 @@ def merged_source(dico, source):
         elif 'BOURQUE' in source:
             return 'BOURQUE'
 
+    elif 'info' in dico:
+        to_group = {
+            # English and French
+            'ALBANY', 'DEBIAN', 'PC', 'CREMAG', 'VIRUS', 'LINUX', 'FIREWALL', 'DEVICE',
+            # French
+            'RESEAU', 'AUTHEN', 'INITIATION', 'REDHAT'}
+
+        if 'WEB' in source or 'INTERNET' in source:
+            return 'WEB'
+        elif 'SECURITY' in source or 'SECURE' in source:
+            return 'SECURITY'
+        elif 'WIN' in source or 'WNT' in source:
+            return 'WIN'
+        elif source.startswith('HOW'):
+            return 'HOW'
+        elif 'HOMENET' in source or 'HOME NETWORK' in source:
+            return 'HOME NETWORK'
+        else:
+            for term in to_group:
+                if term in source:
+                    return term
+
     return source
 
 if __name__ == '__main__':
@@ -52,7 +74,7 @@ if __name__ == '__main__':
 
     source_count = Counter()
     for contexte in dicoxml.findall('lexie/contextes/{{{0}}}contexte'.format(xmlns)):
-        source_count[unified_source(dico_file, contexte.get('source'))] += 1
+        source_count[merged_source(dico_file, contexte.get('source'))] += 1
 
     for source in source_count.most_common():
         print(source)
