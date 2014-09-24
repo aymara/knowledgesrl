@@ -3,7 +3,6 @@
 Separates training and test set based on source distribution
 """
 
-import os.path
 import sys
 from hashlib import sha256
 from xml.etree import ElementTree as ET
@@ -12,18 +11,17 @@ import pickle
 
 import paths
 from domain.dicoxml import deindent_text
-from mergesource import merged_source
+from .mergesource import merged_source
 
 if __name__ == '__main__':
     for dico in paths.DICOS:
-        filename = os.path.join(dico['root'], dico['xml'])
         xmlns = dico['xmlns']
-        dicoxml = ET.ElementTree(file=filename)
+        dicoxml = ET.ElementTree(file=str(dico['xml']))
         sources = defaultdict(list)
         source_count = Counter()
 
         for contexte in dicoxml.findall('lexie/contextes/{{{0}}}contexte'.format(xmlns)):
-            source = merged_source(dico['xml'], contexte.get('source'))
+            source = merged_source(dico['name'], contexte.get('source'))
             sentence_text = deindent_text(contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text)
             sources[source].append(sentence_text)
             source_count[source] += 1

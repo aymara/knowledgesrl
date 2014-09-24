@@ -226,13 +226,13 @@ if __name__ == '__main__':
 
     # DicoInfo, DicoEnviro
     for dico in paths.DICOS:
-        print('--- {}'.format(dico['xml']))
+        print('--- {}'.format(dico['name']))
         evaluation_sets = {
             'train': pickle.load(open(str(dico['root'] / dico['train']), 'rb')),
             'test': pickle.load(open(str(dico['root'] / dico['test']), 'rb'))
         }
 
-        dico_examples = get_dico_examples(str((dico['root'] / dico['xml'])), dico['xmlns'])
-        role_mapping = RoleMapping(str((dico['root'] / dico['mapping'])))
+        dico_examples = get_dico_examples(str(dico['xml']), dico['xmlns'])
+        role_mapping = RoleMapping(str(dico['root'] / dico['mapping']))
 
         analyze_constructs(dico_examples, role_mapping, evaluation_sets)
