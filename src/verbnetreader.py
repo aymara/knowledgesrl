@@ -44,8 +44,8 @@ class VerbnetReader:
         self.unhandled = []
 
         for filename in path.glob('*.xml'):
-            self.filename = filename.as_posix()
-            root = ET.ElementTree(file=(path / self.filename).as_posix())
+            root = ET.ElementTree(file=str(filename.resolve()))
+            self.filename = str(filename)
             self._handle_class(root.getroot(), [], [], [])
 
         if self.normalize:
@@ -491,7 +491,7 @@ class VerbnetReaderTest(unittest.TestCase):
                 [str(x) for x in vnframe.role_restrictions], restrictions_str[verb])
         
         reader.frames_for_verb = {}
-        root = ET.ElementTree(file=(paths.VERBNET_PATH / "separate-23.1.xml").as_posix())
+        root = ET.ElementTree(file=str(paths.VERBNET_PATH / "separate-23.1.xml"))
         reader._handle_class(root.getroot(), [], [], [])
         
         list1 = [

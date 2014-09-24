@@ -228,11 +228,11 @@ if __name__ == '__main__':
     for dico in paths.DICOS:
         print('--- {}'.format(dico['xml']))
         evaluation_sets = {
-            'train': pickle.load(open((dico['root'] / dico['train']).as_posix(), 'rb')),
-            'test': pickle.load(open((dico['root'] / dico['test']).as_posix(), 'rb'))
+            'train': pickle.load(open(str(dico['root'] / dico['train']), 'rb')),
+            'test': pickle.load(open(str(dico['root'] / dico['test']), 'rb'))
         }
 
-        dico_examples = get_dico_examples((dico['root'] / dico['xml']).as_posix(), dico['xmlns'])
-        role_mapping = RoleMapping((dico['root'] / dico['mapping']).as_posix())
+        dico_examples = get_dico_examples(str((dico['root'] / dico['xml'])), dico['xmlns'])
+        role_mapping = RoleMapping(str((dico['root'] / dico['mapping'])))
 
         analyze_constructs(dico_examples, role_mapping, evaluation_sets)

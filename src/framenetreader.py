@@ -90,7 +90,7 @@ class FulltextReader:
         self.pos_file = pos_file
         self.pos_data = None
         if self.pos_file != None:
-            pos_file_content = open(pos_file.as_posix()).read()
+            pos_file_content = open(str(pos_file)).read()
             self.pos_data = pos_file_content.split("\n\n")
 
         # Debug data
@@ -103,7 +103,7 @@ class FulltextReader:
         
         # TODO Remove condition and reorganize caller code instead
         if filename is not None:
-            root = ET.ElementTree(file=filename.as_posix())
+            root = ET.ElementTree(file=str(filename))
             self._init_file_data(root)
             self._parse_xml(root, tree_dict)
     

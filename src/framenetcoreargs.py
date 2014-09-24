@@ -36,7 +36,7 @@ class CoreArgsFinder:
         
         """
         for filename in dirname.glob('*.xml'):
-            root = ET.ElementTree(file=filename.as_posix()).getroot()
+            root = ET.ElementTree(file=str(filename.resolve())).getroot()
 
             self.core_args[root.attrib["name"]] = []
             for arg_data in root.findall(self._xmlns+"FE[@coreType]"):

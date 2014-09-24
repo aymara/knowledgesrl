@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Regrouping all shared paths in one module to make maintenance easier"""
-import os
+"""Contains all shared paths in one module for easy maintenance"""
+
 from pathlib import Path
 
-ROOT = Path(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/data/")
+
+ROOT = Path(__file__).parent.parent / "data"
 
 FRAMENET = ROOT / "fndata-1.5/"
 FRAMENET_FULLTEXT = FRAMENET / "fulltext/"

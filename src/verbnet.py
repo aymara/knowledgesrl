@@ -160,5 +160,5 @@ class Syntax(collections.UserList):
 # If we're loading this module, this is because we want to load VerbNet
 for filename in sorted(paths.VERBNET_PATH.glob('*.xml'),
                        key=lambda v: LooseVersion(v.stem.split('-')[1])):
-    vnclass_xml = ET.ElementTree(file=filename.as_posix()).getroot()
+    vnclass_xml = ET.ElementTree(file=str(filename.resolve())).getroot()
     Class(vnclass_xml)

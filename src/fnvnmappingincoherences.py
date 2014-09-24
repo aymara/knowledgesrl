@@ -30,7 +30,7 @@ class VerbnetRoleReader:
 
         for filename in path.glob('*.xml'):
             class_name = filename.stem.split("-")[0]
-            root = ET.ElementTree(file=(path / filename).as_posix())
+            root = ET.ElementTree(file=str(filename.resolve()))
             self._handle_class(root.getroot(), [], set(), class_name)
     
     def _handle_class(self, xml_class, parent_classes, parent_roles, class_name):
@@ -59,7 +59,7 @@ def load_fn_data():
     fn_verbal_frames = set()
     xmlns = "{http://framenet.icsi.berkeley.edu}"
     for filename in paths.FRAMENET_FRAMES.glob('*.xml'):
-        root = ET.ElementTree(file=filename.as_posix()).getroot()
+        root = ET.ElementTree(file=str(filename.resolve())).getroot()
 
         fn_roles[root.attrib["name"]] = []
         for arg_data in root.findall(xmlns+"FE"):
@@ -118,7 +118,7 @@ classes_names["58"] = classes_names["58.1"]
 
 fn_roles, fn_verbal_frames = load_fn_data()
 
-root = ET.ElementTree(file=paths.VNFN_MATCHING.as_posix())
+root = ET.ElementTree(file=str(paths.VNFN_MATCHING))
 
 bad_vn_roles = {}
 bad_fn_frames = {}
