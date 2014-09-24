@@ -170,7 +170,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
 
         debug(d, ['    ', vn_class.vn_id, vn_syntax])
         debug(d, ['   ',  Fore.GREEN, gold_syntax, Fore.RESET])
-        debug(d, ['   ',  Fore.GREEN, map_gold_frame(vn_class.vn_id, gold_syntax, role_mapping[lexie])])
+        debug(d, ['   ',  Fore.GREEN, map_gold_frame(vn_class.vn_id, gold_syntax, role_mapping[lexie]), Fore.RESET])
 
 
         # TODO better choice strategy?
@@ -216,13 +216,13 @@ if __name__ == '__main__':
 
     print('--- {}'.format(paths.ALL_LUS))
     # Kicktionary
-    kicktionary_evaluation = {
-        'train': pickle.load(open(paths.KICKTIONARY_SETS.format('train', 'en'), 'rb')),
-        'test': pickle.load(open(paths.KICKTIONARY_SETS.format('test', 'en'), 'rb')),
-    }
-    kicktionary_examples = kicktionary_frames('en')
-    role_mapping = RoleMapping(paths.KICKTIONARY_ROLES)
-    analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation)
+    #kicktionary_evaluation = {
+    #    'train': pickle.load(open(paths.KICKTIONARY_SETS.format('train', 'en'), 'rb')),
+    #    'test': pickle.load(open(paths.KICKTIONARY_SETS.format('test', 'en'), 'rb')),
+    #}
+    #kicktionary_examples = kicktionary_frames('en')
+    #role_mapping = RoleMapping(paths.KICKTIONARY_ROLES)
+    #analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation)
 
     # DicoInfo, DicoEnviro
     for dico in paths.DICOS:

@@ -14,7 +14,7 @@ from domain import kicktionary
 
 all_lus = ET.ElementTree(file=paths.ALL_LUS)
 
-% TODO french
+# TODO french
 for lang in ['en']:
     hashes = pickle.load(open('hashes_{}.pickle'.format(lang), 'rb'))
     sentences = defaultdict(list)

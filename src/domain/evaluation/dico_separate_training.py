@@ -12,7 +12,7 @@ import pickle
 
 import paths
 from domain.dicoxml import deindent_text
-from unifysources import unified_source
+from mergesource import merged_source
 
 if __name__ == '__main__':
     for dico in paths.DICOS:
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         source_count = Counter()
 
         for contexte in dicoxml.findall('lexie/contextes/{{{0}}}contexte'.format(xmlns)):
-            source = unified_source(dico['xml'], contexte.get('source'))
+            source = merged_source(dico['xml'], contexte.get('source'))
             sentence_text = deindent_text(contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text)
             sources[source].append(sentence_text)
             source_count[source] += 1
@@ -39,6 +39,11 @@ if __name__ == '__main__':
                 to_extend.append((source, sentence_text))
 
         domain_dir = 'enviro' if 'enviro' in dico['name'] else 'info'
-        pickle.dump(train, open('../data/domain/{}/train_{}.pickle'.format(domain_dir, dico['name']), 'wb'))
-        pickle.dump(test, open('../data/domain/{}/test_{}.pickle'.format(domain_dir, dico['name']), 'wb'))
+        pickle.dump(train, open(
+            '../data/domain/{}/train_{}.pickle'.format(domain_dir, dico['name']),
+            'wb'))
+        pickle.dump(test, open(
+            '../data/domain/{}/test_{}.pickle'.format(domain_dir, dico['name']),
+            'wb'))
+
         print('Dumped {}.'.format(dico['name']))

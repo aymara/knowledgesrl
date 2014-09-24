@@ -24,31 +24,44 @@ _dicoenviro_xmlns = 'http://olst.ling.umontreal.ca/dicoenviro/'
 _dicoinfo_xmlns = 'http://olst.ling.umontreal.ca/dicoinfo/'
 
 DICOS = [
-    # TODO french info
-
     {
         'name': 'enviro_en',
         'root': ROOT / 'domain/enviro',
-        'xml': 'dicoenviro_en.xml',
+        'xml': '/home/quentin/Projets/contextes_olst/dicoenviro_en.xml',
         'xmlns': _dicoenviro_xmlns,
         'mapping':  'enviro-vn-roles.xml',
         'train': 'train_enviro_en.pickle',
         'test': 'test_enviro_en.pickle',
     },
-
-    {
-        'name': 'info_en',
-        'root': ROOT + 'domain/info/',
-        'xml': 'dicoinfo_en.xml',
-        'xmlns': _dicoinfo_xmlns,
-        'mapping': 'info-vn-roles.xml',
-        'train': 'train_info_en.pickle',
-        'test': 'test_info_en.pickle',
-    },
-
-    # TODO french enviro
+    #{
+    #    'name': 'info_en',
+    #    'root': ROOT / 'domain/info/',
+    #    'xml': '/home/quentin/Projets/contextes_olst/dicoinfo_en.xml',
+    #    'xmlns': _dicoinfo_xmlns,
+    #    'mapping': 'info-vn-roles.xml',
+    #    'train': 'train_info_en.pickle',
+    #    'test': 'test_info_en.pickle',
+    #},
+    #{
+    #    'name': 'enviro_fr',
+    #    'root': ROOT / 'domain/enviro',
+    #    'xml': '/home/quentin/Projets/contextes_olst/dicoenviro_fr.xml',
+    #    'xmlns': _dicoenviro_xmlns,
+    #    'mapping':  'enviro-vn-roles.xml',
+    #    'train': 'train_enviro_fr.pickle',
+    #    'test': 'test_enviro_fr.pickle',
+    #},
+    #{
+    #    'name': 'info_fr',
+    #    'root': ROOT / 'domain/info/',
+    #    'xml': '/home/quentin/Projets/contextes_olst/dicoinfo_en.xml',
+    #    'xmlns': _dicoinfo_xmlns,
+    #    'mapping': 'info-vn-roles.xml',
+    #    'train': 'train_info_fr.pickle',
+    #    'test': 'test_info_fr.pickle',
+    #},
 ]
 
-ALL_LUS = ROOT / 'domain/closed/All_LUs.xml'
+ALL_LUS = ROOT / 'domain/kicktionary/All_LUs.xml'
 KICKTIONARY_SETS = ROOT / 'domain/kicktionary/{}_kicktionary_{}.pickle'
 KICKTIONARY_ROLES = ROOT / 'domain/kicktionary/kicktionary-vn-roles.xml'
