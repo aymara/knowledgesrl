@@ -90,7 +90,7 @@ class FulltextReader:
         self.pos_file = pos_file
         self.pos_data = None
         if self.pos_file != None:
-            pos_file_content = open(pos_file).read()
+            pos_file_content = open(pos_file.as_posix()).read()
             self.pos_data = pos_file_content.split("\n\n")
 
         # Debug data
@@ -103,7 +103,7 @@ class FulltextReader:
         
         # TODO Remove condition and reorganize caller code instead
         if filename is not None:
-            root = ET.ElementTree(file=filename)
+            root = ET.ElementTree(file=filename.as_posix())
             self._init_file_data(root)
             self._parse_xml(root, tree_dict)
     
@@ -593,7 +593,7 @@ class FulltextReaderTest(unittest.TestCase):
         
         for filename in self.expected_values:
             print("Parsing " + filename)
-            reader = FulltextReader(options.fulltext_corpus + filename)
+            reader = FulltextReader(options.fulltext_corpus / filename)
 
             # Nothing is empty and begins/ends are coherents
             arg_num = 0
@@ -633,13 +633,13 @@ class FulltextReaderTest(unittest.TestCase):
                 len(reader.frames), arg_num))
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""
-        path = options.fulltext_corpus + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = options.fulltext_corpus / "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         self.assertEqual(reader.frames[0], self.tested_frames[0])
         self.assertEqual(reader.frames[1], self.tested_frames[1])
 
     def test_conll_output(self):
-        path = options.fulltext_corpus + "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = options.fulltext_corpus / "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         conll_sentence = next(reader.to_conll_format()).splitlines()
         self.assertEqual(conll_sentence[2], "3\ttony\ttony\tNNP\tNNP\t_\t0\t \t")

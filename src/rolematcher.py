@@ -71,7 +71,7 @@ class VnFnRoleMatcher():
         self._build_mapping(path)
     
     def _build_mapping(self, path):
-        root = ET.ElementTree(file=path)
+        root = ET.ElementTree(file=path.as_posix())
 
         for mapping in root.getroot():
             vn_class = mapping.attrib["class"]

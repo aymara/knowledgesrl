@@ -41,8 +41,8 @@ if __name__ == "__main__":
         annotation_list = [None]
         parsed_conll_list = [options.conll_input]
     else:
-        annotation_list = FNAllReader.fulltext_annotations()
-        parsed_conll_list = FNAllReader.fulltext_parses()
+        annotation_list = options.fulltext_annotations
+        parsed_conll_list = options.fulltext_parses
 
     print("Loading FrameNet annotations and frame matching...")
     for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
@@ -87,10 +87,6 @@ if __name__ == "__main__":
                 annotated_frames.append(gold_frame)
                 vn_frames.append(VerbnetFrameOccurrence.build_from_frame(gold_frame, conll_frame_instance=frame_instance))
 
-
-        # Extract arguments headwords
-        hw_extractor.compute_all_headwords(annotated_frames, vn_frames)
-
         #
         # Frame matching
         #
@@ -133,12 +129,12 @@ if __name__ == "__main__":
             frame_occurrence.best_classes = matcher.best_classes
 
             # Update semantic restrictions data
-            for word, restr in matcher.get_matched_restrictions().items():
-                if restr.logical_rel == "AND":
-                    for subrestr in restr.children:
-                        data_restr[subrestr].update([word])
-                else:
-                    data_restr[restr].update([word])
+            #for word, restr in matcher.get_matched_restrictions().items():
+            #    if restr.logical_rel == "AND":
+            #        for subrestr in restr.children:
+            #            data_restr[subrestr].update([word])
+            #    else:
+            #        data_restr[restr].update([word])
 
             # Update probability model
             vnclass = model.add_data_vnclass(matcher)

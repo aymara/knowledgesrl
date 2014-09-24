@@ -3,7 +3,6 @@
 import copy
 import collections
 import re
-import os.path
 from xml.etree import ElementTree as ET
 import pickle
 
@@ -19,7 +18,6 @@ from .kicktionary import kicktionary_frames
 def xmlcontext_to_frame(xmlns, lexie, contexte):
     indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
     sentence_text = deindent_text(indented_sentence_text)
-    sentence_hash = sha256(sentence_text.encode('utf-8')).hexdigest()
 
     subcategorization_frame = verbnet.Syntax()
     role = None
@@ -69,7 +67,7 @@ def xmlcontext_to_frame(xmlns, lexie, contexte):
             else:
                 subcategorization_frame.append({'type': phrase_type, 'role': role})
 
-    return sentence_text, sentence_text, subcategorization_frame
+    return sentence_text, subcategorization_frame
 
 
 def get_dico_examples(dico, xmlns):
@@ -77,7 +75,7 @@ def get_dico_examples(dico, xmlns):
     for lexie in xml_dico.findall('lexie'):
         frame_name = '{}.{}'.format(lexie.get('id'), lexie.get('no'))
         for contexte in lexie.findall('contextes/{{{0}}}contexte'.format(xmlns)):
-            sentence_text, sentence_text, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
+            sentence_text, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
             yield (frame_name, lexie.get('id'), sentence_text, sentence_text, subcategorization_frame)
 
 
@@ -230,11 +228,11 @@ if __name__ == '__main__':
     for dico in paths.DICOS:
         print('--- {}'.format(dico['xml']))
         evaluation_sets = {
-            'train': pickle.load(open(os.path.join(dico['root'], dico['train']), 'rb')),
-            'test': pickle.load(open(os.path.join(dico['root'], dico['test']), 'rb'))
+            'train': pickle.load(open((dico['root'] / dico['train']).as_posix(), 'rb')),
+            'test': pickle.load(open((dico['root'] / dico['test']).as_posix(), 'rb'))
         }
 
-        dico_examples = get_dico_examples(os.path.join(dico['root'], dico['xml']), dico['xmlns'])
-        role_mapping = RoleMapping(os.path.join(dico['root'], dico['mapping']))
+        dico_examples = get_dico_examples((dico['root'] / dico['xml']).as_posix(), dico['xmlns'])
+        role_mapping = RoleMapping((dico['root'] / dico['mapping']).as_posix())
 
         analyze_constructs(dico_examples, role_mapping, evaluation_sets)

@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import framenetreader
-import os
+from pathlib import Path
 
 
-semafor_file = "../data/semafor/all_evaluation.out"
-semafor_corpus = "../data/fndata-1.5/fulltext/evaluation/"
-semafor_pos = "../data/semafor/all_evaluation_pos"
+semafor_file = Path("../data/semafor/all_evaluation.out")
+semafor_corpus = Path("../data/fndata-1.5/fulltext/evaluation/")
+semafor_pos = Path("../data/semafor/all_evaluation_pos")
 #semafor_file = "../data/semafor/semafor_testset.out"
 #semafor_corpus = "../data/semafor/testset/"
 #semafor_pos = "../data/semafor/semafor_testset_pos"
@@ -19,11 +19,9 @@ semafor_frames = reader.frames
 semafor_roles = [[y.role for y in x.args] for x in semafor_frames]
 
 annotated_frames = []
-files = os.listdir(semafor_corpus)
-for filename in sorted(files):
-    if not filename[-4:] == ".xml": continue
+for filename in sorted(semafor_corpus.glob('*.xml')):
     reader = framenetreader.FulltextReader(
-        semafor_corpus + filename,
+        filename,
         core_args_only = True,
         keep_unannotated = True,
         keep_nonverbal = False)

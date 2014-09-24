@@ -5,7 +5,6 @@
 
 import unittest
 import xml.etree.ElementTree as ET
-import os
 import sys
 
 from errorslog import errors
@@ -26,7 +25,7 @@ class VerbnetReader:
         """Read VerbNet and fill verbs with its content.
         
         :param path: Path to VerbNet.
-        :type path: str.
+        :type path: pathlib.Path.
         :param normalize: Either stick to VerbNet content closely or make it
             easier for the frame matching to proceed.
         :type normalize: boolean.
@@ -44,11 +43,9 @@ class VerbnetReader:
         self.filename = ""
         self.unhandled = []
 
-        for filename in os.listdir(path):
-            if not filename[-4:] == ".xml": continue
-
-            self.filename = filename
-            root = ET.ElementTree(file=path+self.filename)
+        for filename in path.glob('*.xml'):
+            self.filename = filename.as_posix()
+            root = ET.ElementTree(file=(path / self.filename).as_posix())
             self._handle_class(root.getroot(), [], [], [])
 
         if self.normalize:
@@ -453,7 +450,7 @@ class VerbnetReaderTest(unittest.TestCase):
     
     def test_global(self):
         reader = VerbnetReader(paths.VERBNET_PATH)
-        self.assertEqual(len(reader.frames_for_verb), 4154)
+        self.assertEqual(len(reader.frames_for_verb), 4402)
 
         test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
         test_frames = [
@@ -494,7 +491,7 @@ class VerbnetReaderTest(unittest.TestCase):
                 [str(x) for x in vnframe.role_restrictions], restrictions_str[verb])
         
         reader.frames_for_verb = {}
-        root = ET.ElementTree(file=paths.VERBNET_PATH + "separate-23.1.xml")
+        root = ET.ElementTree(file=(paths.VERBNET_PATH / "separate-23.1.xml").as_posix())
         reader._handle_class(root.getroot(), [], [], [])
         
         list1 = [

@@ -35,19 +35,6 @@ class FNAllReader:
         self.stats = {
             "files":0
         }
-
-    @staticmethod
-    def fulltext_annotations():
-        xml_filelist = os.listdir(options.fulltext_corpus)
-        xml_filelist = sorted([os.path.join(options.fulltext_corpus, x) for x in xml_filelist if x.endswith(".xml")])
-        return xml_filelist
-
-    @staticmethod
-    def fulltext_parses():
-        conll_filelist = os.listdir(options.framenet_parsed)
-        conll_filelist = sorted([x for x in conll_filelist if x.endswith(".conll")])
-        conll_filelist = [os.path.join(options.framenet_parsed, x) for x in conll_filelist]
-        return conll_filelist
     
     def iter_frames(self, annotation_file, parse_file):
         """Read the corpus and yield every valid frame"""
@@ -72,7 +59,7 @@ class FNAllReader:
         :type filename: str.
         :returns: list of trees
         """
-        with open(parse_filename) as content:
+        with open(parse_filename.as_posix()) as content:
             sentences_data = content.read().split("\n\n")
             if sentences_data[-1] == "": del sentences_data[-1]
 
@@ -134,7 +121,7 @@ class FNAllReaderTest(unittest.TestCase):
         extractor = FNAllReader()
 
         frames = []
-        for annotation_file, parse_file in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+        for annotation_file, parse_file in zip(options.fulltext_annotations, options.fulltext_parses):
             frames.extend(extractor.iter_frames(annotation_file, parse_file))
         frame = frames[28]
         self.assertTrue(frame.sentence == ("a few months ago "

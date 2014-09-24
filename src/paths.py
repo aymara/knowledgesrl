@@ -3,21 +3,22 @@
 
 """Regrouping all shared paths in one module to make maintenance easier"""
 import os
+from pathlib import Path
 
-ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/data/"
+ROOT = Path(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/data/")
 
-FRAMENET = ROOT + "fndata-1.5/"
-FRAMENET_FULLTEXT = FRAMENET + "fulltext/"
-FRAMENET_LU = FRAMENET + "lu/"
-FRAMENET_FULLTEXT_EVALUATION = FRAMENET + "fulltext/evaluation/"
-FRAMENET_FRAMES = FRAMENET + "frame/"
-FRAMENET_PARSED = ROOT + "framenet_parsed/"
-FRAMENET_LU_PARSED = ROOT + "lu_parsed/"
-FRAMENET_PARSED_EVALUATION = ROOT + "framenet_parsed/evaluation/"
+FRAMENET = ROOT / "fndata-1.5/"
+FRAMENET_FULLTEXT = FRAMENET / "fulltext/"
+FRAMENET_LU = FRAMENET / "lu/"
+FRAMENET_FULLTEXT_EVALUATION = FRAMENET / "fulltext/evaluation/"
+FRAMENET_FRAMES = FRAMENET / "frame/"
+FRAMENET_PARSED = ROOT / "framenet_parsed/"
+FRAMENET_LU_PARSED = ROOT / "lu_parsed/"
+FRAMENET_PARSED_EVALUATION = ROOT / "framenet_parsed/evaluation/"
 
-VERBNET_PATH = ROOT + "verbnet/"
+VERBNET_PATH = ROOT / "verbnet/"
 
-VNFN_MATCHING = ROOT + "vn-fn-roles.xml"
+VNFN_MATCHING = ROOT / "vn-fn-roles.xml"
 
 _dicoenviro_xmlns = 'http://olst.ling.umontreal.ca/dicoenviro/'
 _dicoinfo_xmlns = 'http://olst.ling.umontreal.ca/dicoinfo/'
@@ -27,7 +28,7 @@ DICOS = [
 
     {
         'name': 'enviro_en',
-        'root': ROOT + 'domain/enviro',
+        'root': ROOT / 'domain/enviro',
         'xml': 'dicoenviro_en.xml',
         'xmlns': _dicoenviro_xmlns,
         'mapping':  'enviro-vn-roles.xml',
@@ -48,6 +49,6 @@ DICOS = [
     # TODO french enviro
 ]
 
-ALL_LUS = ROOT + 'domain/All_LUs.xml'
-KICKTIONARY_SETS = ROOT + 'domain/kicktionary/{}_kicktionary_{}.pickle'
-KICKTIONARY_ROLES = ROOT + 'domain/kicktionary/kicktionary-vn-roles.xml'
+ALL_LUS = ROOT / 'domain/closed/All_LUs.xml'
+KICKTIONARY_SETS = ROOT / 'domain/kicktionary/{}_kicktionary_{}.pickle'
+KICKTIONARY_ROLES = ROOT / 'domain/kicktionary/kicktionary-vn-roles.xml'

@@ -28,6 +28,9 @@ semrestr = False
 fulltext_corpus = paths.FRAMENET_FULLTEXT
 framenet_parsed = paths.FRAMENET_PARSED
 
+fulltext_annotations = sorted(fulltext_corpus.glob('*.xml'))
+fulltext_parses = sorted(framenet_parsed.glob('*.conll'))
+
 options = getopt.getopt(sys.argv[1:], "d:", [
     "baseline", "fmatching-algo=", "add-non-core-args", "help", "model=",
     "bootstrap", "no-gold-args", "heuristic-rules", "dump", "conll_input=",

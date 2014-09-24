@@ -35,7 +35,7 @@ class RemoveDoubleRoleFillers(unittest.TestCase):
             </contexte>
             """)
 
-        hash, frame = xmlcontext_to_frame("http://olst.ling.umontreal.ca/dicoenviro/", 'compare', context)
+        sentence_text, frame = xmlcontext_to_frame("http://olst.ling.umontreal.ca/dicoenviro/", 'compare', context)
         self.assertEqual(frame, [{'type': 'NP', 'role': 'Agent'}, {'type': 'V'}, {'type': 'NP', 'role': 'Theme'}])
 
 class RemoveRolesBeforeVerb(unittest.TestCase):

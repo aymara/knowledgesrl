@@ -254,7 +254,7 @@ class ArgGuesserTest(unittest.TestCase):
 
     def test_global(self):
         frames = []
-        for filename in FNAllReader.fulltext_parses():
+        for filename in options.fulltext_parses:
             frames.extend([x for x in self.arg_guesser.frame_instances_from_file(filename)])
 
         num_args = 0

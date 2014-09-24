@@ -26,7 +26,7 @@ class HeadWordExtractor(FNParsedReader):
     def __init__(self):
         FNParsedReader.__init__(self)
     
-    def headword(self, arg_text):
+    def headword(self, arg_text, tree):
         """Returns the headword of an argument, assuming the proper sentence have
         already been selected.
         
@@ -35,10 +35,7 @@ class HeadWordExtractor(FNParsedReader):
         :returns: str -- The headword
         
         """
-        if self.tree == None:
-            return None
-        else:
-            return self.tree.closest_match_as_node(arg_text).word
+        return tree.closest_match_as_node(arg_text).word
         
     def best_node(self, arg_text):
         """Looks for the closest match of an argument in the syntactic tree.
@@ -83,22 +80,8 @@ class HeadWordExtractor(FNParsedReader):
             wordclass = hypernyms[0].name()
 
         return wordclass
-    
-    def compute_all_headwords(self, frames, vn_frames):
-        """ Fills frame data with the headwords of the arguments.
-        
-        :param frames: The FrameNet frames as returned by a FrameNetReader.
-        :type frames: FrameInstance List.
-        :param vn_frames: The frames that we have to complete with headwords.
-        :type vn_frames: VerbnetFrameOccurrence List.
-        """
-        
-        for frame, vn_frame in zip(frames, vn_frames):
-            self.tree = frame.tree
-            
-            vn_frame.headwords = [
-                self.headword(x.text) for x in frame.args if x.instanciated]
   
+
 class HeadWordExtractorTest(unittest.TestCase):
     bad_files = [
             "ANC__110CYL070.xml", "C-4__C-4Text.xml",
@@ -119,14 +102,14 @@ class HeadWordExtractorTest(unittest.TestCase):
     def test_classes(self):
         filename = "ANC__110CYL067"
         extractor = HeadWordExtractor()
-        extractor.load_file(options.framenet_parsed + filename+".conll")
+        extractor.load_file(options.framenet_parsed / (filename + ".conll"))
 
-        reader = framenetreader.FulltextReader(FNAllReader.fulltext_annotations(), False)
+        reader = framenetreader.FulltextReader(options.fulltext_annotations[0], False)
 
         for frame in reader.frames:
-            extractor.select_sentence(frame.sentence_id)
+            sentence_id, sentence_text, tree = list(extractor.sentence_trees())[frame.sentence_id]
             for arg in frame.args:
-                extractor.headword(arg.text)
+                extractor.headword(arg.text, tree)
 
         self.assertEqual(extractor.get_class("soda"), "physical_entity.n.01")
         #self.assertEqual(extractor.get_class("i"), "pronoun")
@@ -144,9 +127,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         extractor = HeadWordExtractor(options.framenet_parsed)
 
         sample = []
-        for filename in sorted(os.listdir(options.fulltext_corpus)):
-            if not filename[-4:] == ".xml": continue
-
+        for filename in options.fulltext_annotations:
             if filename in self.bad_files: continue
             
             extractor.load_file(options.framenet_parsed + filename)
@@ -158,7 +139,7 @@ class HeadWordExtractorTest(unittest.TestCase):
                 if (filename, frame.sentence_id) in self.bad_sentences: continue
    
                 if frame.sentence_id != previous_sentence:
-                    extractor.select_sentence(frame.sentence_id)
+                    sentence_id, sentence_text, tree = list(extractor.sentence_trees())[frame.sentence_id]
                 
                 for arg in frame.args:
                     if not arg.instanciated: continue
@@ -173,16 +154,16 @@ class HeadWordExtractorTest(unittest.TestCase):
     def test_1(self):
         filename = "ANC__110CYL067"
         extractor = HeadWordExtractor()
-        extractor.load_file(options.framenet_parsed + filename+".conll")
+        extractor.load_file(options.framenet_parsed / (filename + ".conll"))
 
-        reader = framenetreader.FulltextReader(options.fulltext_corpus+filename+".xml", False)
+        reader = framenetreader.FulltextReader(options.fulltext_corpus / (filename + ".xml"), False)
 
         frame = reader.frames[1]
-        extractor.select_sentence(frame.sentence_id)
-        self.assertTrue(extractor.headword(frame.args[0].text) == "you")
+        sentence_id, sentence_text, tree = list(extractor.sentence_trees())[frame.sentence_id]
+        self.assertTrue(extractor.headword(frame.args[0].text, tree) == "you")
               
         frame = reader.frames[0]
-        self.assertTrue(extractor.headword(frame.args[0].text) == "contribution")
+        self.assertTrue(extractor.headword(frame.args[0].text, tree) == "contribution")
 
 if __name__ == "__main__":
     # The -s option makes the script display some examples of results

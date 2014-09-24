@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from xml.etree import ElementTree as ET
-import glob
 import collections
 from distutils.version import LooseVersion
 import paths
@@ -159,7 +158,7 @@ class Syntax(collections.UserList):
         return str(self)
 
 # If we're loading this module, this is because we want to load VerbNet
-for filename in sorted(glob.glob(paths.VERBNET_PATH + '/*.xml'),
-                       key=lambda v: LooseVersion(v.split('-')[1][:-4])):
-    vnclass_xml = ET.ElementTree(file=filename).getroot()
+for filename in sorted(paths.VERBNET_PATH.glob('*.xml'),
+                       key=lambda v: LooseVersion(v.stem.split('-')[1])):
+    vnclass_xml = ET.ElementTree(file=filename.as_posix()).getroot()
     Class(vnclass_xml)

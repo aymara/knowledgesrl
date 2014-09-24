@@ -35,7 +35,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     frames = defaultdict(lambda: defaultdict(list))
     for frame in frame_instances:
         # /path/to/stuff.conll -> stuff
-        frames[os.path.basename(frame.filename)[:-6]][frame.sentence_id].append(frame)
+        frames[frame.filename.stem][frame.sentence_id].append(frame)
 
     fn_reader = FNAllReader(
             core_args_only = True, keep_unannotated = True)
@@ -61,7 +61,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
             
         if frame.sentence_id != previous_id:
             # /path/to/stuff.xml -> stuff
-            sentence_frames = frames[os.path.basename(frame.filename)[:-4]][frame.sentence_id]
+            sentence_frames = frames[frame.filename.stem][frame.sentence_id]
             for extracted_frame in sentence_frames:
                 correct_num_tags(extracted_frame, frame.sentence)
             previous_id = frame.sentence_id

@@ -33,9 +33,7 @@ class FNParsedReader:
         :type filename: str.
         """
         
-        self.filename = filename
-
-        with open(filename) as content:
+        with open(filename.as_posix()) as content:
             self.sentences_data = content.read().split("\n\n")
             if self.sentences_data[len(self.sentences_data) - 1] == "":
                 del self.sentences_data[len(self.sentences_data) - 1]
@@ -74,11 +72,9 @@ class FNParsedReaderTest(unittest.TestCase):
         print("Checking FrameNetParsedReader")
         parsed_reader = FNParsedReader()
 
-        for annotation, parse in zip(FNAllReader.fulltext_annotations(), FNAllReader.fulltext_parses()):
+        for annotation, parse in zip(options.fulltext_annotations, options.fulltext_parses):
             # Skip unwanted files
-            if not annotation[-4:] == ".xml":
-                continue
-            if any([bad_file in annotation for bad_file in bad_files]):
+            if any([annotation.match('*{}*'.format(bad_file)) for bad_file in bad_files]):
                 continue
 
             parsed_reader.load_file(parse)
@@ -86,8 +82,8 @@ class FNParsedReaderTest(unittest.TestCase):
             previous_sentence = 0
 
             for frame in reader.frames:
-                # don't test bad files or bad sentences in files
-                if any(bad_annotation in annotation and bad_sentence_id == frame.sentence_id
+                # don't test bad sentences in files
+                if any(annotation.match(bad_annotation) and bad_sentence_id == frame.sentence_id
                         for bad_annotation, bad_sentence_id in bad_sentences):
                     continue
 

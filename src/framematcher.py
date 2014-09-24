@@ -86,14 +86,13 @@ class FrameMatcher():
         return score
     
     def get_matched_restrictions(self):
-        """Returns the list of restrictions for which we know a given word
-        was a match. Only headwords of arguments for which we attributed exactly
+        """Returns the list of restrictions for which we know a given word was
+        a match. Only headwords of arguments for which we attributed exactly
         one possible role are taken into account. The restriction associated to
-        them is the OR the restrictions associated to this slot in every possible
-        frame.
+        them is the OR of restrictions associated to this slot in every
+        possible frame.
         
         :returns: VNRestriction Dict -- a mapping between head words and the restriction they match 
-        
         """
         result = {}
         

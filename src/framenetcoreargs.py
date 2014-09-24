@@ -35,9 +35,8 @@ class CoreArgsFinder:
         :type dirname: str.
         
         """
-        for filename in os.listdir(dirname):
-            if not filename[-4:] == ".xml": continue
-            root = ET.ElementTree(file=dirname+filename).getroot()
+        for filename in dirname.glob('*.xml'):
+            root = ET.ElementTree(file=filename.as_posix()).getroot()
 
             self.core_args[root.attrib["name"]] = []
             for arg_data in root.findall(self._xmlns+"FE[@coreType]"):
