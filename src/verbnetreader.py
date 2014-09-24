@@ -109,6 +109,10 @@ class VerbnetReader:
         self.roles[vnclass] = role_list
 
         for xml_frame in xml_class.find("FRAMES"):
+            # work around a bug in VerbNet 3.2
+            if xml_frame.find('DESCRIPTION').get('primary') == 'Passive':
+                continue
+
             frames += self._build_frame(xml_frame, vnclass, role_list, restrictions)
         
         for xml_verb in xml_class.find("MEMBERS"):
