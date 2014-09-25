@@ -4,14 +4,12 @@ Thank you for checking out knowledgrsrl, our knowledge-based semantic role
 labeling implementation! Feel free to report GitHub issues for any question or
 remarks you might have.
 
-## Read the docs
-
-You can read our documentation on [Read the
-docs](http://knowledgesrl.readthedocs.org/en/latest/).
+## [Read the docs!](http://knowledgesrl.readthedocs.org/en/latest/)
 
 ## License : AGPLv3
 
-Copyright (C) 2013-2014 CEA LIST (Guilhem Pujol & Quentin Pradet)
+Copyright (C) 2013-2014 CEA LIST (Guilhem Pujol, Quentin Pradet and
+contributors)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
