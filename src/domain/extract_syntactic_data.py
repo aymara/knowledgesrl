@@ -4,6 +4,7 @@ import copy
 import collections
 import re
 from xml.etree import ElementTree as ET
+import json
 import pickle
 
 import colorama
@@ -76,7 +77,7 @@ def get_dico_examples(dico, xmlns):
         frame_name = '{}.{}'.format(lexie.get('id'), lexie.get('no'))
         for contexte in lexie.findall('contextes/{{{0}}}contexte'.format(xmlns)):
             sentence_text, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
-            yield (frame_name, lexie.get('id'), sentence_text, sentence_text, subcategorization_frame)
+            yield (frame_name, lexie.get('id'), sentence_text, subcategorization_frame)
 
 
 def debug(should_debug, stuff, end='\n'):
@@ -125,7 +126,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
     n_correct_roles, n_roles = 0, 0
     n_correct_classes, n_classes = 0, 0
 
-    for lexie, lemma, sentence_text, sentence_text, gold_syntax in examples:
+    for lexie, lemma, sentence_text, gold_syntax in examples:
         d = sentence_text in [sentence for source, sentence in evaluation_sets['train']]
         test_context = sentence_text in [sentence for source, sentence in evaluation_sets['test']]
 
@@ -214,25 +215,28 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
 if __name__ == '__main__':
     colorama.init()
 
-    print('--- {}'.format(paths.ALL_LUS))
-    # Kicktionary
-    #kicktionary_evaluation = {
-    #    'train': pickle.load(open(paths.KICKTIONARY_SETS.format('train', 'en'), 'rb')),
-    #    'test': pickle.load(open(paths.KICKTIONARY_SETS.format('test', 'en'), 'rb')),
-    #}
-    #kicktionary_examples = kicktionary_frames('en')
-    #role_mapping = RoleMapping(paths.KICKTIONARY_ROLES)
-    #analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation)
+    for lang in ['en']:
+        # DicoInfo, DicoEnviro
+        for domain in ['info', 'enviro']:
+            dico = {'domain': domain, 'lang': lang}
+            print('--- dico{domain}_{lang}'.format(**dico))
+            evaluation_sets = {
+                'train': json.load(open(str(paths.ROOT / paths.DICO_TRAIN.format(**dico)))),
+                'test': json.load(open(str(paths.ROOT / paths.DICO_TEST.format(**dico))))
+            }
 
-    # DicoInfo, DicoEnviro
-    for dico in paths.DICOS:
-        print('--- {}'.format(dico['name']))
-        evaluation_sets = {
-            'train': pickle.load(open(str(dico['root'] / dico['train']), 'rb')),
-            'test': pickle.load(open(str(dico['root'] / dico['test']), 'rb'))
+            dico_examples = get_dico_examples(str(paths.ROOT / paths.DICO_XML.format(**dico)), paths.DICO_XMLNS[domain])
+            role_mapping = RoleMapping(str(paths.ROOT / paths.DICO_MAPPING.format(**dico)))
+
+            analyze_constructs(dico_examples, role_mapping, evaluation_sets)
+
+        print('--- kicktionary_{}'.format(lang))
+        # Kicktionary
+        kicktionary_evaluation = {
+            'train': json.load(open(str(paths.ROOT / paths.KICKTIONARY_SETS.format('train', lang)))),
+            'test': json.load(open(str(paths.ROOT / paths.KICKTIONARY_SETS.format('test', lang)))),
         }
+        kicktionary_examples = kicktionary_frames('en')
+        role_mapping = RoleMapping(paths.KICKTIONARY_ROLES)
+        analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation)
 
-        dico_examples = get_dico_examples(str(dico['xml']), dico['xmlns'])
-        role_mapping = RoleMapping(str(dico['root'] / dico['mapping']))
-
-        analyze_constructs(dico_examples, role_mapping, evaluation_sets)

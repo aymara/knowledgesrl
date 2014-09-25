@@ -6,7 +6,7 @@ from collections import UserDict
 class RoleMapping(UserDict):
     def __init__(self, filename):
         super().__init__()
-        tree = ET.ElementTree(file=filename)
+        tree = ET.ElementTree(file=str(filename))
         for lexie in tree.findall('lexie'):
             self.data[lexie.get('name')] = {lexie.get('vn'): {}}
             for role in lexie.findall('role'):

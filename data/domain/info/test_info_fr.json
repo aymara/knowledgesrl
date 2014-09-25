@@ -1,0 +1,1202 @@
+[
+    [
+        "LINUX",
+        "Le login consiste essentiellement à taper son nom d'utilisateur, valider, et répondre éventuellement à la demande de mot de passe de la part du système."
+    ],
+    [
+        "LINUX",
+        "Vérifiez donc bien ce que vous avez tapé avant de valider une commande rm (surtout si vous êtes sous le compte root)."
+    ],
+    [
+        "LINUX",
+        "D'autre part, il est souvent plus efficace de taper une simple commande dans un shell que de rechercher un outil graphique et de parcourir les divers menus, puis de choisir les options de la commande désirée avant de valider."
+    ],
+    [
+        "LINUX",
+        "Sachez toutefois que les options à valider dans la configuration du noyau se trouvent dans le menu \"Multimedia devices\"."
+    ],
+    [
+        "LINUX",
+        "C'est la réponse recommandée, validez donc pour passer à la question suivante."
+    ],
+    [
+        "LINUX",
+        "En général, le lancement du système consiste à exécuter le programme enregistré dans le premier secteur de la partition de ce système."
+    ],
+    [
+        "LINUX",
+        "Elles sont enregistrées dans des fichiers de configuration indiquant le moment où elles doivent être déclenchées, et quelle action elles doivent réaliser."
+    ],
+    [
+        "LINUX",
+        "Les options spécifiques à chaque ligne sont enregistrées quant à elles dans les fichiers options."
+    ],
+    [
+        "LINUX",
+        "Vous pouvez spécifier un autre nom si vous le désirer, afin d'enregistrer ces paramètres dans un autre fichier."
+    ],
+    [
+        "LINUX",
+        "Il faut attendre que ce processus se termine pour entrer de nouvelles commandes."
+    ],
+    [
+        "LINUX",
+        "Lorsque la machine démarre, LILO affiche son invite de démarrage"
+    ],
+    [
+        "LINUX",
+        "Allez ensuite dans le répertoire c : \\cdl puis lancer startcdl. Linux démarre alors."
+    ],
+    [
+        "LINUX",
+        "Le noyau de Linux qui vous a été fourni avec votre distribution est un noyau qui a été spécialement conçu pour démarrer correctement sur le plus grand nombre de machines possible."
+    ],
+    [
+        "LINUX",
+        "Lorsque vous aurez installé votre système de base, vous devrez faire en sorte qu'il puisse démarrer."
+    ],
+    [
+        "LINUX",
+        "Avec ce jeu d'options, un PC standard est supposé démarrer sans poser de problème."
+    ],
+    [
+        "LINUX",
+        "Lorsqu'ils démarrent, les serveurs s'enregistrent dans le système en précisant le port sur lequel ils écouteront les requêtes."
+    ],
+    [
+        "LINUX",
+        "Il ne faut pas répondre par 'M' si votre système a besoin d'un disque SCSI pour démarrer."
+    ],
+    [
+        "LINUX",
+        "Dans ce cas, vous devriez lire tout de suite la section suivante, et ne pas essayer de démarrer Linux immédiatement."
+    ],
+    [
+        "LINUX",
+        "Si toutefois cela vous arrive, vous n'aurez plus qu'une seule solution : démarrer l'ordinateur à partir d'une disquette système, et faire le ménage dans le fichier de mots de passe."
+    ],
+    [
+        "LINUX",
+        "Il attend ici que vous indiquiez le nom du système que vous désirez démarrer."
+    ],
+    [
+        "LINUX",
+        "Xf86config vous demande alors le nombre de couleurs à utiliser par défaut lorsque vous démarrez en mode graphique."
+    ],
+    [
+        "LINUX",
+        "Une fois ces modifications réalisées, vous devrez pouvoir démarrer XWindow simplement avec la commande startx."
+    ],
+    [
+        "LINUX",
+        "Linux est donc un moyen gratuit de créer un réseau local, de se connecter à Internet et de mettre en place un serveur."
+    ],
+    [
+        "LINUX",
+        "La commande u permet d'annuler la dernière opération effectuée, et la commande U permet de la ré-exécuter."
+    ],
+    [
+        "LINUX",
+        "Les principales options sont -l, qui permet d'afficher des informations étendues (notamment les propriétaires, les groupes, les droits, la taille et éventuellement les liens), et -a, qui permet d'afficher tous les fichiers, y compris les fichiers cachés (ceux dont le nom commence par un point)."
+    ],
+    [
+        "LINUX",
+        "Dans ce cas, soit il faut changer de noyau, soit il faut utiliser des pilotes additionnels, qui peuvent être chargés à la demande."
+    ],
+    [
+        "LINUX",
+        "Par défaut, elle convertit les codes reçus en codes Unicode spéciaux, qui représentent les codes utilisés par la police de caractères chargée."
+    ],
+    [
+        "LINUX",
+        "Cependant , ce n'est pas toujours le cas : certains signaux sont envoyés uniquement dans le cadre de la communication entre les processus, et certains autres ne peuvent même pas être captés par le processus et sont traités directement par le système."
+    ],
+    [
+        "LINUX",
+        "Si le processus source a trop de données, il est figé par le système d'exploitation en attendant que le processus consommateur ait fini de traiter les données déjà présente."
+    ],
+    [
+        "LINUX",
+        "Si aucune cible n'est spécifiée, aucune action n'est prise et la règle suivante est traitée."
+    ],
+    [
+        "LINUX",
+        "Bien entendu, les opérations inverses doivent également être effectuées lorsqu' un périphérique est débranché."
+    ],
+    [
+        "LINUX",
+        "Ce système de fichiers est complètement fictif : sa structure et ses fichiers sont générés dynamiquement par le noyau lorsqu'une application y accède."
+    ],
+    [
+        "LINUX",
+        "Toutes les données sont désormais stockées dans des fichiers binaires, qui peuvent être générés à l'aide du programme tic."
+    ],
+    [
+        "LINUX",
+        "Ils peuvent également être générés avec les combinaisons de touches CTRL + A à CTRL + Z."
+    ],
+    [
+        "LINUX",
+        "Elle permet de réafficher la liste des messages générés par le noyau lors de son amorçage."
+    ],
+    [
+        "LINUX",
+        "Elles sont donc actives quel que soit la méthode obtenue pour générer ces caractères (combinaison de touches ou touches simples)."
+    ],
+    [
+        "LINUX",
+        "Il existe trois possibilités pour générer un fichier de configuration XF86Config."
+    ],
+    [
+        "LINUX",
+        "Il est possible d'envoyer directement un fichier à imprimer à l'imprimante, en le recopiant directement sur le fichier spécial de périphérique de l'imprimante."
+    ],
+    [
+        "LINUX",
+        "D'autre part, le sous-système d'impression donne la possibilité de spécifier la nature des fichiers à imprimer, afin de les traduire dans un langage compréhensible par l'imprimante."
+    ],
+    [
+        "LINUX",
+        "En fait, il s'agit d'un véritable langage de programmation, qui permet de programmer les périphériques dont la vocation est d'afficher ou d'imprimer des documents."
+    ],
+    [
+        "LINUX",
+        "Pour qu'il puisse imprimer les caractères d'une police Truetype, il existe deux possibilités."
+    ],
+    [
+        "LINUX",
+        "Ainsi, il n'y a plus de limite sur le nombre de filtres utilisables, et les filtres sont sélectionnés automatiquement en fonction de la nature du document à imprimer."
+    ],
+    [
+        "LINUX",
+        "Celui-ci imprime le fichier et le supprime du disque."
+    ],
+    [
+        "LINUX",
+        "Cet opérateur permet d'insérer directement un texte complet dans le flux d'entrée standard, sans avoir à placer ce document dans un fichier à part."
+    ],
+    [
+        "LINUX",
+        "Le caractère d'échappement antislash peut toujours être utilisé, en particulier pour insérer un caractère de guillemets double dans une chaîne de caractères."
+    ],
+    [
+        "LINUX",
+        "Les options sont séparées par des virgules (attention, il ne faut pas insérer d'espaces)."
+    ],
+    [
+        "LINUX",
+        "il n'est pas nécessaire de désinstaller la version précédente avant d''installer la nouvelle."
+    ],
+    [
+        "LINUX",
+        "Un noyau entièrement configurable en fonction du matériel de la machine sur laquelle le système est installé afin de maximiser les performances."
+    ],
+    [
+        "LINUX",
+        "On devra préfixer les caractères génériques d'un caractère d'échappement pour signaler au shell qu'il ne doit pas l'interpréter."
+    ],
+    [
+        "LINUX",
+        "Enfin, les applications qui gèrent les touches spéciales du clavier peuvent interpréter les codes d'échappement, qui sont ceux renvoyés par le terminal de la console."
+    ],
+    [
+        "LINUX",
+        "À chaque protocole est donc attribué un identificateur numérique qui lui est propre, et qui permet aux services réseaux d'interpréter les données des paquets."
+    ],
+    [
+        "LINUX",
+        "Le serveur X n'interprète en aucune manière les ressources utilisées par les applications, il ne fait que les mettre à disposition des applications."
+    ],
+    [
+        "LINUX",
+        "Le sous-menu applications contient les liens pour lancer les applications courantes."
+    ],
+    [
+        "LINUX",
+        "Le programme run permet de lancer des applications sans ouvrir une console."
+    ],
+    [
+        "LINUX",
+        "C'est sur cette partition que le chargeur du MBR ira chercher le système à lancer."
+    ],
+    [
+        "LINUX",
+        "En effet, ceux-ci permettent de lancer plusieurs programmes simplement, à raison d'un par terminal virtuel, et de s'y retrouver ainsi plus facilement."
+    ],
+    [
+        "LINUX",
+        "Un processus suspendu peut être relancé soit en avant plan, soit en arrière plan."
+    ],
+    [
+        "LINUX",
+        "La combinaison de touches CTRL + Z, qui permet de suspendre l'exécution du programme utilisant la ligne."
+    ],
+    [
+        "LINUX",
+        "Relancement d'un processus un processus suspendu peut être relancé soit en avant plan, soit en arrière plan."
+    ],
+    [
+        "LINUX",
+        "Il est possible de \"geler \" un processus en cours d'exécution, c'est à dire de le suspendre, sans pour autant l'arrêter définitivement."
+    ],
+    [
+        "LINUX",
+        "Les autres options permettent d'arrêter le travail en cours, de le suspendre, de désactiver l'imprimante pour les travaux suivants, et inversement de relancer les travaux d'impression sur cette file."
+    ],
+    [
+        "LINUX",
+        "Le login consiste essentiellement à taper son nom d'utilisateur, valider, et répondre éventuellement à la demande de mot de passe de la part du système."
+    ],
+    [
+        "LINUX",
+        "Si cela devait se produire, vous devrez taper à l'aveugle la commande reset."
+    ],
+    [
+        "LINUX",
+        "Vous l'aurez sans doute remarqué, la commande smbmount vous demande de taper un mot de passe pour accéder au partage."
+    ],
+    [
+        "LINUX",
+        "Les requêtes de DNS font partie des requêtes les plus courantes lorsque l'on navigue sur Internet."
+    ],
+    [
+        "LINUX",
+        "En particulier, celui qui utilise son ordinateur pour travailler (j'entends par là écrire des lettres, les imprimer, naviguer sur Internet pour récupérer des informations, ou programmer) peut parfaitement se contenter de l'installation par défaut."
+    ],
+    [
+        "LINUX",
+        "En effet, si vous installez XWindow, vous pourrez utiliser des programmes graphiques permettant de vous connecter à Internet, d'envoyer et recevoir des courriers électroniques (\"mails\", de naviguer (\"surfer\") et de lire les groupes de discussions (\"news\")."
+    ],
+    [
+        "LINUX",
+        "En particulier, lorsque l'on navigue, un certain nombre d'images et d'informations plus ou moins lentes à télécharger transitent systématiquement."
+    ],
+    [
+        "LINUX",
+        "Chaque travail en attente porte un numéro, grâce auquel on peut le manipuler. Entre autres opérations, il est possible de l'abandonner à l'aide de la commande lprm."
+    ],
+    [
+        "LINUX",
+        "Vous pourrez valider en générant le caractère EOF (abréviation de \" End Of File \", ce qui signifie \" Fin de fichier \") à l'aide de la combinaison de touche CTRL + D, ou abandonner avec le classique CTRL + C."
+    ],
+    [
+        "LINUX",
+        "Mais il est possible d'utiliser les commandes acceptant plusieurs paramètres, même s'il y a plusieurs fichiers dans cette liste."
+    ],
+    [
+        "LINUX",
+        "Le système de fichiers NFS accepte des options permettant d'optimiser les transferts d'informations."
+    ],
+    [
+        "LINUX",
+        "Vous devez donc soit accepter une des plages de valeurs proposées, soit saisir la plage correspondant exactement à votre moniteur à l'aide de l'option \"Enter your own horizontal sync range\"."
+    ],
+    [
+        "LINUX",
+        "Le serveur X n'accepte les connexions que de la machine locale"
+    ],
+    [
+        "LINUX",
+        "Ceci permet généralement d' accélérer les entrées sorties sur le port parallèle , en évitant au noyau d' utiliser un mécanisme de consultation périodique de l' état du port afin de savoir s' il est capable d' accepter des données ou si des données doivent être lues."
+    ],
+    [
+        "LINUX",
+        "Tout ce travail effectué par la passerelle nécessite un traitement spécifique sur chaque paquet qu'elle achemine, et consomme bien entendu des ressources système."
+    ],
+    [
+        "LINUX",
+        "[...] où variable est le nom de la variable à définir, et valeur est la valeur que l' on désire lui affecter."
+    ],
+    [
+        "LINUX",
+        "Les droits des utilisateurs comprennent la possibilité de lire ou écrire un fichier, d'accéder ou non à une ressource ou d'exécuter un programme."
+    ],
+    [
+        "LINUX",
+        "Linux utilise en effet une partie de la mémoire que l'on appelle tampons (\"buffer\" en anglais), pour y stocker des données des systèmes de fichiers montés, et il n'écrit ces données que lorsque c'est nécessaire."
+    ],
+    [
+        "LINUX",
+        "Si les données qui n'ont pas été écrites sont ainsi modifiées par une requête ultérieure, il n'est plus nécessaire de les écrire, et ainsi le système peut économiser un temps précieux en ne le faisant pas."
+    ],
+    [
+        "LINUX",
+        "Pour cela, vous devrez utiliser l'interface en mode graphique ou éditer manuellement le fichier de configuration de XFree86."
+    ],
+    [
+        "LINUX",
+        "Pour éditer un fichier avec vi, il suffit de passer le nom de ce fichier en ligne de commande :"
+    ],
+    [
+        "LINUX",
+        "Elle peut être faite grâce au programme PostScript \" afmmaker.ps \", que l'on peut trouver sur Internet. Pour l'utiliser, il faut l'éditer et définir la police pour laquelle on désire créer un fichier.afm."
+    ],
+    [
+        "LINUX",
+        "Il est encore plus probable que vous aurez à éditer un fichier."
+    ],
+    [
+        "LINUX",
+        "Par conséquent, il est conseillé de n'éditer qu'un seul fichier à la fois."
+    ],
+    [
+        "LINUX",
+        "Malgré tout, il permet de faire tout ce dont on a besoin pour éditer un fichier."
+    ],
+    [
+        "LINUX",
+        "Enfin, l'option -e permet d'éditer le fichier crontab, à l'aide de l'éditeur spécifié dans la variable d'environnement VISUAL ou EDITOR."
+    ],
+    [
+        "LINUX",
+        "Il n'est possible d'éditer qu'une seule configuration à la fois, la configuration courante peut être sélectionnée à l'aide du bouton situé dans la partie inférieure gauche de la fenêtre."
+    ],
+    [
+        "PLAISEN1",
+        "Cette commande permet de visualiser les documents qui sont en cours d'impression, ainsi que les messages envoyés par l'imprimante lorsqu'un problème survient."
+    ],
+    [
+        "PLAISEN1",
+        "Démarrer des programmes d'application (ex.: Lotus, dBASE, Word, etc.);"
+    ],
+    [
+        "PLAISEN1",
+        "Avec la souris, vous devez vous positionner sur l'option désirée et «cliquer» deux fois sur celle-ci."
+    ],
+    [
+        "PLAISEN1",
+        "Les fichiers portant des suffixes réserves DOS (.EXE,.COM,.BIN, etc.) ne peuvent être traités avec les commandes TYPE."
+    ],
+    [
+        "PLAISEN1",
+        "Certains programmes génèrent également des fichiers cachés au moment de leur installation."
+    ],
+    [
+        "PLAISEN1",
+        "Si vous aviez inséré des retours volontaires à la fin de chaque ligne, votre texte serait figé et ne pourrait s'adapter à la nouvelle disposition engendrée par l'insertion d'une ligne vide."
+    ],
+    [
+        "PLAISEN1",
+        "Pour installer WordPerfect 5.1, il vous faut un système muni d'un lecteur pour disquettes de 5,25 pouces ou 3,5 pouces."
+    ],
+    [
+        "PLAISEN1",
+        "La seconde consiste à indiquer au DOS le chemin à suivre pour accéder a ce programme."
+    ],
+    [
+        "PLAISEN1",
+        "Cette puce est un 386SX auquel on a ajouté un cache interne de 8 ko. Ce cache se trouvant à l'intérieur du microprocesseur, les unités internes accèdent à la mémoire par un bus de données interne de 32 bits s'il y a succès du cache."
+    ],
+    [
+        "PLAISEN1",
+        "WordPerfect commence donc l'opération de sauvegarde, puisque vous avez accepté le nom du fichier en appuyant sur [Enter]."
+    ],
+    [
+        "PLAISEN1",
+        "IBM n'accepte toujours pas les lecteurs de disquettes de 3,5 pouces, qui font fureur sur le Macintosh d'Apple."
+    ],
+    [
+        "PLAISEN1",
+        "Une des dernières (la fente 8) ne peut accepter que certaines cartes qui lui sont spécifiquement destinées."
+    ],
+    [
+        "PLAISEN1",
+        "Le contenu ainsi récupéré est acheminé vers le microprocesseur et copié dans le cache simultanément."
+    ],
+    [
+        "PLAISEN1",
+        "Elle effectue de nombreuses opérations sur les données provenant des unités d'entrée et détermine les résultats à acheminer vers les unités de sortie."
+    ],
+    [
+        "PLAISEN1",
+        "Bien que ces unités portent le nom de «lecteur», elles servent néanmoins a la fois a lire et à écrire des données."
+    ],
+    [
+        "WIN",
+        "Détermine le délai accordé entre deux clics de souris pour valider un double-clic."
+    ],
+    [
+        "WIN",
+        "Saisissez alors la taille de partition voulue (nous conseillons au strict minimum 2Go), puis validez par entrée."
+    ],
+    [
+        "WIN",
+        "Un fichier est traditionnellement défini comme une suite de données enregistrées sur un périphérique de stockage et identifié par un nom."
+    ],
+    [
+        "WIN",
+        "Windows NT est un système multi-utilisateur, cela signifie que selon l' utilisateur qui se connecte au système l'interface pourra être différente, ainsi que ses droits sur le système."
+    ],
+    [
+        "WIN",
+        "Pour cela cliquez sur Démarrer puis pointez sur Documents et cliquez sur le fichier que vous voulez ouvrir."
+    ],
+    [
+        "WIN",
+        "Lorsque vous cliquez sur une des icônes du Poste de Travail , apparaît une fenêtre comparable à celle située ci - dessous."
+    ],
+    [
+        "WIN",
+        "Dans le document où vous voulez insérer les informations, cliquez à l'endroit où vous voulez les faire apparaître."
+    ],
+    [
+        "WIN",
+        "Il vous faudra ensuite modifier individuellement les propriétés de partage des imprimantes et des dossiers auxquels vous souhaitez accéder."
+    ],
+    [
+        "WIN",
+        "Pour accéder à un système fonctionnant avec Windows NT, il est essentiel de s'identifier ('se logger') à l' aide d' un nom d'utilisateur et d'un mot de passe (on parle d' \"ouverture de session \"."
+    ],
+    [
+        "WIN",
+        "Enfin, un modem V34 Kortex complète l'équipement pour accéder à Internet."
+    ],
+    [
+        "WIN",
+        "Si vous avez accepté les paramètres par défaut du codeur, entrez le numéro de port 7007 et cliquez sur Suivant. "
+    ],
+    [
+        "WIN",
+        "Ce paramètre empêche les serveurs Terminal Server d'accepter de nouvelles connexions sans mettre fin aux sessions existantes."
+    ],
+    [
+        "PIERRE1",
+        "Les supports de sortie servent à procurer à l'utilisateur un moyen de visualiser le texte qu'il rédige et à interagir avec le système."
+    ],
+    [
+        "PIERRE1",
+        "La lecture des données enregistrées est obtenue par le passage des taches magnétiques sous une tête de lecture."
+    ],
+    [
+        "PIERRE1",
+        "Il appert que pour charger un programme en mémoire, il faut un chargeur qui lui-même doit résider en mémoire au moment de son exécution."
+    ],
+    [
+        "PIERRE1",
+        "Les programmes ou données résidant en mémoire secondaire ne peuvent pas être traités directement par l'unité centrale de traitement"
+    ],
+    [
+        "PIERRE1",
+        "Un ordinateur doit posséder une unité de commande, capable d'interpréter les informations obtenues de la mémoire et d'effectuer des choix parmi plusieurs actions possibles à un instant donné."
+    ],
+    [
+        "PIERRE1",
+        "Le système d'exploitation permet à l'utilisateur d'accéder aux informations en indiquant un nom symbolique plutôt qu'une adresse physique sur l'unité de stockage."
+    ],
+    [
+        "PIERRE1",
+        "Il s'ensuit que l'unité centrale et les canaux accèdent à des informations communes en mémoire principale."
+    ],
+    [
+        "PIERRE1",
+        "Il est moins rapide d'accéder à une mémoire à semi-conducteurs qu'à une mémoire magnétique du type des disques rigides?"
+    ],
+    [
+        "PIERRE1",
+        "Il existe deux façons d'accéder à une information résidant dans la mémoire. La première consiste à utiliser l'adresse de l'information, lorsqu'on la connaît."
+    ],
+    [
+        "PIERRE1",
+        "Le système d'exploitation permet à l'utilisateur d'accéder aux informations en indiquant un nom symbolique plutôt qu'une adresse physique sur l'unité de stockage."
+    ],
+    [
+        "PIERRE1",
+        "Il est alors possible qu'une information soit absente de la mémoire principale au moment où l'unité centrale veut y accéder."
+    ],
+    [
+        "DELAVI1",
+        "Il existe plusieurs façons de visualiser votre base de données."
+    ],
+    [
+        "DELAVI1",
+        "Si l'on veut protéger les informations enregistrées sur une disquette de 13,5 cm, il suffit d'obstruer cette encoche avec un morceau de papier adhésif."
+    ],
+    [
+        "DELAVI1",
+        "Si vous démarrez votre ordinateur pour la première fois, vous devez placer la disquette DOS dans le lecteur A et placer le commutateur en position de marche (on)."
+    ],
+    [
+        "DELAVI1",
+        "Lorsque vient le temps de démarrer l'ordinateur, la mémoire morte (ROM) de l'appareil se met en branle et amorce la procédure de démarrage."
+    ],
+    [
+        "DELAVI1",
+        "UNIX peut être configuré de manière à rendre très simple l'utilisation d'une application spécifique."
+    ],
+    [
+        "DELAVI1",
+        "Dans le cas du DOS, cette fonction consiste à annuler le contenu d'une ligne et à passer à la ligne suivante."
+    ],
+    [
+        "DELAVI1",
+        "En général, plus un microprocesseur peut traiter de bits, plus l'ordinateur est puissant et rapide."
+    ],
+    [
+        "DELAVI1",
+        "Langage de définition de caractères et fonctionnent avec des polices de caractères que l'usager doit télécharger à partir de l'ordinateur"
+    ],
+    [
+        "DELAVI1",
+        "Le texte que vous venez de taper réside actuellement dans la mémoire vive de votre ordinateur."
+    ],
+    [
+        "DELAVI1",
+        "Permet d'accéder a des fichiers déjà créés et de quitter le programme."
+    ],
+    [
+        "CODERREUR",
+        "Le serveur n'a pas pu démarrer."
+    ],
+    [
+        "CODERREUR",
+        "Pour configurer ou supprimer la version existante de ce produit utilisez Ajout Suppression de programmes depuis le Panneau de configuration."
+    ],
+    [
+        "CODERREUR",
+        "Impossible de se connecter au serveur de téléamorçage."
+    ],
+    [
+        "CODERREUR",
+        "Seules les ressources disques partagées peuvent être marquées comme pouvant être cachées."
+    ],
+    [
+        "CODERREUR",
+        "La bibliothèque de liaisons dynamique xxx n' a pas pu être chargée, ou une erreur s' est produite lorsque le système a tenté de l'utiliser."
+    ],
+    [
+        "CODERREUR",
+        "Si vous voulez installer ou configurer un logiciel sur le serveur, contactez votre administrateur réseau."
+    ],
+    [
+        "CODERREUR",
+        "Le serveur distant a été suspendu ou se trouve en phase de démarrage."
+    ],
+    [
+        "CODERREUR",
+        "L'opération d'entrée sortie a été abandonnée en raison de l'arrêt d'une thread ou à la demande d'une application."
+    ],
+    [
+        "CODERREUR",
+        "Utilisez votre compte d'utilisateur global ou local pour accéder à ce serveur."
+    ],
+    [
+        "CODERREUR",
+        "Aucun logiciel réseau n'a accepté le chemin réseau fourni."
+    ],
+    [
+        "INORDI",
+        "Toutefois il est désormais possible d'enregistrer des informations dans certaines mémoires de type ROM."
+    ],
+    [
+        "INORDI",
+        "Le chargeur d'amorce : un programme permettant de charger le système d'exploitation en mémoire (vive) et de le lancer."
+    ],
+    [
+        "INORDI",
+        "Cela se traduit par le découpage d'un programme en plusieurs processus qui seront traités par des processeurs différents dans le but de gagner en temps d'exécution."
+    ],
+    [
+        "INORDI",
+        "Le mode bloc consiste à effectuer des transferts de données par bloc, c'est-à-dire par paquets de 512 octets généralement, ce qui évite au processeur d'avoir à traiter une multitude de minuscules paquets d'un bit"
+    ],
+    [
+        "INORDI",
+        "Les processeurs basés sur l'architecture CISC peuvent traiter des instructions complexes."
+    ],
+    [
+        "INORDI",
+        "En réalité même lorsque votre PC est débranché ou qu' une panne d' électricité intervient, un circuit électronique appelé CMOS ( Complementary Metal - Oxyde Semiconductor , parfois appelé BIOS CMOS ) conserve certaines informations sur le système , y compris l' heure et la date système."
+    ],
+    [
+        "INORDI",
+        "Le chargeur d'amorce : un programme permettant de charger le système d'exploitation en mémoire (vive) et de le lancer."
+    ],
+    [
+        "INORDI",
+        "Le taux de transfert est la quantité de données qui peuvent être lues ou écrites sur le disque en un temps donné."
+    ],
+    [
+        "LININT",
+        "Pour rechercher un mot dans un document , il vous suffit (en mode normal) de taper suivi de la chaîne à rechercher, puis de valider par la touche entrée."
+    ],
+    [
+        "LININT",
+        "Il suffit de taper \"startx\" pour démarrer X-Window"
+    ],
+    [
+        "LININT",
+        "Imprime le fichier demandé."
+    ],
+    [
+        "LININT",
+        "Cependant, vous vous demandez: à quoi bon taper cette commande si je dois la déclarer à chaque fois que je réinitialise le système ?"
+    ],
+    [
+        "LININT",
+        "Seules les commandes présentes dans ce fichier seront acceptées et remplaceront la valeur actuelle du champ programme_de_demarrage."
+    ],
+    [
+        "LININT",
+        "Pour ajouter un utilisateur à un groupe, il suffit d'éditer le fichier etc group et de rajouter ce nom au bout de la ligne en séparant le nom des membres par une virgule."
+    ],
+    [
+        "ROLLAN",
+        "Sur la plupart des systèmes, l'envoi d'un message ne peut être annulé."
+    ],
+    [
+        "ROLLAN",
+        "Les formats de fichier actuellement utilisés sont tellement divers et variés qu'il n'est pas possible à un navigateur de savoir tous les interpréter (exemple les fichiers dvi, vrml, wrl, etc.)."
+    ],
+    [
+        "ROLLAN",
+        "Le client normal , particulier ou entreprise de taille limitée, s'abonne à un serveur de réseau (un prestatire de service, un provider) qui s' occupe de tout le côté technique."
+    ],
+    [
+        "ROLLAN",
+        "Pour poster un message à une liste de diffusion à laquelle vous êtes abonné, il suffit d'envoyer ce message à l'adresse suivante : nom_de_la_liste@sciences.univ-nantes.fr."
+    ],
+    [
+        "ROLLAN",
+        "Un serveur de messagerie est une machine chargée de la gestion du courrier d'un ensemble de personnes. il est chargé d'acheminer et de réceptionner les messages électroniques de ces personnes."
+    ],
+    [
+        "JOINDRE",
+        "Joindre un fichier à un message signifie envoyer un fichier en même temps que celui-ci."
+    ],
+    [
+        "JOINDRE",
+        "Vous pouvez joindre à un message autant de fichiers que vous le désirez."
+    ],
+    [
+        "JOINDRE",
+        "Pour joindre un fichier à un message, rédigez un message comme vous le feriez normalement, mais cliquez sur le bouton Joindre de la barre d'outils avant de l'envoyer. "
+    ],
+    [
+        "JOINDRE",
+        "Pour joindre un fichier, cliquez sur l'option Fichier du menu Joindre."
+    ],
+    [
+        "JOINDRE",
+        "Repérer et sélectionnez le fichier que vous voulez joindre, puis cliquez sur OK."
+    ],
+    [
+        "AUTHEN",
+        "Internet Explorer version 4.0 ou ultérieure peut être configuré pour demander d'emblée ces informations à l'utilisateur si nécessaire."
+    ],
+    [
+        "AUTHEN",
+        "Vous pouvez configurer votre serveur FTP pour autoriser l'accès anonyme aux ressources FTP."
+    ],
+    [
+        "AUTHEN",
+        "Lorsqu' un utilisateur tente de se connecter à votre site Web ou FTP public, votre serveur Web lui attribue le compte d'utilisateur Windows IUSR_nom_ordinateur , nom_ordinateur étant le nom du serveur sur lequel IIS s'exécute."
+    ],
+    [
+        "AUTHEN",
+        "Sélectionnez le compte qui vous intéresse et cliquez sur le bouton Propriétés."
+    ],
+    [
+        "AUTHEN",
+        "Toutefois, si le compte d' utilisateur anonyme n' est pas autorisé à accéder à un fichier ou à une ressource spécifique, votre serveur Web refusera d'établir une connexion anonyme vers cette ressource."
+    ],
+    [
+        "ANNEXEE",
+        "Si vous optez pour une modification du BIOS, reportez-vous au manuel système pour connaître la combinaison des touches permettant d'accéder au BIOS ou repérez la séquence de touches nécessaire lorsque le système commence à démarrer.. "
+    ],
+    [
+        "ANNEXEE",
+        "Si vous n'êtes pas sûr de savoir comment configurer votre imprimante ou si vous avez des problèmes pour la faire marcher correctement, essayer d'utiliser le programme graphique printtool."
+    ],
+    [
+        "ANNEXEE",
+        "Si vous n' avez pas créé de compte utilisateur lors de l' installation, vous devez vous connecter et utiliser le mot de passe approprié."
+    ],
+    [
+        "ANNEXEE",
+        "Pour y accéder, connectez-vous en tant que root, ouvrez une fenêtre terminale et entrez printtool."
+    ],
+    [
+        "ANNEXEE",
+        "Si l'écran Partitionnement automatique ne s'affiche pas lors de l' installation, cela signifie probablement que l'espace disponible sur votre disque dur est insuffisant pour installer Red Hat Linux."
+    ],
+    [
+        "OUTJOIN",
+        "Dans la boîte de dialogue Insérer un fichier, recherchez le fichier à joindre, sélectionnez-le, puis cliquez sur Insérer."
+    ],
+    [
+        "OUTJOIN",
+        "Vous pouvez joindre simultanément plusieurs fichiers en sélectionnant les fichiers et en les faisant glisser d'un dossier de votre ordinateur vers un message ouvert dans Outlook."
+    ],
+    [
+        "OUTJOIN",
+        "Si le fichier à joindre est très volumineux, vous devez d'abord le compresser à l'aide d'un programme zip."
+    ],
+    [
+        "OUTJOIN",
+        "Vous pouvez joindre des éléments (élément : dans Outlook, unité de base pour le stockage d'informations (équivalent d'un fichier pour d'autres programmes)."
+    ],
+    [
+        "INITIATION",
+        "Ce dernier permet de lire des disques optiques, comme les CD-ROM ou les DVD, mais surtout d'enregistrer des informations sur ces supports."
+    ],
+    [
+        "INITIATION",
+        "Un programme écrit dans un langage dit \"compilé\" va être traduit une fois pour toutes par un programme annexe (le compilateur) afin de générer un nouveau fichier qui sera autonome."
+    ],
+    [
+        "INITIATION",
+        "Par exemple, la souris peut permettre de répondre à une question de l'ordinateur, de lancer un programme et d'indiquer au système que vous voulez imprimer un document."
+    ],
+    [
+        "INITIATION",
+        "Avec ce type de connexion, vous pouvez naviguer rapidement dans Internet."
+    ],
+    [
+        "FTP",
+        "Plusieurs informations sont nécessaires pour se connecter à un site : * l' adresse du site : elle est généralement donnée sous forme d' adresse IP, par exemple 194.56.212.32 * le port : c' est un nombre qui permet de différencier les données qui arrivent par votre connexion, il s' agit généralement du nombre 21 par défaut, c' est-à-dire si aucun numéro de port n' est précisé * le nom d'utilisateur (login) et le mot de passe (passwd) qui permettent d' identifier l'utilisateur."
+    ],
+    [
+        "FTP",
+        "Une fois tous les champs remplis cliquez sur OK , puis double-cliquez sur le site voulu dans le gestionnaire de site."
+    ],
+    [
+        "FTP",
+        "Il suffit de cliquer sur le bouton OK pour voir s' afficher la fenêtre suivante."
+    ],
+    [
+        "FTP",
+        "Le bouton permet d'importer vos répertoires provenant d'une autre version de CuteFTP installée sur votre disque ou même de vos préférences de WS_FTP (un autre client FTP)."
+    ],
+    [
+        "DOMINO",
+        "Il est ainsi possible d'importer des JSP ou bien de créer nativement des JSP dans l'outil Designer."
+    ],
+    [
+        "DOMINO",
+        "Ouvrir l'attachement en lançant l'application qui a servi à le créer."
+    ],
+    [
+        "DOMINO",
+        "N'hésitez pas à télécharger les futures versions Bêta de la Rnext car de nombreuses autres améliorations sont encore dans les cartons des développeurs de Lotus et devraient prochainement voir le jour."
+    ],
+    [
+        "DOMINO",
+        "Enfin à l'aide d'un simple clic de souris il est possible d'éditer les données de l'entrée d'agenda affichée dans la vue."
+    ],
+    [
+        "CLAVIEZ1",
+        "La commande DIR permet de visualiser à l'écran tous les répertoires et fichiers enregistrés sur un disque ou sur une disquette."
+    ],
+    [
+        "CLAVIEZ1",
+        "Les fichiers sont enregistrés sur des mémoires externes (disque, disquettes, bandes magnétiques, cartouches, etc.)."
+    ],
+    [
+        "CLAVIEZ1",
+        "Ainsi il n'a plus besoin de savoir ce que va faire l'ordinateur -- ou le logiciel -- lorsqu'il cliquera sur une icône représentant un fichier."
+    ],
+    [
+        "CLAVIEZ1",
+        "Les performances des microprocesseurs se mesurent au nombre d'instructions qu'ils peuvent traiter en une seconde."
+    ],
+    [
+        "WEB",
+        "Les données étaient également enregistrées en utilisant la même méthode."
+    ],
+    [
+        "WEB",
+        "Les feuilles de style ajoutent le surlignement (ainsi que la possibilité de souligner et surligner simultanément)."
+    ],
+    [
+        "WEB",
+        "Il convient donc avant de s'abonner de faire le tour des offres des providers tout en sachant qu' elles varient assez souvent."
+    ],
+    [
+        "SUNTEK",
+        "Abandonnez la copie ou la mise à jour."
+    ],
+    [
+        "SUNTEK",
+        "Vous pouvez abandonner ces opérations aux heures de pointe pour les poursuivre ultérieurement."
+    ],
+    [
+        "SUNTEK",
+        "Pour poursuivre, vous devez abandonner l'opération de copie ou de mise à jour avec l'option de commande iiadm -a."
+    ],
+    [
+        "PROGC",
+        "La variable qui se voit affecter une valeur doit impérativement être déclarée au début du programme, et bien sur, avant sa première affectation."
+    ],
+    [
+        "PROGC",
+        "L'opérateur = permet d'affecter une valeur à une variable."
+    ],
+    [
+        "PROGC",
+        "Le 23ème élément du tableau se voit affecter la valeur numérique 50. "
+    ],
+    [
+        "MESSAGERIE5",
+        "Une liste de diffusion, appelée aussi liste de distribution, est une liste d' adresses électroniques auxquelles on peut s'abonner pour recevoir des informations par thèmes."
+    ],
+    [
+        "MESSAGERIE5",
+        "Pour s'abonner à une liste : - l' utilisateur s' inscrit (gratuitement) auprès du robot gestionnaire de la liste de son choix (et non à l'adresse de la liste)."
+    ],
+    [
+        "MESSAGERIE5",
+        "TP : - identifier les éléments d' information sur les serveurs qui ont acheminé le message - essayer d' identifier l' origine de ce message : o Utiliser NetAstuces."
+    ],
+    [
+        "HYDROM",
+        "Changer la disquette ou annuler la sauvegarde en cours."
+    ],
+    [
+        "HYDROM",
+        "Cette situation peut se produire lorsque l'on souhaite annuler les modifications récentes faites sur des données en les restaurant avec une version plus ancienne."
+    ],
+    [
+        "HYDROM",
+        "Retirer la disquette actuelle et placer la disquette correcte ou abandonner l'opération en cours."
+    ],
+    [
+        "FONCTIONNEMENT",
+        "Les photos sont enregistrées sur une petite disquette au lieu de s'imprégner sur une pellicule."
+    ],
+    [
+        "FONCTIONNEMENT",
+        "Pour imprimer, un ruban imbibé d' encre est placé entre la marguerite et la feuille, de telle façon que lorsque la matrice frappe le ruban, celui-ci dépose de l'encre uniquement au niveau du relief du caractère."
+    ],
+    [
+        "FONCTIONNEMENT",
+        "Cependant, les têtes sont liées entre-elles et seulement une seule tête peut lire ou écrire à un moment donné."
+    ],
+    [
+        "DCOMOLE",
+        "Puis, il faut définir un compte pour chaque utilisateur, et configurer tous les postes pour contrôler les ressources au niveau utilisateur avec mot de passe sur le réseau."
+    ],
+    [
+        "DCOMOLE",
+        "Quoi qu'il en soit, la fonction qui reçoit ces paramètres appelle avant tout CoCreateInstance pour charger le proxy dont le CLSID a été communiquée par CoMarshalInterface"
+    ],
+    [
+        "DCOMOLE",
+        "Si les apparences sont trompeuses, c'est que l'IID ou le DIID demandé n'est pas celui de l' interface à laquelle on essaie de s'abonner."
+    ],
+    [
+        "ASSDELL",
+        "Le système peut, avec ces informations, configurer automatiquement les cartes d'extension PCI."
+    ],
+    [
+        "ASSDELL",
+        "Le RCU indique au système quelles cartes d'extension sont installées ainsi que les connecteurs qu'elles occupent."
+    ],
+    [
+        "ASSDELL",
+        "Vous pouvez ensuite sélectionner l'option Library (Bibliothèque) pour accéder aux documents en ligne."
+    ],
+    [
+        "AIDE",
+        "Lorsque vous cliquez sur un lien, une nouvelle fenêtre s' ouvre à l' écran et vous serez en mesure de voir la page du module que vous êtes en train de compléter juste derrière cette fenêtre."
+    ],
+    [
+        "AIDE",
+        "Une fois que vous avez terminé, cliquez sur SUIVANT pour aller à la page suivante."
+    ],
+    [
+        "AIDE",
+        "Nous vous suggérons d'enregistrer ce site Internet de soutien dans les 'Signets' de votre fureteur pour vous permettre d'accéder au cours plus facilement."
+    ],
+    [
+        "TRAITEM",
+        "Comme l'exécution de l'application cliente est suspendue en attendant le résultat, il est difficile pour l'application de décider qu'elle voudrait annuler la commande en cours."
+    ],
+    [
+        "TRAITEM",
+        "PQrequest cancel : Demande au serveur d'abandonner le traitement de la commande en cours."
+    ],
+    [
+        "SURTEX",
+        "Affichez la diapositive contenant le texte que vous voulez surligner. "
+    ],
+    [
+        "SURTEX",
+        "Dessinez un rectangle autour du texte à surligner."
+    ],
+    [
+        "PILOTE",
+        "Sinon, annulez la boîte de dialogue et cliquez sur \"Connection à Configure Windows CE Platform Manager\"."
+    ],
+    [
+        "PILOTE",
+        "Une fois la connexion établie, on envoie tous les caractères tapés dans la zone de \"Texte envoyé\"."
+    ],
+    [
+        "OCE3145",
+        "Le travail est imprimé lorsque vous lancez l'impression à partir du panneau de commande (travail de boîte aux lettres)."
+    ],
+    [
+        "OCE3145",
+        "Le système Océ 31x5E abandonne le travail d'impression."
+    ],
+    [
+        "INSTXP",
+        "Ensuite vous démarrez avec cette disquette en choisissant l'option \"Démarrer avec prise en charge du lecteur de CD ROM\"."
+    ],
+    [
+        "INSTXP",
+        "C'est pourquoi vous pouvez choisir de télécharger les fichiers les plus récents ou d'ignorer cette étape."
+    ],
+    [
+        "GENILO",
+        "Le nombre de textes que le compilateur doit savoir traiter est infini."
+    ],
+    [
+        "GENILO",
+        "Si l'événement doit être traité avant l'écoulement d'une certaine durée, il est nécessaire que la fonction Lire FA ait été activée avant la fin de Auxerre durée."
+    ],
+    [
+        "DRIVER",
+        "Pour charger le système d'exploitation vous avez besoin d'accéder au disque dur ."
+    ],
+    [
+        "DRIVER",
+        "Vous n'avez toutefois jamais eu à installer de driver pour votre disque dur, pourquoi ? Pour charger le système d'exploitation vous avez besoin d'accéder au disque dur, or comment faire pour accéder au disque dur si votre système d'exploitation n'est pas encore chargé ?"
+    ],
+    [
+        "DECOUVERTE",
+        "Enfin ce type de réseau autorise la croissance de la société et donc du nombre d'utilisateurs qui accèderont au réseau."
+    ],
+    [
+        "DECOUVERTE",
+        "On dit également que la topologie en bus est une topologie passive dans la mesure où les ordinateurs ne font qu' écouter les données en cours et ils ne s' occupent donc pas de les acheminer vers l'ordinateur suivant."
+    ],
+    [
+        "COSNAR",
+        "Les applications traitées sont d'une plus grande difficulté de mise en œuvre. Les projets européens DataGrid et EuroGrid s'appuient sur ce type de technologie."
+    ],
+    [
+        "COSNAR",
+        "Son objectif est de mettre en réseau sur Internet la puissance de calcul et de stockage des ordinateurs installés."
+    ],
+    [
+        "COMPOSANTS_ORDINATEUR2",
+        "Chaque fois que le processeur désire accéder à une donnée stockée en mémoire principale, il lit en fait celle-ci dans la mémoire cache, éventuellement après que cette donnée a été recopiée de la mémoire principale vers le cache s'il s'avère qu'elle n'était pas présente dans le cache au moment de la lecture."
+    ],
+    [
+        "COMPOSANTS_ORDINATEUR2",
+        "Par exemple, le processeur accède directement au cache primaire, mais doit passer par le bus externe et le contrôleur de cache pour accéder au cache secondaire."
+    ],
+    [
+        "CHEMLA",
+        "Il sert à transporter le protocole TCP IP sur une liaison temporaire, et permet à la machine qui se connecte d' obtenir son adresse IP automatiquement."
+    ],
+    [
+        "CHEMLA",
+        "Les listes de diffusion. Il s'agit toujours de courrier électronique , mais dans ce cas le nom du correspondant est en fait celui d' un programme informatique présent sur l' ordinateur auquel on s' adresse , programme qui va restransmettre le message à une liste de personnes qui s'y seront abonnées."
+    ],
+    [
+        "BIOSERV",
+        "L'option Boot sequence permet de définir l'ordre dans lequel le système va choisir les lecteurs sur lesquels il va démarrer ."
+    ],
+    [
+        "BIOSERV",
+        "En configurant correctement la mémoire cache, on peut améliorer considérablement les performances de l'ordinateur."
+    ],
+    [
+        "ANNUL",
+        "Si vous avez extrait un fichier d'une bibliothèque sur un site, apporté des modifications, puis décidé que vous ne voulez pas conserver ces modifications, vous pouvez annuler l'extraction."
+    ],
+    [
+        "ANNUL",
+        "Vous pouvez annuler l'extraction d'un fichier que vous avez extrait ou bien, si cela n'est pas le cas, si vous êtes autorisé à modifier la bibliothèque, par exemple si vous êtes un propriétaire de site."
+    ],
+    [
+        "VISIO",
+        "Pendant la lecture, il peut surligner les mots ou les phrases prononcées."
+    ],
+    [
+        "VARIABLE",
+        "Les développeurs peuvent affecter une valeur à cette variable. $DOLLAR$. Cette variable prend la valeur $."
+    ],
+    [
+        "SUSAC",
+        "Vous pouvez suspendre l'activité de votre ordinateur en choisissant Suspendre l'activité dans le menu Pomme. "
+    ],
+    [
+        "SOLARIS",
+        "Si vous abandonnez le processus d'installation, le serveur Web est automatiquement arrêté et les fichiers temporaires sont supprimés."
+    ],
+    [
+        "SECUR",
+        "On ne peut pratiquement plus joindre ou recevoir que des .zip."
+    ],
+    [
+        "REVOINFO",
+        "Près de la moitié des 70 000 micro-ordinateurs installés en France l'ont été a cours de cette seule année. Les Américains tiennent la première place sur le marché français."
+    ],
+    [
+        "RACINE",
+        "Par défaut seuls seront affichés les fichiers et répertoires non cachés."
+    ],
+    [
+        "PLUIE",
+        "Cependant dans certains cas, le logiciel accepte votre réponse, et par défaut il exécute la suite du programme."
+    ],
+    [
+        "OVLOCK",
+        "Si votre ordinateur ne démarre pas après overclocking, il vous suffit de revenir aux valeurs normales pour que tout remarche."
+    ],
+    [
+        "NWREADME",
+        "À ce stade, abandonnez l'installation, copiez C:\\NWSERVER\\DSLOADER.NLM dans C:\\NWUPDATE et relancez la mise à niveau."
+    ],
+    [
+        "MOBILINK",
+        "Elle accepte le nom d'utilisateur et le mot de passe, puis renvoie un code d'état d'autorisation indiquant la réussite ou l'échec de la validation."
+    ],
+    [
+        "MICROEMACS",
+        " Echap : envoie l'instruction Abort à MicroEmacs. Cela revient à taper Ctrl-G au clavier."
+    ],
+    [
+        "MEMENTO",
+        "Un texte peut être souligné, surligné, barré."
+    ],
+    [
+        "LOGICIELS",
+        "Une seconde manière consiste à interpréter les instructions au fur et à mesure qu'elles sont données à l'ordinateur."
+    ],
+    [
+        "LEARN",
+        "D'autres façons de vous abonner vous sont offertes si vous connaissez l'URL d'un forum."
+    ],
+    [
+        "IRIS",
+        "Il n'est pas nécessaire que le prompt d'édition soit à la fin de la ligne pour valider la commande."
+    ],
+    [
+        "INTROVIR",
+        "Certains virus infectent les deux types de fichiers, mais doivent pour cela, savoir les différencier et agir en conséquence."
+    ],
+    [
+        "INTRO-INFO",
+        "La fonction d'un ordinateur se limite à ordonner, classer, calculer, trier, rechercher, éditer, représenter des informations qui ont au préalable été codifiées selon une représentation binaire."
+    ],
+    [
+        "INTPPP",
+        "Pour le créer et le configurer, il suffit de lancer : ~ $ tin -f.newsrc.mail puis de s'abonner au groupe fr."
+    ],
+    [
+        "INFORMATIQUE",
+        "Le moniteur est l'écran sur lequel vous pouvez visualiser le texte sur lequel vous travaillez, vos photos, vos vidéos, etc."
+    ],
+    [
+        "HOMMES",
+        "Enfin, l'antivirus protège contre les virus connus qui pourraient par exemple se trouver dans un fichier téléchargé ou reçu par messagerie."
+    ],
+    [
+        "GUIDLIN",
+        "Par exemple, vous pouvez visualiser sous une forme lisible les informations du fichier de description des terminaux Linux avec la commande suivante."
+    ],
+    [
+        "GESASYN",
+        "Note : si vous lancez ensuite le gestionnaire d'interruption initial, alors vous n' avez pas à vous préoccuper du port 20h, puisqu'il est géré par l'interruption originelle."
+    ],
+    [
+        "FOUNUM",
+        "La variante de démarrage la plus rapide consiste à lancer le programme en liaison avec des paramètres dans la ligne de commande."
+    ],
+    [
+        "FONORD",
+        "Le processeur est le composant qui calcule, transforme et interprète les informations - données - que lui envoie la carte mère (après des ordres de l' utilisateur)."
+    ],
+    [
+        "FINK",
+        "Cette commande accepte les options suivantes : -h, --help, -r, --recursive."
+    ],
+    [
+        "FENETRES",
+        "Vous pouvez cliquez sur le bouton minimiser pour réduire/iconifier une fenêtre ou cliquez en maintenant la touche Control pour cacher l'application."
+    ],
+    [
+        "FC6",
+        "La plus grande partie de la documentation se trouve sous la forme de documents hypertextes que l'on visualisera avec l'application web browser (Mozilla)."
+    ],
+    [
+        "ETENIR",
+        "Pour maintenir des performances correctes, au moins 10 % du disque doivent rester libres afin que l'ordinateur puisse manipuler ses données en les écrivant quand il en a besoin sur cette section disponible."
+    ],
+    [
+        "ECRAN",
+        "Un système de traitement de l'information tel qu'un ordinateur a toujours nécessité des organes d'entrées et de sorties pour pouvoir charger les programmes, entrer les données et en retour récupérer les résultats de leur traitement."
+    ],
+    [
+        "DISPAR",
+        "Arrêtez le système et installez physiquement l'unité de disque."
+    ],
+    [
+        "DECZIP",
+        "Cela fait , cliquez avec le bouton droit de la souris."
+    ],
+    [
+        "CRYPTER",
+        "Confirmez la clé puis cliquez sur le bouton OK."
+    ],
+    [
+        "CONRES",
+        "Un serveur web permettant d'interpréter des scripts CGI, PHP , ASP ou autres, et les traduire en requêtes SQL afin d'interroger une base de données."
+    ],
+    [
+        "CONDBCC",
+        "Par le simple fait d'accéder au site Internet de la SA Atos Worldline, dont Bank Card Company est une marque déposée avec comme site internet www."
+    ],
+    [
+        "COMMIN",
+        "Par défaut, les deux premiers signaux (INT et QUIT) termine le processus, tandis que le troisième ne fait que suspendre l'éxecution, i.e. elle peut donc être reprise."
+    ],
+    [
+        "COMINT",
+        "TCP IP est basé sur le repérage de chaque ordinateur par une adresse appelée adresse IP qui permet d'acheminer les données à la bonne adresse."
+    ],
+    [
+        "CHEVAL23",
+        "Pour se protéger de ce genre d' intrusion, il suffit d'installer un firewall."
+    ],
+    [
+        "CALIXO",
+        "Pour les Clients FTP tel que CuteFTP ou SmartFTP, il faut valider dans les options de ces logiciels le Mode PASV."
+    ],
+    [
+        "CABLES",
+        "Dans un signal numérique , le message véhiculé, le sens du message, est acheminé sous forme de bits et d'octets, arrangés de manière cohérente (on dit codés) de façon à les comprendre à l'arrivée (on dit décoder)."
+    ],
+    [
+        "BEFORE",
+        "Pour accéder à Internet, vous devez disposer d'une connexion Internet."
+    ],
+    [
+        "AZERTY",
+        "Il est néanmoins possible de combler ces manques en installant le pilote de clavier français enrichi par Denis Liégeois, trouvable sur cette page."
+    ],
+    [
+        "APPANS",
+        "Netscape vous permet d'accéder aux serveurs FTP comme vous accédez aux serveurs (HTTP) du World Wide Web."
+    ],
+    [
+        "AMORCA",
+        "Avec Nero ou Easy CD Creator vous pouvez valider une option pour que votre CD/DVD soit amorçable et l'application vous invitera alors à insérer une disquette amorçable ou à utiliser une image amorçable."
+    ],
+    [
+        "AIDEMAC",
+        "Si le modem dispose d'un bouton de réinitialisation, appuyez dessus avant ou après avoir débranché et rebranché le modem."
+    ],
+    [
+        "ADVANCED",
+        "Navigator Gold vous permet d'accéder aux serveurs FTP de la même manière que vous accédez aux serveurs Web (HTTP)."
+    ],
+    [
+        "ACTDIR",
+        "Les utilisateurs finaux doivent employer plusieurs comptes et mots de passe utilisateur pour se connecter aux différents systèmes."
+    ]
+]
