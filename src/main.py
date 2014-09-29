@@ -3,6 +3,7 @@
 
 from collections import Counter
 import sys
+from pathlib import Path
 
 from framenetallreader import FNAllReader
 from verbnetframe import VerbnetFrameOccurrence
@@ -39,7 +40,7 @@ if __name__ == "__main__":
 
     if options.conll_input is not None:
         annotation_list = [None]
-        parsed_conll_list = [options.conll_input]
+        parsed_conll_list = [Path(options.conll_input)]
     else:
         annotation_list = options.fulltext_annotations
         parsed_conll_list = options.fulltext_parses
