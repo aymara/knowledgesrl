@@ -9,9 +9,10 @@ import pickle
 
 import colorama
 from colorama import Fore
+from nltk.corpus import verbnet
+from nltk.corpus.reader import VerbNetError
 
 import paths
-import verbnet
 from .rolemapping import RoleMapping
 from .dicoxml import deindent_text, get_all_text
 from .kicktionary import kicktionary_frames
@@ -20,7 +21,7 @@ def xmlcontext_to_frame(xmlns, lexie, contexte):
     indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
     sentence_text = deindent_text(indented_sentence_text)
 
-    subcategorization_frame = verbnet.Syntax()
+    subcategorization_frame = ET.Element('SYNTAX')
     role = None
 
     for child in contexte:
@@ -32,7 +33,7 @@ def xmlcontext_to_frame(xmlns, lexie, contexte):
                 not 'auxiliaire' in child.attrib):
             predicate_lemma = child.get("lemme", deindent_text(child.text))
             predicate_lemma = predicate_lemma.lower().strip()
-            subcategorization_frame.append({'type': 'V'})
+            ET.SubElement(subcategorization_frame, 'VERB')
 
         # frame element
         elif child.tag == '{{{0}}}participant'.format(xmlns) and child.get('type') == 'Act':
@@ -60,13 +61,12 @@ def xmlcontext_to_frame(xmlns, lexie, contexte):
 
             if phrase_type == 'PP':
                 assert 'preposition' in groupe_syntaxique.attrib
-                subcategorization_frame.append({
-                    'type': 'PREP',
-                    'value': groupe_syntaxique.get('preposition')
-                })
-                subcategorization_frame.append({'type': 'NP', 'role': role})
+                ET.SubElement(
+                    subcategorization_frame, 'PREP',
+                    value=groupe_syntaxique.get('preposition'))
+                ET.SubElement(subcategorization_frame, 'NP', value=role)
             else:
-                subcategorization_frame.append({'type': phrase_type, 'role': role})
+                ET.SubElement(subcategorization_frame, phrase_type, value=role)
 
     return sentence_text, subcategorization_frame
 
@@ -89,36 +89,55 @@ def debug(should_debug, stuff, end='\n'):
 
 
 def matches_verbnet_frame(gold_syntax, vn_syntax):
-    vn_subcat = [syntax_part['type'] for syntax_part in vn_syntax]
-    dico_subcat = [syntax_part['type'] for syntax_part in gold_syntax]
+    vn_subcat = [syntax_part.tag for syntax_part in vn_syntax]
+    dico_subcat = [syntax_part.tag for syntax_part in gold_syntax]
 
     return dico_subcat == vn_subcat
 
-def remove_before_v(frame):
-    frame = copy.deepcopy(frame)
-    new_syntax = verbnet.Syntax()
+def remove_before_v(syntax):
+    syntax = copy.deepcopy(syntax)
+    new_syntax = ET.Element('SYNTAX')
 
     found_v = False
-    for part in frame.syntax:
-        if part['type'] == 'V':
+    for part in syntax:
+        if part.tag == 'VERB':
             found_v = True
+
         if found_v:
             new_syntax.append(part)
 
-    frame.syntax = new_syntax
-    return frame
+    return new_syntax
 
 def map_gold_frame(vn_id, gold_syntax, role_mapping_lexie):
     if not vn_id in role_mapping_lexie:
-        return verbnet.Syntax()
+        return ET.Element('SYNTAX')
 
-    mapped_gold_syntax = verbnet.Syntax()
+    mapped_gold_syntax = ET.Element('SYNTAX')
     for part in gold_syntax:
-        if 'role' in part:
-            mapped_gold_syntax.append({'role': role_mapping_lexie[vn_id][part['role']], 'type': part['type']})
+        if part.tag != 'PREP' and part.get('value'):
+            ET.SubElement(mapped_gold_syntax, part.tag, value=role_mapping_lexie[vn_id][part.get('value')])
         else:
             mapped_gold_syntax.append(part)
+
     return mapped_gold_syntax
+
+def syntax_to_str(syntax):
+    str_parts = []
+
+    if not(list(syntax)):  # no children
+        return '-'
+
+    for part in syntax:
+        if part.tag == 'VERB':
+            str_parts.append('V')
+        elif part.tag == 'NP':
+            str_parts.append('NP.{}'.format(part.get('value')))
+        elif part.tag == 'PREP' and not part.find('SELRESTRS'):
+            str_parts.append(part.get('value'))
+        else:
+            str_parts.append(part.tag)
+
+    return ' '.join(str_parts)
 
 def analyze_constructs(examples, role_mapping, evaluation_sets):
     annotated_sentences, lemma_in_vn = 0, 0
@@ -141,7 +160,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
             annotated_sentences += 1
 
         # First possible error: lemma does not exist in VerbNet
-        if lemma not in verbnet.classes_for_predicate:
+        if not verbnet.classids(lemma):
             continue
 
         if test_context:
@@ -149,70 +168,78 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
             n_frames += 1
 
         considered_syntax = []
-        for vn_class in verbnet.classes_for_predicate[lemma]:
-            for vn_frame in vn_class.all_frames():
+        from distutils.version import LooseVersion
+        for classid in sorted(verbnet.classids(lemma), key=lambda c: LooseVersion('-'.join(c.split('-')[1:]))):
+            for vn_frame in verbnet.frames(classid):
+                vn_syntax = vn_frame.find('SYNTAX')
                 # If sentence starts with a verb, remove anything that's before
                 # the verb in VerbNet
-                if gold_syntax[0]['type'] == 'V':
-                    vn_frame = remove_before_v(vn_frame)
-                considered_syntax.append((vn_class.vn_id, vn_frame.syntax))
+                if next(iter(gold_syntax)).tag == 'VERB':
+                    vn_syntax = remove_before_v(vn_syntax)
+                considered_syntax.append((classid, vn_syntax))
 
         # Use an OrderedDict for now to get the same behavior than
         # with the tuple list
         vn_syntax_matches = OrderedDict()
-        for vn_id, vn_syntax in considered_syntax:
+        for classid, vn_syntax in considered_syntax:
             if matches_verbnet_frame(gold_syntax, vn_syntax):
-                if not vn_id in vn_syntax_matches:
-                    vn_syntax_matches[vn_id] = []
-                vn_syntax_matches[vn_id].append(vn_syntax)
+                if not classid in vn_syntax_matches:
+                    vn_syntax_matches[classid] = []
+                # check if vn_syntax is already in there?
+                vn_syntax_matches[classid].append(vn_syntax)
 
         # Second possible error: syntactic pattern is not in VerbNet
         if not vn_syntax_matches:
-            debug(d, ['   ', Fore.RED, gold_syntax, Fore.RESET])
+            debug(d, ['   ', Fore.RED, syntax_to_str(gold_syntax), Fore.RESET])
             continue
 
         if test_context:
             n_correct_frames += 1
             n_classes += 1
 
-        debug(d, ['   ',  Fore.GREEN, gold_syntax, '->', map_gold_frame(vn_id, gold_syntax, role_mapping[lexie]), Fore.RESET])
-        for vn_id in vn_syntax_matches:
-            debug(d, ['    ', vn_id, vn_syntax_matches[vn_id]])
+        debug(d, ['   ', Fore.GREEN, syntax_to_str(gold_syntax), '->',syntax_to_str(map_gold_frame(classid, gold_syntax, role_mapping[lexie])), Fore.RESET])
 
+        for classid in vn_syntax_matches:
+            debug(d, ['    ', classid, ' -> ',
+                [syntax_to_str(vn_syntax) for vn_syntax in
+                    vn_syntax_matches[classid]]])
 
-        # TODO better choice strategy?
-        vn_id, vn_syntax_list = list(vn_syntax_matches.items())[0]
+        # TODO better choice strategy!
+        classid, vn_syntax_list = next(iter(vn_syntax_matches.items()))
         vn_syntax = vn_syntax_list[0]
 
-        if not vn_id in role_mapping[lexie]:
+        if not classid in role_mapping[lexie]:
             continue
+
+        if d: print('still hereee! ', classid,
+                syntax_to_str(vn_syntax))
 
         if test_context:
                 n_correct_classes += 1
 
         for i, correct_syntax in enumerate(gold_syntax):
             # if this is a 'frame element', not a V or anything else
-            if 'role' in correct_syntax:
+            if correct_syntax.tag in ['NP', 'S']:
                 if role_mapping[lexie] == {}:
                     # missing sense
                     pass
-                elif not vn_id in role_mapping[lexie]:
-                    break
-                    raise Exception('{} misses {} class'.format(lexie, vn_id))
-                elif correct_syntax.get('role') not in role_mapping[lexie][vn_id]:
-                    raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
+                elif not classid in role_mapping[lexie]:
+                    raise Exception('{} misses {} class'.format(lexie, classid))
+                elif correct_syntax.get('value') not in role_mapping[lexie][classid]:
+                    raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('value')))
 
 
                 if test_context:
                     n_roles += 1
 
                 candidate_roles = set()
-                candidate_roles.add(vn_syntax[i]['role'])
+                candidate_roles.add(list(vn_syntax)[i].get('value'))
 
-                if role_mapping[lexie][vn_id][correct_syntax.get('role')] in candidate_roles:
+                if role_mapping[lexie][classid][correct_syntax.get('value')] in candidate_roles:
                     if test_context:
                         n_correct_roles += 1 / len(candidate_roles)
 
+    print(annotated_sentences, n_frames, n_classes, n_roles)
     print('                         {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('For these tokens,        {:.1%} of constructions are here'.format(n_correct_frames/n_frames))
     print('For these constructions, {:.1%} of classes are here'.format(n_correct_classes/n_classes))

@@ -8,7 +8,6 @@ import xml.etree.ElementTree as ET
 from hashlib import sha256
 
 import paths
-import verbnet
 
 
 def text_from_example(example_xml):
@@ -54,15 +53,15 @@ def kicktionary_frames(lang):
     all_lus = ET.ElementTree(file=str(paths.ALL_LUS))
 
     for frame, lemma, example, sentence_text in lang_examples(all_lus, lang=lang):
-        subcategorization_frame = verbnet.Syntax()
+        subcategorization_frame = ET.Element('SYNTAX')
         for child in example:
             if child.tag == 'LU_REF':
-                subcategorization_frame.append({'type': 'V'})
+                ET.SubElement(subcategorization_frame, 'VERB')
 
             elif child.tag == 'FE_REF':
                 # TODO needs to detect other types such as PP or S_ING
                 role = child.get('fe-idref').title()  # BEING_FREE -> Being_Free
-                subcategorization_frame.append({'type': 'NP', 'role': role})
+                ET.SubElement(subcategorization_frame, 'NP', value=role)
 
         # A few sentences don't have any role assignments, we skip those
         if subcategorization_frame:
