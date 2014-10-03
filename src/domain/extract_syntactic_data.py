@@ -153,12 +153,12 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
                 # the verb in VerbNet
                 if gold_syntax[0]['type'] == 'V':
                     vn_frame = remove_before_v(vn_frame)
-                considered_syntax.append((vn_class, vn_frame.syntax))
+                considered_syntax.append((vn_class.vn_id, vn_frame.syntax))
 
         vn_syntax_matches = []
-        for vn_class, vn_syntax in considered_syntax:
+        for vn_id, vn_syntax in considered_syntax:
             if matches_verbnet_frame(gold_syntax, vn_syntax) and not vn_syntax in vn_syntax_matches:
-                vn_syntax_matches.append((vn_class, vn_syntax))
+                vn_syntax_matches.append((vn_id, vn_syntax))
 
         # Second possible error: syntactic pattern is not in VerbNet
         if not vn_syntax_matches:
@@ -169,15 +169,15 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
             n_correct_frames += 1
             n_classes += 1
 
-        debug(d, ['    ', vn_class.vn_id, vn_syntax])
+        debug(d, ['    ', vn_id, vn_syntax])
         debug(d, ['   ',  Fore.GREEN, gold_syntax, Fore.RESET])
-        debug(d, ['   ',  Fore.GREEN, map_gold_frame(vn_class.vn_id, gold_syntax, role_mapping[lexie]), Fore.RESET])
+        debug(d, ['   ',  Fore.GREEN, map_gold_frame(vn_id, gold_syntax, role_mapping[lexie]), Fore.RESET])
 
 
         # TODO better choice strategy?
-        vn_class, vn_syntax = vn_syntax_matches[0]
+        vn_id, vn_syntax = vn_syntax_matches[0]
 
-        if not vn_class.vn_id in role_mapping[lexie]:
+        if not vn_id in role_mapping[lexie]:
             continue
 
         if test_context:
@@ -189,10 +189,10 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
                 if role_mapping[lexie] == {}:
                     # missing sense
                     pass
-                elif not vn_class.vn_id in role_mapping[lexie]:
+                elif not vn_id in role_mapping[lexie]:
                     break
-                    raise Exception('{} misses {} class'.format(lexie, vn_class.vn_id))
-                elif correct_syntax.get('role') not in role_mapping[lexie][vn_class.vn_id]:
+                    raise Exception('{} misses {} class'.format(lexie, vn_id))
+                elif correct_syntax.get('role') not in role_mapping[lexie][vn_id]:
                     raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('role')))
 
 
@@ -202,7 +202,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
                 candidate_roles = set()
                 candidate_roles.add(vn_syntax[i]['role'])
 
-                if role_mapping[lexie][vn_class.vn_id][correct_syntax.get('role')] in candidate_roles:
+                if role_mapping[lexie][vn_id][correct_syntax.get('role')] in candidate_roles:
                     if test_context:
                         n_correct_roles += 1 / len(candidate_roles)
 
