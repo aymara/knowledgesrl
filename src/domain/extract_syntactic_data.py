@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import copy
-import collections
+from collections import OrderedDict
 import re
 from xml.etree import ElementTree as ET
 import json
@@ -130,11 +130,13 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
         d = sentence_text in [sentence for source, sentence in evaluation_sets['train']]
         test_context = sentence_text in [sentence for source, sentence in evaluation_sets['test']]
 
+        debug(d, [])
+
         if d == test_context:
             print(d, test_context, sentence_text)
         assert d != test_context
 
-        debug(d, [lexie, lemma])
+        debug(d, [lexie, lemma, sentence_text])
         if test_context:
             annotated_sentences += 1
 
@@ -155,10 +157,14 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
                     vn_frame = remove_before_v(vn_frame)
                 considered_syntax.append((vn_class.vn_id, vn_frame.syntax))
 
-        vn_syntax_matches = []
+        # Use an OrderedDict for now to get the same behavior than
+        # with the tuple list
+        vn_syntax_matches = OrderedDict()
         for vn_id, vn_syntax in considered_syntax:
-            if matches_verbnet_frame(gold_syntax, vn_syntax) and not vn_syntax in vn_syntax_matches:
-                vn_syntax_matches.append((vn_id, vn_syntax))
+            if matches_verbnet_frame(gold_syntax, vn_syntax):
+                if not vn_id in vn_syntax_matches:
+                    vn_syntax_matches[vn_id] = []
+                vn_syntax_matches[vn_id].append(vn_syntax)
 
         # Second possible error: syntactic pattern is not in VerbNet
         if not vn_syntax_matches:
@@ -169,13 +175,14 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
             n_correct_frames += 1
             n_classes += 1
 
-        debug(d, ['    ', vn_id, vn_syntax])
-        debug(d, ['   ',  Fore.GREEN, gold_syntax, Fore.RESET])
-        debug(d, ['   ',  Fore.GREEN, map_gold_frame(vn_id, gold_syntax, role_mapping[lexie]), Fore.RESET])
+        debug(d, ['   ',  Fore.GREEN, gold_syntax, '->', map_gold_frame(vn_id, gold_syntax, role_mapping[lexie]), Fore.RESET])
+        for vn_id in vn_syntax_matches:
+            debug(d, ['    ', vn_id, vn_syntax_matches[vn_id]])
 
 
         # TODO better choice strategy?
-        vn_id, vn_syntax = vn_syntax_matches[0]
+        vn_id, vn_syntax_list = list(vn_syntax_matches.items())[0]
+        vn_syntax = vn_syntax_list[0]
 
         if not vn_id in role_mapping[lexie]:
             continue
