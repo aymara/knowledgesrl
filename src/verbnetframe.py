@@ -385,26 +385,3 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
             i += 1
 
         return passivizedframes
-
-    def generate_relatives(self):
-        relatives = []
-        i_slot = 0
-        for i, element in enumerate(self.structure):
-            if VerbnetOfficialFrame._is_a_slot(element):
-                j = i - 1
-                while j >= 0 and self.structure[j][0].islower():
-                    j -= 1
-
-                structure = (self.structure[j+1:i+1] +
-                             self.structure[0:j+1] +
-                             self.structure[i+1:])
-                roles = ([self.roles[i_slot]] +
-                         self.roles[0:i_slot] +
-                         self.roles[i_slot+1:])
-
-                relatives.append(
-                    VerbnetOfficialFrame(structure, roles, vnclass=self.vnclass,
-                                 role_restrictions=self.role_restrictions))
-                i_slot += 1
-
-        return relatives

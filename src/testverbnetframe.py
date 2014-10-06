@@ -46,24 +46,3 @@ class VerbnetOfficialFrameTest(unittest.TestCase):
                 ["S", "NP", "V", "by", "NP"],
                 ["Value", "Theme", "Agent"],
                 "XX", [])])
-
-    def test_relatives(self):
-        test_frame = VerbnetOfficialFrame(
-            ["NP", "V", "NP", "for", "NP"],
-            ["Agent", "Theme", "Beneficiary"],
-            "XX", [])
-
-        self.assertEqual(test_frame.generate_relatives(), [
-            VerbnetOfficialFrame(
-                ["NP", "V", "NP", "for", "NP"],
-                ["Agent", "Theme", "Beneficiary"],
-                "XX", []),
-            VerbnetOfficialFrame(
-                ["NP", "NP", "V", "for", "NP"],
-                ["Theme", "Agent", "Beneficiary"],
-                "XX", []),
-            VerbnetOfficialFrame(
-                ["for", "NP", "NP", "V", "NP"],
-                ["Beneficiary", "Agent", "Theme"],
-                "XX", [])
-        ])
