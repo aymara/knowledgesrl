@@ -71,8 +71,8 @@ class HeadWordExtractor(FNParsedReader):
         # paths, the top synset is very likely to be the same
         hypernyms = synset.hypernym_paths()[0]
 
-        # TODO For PoS, not in WN, return PoS instead of synset
-        # see commented out test
+        # TODO For PoS not in WN, return PoS instead of synset
+        # (see commented out test)
 
         if hypernyms[0].name() == entity_synset and len(hypernyms) > 1:
             wordclass = hypernyms[1].name()
