@@ -270,14 +270,13 @@ class FulltextReader:
             return
         
         if annotated:
-            args, relative = self._build_args_list(
+            args = self._build_args_list(
                 sentence_text, frame, frame_name, predicate)
         else:
-            args, relative = [], False
-        
+            args = []
+
         return FrameInstance(sentence_text, predicate, args, words, frame_name,
-            filename=self.filename, arg_annotated=annotated,
-            relative=relative)
+            filename=self.filename, arg_annotated=annotated)
     
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.
@@ -290,13 +289,12 @@ class FulltextReader:
         :type frame_name: str.
         :param predicate: The predicate of the frame
         :type predicate: Predicate
-        :returns: Argument list, Boolean -- the built argument list, whether this is a relative clause
+        :returns: Argument list -- the built argument list
         """
         
         args = []
         rank = 1
         stop = False
-        is_relative = False
         phrase_data = None
         while not stop:
             arg_search_str = self.patterns["arg"].format(self._xmlns, rank)
@@ -326,10 +324,8 @@ class FulltextReader:
                     if (arg.role == new_arg.role and
                         arg.phrase_type == new_arg.phrase_type):
                         if arg.text in rel_pronouns:
-                            is_relative = True
                             add = False
                         if new_arg.text in rel_pronouns:
-                            is_relative = True
                             args.remove(arg)
                 
                 if add:
@@ -341,7 +337,7 @@ class FulltextReader:
             # because there is always only one layer
             if self.corpus == "semafor": stop = True
 
-        return args, is_relative
+        return args
     
     def _build_arg(self, sentence_text, frame, predicate, arg, phrase_data, rank):
         # Checks wether the argument is instanciated
