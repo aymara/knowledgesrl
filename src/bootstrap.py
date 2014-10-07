@@ -15,23 +15,23 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
     #[3, 5, 10] -> [17, 65, 2076]
     
     # Transform the frame list (with the slots in frame.roles) into
-    # a list of (frame, role_set, frame_position, slot_position)
-    grouped_roles = [[(x, y, i, j) for j, y in enumerate(x.roles)] for i, x in enumerate(frames)]
+    # a list of (frame, role_set, slot_position)
+    grouped_roles = [[(x, y, slot_position) for slot_position, y in enumerate(x.roles)] for x in frames]
     slots = reduce(lambda a,b:a+b, grouped_roles)
     
     total = [0, 0, 0]
     while log_ratio >= 1:
         # Update probability model with resolved slots
-        for frame, role_set, i, j in slots:
+        for frame, role_set, slot_position in slots:
             if len(role_set) == 1:
                 probability_model.add_data_bootstrap(
                     next(iter(role_set)),
                     frame.predicate,
                     verbnet_classes[frame.predicate],
-                    frame.slot_types[j],
-                    frame.slot_preps[j],
-                    frame.headwords[j],
-                    hw_extractor.get_class(frame.headwords[j])
+                    frame.slot_types[slot_position],
+                    frame.slot_preps[slot_position],
+                    frame.headwords[slot_position],
+                    hw_extractor.get_class(frame.headwords[slot_position])
                 )
         
         # Remove resolved and empty slots
@@ -41,7 +41,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
         # when log_ratio reaches 1
         if log_ratio == 1: min_evidence = [1, 1, 1]
         
-        for frame, role_set, i, j in slots:
+        for frame, role_set, slot_position in slots:
             role = None
             for backoff_level in [0, 1, 2]:
                 role1, role2, ratio = probability_model.best_roles_bootstrap(
@@ -49,10 +49,10 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                     frame.predicate,
                     # Choosing the first class here is arbitrary
                     verbnet_classes[frame.predicate],
-                    frame.slot_types[j],
-                    frame.slot_preps[j],
-                    frame.headwords[j],
-                    hw_extractor.get_class(frame.headwords[j]),
+                    frame.slot_types[slot_position],
+                    frame.slot_preps[slot_position],
+                    frame.headwords[slot_position],
+                    hw_extractor.get_class(frame.headwords[slot_position]),
                     backoff_level,
                     min_evidence[backoff_level]
                 )
