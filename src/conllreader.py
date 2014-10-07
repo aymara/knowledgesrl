@@ -23,21 +23,6 @@ class ConllInvalidPositionError(Exception):
                " parsing CoNLL output (last valid position was {})".format(
                 self.bad_root, self.max_root)
 
-# http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Longest_common_substring#Python
-def LongestCommonSubstring(S1, S2):
-    M = [[0]*(1+len(S2)) for i in range(1+len(S1))]
-    longest, x_longest = 0, 0
-    for x in range(1,1+len(S1)):
-        for y in range(1,1+len(S2)):
-            if S1[x-1] == S2[y-1]:
-                M[x][y] = M[x-1][y-1] + 1
-                if M[x][y]>longest:
-                    longest = M[x][y]
-                    x_longest  = x
-            else:
-                M[x][y] = 0
-    return S1[x_longest-longest: x_longest]
-
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
     
@@ -101,11 +86,14 @@ class SyntacticTreeNode:
 
     def closest_match_as_node(self, arg):
         return self._closest_match_as_node_lcs(arg)[1]
-        
+
     def _closest_match_as_node_lcs(self, arg):
+        from distance import lcsubstrings as word_overlap
+
         root_match = self.flat().split()
-        root_match_len = (len(LongestCommonSubstring(root_match, arg.split())) /
-                (len(root_match) + len(arg.split())))
+        root_match_len = (
+            len(word_overlap(tuple(root_match), tuple(arg.text.split()))) /
+            (len(root_match) + len(arg.text.split())))
         children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
         return max([(root_match_len, self)] + children_results, key = lambda x: x[0])
 

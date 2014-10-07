@@ -176,9 +176,6 @@ if __name__ == "__main__":
         # Probability model
         #
         if options.bootstrap:
-            # Compute headwords classes
-            hw_extractor.compute_word_classes()
-
             bootstrap_algorithm(all_vn_frames, model, hw_extractor, verbnet_classes)
         else:
             for frame in all_vn_frames:

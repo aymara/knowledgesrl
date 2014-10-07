@@ -119,7 +119,8 @@ class ArgGuesser(FNParsedReader):
                     words=[Word(x.begin, x.end, x.pos) for x in tree],
                     frame_name="",
                     sentence_id=sentence_id,
-                    filename=filename
+                    filename=filename,
+                    tree=tree
                 )
     
     def _is_good_pt(self, phrase_type):

@@ -155,8 +155,13 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         # TODO remove this condition and reorganize caller code instead
         if conll_frame_instance is not None:
             result.predicate_position = conll_frame_instance.predicate.position
-            result.args = conll_frame_instance.args
             result.sentence_id = conll_frame_instance.sentence_id
+
+            result.args = conll_frame_instance.args
+            result.tree = conll_frame_instance.tree
+        else:
+            result.args = gold_framenet_instance.args
+            result.tree = gold_framenet_instance.tree
 
         return result
 
