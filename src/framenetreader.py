@@ -61,21 +61,21 @@ class FulltextReader:
     # etree will add the xmlns string before every tag name
     framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
     
-    def __init__(self, filename, core_args_only = False, keep_unannotated = False,
+    def __init__(self, filename, add_non_core_args=True, keep_unannotated = False,
         tree_dict = None, keep_nonverbal = False, pos_file = None):
         """Read a file and update the collected frames list.
         
         :param filename: Path to the file to read.
         :type filename: str.
-        :param core_args_only: Whether we should discard non core args.
-        :type core_args_only: boolean.
+        :param add_non_core_args: Whether we should include non core args.
+        :type add_non_core_args: boolean.
         :param keep_unannotated: Whether we should keep frames without annotated args.
         :type keep_unannotated: boolean.
         :param tree_dict: Syntactic trees for the frames (grouped by sentence in dict)
         :type trees: None | SyntacticTreeNode Dict
         """
         
-        if FulltextReader.core_arg_finder == None and core_args_only:
+        if FulltextReader.core_arg_finder == None and not add_non_core_args:
             print("Loading core arguments list for FrameNet frames... ", end="")
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
             FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
@@ -83,7 +83,7 @@ class FulltextReader:
         
         self.frames = []
         
-        self.core_args_only = core_args_only
+        self.add_non_core_args = add_non_core_args
         self.keep_unannotated = keep_unannotated
         self.keep_nonverbal = keep_nonverbal
         
@@ -313,7 +313,7 @@ class FulltextReader:
                     
                 if new_arg == None: continue
                 
-                if (self.core_args_only and not
+                if (not self.add_non_core_args and not
                     FulltextReader.core_arg_finder.is_core_role(
                         new_arg.role, frame_name)
                 ):

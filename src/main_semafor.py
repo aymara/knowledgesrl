@@ -13,7 +13,7 @@ semafor_pos = Path("../data/semafor/all_evaluation_pos")
 #semafor_pos = "../data/semafor/semafor_testset_pos"
 
 reader = framenetreader.FulltextReader(
-semafor_file, core_args_only = True, pos_file = semafor_pos,
+semafor_file, add_non_core_args=False, pos_file = semafor_pos,
 keep_nonverbal = False)
 semafor_frames = reader.frames
 semafor_roles = [[y.role for y in x.args] for x in semafor_frames]
@@ -22,7 +22,7 @@ annotated_frames = []
 for filename in sorted(semafor_corpus.glob('*.xml')):
     reader = framenetreader.FulltextReader(
         filename,
-        core_args_only = True,
+        add_non_core_args=False,
         keep_unannotated = True,
         keep_nonverbal = False)
     annotated_frames += reader.frames

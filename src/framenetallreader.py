@@ -18,7 +18,7 @@ class FNAllReader:
     This class will one day replace framenetparsedreader.
     
     :var annotations_path: str -- Path to framenet_parsed
-    :var core_args_only: boolean -- Indicates whether we want only core args
+    :var add_non_core_args: boolean -- Indicates whether we also want non-core args
     :var keep_unannotated: boolean -- Indicates whether we want to keep frames without arg annotations
     :var frames: FrameInstance List -- The collected frames
     """
@@ -28,8 +28,8 @@ class FNAllReader:
         "'m", "'re", "'s"]
     
     def __init__(self,
-        core_args_only = False, keep_unannotated = False):
-        self.core_args_only = core_args_only
+        add_non_core_args=True, keep_unannotated = False):
+        self.add_non_core_args = add_non_core_args
         self.keep_unannotated = keep_unannotated
         
         self.stats = {
@@ -43,7 +43,7 @@ class FNAllReader:
 
         reader = framenetreader.FulltextReader(
             annotation_file,
-            core_args_only = self.core_args_only,
+            add_non_core_args=self.add_non_core_args,
             keep_unannotated = self.keep_unannotated,
             tree_dict = self.read_syntactic_parses(parse_file))
         

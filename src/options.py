@@ -9,22 +9,26 @@ import sys
 
 
 matching_algorithm = "sync_predicates"
-core_args_only = True
-gold_args = True
+
+argument_identification = False
 heuristic_rules = False
-debug = False
 bootstrap = False
-probability_model = "predicate_slot"
-dump = False
-dump_file = ""
+probability_model = None
+passivize = False
+semrestr = False
+# usually, a negative option is a bad idea, but 'non-core' is a thing in
+# FrameNet
+add_non_core_args = False
 
 conll_input = None
 conll_output = sys.stdout
-
-passive = True
 use_test_set = False
 corpus_lu = False
-semrestr = False
+
+debug = False
+dump = False
+dump_file = ""
+
 fulltext_corpus = paths.FRAMENET_FULLTEXT
 framenet_parsed = paths.FRAMENET_PARSED
 
@@ -32,57 +36,62 @@ fulltext_annotations = sorted(fulltext_corpus.glob('*.xml'))
 fulltext_parses = sorted(framenet_parsed.glob('*.conll'))
 
 options = getopt.getopt(sys.argv[1:], "d:", [
-    "baseline", "fmatching-algo=", "add-non-core-args", "help", "model=",
-    "bootstrap", "no-gold-args", "heuristic-rules", "dump", "conll_input=",
-    "conll_output=", "no-passive", "baseline", "test-set", "lu",
-    "semantic-restrictions"])
+    # "manual use"
+    "best-gold", "best-auto",
+    # tuning algorithms
+    "fmatching-algo=", "add-non-core-args", "model=", "bootstrap",
+    "argument-identification", "heuristic-rules", "passivize", "semantic-restrictions",
+    # what do we annotate?
+    "conll_input=", "conll_output=", "test-set", "lu",
+    # meta
+    "dump", "help"])
 
 display_usage = False
 
-usage_str = """Usage: main.py [--baseline] [-d num_sample]
-[--fmatching-algo=algo] [--model=probability_model] [--add-non-core-args]
-[--bootstrap] [--no-gold-args] [--heuristic-rules] [--dump filename]
-[--conll_input filename] [--conll_output filename] [--no-passive] [--test-set]
-[--lu] [--semantic-restrictions] [--help]"""
+usage_str = """Usage:
+    main.py options # annotates FrameNet
+    main.py --conll_input=parsed_file.txt --conll_output=annotated_file.txt"""
 
 for opt, value in options[0]:
-    # Removes our enhancements
-    if opt == "--baseline":
-        passive = False
-    elif opt == "-d":
-        debug = True
-        value = 0 if value == "" else int(value)
-        if value > 0:
-            n_debug = value
+    if opt == "--best-gold":
+        argument_identification = False
+        passivize = True
+        probability_model = "predicate_slot"
+    elif opt == "--best-auto":
+        argument_identification = True
+        passivize = True
+        probability_model = "predicate_slot"
+
     elif opt == "--fmatching-algo":
         matching_algorithm = value
     elif opt == "--add-non-core-args":
-        core_args_only = False
+        add_non_core_args = True
     elif opt == "--model":
         if not value in probabilitymodel.models:
             raise Exception("Unknown model {}".format(value))
         probability_model = value
     elif opt == "--bootstrap":
         bootstrap = True
-    elif opt == "--no-gold-args":
-        gold_args = False
+    elif opt == "--argument-identification":
+        argument_identification = True
     elif opt == "--heuristic-rules":
         heuristic_rules = True
+    elif opt == "--semantic-restrictions":
+        semrestr = True
+    elif opt == "--passivize":
+        passivize = True
 
     elif opt == "--conll_input":
         conll_input = value
-        gold_args = False
+        argument_identification = True
     elif opt == "--conll_output":
         conll_output = value
-
     elif opt == "--dump":
         if len(options[1]) > 0:
             dump = True
             dump_file = options[1][0]
         else:
             display_usage = True
-    elif opt == "--no-passive":
-        passive = False 
     elif opt == "--test-set":
         use_test_set = True
         fulltext_corpus = paths.FRAMENET_FULLTEXT_EVALUATION
@@ -91,15 +100,19 @@ for opt, value in options[0]:
         corpus_lu = True
         fulltext_corpus = paths.FRAMENET_LU
         framenet_parsed = paths.FRAMENET_LU_PARSED
-    elif opt == "--semantic-restrictions":
-        semrestr = True
+
+    elif opt == "-d":
+        debug = True
+        value = 0 if value == "" else int(value)
+        if value > 0:
+            n_debug = value
     elif opt == "--help":
         display_usage = True
 
-if conll_input is not None and conll_output == sys.stdout:
-    print("--conll_input should be used with --conll_output. Aborting")
+if conll_output != sys.stdout and conll_input is not None:
+    print("--conll_output should be used with --conll_input. Aborting")
     display_usage = True
-            
+
 if display_usage:
     print(usage_str)
     sys.exit(-1)

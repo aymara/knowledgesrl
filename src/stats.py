@@ -93,7 +93,7 @@ def hmean(x, y):
         return 0
     return (2 * x * y) / (x + y)
 
-def display_stats(gold_args):
+def display_stats(argument_identification):
     s = stats_data
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
@@ -116,14 +116,7 @@ def display_stats(gold_args):
     extrapolated_recall = extrapolated_good_slots / max(s["args_instanciated"], 1)
     extrapolated_accuracy = extrapolated_one_good / max(s["args_instanciated"], 1)
     
-    if gold_args:
-        print(
-            "\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"
-            "Frame instances with predicate in VerbNet: {} frame instances ({} args)\n".format(
-            s["files"], s["frames"], s["args"],
-            s["frames_with_predicate_in_verbnet"],  s["args_kept"]
-        ))
-    else:
+    if argument_identification:
         print(
             "\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
             "Did not extract {} annotated frames.\n"
@@ -134,6 +127,13 @@ def display_stats(gold_args):
             s["arg_extracted_good"], s["arg_extracted_partial"],
             s["arg_extracted_bad"],
             s["arg_not_extracted"]
+        ))
+    else:
+        print(
+            "\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"
+            "Frame instances with predicate in VerbNet: {} frame instances ({} args)\n".format(
+            s["files"], s["frames"], s["args"],
+            s["frames_with_predicate_in_verbnet"],  s["args_kept"]
         ))
         
     if not options.use_test_set:
@@ -215,14 +215,16 @@ def reset_computed_stats():
     stats_data["attributed_roles"] = 0
     stats_data["attributed_roles_mapping_ok"] = 0
 
-def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, gold_args):
+def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, argument_identification):
     # We first reset computed values to 0, eg. if we modified them before
     reset_computed_stats()
 
     # This variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point and
     # args_annotated_mapping_ok is related to gold annotated frames
-    if gold_args: stats_data["args_annotated_mapping_ok"] = 0
+    if not argument_identification:
+        stats_data["args_annotated_mapping_ok"] = 0
+
     total_roles = 0
     
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
@@ -276,7 +278,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, go
 
             stats_data["attributed_roles_mapping_ok"] += len(slot)
             
-            if gold_args:
+            if not argument_identification:
                 stats_data["args_annotated_mapping_ok"] += 1
             
             if next(iter(possible_roles)) in slot:

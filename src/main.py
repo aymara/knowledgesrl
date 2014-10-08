@@ -50,19 +50,33 @@ if __name__ == "__main__":
         annotated_frames = []
         vn_frames = []
 
-        if options.gold_args:
+        if options.argument_identification:
+            #
+            # Argument identification
+            #
+            arg_guesser = argguesser.ArgGuesser(verbnet_classes)
+
+            new_frame_instances = list(arg_guesser.frame_instances_from_file(parsed_conll_file))
+            new_annotated_frames = roleextractor.fill_gold_roles(new_frame_instances,
+                annotation_file, parsed_conll_file, verbnet_classes,
+                role_matcher)
+
+            for gold_frame, frame_instance in zip(new_annotated_frames, new_frame_instances):
+                annotated_frames.append(gold_frame)
+                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(gold_frame, conll_frame_instance=frame_instance))
+        else:
             #
             # Load gold arguments
             #
             fn_reader = FNAllReader(
-                core_args_only=options.core_args_only)
+                add_non_core_args=options.add_non_core_args)
 
             for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
                 stats_data["args"] += len(frame.args)
                 stats_data["args_instanciated"] += len(
                     [x for x in frame.args if x.instanciated])
                 stats_data["frames"] += 1
-                
+
                 if not frame.predicate.lemma in frames_for_verb:
                     log_vn_missing(frame)
                     continue
@@ -73,20 +87,6 @@ if __name__ == "__main__":
                 vn_frames.append(VerbnetFrameOccurrence.build_from_frame(frame, conll_frame_instance=None))
 
             stats_data["files"] += fn_reader.stats["files"]
-        else:
-            #
-            # Argument identification
-            #
-            arg_guesser = argguesser.ArgGuesser(verbnet_classes)
-            
-            new_frame_instances = list(arg_guesser.frame_instances_from_file(parsed_conll_file))
-            new_annotated_frames = roleextractor.fill_gold_roles(new_frame_instances,
-                annotation_file, parsed_conll_file, verbnet_classes,
-                role_matcher)
-            
-            for gold_frame, frame_instance in zip(new_annotated_frames, new_frame_instances):
-                annotated_frames.append(gold_frame)
-                vn_frames.append(VerbnetFrameOccurrence.build_from_frame(gold_frame, conll_frame_instance=frame_instance))
 
         #
         # Frame matching
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
             # Actual frame matching
             for verbnet_frame in frames_for_verb[predicate]:
-                if options.passive and good_frame.passive:
+                if options.passivize and good_frame.passive:
                     try:
                         for passivized_frame in verbnet_frame.passivize():
                             matcher.new_match(passivized_frame)
@@ -159,25 +159,19 @@ if __name__ == "__main__":
                 matcher.handle_semantic_restrictions(data_restr)
                 matcher.frame_occurrence.roles = matcher.possible_distribs()
 
-            #stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, options.gold_args)
-            #display_stats(options.gold_args)
-
         all_vn_frames.extend(vn_frames)
         all_annotated_frames.extend(annotated_frames)
 
-    if options.conll_input is None:
-        print("\n\n## Frame matching stats")
-        stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
-        display_stats(options.gold_args)
-
-    print("Applying probabilty model...")
-    for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
-        #
-        # Probability model
-        #
-        if options.bootstrap:
+    #
+    # Probability models
+    #
+    if options.bootstrap:
+        print("Applying bootstrap...")
+        for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
             bootstrap_algorithm(all_vn_frames, model, hw_extractor, verbnet_classes)
-        else:
+    elif options.probability_model is not None:
+        print("Applying probability model...")
+        for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
             for frame in all_vn_frames:
                 for i, roles in enumerate(frame.roles):
                     if len(frame.roles[i]) > 1:
@@ -187,12 +181,12 @@ if __name__ == "__main__":
                         if new_role != None:
                             frame.roles[i] = set([new_role])
 
-        if options.dump:
-            dumper.add_data_prob_model(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes)
-            dumper.dump(options.dump_file)
+            if options.dump:
+                dumper.add_data_prob_model(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes)
+                dumper.dump(options.dump_file)
 
-        if options.debug:
-            display_debug(options.n_debug)
+            if options.debug:
+                display_debug(options.n_debug)
 
     if options.conll_input is not None:
         print("Dumping semantic CoNLL...")
@@ -204,5 +198,5 @@ if __name__ == "__main__":
 
     else:
         print("\n\n## Final stats")
-        stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.gold_args)
-        display_stats(options.gold_args)
+        stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.argument_identification)
+        display_stats(options.argument_identification)

@@ -25,7 +25,7 @@ class FrameInstance:
         self.filename = filename
         self.slot_type = slot_type
         self.arg_annotated = arg_annotated
-        self.passive = False
+        self.passive = None  # as yet undecided
         self.tree = tree
 
     def get_word(self, word):
