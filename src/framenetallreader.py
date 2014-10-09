@@ -59,7 +59,7 @@ class FNAllReader:
         :type filename: str.
         :returns: list of trees
         """
-        with open(str(parse_filename)) as content:
+        with open(str(parse_filename), encoding='UTF-8') as content:
             sentences_data = content.read().split("\n\n")
             if sentences_data[-1] == "": del sentences_data[-1]
 
