@@ -33,7 +33,7 @@ class FNParsedReader:
         :type filename: str.
         """
         
-        with open(str(filename)) as content:
+        with open(str(filename), encoding='UTF-8') as content:
             self.sentences_data = content.read().split("\n\n")
             if self.sentences_data[len(self.sentences_data) - 1] == "":
                 del self.sentences_data[len(self.sentences_data) - 1]
