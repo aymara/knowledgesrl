@@ -3,7 +3,7 @@
 import unittest
 
 from verbnetframe import VerbnetFrameOccurrence, VerbnetOfficialFrame, ComputeSlotTypeMixin
-from framestructure import FrameInstance, Predicate, Arg, Word
+from framenetframe import FrameInstance, Predicate, Arg, Word
 
 
 class VerbnetFrameOccurrenceTest(unittest.TestCase):

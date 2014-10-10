@@ -7,7 +7,7 @@ import unittest
 import paths
 import os
 
-from framestructure import FrameInstance, Predicate, Word, Arg
+from framenetframe import FrameInstance, Predicate, Word, Arg
 import verbnetreader
 from framenetparsedreader import FNParsedReader
 from framenetallreader import FNAllReader

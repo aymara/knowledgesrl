@@ -26,7 +26,7 @@ import os
 import sys
 import glob
 
-from framestructure import FrameInstance, Predicate, Word, Arg
+from framenetframe import FrameInstance, Predicate, Word, Arg
 from verbnetprepclasses import rel_pronouns
 import framenetcoreargs
 import paths

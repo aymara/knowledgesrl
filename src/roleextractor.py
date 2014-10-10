@@ -13,7 +13,7 @@ from framenetallreader import FNAllReader
 import paths
 import options
 from stats import stats_data
-from framestructure import FrameInstance, Predicate, Arg
+from framenetframe import FrameInstance, Predicate, Arg
 
 
 """Fill the roles of some frames extracted from the syntactic parser output

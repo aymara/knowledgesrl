@@ -4,7 +4,7 @@
 import unittest
 from abc import ABCMeta
 
-from framestructure import FrameInstance, Predicate, Arg, Word
+from framenetframe import FrameInstance, Predicate, Arg, Word
 import verbnetprepclasses
 
 class ComputeSlotTypeMixin(metaclass=ABCMeta):
