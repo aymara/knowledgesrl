@@ -3,6 +3,7 @@
 
 import pickle
 import sys
+import os
 import getopt
 
 import framematcher
@@ -32,13 +33,13 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher,
     result = []
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
         if frame_matching:
-            try:
-                matcher = framematcher.FrameMatcher(found_vn_frame, matching_algorithm)
-                
-                for test_frame in verbnet_predicates[gold_fn_frame.predicate.lemma]:
-                    matcher.new_match(test_frame)
-            except framematcher.EmptyFrameError:
-                pass
+            if found_vn_frame.num_slots == 0:
+                continue
+
+            matcher = framematcher.FrameMatcher(found_vn_frame, matching_algorithm)
+
+            for test_frame in verbnet_predicates[gold_fn_frame.predicate.lemma]:
+                matcher.new_match(test_frame)
 
             best_match_structures = [x[0].structure for x in matcher.best_data]
             best_match_roles = [x[0].roles for x in matcher.best_data]
@@ -143,7 +144,8 @@ def print_slot(slot_data):
         )
   
 def dump(filename):
-     with open("dump/"+filename, "wb") as picklefile:
+    os.makedirs('dump', exist_ok=True)
+    with open("dump/"+filename, "wb") as picklefile:
         pickle.dump(data, picklefile)
 
 if __name__ == "__main__":
