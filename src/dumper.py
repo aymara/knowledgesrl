@@ -147,6 +147,7 @@ def dump(filename):
     os.makedirs('dump', exist_ok=True)
     with open("dump/"+filename, "wb") as picklefile:
         pickle.dump(data, picklefile)
+    print('Dumped to dump/{}'.format(filename))
 
 if __name__ == "__main__":
     status = True

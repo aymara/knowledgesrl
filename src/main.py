@@ -183,10 +183,12 @@ if __name__ == "__main__":
 
             if options.dump:
                 dumper.add_data_prob_model(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes)
-                dumper.dump(options.dump_file)
 
             if options.debug:
                 display_debug(options.n_debug)
+
+    if options.dump:
+        dumper.dump(options.dump_file)
 
     if options.conll_input is not None:
         print("Dumping semantic CoNLL...")
