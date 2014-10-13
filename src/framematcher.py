@@ -237,6 +237,11 @@ class FrameMatcher():
             
         """
         slots_associations = [None for x in range(self.frame_occurrence.num_slots)]
+
+        import copy
+        if 'that' in verbnet_frame.structure and not 'that' in self.frame_occurrence.structure:
+            verbnet_frame = copy.deepcopy(verbnet_frame)
+            verbnet_frame.structure.remove('that')
         
         if self.algo == "baseline":
             matching_function = self._matching_baseline
@@ -342,3 +347,20 @@ class frameMatcherTest(unittest.TestCase):
         for verbnet_frame in verbnet_frames:
             matcher.new_match(verbnet_frame)
         self.assertEqual(matcher.possible_distribs(), [{"R1"}, {"R4"}, set(), {"R5"}])
+
+    def test_removed_that(self):
+        # They considered he was the professor
+        frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'S'], ['Agent', 'Theme'], "consider")
+        matcher = FrameMatcher(frame_occurrence, "sync_predicates")
+
+        matcher.new_match(VerbnetOfficialFrame(['NP', 'V', 'that', 'S'], ['Agent', 'Patient'], 'consider-29.9-1', []))
+        self.assertEqual(matcher.best_score, 200)
+        self.assertEqual(matcher.possible_distribs(), [{'Agent'}, {'Patient'}])
+
+    def test_present_that(self):
+        frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'that', 'S'], ['Agent', 'Theme'], "consider")
+        matcher = FrameMatcher(frame_occurrence, "sync_predicates")
+
+        matcher.new_match(VerbnetOfficialFrame(['NP', 'V', 'that', 'S'], ['Agent', 'Patient'], 'consider-29.9-1', []))
+        self.assertEqual(matcher.best_score, 200)
+        self.assertEqual(matcher.possible_distribs(), [{'Agent'}, {'Patient'}])
