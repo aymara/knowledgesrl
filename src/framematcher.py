@@ -174,19 +174,19 @@ class FrameMatcher():
         
         num_match = 0
         i, j = 0, 0
-        index_v_1 = self.frame_occurrence.structure.index("V")
-        index_v_2 = verbnet_frame.structure.index("V")
+        index_v_in_frame_occurrence = self.frame_occurrence.structure.index("V")
+        index_v_in_official_frame = verbnet_frame.structure.index("V")
         slot_1, slot_2 = 0, 0
-        num_slots_before_v_1 = 0
-        num_slots_before_v_2 = 0
+        num_slots_before_v_in_frame_occurrence = 0
+        num_slots_before_v_in_official_frame = 0
             
         for elem in self.frame_occurrence.structure:
             if VerbnetFrameOccurrence._is_a_slot(elem):
-                num_slots_before_v_1 += 1
+                num_slots_before_v_in_frame_occurrence += 1
             elif elem == "V": break
         for elem in verbnet_frame.structure:
             if VerbnetFrameOccurrence._is_a_slot(elem):
-                num_slots_before_v_2 += 1
+                num_slots_before_v_in_official_frame += 1
             elif elem == "V": break
 
         while i < len(self.frame_occurrence.structure) and j < len(verbnet_frame.structure):
@@ -202,13 +202,15 @@ class FrameMatcher():
                     if slot_2 < len(verbnet_frame.roles):
                         slots_associations[slot_1] = slot_2
                         slot_1, slot_2 = slot_1 + 1, slot_2 + 1
-            elif i < index_v_1 or j < index_v_2:
+            # no match, but not seen the verb everywhere yet
+            elif i < index_v_in_frame_occurrence or j < index_v_in_official_frame:
                 # If we have not encountered the verb yet, we continue the matching
                 # with everything that follows the verb
                 # This is for instance to prevent a "NP NP V" construct
                 # from interrupting the matching early
-                i, j = index_v_1, index_v_2
-                slot_1, slot_2 = num_slots_before_v_1, num_slots_before_v_2
+                i, j = index_v_in_frame_occurrence, index_v_in_official_frame
+                slot_1 = num_slots_before_v_in_frame_occurrence
+                slot_2 = num_slots_before_v_in_official_frame
             else: break
             
             i, j = i + 1, j + 1
