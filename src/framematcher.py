@@ -261,6 +261,7 @@ class FrameMatcher():
             # This frame is better than any previous one : reset everything
             self.best_data = []
             self.best_classes = set()
+
         if score >= self.best_score:
             self.best_score = score
             # This frame got the best score : add its data

@@ -452,7 +452,6 @@ class VerbnetReader:
         return " ".join(pred_strings)
         
 class VerbnetReaderTest(unittest.TestCase):
-
     """Unit test class"""
     
     def test_global(self):
