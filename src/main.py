@@ -47,6 +47,7 @@ if __name__ == "__main__":
 
     print("Loading FrameNet annotations and frame matching...")
     for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
+        print(annotation_file.stem)
         annotated_frames = []
         vn_frames = []
 
@@ -172,6 +173,7 @@ if __name__ == "__main__":
     elif options.probability_model is not None:
         print("Applying probability model...")
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
+            print(annotation_file.stem)
             for frame in all_vn_frames:
                 for i, roles in enumerate(frame.roles):
                     if len(frame.roles[i]) > 1:
