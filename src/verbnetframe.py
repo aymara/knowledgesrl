@@ -321,6 +321,12 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
                 self.num_slots == other.num_slots and
                 self.vnclass == other.vnclass)
 
+    def __key__(self):
+        return (self.vnclass, len(self.structure), tuple(self.structure))
+
+    def __lt__(self, other):
+        return self.__key__() < other.__key__()
+
     def __repr__(self):
         return "VerbnetOfficialFrame({}, {}, {})".format(
             self.vnclass, self.structure, self.roles)

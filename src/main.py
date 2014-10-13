@@ -116,7 +116,7 @@ if __name__ == "__main__":
             stats_data["frames_mapped"] += 1
 
             # Actual frame matching
-            for verbnet_frame in frames_for_verb[predicate]:
+            for verbnet_frame in sorted(frames_for_verb[predicate]):
                 if options.passivize and good_frame.passive:
                     try:
                         for passivized_frame in verbnet_frame.passivize():
