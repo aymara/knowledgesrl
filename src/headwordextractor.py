@@ -109,7 +109,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         for frame in reader.frames:
             sentence_id, sentence_text, tree = list(extractor.sentence_trees())[frame.sentence_id]
             for arg in frame.args:
-                extractor.headword(arg.text, tree)
+                extractor.headword(arg, tree)
 
         self.assertEqual(extractor.get_class("soda"), "physical_entity.n.01")
         #self.assertEqual(extractor.get_class("i"), "pronoun")
@@ -160,10 +160,11 @@ class HeadWordExtractorTest(unittest.TestCase):
 
         frame = reader.frames[1]
         sentence_id, sentence_text, tree = list(extractor.sentence_trees())[frame.sentence_id]
-        self.assertTrue(extractor.headword(frame.args[0].text, tree) == "you")
-              
-        frame = reader.frames[0]
-        self.assertTrue(extractor.headword(frame.args[0].text, tree) == "contribution")
+        self.assertEqual(extractor.headword(frame.args[0], tree), "you")
+
+        frame = reader.frames[25]
+        sentence_id, sentence_text, tree = list(extractor.sentence_trees())[frame.sentence_id]
+        self.assertEqual(extractor.headword(frame.args[0], tree), "people")
 
 if __name__ == "__main__":
     # The -s option makes the script display some examples of results

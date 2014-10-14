@@ -247,10 +247,6 @@ class TreeBuilderTest(unittest.TestCase):
         self.assertTrue(self.tree_list[0].contains("here today"))
         self.assertFalse(self.tree_list[0].contains("others here today"))
 
-    def test_tree_match(self):
-        self.assertEqual(self.tree_list[0].closest_match("others here today"),
-                ['The', 'others', 'here', 'today'])
-
     def test_lima_tree(self):
         conll_tree = \
 """1	Jamaica	Jamaica	NNP	NNP	-	2	SUB	-	-
