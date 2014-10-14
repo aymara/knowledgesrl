@@ -191,49 +191,22 @@ class VerbnetReader:
         index_xml = -1
         num_slot = 0
 
-        replacements = {
-            "ADVP-Middle":[], "ADV-Middle":[],
-            "NP-Fulfilling":["NP"], "NP-Dative":["NP"],
-            "S-Quote":["S"], "S_INF":["to", "S"]
-        }
-
-        previous_was_pp = False
-
         for i, full_element in enumerate(base_structure):
             full_element = full_element.split(".")
             element = full_element[0]
 
-            # see snooze-40.4 for instance (intransitive verbs)
-            # We cannot use :replacements because lower/upper case
-            # is used to detect keywords
-            if element == "v": element = "V"
+            for end in ['-Middle', '-Dative', '-dative', '-Result',
+                        '-Conative', '-Fulfilling', '-Quote']:
+                if element.endswith(end):
+                    element = element[:-len(end)]
 
-            # Handle "PP S_ING": we must ignore the PP
-            if element == "S_ING" and previous_was_pp:
-                del roles[-1]
-                del structure[-1]
-            previous_was_pp = (element == "PP")
+            if '-' in element:
+                raise Exception('Unexpected {} in {}'.format(element, vnclass))
             
-            # Handle optional elements, eg. (PP)
-            if len(element) > 0 and element[0] == "(":
-                base_structure_1 = base_structure[:]
-                del base_structure_1[i]
-                base_structure_2 = base_structure[:]
-                base_structure_2[i] = element[1:-1]
-
-                roles1, structure1 = self._build_structure(
-                    base_structure_1, syntax_data, vnclass, role_list)
-                roles2, structure2 = self._build_structure(
-                    base_structure_2, syntax_data, vnclass, role_list)
-                return (roles1 + roles2), (structure1 + structure2)
-            
-            # Handle some syntax issues : see last entry of steal-10.5
-            if element == "" or "\n" in element:
-                continue
-            # Handle simple replacements
-            if element in replacements:
-                structure = structure + replacements[element]
-            # Handle the "a/b" syntax (which means "a" or "b")
+            # S_INF -> to S
+            if element == 'S_INF':
+                structure = structure + ['to', 'S']
+            # Handle the "whether/if" syntax (which means "whether" or "if")
             elif "/" in element:
                 structure.append(set(element.split("/")))
             # Replace PP by "{preposition set} + NP"
