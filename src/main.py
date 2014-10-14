@@ -168,9 +168,7 @@ if __name__ == "__main__":
     #
     if options.bootstrap:
         print("Applying bootstrap...")
-        for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
-            print(annotation_file.stem)
-            bootstrap_algorithm(all_vn_frames, model, hw_extractor, verbnet_classes)
+        bootstrap_algorithm(all_vn_frames, model, hw_extractor, verbnet_classes)
     elif options.probability_model is not None:
         print("Applying probability model...")
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
