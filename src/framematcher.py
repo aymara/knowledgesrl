@@ -175,7 +175,7 @@ class FrameMatcher():
         num_match = 0
         i, j = 0, 0
         index_v_in_frame_occurrence = self.frame_occurrence.structure.index("V")
-        index_v_in_official_frame = verbnet_frame.structure.index("V")
+        index_v_in_official_frame = verbnet_frame.syntax.index("V")
         slot_1, slot_2 = 0, 0
         num_slots_before_v_in_frame_occurrence = 0
         num_slots_before_v_in_official_frame = 0
@@ -184,21 +184,24 @@ class FrameMatcher():
             if VerbnetFrameOccurrence._is_a_slot(elem):
                 num_slots_before_v_in_frame_occurrence += 1
             elif elem == "V": break
-        for elem in verbnet_frame.structure:
-            if VerbnetFrameOccurrence._is_a_slot(elem):
+        for elem in verbnet_frame.syntax:
+            if '.' in elem:
                 num_slots_before_v_in_official_frame += 1
             elif elem == "V": break
 
-        while i < len(self.frame_occurrence.structure) and j < len(verbnet_frame.structure):
+        while i < len(self.frame_occurrence.structure) and j < len(verbnet_frame.syntax):
             elem1 = self.frame_occurrence.structure[i]
-            elem2 = verbnet_frame.structure[j]
+            try:
+                elem2 = verbnet_frame.syntax[j].split('.')[0]
+            except:
+                elem2 = verbnet_frame.syntax[j]
             
             if FrameMatcher._is_a_match(elem1, elem2):
                 if VerbnetFrameOccurrence._is_a_slot(elem1):
                     num_match += 1
                     # verbnet_frame.roles can be too short. This will for instance
-                    # happen in the "NP V NP S_INF" structure of want-32.1,
-                    # where S_INF is given no role
+                    # happen in the "NP V NP S_INF" syntax of want-32.1,
+                    # where S_INF is given no role since it's part of the NP
                     if slot_2 < len(verbnet_frame.roles):
                         slots_associations[slot_1] = slot_2
                         slot_1, slot_2 = slot_1 + 1, slot_2 + 1
@@ -219,7 +222,7 @@ class FrameMatcher():
     def _matching_stop_on_fail(self, verbnet_frame, slots_associations):
         """ Stop the algorithm at the first mismatch encountered """
         num_match = 0
-        for elem1,elem2 in zip(self.frame_occurrence.structure, verbnet_frame.structure):
+        for elem1,elem2 in zip(self.frame_occurrence.structure, verbnet_frame.syntax):
             if FrameMatcher._is_a_match(elem1, elem2):
                 if VerbnetFrameOccurrence._is_a_slot(elem1):
                     num_match += 1
@@ -239,9 +242,10 @@ class FrameMatcher():
         slots_associations = [None for x in range(self.frame_occurrence.num_slots)]
 
         import copy
-        if 'that' in verbnet_frame.structure and not 'that' in self.frame_occurrence.structure:
+        if 'that' in verbnet_frame.syntax and not 'that' in self.frame_occurrence.structure:
             verbnet_frame = copy.deepcopy(verbnet_frame)
             verbnet_frame.structure.remove('that')
+            verbnet_frame.syntax.remove('that')
         
         if self.algo == "baseline":
             matching_function = self._matching_baseline
@@ -292,9 +296,18 @@ class FrameMatcher():
 class frameMatcherTest(unittest.TestCase):
     def test_1(self):
         frame_occurrence = VerbnetFrameOccurrence(["NP", "V", "NP", "with", "NP"], [None, None, None], "a predicate")
-        frame2 = VerbnetOfficialFrame(["NP", "V", "NP", "for", "NP"], ["Agent", "Patient", "Role1"], "a", [])
-        frame3 = VerbnetOfficialFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role2"], "b", [])
-        frame4 = VerbnetOfficialFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"], "c", [])
+        frame2 = VerbnetOfficialFrame(
+            ["NP.Agent", "V", "NP.Patient", "for", "NP.Role1"],
+            ["NP", "V", "NP", "for", "NP"],
+            ["Agent", "Patient", "Role1"], "a", [])
+        frame3 = VerbnetOfficialFrame(
+            ["NP.Agent", "V", "NP.Patient", "with", "NP.Role2"],
+            ["NP", "V", "NP", "with", "NP"],
+            ["Agent", "Patient", "Role2"], "b", [])
+        frame4 = VerbnetOfficialFrame(
+            ["NP.Agent", "V", "NP.Patient", "with", "NP.Role3"],
+            ["NP", "V", "NP", "with", "NP"],
+            ["Agent", "Patient", "Role3"], "c", [])
 
         matcher = FrameMatcher(frame_occurrence, "sync_predicates")
         matcher.new_match(frame2)
@@ -306,13 +319,19 @@ class frameMatcherTest(unittest.TestCase):
         
     def test_2(self):
         frame_occurrence = VerbnetFrameOccurrence(["to", "be"], [], "a predicate")
-        frame = VerbnetOfficialFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"], "X", [])
+        frame = VerbnetOfficialFrame(
+            ["NP.Agent", "V", "NP.Patient", "with", "NP.Role3"],
+            ["NP", "V", "NP", "with", "NP"],
+            ["Agent", "Patient", "Role3"], "c", [])
 
         self.assertEqual(frame_occurrence.num_slots, 0)
             
     def test_3(self):
         frame_occurrence = VerbnetFrameOccurrence(["NP", "V", "with", "NP"], [None, None], "a predicate")
-        frame = VerbnetOfficialFrame(["NP", "V", "NP", "with", "NP"], ["Agent", "Patient", "Role3"], "XX", [])
+        frame = VerbnetOfficialFrame(
+            ["NP.Agent", "V", "NP.Patient", "with", "NP.Role3"],
+            ["NP", "V", "NP", "with", "NP"],
+            ["Agent", "Patient", "Role3"], "c", [])
 
         matcher = FrameMatcher(frame_occurrence, "sync_predicates")
         matcher.new_match(frame)
@@ -322,13 +341,30 @@ class frameMatcherTest(unittest.TestCase):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'NP'], [None, None], "a predicate")
         matcher = FrameMatcher(frame_occurrence, "sync_predicates")
         verbnet_frames = [
-            VerbnetOfficialFrame(['NP', 'V', 'NP'], ['Agent', 'Theme'], "XX", []),
-            VerbnetOfficialFrame(['NP', 'V', 'NP'], ['Agent', 'Theme'], "XX", []),
-            VerbnetOfficialFrame(['NP', 'V'], ['Theme'], "XX", []),
-            VerbnetOfficialFrame(['NP', 'V', 'NP'], ['Agent', 'Theme'], "XX", []),
-            VerbnetOfficialFrame(['NP', 'V', {'with'}, 'NP'], ['Theme', 'Instrument'], "XX", []),
-            VerbnetOfficialFrame(['NP', 'V', 'NP', {'with'}, 'NP'], ['Agent', 'Theme', 'Instrument'], "XX", []),
-            VerbnetOfficialFrame(['NP', 'V', 'NP'], ['Instrument', 'Theme'], "XX", [])
+            VerbnetOfficialFrame(
+                ['NP.Agent', 'V', 'NP.Theme'], ['NP', 'V', 'NP'], ['Agent', 'Theme'],
+                "XX", []),
+            VerbnetOfficialFrame(
+                ['NP.Agent', 'V', 'NP.Theme'], ['NP', 'V', 'NP'], ['Agent', 'Theme'],
+                "XX", []),
+            VerbnetOfficialFrame(
+                ['NP.Theme', 'V'], ['NP', 'V'], ['Theme'],
+                "XX", []),
+            VerbnetOfficialFrame(
+                ['NP.Agent', 'V', 'NP.Theme'], ['NP', 'V', 'NP'], ['Agent', 'Theme'],
+                "XX", []),
+            VerbnetOfficialFrame(
+                ['NP.Theme', 'V', {'with'}, 'NP.Instrument'],
+                ['NP', 'V', {'with'}, 'NP'], ['Theme', 'Instrument'],
+                "XX", []),
+            VerbnetOfficialFrame(
+                ['NP.Agent', 'V', 'NP.Theme', {'with'}, 'NP.Instrument'],
+                ['NP', 'V', 'NP', {'with'}, 'NP'], ['Agent', 'Theme', 'Instrument'],
+                "XX", []),
+            VerbnetOfficialFrame(
+                ['NP.Instrument', 'V', 'NP.Theme'],
+                ['NP', 'V', 'NP'], ['Instrument', 'Theme'],
+                "XX", [])
         ]
         for verbnet_frame in verbnet_frames:
             matcher.new_match(verbnet_frame)
@@ -340,8 +376,14 @@ class frameMatcherTest(unittest.TestCase):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'NP', 'NP', 'for', 'NP'], [None, None, None, None], "a predicate")
         
         verbnet_frames = [
-            VerbnetOfficialFrame(['NP', 'V', 'NP', 'by', 'NP'], ['R1', 'R2', 'R3'], "XX", []),
-            VerbnetOfficialFrame(['NP', 'V', 'NP', {'for', 'as'}, 'NP'], ['R1', 'R4', 'R5'], "XX", [])
+            VerbnetOfficialFrame(
+                ['NP.R1', 'V', 'NP.R2', 'by', 'NP.R3'],
+                ['NP', 'V', 'NP', 'by', 'NP'], ['R1', 'R2', 'R3'],
+                "XX", []),
+            VerbnetOfficialFrame(
+                ['NP.R1', 'V', 'NP.R4', {'for', 'as'}, 'NP.R5'],
+                ['NP', 'V', 'NP', {'for', 'as'}, 'NP'],
+                ['R1', 'R4', 'R5'], "XX", [])
         ]
         matcher = FrameMatcher(frame_occurrence, "baseline")
         for verbnet_frame in verbnet_frames:
@@ -353,7 +395,10 @@ class frameMatcherTest(unittest.TestCase):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'S'], ['Agent', 'Theme'], "consider")
         matcher = FrameMatcher(frame_occurrence, "sync_predicates")
 
-        matcher.new_match(VerbnetOfficialFrame(['NP', 'V', 'that', 'S'], ['Agent', 'Patient'], 'consider-29.9-1', []))
+        matcher.new_match(VerbnetOfficialFrame(
+            ['NP.Agent', 'V', 'that', 'S.Patient'],
+            ['NP', 'V', 'that', 'S'], ['Agent', 'Patient'],
+            'consider-29.9-1', []))
         self.assertEqual(matcher.best_score, 200)
         self.assertEqual(matcher.possible_distribs(), [{'Agent'}, {'Patient'}])
 
@@ -361,6 +406,9 @@ class frameMatcherTest(unittest.TestCase):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'that', 'S'], ['Agent', 'Theme'], "consider")
         matcher = FrameMatcher(frame_occurrence, "sync_predicates")
 
-        matcher.new_match(VerbnetOfficialFrame(['NP', 'V', 'that', 'S'], ['Agent', 'Patient'], 'consider-29.9-1', []))
+        matcher.new_match(VerbnetOfficialFrame(
+            ['NP.Agent', 'V', 'that', 'S.Patient'],
+            ['NP', 'V', 'that', 'S'], ['Agent', 'Patient'],
+            'consider-29.9-1', []))
         self.assertEqual(matcher.best_score, 200)
         self.assertEqual(matcher.possible_distribs(), [{'Agent'}, {'Patient'}])

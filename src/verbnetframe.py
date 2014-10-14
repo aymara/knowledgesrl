@@ -13,7 +13,7 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
         "indirect_object": "OBJI", "prep_object": "PPOBJ"
     }
 
-    def compute_slot_types(self, structure):
+    def compute_slot_types(self, syntax):
         """Build the list of slot types for this frame"""
 
         slot_types, slot_preps = [], []
@@ -22,11 +22,11 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
         # always subject before the verb, object immediatly after the verb
         # and indirect_object after we encoutered a slot for object
         next_expected = ComputeSlotTypeMixin.slot_types["subject"]
-        # If last structure element was a preposition, this will be filled
+        # If last syntax element was a preposition, this will be filled
         # with the preposition and will "overwrite" :next_expected
         preposition = ""
 
-        for element in structure:
+        for element in syntax:
             if element == "V":
                 next_expected = ComputeSlotTypeMixin.slot_types["object"]
             elif self._is_a_slot(element):
@@ -303,7 +303,8 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
     :var example: str -- An example sentence that illustrates the frame
     """
 
-    def __init__(self, structure, roles, vnclass, role_restrictions):
+    def __init__(self, syntax, structure, roles, vnclass, role_restrictions):
+        self.syntax = syntax
         self.structure = structure
 
         # Transform "a" in {"a"} and keep everything else unchanged
@@ -311,7 +312,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         self.num_slots = len(self.roles)
         self.role_restrictions = role_restrictions
 
-        self.slot_types, self.slot_preps = self.compute_slot_types(structure)
+        self.slot_types, self.slot_preps = self.compute_slot_types(syntax)
         self.vnclass = vnclass
 
     def __eq__(self, other):
@@ -322,11 +323,11 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
                 self.vnclass == other.vnclass)
 
     def __key__(self):
-        def structure_no_set(structure):
-            for part in structure:
+        def syntax_no_set(syntax):
+            for part in syntax:
                 yield '-'.join(part) if type(part) == set else part
 
-        return (self.vnclass, len(self.structure), tuple(structure_no_set(self.structure)))
+        return (self.vnclass, len(self.syntax), tuple(syntax_no_set(self.syntax)))
 
     def __lt__(self, other):
         return self.__key__() < other.__key__()
@@ -346,7 +347,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         slot_position = 0
         old_sbj_end = 0
         first_slot = True
-        for i, element in enumerate(self.structure):
+        for i, element in enumerate(self.syntax):
             if first_slot:
                 old_sbj_end = i
             if VerbnetOfficialFrame._is_a_slot(element):
@@ -356,17 +357,20 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
                 break
 
         # Find the first and last element of the first slot following the verb
-        index_v = self.structure.index("V")
+        index_v = self.syntax.index("V")
         new_sbj_begin, new_sbj_end = index_v + 1, index_v + 1
         while True:
-            if new_sbj_end >= len(self.structure):
+            if new_sbj_end >= len(self.syntax):
                 return []
-            if VerbnetOfficialFrame._is_a_slot(self.structure[new_sbj_end]):
+            if VerbnetOfficialFrame._is_a_slot(self.syntax[new_sbj_end]):
                 break
             new_sbj_end += 1
 
         # Build the passive frame without "by"
         frame_without_agent = VerbnetOfficialFrame(
+            (self.syntax[new_sbj_begin:new_sbj_end+1] +
+                self.syntax[old_sbj_end+1:index_v] + ["V"] +
+                self.syntax[new_sbj_end+1:]),
             (self.structure[new_sbj_begin:new_sbj_end+1] +
                 self.structure[old_sbj_end+1:index_v] + ["V"] +
                 self.structure[new_sbj_end+1:]),
@@ -380,13 +384,16 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
 
         # Add the frames obtained by inserting "by + the old subject"
         # after the verb and every slot that follows it
-        new_index_v = frame_without_agent.structure.index("V")
+        new_index_v = frame_without_agent.syntax.index("V")
         i = new_index_v
         slot = slot_position - 1
-        while i < len(frame_without_agent.structure):
-            elem = frame_without_agent.structure[i]
+        while i < len(frame_without_agent.syntax):
+            elem = frame_without_agent.syntax[i]
             if self._is_a_slot(elem) or elem == "V":
                 passivizedframes.append(VerbnetOfficialFrame(
+                    (frame_without_agent.syntax[0:i+1] +
+                        ["by"] + self.syntax[0:old_sbj_end+1] +
+                        frame_without_agent.syntax[i+1:]),
                     (frame_without_agent.structure[0:i+1] +
                         ["by"] + self.structure[0:old_sbj_end+1] +
                         frame_without_agent.structure[i+1:]),

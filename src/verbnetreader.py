@@ -129,6 +129,22 @@ class VerbnetReader:
             
         for subclass in xml_class.find("SUBCLASSES"):
             self._handle_class(subclass, frames, role_list, restrictions)
+
+    def merge_syntax(self, primary_structure, roles):
+        new_syntax = []
+        role_index = 0
+        for elem in primary_structure:
+            if elem in ['NP', 'ADJP', 'ADVP', 'S', 'S_ING']:
+                try:
+                    new_syntax.append('{}.{}'.format(elem, roles[role_index]))
+                    role_index += 1
+                    continue
+                except:
+                    pass
+
+            new_syntax.append(elem)
+
+        return new_syntax
        
     def _build_frame(self, xml_frame, vnclass, role_list, restrictions):
         """Parse one frame
@@ -158,7 +174,8 @@ class VerbnetReader:
 
         role_restr = [restrictions[role_list.index(x)] for x in roles]
         
-        result = VerbnetOfficialFrame(structure, roles, vnclass, role_restrictions=role_restr)
+        syntax = self.merge_syntax(structure, roles)
+        result = VerbnetOfficialFrame(syntax, structure, roles, vnclass, role_restrictions=role_restr)
         
         if self.normalize:
             example = xml_frame.find("EXAMPLES/EXAMPLE").text
@@ -428,22 +445,27 @@ class VerbnetReaderTest(unittest.TestCase):
         test_verbs = ["sparkle", "employ", "break", "suggest", "snooze"]
         test_frames = [
             VerbnetOfficialFrame(
+                ['there', 'V', 'NP.Theme', verbnetprepclasses.prep["loc"], 'NP.Location'],
                 ['there', 'V', 'NP', verbnetprepclasses.prep["loc"], 'NP'],
                 ['Theme', 'Location'],
                 "light_emission-43.1", []),
             VerbnetOfficialFrame(
+                ["NP.Agent", "V", "NP.Theme", "ADV"],
                 ["NP", "V", "NP", "ADV"],
                 ["Agent", "Theme"],
                 "use-105", []),
             VerbnetOfficialFrame(
+                ["NP.Patient", "V"],
                 ["NP", "V"],
                 ["Patient"],
                 "break-45.1", []),
             VerbnetOfficialFrame(
+                ["NP.Agent", "V", "how", "to", "S.Topic"],
                 ["NP", "V", "how", "to", "S"],
                 ["Agent", "Topic"],
                 "say-37.7", []),
             VerbnetOfficialFrame(
+                ["NP.Agent", "V"],
                 ["NP", "V"],
                 ["Agent"],
                 "snooze-40.4", [])
@@ -469,27 +491,38 @@ class VerbnetReaderTest(unittest.TestCase):
         
         list1 = [
             VerbnetOfficialFrame(
+                ['NP.Agent', 'V', 'NP.Patient', {'from'}, 'NP.Co-Patient'],
                 ['NP', 'V', 'NP', {'from'}, 'NP'],
                 ['Agent', 'Patient', 'Co-Patient'],
                 "separate-23.1", []),
             VerbnetOfficialFrame(
+                ['NP.Agent', 'V', 'NP.Patient'],
                 ['NP', 'V', 'NP'],
                 ['Agent', 'Patient'],
                 "separate-23.1", []),
             VerbnetOfficialFrame(
+                ['NP.Patient', 'V'],
                 ['NP', 'V'],
                 ['Patient'],
                 "separate-23.1", []),
             VerbnetOfficialFrame(
-                ['NP', 'V', {'from'}, 'NP'],
+                ['NP.Patient', 'V', 'ADVP', {'from'}, 'NP.Co-Patient'],
+                ['NP', 'V', 'ADVP', {'from'}, 'NP'],
                 ['Patient', 'Co-Patient'],
                 "separate-23.1", []),
             VerbnetOfficialFrame(
-                ['NP', 'V'],
+                ['NP.Patient', 'V', 'ADVP'],
+                ['NP', 'V', 'ADVP'],
                 ['Patient'],
                 "separate-23.1", [])]
-        list2 = [VerbnetOfficialFrame(['NP', 'V', {'from'}, 'NP'], ['Patient', 'Co-Patient'], "separate-23.1-1", [])]
-        list3 = [VerbnetOfficialFrame(['NP', 'V', {'with'}, 'NP'], ['Patient', 'Co-Patient'], "separate-23.1-2", [])]
+        list2 = [VerbnetOfficialFrame(
+            ['NP.Patient', 'V', {'from'}, 'NP.Co-Patient'],
+            ['NP', 'V', {'from'}, 'NP'],
+            ['Patient', 'Co-Patient'], "separate-23.1-1", [])]
+        list3 = [VerbnetOfficialFrame(
+            ['NP.Patient', 'V', {'with'}, 'NP.Co-Patient'],
+            ['NP', 'V', {'with'}, 'NP'],
+            ['Patient', 'Co-Patient'], "separate-23.1-2", [])]
         expected_result = {
             'dissociate': list1+list3,
             'disconnect': list1+list3,
@@ -509,14 +542,14 @@ class VerbnetReaderTest(unittest.TestCase):
         
         for verb in expected_result:
             if expected_result[verb] != reader.frames_for_verb[verb]:
-                print("Error :")
-                print(verb)
+                print("Error with {}".format(verb))
+                print('Expected')
                 for data in expected_result[verb]:
                     print(data)
-                print("\n")
+                print('Got')
                 for data in reader.frames_for_verb[verb]:
                     print(data)
-                print("\n")
+                print()
             
         self.assertEqual(reader.frames_for_verb, expected_result)
 

@@ -62,6 +62,8 @@ class VerbnetFrameOccurrenceTest(unittest.TestCase):
             VerbnetOfficialFrame(
                 ["NP", "NP", "in", "NP", "V", "that", "S",
                  "for", "NP", "NP", "after", "NP"],
+                ["NP", "NP", "in", "NP", "V", "that", "S",
+                 "for", "NP", "NP", "after", "NP"],
                 [None, None, None, None, None, None, None],
                 "XX", [])
         ]
