@@ -116,7 +116,7 @@ class VerbnetReader:
             if xml_frame.find('DESCRIPTION').get('primary') == 'Passive':
                 continue
 
-            frames += self._build_frame(xml_frame, vnclass, role_list, restrictions)
+            frames.append(self._build_frame(xml_frame, vnclass, role_list, restrictions))
         
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
@@ -153,23 +153,21 @@ class VerbnetReader:
             
         syntax_data = xml_frame.find("SYNTAX")
         
-        roles, structures = self._build_structure(
+        roles, structure = self._build_structure(
             base_structure, syntax_data, vnclass, role_list)
 
-        role_restr = [[restrictions[role_list.index(x)] for x in y] for y in roles]
+        role_restr = [restrictions[role_list.index(x)] for x in roles]
         
-        result = [VerbnetOfficialFrame(y, x, vnclass, role_restrictions=z)
-            for x, y, z in zip(roles, structures, role_restr)]
+        result = VerbnetOfficialFrame(structure, roles, vnclass, role_restrictions=role_restr)
         
         if self.normalize:
             example = xml_frame.find("EXAMPLES/EXAMPLE").text
             semantics = self._build_semantics(xml_frame.find("SEMANTICS"))
             syntax_roles = self._format_syntax_roles(xml_frame.find("SYNTAX"))
             
-            for frame in result:
-                frame.example = example
-                frame.semantics = semantics
-                frame.syntax = syntax_roles
+            result.example = example
+            result.semantics = semantics
+            result.syntax = syntax_roles
         
         return result
   
@@ -276,7 +274,7 @@ class VerbnetReader:
              
         while len(roles) > 0 and roles[-1] == None: del roles[-1]
             
-        return [roles], [structure]
+        return roles, structure
     
     def _read_syntax_data(self, index_xml, syntax_data, elem, base_structure):
         """ Look for a node of SYNTAX that match the current element
