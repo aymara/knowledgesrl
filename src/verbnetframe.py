@@ -322,7 +322,11 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
                 self.vnclass == other.vnclass)
 
     def __key__(self):
-        return (self.vnclass, len(self.structure), tuple(self.structure))
+        def structure_no_set(structure):
+            for part in structure:
+                yield '-'.join(part) if type(part) == set else part
+
+        return (self.vnclass, len(self.structure), tuple(structure_no_set(self.structure)))
 
     def __lt__(self, other):
         return self.__key__() < other.__key__()
