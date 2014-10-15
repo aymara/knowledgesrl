@@ -294,8 +294,9 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 
 
 class VerbnetOfficialFrame(ComputeSlotTypeMixin):
-    """A representation of a frame syntactic structure
+    """A representation of a frame syntactic syntax
 
+    :var syntax : (str.role | str | str set) list -- structure + roles
     :var structure: (str | str set) List -- representation of the structure
     :var roles: str list -- VerbNet roles for each structure's slot
     :var num_slots: int -- number of argument slots in :structure
@@ -334,7 +335,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
 
     def __repr__(self):
         return "VerbnetOfficialFrame({}, {}, {})".format(
-            self.vnclass, self.structure, self.roles)
+            self.vnclass, self.syntax)
 
     def passivize(self):
         """

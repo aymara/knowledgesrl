@@ -31,20 +31,20 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher,
     matching_algorithm = ""):
     
     result = []
-    for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
+    for gold_fn_frame, frame_instance in zip(annotated_frames, vn_frames):
         if frame_matching:
-            if found_vn_frame.num_slots == 0:
+            if frame_instance.num_slots == 0:
                 continue
 
-            matcher = framematcher.FrameMatcher(found_vn_frame, matching_algorithm)
+            matcher = framematcher.FrameMatcher(frame_instance, matching_algorithm)
 
             for test_frame in verbnet_predicates[gold_fn_frame.predicate.lemma]:
                 matcher.new_match(test_frame)
 
-            best_match_structures = [x[0].structure for x in matcher.best_data]
-            best_match_roles = [x[0].roles for x in matcher.best_data]
+            best_matches_syntax = [x[0].syntax for x in matcher.best_data]
+            best_matches_roles = [x[0].roles for x in matcher.best_data]
                
-        for i, slot in enumerate(found_vn_frame.roles):
+        for i, slot in enumerate(frame_instance.roles):
             status = "?"
             possible_roles = None
             if len(slot) == 0: status = "no_role"
@@ -70,7 +70,7 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher,
 
             to_add = {
                 "slot":i,
-                "structure":found_vn_frame.structure,
+                "structure":frame_instance.structure,
                 "frame_name":gold_fn_frame.frame_name,
                 "sentence":gold_fn_frame.sentence,
                 "predicate":gold_fn_frame.predicate.lemma,
@@ -82,8 +82,8 @@ def clone_and_eval(annotated_frames, vn_frames, role_matcher,
             }
                            
             if frame_matching:
-                to_add["best_match_structures"] = best_match_structures
-                to_add["best_match_roles"] = best_match_roles
+                to_add["best_matches_syntax"] = best_matches_syntax
+                to_add["best_matches_roles"] = best_matches_roles
 
             result.append(to_add)
 
@@ -134,12 +134,12 @@ def print_slot(slot_data):
             slot_data["status"]
         )
     )
-    if "best_match_structures" in slot_data:
+    if "best_matches_syntax" in slot_data:
         print(
-            "Frame matching best structures {}\n"
+            "Frame matching best syntax{}\n"
             "Frame matching best roles {}\n".format(
-                slot_data["best_match_structures"],
-                slot_data["best_match_roles"]
+                slot_data["best_matches_syntax"],
+                slot_data["best_matches_roles"]
             )
         )
   
