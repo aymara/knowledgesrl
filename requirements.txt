@@ -1,4 +1,4 @@
--e git://github.com/pquentin/nltk.git#egg=nltk
+-e git://github.com/pquentin/nltk.git@verbnet#egg=nltk
 
 colorama==0.2.7
 Distance==0.1.3
