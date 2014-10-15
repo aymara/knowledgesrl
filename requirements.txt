@@ -1,4 +1,4 @@
-nltk==3.0.0
+-e git://github.com/pquentin/nltk.git#egg=nltk
 
 colorama==0.2.7
 Distance==0.1.3
