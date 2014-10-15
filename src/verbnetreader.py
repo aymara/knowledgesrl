@@ -175,7 +175,7 @@ class VerbnetReader:
         role_restr = [restrictions[role_list.index(x)] for x in roles]
         
         syntax = self.merge_syntax(structure, roles)
-        result = VerbnetOfficialFrame(syntax, structure, roles, vnclass, role_restrictions=role_restr)
+        result = VerbnetOfficialFrame(syntax, vnclass, role_restrictions=role_restr)
         
         if self.normalize:
             example = xml_frame.find("EXAMPLES/EXAMPLE").text
@@ -218,8 +218,11 @@ class VerbnetReader:
             if '-' in element:
                 raise Exception('Unexpected {} in {}'.format(element, vnclass))
             
+            # TODO handle adverbial phrases and adverbs?
+            if element in ['ADV', 'ADVP']:
+                pass
             # S_INF -> to S
-            if element == 'S_INF':
+            elif element == 'S_INF':
                 structure = structure + ['to', 'S']
             # Handle the "whether/if" syntax (which means "whether" or "if")
             elif "/" in element:
@@ -446,28 +449,18 @@ class VerbnetReaderTest(unittest.TestCase):
         test_frames = [
             VerbnetOfficialFrame(
                 ['there', 'V', 'NP.Theme', verbnetprepclasses.prep["loc"], 'NP.Location'],
-                ['there', 'V', 'NP', verbnetprepclasses.prep["loc"], 'NP'],
-                ['Theme', 'Location'],
                 "light_emission-43.1", []),
             VerbnetOfficialFrame(
-                ["NP.Agent", "V", "NP.Theme", "ADV"],
-                ["NP", "V", "NP", "ADV"],
-                ["Agent", "Theme"],
+                ["NP.Agent", "V", "NP.Theme"],
                 "use-105", []),
             VerbnetOfficialFrame(
                 ["NP.Patient", "V"],
-                ["NP", "V"],
-                ["Patient"],
                 "break-45.1", []),
             VerbnetOfficialFrame(
                 ["NP.Agent", "V", "how", "to", "S.Topic"],
-                ["NP", "V", "how", "to", "S"],
-                ["Agent", "Topic"],
                 "say-37.7", []),
             VerbnetOfficialFrame(
                 ["NP.Agent", "V"],
-                ["NP", "V"],
-                ["Agent"],
                 "snooze-40.4", [])
         ]
         restrictions_str = {
@@ -492,37 +485,17 @@ class VerbnetReaderTest(unittest.TestCase):
         list1 = [
             VerbnetOfficialFrame(
                 ['NP.Agent', 'V', 'NP.Patient', {'from'}, 'NP.Co-Patient'],
-                ['NP', 'V', 'NP', {'from'}, 'NP'],
-                ['Agent', 'Patient', 'Co-Patient'],
                 "separate-23.1", []),
+            VerbnetOfficialFrame(['NP.Agent', 'V', 'NP.Patient'], "separate-23.1", []),
+            VerbnetOfficialFrame(['NP.Patient', 'V'], "separate-23.1", []),
             VerbnetOfficialFrame(
-                ['NP.Agent', 'V', 'NP.Patient'],
-                ['NP', 'V', 'NP'],
-                ['Agent', 'Patient'],
+                ['NP.Patient', 'V', {'from'}, 'NP.Co-Patient'],
                 "separate-23.1", []),
-            VerbnetOfficialFrame(
-                ['NP.Patient', 'V'],
-                ['NP', 'V'],
-                ['Patient'],
-                "separate-23.1", []),
-            VerbnetOfficialFrame(
-                ['NP.Patient', 'V', 'ADVP', {'from'}, 'NP.Co-Patient'],
-                ['NP', 'V', 'ADVP', {'from'}, 'NP'],
-                ['Patient', 'Co-Patient'],
-                "separate-23.1", []),
-            VerbnetOfficialFrame(
-                ['NP.Patient', 'V', 'ADVP'],
-                ['NP', 'V', 'ADVP'],
-                ['Patient'],
-                "separate-23.1", [])]
+            VerbnetOfficialFrame(['NP.Patient', 'V'], "separate-23.1", [])]
         list2 = [VerbnetOfficialFrame(
-            ['NP.Patient', 'V', {'from'}, 'NP.Co-Patient'],
-            ['NP', 'V', {'from'}, 'NP'],
-            ['Patient', 'Co-Patient'], "separate-23.1-1", [])]
+            ['NP.Patient', 'V', {'from'}, 'NP.Co-Patient'], "separate-23.1-1", [])]
         list3 = [VerbnetOfficialFrame(
-            ['NP.Patient', 'V', {'with'}, 'NP.Co-Patient'],
-            ['NP', 'V', {'with'}, 'NP'],
-            ['Patient', 'Co-Patient'], "separate-23.1-2", [])]
+            ['NP.Patient', 'V', {'with'}, 'NP.Co-Patient'], "separate-23.1-2", [])]
         expected_result = {
             'dissociate': list1+list3,
             'disconnect': list1+list3,

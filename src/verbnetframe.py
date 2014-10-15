@@ -297,20 +297,14 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
     """A representation of a frame syntactic syntax
 
     :var syntax : (str.role | str | str set) list -- structure + roles
-    :var structure: (str | str set) List -- representation of the structure
-    :var roles: str list -- VerbNet roles for each structure's slot
     :var num_slots: int -- number of argument slots in :structure
     :var vnclass: str -- the class number, eg. 9.10
     :var example: str -- An example sentence that illustrates the frame
     """
 
-    def __init__(self, syntax, structure, roles, vnclass, role_restrictions):
+    def __init__(self, syntax, vnclass, role_restrictions):
         self.syntax = syntax
-        self.structure = structure
-
-        # Transform "a" in {"a"} and keep everything else unchanged
-        self.roles = [{x} if isinstance(x, str) else x for x in roles]
-        self.num_slots = len(self.roles)
+        self.num_slots = len([s for s in syntax if '.' in s])
         self.role_restrictions = role_restrictions
 
         self.slot_types, self.slot_preps = self.compute_slot_types(syntax)
@@ -318,9 +312,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
-                self.structure == other.structure and
-                self.roles == other.roles and
-                self.num_slots == other.num_slots and
+                self.syntax == other.syntax and
                 self.vnclass == other.vnclass)
 
     def __key__(self):
@@ -334,7 +326,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         return self.__key__() < other.__key__()
 
     def __repr__(self):
-        return "VerbnetOfficialFrame({}, {}, {})".format(
+        return "VerbnetOfficialFrame({}, {})".format(
             self.vnclass, self.syntax)
 
     def passivize(self):
@@ -372,11 +364,6 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
             (self.syntax[new_sbj_begin:new_sbj_end+1] +
                 self.syntax[old_sbj_end+1:index_v] + ["V"] +
                 self.syntax[new_sbj_end+1:]),
-            (self.structure[new_sbj_begin:new_sbj_end+1] +
-                self.structure[old_sbj_end+1:index_v] + ["V"] +
-                self.structure[new_sbj_end+1:]),
-            ([self.roles[slot_position]] + self.roles[1:slot_position] +
-                self.roles[slot_position+1:]),
             vnclass=self.vnclass,
             role_restrictions=self.role_restrictions
         )
@@ -395,12 +382,6 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
                     (frame_without_agent.syntax[0:i+1] +
                         ["by"] + self.syntax[0:old_sbj_end+1] +
                         frame_without_agent.syntax[i+1:]),
-                    (frame_without_agent.structure[0:i+1] +
-                        ["by"] + self.structure[0:old_sbj_end+1] +
-                        frame_without_agent.structure[i+1:]),
-                    (frame_without_agent.roles[0:slot+1] +
-                        [self.roles[0]] +
-                        frame_without_agent.roles[slot+1:]),
                     vnclass=self.vnclass,
                     role_restrictions=self.role_restrictions
                 ))
