@@ -1,4 +1,4 @@
 [submodule "data/verbnet"]
 	path = data/verbnet
 	url = https://github.com/pquentin/verbnet.git
-	branch = pradet_fixes
+	branch = pradet-fixes
