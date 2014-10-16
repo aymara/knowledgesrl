@@ -3,7 +3,7 @@
 import unittest
 from xml.etree import ElementTree as ET
 
-from .dicoxml import deindent_text, get_all_text
+from domain.dicoxml import deindent_text, get_all_text
 
 class ParseDicoText(unittest.TestCase):
     maxDiff = None

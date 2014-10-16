@@ -3,8 +3,6 @@
 
 """Reads the files containing the syntactic parser output"""
 
-import unittest
-import options
 import os
 
 import framenetreader
@@ -109,28 +107,3 @@ class FNAllReader:
         if node.father == None: return False
         if node.father.pos not in FNAllReader.predicate_pos: return False
         return node.father.word.lower() in FNAllReader.be_forms
-    
-class FNAllReaderTest(unittest.TestCase):
-    def comp(self, original, parsed):
-        return all(
-            [x == y or y == "<num>" for x,y in zip(original.split(), parsed.split())]
-        )
-
-    def test_sentences_match(self, num_sample = 0):
-        print("Checking FrameNetAllReader")
-        extractor = FNAllReader()
-
-        frames = []
-        for annotation_file, parse_file in zip(options.fulltext_annotations, options.fulltext_parses):
-            frames.extend(extractor.iter_frames(annotation_file, parse_file))
-        frame = frames[28]
-        self.assertTrue(frame.sentence == ("a few months ago "
-            "you received a letter from me telling the success stories of "
-            "people who got jobs with goodwill 's help ."))
-        self.assertTrue(frame.predicate.lemma == "receive")
-        self.assertTrue(frame.passive == False)
-        self.assertTrue(frame.tree.flat() == frame.sentence)
-        
-        frame = frames[42]
-        self.assertTrue(frame.predicate.lemma == "use")
-        self.assertTrue(frame.passive == True)

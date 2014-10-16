@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest
 import xml.etree.ElementTree as ET
-import os
-import paths
 
 
 class NoSuchFrameError(Exception):
@@ -58,20 +55,3 @@ class CoreArgsFinder:
             raise NoSuchFrameError(frame)
             
         return role in self.core_args[frame]
-
-class CoreArgsFinderTest(unittest.TestCase):
-    def test_specific(self):
-        core_args_finder = CoreArgsFinder()
-        core_args_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
-        
-        self.assertEqual(len(core_args_finder.core_args), 1019)
-        
-        frame = "Activity_abandoned_state"
-        self.assertTrue(core_args_finder.is_core_role("Agent", frame))
-        self.assertTrue(core_args_finder.is_core_role("Activity", frame))
-        self.assertFalse(core_args_finder.is_core_role("Non_existing_role", frame))
-        self.assertFalse(core_args_finder.is_core_role("Time", frame))
-        self.assertFalse(core_args_finder.is_core_role("Duration", frame))
-        
-        with self.assertRaises(NoSuchFrameError):
-            core_args_finder.is_core_role("Agent", "Non_existing_frame")

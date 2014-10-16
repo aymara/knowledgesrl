@@ -7,8 +7,8 @@ For example, the roles are changed, the syntax is changed (NP.Agent NP.Agent V -
 from xml.etree import ElementTree as ET
 import unittest
 
-from .extract_syntactic_data import xmlcontext_to_frame, remove_before_v, syntax_to_str, map_gold_frame
-from .rolemapping import RoleMapping
+from domain.extract_syntactic_data import xmlcontext_to_frame, remove_before_v, syntax_to_str, map_gold_frame
+from domain.rolemapping import RoleMapping
 import paths
 
 class DicoTransforms(unittest.TestCase):

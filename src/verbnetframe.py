@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import unittest
 from abc import ABCMeta
 
 from framenetframe import FrameInstance, Predicate, Arg, Word
