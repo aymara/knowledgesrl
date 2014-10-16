@@ -168,15 +168,13 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
             n_frames += 1
 
         considered_syntax = []
-        from distutils.version import LooseVersion
-        for classid in sorted(verbnet.classids(lemma), key=lambda c: LooseVersion('-'.join(c.split('-')[1:]))):
-            for vn_frame in verbnet.frames(classid):
-                vn_syntax = vn_frame.find('SYNTAX')
-                # If sentence starts with a verb, remove anything that's before
-                # the verb in VerbNet
-                if next(iter(gold_syntax)).tag == 'VERB':
-                    vn_syntax = remove_before_v(vn_syntax)
-                considered_syntax.append((classid, vn_syntax))
+        for vn_frame in verbnet.frames_for_lemma(lemma):
+            vn_syntax = vn_frame['frame'].find('SYNTAX')
+            # If sentence starts with a verb, remove anything that's before
+            # the verb in VerbNet
+            if next(iter(gold_syntax)).tag == 'VERB':
+                vn_syntax = remove_before_v(vn_syntax)
+            considered_syntax.append((vn_frame['classid'], vn_syntax))
 
         # Use an OrderedDict for now to get the same behavior than
         # with the tuple list
