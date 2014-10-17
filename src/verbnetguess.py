@@ -67,6 +67,14 @@ def syntax_to_primary(syntax):
 
             if check_all_restr(part, '+', 'adv_loc'):
                 out_list.append('ADVP')
+            elif check_all_restr(part, '+', 'np_ppart'):
+                out_list.extend(['NP', 'ADJ'])
+
+            elif check_all_restr(part, '+', 'to_be') and check_all_restr(part, '+', 'adj'):
+                out_list.append('NP to be ADJ')
+            elif check_all_restr(part, '+', 'to_be'):
+                out_list.append('NP to be NP')
+
             elif check_all_restr(part, '+', 'adj'):
                 out_list.append('ADJP')
 
@@ -104,6 +112,8 @@ def syntax_to_primary(syntax):
             out_list.append('V')
         elif part.tag == 'ADV':
             out_list.append('ADV')
+        elif part.tag == 'ADJ':
+            out_list.append('ADJ')
         elif part.tag == 'LEX' and (i == len(syntax) - 1 or syntax[i+1].tag != 'NP'):
             if part.get('value') in ['it', 'there']:
                 out_list.append(part.get('value').title())
@@ -116,6 +126,8 @@ def syntax_to_primary(syntax):
                 out_list.extend(['PP', 'S_ING'])
             elif check_all_restr(next_part, '+', ['oc_ing', 'ac_ing']):
                 out_list.append('S_ING')
+            elif part.tag == 'PREP' and check_all_restr(next_part, '+', 'adj'):
+                out_list.append('ADJP')
             elif part.tag == 'LEX' and check_all_restr(next_part, '+', 'adj'):
                 out_list.append(part.get('value'))
                 out_list.append('ADJ')
