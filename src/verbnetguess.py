@@ -78,7 +78,7 @@ def syntax_to_primary(syntax):
             elif check_all_restr(part, '+', 'adj'):
                 out_list.append('ADJP')
 
-            elif check_all_restr(part, '+', ['that_comp', 'oc_to_inf']):
+            elif check_all_restr(part, '+', ['that_comp']):
                 out_list.extend(['that', 'S'])
             elif check_all_restr(part, '+', 'how_extract'):
                 out_list.extend(['how', 'S'])
@@ -87,6 +87,8 @@ def syntax_to_primary(syntax):
 
             elif check_all_restr(part, '+', 'for_comp'):
                 out_list.extend(['for', 'NP', 'S_INF'])
+            elif check_all_restr(part, '+', 'np_to_inf'):
+                out_list.extend(['NP', 'S_INF'])
 
             elif check_all_restr(part, '+', 'wh_inf'):
                 out_list.extend(['how', 'S_INF'])
@@ -97,7 +99,7 @@ def syntax_to_primary(syntax):
 
             elif check_all_restr(part, '+', ['sc_ing', 'ac_ing', 'poss_ing', 'be_sc_ing']):
                 out_list.append('S_ING')
-            elif check_all_restr(part, '+', ['rs_to_inf', 'vc_to_inf', 'sc_to_inf']):
+            elif check_all_restr(part, '+', ['rs_to_inf', 'vc_to_inf', 'sc_to_inf', 'ac_to_inf', 'oc_to_inf']):
                 out_list.append('S_INF')
 
             elif check_all_restr(part, '+', ['plural', 'genitive']):
