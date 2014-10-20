@@ -22,15 +22,15 @@ add_non_core_args = False
 
 conll_input = None
 conll_output = sys.stdout
-use_test_set = False
+use_training_set = False
 corpus_lu = False
 
 debug = False
 dump = False
 dump_file = ""
 
-fulltext_corpus = paths.FRAMENET_FULLTEXT
-framenet_parsed = paths.FRAMENET_PARSED
+fulltext_corpus = paths.FRAMENET_FULLTEXT_EVALUATION
+framenet_parsed = paths.FRAMENET_PARSED_EVALUATION
 
 fulltext_annotations = sorted(fulltext_corpus.glob('*.xml'))
 fulltext_parses = sorted(framenet_parsed.glob('*.conll'))
@@ -42,7 +42,7 @@ options = getopt.getopt(sys.argv[1:], "d:", [
     "fmatching-algo=", "add-non-core-args", "model=", "bootstrap",
     "argument-identification", "heuristic-rules", "passivize", "semantic-restrictions",
     # what do we annotate?
-    "conll_input=", "conll_output=", "test-set", "lu",
+    "conll_input=", "conll_output=", "training-set", "lu",
     # meta
     "dump", "help"])
 
@@ -92,10 +92,10 @@ for opt, value in options[0]:
             dump_file = options[1][0]
         else:
             display_usage = True
-    elif opt == "--test-set":
-        use_test_set = True
-        fulltext_corpus = paths.FRAMENET_FULLTEXT_EVALUATION
-        framenet_parsed = paths.FRAMENET_PARSED_EVALUATION
+    elif opt == "--training-set":
+        use_training_set = True
+        fulltext_corpus = paths.FRAMENET_FULLTEXT
+        framenet_parsed = paths.FRAMENET_PARSED
     elif opt == "--lu":
         corpus_lu = True
         fulltext_corpus = paths.FRAMENET_LU

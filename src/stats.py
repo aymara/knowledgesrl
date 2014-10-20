@@ -136,7 +136,7 @@ def display_stats(argument_identification):
             s["frames_with_predicate_in_verbnet"],  s["args_kept"]
         ))
         
-    if not options.use_test_set:
+    if options.use_training_set:
         print(
             "Frame instances mapped: {} frames\n"
             
