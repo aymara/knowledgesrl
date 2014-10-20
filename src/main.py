@@ -95,30 +95,30 @@ if __name__ == "__main__":
         all_matcher = []
         data_restr = NoHashDefaultDict(lambda : Counter())
         assert len(annotated_frames) == len(vn_frames)
-        for good_frame, frame_occurrence in zip(annotated_frames, vn_frames):
-            num_instanciated = len([x for x in good_frame.args if x.instanciated])
-            predicate = good_frame.predicate.lemma
+        for gold_frame, frame_occurrence in zip(annotated_frames, vn_frames):
+            num_instanciated = len([x for x in gold_frame.args if x.instanciated])
+            predicate = gold_frame.predicate.lemma
 
-            if good_frame.arg_annotated:
+            if gold_frame.arg_annotated:
                 stats_data["args_kept"] += num_instanciated
 
-            stats_ambiguous_roles(good_frame, num_instanciated,
+            stats_ambiguous_roles(gold_frame, num_instanciated,
                 role_matcher, verbnet_classes)
 
             # Check that FrameNet frame slots have been mapped to VerbNet-style slots
             if frame_occurrence.num_slots == 0:
-                errorslog.log_frame_without_slot(good_frame, frame_occurrence)
+                errorslog.log_frame_without_slot(gold_frame, frame_occurrence)
                 continue
 
             matcher = framematcher.FrameMatcher(frame_occurrence, options.matching_algorithm)
             all_matcher.append(matcher)
 
-            errorslog.log_frame_with_slot(good_frame, frame_occurrence)
+            errorslog.log_frame_with_slot(gold_frame, frame_occurrence)
             stats_data["frames_mapped"] += 1
 
             # Actual frame matching
             for verbnet_frame in sorted(frames_for_verb[predicate]):
-                if options.passivize and good_frame.passive:
+                if options.passivize and gold_frame.passive:
                     try:
                         for passivized_frame in verbnet_frame.passivize():
                             matcher.new_match(passivized_frame)
@@ -148,7 +148,7 @@ if __name__ == "__main__":
                         model.add_data(slot_type, next(iter(roles)), prep, predicate, vnclass)
 
             if options.debug and set() in frame_occurrence.roles:
-                log_debug_data(good_frame, frame_occurrence, matcher, frame_occurrence.roles, verbnet_classes)
+                log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles, verbnet_classes)
 
         if options.dump:
             dumper.add_data_frame_matching(annotated_frames, vn_frames,
