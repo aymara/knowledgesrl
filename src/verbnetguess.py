@@ -92,10 +92,13 @@ def syntax_to_primary(syntax):
 
             elif check_all_restr(part, '+', 'wh_inf'):
                 out_list.extend(['how', 'S_INF'])
+            # TODO ambiguous
             elif check_all_restr(part, '+', 'wh_comp'):
-                out_list.extend(['why', 'S'])
+                out_list.extend(['whether', 'S'])
             elif check_all_restr(part, '+', 'what_inf'):
                 out_list.extend(['what', 'S_INF'])
+            elif check_all_restr(part, '+', 'wheth_inf'):
+                out_list.extend(['whether', 'S_INF'])
 
             elif check_all_restr(part, '+', ['sc_ing', 'ac_ing', 'poss_ing', 'be_sc_ing']):
                 out_list.append('S_ING')
