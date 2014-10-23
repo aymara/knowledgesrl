@@ -266,10 +266,13 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
                     stats_data["several_roles_bad"] += 1
                 stats_data["attributed_roles_mapping_ok"] += len(slot)
                 continue
+
             try:
                 possible_roles = role_matcher.possible_vn_roles(
                     gold_fn_frame.args[i].role,
                     fn_frame=gold_fn_frame.frame_name,
+                    # TODO don't forget we need to specify the VN class?
+                    # If the mapping is ambiguous, it could be our mistake here
                     vn_classes=verbnet_classes[gold_fn_frame.predicate.lemma]
                     )
             except RoleMatchingError:

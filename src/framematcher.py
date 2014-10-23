@@ -173,7 +173,7 @@ class FrameMatcher():
         num_match = 0
         i, j = 0, 0
         index_v_in_frame_occurrence = self.frame_occurrence.structure.index("V")
-        index_v_in_official_frame = verbnet_frame.syntax.index("V")
+        index_v_in_official_frame = verbnet_frame.syntax.index(("V", None))
         slot_1, slot_2 = 0, 0
         num_slots_before_v_in_frame_occurrence = 0
         num_slots_before_v_in_official_frame = 0
@@ -182,21 +182,19 @@ class FrameMatcher():
             if VerbnetFrameOccurrence._is_a_slot(elem):
                 num_slots_before_v_in_frame_occurrence += 1
             elif elem == "V": break
-        for elem in verbnet_frame.syntax:
-            if '.' in elem:
+        for elem, role in verbnet_frame.syntax:
+            if role is not None:
                 num_slots_before_v_in_official_frame += 1
             elif elem == "V": break
 
         while i < len(self.frame_occurrence.structure) and j < len(verbnet_frame.syntax):
             elem1 = self.frame_occurrence.structure[i]
-            try:
-                elem2 = verbnet_frame.syntax[j].split('.')[0]
-            except:
-                elem2 = verbnet_frame.syntax[j]
+            elem2, role2 = verbnet_frame.syntax[j]
             
             if FrameMatcher._is_a_match(elem1, elem2):
                 if VerbnetFrameOccurrence._is_a_slot(elem1):
                     num_match += 1
+                    # TODO this is probably fixed with the SYNTAX-based VN reader
                     # verbnet_frame can have more syntax than roles.This will
                     # for instance happen in the "NP V NP S_INF" syntax of
                     # want-32.1, where S_INF is given no role since it's part
@@ -221,7 +219,8 @@ class FrameMatcher():
     def _matching_stop_on_fail(self, verbnet_frame, slots_associations):
         """ Stop the algorithm at the first mismatch encountered """
         num_match = 0
-        for elem1,elem2 in zip(self.frame_occurrence.structure, verbnet_frame.syntax):
+        for elem1, elemrole2 in zip(self.frame_occurrence.structure, verbnet_frame.syntax):
+            elem2, role2 = elemrole2
             if FrameMatcher._is_a_match(elem1, elem2):
                 if VerbnetFrameOccurrence._is_a_slot(elem1):
                     num_match += 1
@@ -241,9 +240,9 @@ class FrameMatcher():
         slots_associations = [None for x in range(self.frame_occurrence.num_slots)]
 
         import copy
-        if 'that' in verbnet_frame.syntax and not 'that' in self.frame_occurrence.structure:
+        if verbnet_frame.has('that') and not 'that' in self.frame_occurrence.structure:
             verbnet_frame = copy.deepcopy(verbnet_frame)
-            verbnet_frame.syntax.remove('that')
+            verbnet_frame.remove('that')
         
         if self.algo == "baseline":
             matching_function = self._matching_baseline
@@ -288,9 +287,9 @@ class FrameMatcher():
                 if slot2 == None: continue
 
                 # We want this to fail when roles get stored in a dictionary or a class
-                assert all([type(s) == str or type(s) == set for s in verbnet_frame.syntax])
+                assert all([type(s) == tuple for s in verbnet_frame.syntax])
 
-                role = [s for s in verbnet_frame.syntax if '.' in s][slot2].split('.')[1]
+                role = [role for elem, role in verbnet_frame.syntax if role is not None][slot2]
                 result[slot1].add(role)
         
         return result

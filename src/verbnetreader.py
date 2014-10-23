@@ -91,13 +91,13 @@ class VerbnetReader:
         for elem in primary_structure:
             if elem in ['NP', 'ADJP', 'ADVP', 'S', 'S_ING']:
                 try:
-                    new_syntax.append('{}.{}'.format(elem, roles[role_index]))
+                    new_syntax.append((elem, roles[role_index]))
                     role_index += 1
                     continue
                 except:
                     pass
 
-            new_syntax.append(elem)
+            new_syntax.append((elem, None))
 
         return new_syntax
        

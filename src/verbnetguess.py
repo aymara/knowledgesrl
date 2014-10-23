@@ -58,94 +58,96 @@ def check_restr(synrestr, value, type_):
         return type_ == type_found and value == value_found
 
 def syntax_to_primary(syntax):
+    def add(o, name, part):
+        o.append((name, part))
+
     out_list = []
     i = 0
 
     while i < len(syntax):
         part = syntax[i]
+        role = syntax[i].get('value')
         if part.tag == 'NP':
 
             if check_all_restr(part, '+', 'adv_loc'):
-                out_list.append('ADVP')
+                out_list.append(('ADVP', role))
             elif check_all_restr(part, '+', 'np_ppart'):
-                out_list.extend(['NP', 'ADJ'])
+                out_list.append(('NP ADJ', role))
 
             elif check_all_restr(part, '+', 'to_be') and check_all_restr(part, '+', 'adj'):
-                out_list.append('NP to be ADJ')
+                out_list.append(('NP to be ADJ', role))
             elif check_all_restr(part, '+', 'to_be'):
-                out_list.append('NP to be NP')
+                out_list.append(('NP to be NP', role))
 
             elif check_all_restr(part, '+', 'adj'):
-                out_list.append('ADJP')
+                out_list.append(('ADJP', role))
 
             elif check_all_restr(part, '+', ['that_comp']):
-                out_list.extend(['that', 'S'])
+                out_list.append(('that S', role))
             elif check_all_restr(part, '+', 'how_extract'):
-                out_list.extend(['how', 'S'])
+                out_list.append(('how S', role))
             elif check_all_restr(part, '+', 'what_extract'):
-                out_list.extend(['what', 'S'])
+                out_list.append(('what S', role))
 
             elif check_all_restr(part, '+', 'for_comp'):
-                out_list.extend(['for', 'NP', 'S_INF'])
+                out_list.append(('for NP S_INF', role))
             elif check_all_restr(part, '+', 'np_to_inf'):
-                out_list.extend(['NP', 'S_INF'])
+                out_list.append(('NP S_INF', role))
 
             elif check_all_restr(part, '+', 'wh_inf'):
-                out_list.extend(['how', 'S_INF'])
+                out_list.append(('how S_INF', role))
             # TODO ambiguous
             elif check_all_restr(part, '+', 'wh_comp'):
-                out_list.extend(['whether', 'S'])
+                out_list.append(('whether S', role))
             elif check_all_restr(part, '+', 'what_inf'):
-                out_list.extend(['what', 'S_INF'])
+                out_list.append(('what S_INF', role))
             elif check_all_restr(part, '+', 'wheth_inf'):
-                out_list.extend(['whether', 'S_INF'])
+                out_list.append(('whether S_INF', role))
 
             elif check_all_restr(part, '+', ['sc_ing', 'ac_ing', 'poss_ing', 'be_sc_ing']):
-                out_list.append('S_ING')
+                out_list.append(('S_ING', role))
             elif check_all_restr(part, '+', ['rs_to_inf', 'vc_to_inf', 'sc_to_inf', 'ac_to_inf', 'oc_to_inf']):
-                out_list.append('S_INF')
+                out_list.append(('S_INF', role))
 
             elif check_all_restr(part, '+', ['plural', 'genitive']):
-                out_list.append('NP')
+                out_list.append(('NP', role))
             else:
                 synrestr = part.find('SYNRESTRS/SYNRESTR')
                 if synrestr is not None:
                     print('WHATIS {}{}'.format(synrestr.get('Value'), synrestr.get('type')))
-                out_list.append('NP')
+                out_list.append(('NP', role))
 
         elif part.tag == 'VERB':
-            out_list.append('V')
+            out_list.append(('V', None))
         elif part.tag == 'ADV':
-            out_list.append('ADV')
+            out_list.append(('ADV', None))
         elif part.tag == 'ADJ':
-            out_list.append('ADJ')
+            out_list.append(('ADJ', None))
         elif part.tag == 'LEX' and (i == len(syntax) - 1 or syntax[i+1].tag != 'NP'):
             if part.get('value') in ['it', 'there']:
-                out_list.append(part.get('value').title())
+                out_list.append((part.get('value').title(), None))
             else:
-                out_list.append(part.get('value'))
+                out_list.append((part.get('value'), None))
         elif part.tag == 'PREP' or part.tag == 'LEX':
             next_part = syntax[i+1]
             assert next_part.tag == 'NP'
             if check_all_restr(next_part, '+', ['sc_ing']):
-                out_list.extend(['PP', 'S_ING'])
+                out_list.append(('PP S_ING', role))
             elif check_all_restr(next_part, '+', ['oc_ing', 'ac_ing']):
-                out_list.append('S_ING')
+                out_list.append(('S_ING', role))
             elif part.tag == 'PREP' and check_all_restr(next_part, '+', 'adj'):
-                out_list.append('ADJP')
+                out_list.append(('ADJP', role))
             elif part.tag == 'LEX' and check_all_restr(next_part, '+', 'adj'):
-                out_list.append(part.get('value'))
-                out_list.append('ADJ')
+                out_list.append(('{} {}'.format(part.get('value'), 'ADJ'), None))
             elif part.tag == 'LEX' and (check_all_restr(next_part, '-', 'sentential') or check_all_restr(next_part, '+', 'small_clause')):
-                out_list.append(part.get('value'))
-                out_list.append('NP')
+                out_list.append(('{} {}'.format(part.get('value'), 'NP'), None))
             else:
-                out_list.append('PP')
+                out_list.append(('PP', role))
             i += 1
 
         i += 1
 
-    return ' '.join(out_list)
+    return out_list
 
 class VerbnetGuessTest(unittest.TestCase):
     def test(self):
@@ -165,7 +167,7 @@ class VerbnetGuessTest(unittest.TestCase):
                         continue
                     syntax = vn_frame['frame'].find('SYNTAX')
                     wanted_primary = strip_roles(vn_frame['frame'].find('DESCRIPTION').get('primary'))
-                    converted_primary = syntax_to_primary(syntax)
+                    converted_primary = ' '.join([phrase for phrase, role in syntax_to_primary(syntax)])
 
                     self.assertEqual(wanted_primary, converted_primary)
                 i += 1
