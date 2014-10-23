@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from collections import Counter
-import sys
 from pathlib import Path
 
 from framenetallreader import FNAllReader
 from verbnetframe import VerbnetFrameOccurrence
 from conllreader import ConllSemanticAppender
-from stats import stats_quality, display_stats, stats_data, stats_ambiguous_roles
+import stats
 import errorslog
 from errorslog import log_debug_data, log_vn_missing, display_debug
 from bootstrap import bootstrap_algorithm
@@ -73,21 +72,21 @@ if __name__ == "__main__":
                 add_non_core_args=options.add_non_core_args)
 
             for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
-                stats_data["args"] += len(frame.args)
-                stats_data["args_instanciated"] += len(
+                stats.stats_data["args"] += len(frame.args)
+                stats.stats_data["args_instanciated"] += len(
                     [x for x in frame.args if x.instanciated])
-                stats_data["frames"] += 1
+                stats.stats_data["frames"] += 1
 
                 if not frame.predicate.lemma in frames_for_verb:
                     log_vn_missing(frame)
                     continue
 
-                stats_data["frames_with_predicate_in_verbnet"] += 1
+                stats.stats_data["frames_with_predicate_in_verbnet"] += 1
 
                 annotated_frames.append(frame)
                 vn_frames.append(VerbnetFrameOccurrence.build_from_frame(frame, conll_frame_instance=None))
 
-            stats_data["files"] += fn_reader.stats["files"]
+            stats.stats_data["files"] += fn_reader.stats["files"]
 
         #
         # Frame matching
@@ -100,9 +99,9 @@ if __name__ == "__main__":
             predicate = gold_frame.predicate.lemma
 
             if gold_frame.arg_annotated:
-                stats_data["args_kept"] += num_instanciated
+                stats.stats_data["args_kept"] += num_instanciated
 
-            stats_ambiguous_roles(gold_frame, num_instanciated,
+            stats.stats_ambiguous_roles(gold_frame, num_instanciated,
                 role_matcher, verbnet_classes)
 
             # Check that FrameNet frame slots have been mapped to VerbNet-style slots
@@ -114,7 +113,7 @@ if __name__ == "__main__":
             all_matcher.append(matcher)
 
             errorslog.log_frame_with_slot(gold_frame, frame_occurrence)
-            stats_data["frames_mapped"] += 1
+            stats.stats_data["frames_mapped"] += 1
 
             # Actual frame matching
             for verbnet_frame in sorted(frames_for_verb[predicate]):
@@ -201,5 +200,5 @@ if __name__ == "__main__":
 
     else:
         print("\n\n## Final stats")
-        stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.argument_identification)
-        display_stats(options.argument_identification)
+        stats.stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.argument_identification)
+        stats.display_stats(options.argument_identification)
