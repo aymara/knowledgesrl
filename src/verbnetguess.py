@@ -96,9 +96,10 @@ def syntax_to_primary(syntax):
 
             elif check_all_restr(part, '+', 'wh_inf'):
                 out_list.append(('how S_INF', role))
-            # TODO ambiguous
+            elif check_all_restr(part, '+', 'why_comp'):
+                out_list.append(('why S', role))
             elif check_all_restr(part, '+', 'wh_comp'):
-                out_list.append(('whether S', role))
+                out_list.append(('whether/if S', role))
             elif check_all_restr(part, '+', 'what_inf'):
                 out_list.append(('what S_INF', role))
             elif check_all_restr(part, '+', 'wheth_inf'):
@@ -131,18 +132,27 @@ def syntax_to_primary(syntax):
         elif part.tag == 'PREP' or part.tag == 'LEX':
             next_part = syntax[i+1]
             assert next_part.tag == 'NP'
+            next_role = syntax[i+1].get('Value')
             if check_all_restr(next_part, '+', ['sc_ing']):
-                out_list.append(('PP S_ING', role))
+                out_list.append(('PP S_ING', next_role))
+            elif check_all_restr(next_part, '+', ['wheth_inf']):
+                out_list.append(('PP whether S_INF', next_role))
+            elif check_all_restr(next_part, '+', ['wheth_comp']):
+                out_list.append(('PP whether S', next_role))
+            elif check_all_restr(next_part, '+', ['wh_comp']):
+                out_list.append(('PP whether S', next_role))
             elif check_all_restr(next_part, '+', ['oc_ing', 'ac_ing']):
-                out_list.append(('S_ING', role))
+                out_list.append(('S_ING', next_role))
+            elif check_all_restr(next_part, '+', 'what_extract'):
+                out_list.append(('PP what S', next_role))
             elif part.tag == 'PREP' and check_all_restr(next_part, '+', 'adj'):
-                out_list.append(('ADJP', role))
+                out_list.append(('ADJP', next_role))
             elif part.tag == 'LEX' and check_all_restr(next_part, '+', 'adj'):
                 out_list.append(('{} {}'.format(part.get('value'), 'ADJ'), None))
             elif part.tag == 'LEX' and (check_all_restr(next_part, '-', 'sentential') or check_all_restr(next_part, '+', 'small_clause')):
                 out_list.append(('{} {}'.format(part.get('value'), 'NP'), None))
             else:
-                out_list.append(('PP', role))
+                out_list.append(('PP', next_role))
             i += 1
 
         i += 1
