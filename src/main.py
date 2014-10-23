@@ -149,11 +149,6 @@ if __name__ == "__main__":
             if options.debug and set() in frame_occurrence.roles:
                 log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles, verbnet_classes)
 
-        if options.dump:
-            dumper.add_data_frame_matching(annotated_frames, vn_frames,
-                role_matcher, verbnet_classes,
-                frames_for_verb, options.matching_algorithm)
-
         if options.semrestr:
             for matcher in all_matcher:
                 matcher.handle_semantic_restrictions(data_restr)
@@ -181,14 +176,8 @@ if __name__ == "__main__":
                         if new_role != None:
                             frame.roles[i] = set([new_role])
 
-            if options.dump:
-                dumper.add_data_prob_model(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes)
-
             if options.debug:
                 display_debug(options.n_debug)
-
-    if options.dump:
-        dumper.dump(options.dump_file)
 
     if options.conll_input is not None:
         print("Dumping semantic CoNLL...")
@@ -202,3 +191,6 @@ if __name__ == "__main__":
         print("\n\n## Final stats")
         stats.stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.argument_identification)
         stats.display_stats(options.argument_identification)
+
+        if options.dump:
+            dumper.dump(options.dump_file, stats.annotated_frames_stats)

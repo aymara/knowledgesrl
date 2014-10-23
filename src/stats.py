@@ -86,6 +86,8 @@ ambiguous_mapping = {
     "verbs_with_frame":[], "args_total_with_frame":0, "args_with_frame":0
 }
 
+annotated_frames_stats = []
+
 def hmean(x, y):
     if x < 0 or y < 0:
         raise ValueError("Harmonic mean does not apply to negative parameters.")
@@ -214,6 +216,7 @@ def reset_computed_stats():
     stats_data["several_roles_annotated"] = 0
     stats_data["attributed_roles"] = 0
     stats_data["attributed_roles_mapping_ok"] = 0
+    annotated_frames_stats = []
 
 def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, argument_identification):
     # We first reset computed values to 0, eg. if we modified them before
@@ -228,6 +231,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
     total_roles = 0
     
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
+        annotated_frames_stats.append({'gold_fn_frame': gold_fn_frame, 'slots': []})
         # We don't know how to evaluate args that were extracted from a frame
         # that exist in the fulltext corpus but that lacks argument annotations
         if gold_fn_frame.frame_name != "" and not gold_fn_frame.arg_annotated:
@@ -280,6 +284,8 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
             
             if not argument_identification:
                 stats_data["args_annotated_mapping_ok"] += 1
+
+            annotated_frames_stats[-1]['slots'].append({'text': gold_fn_frame.args[i].text, 'found_roles': slot, 'wanted_roles': possible_roles})
             
             if next(iter(possible_roles)) in slot:
                 if len(slot) == 1:
