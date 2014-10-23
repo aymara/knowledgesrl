@@ -19,18 +19,12 @@ class VerbnetReader:
     :var verbs: Dictionary of VerbnetOfficialFrame lists representing VerbNet.
     """
     
-    def __init__(self, path, normalize = False):
+    def __init__(self, path):
         """Read VerbNet and fill verbs with its content.
         
         :param path: Path to VerbNet.
         :type path: pathlib.Path.
-        :param normalize: Either stick to VerbNet content closely or make it
-            easier for the frame matching to proceed.
-        :type normalize: boolean.
-        
         """
-        
-        self.normalize = normalize
         
         self.frames_for_verb = {}
         self.classes = {}
@@ -48,43 +42,6 @@ class VerbnetReader:
             root = ET.ElementTree(file=str(filename.resolve()))
             self.filename = str(filename)
             self._handle_class(root.getroot(), [], [], [])
-
-        if self.normalize:
-            return self._normalized()
-    
-    def _normalized(self):
-        self.files = {}
-        
-        for verb, verb_data in self.frames_for_verb.items():
-            for vnframe in verb_data:
-                filename = self.cnames[vnframe.vnclass][:-4]
-                
-                if not filename in self.files: self.files[filename] = {
-                    "children": [], "roles": set(), "members": [],
-                    "frames": [], "name":vnframe.vnclass.split("-")[0]}
-                    
-                current_class = self.files[filename]
-                if "-" in vnframe.vnclass:
-                    for subclass in vnframe.vnclass.split("-")[1:]:
-                        new_name = current_class["name"]+"-"+subclass
-                        
-                        matching_class = None
-                        for child_class in current_class["children"]:
-                            if child_class["name"] == new_name:
-                                matching_class = child_class
-                        if matching_class == None:
-                            new_class = {
-                                "children": [], "roles": set(), "members": [],
-                                "frames": [], "name":new_name}
-                            current_class["children"].append(new_class)
-                            matching_class = new_class
-                            
-                        current_class = matching_class
-                
-                current_class["members"].append(verb)
-                current_class["frames"].append(vnframe)
-                for role in vnframe.roles:
-                    current_class["roles"].add(next(role.__iter__()))
     
     def _handle_class(self, xml_class, parent_frames, role_list, restrictions):
         """Parse one class of verbs and all its subclasses.
@@ -174,15 +131,6 @@ class VerbnetReader:
         
         syntax = self.merge_syntax(structure, roles)
         result = VerbnetOfficialFrame(syntax, vnclass, role_restrictions=role_restr)
-        
-        if self.normalize:
-            example = xml_frame.find("EXAMPLES/EXAMPLE").text
-            semantics = self._build_semantics(xml_frame.find("SEMANTICS"))
-            syntax_roles = self._format_syntax_roles(xml_frame.find("SYNTAX"))
-            
-            result.example = example
-            result.semantics = semantics
-            result.syntax = syntax_roles
         
         return result
   
