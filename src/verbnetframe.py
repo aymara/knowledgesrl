@@ -26,6 +26,7 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
         preposition = ""
 
         for element in syntax:
+            # TODO type(...) -= tuple is a hack!
             if type(element) == tuple:
                 element, role = element
 
@@ -57,7 +58,7 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
 
         return isinstance(elem, str) and elem[0].isupper() and elem != "V"
 
-class VerbnetFrameOccurrence(ComputeSlotTypeMixin): 
+class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
     """A representation of a FrameNet frame occurrence converted to VerbNet
     representation for easy comparison.
 
@@ -364,7 +365,9 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         while True:
             if new_sbj_end >= len(self.syntax):
                 return []
-            if VerbnetOfficialFrame._is_a_slot(self.syntax[new_sbj_end]):
+
+            # TODO type(...) -= tuple is a hack!
+            if type(self.syntax[new_sbj_end]) == tuple and VerbnetOfficialFrame._is_a_slot(self.syntax[new_sbj_end][1]):
                 break
             new_sbj_end += 1
 
@@ -386,7 +389,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         slot = slot_position - 1
         while i < len(frame_without_agent.syntax):
             elem, role = frame_without_agent.syntax[i]
-            if self._is_a_slot(elem) or elem == ("V", None):
+            if self._is_a_slot(elem) or elem == "V":
                 passivizedframes.append(VerbnetOfficialFrame(
                     (frame_without_agent.syntax[0:i+1] +
                         [("by", None)] + self.syntax[0:old_sbj_end+1] +

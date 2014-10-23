@@ -5,33 +5,34 @@ import unittest
 from verbnetframe import VerbnetOfficialFrame
 
 class VerbnetOfficialFrameTest(unittest.TestCase):
-    """Tests operations on frames from the VerbNet resource.
+    '''Tests operations on frames from the VerbNet resource.
 
-    "XX", [] denote the vnclass and role restrictions, we don't want them to be
+    'XX', [] denote the vnclass and role restrictions, we don't want them to be
     optional in __init__ to catch constructor call errors.
-    """
-    def test_passivize(self):
+    '''
+    def test_transitive(self):
         vn_frame_transitive = VerbnetOfficialFrame(
-            ["NP.Agent", "V", "NP.Theme"],
-            "XX", [])
+            [('NP', 'Agent'), ('V', None), ('NP', 'Theme')], 'XX', [])
         self.assertEqual(vn_frame_transitive.passivize(), [
-            VerbnetOfficialFrame(["NP.Theme", "V"], "XX", []),
-            VerbnetOfficialFrame(["NP.Theme", "V", "by", "NP.Agent"], "XX", [])])
+            VerbnetOfficialFrame([('NP', 'Theme'), ('V', None)], 'XX', []),
+            VerbnetOfficialFrame([('NP', 'Theme'), ('V', None), ('by', None), ('NP', 'Agent')], 'XX', [])])
 
+    def test_ditransitive(self):
         vn_frame_ditransitive = VerbnetOfficialFrame(
-            ["NP.Agent", "V", "NP.Theme", "at", "NP.Value"], "XX", [])
+            [('NP', 'Agent'), ('V', None), ('NP', 'Theme'), ('at', None), ('NP', 'Value')], 'XX', [])
         self.assertEqual(vn_frame_ditransitive.passivize(), [
             VerbnetOfficialFrame(
-                ["NP.Theme", "V", "at", "NP.Value"], "XX", []),
+                [('NP', 'Theme'), ('V', None), ('at', None), ('NP', 'Value')], 'XX', []),
             VerbnetOfficialFrame(
-                ["NP.Theme", "V", "by", "NP.Agent", "at", "NP.Value"], "XX", []),
+                [('NP', 'Theme'), ('V', None), ('by', None), ('NP', 'Agent'), ('at', None), ('NP', 'Value')], 'XX', []),
             VerbnetOfficialFrame(
-                ["NP.Theme", "V", "at", "NP.Value", "by", "NP.Agent"], "XX", [])])
+                [('NP', 'Theme'), ('V', None), ('at', None), ('NP', 'Value'), ('by', None), ('NP', 'Agent')], 'XX', [])])
 
+    def test_strange(self):
         vn_frame_strange = VerbnetOfficialFrame(
-            ["NP.Agent", "NP.Theme", "V", "S.Value"], "XX", [])
+            [('NP', 'Agent'), ('NP', 'Theme'), ('V', None), ('S', 'Value')], 'XX', [])
         self.assertEqual(vn_frame_strange.passivize(), [
             VerbnetOfficialFrame(
-                ["S.Value", "NP.Theme", "V"], "XX", []),
+                [('S', 'Value'), ('NP', 'Theme'), ('V', None)], 'XX', []),
             VerbnetOfficialFrame(
-                ["S.Value", "NP.Theme", "V", "by", "NP.Agent"],"XX", [])])
+                [('S', 'Value'), ('NP', 'Theme'), ('V', None), ('by', None), ('NP', 'Agent')],'XX', [])])

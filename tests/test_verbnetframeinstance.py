@@ -59,10 +59,6 @@ class VerbnetFrameOccurrenceTest(unittest.TestCase):
                 ["NP", "V", "NP", "to", "S"],
                 [None, None, None], predicate="urge"),
             VerbnetFrameOccurrence(["NP", "V", "NP"], [None, None], predicate="allow"),
-            VerbnetOfficialFrame(
-                ["NP", "NP", "in", "NP", "V", "that", "S",
-                 "for", "NP", "NP", "after", "NP"],
-                "XX", [])
         ]
         slot_preps = [
             [None, None, "to"],
