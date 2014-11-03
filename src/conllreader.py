@@ -88,12 +88,20 @@ class SyntacticTreeNode:
     def _closest_match_as_node_lcs(self, arg):
         from distance import lcsubstrings as word_overlap
 
-        root_match = self.flat().split()
-        root_match_len = (
-            len(word_overlap(tuple(root_match), tuple(arg.text.split()))) /
-            (len(root_match) + len(arg.text.split())))
+        current_word_list = self.flat().split()
+        wanted_word_list = arg.text.split()
+
+        overlap = word_overlap(tuple(current_word_list), tuple(wanted_word_list))
+        if not overlap:
+            overlap_words = []
+        else:
+            overlap_words = list(next(iter(overlap)))
+
+        mean_length = (len(current_word_list) + len(wanted_word_list)) / 2
+        score = len(overlap_words) / mean_length
+
         children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
-        return max([(root_match_len, self)] + children_results, key = lambda x: x[0])
+        return max([(score, self)] + children_results, key = lambda x: x[0])
 
 class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree
