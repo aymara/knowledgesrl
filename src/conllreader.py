@@ -135,7 +135,7 @@ class SyntacticTreeBuilder():
 
             self.node_dict[word_id] = SyntacticTreeNode(
                 word_id=word_id,
-                word=form, pos=cpos,
+                word=form.lower(), pos=cpos,
                 deprel=deprel,
                 begin_word=begin)
 
