@@ -29,11 +29,37 @@ debug = False
 dump = False
 dump_file = ""
 
-fulltext_corpus = paths.FRAMENET_FULLTEXT_EVALUATION
-framenet_parsed = paths.FRAMENET_PARSED_EVALUATION
+test_set = [
+    'ANC__110CYL067',
+    'ANC__110CYL068',
+    'ANC__112C-L013',
+    'ANC__IntroHongKong',
+    'ANC__StephanopoulosCrimes',
+    'ANC__WhereToHongKong',
+    'KBEval__Brandeis',
+    'KBEval__Stanford',
+    'KBEval__atm',
+    'KBEval__cycorp',
+    'KBEval__parc',
+    'KBEval__utd-icsi',
+    'LUCorpus-v0.3__20000410_nyt-NEW',
+    'LUCorpus-v0.3__AFGP-2002-602187-Trans',
+    'LUCorpus-v0.3__IZ-060316-01-Trans-1',
+    'LUCorpus-v0.3__SNO-525',
+    'LUCorpus-v0.3__enron-thread-159550',
+    'LUCorpus-v0.3__sw2025-ms98-a-trans.ascii-1-NEW',
+    'Miscellaneous__Hound-Ch14',
+    'Miscellaneous__SadatAssassination',
+    'NTI__NorthKorea_Introduction',
+    'NTI__Syria_NuclearOverview',
+    'PropBank__AetnaLifeAndCasualty',
+]
 
-fulltext_annotations = sorted(fulltext_corpus.glob('*.xml'))
-fulltext_parses = sorted(framenet_parsed.glob('*.conll'))
+fulltext_corpus = paths.FRAMENET_FULLTEXT
+framenet_parsed = paths.FRAMENET_PARSED
+
+fulltext_annotations = sorted([f for f in fulltext_corpus.glob('*.xml') if f.stem in test_set])
+fulltext_parses = sorted([f for f in framenet_parsed.glob('*.conll') if f.stem in test_set])
 
 options = getopt.getopt(sys.argv[1:], "d:", [
     # "manual use"
