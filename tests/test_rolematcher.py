@@ -42,21 +42,28 @@ class VnFnRoleMatcherTest(unittest.TestCase):
                 matcher.issues["vbclass_dependent"] += 1
             if contradictory:
                 matcher.issues["vbclass_contradictory"] += 1
-                    
-        print("Found {} fnrole-fnframe entries".format(num_role_frames))
-        print("{} different FrameNet frames".format(len(matcher.mappings)))
-        
-        print("{} frames have different possible mappings".format(matcher.issues["vbclass_dependent"]))
-        print("{} frames have contradictory mappings".format(matcher.issues["vbclass_contradictory"]))
-        print("Found {} cases of a FrameNet role corresponding to several"\
-            " VerbNet roles in the same FrameNet frame".format(matcher.issues["ambiguities"]))
-        print("Found {} cases of a FrameNet role corresponding to several"\
-            " VerbNet roles in the same FrameNet frame for the same VerbNet"\
-            " class".format(matcher.issues["ambiguities2"]))
+
+        # fnrole-fnframe entries
+        self.assertEqual(num_role_frames, 1179)
+        # different FrameNet frames
+        self.assertEqual(len(matcher.mappings), 274)
+        # FN frames that have different possible VN mappings
+        self.assertEqual(matcher.issues["vbclass_dependent"], 244)
+        # FN frames that have contradictory mappings
+        self.assertEqual(matcher.issues["vbclass_contradictory"], 108)
+        # FrameNet role corresponding to several VerbNet roles in the same
+        # FN frame for the same VerbNet class
+        self.assertEqual(matcher.issues["ambiguities"], 185)
+        # Framenet role corresponding to several VerbNet roles in the same
+        # FN frame for the same VerbNet class
+        self.assertEqual(matcher.issues["ambiguities2"], 7)
+
+        role_encounters = {
+            'Trajectory': 9, 'Goal': 4, 'Initial_Location': 15,
+            'Value': 9, 'Result': 37, 'Pivot': 7}
 
         for role, n in matcher.issues["new_vn_roles"].items():
-            print("VerbNet role \"{}\" was encountered {} time(s)".format(
-                role, n))
+            self.assertEqual(role_encounters[role], n)
             
     def test_matching(self):
         matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)

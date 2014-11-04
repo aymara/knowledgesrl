@@ -26,8 +26,8 @@ class ArgGuesserTest(unittest.TestCase):
                 self.assertTrue(arg.text != "")
                 #self.assertEqual(frame.sentence[arg.begin:arg.end + 1], arg.text)
             num_args += len(frame.args)
-        print(len(frames))
-        print(num_args)
+        self.assertEqual(len(frames), 4173)
+        self.assertEqual(num_args, 7936)
             
     def test_1(self):
         conll_tree = """1	The	The	DT	DT	-	2	NMOD	-	-
@@ -43,7 +43,6 @@ class ArgGuesserTest(unittest.TestCase):
         ]
         
         self.assertEqual(self.arg_guesser._find_args(treeBuilder.tree_list[0]), args)
-        print(self.arg_guesser._find_args(treeBuilder.tree_list[0]))
 
     def test_multiroot_sentence(self):
         conll_tree = \

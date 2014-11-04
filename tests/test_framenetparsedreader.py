@@ -30,7 +30,6 @@ class FNParsedReaderTest(unittest.TestCase):
                 ("SemAnno__Text1.xml", 3)]
 
 
-        print("Checking FrameNetParsedReader")
         parsed_reader = FNParsedReader()
 
         for annotation, parse in zip(options.fulltext_annotations, options.fulltext_parses):

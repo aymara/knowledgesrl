@@ -29,7 +29,7 @@ class ArgHeuristicTest(unittest.TestCase):
         expected = (
             "mean IDENTITY (more OBJ_DOWN (than AMOD_DOWN (may SUB_DOWN (you SB"
             "J_DOWN (), know VC_DOWN ()))), will VC_UP (contribution SBJ_DOWN ("
-            "Your NMOD_DOWN (), to NMOD_DOWN (Goodwill IM_DOWN ())), . P_DOWN ("
+            "your NMOD_DOWN (), to NMOD_DOWN (goodwill IM_DOWN ())), . P_DOWN ("
             ")))"
         )
         

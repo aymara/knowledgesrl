@@ -25,11 +25,11 @@ class TreeBuilderTest(unittest.TestCase):
 
     def test_tree_str(self):
         #The others here today live elsewhere .
-        expected_str = "(VV/ROOT/1/0/37 live (NNS/SBJ/1/0/20 others (DT/NMOD/0/0/2 The) (RB/LOC/0/11/20 here (RB/TMP/0/16/20 today))) (RB/LOC/0/27/35 elsewhere) (./P/0/37/37 .))"
+        expected_str = "(VV/ROOT/1/0/37 live (NNS/SBJ/1/0/20 others (DT/NMOD/0/0/2 the) (RB/LOC/0/11/20 here (RB/TMP/0/16/20 today))) (RB/LOC/0/27/35 elsewhere) (./P/0/37/37 .))"
         self.assertEqual(str(self.tree_list[0]), expected_str)
 
     def test_tree_flat(self):
-        self.assertEqual(self.tree_list[0].flat(), "The others here today live elsewhere .")
+        self.assertEqual(self.tree_list[0].flat(), "the others here today live elsewhere .")
 
     def test_tree_contains(self):
         self.assertTrue(self.tree_list[0].contains("here today"))
@@ -51,7 +51,6 @@ class TreeBuilderTest(unittest.TestCase):
         treeBuilder = SyntacticTreeBuilder(conll_tree)
         for tree in treeBuilder.tree_list:
             self.assertEqual(tree.father, None)
-            print(str(tree))
 
     def test_another_flat(self):
         conll_tree = \

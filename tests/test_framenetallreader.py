@@ -13,7 +13,6 @@ class FNAllReaderTest(unittest.TestCase):
         )
 
     def test_sentences_match(self, num_sample = 0):
-        print("Checking FrameNetAllReader")
         extractor = FNAllReader()
 
         frames = []
