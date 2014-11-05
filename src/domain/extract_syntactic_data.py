@@ -9,15 +9,16 @@ import pickle
 
 import colorama
 from colorama import Fore
-from nltk.corpus import verbnet
 from nltk.corpus.reader import VerbNetError
+from nltk.corpus import verbnet
+from nltk.corpus import verbenet
 
 import paths
 from .rolemapping import RoleMapping
 from .dicoxml import deindent_text, get_all_text
 from .kicktionary import kicktionary_frames
 
-def xmlcontext_to_frame(xmlns, lexie, contexte):
+def xmlcontext_to_frame(lang, xmlns, lexie, contexte):
     indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
     sentence_text = deindent_text(indented_sentence_text)
 
@@ -51,32 +52,31 @@ def xmlcontext_to_frame(xmlns, lexie, contexte):
 
             role_filler = get_all_text(child)
 
-            if phrase_type == 'Pro':
-                phrase_type = 'NP'
-            elif phrase_type == 'AdvP':
-                phrase_type = 'ADV'
-            elif phrase_type == 'Clause':
-                # TODO analysis to write info in SYNRESTRS maybe
-                phrase_type = 'NP'
+            phrase_type_per_lang = {
+                'en': {'Pro': 'NP', 'AdvP': 'ADV', 'Clause': 'S', 'PP': 'PP', 'NP': 'NP'},
+                'fr': {'Pro': 'NP', 'SN': 'NP', 'SP': 'PP', 'Prop': 'S', 'SAdv': 'ADV'}
+            }
 
-            if phrase_type == 'PP':
+            vn_phrase_type = phrase_type_per_lang[lang][phrase_type]
+
+            if vn_phrase_type == 'PP':
                 assert 'preposition' in groupe_syntaxique.attrib
                 ET.SubElement(
                     subcategorization_frame, 'PREP',
                     value=groupe_syntaxique.get('preposition'))
                 ET.SubElement(subcategorization_frame, 'NP', value=role)
             else:
-                ET.SubElement(subcategorization_frame, phrase_type, value=role)
+                ET.SubElement(subcategorization_frame, vn_phrase_type, value=role)
 
     return sentence_text, subcategorization_frame
 
 
-def get_dico_examples(dico, xmlns):
+def get_dico_examples(lang, dico, xmlns):
     xml_dico = ET.ElementTree(file=dico)
     for lexie in xml_dico.findall('lexie'):
         frame_name = '{}.{}'.format(lexie.get('id'), lexie.get('no'))
         for contexte in lexie.findall('contextes/{{{0}}}contexte'.format(xmlns)):
-            sentence_text, subcategorization_frame = xmlcontext_to_frame(xmlns, lexie, contexte)
+            sentence_text, subcategorization_frame = xmlcontext_to_frame(lang, xmlns, lexie, contexte)
             yield (frame_name, lexie.get('id'), sentence_text, subcategorization_frame)
 
 
@@ -132,14 +132,21 @@ def syntax_to_str(syntax):
             str_parts.append('V')
         elif part.tag == 'NP':
             str_parts.append('NP.{}'.format(part.get('value')))
-        elif part.tag == 'PREP' and not part.find('SELRESTRS'):
-            str_parts.append(part.get('value'))
+        elif part.tag == 'PREP':
+            if part.find('SELRESTRS'):
+                selrestr_list = []
+                for selrestr in part.findall('SELRESTRS/SELRESTR'):
+                    selrestr = part.find('SELRESTRS/SELRESTR')
+                    selrestr_list.append('{}{}'.format(selrestr.get('Value'), selrestr.get('type')))
+                str_parts.append('-'.join(selrestr_list))
+            else:
+                str_parts.append(part.get('value'))
         else:
             str_parts.append(part.tag)
 
     return ' '.join(str_parts)
 
-def analyze_constructs(examples, role_mapping, evaluation_sets):
+def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
     annotated_sentences, lemma_in_vn = 0, 0
     n_correct_frames, n_frames = 0, 0
     n_correct_roles, n_roles = 0, 0
@@ -195,7 +202,12 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
             n_correct_frames += 1
             n_classes += 1
 
-        debug(d, ['   ', Fore.GREEN, syntax_to_str(gold_syntax), '->',syntax_to_str(map_gold_frame(classid, gold_syntax, role_mapping[lexie])), Fore.RESET])
+        if not lexie in role_mapping:
+            if test_context:
+                print('Missing lexie {} ({}) in role mapping.'.format(lexie, lemma))
+            continue
+
+        debug(d, ['   ', Fore.GREEN, syntax_to_str(gold_syntax), '->', syntax_to_str(map_gold_frame(classid, gold_syntax, role_mapping[lexie])), Fore.RESET])
 
         for classid in vn_syntax_matches:
             debug(d, ['    ', classid, ' -> ',
@@ -209,9 +221,6 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
         if not classid in role_mapping[lexie]:
             continue
 
-        if d: print('still hereee! ', classid,
-                syntax_to_str(vn_syntax))
-
         if test_context:
                 n_correct_classes += 1
 
@@ -220,6 +229,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
             if correct_syntax.tag in ['NP', 'S']:
                 if role_mapping[lexie] == {}:
                     # missing sense
+                    # TODO handle this explicitly using XML annotations
                     pass
                 elif not classid in role_mapping[lexie]:
                     raise Exception('{} misses {} class'.format(lexie, classid))
@@ -240,14 +250,19 @@ def analyze_constructs(examples, role_mapping, evaluation_sets):
     print(annotated_sentences, n_frames, n_classes, n_roles)
     print('                         {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('For these tokens,        {:.1%} of constructions are here'.format(n_correct_frames/n_frames))
-    print('For these constructions, {:.1%} of classes are here'.format(n_correct_classes/n_classes))
-    print('For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/n_roles))
+    print('For these constructions, {:.1%} of classes are here'.format(n_correct_classes/max(n_classes, 1)))
+    print('For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/max(n_roles,1)))
     print()
 
 if __name__ == '__main__':
     colorama.init()
 
-    for lang in ['en']:
+    verbnet_modules = {
+        'fr': verbenet,
+        'en': verbnet
+    }
+
+    for lang in ['en', 'fr']:
         # DicoInfo, DicoEnviro
         for domain in ['info', 'enviro']:
             dico = {'domain': domain, 'lang': lang}
@@ -257,10 +272,10 @@ if __name__ == '__main__':
                 'test': json.load(open(str(paths.ROOT / paths.DICO_TEST.format(**dico))))
             }
 
-            dico_examples = get_dico_examples(str(paths.ROOT / paths.DICO_XML.format(**dico)), paths.DICO_XMLNS[domain])
+            dico_examples = get_dico_examples(lang, str(paths.ROOT / paths.DICO_XML.format(**dico)), paths.DICO_XMLNS[domain])
             role_mapping = RoleMapping(str(paths.ROOT / paths.DICO_MAPPING.format(**dico)))
 
-            analyze_constructs(dico_examples, role_mapping, evaluation_sets)
+            analyze_constructs(dico_examples, role_mapping, evaluation_sets, verbnet_modules[lang])
 
         print('--- kicktionary_{}'.format(lang))
         # Kicktionary
@@ -268,7 +283,7 @@ if __name__ == '__main__':
             'train': json.load(open(str(paths.ROOT / paths.KICKTIONARY_SETS.format('train', lang)))),
             'test': json.load(open(str(paths.ROOT / paths.KICKTIONARY_SETS.format('test', lang)))),
         }
-        kicktionary_examples = kicktionary_frames('en')
-        role_mapping = RoleMapping(paths.KICKTIONARY_ROLES)
-        analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation)
+        kicktionary_examples = kicktionary_frames(lang)
+        role_mapping = RoleMapping(str(paths.KICKTIONARY_ROLES).format(lang))
+        analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation, verbnet_modules[lang])
 

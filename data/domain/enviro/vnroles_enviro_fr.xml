@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE dico_verbnet_rolemapping [
+  <!ELEMENT dico_verbnet_rolemapping (lexie+)>
+  <!ELEMENT lexie  (role+)>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST lexie name  CDATA #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST role  name  CDATA #REQUIRED>
+  <!ATTLIST role  vn    CDATA #REQUIRED>
+]>
+<dico_verbnet_rolemapping vn='2014-11-05'>
+    <lexie name='convertir.1' vn='turn-26.6.1'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+        <role name='Résultat' vn='Result' />
+    </lexie>
+
+    <lexie name='extraire.1' vn='mine-10.9'>
+        <role name='Patient' vn='Theme' />
+        <role name='Source' vn='Initial_Location' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+</dico_verbnet_rolemapping>
+

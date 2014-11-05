@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE kicktionary_verbnet_rolemapping [
+  <!ELEMENT kicktionary_verbnet_rolemapping (lexie+)>
+  <!ELEMENT lexie  (role+)>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST lexie name  CDATA #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST role  frame  CDATA #REQUIRED>
+  <!ATTLIST role  vn    CDATA #REQUIRED>
+]>
+<kicktionary_verbnet_rolemapping>
+    <lexie name='Shot' vn='hit-18.1'>
+        <role name='Ball' vn='Patient' />
+        <role name='Part_Of_Body' vn='Instrument' />
+        <role name='Shooter' vn='Agemt' />
+        <role name='Source' vn='N/A' />
+        <role name='Target' vn='N/A' />
+        <role name='Shot' vn='N/A' />
+    </lexie>
+    <lexie name='Pass' vn='send-11.1'>
+        <role name='Ball' vn='Theme' />
+        <role name='Direction' vn='Destination' />
+        <role name='Passer' vn='Agent' />
+        <role name='Recipient' vn='N/A' />
+    </lexie>
+</kicktionary_verbnet_rolemapping>

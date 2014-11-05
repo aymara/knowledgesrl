@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE dico_verbnet_rolemapping [
+  <!ELEMENT dico_verbnet_rolemapping (lexie+)>
+  <!ELEMENT lexie  (role+)>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST lexie name  CDATA #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST role  name  CDATA #REQUIRED>
+  <!ATTLIST role  vn    CDATA #REQUIRED>
+]>
+<dico_verbnet_rolemapping ven='2014-11-05'>
+    <lexie name='taper.1' sense='missinglemma' on='access.1' wn='access#1'>
+    </lexie>
+    <lexie name='enregistrer.1' vn='transcribe-25.4' quality='good'>
+        <role name='Patient' vn='Theme' />
+        <role name='Destination' vn='Destination' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='installer.1' vn='put-9.2-1' quality='metaphor subsumes'>
+        <role name='Patient' vn='Theme' />
+        <role name='Agent' vn='Agent' />
+        <role name='Lieu' vn='Destination' />
+    </lexie>
+    <lexie name='naviguer.1' vn='run-51.3.2' quality='metaphor'>
+        <role name='Agent' vn='Agent' />
+        <role name='Lieu' vn='Location' />
+        <role name='Instrument' vn='N/A' />
+    </lexie>
+</dico_verbnet_rolemapping>

@@ -31,4 +31,4 @@ DICO_TEST = 'domain/{domain}/test_{domain}_{lang}.json'
 
 ALL_LUS = ROOT / 'domain/kicktionary/All_LUs.xml'
 KICKTIONARY_SETS = 'domain/kicktionary/{}_kicktionary_{}.json'
-KICKTIONARY_ROLES = ROOT / 'domain/kicktionary/kicktionary-vn-roles.xml'
+KICKTIONARY_ROLES = ROOT / 'domain/kicktionary/vnroles_kicktionary_{}.xml'
