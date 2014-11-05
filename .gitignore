@@ -1,1 +1,3 @@
 buildbot
+__pycache__
+_build
