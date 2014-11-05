@@ -19,15 +19,15 @@ def get_trees(filename):
             else:
                 trees_for_sentence = SyntacticTreeBuilder(conll_tree).tree_list
                 if not len(trees_for_sentence) == 1:
-                    print('{} trees in one sentence of {}'.format(len(trees_for_sentence), filename))
+                    #print('{} trees in one sentence of {}'.format(len(trees_for_sentence), filename))
+                    pass
 
                 tree_list.append(trees_for_sentence[0])
                 conll_tree = ""
 
     return tree_list
 
-
-if __name__ == '__main__':
+def get_quality_scores():
     correct, partial, total = 0, 0, 0
 
     # get data from FrameNet arguments
@@ -37,7 +37,6 @@ if __name__ == '__main__':
 
         # for each argument, see if it is in a parse tree. if yes +1
         for frame in reader.frames:
-            print('.', end='', flush=True)
             frame_text = " ".join([frame.get_word(w) for w in frame.words])
             for tree in tree_list:
                 if tree.flat().lower() == frame_text.lower():
@@ -49,6 +48,9 @@ if __name__ == '__main__':
                             if score == 1:
                                 correct += 1
                     break
-        print()
+
+    return correct, partial, total
         
+if __name__ == '__main__':
+    correct, partial, total = get_quality_scores()
     print("Correct: {:.02f} - Partial {:.02f} (out of {} args)".format(correct/total, partial/total, total))
