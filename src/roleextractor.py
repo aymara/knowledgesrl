@@ -58,6 +58,8 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
             if len(possible_roles) == 1:
                 stats_data["args_annotated_mapping_ok"] += 1
             
+        # If this frame appears in a new sentence, update id and ensure <num>
+        # words are consistent
         if frame.sentence_id != previous_id:
             # /path/to/stuff.xml -> stuff
             sentence_frames = frames[frame.filename.stem][frame.sentence_id]
@@ -151,6 +153,7 @@ def predicate_match(predicate1, predicate2):
 
 def handle_frame(extracted_frame, annotated_frame):
     # Update the frame data
+    extracted_frame.passive = annotated_frame.passive
     extracted_frame.frame_name = annotated_frame.frame_name
     extracted_frame.arg_annotated = annotated_frame.arg_annotated
     extracted_frame.annotated = True
