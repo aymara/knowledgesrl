@@ -11,7 +11,7 @@ import options
 def get_trees(filename):
     # get data from parse trees
     tree_list = []
-    with open(str(filename)) as conll_file:
+    with open(str(filename), encoding='utf-8') as conll_file:
         conll_tree = ""
         for l in conll_file.readlines():
             if l != "\n":
