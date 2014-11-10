@@ -8,3 +8,5 @@ _build
 data/domain/kicktionary/All_LUs.xml
 data/domain/contextes_olst
 
+# generated data
+src/dump/
