@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from abc import ABCMeta
+from operator import attrgetter
 
 from framenetframe import FrameInstance, Predicate, Arg, Word
 import verbnetprepclasses
@@ -111,10 +112,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         converted to VerbNet-style representation
         """
 
-        num_slots = 0
-
         # The goal here is to translate a FrameInstance into a VerbnetFrameOccurrence.
-        # We do this in a number of steps
 
         # TODO split the method for two usages
         if conll_frame_instance is not None:
@@ -124,33 +122,15 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         else:
             raise Exception('Either conll_frame_instance or gold_framenet_instance should exist.')
 
-        # First, only keep the text segments with arguments and predicates
-        begin = gold_framenet_instance.predicate.begin
-        end = gold_framenet_instance.predicate.end
+        chunk_list = VerbnetFrameOccurrence.annotated_chunks(gold_framenet_instance, sentence)
+        structure = list(VerbnetFrameOccurrence.chunks_to_verbnet(chunk_list))
 
-        for argument in gold_framenet_instance.args:
-            if not argument.instanciated:
-                continue
-            num_slots += 1
-            if argument.begin < begin:
-                begin = argument.begin
-            if argument.end > end:
-                end = argument.end
-
-        structure = sentence[begin:end + 1]
-
-        # Then, replace the predicate/arguments by their phrase type
-        structure = VerbnetFrameOccurrence._reduce_args(gold_framenet_instance, structure, begin)
-        # And delete everything else, except some keywords
-        structure = VerbnetFrameOccurrence._keep_only_keywords(structure)
-        # Transform the structure into a list
-        structure = structure.split(" ")
 
         result = VerbnetFrameOccurrence(structure, [], predicate=gold_framenet_instance.predicate.lemma)
-        result.num_slots = num_slots
+        result.num_slots = len([arg for arg in gold_framenet_instance.args if arg.instanciated])
 
         # Finally, fill the role list with None value
-        result.roles = [None] * num_slots
+        result.roles = [None] * result.num_slots
 
         # If the FrameInstance only comes from a CoNLL file and is not part of
         # the corpus, we don't want to loose predicate/args position in the
@@ -169,131 +149,74 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         return result
 
     @staticmethod
-    def _reduce_args(frame, structure, new_begin):
-        """Replace the predicate and the argument of a frame by phrase type marks
+    def annotated_chunks(frame, sentence):
+        """Transforms a frame sentence into a list of "chunks".
 
-        :param frame: The original Frame.
-        :type frame: Frame.
-        :param structure: The current structure representation.
-        :type structure: str.
-        :param new_begin: The left offset cause by previous manipulations.
-        :type new_begin: int.
-        :returns: String -- the reduced string
-        """
-        predicate_begin = frame.predicate.begin - new_begin
-        predicate_end = frame.predicate.end - new_begin
+        The chunks we're talking about are really "parts of a sentence", not
+        actual parsed chunks."""
 
-        for argument in reversed(frame.args):
+        frame_part_list = sorted(
+            frame.args + [frame.predicate],
+            key=attrgetter('begin'))
 
-            if not argument.instanciated:
-                continue
+        i = 0
+        for frame_part in frame_part_list:
+            # Place the preceding chunk
+            if frame_part.begin > i:
+                yield {
+                    'type': 'text',
+                    'text': sentence[i:frame_part.begin].strip()}
+                i = frame_part.begin
 
-            phrase_type = argument.phrase_type
-            if phrase_type in VerbnetFrameOccurrence.phrase_replacements:
-                phrase_type = VerbnetFrameOccurrence.phrase_replacements[phrase_type]
+            # Place predicate or argument
+            if isinstance(frame_part, Predicate):
+                yield {'type': 'verb', 'text': frame.predicate.text}
+                i = frame_part.end + 1
+            elif isinstance(frame_part, Arg):
+                argument = frame_part
+                if not argument.instanciated:
+                    continue
 
-            before = structure[0:argument.begin - new_begin]
-            after = structure[1 + argument.end - new_begin:]
-            arg_first_word = argument.text.lower().split(" ")[0]
-
-            # Fix some S incorrectly marked as PP
-            if (phrase_type == "PP"
-                    and arg_first_word in verbnetprepclasses.sub_pronouns):
-                added_length = 8 + len(arg_first_word)
-                structure = "{} || {} S| {}".format(before, arg_first_word, after)
-
-            # Replace every "PP" by "prep NP"
-            elif phrase_type == "PP":
-                prep = ""
-                for word in argument.text.lower().split(" "):
-                    if word in verbnetprepclasses.keywords:
-                        prep = word
-                        break
-                if prep == "":
-                    prep = arg_first_word
-
-                added_length = 9 + len(prep)
-                structure = "{} || {} NP| {}".format(before, prep, after)
-            # Replace every "PPing" by "prep S_ING",
-            elif phrase_type == "PPing":
-                prep = ""
-                for word in argument.text.lower().split(" "):
-                    if word in verbnetprepclasses.keywords:
-                        prep = word
-                        break
-                if prep == "":
-                    prep = arg_first_word
-
-                added_length = 12 + len(prep)
-                structure = "{} || {} S_ING| {}".format(before, prep, after)
-            # Replace every "Swhether" and "S" by "that S", "if S", ...
-            elif phrase_type in ["Swhether", "Sub"]:
-                added_length = 8 + len(arg_first_word)
-                structure = "{} || {} S| {}".format(before, arg_first_word, after)
-            else:
-                added_length = 6 + len(phrase_type)
-                structure = "{} || {}| {}".format(before, phrase_type, after)
-
-            # Compute the new position of the predicate if we reduced an
-            # argument before it
-            if argument.begin - new_begin < predicate_begin:
-                offset = (argument.end - argument.begin + 1) - added_length
-                predicate_begin -= offset
-                predicate_end -= offset
-
-        structure = "{} || V| {}".format(
-            structure[0:predicate_begin], structure[1+predicate_end:])
-
-        return structure
+                assert i == argument.begin
+                phrase_type = VerbnetFrameOccurrence.phrase_replacements.get(
+                    argument.phrase_type, argument.phrase_type)
+                yield {
+                    'type': 'arg',
+                    'phrase_type': phrase_type,
+                    'text': argument.text}
+                i = argument.end + 1
 
     @staticmethod
-    def _keep_only_keywords(sentence):
-        """Keep only keywords and phrase type markers in the structure
-
-        :param sentence: The structure to reduce.
-        :type sentence: str.
-        :returns: String -- the reduced string
-        """
-        pos = 0
-        last_pos = len(sentence) - 1
-        inside_tag = 0
-        closing_tag = False
-        result = ""
-
-        while pos < last_pos:
-            if inside_tag == 2 and sentence[pos] == "|":
-                inside_tag = 0
-                closing_tag = True
-
-            if inside_tag == 2:
-                result += sentence[pos]
-                pos += 1
-                continue
-
-            if not closing_tag and sentence[pos] == "|":
-                inside_tag += 1
+    def chunks_to_verbnet(chunk_list):
+        for chunk in chunk_list:
+            if chunk['text'] == '':
+                pass
+            elif chunk['type'] == 'arg':
+                arg_first_word = chunk['text'].split()[0]
+                if chunk['phrase_type'] == 'PP' and arg_first_word in verbnetprepclasses.sub_pronouns:
+                    yield arg_first_word
+                    yield 'S'
+                elif chunk['phrase_type'] == 'PP':
+                    yield arg_first_word
+                    yield 'NP'
+                elif chunk['phrase_type'] == 'PPing':
+                    yield arg_first_word
+                    yield 'S_ING'
+                elif chunk['phrase_type'] == 'to S':
+                    yield 'to'
+                    yield 'S'
+                elif chunk['phrase_type'] in ["Swhether", "Sub"]:
+                    yield arg_first_word
+                    yield 'S'
+                else:
+                    yield chunk['phrase_type']
+            elif chunk['type'] == 'verb':
+                yield 'V'
+            elif chunk['type'] == 'text':
+                # we do not keep any keyword here, but it's a possibility.
+                pass
             else:
-                inside_tag = 0
-            closing_tag = False
-
-            for search in verbnetprepclasses.external_lexemes:
-                if (search == sentence[pos:pos + len(search)].lower() and
-                    (pos == 0 or sentence[pos - 1] == " ") and
-                    (pos + len(search) == len(sentence) or
-                        sentence[pos + len(search)] == " ")):
-
-                    pos += len(search) - 1
-                    result += " "+search
-
-            pos += 1
-
-        if result[0] == " ":
-            result = result[1:]
-
-        if result[-1] == " ":
-            result = result[:-1]
-
-        return result
+                raise Exception('Unknown chunk type {}.'.format(chunk['type']))
 
 
 class VerbnetOfficialFrame(ComputeSlotTypeMixin):
