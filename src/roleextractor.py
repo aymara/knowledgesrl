@@ -106,8 +106,8 @@ def correct_num_tags(extracted_frame, original_sentence):
     
     """
     
-    # We don't want to include "," in numbers since 3,300 is actually to
-    # numbers: 3 and 300, separate by a comma
+    # We don't want to include "," in numbers since 3,300 is actually two
+    # numbers: 3 and 300, separated by a comma
     p = re.compile('[0-9]+')
     numbers = p.findall(original_sentence)
     

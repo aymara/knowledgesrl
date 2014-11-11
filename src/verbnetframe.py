@@ -26,7 +26,7 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
         preposition = ""
 
         for element in syntax:
-            # TODO type(...) -= tuple is a hack!
+            # TODO type(...) == tuple is a hack!
             if type(element) == tuple:
                 element, role = element
 

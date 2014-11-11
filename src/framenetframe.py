@@ -69,7 +69,7 @@ class Arg:
         self.annotated = annotated
 
     def __repr__(self):
-        return "Arg({}, {})".format(self.text, self.role)
+        return "Arg({}, {}, {})".format(self.text, self.phrase_type, self.role)
         
     def __eq__(self, other):
         return (isinstance(other, self.__class__)  and

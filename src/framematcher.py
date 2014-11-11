@@ -239,6 +239,8 @@ class FrameMatcher():
         """
         slots_associations = [None for x in range(self.frame_occurrence.num_slots)]
 
+        # Consider 'that' as optional in english, eg.:
+        # Tell him that S --> Tell him S
         import copy
         if verbnet_frame.has('that') and not 'that' in self.frame_occurrence.structure:
             verbnet_frame = copy.deepcopy(verbnet_frame)
