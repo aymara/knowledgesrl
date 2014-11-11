@@ -120,8 +120,8 @@ for opt, value in options[0]:
             display_usage = True
     elif opt == "--training-set":
         use_training_set = True
-        fulltext_corpus = paths.FRAMENET_FULLTEXT
-        framenet_parsed = paths.FRAMENET_PARSED
+        fulltext_annotations = sorted([f for f in fulltext_corpus.glob('*.xml') if f.stem not in test_set])
+        fulltext_parses = sorted([f for f in framenet_parsed.glob('*.conll') if f.stem not in test_set])
     elif opt == "--lu":
         corpus_lu = True
         fulltext_corpus = paths.FRAMENET_LU
