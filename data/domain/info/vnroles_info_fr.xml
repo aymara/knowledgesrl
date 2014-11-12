@@ -26,4 +26,53 @@
         <role name='Lieu' vn='Location' />
         <role name='Instrument' vn='N/A' />
     </lexie>
+    <lexie name='valider.1' vn='conjecture-29.5' sense='far fetched' alternatives='more' roles='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='visualiser.1' verbenet='missing' wonef='missing' />
+    <lexie name='importer.1' verbenet='11.1' sense='metaphor' alternatives='more' roles='more'>
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='charger.1' verbenet='92' sense='metaphor' alternations='ok' roles='ok'>
+        <role name='Patient' vn='Theme' />
+        <role name='Destination' vn='Destination' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='créer.1' verbenet='preparing-26.3' sense='ok' alternations='more' roles='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Product' />
+    </lexie>
+    <lexie name='imprimer.1a' verbenet='scribble-25.2' sense='ok' alternations='ok' roles='more'>
+        <!-- Ici, dicoinfo ne fait pas la distinction explicite entre Instrument et Agent : tout le monde est Instrument, peut-être parce qu'il n'y a pas d'humain explicite dans le corpus -->
+        <role name='Patient' vn='Theme' />
+        <role name='Instrument' vn='Agent' />
+    </lexie>
+    <lexie name='installer.1' verbenet='put_spatial-9.2' sense='ok' alternations='more' roles='more'>
+        <!-- SIGNALER - Pourquoi est-ce que Lieu n'est pas dans les actants ? -->
+        <role name='Patient' vn='Theme' />
+        <role name='Destination' vn='Destination' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='installer.2' verbenet='put_spatial-9.2' sense='metaphor' alternations='ok' roles='ok'>
+        <!-- La différence par rapport à signaler_1 est qu'on traite de logiciel ici : installer un programme vs. installer une carte graphique. VerbNet ne fait pas cette distinction. -->
+        <role name='Patient' vn='Theme' />
+        <role name='Destination' vn='Destination' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='interpréter.1' verbenet='missing' wonef='missing' />
+    <lexie name='abandonner.1' verbenet='void-106' sense='ok; verb not here' alternations='ok' roles='ok'>
+        <role name='Patient' vn='Patient' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='écrire.1' verbenet='scribble-25.2' sense='ok; verb not here' alternations='ok' roles='ok'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+        <role name='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='éditer.1' verbenet='other_cos-45.4' sense='ok; verb not here' alternations='ok' roles='ok'>
+        <role name='Patient' vn='Patient' />
+        <role name='Agent' vn='Agent' />
+        <role name='Instrument' vn='Instrument' />
+    </lexie>
 </dico_verbnet_rolemapping>

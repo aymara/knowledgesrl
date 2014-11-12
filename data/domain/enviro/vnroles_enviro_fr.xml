@@ -20,5 +20,53 @@
         <role name='Source' vn='Initial_Location' />
         <role name='Agent' vn='Agent' />
     </lexie>
+    <lexie name='chauffer.2a' verbenet='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+        <!-- La correspondance entre Moyen et Agent est limite. -->
+        <role name='Moyen' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+        <role name='Instrument' vn='Instrument' />
+    </lexie>
+    <lexie name='refroidir.1b' verbenet='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+        <role name='Cause' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='brûler.1a' verbenet='entity_specific_modes_being-47.2' sense='ok' alternations='more' roles='more'>
+        <!-- Les exemples dans le corpus semblent plus traiter d'état (un gaz qui brûle) que de changement d'état (la forêt a brûlée et a donc disparu) -->
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='brûler.1b' verbenet='destroy-44' sense='ok' alternations='more' roles='more'>
+        <!-- Le fait que deux lexies proches dans DiCoEnviro donnent deux choses très différentes dans VerbNet pourrait suggérer que la classe précédente ne correspond pas tout à fait ? -->
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='inonder.1' verbenet='fill-9.8' sense='ok' alternations='more' roles='ok'>
+        <role name='Lieu' vn='Destination' />
+        <role name='Cause' vn='Agent' />
+        <role name='Item' vn='Theme' />
+    </lexie>
+    <lexie name='exciter.1' verbenet='missing'>
+        <!-- On parle ici du sens précis en physique -->
+    </lexie>
+    <lexie name='transporter.1' verbenet='send-11.1' sense='ok' alternations='ok' roles='ok'>
+        <role name='Patient' vn='Theme' />
+        <role name='Cause' vn='Agent' />
+        <role name='Source' vn='Initial_Location' />
+        <role name='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='libérer.1a' sense='missing'>
+        <!-- free-80 doesn't fit, there's no "Cause V Theme" frame -->
+    </lexie>
+    <lexie name='libérer.1b' sense='missing'>
+        <!-- free-80 doesn't fit, there's no "Cause V Theme" frame -->
+    </lexie>
+    <lexie name='transformer.1' verbenet='turn-26.6.1' sense='ok' alternations='ok' roles='ok'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+        <role name='Résultat' vn='Result' />
+    </lexie>
+    <lexie name='perturber.1' sense='missing'>
+        <!-- Sens assez précis en physique - ce n'est que du NP V NP, mais ce n'est pas une raison de le mettre en amuse-31, si ? -->
+    </lexie>
 </dico_verbnet_rolemapping>
 
