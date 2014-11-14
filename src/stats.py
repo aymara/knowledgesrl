@@ -119,17 +119,28 @@ def display_stats(argument_identification):
     extrapolated_accuracy = extrapolated_one_good / max(s["args_instanciated"], 1)
     
     if argument_identification:
-        print(
-            "\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"
-            "Did not extract {} annotated frames.\n"
-            "Extracted {} correct, {} partial-match and {} incorrect arguments.\n"
-            "Did not extract {} annotated arguments.\n".format(
-            s["frame_extracted_good"], s["frame_extracted_bad"],
-            s["frame_not_extracted"],
-            s["arg_extracted_good"], s["arg_extracted_partial"],
-            s["arg_extracted_bad"],
-            s["arg_not_extracted"]
-        ))
+        # Give frame identification scores and argument identification scores
+
+        frame_identification_recall = s["frame_extracted_good"] / (
+            s["frame_extracted_good"] + s["frame_not_extracted"])
+        frame_identification_productivity = (
+            (s["frame_extracted_good"] + s["frame_extracted_bad"]) /
+            (s["frame_extracted_good"] + s["frame_not_extracted"]))
+        print("Frame identification: Recall: {:.1%}, Productivity: {:.0%}".format(
+            frame_identification_recall, frame_identification_productivity))
+
+        argument_identification_precision = s["arg_extracted_good"] / (
+            s["arg_extracted_good"] + s["arg_extracted_bad"])
+        argument_identification_recall = s["arg_extracted_good"] / (
+                s["arg_extracted_good"] + s["arg_not_extracted"])
+        argument_identification_f1 = 2 * (
+            (argument_identification_precision * argument_identification_recall) /
+            (argument_identification_precision + argument_identification_recall))
+        print("Argument identification: Precision: {:.1%}, Recall: {:.1%}, F1: {:.1%}".format(
+            argument_identification_precision, argument_identification_recall,
+            argument_identification_f1))
+
+        print("Extracted {} partial-match arguments.".format(s["arg_extracted_partial"]))
     else:
         print(
             "\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"
