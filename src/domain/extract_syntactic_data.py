@@ -203,9 +203,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
             n_classes += 1
 
         if not lexie in role_mapping:
-            if test_context:
-                print('Missing lexie {} ({}) in role mapping.'.format(lexie, lemma))
-            continue
+            raise Exception('Missing lexie {} ({}) in role mapping.'.format(lexie, lemma))
 
         debug(d, ['   ', Fore.GREEN, syntax_to_str(gold_syntax), '->', syntax_to_str(map_gold_frame(classid, gold_syntax, role_mapping[lexie])), Fore.RESET])
 
