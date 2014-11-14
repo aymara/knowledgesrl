@@ -73,11 +73,6 @@ if __name__ == "__main__":
                 add_non_core_args=options.add_non_core_args)
 
             for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
-                stats.stats_data["args"] += len(frame.args)
-                stats.stats_data["args_instanciated"] += len(
-                    [x for x in frame.args if x.instanciated])
-                stats.stats_data["frames"] += 1
-
                 if not frame.predicate.lemma in frames_for_verb:
                     log_vn_missing(frame)
                     continue
@@ -96,6 +91,10 @@ if __name__ == "__main__":
         data_restr = NoHashDefaultDict(lambda : Counter())
         assert len(annotated_frames) == len(vn_frames)
         for gold_frame, frame_occurrence in zip(annotated_frames, vn_frames):
+            stats.stats_data["args"] += len(gold_frame.args)
+            stats.stats_data["args_instanciated"] += len(
+                [x for x in gold_frame.args if x.instanciated])
+
             num_instanciated = len([x for x in gold_frame.args if x.instanciated])
             predicate = gold_frame.predicate.lemma
 
@@ -105,16 +104,18 @@ if __name__ == "__main__":
             stats.stats_ambiguous_roles(gold_frame, num_instanciated,
                 role_matcher, verbnet_classes)
 
+            stats.stats_data["frames"] += 1
+
             # Check that FrameNet frame slots have been mapped to VerbNet-style slots
             if frame_occurrence.num_slots == 0:
                 errorslog.log_frame_without_slot(gold_frame, frame_occurrence)
                 continue
 
-            matcher = framematcher.FrameMatcher(frame_occurrence, options.matching_algorithm)
-            all_matcher.append(matcher)
-
             errorslog.log_frame_with_slot(gold_frame, frame_occurrence)
             stats.stats_data["frames_mapped"] += 1
+
+            matcher = framematcher.FrameMatcher(frame_occurrence, options.matching_algorithm)
+            all_matcher.append(matcher)
 
             # Actual frame matching
             for verbnet_frame in sorted(frames_for_verb[predicate]):
@@ -189,7 +190,7 @@ if __name__ == "__main__":
         semantic_appender.dump_semantic_file(options.conll_output)
 
     else:
-        print("\n## Final stats")
+        print("\n## Evaluation")
         stats.stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.argument_identification)
         stats.display_stats(options.argument_identification)
 

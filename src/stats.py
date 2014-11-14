@@ -47,6 +47,8 @@ stats_data = {
     "several_roles_ok":0,
     # Several roles attributed, annotated, role mapping ok, correct role not in the list
     "several_roles_bad":0,
+    # All cases where a mapping was possible but no role mapping anyway
+    "no_roles_evaluated": 0,
     # Role mapping returned several possible VerbNet roles
     "ambiguous_mapping":0,
     # Role mapping returned no possible VerbNet roles
@@ -98,89 +100,90 @@ def display_stats(argument_identification):
     several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
-    
-    good_slots = s["one_correct_role"] + s["several_roles_ok"]
 
-    precision = good_slots / max(s["attributed_roles_mapping_ok"], 1)
-    recall = good_slots / max(s["args_annotated_mapping_ok"], 1)
-
-    accuracy = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
-    
-    extrapolated_one_good = (s["one_correct_role"] *
-        s["one_role_annotated"] / max(unique_role_evaluated, 1))
-    extrapolated_good_slots = (extrapolated_one_good +
-        s["several_roles_ok"] * s["several_roles_annotated"] /
-        max(several_roles_evaluated, 1))
-    
-    extrapolated_precision = extrapolated_good_slots / max(s["attributed_roles"], 1)
-    extrapolated_recall = extrapolated_good_slots / max(s["args_instanciated"], 1)
-    extrapolated_accuracy = extrapolated_one_good / max(s["args_instanciated"], 1)
-    
     if argument_identification:
-        # Give frame identification scores and argument identification scores
-
-        frame_identification_recall = s["frame_extracted_good"] / (
+        # Predicate identification
+        predicate_identification_recall = s["frame_extracted_good"] / (
             s["frame_extracted_good"] + s["frame_not_extracted"])
-        frame_identification_productivity = (
+        # The productivity is the ratio between the number of FN predicates and
+        # the number of extracted predicates. If productivity is 3x, we
+        # produced 3 times as much predicates as FrameNet manual annotation
+        # did. There are two reasons for producing so much predicates:
+        #  * we're using VerbNet, which includes more senses than FrameNet
+        #  * we don't disambiguate, so even if it's not the correct sense, we
+        #    assign it to a "frame"
+        predicate_identification_productivity = (
             (s["frame_extracted_good"] + s["frame_extracted_bad"]) /
             (s["frame_extracted_good"] + s["frame_not_extracted"]))
-        print("Frame identification: Recall: {:.1%}, Productivity: {:.0%}".format(
-            frame_identification_recall, frame_identification_productivity))
+        print("Predicate identification ({:.2f}x):                  {:.1%} recall".format(
+            predicate_identification_productivity, predicate_identification_recall))
 
+        # Argument identification
         argument_identification_precision = s["arg_extracted_good"] / (
             s["arg_extracted_good"] + s["arg_extracted_bad"])
         argument_identification_recall = s["arg_extracted_good"] / (
-                s["arg_extracted_good"] + s["arg_not_extracted"])
-        argument_identification_f1 = 2 * (
-            (argument_identification_precision * argument_identification_recall) /
-            (argument_identification_precision + argument_identification_recall))
-        print("Argument identification: Precision: {:.1%}, Recall: {:.1%}, F1: {:.1%}".format(
+            s["arg_extracted_good"] + s["arg_not_extracted"])
+        argument_identification_f1 = hmean(
+            argument_identification_precision,
+            argument_identification_recall)
+        argument_identification_productivity = (s["args"]) / s["args_kept"]
+        print("Argument identification  ({:.2f}x): {:.1%} precision, {:.1%} recall, {:.1%} F1".format(
+            argument_identification_productivity,
             argument_identification_precision, argument_identification_recall,
             argument_identification_f1))
     else:
         print(
-            "\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"
-            "Frame instances with predicate in VerbNet: {} frame instances ({} args)\n".format(
+            "{} files, {} gold frame instances, {} gold args\n"
+            "{} frame instances with predicate in VerbNet, that is {} args".format(
             s["files"], s["frames"], s["args"],
-            s["frames_with_predicate_in_verbnet"],  s["args_kept"]
+            s["frames_with_predicate_in_verbnet"], s["args_kept"]
         ))
-        
-    if options.use_training_set:
-        print(
-            "Frame instances mapped: {} frames\n"
-            
-            "\nFrame matching:\n"
-            "{} args not matched ({} not annotated)\n"
-            "{} args with exactly one possible role\n"
-            "\t{:.2%} correct out of {} evaluated\n"
-            "{} args with multiple possible roles\n"
-            "\t{:.2%} correct (correct role is in role list) out of {} evaluated\n"
-            "\n{} slots with at least one possible role where we cannot verify the labeling\n"
-            "{} slots where no role mapping was found\n"
-            "{} slots where several VerbNet roles are mapped to the FrameNet role\n"
-            .format(
-                s["frames_mapped"],
 
-                s["no_role"], s["no_role"] - s["no_role_annotated"],
-                s["one_role"],
-                s["one_correct_role"] / max(unique_role_evaluated, 1), unique_role_evaluated,
-                several_roles,
-                s["several_roles_ok"] / max(several_roles_evaluated, 1), several_roles_evaluated,
-                s["one_role"] + several_roles - (unique_role_evaluated + several_roles_evaluated),
+    role_matching_precision = s["one_correct_role"] / unique_role_evaluated
+    role_matching_recall = (s["one_correct_role"] / (unique_role_evaluated + several_roles_evaluated + s["no_roles_evaluated"]))
+    role_matching_f1 = hmean(role_matching_precision, role_matching_recall)
+    role_matching_productivity = s['one_role'] / s['args_instanciated']
+    print("Role matching           (*{:.2f}x): {:.1%} precision, {:.1%} recall, {:.1%} F1".format(
+        role_matching_productivity,
+        role_matching_precision, role_matching_recall,
+        role_matching_f1))
+    print("     when multiple possibilities, {:.1%} precision".format(s["several_roles_ok"] / max(several_roles_evaluated, 1)))
+    print()
 
-                s["impossible_mapping"], s["ambiguous_mapping"])
+    # * the reason this is low compared to frameid and argid is that we only
+    # evaluate against FrameNet frames, so it can only be < 1
 
-        )
+    print("Mapped {:.1%} of {} frames, uniquely mapped {:.1%} of {} arguments".format(
+        s["frames_mapped"]/s["frames"], s["frames"],
+        s["args_annotated_mapping_ok"]/s["args_instanciated"], s["args_instanciated"]))
+
+    good_slots = s["one_correct_role"] + s["several_roles_ok"]
+    precision = good_slots / max(s["attributed_roles_mapping_ok"], 1)
+    recall = good_slots / max(s["args_annotated_mapping_ok"], 1)
+
+    accuracy = s["one_correct_role"] / max(s["args_annotated_mapping_ok"], 1)
+
+    extrapolated_one_good = (
+        s["one_correct_role"] * s["one_role_annotated"] /
+        max(unique_role_evaluated, 1))
+    extrapolated_good_slots = (
+        extrapolated_one_good + s["several_roles_ok"] * s["several_roles_annotated"] /
+        max(several_roles_evaluated, 1))
+
+    extrapolated_precision = extrapolated_good_slots / max(s["attributed_roles"], 1)
+    extrapolated_recall = extrapolated_good_slots / max(s["args_instanciated"], 1)
+    extrapolated_accuracy = extrapolated_one_good / max(s["args_instanciated"], 1)
 
     print(
-        "Overall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
-        "Overall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n".format(
+        "Overall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n"
+        "Overall extrapolation:             {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy".format(
+            hmean(precision, recall), accuracy,
+
             extrapolated_precision, extrapolated_recall,
             hmean(extrapolated_precision, extrapolated_recall),
-            extrapolated_accuracy,
+            extrapolated_accuracy))
 
-            hmean(precision, recall), accuracy)
-    )
+    print("*: see comments in stats.py")
     
 def display_stats_ambiguous_mapping():
     print(
@@ -209,34 +212,13 @@ def display_stats_ambiguous_mapping():
         n2 = count_with_frame[v] if v in count_with_frame else 0
         print("{:>12}: {:>3} - {:<3}".format(v, n1, n2))
 
-def reset_computed_stats():
-    stats_data["one_correct_role"] = 0
-    stats_data["several_roles_ok"] = 0
-    stats_data["one_bad_role"] = 0
-    stats_data["several_roles_bad"] = 0
-    stats_data["one_role"] = 0
-    stats_data["no_role"] = 0
-    stats_data["no_role_annotated"] = 0
-    stats_data["impossible_mapping"] = 0
-    stats_data["ambiguous_mapping"] = 0
-    stats_data["one_role_annotated"] = 0
-    stats_data["several_roles_annotated"] = 0
-    stats_data["attributed_roles"] = 0
-    stats_data["attributed_roles_mapping_ok"] = 0
-    annotated_frames_stats = []
-
 def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, argument_identification):
-    # We first reset computed values to 0, eg. if we modified them before
-    reset_computed_stats()
-
     # This variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point and
     # args_annotated_mapping_ok is related to gold annotated frames
     if not argument_identification:
         stats_data["args_annotated_mapping_ok"] = 0
 
-    total_roles = 0
-    
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
         annotated_frames_stats.append({'gold_fn_frame': gold_fn_frame, 'slots': []})
         # We don't know how to evaluate args that were extracted from a frame
@@ -307,6 +289,8 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
                     stats_data["one_bad_role"] += 1
                 else:
                     stats_data["several_roles_bad"] += 1
+            else:
+                stats_data["no_roles_evaluated"] += 1
     
 def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     good = stats_data["one_correct_role"]

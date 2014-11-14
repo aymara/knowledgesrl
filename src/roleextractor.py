@@ -43,10 +43,6 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     sentence_frames = []
     good_frames = 0
     for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
-
-        stats_data["args_instanciated"] += len(
-            [x for x in frame.args if x.instanciated])
-        
         for arg in frame.args:
             if not arg.instanciated: continue
             try:
