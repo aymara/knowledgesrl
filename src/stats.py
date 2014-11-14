@@ -178,7 +178,7 @@ def display_stats(argument_identification):
 
     print(
         "Overall extrapolation : {:.2%} precision, {:.2%} recall, {:.2%} F1, {:.2%} accuracy\n"
-        "Overall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n\n".format(
+        "Overall when role mapping applies: {:.2%} F1, {:.2%} accuracy\n".format(
             extrapolated_precision, extrapolated_recall,
             hmean(extrapolated_precision, extrapolated_recall),
             extrapolated_accuracy,

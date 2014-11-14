@@ -189,7 +189,7 @@ if __name__ == "__main__":
         semantic_appender.dump_semantic_file(options.conll_output)
 
     else:
-        print("\n\n## Final stats")
+        print("\n## Final stats")
         stats.stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.argument_identification)
         stats.display_stats(options.argument_identification)
 
