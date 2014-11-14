@@ -69,8 +69,6 @@ stats_data = {
     "frame_not_extracted_not_verbnet":0,
     # Number of correct extracted arguments
     "arg_extracted_good":0,
-    # Number of partial-match in extracted arguments
-    "arg_extracted_partial":0,
     # Number of incorrect (no annotation) extracted arguments
     "arg_extracted_bad":0,
     # Number of non-extracted annotated arguments
@@ -139,8 +137,6 @@ def display_stats(argument_identification):
         print("Argument identification: Precision: {:.1%}, Recall: {:.1%}, F1: {:.1%}".format(
             argument_identification_precision, argument_identification_recall,
             argument_identification_f1))
-
-        print("Extracted {} partial-match arguments.".format(s["arg_extracted_partial"]))
     else:
         print(
             "\nFiles: {} - annotated frame instances: {} - annotated args: {}\n"

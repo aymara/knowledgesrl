@@ -158,7 +158,7 @@ def handle_frame(extracted_frame, annotated_frame):
     extracted_frame.arg_annotated = annotated_frame.arg_annotated
     extracted_frame.annotated = True
     
-    good_args, partial_args = 0, 0
+    good_args = 0
     
     # Update the argument roles and statistics
     for annotated_arg in annotated_frame.args:
@@ -173,19 +173,12 @@ def handle_frame(extracted_frame, annotated_frame):
                 extracted_arg.annotated = True
                 arg_found = True
                 break
-            elif score > 0.5:
-                partial_args += 1
-                extracted_arg.role = annotated_arg.role
-                extracted_arg.annotated = True
-                arg_found = True
-                break
         if not arg_found:
             stats_data["arg_not_extracted"] += 1
     
     if extracted_frame.arg_annotated:
         stats_data["arg_extracted_good"] += good_args
-        stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args - partial_args)
-        stats_data["arg_extracted_partial"] += partial_args
+        stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args)
 
 def match_score(arg1, arg2):
     intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
