@@ -39,7 +39,9 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     good_frames = 0
     for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
         for arg in frame.args:
-            if not arg.instanciated: continue
+            if not arg.instanciated:
+                continue
+
             try:
                 possible_roles = role_matcher.possible_vn_roles(
                     arg.role,

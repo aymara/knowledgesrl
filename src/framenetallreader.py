@@ -5,7 +5,10 @@
 
 import framenetreader
 from conllreader import SyntacticTreeBuilder
+import headwordextractor
 
+class PredicateNotFound(Exception):
+    pass
 
 class FNAllReader:
     """ Reads simultaneously the fulltext corpus and framenet_parsed
@@ -35,16 +38,21 @@ class FNAllReader:
         """Read the corpus and yield every valid frame"""
 
         self.stats["files"] += 1
+        tree_dict = self.read_syntactic_parses(parse_file)
 
         reader = framenetreader.FulltextReader(
             annotation_file,
             add_non_core_args=self.add_non_core_args,
-            keep_unannotated = self.keep_unannotated,
-            tree_dict = self.read_syntactic_parses(parse_file))
+            keep_unannotated=self.keep_unannotated,
+            tree_dict=tree_dict)
 
         for frame_instance in reader.frames:
-            if self.add_syntactic_information(frame_instance):
+            try:
+                sentence_tree_list = tree_dict[frame_instance.sentence_id]
+                self.add_syntactic_information(frame_instance, sentence_tree_list[0])
                 yield frame_instance
+            except PredicateNotFound:
+                pass
 
     def read_syntactic_parses(self, parse_filename):
         """Load the syntactic annotations files.
@@ -56,7 +64,8 @@ class FNAllReader:
         """
         with open(str(parse_filename), encoding='UTF-8') as content:
             sentences_data = content.read().split("\n\n")
-            if sentences_data[-1] == "": del sentences_data[-1]
+            if sentences_data[-1] == "":
+                del sentences_data[-1]
 
         tree_dict = {}
         for sentence_id, one_sentence_data in enumerate(sentences_data):
@@ -64,7 +73,7 @@ class FNAllReader:
 
         return tree_dict
 
-    def add_syntactic_information(self, frame):
+    def add_syntactic_information(self, frame, sentence_tree):
         """
         Add information to a frame using the syntactic annotation: whether it is
         passive or not, and whether the predicate has been found in the tree.
@@ -80,22 +89,20 @@ class FNAllReader:
         :type frame: FrameInstance
         """
 
-        search = frame.predicate.text.split()[0].lower()
-        found = False
-        for node in frame.tree:
-            if node.word == search:
-                found = True
-                predicate_node = node
-                break
+        # Search verb + passive status
+        try:
+            search = frame.predicate.text.split()[0].lower()
+            predicate_node = [node for node in frame.tree if node.word == search][0]
+            frame.passive = FNAllReader.is_passive(predicate_node)
+        except IndexError:
+            raise PredicateNotFound("\nframenetparsedreader : predicate \"{}\" not found in "
+                "sentence {}".format(search, frame.tree.flat()))
 
-        if not found:
-            #print("\nframenetparsedreader : predicate \"{}\" not found in "
-            #    "sentence {}".format(search, frame.tree.flat()))
-            return False
-
-        frame.passive = FNAllReader.is_passive(predicate_node)
-
-        return True
+        # Read headwords
+        for i, arg in enumerate(frame.args):
+            if not arg.instanciated:
+                continue
+            frame.headwords[i] = headwordextractor.headword(arg, sentence_tree)
 
     @staticmethod
     def is_passive(node):

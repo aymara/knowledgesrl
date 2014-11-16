@@ -42,12 +42,12 @@ class FrameMatcher():
         self.best_data = []
         self.best_classes = set()
 
-    def handle_semantic_restrictions(self, data):
+    def handle_semantic_restrictions(self, restr_data):
         """Keep only frames for which the syntactic restriction are
         the best matched
 
-        :param data: The gathered relations between restrictions and words
-        :type data: (VNRestriction -> (str Counter)) NoHashDefaultDict
+        :param restr_data: The gathered relations between restrictions and words
+        :type restr_data: (VNRestriction -> (str Counter)) NoHashDefaultDict
 
         """
 
@@ -56,7 +56,7 @@ class FrameMatcher():
         if len(self.best_data) == 0:
             return
 
-        scores = [self.frame_semantic_score(x, data) for x in self.best_data]
+        scores = [self.frame_semantic_score(x, restr_data) for x in self.best_data]
         assert len(scores) == len(self.best_data)
 
         self.best_data = [data_part for data_part, score in zip(self.best_data, scores)
@@ -115,9 +115,7 @@ class FrameMatcher():
                     restr,
                     frame.role_restrictions[mapping[i]])
 
-            result[self.frame_occurrence.headwords[i]] = restr
-
-        return result
+            yield i, restr
 
     @staticmethod
     def _is_a_match(frame_occurrence_elem, frame_elem):

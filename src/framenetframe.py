@@ -16,12 +16,17 @@ class FrameInstance:
 
     def __init__(self, sentence, predicate, args, words, frame_name,
                  sentence_id=-1, filename="",
-                 slot_type="", arg_annotated=False, tree=None):
+                 slot_type="", arg_annotated=False, tree=None,
+                 headwords=None):
 
         self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
         self.args = sorted(args)
+        if headwords is None:
+            self.headwords = [None] * len(self.args)
+        else:
+            self.headwords = headwords
         self.words = words
         self.sentence_id = sentence_id
         self.filename = filename

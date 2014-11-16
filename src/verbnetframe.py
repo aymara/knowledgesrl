@@ -87,7 +87,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.num_slots = len(self.roles)
 
         self.slot_types, self.slot_preps = self.compute_slot_types(structure)
-        self.headwords = []
+        self.headwords = [None] * self.num_slots
 
         self.best_classes = None
 
@@ -144,9 +144,11 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 
             result.args = conll_frame_instance.args
             result.tree = conll_frame_instance.tree
+            result.headwords = conll_frame_instance.headwords
         else:
             result.args = gold_framenet_instance.args
             result.tree = gold_framenet_instance.tree
+            result.headwords = gold_framenet_instance.headwords
 
         return result
 

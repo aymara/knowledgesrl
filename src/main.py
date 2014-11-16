@@ -135,13 +135,13 @@ if __name__ == "__main__":
             frame_occurrence.best_classes = matcher.best_classes
 
             # Update semantic restrictions data
-            #for word, restr in matcher.get_matched_restrictions().items():
-            #    print(word, restr)
-            #    if restr.logical_rel == "AND":
-            #        for subrestr in restr.children:
-            #            data_restr[subrestr].update([word])
-            #    else:
-            #        data_restr[restr].update([word])
+            for i, restr in matcher.get_matched_restrictions():
+                word = frame_occurrence.headwords[i]
+                if restr.logical_rel == "AND":
+                    for subrestr in restr.children:
+                        data_restr[subrestr].update([word])
+                else:
+                    data_restr[restr].update([word])
 
             # Update probability model
             vnclass = model.add_data_vnclass(matcher)

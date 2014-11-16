@@ -104,6 +104,13 @@ class ArgGuesser():
 
                 args = [x for x in args if self._is_good_pt(x.phrase_type)]
 
+                # Read headwords
+                headwords = [None] * len(args)
+                for i, arg in enumerate(args):
+                    if not arg.instanciated:
+                        continue
+                    headwords[i] = headwordextractor.headword(arg, tree)
+
                 yield FrameInstance(
                     sentence=sentence,
                     predicate=predicate,
@@ -112,7 +119,8 @@ class ArgGuesser():
                     frame_name="",
                     sentence_id=sentence_id,
                     filename=filename,
-                    tree=tree
+                    tree=tree,
+                    headwords=headwords
                 )
 
     def _is_good_pt(self, phrase_type):
