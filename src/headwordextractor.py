@@ -5,19 +5,14 @@
 
 from nltk.corpus import wordnet as wn
 
-from framenetparsedreader import FNParsedReader
 
-
-class HeadWordExtractor(FNParsedReader):
+class HeadWordExtractor():
     """This object uses syntactic annotations to retrieve the headwords of
     arguments, and attributes them a WordNet top synset (currently called class).
     """
     
-    def __init__(self):
-        FNParsedReader.__init__(self)
-    
     def headword(self, arg_text, tree):
-        """Returns the headword of an argument, assuming the proper sentence have
+        """Returns the headword of an argument, assuming the proper sentence has
         already been selected.
         
         :param arg_text: The argument.
@@ -27,18 +22,6 @@ class HeadWordExtractor(FNParsedReader):
         """
         return tree.closest_match_as_node(arg_text).word
         
-    def best_node(self, arg_text):
-        """Looks for the closest match of an argument in the syntactic tree.
-        This method is only here for debug purposes.
-        
-        :param arg_text: The argument.
-        :type arg_text: str.
-        :returns: SyntacticTreeNode -- The nodes which contents match arg_text the best
-        
-        """
-        if self.tree == None: return None
-        return self.tree.closest_match_as_node(arg_text)
-
     def get_class(self, word):
         """Looks for the WordNet class of a word and returns it.
         
@@ -58,7 +41,7 @@ class HeadWordExtractor(FNParsedReader):
         # Since WSD is complicated, we choose the first synset.
         synset = synsets[0]
         # We also choose the first hypernymy path: even when there are two
-        # paths, the top synset is very likely to be the same
+        # paths, the top synset is very likely to be the same anyway
         hypernyms = synset.hypernym_paths()[0]
 
         # TODO For PoS not in WN, return PoS instead of synset

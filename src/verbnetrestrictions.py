@@ -90,7 +90,7 @@ class VNRestriction:
         if self.type != None or other.type != None: return self.type == other.type
         if self.logical_rel != other.logical_rel: return False
         
-        # We cannot use Python's buildin unordered sets, since
+        # We cannot use Python's builtin unordered sets, since
         # VNRestriction are not hashable
         return (all([x in other.children for x in self.children]) and
                 all([x in self.children for x in other.children]))
