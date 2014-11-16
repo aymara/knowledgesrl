@@ -21,6 +21,7 @@ class ConllInvalidPositionError(Exception):
                " parsing CoNLL output (last valid position was {})".format(
                self.bad_root, self.max_root)
 
+
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
 
@@ -102,6 +103,7 @@ class SyntacticTreeNode:
 
         children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
         return max([(score, self)] + children_results, key = lambda x: x[0])
+
 
 class SyntacticTreeBuilder():
     """Wrapper class for the building of a syntactic tree

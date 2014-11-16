@@ -16,6 +16,7 @@ errors = {
 
 debug_data = []
 
+
 def log_ambiguous_role_conversion(frame, arg, role_matcher, verbnet_classes):
     errors["ambiguous_role"].append({
         "file": frame.filename,
@@ -27,11 +28,13 @@ def log_ambiguous_role_conversion(frame, arg, role_matcher, verbnet_classes):
             arg.role, vn_classes = verbnet_classes[frame.predicate.lemma])
     })
 
+
 def log_vn_missing(frame):
     errors["vn_missing"].append({
         "file": frame.filename, "sentence": frame.sentence,
         "predicate": frame.predicate.lemma,
     })
+
 
 def log_frame_with_slot(frame, converted_frame):
     errors["frame_with_slot"].append({
@@ -40,12 +43,14 @@ def log_frame_with_slot(frame, converted_frame):
         "structure": converted_frame.structure
     })
 
+
 def log_frame_without_slot(frame, converted_frame):
     errors["frame_without_slot"].append({
         "file": frame.filename, "sentence": frame.sentence,
         "predicate": frame.predicate.lemma,
         "structure": converted_frame.structure
     })
+
 
 def log_impossible_role_matching(frame, i, msg):
     errors["impossible_role_matching"].append({
@@ -55,6 +60,7 @@ def log_impossible_role_matching(frame, i, msg):
         "fn_frame": frame.frame_name,
         "msg": msg
     })
+
 
 def log_debug_data(frame, converted_frame, matcher, distrib, verbnet):
     debug_data.append({
@@ -66,6 +72,7 @@ def log_debug_data(frame, converted_frame, matcher, distrib, verbnet):
         "chosen_frames": matcher.best_frames,
         "result": distrib
     })
+
 
 def display_errors_num():
     print(
@@ -84,6 +91,7 @@ def display_errors_num():
             len(errors["frame_without_slot"]), len(errors["impossible_role_matching"]))
     )
 
+
 def display_mapping_errors():
     predicate_errors = Counter()
     for data in errors['frame_without_slot']:
@@ -91,6 +99,7 @@ def display_mapping_errors():
         predicate_errors[data['predicate']] += 1
     print(predicate_errors.most_common(10))
     print("Mapping errors for {} of {} predicates.".format(len(errors['frame_without_slot']), len(errors['frame_without_slot']) + len(errors['frame_with_slot'])))
+
 
 def display_error_details():
     #for data in errors["vn_parsing"]: print(data)
@@ -103,6 +112,7 @@ def display_error_details():
     #for data in errors["impossible_role_matching"]: print(data)
     #for data in errors["ambiguous_role"]: print(data)
     pass
+
 
 def display_debug(n):
     random.shuffle(debug_data)

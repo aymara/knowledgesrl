@@ -217,8 +217,8 @@ class VerbnetReader:
         i = 0
         for element in syntax_data:
             if ((not element.tag in ["VERB", "PREP", "LEX"]) and
-                "value" in element.attrib
-            ):
+                    "value" in element.attrib):
+
                 if i >= len(roles):
                     roles.append(None)
                     self.unhandled.append({
@@ -326,8 +326,7 @@ class VerbnetReader:
             if restr_group.tag == "SELRESTRS":
                 for restr in restr_group:
                     if (restr.attrib["Value"] == "+"
-                        and restr.attrib["type"] in verbnetprepclasses.prep
-                    ):
+                            and restr.attrib["type"] in verbnetprepclasses.prep):
                         return verbnetprepclasses.prep[restr.attrib["type"]]
                     else:
                         self.unhandled.append({
@@ -382,6 +381,7 @@ class VerbnetReader:
             pred_strings.append(pred_string)
 
         return " ".join(pred_strings)
+
 
 def init_verbnet(path):
     print("Loading VerbNet data...")

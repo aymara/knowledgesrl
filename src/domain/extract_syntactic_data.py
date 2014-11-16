@@ -15,6 +15,7 @@ from .rolemapping import RoleMapping
 from .dicoxml import deindent_text, get_all_text
 from .kicktionary import kicktionary_frames
 
+
 def xmlcontext_to_frame(lang, xmlns, lexie, contexte):
     indented_sentence_text = contexte.find('{{{0}}}contexte-texte'.format(xmlns)).text
     sentence_text = deindent_text(indented_sentence_text)
@@ -91,6 +92,7 @@ def matches_verbnet_frame(gold_syntax, vn_syntax):
 
     return dico_subcat == vn_subcat
 
+
 def remove_before_v(syntax):
     syntax = copy.deepcopy(syntax)
     new_syntax = ET.Element('SYNTAX')
@@ -105,6 +107,7 @@ def remove_before_v(syntax):
 
     return new_syntax
 
+
 def map_gold_frame(vn_id, gold_syntax, role_mapping_lexie):
     if not vn_id in role_mapping_lexie:
         return ET.Element('SYNTAX')
@@ -117,6 +120,7 @@ def map_gold_frame(vn_id, gold_syntax, role_mapping_lexie):
             mapped_gold_syntax.append(part)
 
     return mapped_gold_syntax
+
 
 def syntax_to_str(syntax):
     str_parts = []
@@ -142,6 +146,7 @@ def syntax_to_str(syntax):
             str_parts.append(part.tag)
 
     return ' '.join(str_parts)
+
 
 def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
     annotated_sentences, lemma_in_vn = 0, 0

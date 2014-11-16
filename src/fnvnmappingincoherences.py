@@ -21,6 +21,7 @@ for opt, v in options[0]:
 if not display_framenet and not display_verbnet:
     display_verbnet = True
 
+
 class VerbnetRoleReader:
 
     def __init__(self, path):
@@ -53,6 +54,7 @@ class VerbnetRoleReader:
         for subclass in xml_class.find("SUBCLASSES"):
             self._handle_class(subclass, parent_classes, parent_roles, class_name)
 
+
 def load_fn_data():
     fn_roles = {}
     fn_verbal_frames = set()
@@ -69,6 +71,7 @@ def load_fn_data():
                 break
     return fn_roles, fn_verbal_frames
 
+
 def display_vn_issues():
     for vn_class in sorted(bad_vn_roles, key=LooseVersion):
         print("VerbNet class : {}-{} ({})".format(
@@ -81,6 +84,7 @@ def display_vn_issues():
                 bad_role["vn_role"]
             ))
         print("\n")
+
 
 def display_fn_issues():
     print("Cannot find following FrameNet frame :\n")

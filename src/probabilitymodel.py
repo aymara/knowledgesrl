@@ -29,21 +29,25 @@ NO_PREP = "no_prep_magic_value"
 
 models = ["default", "slot_class", "slot", "predicate_slot", "vnclass_slot"]
 
+
 def multi_get(d, l, default = None):
     """Traverses multiple levels of a dictionary to get a key or None"""
     if not d: return default
     result = reduce(lambda d, k: d.get(k) if d else default, l, d)
     return result if result else default
 
+
 def multi_default_dict(dimension):
     """Returns an empty int defaultdict of a given dimension"""
     if dimension <= 1: return defaultdict(int)
     else: return defaultdict(lambda: multi_default_dict(dimension - 1))
 
+
 def multi_count(obj):
     """Returns the sum of all integers in a multidict"""
     if isinstance(obj, int) or isinstance(obj, float): return obj
     else: return sum([multi_count(x) for x in obj.values()])
+
 
 def check_depth(data, depth):
     is_scalar = isinstance(data, int) or isinstance(data, float)
@@ -51,10 +55,12 @@ def check_depth(data, depth):
     if is_scalar: return False
     return all([check_depth(x, depth - 1) for x in data.values()])
 
+
 def root_vnclass(vnclass):
     position = vnclass.find("-")
     if position == -1: return vnclass
     return vnclass[0:position]
+
 
 class ProbabilityModel:
 
@@ -317,17 +323,17 @@ class ProbabilityModel:
 
         if backoff_level == 0:
             data = multi_get(self.data_bootstrap_p,
-                                [slot_class, prep, predicate, headword], {})
+                             [slot_class, prep, predicate, headword], {})
             data = {x: data[x] for x in data if x in role_set and data[x] >= min_evidence}
         elif backoff_level == 1:
             data1 = multi_get(self.data_bootstrap_p1,
-                                [slot_class, predicate], {})
+                              [slot_class, predicate], {})
             data2 = multi_get(self.data_bootstrap_p2,
-                                [predicate, headword_class], {})
+                              [predicate, headword_class], {})
             sum1 = multi_get(self.data_bootstrap_p1_sum,
-                                [slot_class, predicate], 0)
+                             [slot_class, predicate], 0)
             sum2 = multi_get(self.data_bootstrap_p2_sum,
-                                [predicate, headword_class], 0)
+                             [predicate, headword_class], 0)
 
             # We still have the problem of verbs with multiple VN classes
             # We choose not to give them an equal weight :
@@ -337,20 +343,19 @@ class ProbabilityModel:
             data3 = defaultdict(int)
             for vn_class in predicate_classes:
                 d = multi_get(self.data_bootstrap_p3,
-                                [slot_class, prep, vn_class], {})
+                              [slot_class, prep, vn_class], {})
                 for role, n in d.items():
                     data3[role] += n
 
             sum3 = sum(multi_get(self.data_bootstrap_p3_sum,
-                                [slot_class, prep, vn_class], 0)
+                                 [slot_class, prep, vn_class], 0)
                        for vn_class in predicate_classes)
 
             roles = set(data1.keys()) & set(data2.keys()) & set(data3.keys())
             roles = list(filter(lambda x: (x in role_set and
                                     data1[x] + data2[x] + data3[x] >= 3 * min_evidence),
                              roles))
-            data = {x: (data1[x] / sum1 + data2[x] / sum2 + data3[x] / sum3)
-                        for x in roles}
+            data = {x: (data1[x] / sum1 + data2[x] / sum2 + data3[x] / sum3) for x in roles}
         elif backoff_level == 2:
             data = multi_get(self.data_slot_class, [slot_class], {})
             data = {x: data[x] for x in data if x in role_set and data[x] >= min_evidence}

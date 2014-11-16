@@ -7,6 +7,7 @@ from operator import attrgetter
 from framenetframe import Predicate, Arg
 import verbnetprepclasses
 
+
 class ComputeSlotTypeMixin(metaclass=ABCMeta):
     slot_types = {
         "subject": "SBJ", "object": "OBJ",
@@ -58,6 +59,7 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
         """
 
         return isinstance(elem, str) and elem[0].isupper() and elem != "V"
+
 
 class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
     """A representation of a FrameNet frame occurrence converted to VerbNet

@@ -147,12 +147,13 @@ class FrameMatcher():
                 # (or a list slot preps containing our preposition)
                 if test_slot_data["slot_type"] != slot_type:
                     continue
+
                 if (slot_type == ComputeSlotTypeMixin.slot_types["prep_object"] and
                     not FrameMatcher._is_a_match(
                         self.frame_occurrence.slot_preps[slot_pos],
-                        test_slot_data["prep"])
-                ):
+                        test_slot_data["prep"])):
                     continue
+
                 matching_slot = test_slot_data["pos"]
                 break # Stop at the first good slot we find
 
@@ -211,7 +212,8 @@ class FrameMatcher():
                 i, j = index_v_in_frame_occurrence, index_v_in_official_frame
                 slot_1 = num_slots_before_v_in_frame_occurrence
                 slot_2 = num_slots_before_v_in_official_frame
-            else: break
+            else:
+                break
 
             i, j = i + 1, j + 1
         return num_match

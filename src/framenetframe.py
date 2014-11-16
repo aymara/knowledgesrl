@@ -3,6 +3,7 @@
 
 """Frames instances, its arguments and predicates."""
 
+
 class FrameInstance:
     """A frame directly extracted from the FrameNet corpus or another CoNLL
     file.
@@ -102,6 +103,7 @@ class Arg:
     def __gt__(self, other):
         return self.__cmp__(other) > 0
 
+
 class Predicate:
 
     """A frame's predicate
@@ -128,6 +130,7 @@ class Predicate:
             self.begin == other.begin and
             self.end == other.end and
             self.lemma == other.lemma)
+
 
 class Word:
     """A frame's word

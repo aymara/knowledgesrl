@@ -12,6 +12,7 @@ def dump(filename, annotated_frames):
         pickle.dump(annotated_frames, picklefile)
     print('Dumped to dump/{}'.format(filename))
 
+
 def diff_all(data1, data2):
     for slot_data1, slot_data2 in zip(data1, data2):
         if slot_data1 != slot_data2:
@@ -26,6 +27,7 @@ def diff_all(data1, data2):
                 print("  * {}".format(slot1['text']))
                 print("    {} should in {}".format(slot1['found_roles'], slot1['wanted_roles']))
                 print("    {} should in {}".format(slot2['found_roles'], slot2['wanted_roles']))
+
 
 if __name__ == "__main__":
     status = True

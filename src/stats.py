@@ -87,12 +87,14 @@ ambiguous_mapping = {
 
 annotated_frames_stats = []
 
+
 def hmean(x, y):
     if x < 0 or y < 0:
         raise ValueError("Harmonic mean does not apply to negative parameters.")
     if x == 0 and y == 0:
         return 0
     return (2 * x * y) / (x + y)
+
 
 def display_stats(argument_identification):
     s = stats_data
@@ -148,8 +150,9 @@ def display_stats(argument_identification):
     print("     when multiple possibilities, {:.1%} precision".format(s["several_roles_ok"] / max(several_roles_evaluated, 1)))
     print()
 
-    # * the reason this is low compared to frameid and argid is that we only
-    # evaluate against FrameNet frames, so it can only be < 1
+    # * the reason this is low in arguent identification compared to frameid
+    # and argid is that we only evaluate against FrameNet frames, so it can
+    # only be < 1
 
     print("Mapped {:.1%} of {} frames, uniquely mapped {:.1%} of {} arguments".format(
         s["frames_mapped"]/s["frames"], s["frames"],
@@ -183,6 +186,7 @@ def display_stats(argument_identification):
 
     print("*: see comments in stats.py")
 
+
 def display_stats_ambiguous_mapping():
     print(
         "Ambiguous VerbNet roles:\n"
@@ -209,6 +213,7 @@ def display_stats_ambiguous_mapping():
     for v, n1 in Counter(ambiguous_mapping["verbs"]).most_common():
         n2 = count_with_frame[v] if v in count_with_frame else 0
         print("{:>12}: {:>3} - {:<3}".format(v, n1, n2))
+
 
 def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, argument_identification):
     # This variable is not handled here for non-gold args, because
@@ -290,6 +295,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
             else:
                 stats_data["no_roles_evaluated"] += 1
 
+
 def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     good = stats_data["one_correct_role"]
     bad = stats_data["one_bad_role"]
@@ -307,6 +313,7 @@ def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
         cover = resolved_model / (identified - resolved_fm)
 
     return precision, cover, precision_all, cover_all
+
 
 def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
     found_ambiguous_arg = False

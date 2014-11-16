@@ -61,8 +61,8 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
 
                 if (role1 != None and
                     ((role2 != None and log(ratio) > log_ratio) or
-                    log_ratio <= 1)
-                ):
+                     log_ratio <= 1)):
+
                     role = role1
                     total[backoff_level] += 1
                     break
@@ -75,4 +75,3 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                 # everywhere it is referenced
 
         log_ratio -= log_ratio_step
-

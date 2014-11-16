@@ -26,6 +26,7 @@ class NoHashDefaultDict:
     def __iter__(self):
         return self.keys.__iter__()
 
+
 class VNRestriction:
 
     """A semantic condition associated to a role in VerbNet
@@ -45,9 +46,7 @@ class VNRestriction:
         "sound", "substance", "time", "vehicle"
     }
 
-    def __init__(self, restr_type=None, children=[],
-        logical_rel=None
-    ):
+    def __init__(self, restr_type=None, children=[], logical_rel=None):
         """Private constructor. Use the build* static methods to instanciate
         VNRestricitons.
         Takes care of deleting children that could occurs several time in the

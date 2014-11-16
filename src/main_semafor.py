@@ -55,8 +55,7 @@ for frame in semafor_frames:
     frame_found = True
     while annotated_frames[i].predicate.begin != frame.predicate.begin:
         if (i >= len(annotated_frames) - 1
-            or annotated_frames[i + 1].sentence != frame.sentence
-        ):
+                or annotated_frames[i + 1].sentence != frame.sentence):
             frame_found = False
             break
         i += 1

@@ -25,6 +25,7 @@ def get_trees(filename):
 
     return tree_list
 
+
 def get_quality_scores():
     correct, partial, total = 0, 0, 0
 
@@ -48,6 +49,7 @@ def get_quality_scores():
                     break
 
     return correct, partial, total
+
 
 if __name__ == '__main__':
     correct, partial, total = get_quality_scores()

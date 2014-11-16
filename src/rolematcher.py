@@ -23,6 +23,7 @@ vn_roles_additionnal = ["Goal", "Initial_Location", "Pivot", "Result",
 # List of VN roles that won't trigger an error in unit tests
 authorised_roles = vn_roles_list + vn_roles_additionnal
 
+
 class RoleMatchingError(Exception):
     """ Missing data to compare a vn and a fn role
 
@@ -34,6 +35,7 @@ class RoleMatchingError(Exception):
 
     def __str__(self):
         return ("Error : {}".format(self.msg))
+
 
 class VnFnRoleMatcher():
     """Reads the mapping between VN and FN roles, and can then be used to compare them

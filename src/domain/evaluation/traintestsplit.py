@@ -12,6 +12,7 @@ from domain import kicktionary
 from domain.dicoxml import deindent_text
 from .mergesource import merged_source
 
+
 def split_sources(sentences):
     sentences_for_source = defaultdict(list)
     for source, sentence_text in sentences:
@@ -31,6 +32,7 @@ def split_sources(sentences):
             to_extend.append((source, sentence_text))
 
     return train, test
+
 
 def dico_split():
     for dico in paths.DICOS:

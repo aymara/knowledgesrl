@@ -134,7 +134,7 @@ class ArgGuesser():
             base_node = base_node.father
 
         result = self._find_args_rec(node, node)
-        if not base_node is node and base_node.pos in self.predicate_pos:
+        if base_node is not node and base_node.pos in self.predicate_pos:
             result += self._find_args_rec(base_node, base_node)
 
         result = [x for x in result if x.text != "to"]
@@ -228,12 +228,12 @@ class ArgGuesser():
         """Tells whether node is the subject of predicate_node. This is only called
         when node is a brother of predicate_node.
         """
-        return ((not node is predicate_node) and
+        return ((node is not predicate_node) and
                 node.deprel in self.subject_deprels)
 
     def _is_arg(self, node, predicate_node):
         """Tells whether node is an argument of predicate_node. This is only called
         when node is a descendant of predicate_node.
         """
-        return ((not node is predicate_node) and
+        return ((node is not predicate_node) and
                 node.deprel in self.args_deprels)

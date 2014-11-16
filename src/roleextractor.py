@@ -13,6 +13,7 @@ from stats import stats_data
 using the annotated FrameNet data.
 """
 
+
 def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet_classes, role_matcher):
     """Fills the roles of some frame instance arguments, when possible.
     Note: frame_instances must be sorted by sentence order.
@@ -85,6 +86,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
 
     return frame_instances
 
+
 def correct_num_tags(extracted_frame, original_sentence):
     """ Replace <num> tags by their real equivalents
     and update begin/end attributes where necessary.
@@ -129,6 +131,7 @@ def frame_replace_one(frame, search, replace):
             arg.end += offset
     return True
 
+
 def frame_replace_all(frame, search, replace):
     """ Replace every occurence of a word by another word in a frame"""
     if search in replace:
@@ -137,9 +140,11 @@ def frame_replace_all(frame, search, replace):
 
     while frame_replace_one(frame, search, replace): pass
 
+
 def predicate_match(predicate1, predicate2):
     """ Tells whether two predicates in the same sentence belongs to the same frame"""
     return predicate1.begin == predicate2.begin
+
 
 def handle_frame(extracted_frame, annotated_frame):
     # Update the frame data
@@ -169,6 +174,7 @@ def handle_frame(extracted_frame, annotated_frame):
     if extracted_frame.arg_annotated:
         stats_data["arg_extracted_good"] += good_args
         stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args)
+
 
 def match_score(arg1, arg2):
     intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)

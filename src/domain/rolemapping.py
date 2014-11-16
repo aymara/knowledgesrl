@@ -3,6 +3,7 @@
 from xml.etree import ElementTree as ET
 from collections import UserDict
 
+
 class RoleMapping(UserDict):
     def __init__(self, filename):
         super().__init__()

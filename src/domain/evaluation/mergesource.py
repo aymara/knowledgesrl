@@ -9,6 +9,7 @@ import sys
 from xml.etree import ElementTree as ET
 from collections import Counter
 
+
 def get_xmlns(dico_file):
     DICOENVIRO_XMLNS = 'http://olst.ling.umontreal.ca/dicoenviro/'
     DICOINFO_XMLNS = 'http://olst.ling.umontreal.ca/dicoinfo/'
@@ -19,6 +20,7 @@ def get_xmlns(dico_file):
         return DICOENVIRO_XMLNS
     else:
         raise Exception('Unknown file {}'.format(dico_file))
+
 
 def merged_source(dico, source):
     if 'enviro' in dico: 

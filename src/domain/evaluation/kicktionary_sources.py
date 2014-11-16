@@ -8,6 +8,7 @@ import pickle
 
 KICKTIONARY_CORPUS = '/home/quentin/Projets/Kicktionary/corpus'
 
+
 def add_www_hash(hashes, author, sentence):
     text_hash = sha256(sentence.encode('utf-8')).hexdigest()
     print('{} -> {}'.format(sentence, text_hash))

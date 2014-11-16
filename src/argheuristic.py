@@ -99,7 +99,7 @@ class RelationTreeNode:
         """
 
         for node in self._iter_all():
-            if not node is self:
+            if node is not self:
                 yield node
 
     def _iter_all(self):
@@ -133,6 +133,7 @@ def build_relation_tree(node):
     # attribute is never actually read, except for debug purposes.
     return build_relation_tree_rec(node, node, "IDENTITY")
 
+
 def build_relation_tree_rec(node, new_father, relation):
     """Recursivly build the subtree which starts at node
 
@@ -147,7 +148,7 @@ def build_relation_tree_rec(node, new_father, relation):
 
     # Starts by the syntactic children (except new_father if it is one)
     new_children = [build_relation_tree_rec(x, node, Relation(x.deprel, "DOWN"))
-            for x in node.children if not x is new_father]
+            for x in node.children if x is not new_father]
 
     # The add the father if it is not new_father
     if not (new_father is node.father or node.father == None):
@@ -176,6 +177,7 @@ rule4_relations = reduce(lambda x, y: x + Relation.both(y), [
     "HMOD", "IOBJ", "LGS", "LOC", "MNR", "NMOD", "OBJ", "OPRD", "POSTHON",
     "PRD", "PRN", "PRP", "PRT", "PUT", "SBJ", "SUB", "SUFFIX"
     ], [])
+
 
 def find_args(predicate_node):
     """ Apply the heuristic to its argument
@@ -211,15 +213,18 @@ def find_args(predicate_node):
 
     return [x.node for x in tree if x.status == "KEPT"]
 
+
 def rule1(tree):
     for elem in tree:
         if elem.node.pos in rule1_pos:
             elem.discard()
 
+
 def rule2(tree):
     for elem in tree:
         if elem.relation in rule2_relations:
             elem.discard()
+
 
 def rule3(tree):
     candidate = None
@@ -227,9 +232,8 @@ def rule3(tree):
 
     for elem in tree:
         if (elem.node.deprel == "SBJ" and
-            elem.node.begin_word < tree.node.begin_word and
-            elem.node.begin_word > best_position
-        ):
+                elem.node.begin_word < tree.node.begin_word and
+                elem.node.begin_word > best_position):
             candidate, best_position = elem, elem.node.begin
 
     if candidate == None: return
@@ -244,6 +248,7 @@ def rule3(tree):
 
     if found: candidate.keep()
 
+
 def rule4(tree):
     for elem1 in tree.children:
         if elem1.relation in rule4_relations:
@@ -251,17 +256,20 @@ def rule4(tree):
         else:
             rule4(elem1)
 
+
 def rule5(tree):
     for elem in tree:
         if any([x.deprel == "VC" for x in elem.node.children]):
             elem.discard()
 
+
 def rule6(tree):
     for elem in tree.children:
         # Do not keep elem that are on the left of the predicate
-        if (not elem.node is tree.node.father and
+        if (elem.node is not tree.node.father and
         elem.node.begin_word > tree.node.begin_word):
             elem.keep()
+
 
 def rule7(tree, root = True):
     for elem in tree.children:
@@ -269,6 +277,7 @@ def rule7(tree, root = True):
             rule7(elem, False)
         elif not root:
             elem.keep()
+
 
 def rule8(tree):
     for elem in tree: elem.discard()

@@ -15,11 +15,13 @@ import warnings
 
 from nltk.corpus import verbnet
 
+
 def classid_to_number(classid):
     number = '-'.join(classid.split('-')[1:])
     # prevent LooseVersion bug: 109-1-1 can't compare with 80.1
     number = number.replace('-', '.')
     return number
+
 
 def strip_roles(primary):
     out_list = []
@@ -34,6 +36,7 @@ def strip_roles(primary):
 
     return ' '.join(out_list)
 
+
 def check_all_restr(part, value, type_):
     if type(type_) == str:
         type_list = [type_]
@@ -42,7 +45,10 @@ def check_all_restr(part, value, type_):
     else:
         raise Exception('Invalid type {}'.format(type_))
 
-    return any([check_restr(synrestr, value, type_) for synrestr in part.findall('SYNRESTRS/SYNRESTR') for type_ in type_list])
+    return any([check_restr(synrestr, value, type_part)
+               for synrestr in part.findall('SYNRESTRS/SYNRESTR')
+               for type_part in type_list])
+
 
 def check_restr(synrestr, value, type_):
     value_found, type_found = synrestr.get('Value'), synrestr.get('type')
@@ -56,6 +62,7 @@ def check_restr(synrestr, value, type_):
     else:
         # restrict on both type and value
         return type_ == type_found and value == value_found
+
 
 def syntax_to_primary(syntax):
     def add(o, name, part):
@@ -107,7 +114,8 @@ def syntax_to_primary(syntax):
 
             elif check_all_restr(part, '+', ['sc_ing', 'ac_ing', 'poss_ing', 'be_sc_ing']):
                 out_list.append(('S_ING', role))
-            elif check_all_restr(part, '+', ['rs_to_inf', 'vc_to_inf', 'sc_to_inf', 'ac_to_inf', 'oc_to_inf']):
+            elif check_all_restr(part, '+', ['rs_to_inf', 'vc_to_inf',
+                                             'sc_to_inf', 'ac_to_inf', 'oc_to_inf']):
                 out_list.append(('S_INF', role))
 
             elif check_all_restr(part, '+', ['plural', 'genitive']):
@@ -149,7 +157,8 @@ def syntax_to_primary(syntax):
                 out_list.append(('ADJP', next_role))
             elif part.tag == 'LEX' and check_all_restr(next_part, '+', 'adj'):
                 out_list.append(('{} {}'.format(part.get('value'), 'ADJ'), None))
-            elif part.tag == 'LEX' and (check_all_restr(next_part, '-', 'sentential') or check_all_restr(next_part, '+', 'small_clause')):
+            elif part.tag == 'LEX' and (check_all_restr(next_part, '-', 'sentential') or
+                                        check_all_restr(next_part, '+', 'small_clause')):
                 out_list.append(('{} {}'.format(part.get('value'), 'NP'), None))
             else:
                 out_list.append(('PP', next_role))
@@ -158,6 +167,7 @@ def syntax_to_primary(syntax):
         i += 1
 
     return out_list
+
 
 class VerbnetGuessTest(unittest.TestCase):
     def test(self):
@@ -176,8 +186,10 @@ class VerbnetGuessTest(unittest.TestCase):
                     if text in skips:
                         continue
                     syntax = vn_frame['frame'].find('SYNTAX')
-                    wanted_primary = strip_roles(vn_frame['frame'].find('DESCRIPTION').get('primary'))
-                    converted_primary = ' '.join([phrase for phrase, role in syntax_to_primary(syntax)])
+                    wanted_primary = strip_roles(
+                        vn_frame['frame'].find('DESCRIPTION').get('primary'))
+                    converted_primary = ' '.join(
+                        [phrase for phrase, role in syntax_to_primary(syntax)])
 
                     self.assertEqual(wanted_primary, converted_primary)
                 i += 1

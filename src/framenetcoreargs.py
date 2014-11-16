@@ -16,6 +16,7 @@ class NoSuchFrameError(Exception):
     def __str__(self):
         return ("is_core_role : no data for frame '{}'.".format(self.frame))
 
+
 class CoreArgsFinder:
     """This class reads data from FrameNet and sued them to distinguishe core args from other args.
 

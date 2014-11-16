@@ -210,9 +210,7 @@ class FulltextReader:
                 start += len(line[1]) + 1
 
         for word in pos_data:
-            if (word["pos"] in FulltextReader.predicate_pos
-                or self.keep_nonverbal
-            ):
+            if word["pos"] in FulltextReader.predicate_pos or self.keep_nonverbal:
                 predicate_starts.append(int(word["start"]))
 
             words.append(Word(int(word["start"]), int(word["end"]), word["pos"]))
@@ -244,9 +242,9 @@ class FulltextReader:
 
         predicate = self._build_predicate(sentence_text, frame)
 
-        if (predicate == None or
-            (self.corpus in ["fulltext", "semafor"] and not predicate.begin in predicate_starts)
-        ):
+        if predicate == None:
+            return
+        elif self.corpus in ["fulltext", "semafor"] and not predicate.begin in predicate_starts):
             return
 
         if self.constant_frame == "":
@@ -309,8 +307,7 @@ class FulltextReader:
 
                 if (not self.add_non_core_args and not
                     FulltextReader.core_arg_finder.is_core_role(
-                        new_arg.role, frame_name)
-                ):
+                        new_arg.role, frame_name)):
                     continue
 
                 add = True
