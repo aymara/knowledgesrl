@@ -244,7 +244,7 @@ class FulltextReader:
 
         if predicate == None:
             return
-        elif self.corpus in ["fulltext", "semafor"] and not predicate.begin in predicate_starts):
+        elif self.corpus in ["fulltext", "semafor"] and not predicate.begin in predicate_starts:
             return
 
         if self.constant_frame == "":
