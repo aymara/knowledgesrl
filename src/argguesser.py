@@ -4,7 +4,6 @@
 """ Extract frames, predicates and arguments from a corpus, using only syntactic annotations """
 
 from framenetframe import FrameInstance, Predicate, Word, Arg
-from framenetparsedreader import FNParsedReader
 from framenetallreader import FNAllReader
 import options
 from verbnetprepclasses import all_preps
@@ -12,7 +11,7 @@ from argheuristic import find_args
 from nltk.corpus import wordnet as wn
 
 
-class ArgGuesser(FNParsedReader):
+class ArgGuesser():
     """
     :var frames_for_verb: lemma -> VerbnetOfficialFrame list - Used to know which predicates are in VerbNet.
     :var filename: str -- The name of the current CoNLL file.
@@ -67,13 +66,11 @@ class ArgGuesser(FNParsedReader):
     complex_pos = ["IN", "WP"]
 
     def __init__(self, frames_for_verb):
-        FNParsedReader.__init__(self)
         self.frames_for_verb = frames_for_verb
         
-    def frame_instances_from_file(self, filename):
+    def frame_instances_from_file(self, sentence_trees, filename):
         """ Extracts frames from one file and iterate over them """
-        self.load_file(filename)
-        for sentence_id, sentence, tree in self.sentence_trees():
+        for sentence_id, sentence, tree in sentence_trees:
             for frame in self._handle_sentence(sentence_id, sentence, tree, filename):
                 yield frame
     

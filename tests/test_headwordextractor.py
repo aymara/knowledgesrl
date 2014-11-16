@@ -12,13 +12,13 @@ class HeadWordExtractorTest(unittest.TestCase):
     def test_classes(self):
         filename = "ANC__110CYL067"
         fnparsed_reader = FNParsedReader()
-        fnparsed_reader.load_file(options.framenet_parsed / (filename + ".conll"))
+        parsed_conll_file = options.framenet_parsed / (filename + ".conll")
         extractor = HeadWordExtractor()
 
         reader = framenetreader.FulltextReader(options.fulltext_annotations[0], False)
 
         for frame in reader.frames:
-            sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees())[frame.sentence_id]
+            sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
             for arg in frame.args:
                 extractor.headword(arg, tree)
 
@@ -31,17 +31,17 @@ class HeadWordExtractorTest(unittest.TestCase):
     def test_1(self):
         filename = "ANC__110CYL067"
         fnparsed_reader = FNParsedReader()
-        fnparsed_reader.load_file(options.framenet_parsed / (filename + ".conll"))
+        parsed_conll_file = options.framenet_parsed / (filename + ".conll")
         extractor = HeadWordExtractor()
 
         reader = framenetreader.FulltextReader(options.fulltext_corpus / (filename + ".xml"), False)
 
         frame = reader.frames[1]
-        sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees())[frame.sentence_id]
+        sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
         self.assertEqual(extractor.headword(frame.args[0], tree), "you")
 
         frame = reader.frames[25]
-        sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees())[frame.sentence_id]
+        sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
         self.assertEqual(extractor.headword(frame.args[0], tree), "people")
 
 
@@ -76,7 +76,6 @@ def sample_args(self, num_sample = 10):
     for annotation_file, parsed_conll_file in zip(options.fulltext_annotations, options.fulltext_parses):
         if annotation_file.stem in bad_files: continue
 
-        fnparsed_reader.load_file(parsed_conll_file)
         reader = framenetreader.FulltextReader(annotation_file)
 
         previous_sentence = 0
@@ -85,7 +84,7 @@ def sample_args(self, num_sample = 10):
             if (annotation_file.stem, frame.sentence_id) in bad_sentences: continue
 
             if frame.sentence_id != previous_sentence:
-                sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees())[frame.sentence_id]
+                sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
 
             for arg in frame.args:
                 if not arg.instanciated: continue

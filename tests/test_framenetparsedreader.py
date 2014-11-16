@@ -37,7 +37,6 @@ class FNParsedReaderTest(unittest.TestCase):
             if any([annotation.match('*{}*'.format(bad_file)) for bad_file in bad_files]):
                 continue
 
-            parsed_reader.load_file(parse)
             reader = framenetreader.FulltextReader(annotation, False)
             previous_sentence = 0
 
@@ -49,7 +48,7 @@ class FNParsedReaderTest(unittest.TestCase):
 
                 # find the correct sentence
                 if frame.sentence_id != previous_sentence:
-                    for sentence_id, builder_sentence, tree in parsed_reader.sentence_trees():
+                    for sentence_id, builder_sentence, tree in parsed_reader.sentence_trees(parse):
                         if sentence_id == frame.sentence_id:
                             sentence = tree.flat()
                             self.assertEqual(builder_sentence, sentence)

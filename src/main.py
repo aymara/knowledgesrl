@@ -5,6 +5,7 @@ from collections import Counter
 from pathlib import Path
 
 from framenetallreader import FNAllReader
+from framenetparsedreader import FNParsedReader
 from verbnetframe import VerbnetFrameOccurrence
 from conllreader import ConllSemanticAppender
 import stats
@@ -49,6 +50,7 @@ if __name__ == "__main__":
         print(annotation_file.stem)
         annotated_frames = []
         vn_frames = []
+        fnparsed_reader = FNParsedReader()
 
         if options.argument_identification:
             #
@@ -57,7 +59,7 @@ if __name__ == "__main__":
             arg_guesser = argguesser.ArgGuesser(verbnet_classes)
 
             # Many instances are not actually FrameNet frames
-            new_frame_instances = list(arg_guesser.frame_instances_from_file(parsed_conll_file))
+            new_frame_instances = list(arg_guesser.frame_instances_from_file(fnparsed_reader.sentence_trees(parsed_conll_file), parsed_conll_file))
             new_annotated_frames = roleextractor.fill_gold_roles(new_frame_instances,
                 annotation_file, parsed_conll_file, verbnet_classes,
                 role_matcher)

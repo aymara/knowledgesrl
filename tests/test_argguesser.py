@@ -6,6 +6,7 @@ import paths
 import options
 import verbnetreader
 from argguesser import ArgGuesser
+from framenetparsedreader import FNParsedReader
 from conllreader import SyntacticTreeBuilder
 from framenetframe import Arg
 
@@ -17,7 +18,9 @@ class ArgGuesserTest(unittest.TestCase):
     def test_global(self):
         frames = []
         for filename in options.fulltext_parses:
-            frames.extend([x for x in self.arg_guesser.frame_instances_from_file(filename)])
+            fnparsed_reader = FNParsedReader()
+            sentence_trees = fnparsed_reader.sentence_trees(filename)
+            frames.extend([x for x in self.arg_guesser.frame_instances_from_file(sentence_trees, filename)])
 
         num_args = 0
         
