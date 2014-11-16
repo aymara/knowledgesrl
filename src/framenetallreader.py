@@ -23,8 +23,7 @@ class FNAllReader:
     be_forms = ["am", "are", "be", "been", "being", "is", "was", "were",
         "'m", "'re", "'s"]
 
-    def __init__(self,
-        add_non_core_args=True, keep_unannotated = False):
+    def __init__(self, add_non_core_args=True, keep_unannotated=False):
         self.add_non_core_args = add_non_core_args
         self.keep_unannotated = keep_unannotated
 

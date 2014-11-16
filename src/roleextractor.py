@@ -31,7 +31,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
         frames[frame.filename.stem][frame.sentence_id].append(frame)
 
     fn_reader = FNAllReader(
-            add_non_core_args=False, keep_unannotated = True)
+        add_non_core_args=False, keep_unannotated=True)
 
     previous_id = -1
     sentence_frames = []

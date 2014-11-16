@@ -92,7 +92,7 @@ class ProbabilityModel:
         self.data_vnclass_slot = multi_default_dict(4)
 
         if vn_classes != None and vn_init_value != None:
-            self.data_vnclass = defaultdict(lambda : {})
+            self.data_vnclass = defaultdict(lambda: {})
             for verb, verb_vnclass in vn_classes.items():
                 for vnclass in verb_vnclass:
                     vnclass = root_vnclass(vnclass)
@@ -127,7 +127,7 @@ class ProbabilityModel:
                 self.data_vnclass_slot[vnclass][slot_class][NO_PREP][role] += 1
 
     def add_data_bootstrap(self, role, predicate, predicate_classes,
-        slot_class, prep, headword, headword_class):
+                           slot_class, prep, headword, headword_class):
         """Use one known occurence of a role in a given context to update the data
         of the bootstrap algorithm
 
@@ -287,7 +287,7 @@ class ProbabilityModel:
         return None
 
     def best_roles_bootstrap(self, role_set, predicate, predicate_classes, slot_class,
-        prep, headword, headword_class, backoff_level, min_evidence):
+                             prep, headword, headword_class, backoff_level, min_evidence):
         """Computes the two best roles for a slot at a given backoff level
         of the bootstrap algorithm
 

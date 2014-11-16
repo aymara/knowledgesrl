@@ -104,7 +104,7 @@ def display_fn_issues():
 
 role_reader = VerbnetRoleReader(paths.VERBNET_PATH)
 vn_classes = role_reader.classes
-classes_names  = role_reader.classes_names
+classes_names = role_reader.classes_names
 
 vn_classes["13.4"] = vn_classes["13.4.1"]
 classes_names["13.4"] = classes_names["13.4.1"]

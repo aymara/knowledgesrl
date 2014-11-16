@@ -19,7 +19,7 @@ class ConllInvalidPositionError(Exception):
     def __str__(self):
         return "Error : tried to build a subtree from position {} while"\
                " parsing CoNLL output (last valid position was {})".format(
-                self.bad_root, self.max_root)
+               self.bad_root, self.max_root)
 
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree

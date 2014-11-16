@@ -37,7 +37,8 @@ class FulltextReader:
     """
 
     core_arg_finder = None
-    predicate_pos = ["md", "MD",
+    predicate_pos = [
+        "md", "MD",
         "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
         "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
         "VH", "VHD", "VHG", "VHN", "VHP", "VHZ"]
@@ -56,8 +57,8 @@ class FulltextReader:
     # etree will add the xmlns string before every tag name
     framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
 
-    def __init__(self, filename, add_non_core_args=True, keep_unannotated = False,
-        tree_dict = None, keep_nonverbal = False, pos_file = None):
+    def __init__(self, filename, add_non_core_args=True, keep_unannotated=False,
+                 tree_dict=None, keep_nonverbal=False, pos_file=None):
         """Read a file and update the collected frames list.
 
         :param filename: Path to the file to read.
@@ -188,7 +189,7 @@ class FulltextReader:
         pos_data = []
         if self.pos_data == None:
             pos_annotation = "{0}annotationSet/{0}layer[@name='PENN']/" \
-                         "{0}label".format(self._xmlns)
+                             "{0}label".format(self._xmlns)
             for label in sentence.findall(pos_annotation):
                 pos_data.append({
                     "start": label.attrib["start"],
@@ -315,7 +316,8 @@ class FulltextReader:
                 add = True
                 for arg in args[:]:
                     if (arg.role == new_arg.role and
-                        arg.phrase_type == new_arg.phrase_type):
+                            arg.phrase_type == new_arg.phrase_type):
+
                         if arg.text in rel_pronouns:
                             add = False
                         if new_arg.text in rel_pronouns:
@@ -366,10 +368,10 @@ class FulltextReader:
             # If the argument and the predicate overlap, mark the argument as NI
             if arg_start <= predicate.end and arg_end >= predicate.begin:
                 self.predicate_is_arg.append({
-                        "file": self.filename,
-                        "predicate": predicate.lemma,
-                        "sentence": sentence_text
-                    })
+                    "file": self.filename,
+                    "predicate": predicate.lemma,
+                    "sentence": sentence_text
+                })
                 return False, Arg(0, -1, "",  arg.attrib["name"], False, "")
 
             if phrase_found:
@@ -438,7 +440,7 @@ class FulltextReader:
                 for w in frame.words:
                     i += 1
                     frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\t \t\n".format(
-                            i, frame.get_word(w), self.pos_mapping.get(w.pos, w.pos))
+                        i, frame.get_word(w), self.pos_mapping.get(w.pos, w.pos))
 
                 yield frame_conll + "\n"
 

@@ -14,8 +14,9 @@ class FrameInstance:
     """
 
     def __init__(self, sentence, predicate, args, words, frame_name,
-        sentence_id = -1, filename = "",
-        slot_type = "", arg_annotated = False, tree=None):
+                 sentence_id=-1, filename="",
+                 slot_type="", arg_annotated=False, tree=None):
+
         self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
@@ -40,7 +41,7 @@ class FrameInstance:
 
     def __repr__(self):
         return "FrameInstance({}, {}, {})".format(
-                self.predicate, self.args, self.frame_name)
+            self.predicate, self.args, self.frame_name)
 
 
 class Arg:
@@ -72,9 +73,9 @@ class Arg:
         return "Arg({}, {}, {})".format(self.text, self.phrase_type, self.role)
 
     def __eq__(self, other):
-        return (isinstance(other, self.__class__)  and
+        return (isinstance(other, self.__class__) and
             ((self.begin == other.begin and self.end == other.end) or
-                (self.instanciated == False and other.instanciated == False)) and
+                (self.instanciated is False and other.instanciated is False)) and
             self.role == other.role and
             self.phrase_type == other.phrase_type)
 

@@ -105,8 +105,8 @@ class VnFnRoleMatcher():
         found = False
         for compare in self.mappings[fn_frame]:
             if compare == new_mapping:
-                   found = True
-                   break
+                found = True
+                break
 
         if not found:
             self.mappings[fn_frame].append(new_mapping)
@@ -139,14 +139,14 @@ class VnFnRoleMatcher():
 
         if not fn_role in self.fn_roles:
             raise RoleMatchingError(
-                "{} role does not seem"\
+                "{} role does not seem"
                 " to exist".format(fn_role))
         if fn_frame == None and vn_classes == None:
             return self.fn_roles[fn_role]["all"]
 
         if fn_frame != None and not fn_frame in self.fn_roles[fn_role]:
             raise RoleMatchingError(
-                "{} role does not seem"\
+                "{} role does not seem"
                 " to belong to frame {}".format(fn_role, fn_frame))
         if vn_classes == None:
             return self.fn_roles[fn_role][fn_frame]["all"]
@@ -174,7 +174,7 @@ class VnFnRoleMatcher():
         if vn_roles == set():
             # We don't have the mapping for any of the VN class provided in vn_classes
             raise RoleMatchingError(
-                "None of the given VerbNet classes ({}) were corresponding to"\
+                "None of the given VerbNet classes ({}) were corresponding to"
                 " {} role and frame {}".format(vn_class, fn_role, fn_frame))
 
         return vn_roles
@@ -198,7 +198,7 @@ class VnFnRoleMatcher():
 
     def build_frames_vnclasses_mapping(self):
         """ Builds a mapping between framenet frames and associated verbnet classes """
-        self.fn_frames = defaultdict(lambda : set())
+        self.fn_frames = defaultdict(lambda: set())
         for fn_role in self.fn_roles:
             if fn_role == "all": continue
             for fn_frame in self.fn_roles[fn_role]:

@@ -6,12 +6,12 @@ from collections import Counter
 
 
 errors = {
-   "vn_parsing": [],
-   "vn_missing": [],
-   "frame_without_slot": [],
-   "frame_with_slot": [],
-   "impossible_role_matching": [],
-   "ambiguous_role": []
+    "vn_parsing": [],
+    "vn_missing": [],
+    "frame_without_slot": [],
+    "frame_with_slot": [],
+    "impossible_role_matching": [],
+    "ambiguous_role": []
 }
 
 debug_data = []
