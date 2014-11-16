@@ -5,7 +5,7 @@ import unittest
 import random
 import options
 from framenetparsedreader import FNParsedReader
-from headwordextractor import HeadWordExtractor
+import headwordextractor
 import framenetreader
 
 class HeadWordExtractorTest(unittest.TestCase):
@@ -13,36 +13,34 @@ class HeadWordExtractorTest(unittest.TestCase):
         filename = "ANC__110CYL067"
         fnparsed_reader = FNParsedReader()
         parsed_conll_file = options.framenet_parsed / (filename + ".conll")
-        extractor = HeadWordExtractor()
 
         reader = framenetreader.FulltextReader(options.fulltext_annotations[0], False)
 
         for frame in reader.frames:
             sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
             for arg in frame.args:
-                extractor.headword(arg, tree)
+                headwordextractor.headword(arg, tree)
 
-        self.assertEqual(extractor.get_class("soda"), "physical_entity.n.01")
-        #self.assertEqual(extractor.get_class("i"), "pronoun")
+        self.assertEqual(headwordextractor.get_class("soda"), "physical_entity.n.01")
+        #self.assertEqual(headwordextractor.get_class("i"), "pronoun")
         
         # get_class should return None for words out of WordNet
-        self.assertEqual(extractor.get_class("abcde"), None)
+        self.assertEqual(headwordextractor.get_class("abcde"), None)
 
     def test_1(self):
         filename = "ANC__110CYL067"
         fnparsed_reader = FNParsedReader()
         parsed_conll_file = options.framenet_parsed / (filename + ".conll")
-        extractor = HeadWordExtractor()
 
         reader = framenetreader.FulltextReader(options.fulltext_corpus / (filename + ".xml"), False)
 
         frame = reader.frames[1]
         sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
-        self.assertEqual(extractor.headword(frame.args[0], tree), "you")
+        self.assertEqual(headwordextractor.headword(frame.args[0], tree), "you")
 
         frame = reader.frames[25]
         sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
-        self.assertEqual(extractor.headword(frame.args[0], tree), "people")
+        self.assertEqual(headwordextractor.headword(frame.args[0], tree), "people")
 
 
 def sample_args(self, num_sample = 10):
