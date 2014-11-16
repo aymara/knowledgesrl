@@ -33,7 +33,6 @@ if __name__ == "__main__":
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
-    hw_extractor = headwordextractor.HeadWordExtractor()
 
     all_annotated_frames = []
     all_vn_frames = []
@@ -169,7 +168,7 @@ if __name__ == "__main__":
     #
     if options.bootstrap:
         print("Applying bootstrap...")
-        bootstrap_algorithm(all_vn_frames, model, hw_extractor, verbnet_classes)
+        bootstrap_algorithm(all_vn_frames, model, verbnet_classes)
     elif options.probability_model is not None:
         print("Applying probability model...")
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):

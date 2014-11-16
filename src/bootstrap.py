@@ -3,9 +3,10 @@
 
 from math import log
 from functools import reduce
+import headwordextractor
 
 
-def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes):
+def bootstrap_algorithm(frames, probability_model, verbnet_classes):
     # See Swier and Stevenson, Unsupervised Semantic Role Labelling, 2004, 5.4
     # for information about the parameters' values
     log_ratio = 8
@@ -24,7 +25,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
         # Update probability model with resolved slots
         for frame, role_set, slot_position in slots:
             if len(role_set) == 1:
-                headword = hw_extractor.headword(frame.args[slot_position], frame.tree)
+                headword = headwordextractor.headword(frame.args[slot_position], frame.tree)
                 probability_model.add_data_bootstrap(
                     next(iter(role_set)),
                     frame.predicate,
@@ -32,7 +33,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                     frame.slot_types[slot_position],
                     frame.slot_preps[slot_position],
                     headword,
-                    hw_extractor.get_class(headword)
+                    headwordextractor.get_class(headword)
                 )
 
         # Remove resolved and empty slots
@@ -43,7 +44,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
         if log_ratio == 1: min_evidence = [1, 1, 1]
 
         for frame, role_set, slot_position in slots:
-            headword = hw_extractor.headword(frame.args[slot_position], frame.tree)
+            headword = headwordextractor.headword(frame.args[slot_position], frame.tree)
             role = None
             for backoff_level in [0, 1, 2]:
                 role1, role2, ratio = probability_model.best_roles_bootstrap(
@@ -54,7 +55,7 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                     frame.slot_types[slot_position],
                     frame.slot_preps[slot_position],
                     headword,
-                    hw_extractor.get_class(headword),
+                    headwordextractor.get_class(headword),
                     backoff_level,
                     min_evidence[backoff_level]
                 )

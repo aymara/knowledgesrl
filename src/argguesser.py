@@ -3,11 +3,13 @@
 
 """ Extract frames, predicates and arguments from a corpus, using only syntactic annotations """
 
+from nltk.corpus import wordnet as wn
+
 from framenetframe import FrameInstance, Predicate, Word, Arg
 import options
 from verbnetprepclasses import all_preps
 from argheuristic import find_args
-from nltk.corpus import wordnet as wn
+import headwordextractor
 
 
 class ArgGuesser():
