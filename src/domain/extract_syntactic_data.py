@@ -2,14 +2,11 @@
 
 import copy
 from collections import OrderedDict
-import re
 from xml.etree import ElementTree as ET
 import json
-import pickle
 
 import colorama
 from colorama import Fore
-from nltk.corpus.reader import VerbNetError
 from nltk.corpus import verbnet
 from nltk.corpus import verbenet
 
@@ -249,7 +246,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
     print('                         {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('For these tokens,        {:.1%} of constructions are here'.format(n_correct_frames/n_frames))
     print('For these constructions, {:.1%} of classes are here'.format(n_correct_classes/max(n_classes, 1)))
-    print('For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/max(n_roles,1)))
+    print('For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/max(n_roles, 1)))
     print()
 
 if __name__ == '__main__':

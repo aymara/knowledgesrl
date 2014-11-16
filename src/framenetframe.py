@@ -6,13 +6,13 @@
 class FrameInstance:
     """A frame directly extracted from the FrameNet corpus or another CoNLL
     file.
-    
+
     :var sentence: Sentence in which the frame appears
     :var predicate: Predicate object representing the frame's predicate
     :var args: Arg list containing the predicate's arguments
-    
+
     """
-    
+
     def __init__(self, sentence, predicate, args, words, frame_name,
         sentence_id = -1, filename = "",
         slot_type = "", arg_annotated = False, tree=None):
@@ -30,7 +30,7 @@ class FrameInstance:
 
     def get_word(self, word):
         return self.sentence[word.begin:word.end + 1]
-        
+
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
             self.sentence == other.sentence and
@@ -42,7 +42,7 @@ class FrameInstance:
         return "FrameInstance({}, {}, {})".format(
                 self.predicate, self.args, self.frame_name)
 
-    
+
 class Arg:
 
     """An argument of a frame
@@ -52,9 +52,9 @@ class Arg:
     :var text: string containing the argument's text
     :var role: string containing the argument's role
     :var instanciated: boolean that marks wether the argument is instanciated
-    
+
     """
-    
+
     def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated = True, position=None):
         self.begin = begin
         self.end = end
@@ -63,21 +63,21 @@ class Arg:
         self.instanciated = instanciated
         self.phrase_type = phrase_type
         self.position = position
-        
+
         # This can be false for extracted args which could not be matched with
         # annotated args from the fulltext corpus
         self.annotated = annotated
 
     def __repr__(self):
         return "Arg({}, {}, {})".format(self.text, self.phrase_type, self.role)
-        
+
     def __eq__(self, other):
         return (isinstance(other, self.__class__)  and
             ((self.begin == other.begin and self.end == other.end) or
                 (self.instanciated == False and other.instanciated == False)) and
             self.role == other.role and
             self.phrase_type == other.phrase_type)
-            
+
     def __cmp__(self, other):
         if not self.instanciated:
             if other.instanciated: return 1
@@ -88,10 +88,10 @@ class Arg:
         if self.begin < other.begin: return -1
         if self.begin > other.begin: return 1
         return 0
-        
+
     def __lt__(self, other):
         return self.__cmp__(other) < 0
-        
+
     def __le__(self, other):
         return self.__cmp__(other) <= 0
 
@@ -100,18 +100,18 @@ class Arg:
 
     def __gt__(self, other):
         return self.__cmp__(other) > 0
-    
+
 class Predicate:
 
     """A frame's predicate
-    
+
     :var begin: integer, position of the predicate's first character in the sentence
     :var end: integer, position of the predicate's last character in the sentence
     :var text: string containing the predicate's text
     :var lemma: string containing the predicate's lemma
-    
+
     """
-    
+
     def __init__(self, begin, end, text, lemma, position=None):
         self.begin = begin
         self.end = end
@@ -121,7 +121,7 @@ class Predicate:
 
     def __repr__(self):
         return "Predicate({}, {})".format(self.text, self.lemma)
-        
+
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
             self.begin == other.begin and
@@ -130,21 +130,21 @@ class Predicate:
 
 class Word:
     """A frame's word
-    
+
     :var begin: integer, position of the predicate's first character in the sentence
     :var end: integer, position of the predicate's last character in the sentence
     :var text: string containing the predicate's text
     :var pos: string containing the predicate's part-of-speech
-    
+
     """
-    
+
     def __init__(self, begin, end, pos):
         self.begin = begin
         self.end = end
         if pos == 'sent': pos = '.'
         self.pos = pos.upper()
-        
-        
+
+
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
             self.begin == other.begin and

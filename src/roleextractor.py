@@ -3,16 +3,10 @@
 
 from collections import defaultdict
 import re
-import os
-import sys
 
-
-import argguesser
 from framenetallreader import FNAllReader
-import paths
 import options
 from stats import stats_data
-from framenetframe import FrameInstance, Predicate, Arg
 
 
 """Fill the roles of some frames extracted from the syntactic parser output
@@ -23,14 +17,14 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     """Fills the roles of some frame instance arguments, when possible.
     Note: frame_instances must be sorted by sentence order.
     Note: frame_instances is altered, even if the final result is returned.
-    
+
     :param frame_instances: The frames.
     :type frame_instances: FrameInstance List.
     :param verbnet_classes: The VerbNet lexicon, used to determine which frames
     from the corpus we should have extracted.
     :type verbnet_classes: Str Dict.
     """
-    
+
     frames = defaultdict(lambda: defaultdict(list))
     for frame in frame_instances:
         # /path/to/stuff.conll -> stuff
@@ -38,7 +32,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
 
     fn_reader = FNAllReader(
             add_non_core_args=False, keep_unannotated = True)
-    
+
     previous_id = -1
     sentence_frames = []
     good_frames = 0
@@ -53,7 +47,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
             except Exception: continue
             if len(possible_roles) == 1:
                 stats_data["args_annotated_mapping_ok"] += 1
-            
+
         # If this frame appears in a new sentence, update id and ensure <num>
         # words are consistent
         if frame.sentence_id != previous_id:
@@ -62,7 +56,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
             for extracted_frame in sentence_frames:
                 correct_num_tags(extracted_frame, frame.sentence)
             previous_id = frame.sentence_id
-        
+
         frame_found = False
         for extracted_frame in sentence_frames:
             # See if we have the two "same" frames
@@ -84,32 +78,32 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
 
     stats_data["frame_extracted_bad"] += len(list(frame_instances)) - good_frames
     stats_data["frame_extracted_good"] += good_frames
-    
+
     # For LUCorpus, discard every frame for which there was no match
     if options.corpus_lu:
         frame_instances = [x for x in frame_instances if x.frame_name != ""]
-        
+
     return frame_instances
 
 def correct_num_tags(extracted_frame, original_sentence):
     """ Replace <num> tags by their real equivalents
     and update begin/end attributes where necessary.
-    
+
     :param extracted_frame: The frame that contains <num> tags
     :type extracted_frame: FrameInstance
     :param original_sentence: The original unaltered sentence of the frame
     :type original_sentence: str
-    
+
     """
-    
+
     # We don't want to include "," in numbers since 3,300 is actually two
     # numbers: 3 and 300, separated by a comma
     p = re.compile('[0-9]+')
     numbers = p.findall(original_sentence)
-    
+
     frame_replace_all(extracted_frame, "<num> , <num>", "<num>,<num>")
     frame_replace_all(extracted_frame, "<num> : <num>", "<num>:<num>")
-    
+
     for number in numbers:
         frame_replace_one(extracted_frame, "<num>", number)
 
@@ -118,11 +112,11 @@ def frame_replace_one(frame, search, replace):
     """ Replace the first occurence of a word by another word in a frame """
     position = frame.sentence.find(search)
     if position == -1: return False
-    
+
     offset = len(replace) - len(search)
-    
+
     frame.sentence = frame.sentence.replace(search, replace, 1)
-    
+
     if frame.predicate.begin > position:
         frame.predicate.begin += offset
         frame.predicate.end += offset
@@ -134,13 +128,13 @@ def frame_replace_one(frame, search, replace):
         if arg.end > position:
             arg.end += offset
     return True
-    
+
 def frame_replace_all(frame, search, replace):
     """ Replace every occurence of a word by another word in a frame"""
     if search in replace:
         raise Exception("frame_replace_all : cannot handle cases where :search"
             " is a substring of :replace")
-    
+
     while frame_replace_one(frame, search, replace): pass
 
 def predicate_match(predicate1, predicate2):
@@ -153,13 +147,13 @@ def handle_frame(extracted_frame, annotated_frame):
     extracted_frame.frame_name = annotated_frame.frame_name
     extracted_frame.arg_annotated = annotated_frame.arg_annotated
     extracted_frame.annotated = True
-    
+
     good_args = 0
-    
+
     # Update the argument roles and statistics
     for annotated_arg in annotated_frame.args:
         if not annotated_arg.instanciated: continue
-        
+
         arg_found = False
         for extracted_arg in extracted_frame.args:
             score = match_score(extracted_arg, annotated_arg)
@@ -171,7 +165,7 @@ def handle_frame(extracted_frame, annotated_frame):
                 break
         if not arg_found:
             stats_data["arg_not_extracted"] += 1
-    
+
     if extracted_frame.arg_annotated:
         stats_data["arg_extracted_good"] += good_args
         stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args)

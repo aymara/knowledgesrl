@@ -43,6 +43,7 @@ if __name__ == "__main__":
     import verbnetreader
     from argguesser import ArgGuesser
     from rolematcher import VnFnRoleMatcher
+    from stats import stats_data
 
     role_matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
     verbnet_classes = verbnetreader.VerbnetReader(paths.VERBNET_PATH).classes

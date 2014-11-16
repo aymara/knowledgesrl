@@ -5,7 +5,6 @@ import pickle
 import sys
 import os
 
-import framematcher
 
 def dump(filename, annotated_frames):
     os.makedirs('dump', exist_ok=True)
@@ -27,22 +26,22 @@ def diff_all(data1, data2):
                 print("  * {}".format(slot1['text']))
                 print("    {} should in {}".format(slot1['found_roles'], slot1['wanted_roles']))
                 print("    {} should in {}".format(slot2['found_roles'], slot2['wanted_roles']))
-  
+
 if __name__ == "__main__":
     status = True
-    
+
     if len(sys.argv) >= 2:
         filename1 = sys.argv[1]
         filename2 = sys.argv[2]
     else:
         print("Syntax : dump.py file1 file2")
-    
+
     print(filename1)
     with open("dump/"+filename1, "rb") as picklefile:
         data1 = pickle.load(picklefile)
     print(filename2)
     with open("dump/"+filename2, "rb") as picklefile:
         data2 = pickle.load(picklefile)
-    
+
     diff_all(data1, data2)
     print("That was the list of differences between {} and {}.".format(filename1, filename2))

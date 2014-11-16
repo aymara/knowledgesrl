@@ -13,7 +13,7 @@ def add_www_hash(hashes, author, sentence):
     print('{} -> {}'.format(sentence, text_hash))
     hashes[text_hash] = ('WWW', author)
 
-% TODO French
+# TODO French
 
 hashes = {}
 for event in os.listdir(os.path.join(KICKTIONARY_CORPUS, 'EN', 'UEFA')):

@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 prep = {
-    "src":{"from", "out", "out_of", "off", "off_of"},
+    "src": {"from", "out", "out_of", "off", "off_of"},
     "dest_conf": {"into", "onto"},
     "dest_dir": {"for", "at", "to", "towards"},
-    "dir":{
+    "dir": {
         "across", "along", "around", "down", "over", "past", "round",
         "through", "towards", "up"
     },
-    "loc":{
+    "loc": {
         "about", "above", "against", "along", "alongside", "amid", "among",
         "amongst", "around", "astride", "at", "athwart", "before", "behind", "below",
         "beneath", "beside", "between", "beyond", "by", "from", "in", "in_front_of",
@@ -44,7 +44,7 @@ rel_pronouns = {
     "who", "whom", "whose", "why"}
 
 sub_pronouns = rel_pronouns | {"if"}
-    
+
 all_preps = set()
 for group in prep.values(): all_preps |= group
 all_preps |= other_preps

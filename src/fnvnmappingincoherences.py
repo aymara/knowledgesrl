@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import xml.etree.ElementTree as ET
-import os
 import sys
 import getopt
 from distutils.version import LooseVersion
@@ -15,7 +14,7 @@ display_verbnet = False
 
 options = getopt.getopt(sys.argv[1:], "", ["verbnet", "framenet"])
 
-for opt,v in options[0]:
+for opt, v in options[0]:
     if opt == "--verbnet": display_verbnet = True
     elif opt == "--framenet": display_framenet = True
 
@@ -23,7 +22,7 @@ if not display_framenet and not display_verbnet:
     display_verbnet = True
 
 class VerbnetRoleReader:
-    
+
     def __init__(self, path):
         self.classes = {}
         self.classes_names = {}
@@ -32,13 +31,13 @@ class VerbnetRoleReader:
             class_name = filename.stem.split("-")[0]
             root = ET.ElementTree(file=str(filename.resolve()))
             self._handle_class(root.getroot(), [], set(), class_name)
-    
+
     def _handle_class(self, xml_class, parent_classes, parent_roles, class_name):
         parent_classes = parent_classes[:]
-        
+
         # Use the format of the vn/fn mapping
         vnclass = "-".join(xml_class.attrib["ID"].split('-')[1:])
-        
+
         parent_classes.append(vnclass)
 
         for role in xml_class.find("THEMROLES"):
@@ -48,9 +47,9 @@ class VerbnetRoleReader:
             if not vn_class in self.classes:
                 self.classes_names[vn_class] = class_name
                 self.classes[vn_class] = set()
-                
+
             self.classes[vn_class] = self.classes[vn_class] | parent_roles
-            
+
         for subclass in xml_class.find("SUBCLASSES"):
             self._handle_class(subclass, parent_classes, parent_roles, class_name)
 
@@ -69,7 +68,7 @@ def load_fn_data():
                 fn_verbal_frames.add(root.attrib["name"])
                 break
     return fn_roles, fn_verbal_frames
-    
+
 def display_vn_issues():
     for vn_class in sorted(bad_vn_roles, key=LooseVersion):
         print("VerbNet class : {}-{} ({})".format(
@@ -96,13 +95,13 @@ def display_fn_issues():
         print("Allowed roles: {}".format(", ".join(fn_roles[fn_frame])))
         print("{:>20} {:>30} {:>30}".format(
             "FrameNet Role", "Associated VerbNet Role", "VerbNet class"))
-            
+
         for bad_role in bad_roles_frame:
             print("{:>20} {:>30} {:>30}".format(
                 bad_role["fn_role"], bad_role["vn_role"],
                 bad_role["vn_class"]+"-"+classes_names[bad_role["vn_class"]]
             ))
-            
+
 role_reader = VerbnetRoleReader(paths.VERBNET_PATH)
 vn_classes = role_reader.classes
 classes_names  = role_reader.classes_names
@@ -129,12 +128,12 @@ for mapping in root.getroot():
     vn_class = mapping.attrib["class"]
     fn_frame = mapping.attrib["fnframe"]
     encountered_fn_frames.add(fn_frame)
-        
+
     if not fn_frame in fn_roles:
         if not fn_frame in bad_fn_frames:
             bad_fn_frames[fn_frame] = []
         bad_fn_frames[fn_frame].append(vn_class)
-        
+
     for role in mapping.findall("roles/role"):
         vn_role = role.attrib["vnrole"]
         fn_role = role.attrib["fnrole"]
@@ -143,21 +142,21 @@ for mapping in root.getroot():
             if not fn_frame in bad_fn_roles:
                 bad_fn_roles[fn_frame] = []
             bad_fn_roles[fn_frame].append({
-                "fn_role":fn_role,
-                "vn_role":vn_role, "vn_class":vn_class
+                "fn_role": fn_role,
+                "vn_role": vn_role, "vn_class": vn_class
             })
 
         if not vn_role in vn_classes[vn_class]:
             if not vn_class in bad_vn_roles:
                 bad_vn_roles[vn_class] = []
             bad_vn_roles[vn_class].append({
-                "fn_frame":fn_frame, "fn_role":fn_role,
-                "vn_role":vn_role
+                "fn_frame": fn_frame, "fn_role": fn_role,
+                "vn_role": vn_role
             })
-            
+
 if display_verbnet: display_vn_issues()
 if display_framenet: display_fn_issues()
-    
+
 
 
 mapped = fn_verbal_frames & encountered_fn_frames

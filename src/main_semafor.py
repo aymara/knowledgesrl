@@ -31,7 +31,7 @@ num_annotated_frames = len(annotated_frames)
 num_annotated_args = sum([len([y for y in x.args if y.instanciated]) for x in annotated_frames])
 
 num_good, num_bad = 0, 0
-num_correct, num_incorrect = 0, 0    
+num_correct, num_incorrect = 0, 0
 
 sentence_position = 0
 last_sentence = ""
@@ -48,7 +48,7 @@ for frame in semafor_frames:
         if sentence_found:
             sentence_position = i
 
-    last_sentence = frame.sentence    
+    last_sentence = frame.sentence
     if not sentence_found: continue
 
     i = sentence_position
@@ -63,7 +63,7 @@ for frame in semafor_frames:
     if not frame_found:
         num_bad += len(frame.args)
         continue
-    
+
     for arg in frame.args:
         arg_found = False
         for annotated_arg in annotated_frames[i].args:

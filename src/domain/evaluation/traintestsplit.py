@@ -3,10 +3,8 @@
 Separates training and test set based on source distribution
 """
 
-import sys
-from hashlib import sha256
 from xml.etree import ElementTree as ET
-from collections import defaultdict, Counter
+from collections import defaultdict
 import json
 
 import paths

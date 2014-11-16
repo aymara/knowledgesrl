@@ -13,12 +13,12 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
     min_evidence = [1, 1, 10]
     #[1, 3, 10] -> [17, 65, 2076]
     #[3, 5, 10] -> [17, 65, 2076]
-    
+
     # Transform the frame list (with the slots in frame.roles) into
     # a list of (frame, role_set, slot_position)
     grouped_roles = [[(x, y, slot_position) for slot_position, y in enumerate(x.roles)] for x in frames]
-    slots = reduce(lambda a,b:a+b, grouped_roles)
-    
+    slots = reduce(lambda a, b: a+b, grouped_roles)
+
     total = [0, 0, 0]
     while log_ratio >= 1:
         # Update probability model with resolved slots
@@ -34,14 +34,14 @@ def bootstrap_algorithm(frames, probability_model, hw_extractor, verbnet_classes
                     headword,
                     hw_extractor.get_class(headword)
                 )
-        
+
         # Remove resolved and empty slots
         slots = list(filter(lambda x: len(x[1]) > 1, slots))
- 
+
         # According to the article, there is no longer a min evidence threshold
         # when log_ratio reaches 1
         if log_ratio == 1: min_evidence = [1, 1, 1]
-        
+
         for frame, role_set, slot_position in slots:
             headword = hw_extractor.headword(frame.args[slot_position], frame.tree)
             role = None

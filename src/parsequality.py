@@ -3,8 +3,6 @@
 
 from framenetreader import FulltextReader
 from conllreader import SyntacticTreeBuilder
-import glob
-import os
 import options
 
 
@@ -50,7 +48,7 @@ def get_quality_scores():
                     break
 
     return correct, partial, total
-        
+
 if __name__ == '__main__':
     correct, partial, total = get_quality_scores()
     print("Correct: {:.02f} - Partial {:.02f} (out of {} args)".format(correct/total, partial/total, total))

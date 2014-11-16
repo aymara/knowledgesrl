@@ -59,10 +59,11 @@ if __name__ == "__main__":
             arg_guesser = argguesser.ArgGuesser(verbnet_classes)
 
             # Many instances are not actually FrameNet frames
-            new_frame_instances = list(arg_guesser.frame_instances_from_file(fnparsed_reader.sentence_trees(parsed_conll_file), parsed_conll_file))
-            new_annotated_frames = roleextractor.fill_gold_roles(new_frame_instances,
-                annotation_file, parsed_conll_file, verbnet_classes,
-                role_matcher)
+            new_frame_instances = list(arg_guesser.frame_instances_from_file(
+                fnparsed_reader.sentence_trees(parsed_conll_file), parsed_conll_file))
+            new_annotated_frames = roleextractor.fill_gold_roles(
+                new_frame_instances, annotation_file, parsed_conll_file,
+                verbnet_classes, role_matcher)
 
             for gold_frame, frame_instance in zip(new_annotated_frames, new_frame_instances):
                 annotated_frames.append(gold_frame)
@@ -75,7 +76,7 @@ if __name__ == "__main__":
                 add_non_core_args=options.add_non_core_args)
 
             for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
-                if not frame.predicate.lemma in frames_for_verb:
+                if frame.predicate.lemma not in frames_for_verb:
                     log_vn_missing(frame)
                     continue
 
@@ -90,7 +91,7 @@ if __name__ == "__main__":
         # Frame matching
         #
         all_matcher = []
-        data_restr = NoHashDefaultDict(lambda : Counter())
+        data_restr = NoHashDefaultDict(lambda: Counter())
         assert len(annotated_frames) == len(vn_frames)
         for gold_frame, frame_occurrence in zip(annotated_frames, vn_frames):
             stats.stats_data["args"] += len(gold_frame.args)
@@ -103,7 +104,8 @@ if __name__ == "__main__":
             if gold_frame.arg_annotated:
                 stats.stats_data["args_kept"] += num_instanciated
 
-            stats.stats_ambiguous_roles(gold_frame, num_instanciated,
+            stats.stats_ambiguous_roles(
+                gold_frame, num_instanciated,
                 role_matcher, verbnet_classes)
 
             stats.stats_data["frames"] += 1
@@ -135,6 +137,7 @@ if __name__ == "__main__":
 
             # Update semantic restrictions data
             #for word, restr in matcher.get_matched_restrictions().items():
+            #    print(word, restr)
             #    if restr.logical_rel == "AND":
             #        for subrestr in restr.children:
             #            data_restr[subrestr].update([word])
@@ -177,7 +180,7 @@ if __name__ == "__main__":
                         new_role = model.best_role(
                             frame.roles[i], frame.slot_types[i], frame.slot_preps[i],
                             frame.predicate, options.probability_model)
-                        if new_role != None:
+                        if new_role is not None:
                             frame.roles[i] = set([new_role])
 
             if options.debug:
@@ -193,7 +196,9 @@ if __name__ == "__main__":
 
     else:
         print("\n## Evaluation")
-        stats.stats_quality(all_annotated_frames, all_vn_frames, role_matcher, verbnet_classes, options.argument_identification)
+        stats.stats_quality(
+            all_annotated_frames, all_vn_frames,
+            role_matcher, verbnet_classes, options.argument_identification)
         stats.display_stats(options.argument_identification)
 
         if options.dump:

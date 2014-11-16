@@ -6,16 +6,16 @@
 
 class ConllInvalidPositionError(Exception):
     """Trying to build a subtree from a node that does not exist
-    
+
     :var bad_root: integer, the position from which we attempted to build a subtree
     :var max_root: integer, the last valid position
-    
+
     """
-    
+
     def __init__(self, bad_root, max_root):
         self.bad_root = bad_root
         self.max_root = max_root
-        
+
     def __str__(self):
         return "Error : tried to build a subtree from position {} while"\
                " parsing CoNLL output (last valid position was {})".format(
@@ -23,7 +23,7 @@ class ConllInvalidPositionError(Exception):
 
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
-    
+
     :var word_id: int, the CoNLL word id (starts at 1)
 
     :var word: string, the word contained by the node
@@ -36,9 +36,9 @@ class SyntacticTreeNode:
     :var begin: int, the character position this phrase starts at (root would be 0)
     :var end: int, the position this phrase ends at (root would be last character)
     :var begin_word: int, the position this *word* begins at
-    
+
     """
-    
+
     def __init__(self, word_id, word, pos, deprel, begin_word):
         self.word_id = word_id
 
@@ -51,7 +51,7 @@ class SyntacticTreeNode:
 
         self.begin_word = begin_word
         self.begin, self.end = None, None
-                
+
     def __repr__(self):
         if self.children:
             children = " " + " ".join([str(t) for t in self.children])
@@ -68,7 +68,7 @@ class SyntacticTreeNode:
                 yield node
         if self.position == len(self.children):
             yield self
-    
+
     def flat(self):
         """Return the tokenized sentence from the parse tree."""
         return " ".join([x.word for x in self])
@@ -115,18 +115,18 @@ class SyntacticTreeBuilder():
 
     def __init__(self, conll_tree):
         """Extract the data provided
-        
+
         :param conll_tree: The output of the CoNLL parser
         :type conll_tree: str
-        
+
         """
         self.node_dict, self.father_ids = {}, {}
         self.tree_list = []
-        
+
         begin = 0
         for l in conll_tree.splitlines():
             word_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
-            
+
             word_id = int(word_id)
             head = int(head) if head != '-' else None
             deprel = deprel if deprel != '-' else 'ROOT'

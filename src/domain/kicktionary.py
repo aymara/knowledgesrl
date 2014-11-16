@@ -5,7 +5,6 @@ Kicktionary parser which only use the information from the annotations.
 """
 
 import xml.etree.ElementTree as ET
-from hashlib import sha256
 
 import paths
 

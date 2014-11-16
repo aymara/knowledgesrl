@@ -4,7 +4,7 @@
 from abc import ABCMeta
 from operator import attrgetter
 
-from framenetframe import FrameInstance, Predicate, Arg, Word
+from framenetframe import Predicate, Arg
 import verbnetprepclasses
 
 class ComputeSlotTypeMixin(metaclass=ABCMeta):

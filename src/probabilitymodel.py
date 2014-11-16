@@ -3,7 +3,7 @@
 
 """ Implements the probability models proposed in the article to make a choice
     in slot where frame matching left several possible roles.
-    
+
     There are four possible models :
       * default does not use any collected data, nor the list of possible roles
         and makes default assignement depending on the slot class
@@ -32,7 +32,7 @@ models = ["default", "slot_class", "slot", "predicate_slot", "vnclass_slot"]
 def multi_get(d, l, default = None):
     """Traverses multiple levels of a dictionary to get a key or None"""
     if not d: return default
-    result = reduce(lambda d,k: d.get(k) if d else default, l, d)
+    result = reduce(lambda d, k: d.get(k) if d else default, l, d)
     return result if result else default
 
 def multi_default_dict(dimension):
@@ -44,7 +44,7 @@ def multi_count(obj):
     """Returns the sum of all integers in a multidict"""
     if isinstance(obj, int) or isinstance(obj, float): return obj
     else: return sum([multi_count(x) for x in obj.values()])
-      
+
 def check_depth(data, depth):
     is_scalar = isinstance(data, int) or isinstance(data, float)
     if depth == 0: return is_scalar
@@ -55,7 +55,7 @@ def root_vnclass(vnclass):
     position = vnclass.find("-")
     if position == -1: return vnclass
     return vnclass[0:position]
-  
+
 class ProbabilityModel:
 
     """Class used to collect data and apply one probability model
@@ -64,24 +64,24 @@ class ProbabilityModel:
     :var data_slot_class: str. 2D Dict The number of occurences of each role in every slot class
     :var data_slot: str. 3D Dict The number of occurences of each role in every slot
     :var data_slot: str. 4D Dict The number of occurences of each role in every (slot, predicate)
-    
+
     """
-    
+
     guess_good = 1
     guess_unknown = 0
     guess_bad = -1
-    
+
     def __init__(self, vn_classes = None, vn_init_value = None):
         self.data_default = {
-            ComputeSlotTypeMixin.slot_types["subject"]:"Agent",
-            ComputeSlotTypeMixin.slot_types["object"]:"Theme",
-            ComputeSlotTypeMixin.slot_types["indirect_object"]:"Recipient",
-            ComputeSlotTypeMixin.slot_types["prep_object"]:"Location"
+            ComputeSlotTypeMixin.slot_types["subject"]: "Agent",
+            ComputeSlotTypeMixin.slot_types["object"]: "Theme",
+            ComputeSlotTypeMixin.slot_types["indirect_object"]: "Recipient",
+            ComputeSlotTypeMixin.slot_types["prep_object"]: "Location"
         }
         self.data_slot_class = multi_default_dict(2)
         self.data_slot = multi_default_dict(3)
         self.data_predicate_slot = multi_default_dict(4)
-                
+
         self.data_bootstrap_p = multi_default_dict(5)
         self.data_bootstrap_p1 = multi_default_dict(3)
         self.data_bootstrap_p2 = multi_default_dict(3)
@@ -90,7 +90,7 @@ class ProbabilityModel:
         self.data_bootstrap_p2_sum = multi_default_dict(2)
         self.data_bootstrap_p3_sum = multi_default_dict(3)
         self.data_vnclass_slot = multi_default_dict(4)
-        
+
         if vn_classes != None and vn_init_value != None:
             self.data_vnclass = defaultdict(lambda : {})
             for verb, verb_vnclass in vn_classes.items():
@@ -101,7 +101,7 @@ class ProbabilityModel:
     def add_data(self, slot_class, role, prep, predicate, vnclass = None):
         """Use one known occurence of a role in a given context to update the data
         of every model
-        
+
         :param slot_class: The slot class of the slot where the role occured
         :type slot_class: str
         :param role: The role that occured
@@ -114,7 +114,7 @@ class ProbabilityModel:
         :type vnclass: None | str
         """
         self.data_slot_class[slot_class][role] += 1
-        
+
         if slot_class == ComputeSlotTypeMixin.slot_types["prep_object"]:
             self.data_slot[slot_class][prep][role] += 1
             self.data_predicate_slot[predicate][slot_class][prep][role] += 1
@@ -130,7 +130,7 @@ class ProbabilityModel:
         slot_class, prep, headword, headword_class):
         """Use one known occurence of a role in a given context to update the data
         of the bootstrap algorithm
-        
+
         :param role: The attributed role
         :type role: str
         :param predicate: The predicate of which the slot is an argument
@@ -151,13 +151,13 @@ class ProbabilityModel:
 
         # Most specific
         self.data_bootstrap_p[slot_class][prep][predicate][headword][role] += 1
-        
+
         # First backoff level
         self.data_bootstrap_p1[slot_class][predicate][role] += 1
         self.data_bootstrap_p2[predicate][headword_class][role] += 1
         self.data_bootstrap_p1_sum[slot_class][predicate] += 1
         self.data_bootstrap_p2_sum[predicate][headword_class] += 1
-        
+
         # For verbs with multiple posible VerbNet classes, the score is
         # uniformly repartited amon every classes
         increment = 1 / len(predicate_classes)
@@ -172,46 +172,46 @@ class ProbabilityModel:
         sums = defaultdict(int)
         f_max = defaultdict(int)
         weights = defaultdict(int)
-        
+
         num_encountered = 0
         for verb, vnclasses in self.data_vnclass.items():
             total = sum([x for x in vnclasses.values()])
             if total == 0: continue
-            
+
             num_encountered += 1
-            
+
             if len(vnclasses) < 2: continue
-            
+
             freq = [x / total for x in vnclasses.values()]
             v = sum([(x - (1 / len(vnclasses))) ** 2 for x in freq]) / len(vnclasses)
             std = math.sqrt(v)
-            
+
             sums[len(vnclasses)] += std
             f_max[len(vnclasses)] += max(freq)
             weights[len(vnclasses)] += 1
-        
+
         print(
             "{} verbs in VerbNet\n"
             "{} verbs encountered\n".format(
                 len(self.data_vnclass), num_encountered))
-                
+
         for n, sigma in sums.items():
             print("Verbes à {} classes ({} verbes) : std={}, fmax={}".format(
                 n, weights[n], sigma / weights[n], f_max[n] / weights[n]))
-        
+
         print("Fréquence max moyenne : {}".format(
             sum(f_max.values()) / sum(weights.values())))
 
     def add_data_vnclass(self, matcher):
         """Fill data_vnclass using the data of a framematcher object
-        
+
         :param matcher: A frame matcher after at least one matching
         :type matcher: FrameMatcher
-        
+
         """
-        
+
         verb = matcher.frame_occurrence.predicate
-        
+
         vnclass = None
         for frame, junk in matcher.best_data:
             if vnclass == None:
@@ -219,28 +219,28 @@ class ProbabilityModel:
             elif vnclass != root_vnclass(frame.vnclass):
                 vnclass = None
                 break
-                
+
         if vnclass != None:
             vnclass = root_vnclass(vnclass)
             self.data_vnclass[verb][vnclass] += 1
-            
+
         return vnclass
-    
+
     def check_vnclass_guess(self, predicate, frame_name, role_matcher):
         class_data = self.data_vnclass[predicate]
         guess = max(class_data, key=class_data.get)
-        
+
         frame_data = role_matcher.fn_frames[frame_name]
-        
+
         if guess in frame_data:
             return ProbabilityModel.guess_good
         if any([x in frame_data for x in class_data.keys()]):
             return ProbabilityModel.guess_bad
         return ProbabilityModel.guess_unknown
-    
+
     def best_role(self, role_set, slot_class, prep, predicate, model):
         """Apply one probability model to resolve one slot
-        
+
         :param role_set: The set of possible roles left by frame matching
         :type role_set: str Set
         :param slot_class: The slot class of the slot we want to resolve
@@ -278,7 +278,7 @@ class ProbabilityModel:
                     data[role] += (n_role / total_role) * (n_vnclass / total_vnclass)
         else:
             raise Exception("Unknown model {}".format(model))
-                
+
         if data:
             possible_roles = sorted(list(set(data.keys()) & role_set))
             if possible_roles:
@@ -290,7 +290,7 @@ class ProbabilityModel:
         prep, headword, headword_class, backoff_level, min_evidence):
         """Computes the two best roles for a slot at a given backoff level
         of the bootstrap algorithm
-        
+
         :param role_set: The set of possible roles left by frame matching
         :type role_set: str Set
         :param predicate: The predicate of which the slot is an argument
@@ -309,16 +309,16 @@ class ProbabilityModel:
         :type backoff_level: int
         :param min_evidence: The minimum number of occurences that a role must have to be returned
         :type min_evidence: int
-        
+
         :returns (str, str, float) -- The two roles and their probability ratio
         """
         if not slot_class == ComputeSlotTypeMixin.slot_types["prep_object"]:
             prep = NO_PREP
-        
+
         if backoff_level == 0:
             data = multi_get(self.data_bootstrap_p,
                                 [slot_class, prep, predicate, headword], {})
-            data = {x:data[x] for x in data if x in role_set and data[x] >= min_evidence}
+            data = {x: data[x] for x in data if x in role_set and data[x] >= min_evidence}
         elif backoff_level == 1:
             data1 = multi_get(self.data_bootstrap_p1,
                                 [slot_class, predicate], {})
@@ -340,28 +340,28 @@ class ProbabilityModel:
                                 [slot_class, prep, vn_class], {})
                 for role, n in d.items():
                     data3[role] += n
-                
+
             sum3 = sum(multi_get(self.data_bootstrap_p3_sum,
                                 [slot_class, prep, vn_class], 0)
                        for vn_class in predicate_classes)
-            
+
             roles = set(data1.keys()) & set(data2.keys()) & set(data3.keys())
             roles = list(filter(lambda x: (x in role_set and
                                     data1[x] + data2[x] + data3[x] >= 3 * min_evidence),
                              roles))
-            data = {x:(data1[x] / sum1 + data2[x] / sum2 + data3[x] / sum3)
+            data = {x: (data1[x] / sum1 + data2[x] / sum2 + data3[x] / sum3)
                         for x in roles}
         elif backoff_level == 2:
             data = multi_get(self.data_slot_class, [slot_class], {})
-            data = {x:data[x] for x in data if x in role_set and data[x] >= min_evidence}
+            data = {x: data[x] for x in data if x in role_set and data[x] >= min_evidence}
         else:
             raise Exception("Unknown backoff level {}".format(backoff_level))
-        
+
         # At this point, data is a dictionnary that maps every role of :role_set
         # that meet the evidence count :min_evidence in the model :backoff_level
         # to the number of occurences of this role in the given conditions
         # according to the model.
-        
+
         if len(data) == 0:
             return None, None, None
         first = max(data, key = lambda r: data[r])

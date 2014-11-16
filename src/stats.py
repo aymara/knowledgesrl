@@ -5,85 +5,84 @@ from collections import Counter
 
 from rolematcher import RoleMatchingError
 from errorslog import log_ambiguous_role_conversion
-import options
 
 
 # TODO separate computed values from measured values
 stats_data = {
     # Total number of files in the corpus
-    "files":0,
+    "files": 0,
     # Number of annotated verbal frame instances in the corpus
-    "frames":0,
+    "frames": 0,
     # Number of annotated verbal frame instances which have a predicate in VerbNet
-    "frames_with_predicate_in_verbnet":0,
+    "frames_with_predicate_in_verbnet": 0,
     # Number of frame instances for which frame-matching is possible (at least one slot)
-    "frames_mapped":0,
+    "frames_mapped": 0,
     # Number of args belonging to an annotated verbal frame in the corpus
-    "args":0,
+    "args": 0,
     # Number of instanciated args
-    "args_instanciated":0,
+    "args_instanciated": 0,
     # Number of instanciated args belonging to a frame wich has a predicate in VerbNet
-    "args_kept":0,
+    "args_kept": 0,
     # Number of annotated, instanciated args with a role mapping ok
-    "args_annotated_mapping_ok":0,
-    
+    "args_annotated_mapping_ok": 0,
+
     # Slots states (applies to extracted slots if no gold args)
-    
+
     # No role attributed
-    "no_role":0,
+    "no_role": 0,
     # No role attributed, annotated
-    "no_role_annotated":0,
+    "no_role_annotated": 0,
     # One role attributed
-    "one_role":0,
+    "one_role": 0,
     # One role attributed, annotated
-    "one_role_annotated":0,
+    "one_role_annotated": 0,
     # One role attributed, annotated, role mapping possible, correct role
-    "one_correct_role":0,
+    "one_correct_role": 0,
     # One role attributed, annotated, role mapping possible, incorrect role
-    "one_bad_role":0,
+    "one_bad_role": 0,
     # Several role attributed, annotated
-    "several_roles_annotated":0,
+    "several_roles_annotated": 0,
     # Several roles attributed, annotated, role mapping ok, correct role in the list
-    "several_roles_ok":0,
+    "several_roles_ok": 0,
     # Several roles attributed, annotated, role mapping ok, correct role not in the list
-    "several_roles_bad":0,
+    "several_roles_bad": 0,
     # All cases where a mapping was possible but no role mapping anyway
-    "no_roles_evaluated": 0,
+    "no_roles_evaluated":  0,
     # Role mapping returned several possible VerbNet roles
-    "ambiguous_mapping":0,
+    "ambiguous_mapping": 0,
     # Role mapping returned no possible VerbNet roles
-    "impossible_mapping":0,
-    
+    "impossible_mapping": 0,
+
     # Total number of roles = sum of number of possible roles for each slot
-    "attributed_roles":0,
+    "attributed_roles": 0,
     # Idem only on slots where role mapping is ok
-    "attributed_roles_mapping_ok":0,
-    
+    "attributed_roles_mapping_ok": 0,
+
     # Frame instances and argument extraction from raw text
-    
+
     # Number of correct extracted frame instances
-    "frame_extracted_good":0,
+    "frame_extracted_good": 0,
     # Number of incorrect (no annotations) extracted frame instances
-    "frame_extracted_bad":0,
+    "frame_extracted_bad": 0,
     # Number of non-extracted annotated frame instances
-    "frame_not_extracted":0,
+    "frame_not_extracted": 0,
     # Number of non-extracted annotated frame instances which do not have a predicate in VerbNet
-    "frame_not_extracted_not_verbnet":0,
+    "frame_not_extracted_not_verbnet": 0,
     # Number of correct extracted arguments
-    "arg_extracted_good":0,
+    "arg_extracted_good": 0,
     # Number of incorrect (no annotation) extracted arguments
-    "arg_extracted_bad":0,
+    "arg_extracted_bad": 0,
     # Number of non-extracted annotated arguments
-    "arg_not_extracted":0,
+    "arg_not_extracted": 0,
     # Number of non-extracted annotated args which do not have a predicate in VerbNet
-    "arg_not_extracted_not_verbnet":0
+    "arg_not_extracted_not_verbnet": 0
 }
 
 ambiguous_mapping = {
     # Stats of ambiguous mapping when ignoring the FN frame given by the annotations
-    "verbs":[], "args_total":0, "args":0,
+    "verbs": [], "args_total": 0, "args": 0,
     # Stats of ambiguous mapping remaining despite the FN frame given by the annotations
-    "verbs_with_frame":[], "args_total_with_frame":0, "args_with_frame":0
+    "verbs_with_frame": [], "args_total_with_frame": 0, "args_with_frame": 0
 }
 
 annotated_frames_stats = []
@@ -97,7 +96,6 @@ def hmean(x, y):
 
 def display_stats(argument_identification):
     s = stats_data
-    several_roles = s["args_kept"] - (s["one_role"] + s["no_role"])
     unique_role_evaluated = s["one_correct_role"] + s["one_bad_role"]
     several_roles_evaluated = s["several_roles_ok"] + s["several_roles_bad"]
 
@@ -184,7 +182,7 @@ def display_stats(argument_identification):
             extrapolated_accuracy))
 
     print("*: see comments in stats.py")
-    
+
 def display_stats_ambiguous_mapping():
     print(
         "Ambiguous VerbNet roles:\n"
@@ -200,7 +198,7 @@ def display_stats_ambiguous_mapping():
             ambiguous_mapping["args_total_with_frame"], ambiguous_mapping["args"],
             len(ambiguous_mapping["verbs"]), ambiguous_mapping["args_total"]
         )
-        
+
     )
     count_with_frame = Counter(ambiguous_mapping["verbs_with_frame"])
     print(
@@ -225,12 +223,12 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
         # that exist in the fulltext corpus but that lacks argument annotations
         if gold_fn_frame.frame_name != "" and not gold_fn_frame.arg_annotated:
             continue
-        
+
         # Do not penalize arguments extracted from frames that do not exist
         # in the fulltext corpus
         if gold_fn_frame.frame_name == "":
             continue
-        
+
         for i, slot in enumerate(found_vn_frame.roles):
             # Add number of possibles role for this slot (eg. the subject slot)
             stats_data["attributed_roles"] += len(slot)
@@ -244,7 +242,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
                     stats_data["one_role_annotated"] += 1
             elif gold_fn_frame.args[i].annotated:
                 stats_data["several_roles_annotated"] += 1
-            
+
             # Penalize slots extracted from frames that do not exist
             # or associated with arguments that are not annotated
             # when they have at least one possible roles
@@ -267,18 +265,18 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
             except RoleMatchingError:
                 stats_data["impossible_mapping"] += 1
                 continue
-  
+
             if len(possible_roles) > 1:
                 stats_data["ambiguous_mapping"] += 1
                 continue
 
             stats_data["attributed_roles_mapping_ok"] += len(slot)
-            
+
             if not argument_identification:
                 stats_data["args_annotated_mapping_ok"] += 1
 
             annotated_frames_stats[-1]['slots'].append({'text': gold_fn_frame.args[i].text, 'found_roles': slot, 'wanted_roles': possible_roles})
-            
+
             if next(iter(possible_roles)) in slot:
                 if len(slot) == 1:
                     stats_data["one_correct_role"] += 1
@@ -291,7 +289,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
                     stats_data["several_roles_bad"] += 1
             else:
                 stats_data["no_roles_evaluated"] += 1
-    
+
 def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     good = stats_data["one_correct_role"]
     bad = stats_data["one_bad_role"]
@@ -307,9 +305,9 @@ def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
     else:
         precision = good_model / (good_model + bad_model)
         cover = resolved_model / (identified - resolved_fm)
-        
+
     return precision, cover, precision_all, cover_all
-    
+
 def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
     found_ambiguous_arg = False
     found_ambiguous_arg_2 = False
@@ -327,7 +325,7 @@ def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
 
                 log_ambiguous_role_conversion(frame, arg,
                     role_matcher, verbnet_classes)
-                
+
                 if len(role_matcher.possible_vn_roles(
                     arg.role,
                     fn_frame = frame.frame_name,
