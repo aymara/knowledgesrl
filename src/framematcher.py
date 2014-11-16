@@ -27,7 +27,9 @@ class FrameMatcher():
 
     :var frame_occurrence: VerbnetFrameOccurrence -- The frame to annotate
     :var best_score: int -- The best score encountered among all the matches
-    :var best_data: (VerbnetOfficialFrame, int List) List -- The frames that achieved this best score + the mapping between the slots of :frame_occurrence and these verbnet frames
+    :var best_data: (VerbnetOfficialFrame, int List) List -- The frames that
+        achieved this best score + the mapping between the slots of
+    :frame_occurrence and these verbnet frames
     :var algo: str -- The algorithm that we want to use
 
     """
@@ -51,14 +53,14 @@ class FrameMatcher():
 
         # Nothing to do if no matching have been done yet.
         # Returns early to avoid taking the max of an empty list.
-        if len(self.best_data) == 0: return
-
+        if len(self.best_data) == 0:
+            return
 
         scores = [self.frame_semantic_score(x, data) for x in self.best_data]
         assert len(scores) == len(self.best_data)
 
-        self.best_data = [data for data, score in zip(self.best_data, scores)
-                if score == max(scores)]
+        self.best_data = [data_part for data_part, score in zip(self.best_data, scores)
+                          if score == max(scores)]
 
     def frame_semantic_score(self, frame_data, semantic_data):
         """For a given frame from VerbNet, compute a semantic score between
@@ -75,8 +77,11 @@ class FrameMatcher():
         frame, mapping = frame_data
         score = 0
         for slot1, slot2 in enumerate(mapping):
-            if slot2 == None: continue
-            if slot2 >= len(frame.role_restrictions): continue
+            if slot2 is None:
+                continue
+            if slot2 >= len(frame.role_restrictions):
+                continue
+
             word = self.frame_occurrence.headwords[slot1]
             restr = frame.role_restrictions[slot2]
             score += restr.match_score(word, semantic_data)
@@ -96,14 +101,20 @@ class FrameMatcher():
 
         slots = self.possible_distribs()
         for i, slot in enumerate(slots):
-            if slot == None or len(slot) != 1: continue
+            if slot is None or len(slot) != 1:
+                continue
 
             restr = VNRestriction.build_empty()
             for frame, mapping in self.best_data:
-                if mapping[i] == None: continue
-                if mapping[i] >= len(frame.role_restrictions): continue
-                restr = VNRestriction.build_or(restr,
+                if mapping[i] is None:
+                    continue
+                elif mapping[i] >= len(frame.role_restrictions):
+                    continue
+
+                restr = VNRestriction.build_or(
+                    restr,
                     frame.role_restrictions[mapping[i]])
+
             result[self.frame_occurrence.headwords[i]] = restr
 
         return result
@@ -120,7 +131,6 @@ class FrameMatcher():
             return frame_occurrence_elem in frame_elem
         else:
             return frame_occurrence_elem == frame_elem
-
 
     def _matching_baseline(self, verbnet_frame, slots_associations):
         """ Matching algorithm that is the closest to the article's method """
@@ -155,10 +165,10 @@ class FrameMatcher():
                     continue
 
                 matching_slot = test_slot_data["pos"]
-                break # Stop at the first good slot we find
+                break  # Stop at the first good slot we find
 
             if matching_slot != -1:
-                del available_slots[i] # Slot i has been attributed
+                del available_slots[i]  # Slot i has been attributed
                 # TODO? we need to check that enough roles were given in VerbNet
                 if verbnet_frame.num_slots > matching_slot:
                     slots_associations[slot_pos] = matching_slot
@@ -182,11 +192,13 @@ class FrameMatcher():
         for elem in self.frame_occurrence.structure:
             if VerbnetFrameOccurrence._is_a_slot(elem):
                 num_slots_before_v_in_frame_occurrence += 1
-            elif elem == "V": break
+            elif elem == "V":
+                break
         for elem, role in verbnet_frame.syntax:
             if role is not None:
                 num_slots_before_v_in_official_frame += 1
-            elif elem == "V": break
+            elif elem == "V":
+                break
 
         while i < len(self.frame_occurrence.structure) and j < len(verbnet_frame.syntax):
             elem1 = self.frame_occurrence.structure[i]
@@ -228,7 +240,8 @@ class FrameMatcher():
                     num_match += 1
                     if num_match - 1 < verbnet_frame.num_slots:
                         slots_associations[num_match - 1] = num_match - 1
-            else: break
+            else:
+                break
 
         return num_match
 
@@ -244,7 +257,7 @@ class FrameMatcher():
         # Consider 'that' as optional in english, eg.:
         # Tell him that S --> Tell him S
         import copy
-        if verbnet_frame.has('that') and not 'that' in self.frame_occurrence.structure:
+        if verbnet_frame.has('that') and 'that' not in self.frame_occurrence.structure:
             verbnet_frame = copy.deepcopy(verbnet_frame)
             verbnet_frame.remove('that')
 
@@ -288,7 +301,8 @@ class FrameMatcher():
 
         for verbnet_frame, mapping in self.best_data:
             for slot1, slot2 in enumerate(mapping):
-                if slot2 == None: continue
+                if slot2 is None:
+                    continue
 
                 # We want this to fail when roles get stored in a dictionary or a class
                 assert all([type(s) == tuple for s in verbnet_frame.syntax])
