@@ -82,12 +82,13 @@ for opt, value in options[0]:
     if opt == "--best-gold":
         argument_identification = False
         passivize = True
-        probability_model = "predicate_slot"
+        semrestr = True
+        bootstrap = True
     elif opt == "--best-auto":
         argument_identification = True
         passivize = True
-        probability_model = "predicate_slot"
-
+        semrestr = True
+        bootstrap = True
     elif opt == "--fmatching-algo":
         matching_algorithm = value
     elif opt == "--add-non-core-args":
