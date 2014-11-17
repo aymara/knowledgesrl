@@ -111,7 +111,8 @@ def display_stats(argument_identification):
         # did. There are two reasons for producing so much predicates:
         #  * we're using VerbNet, which includes more senses than FrameNet
         #  * we don't disambiguate, so even if it's not the correct sense, we
-        #    assign it to a "frame"
+        #  assign it to a "frame" (but there are less holes in VerbNet than in
+        #  FrameNet, so that's less of an issue.
         predicate_identification_productivity = (
             (s["frame_extracted_good"] + s["frame_extracted_bad"]) /
             (s["frame_extracted_good"] + s["frame_not_extracted"]))
@@ -126,8 +127,11 @@ def display_stats(argument_identification):
         argument_identification_f1 = hmean(
             argument_identification_precision,
             argument_identification_recall)
+        # * If I'm not mistaken, this only concerns arguments for frames that
+        # are in FrameNet: any "surproduction" is not caused by producing too
+        # much frames.
         argument_identification_productivity = (s["args"]) / s["args_kept"]
-        print("Argument identification  ({:.2f}x): {:.1%} precision, {:.1%} recall, {:.1%} F1".format(
+        print("Argument identification (*{:.2f}x): {:.1%} precision, {:.1%} recall, {:.1%} F1".format(
             argument_identification_productivity,
             argument_identification_precision, argument_identification_recall,
             argument_identification_f1))
@@ -142,6 +146,14 @@ def display_stats(argument_identification):
     role_matching_precision = s["one_correct_role"] / unique_role_evaluated
     role_matching_recall = (s["one_correct_role"] / (unique_role_evaluated + several_roles_evaluated + s["no_roles_evaluated"]))
     role_matching_f1 = hmean(role_matching_precision, role_matching_recall)
+
+    # * the reason this is low in argument identification compared to frameid 
+    # and argid is that we only evaluate against FrameNet frames, so it can
+    # only be < 1. I believe the drop from > 3 to close to 0 is due to VerbNet:
+    # every argument that does not fit a VerbNet frame is not assigned to a
+    # role. Another reason is that whenever multiple roles are possibles, that
+    # doesn't count towards productivity. Even if productivity would stay under
+    # 0.1, counting thoses cases would currently make productivity go from 0.12 to 0.25.
     role_matching_productivity = s['one_role'] / s['args_instanciated']
     print("Role matching           (*{:.2f}x): {:.1%} precision, {:.1%} recall, {:.1%} F1".format(
         role_matching_productivity,
@@ -149,10 +161,6 @@ def display_stats(argument_identification):
         role_matching_f1))
     print("     when multiple possibilities, {:.1%} precision".format(s["several_roles_ok"] / max(several_roles_evaluated, 1)))
     print()
-
-    # * the reason this is low in arguent identification compared to frameid
-    # and argid is that we only evaluate against FrameNet frames, so it can
-    # only be < 1
 
     print("Mapped {:.1%} of {} frames, uniquely mapped {:.1%} of {} arguments".format(
         s["frames_mapped"]/s["frames"], s["frames"],
@@ -184,6 +192,7 @@ def display_stats(argument_identification):
             hmean(extrapolated_precision, extrapolated_recall),
             extrapolated_accuracy))
 
+    # Search for * in this function
     print("*: see comments in stats.py")
 
 
