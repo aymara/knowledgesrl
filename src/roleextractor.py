@@ -48,6 +48,8 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
                     arg.role,
                     fn_frame=frame.frame_name,
                     vn_classes=verbnet_classes[frame.predicate.lemma])
+            except KeyError:
+                continue
             except RoleMatchingError:
                 continue
             if len(possible_roles) == 1:
