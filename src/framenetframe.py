@@ -62,7 +62,7 @@ class Arg:
 
     """
 
-    def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated = True, position=None):
+    def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated=True, position=None):
         self.begin = begin
         self.end = end
         self.text = text
@@ -87,14 +87,22 @@ class Arg:
 
     def __cmp__(self, other):
         if not self.instanciated:
-            if other.instanciated: return 1
-            if self.role < other.role: return -1
-            if self.role > other.role: return 1
+            if other.instanciated:
+                return 1
+            elif self.role < other.role:
+                return -1
+            elif self.role > other.role:
+                return 1
+            else:
+                return 0
+        elif not other.instanciated:
+            return -1
+        elif self.begin < other.begin:
+            return -1
+        elif self.begin > other.begin:
+            return 1
+        else:
             return 0
-        if not other.instanciated: return -1
-        if self.begin < other.begin: return -1
-        if self.begin > other.begin: return 1
-        return 0
 
     def __lt__(self, other):
         return self.__cmp__(other) < 0
@@ -150,9 +158,9 @@ class Word:
     def __init__(self, begin, end, pos):
         self.begin = begin
         self.end = end
-        if pos == 'sent': pos = '.'
+        if pos == 'sent':
+            pos = '.'
         self.pos = pos.upper()
-
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and

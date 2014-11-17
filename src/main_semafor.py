@@ -8,13 +8,13 @@ from pathlib import Path
 semafor_file = Path("../data/semafor/all_evaluation.out")
 semafor_corpus = Path("../data/fndata-1.5/fulltext/evaluation/")
 semafor_pos = Path("../data/semafor/all_evaluation_pos")
-#semafor_file = "../data/semafor/semafor_testset.out"
-#semafor_corpus = "../data/semafor/testset/"
-#semafor_pos = "../data/semafor/semafor_testset_pos"
+# semafor_file = "../data/semafor/semafor_testset.out"
+# semafor_corpus = "../data/semafor/testset/"
+# semafor_pos = "../data/semafor/semafor_testset_pos"
 
 reader = framenetreader.FulltextReader(
-semafor_file, add_non_core_args=False, pos_file = semafor_pos,
-keep_nonverbal = False)
+    semafor_file, add_non_core_args=False, pos_file=semafor_pos,
+    keep_nonverbal=False)
 semafor_frames = reader.frames
 semafor_roles = [[y.role for y in x.args] for x in semafor_frames]
 
@@ -23,8 +23,8 @@ for filename in sorted(semafor_corpus.glob('*.xml')):
     reader = framenetreader.FulltextReader(
         filename,
         add_non_core_args=False,
-        keep_unannotated = True,
-        keep_nonverbal = False)
+        keep_unannotated=True,
+        keep_nonverbal=False)
     annotated_frames += reader.frames
 
 num_annotated_frames = len(annotated_frames)
@@ -49,7 +49,8 @@ for frame in semafor_frames:
             sentence_position = i
 
     last_sentence = frame.sentence
-    if not sentence_found: continue
+    if not sentence_found:
+        continue
 
     i = sentence_position
     frame_found = True

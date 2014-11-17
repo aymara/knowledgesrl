@@ -127,7 +127,6 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         chunk_list = VerbnetFrameOccurrence.annotated_chunks(gold_framenet_instance, sentence)
         structure = list(VerbnetFrameOccurrence.chunks_to_verbnet(chunk_list))
 
-
         result = VerbnetFrameOccurrence(structure, [], predicate=gold_framenet_instance.predicate.lemma)
         result.num_slots = len([arg for arg in gold_framenet_instance.args if arg.instanciated])
 

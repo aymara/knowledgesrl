@@ -54,7 +54,7 @@ class VNRestriction:
 
         """
 
-        if restr_type != None and not restr_type in VNRestriction.possible_types:
+        if restr_type is not None and restr_type not in VNRestriction.possible_types:
             raise Exception("VNRestriction : unhandled restriction "+restr_type)
 
         # See what children can be discarded (because they occur several times)
@@ -71,7 +71,7 @@ class VNRestriction:
     def __str__(self):
         if self._is_empty_restr():
             return "NORESTR"
-        if self.logical_rel == None:
+        if self.logical_rel is None:
             return self.type
         if self.logical_rel == "NOT":
             return "(NOT "+str(self.children[0])+")"
@@ -85,9 +85,12 @@ class VNRestriction:
         # restrictions, such as (NOT(NOT a AND NOT b)), (a OR b), but this
         # does not matter since VerbNet logic statements are very simple
 
-        if not isinstance(other, self.__class__): return False
-        if self.type != None or other.type != None: return self.type == other.type
-        if self.logical_rel != other.logical_rel: return False
+        if not isinstance(other, self.__class__):
+            return False
+        elif self.type is not None or other.type is not None:
+            return self.type == other.type
+        elif self.logical_rel != other.logical_rel:
+            return False
 
         # We cannot use Python's builtin unordered sets, since
         # VNRestriction are not hashable
@@ -109,18 +112,21 @@ class VNRestriction:
         """
 
         # Give a very small score for matching NORESTR
-        if self._is_empty_restr(): return 1 / 100
+        if self._is_empty_restr():
+            return 1 / 100
 
         base_score = 0
-        if word in data[self]: base_score = data[self][word]
+        if word in data[self]:
+            base_score = data[self][word]
 
-        if self.logical_rel == None:
+        if self.logical_rel is None:
             children_score = 0
         elif self.logical_rel == "NOT":
             children_score = (-1) * self.children[0].match_score(word, data)
 
             # Attribute a score of 1 for finding no match
-            if children_score == 0: children_score = 1
+            if children_score == 0:
+                children_score = 1
         elif self.logical_rel == "OR":
             children_score = max(
                 [x.match_score(word, data) for x in self.children])
@@ -135,11 +141,13 @@ class VNRestriction:
     def get_atomic_restrictions(self):
         """Return the list of basic (one keyword without logical relations)
         restrictions needed to compute this restriction.
-
-        This function is no longer used.
         """
-        if self._is_empty_restr(): return set()
-        if len(self.children) == 0: return {self.type}
+        # TODO: This function is no longer used.
+
+        if self._is_empty_restr():
+            return set()
+        if len(self.children) == 0:
+            return {self.type}
 
         result = set()
         for child in self.children:
@@ -148,15 +156,17 @@ class VNRestriction:
 
     @staticmethod
     def _build_keyword(r1, r2, kw):
-        if r1._is_empty_restr(): return r2
-        if r2._is_empty_restr(): return r1
-        if r1 == r2: return r1
-
-        if r1.logical_rel == kw and r2.logical_rel == kw:
+        if r1._is_empty_restr():
+            return r2
+        elif r2._is_empty_restr():
+            return r1
+        elif r1 == r2:
+            return r1
+        elif r1.logical_rel == kw and r2.logical_rel == kw:
             return VNRestriction(children=r1.children + r2.children, logical_rel=kw)
-        if r1.logical_rel == kw:
+        elif r1.logical_rel == kw:
             return VNRestriction(children=r1.children + [r2], logical_rel=kw)
-        if r2.logical_rel == kw:
+        elif r2.logical_rel == kw:
             return VNRestriction(children=[r1] + r2.children, logical_rel=kw)
         else:
             return VNRestriction(children=[r1, r2], logical_rel=kw)

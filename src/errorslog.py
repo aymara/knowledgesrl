@@ -25,7 +25,7 @@ def log_ambiguous_role_conversion(frame, arg, role_matcher, verbnet_classes):
         "predicate_classes": verbnet_classes[frame.predicate.lemma],
         "sentence": frame.sentence,
         "vn_roles": role_matcher.possible_vn_roles(
-            arg.role, vn_classes = verbnet_classes[frame.predicate.lemma])
+            arg.role, vn_classes=verbnet_classes[frame.predicate.lemma])
     })
 
 
@@ -102,15 +102,15 @@ def display_mapping_errors():
 
 
 def display_error_details():
-    #for data in errors["vn_parsing"]: print(data)
-    #for data in errors["missing_predicate_data"]: print(data)
-    #for data in errors["unannotated_layer"]: print(data)
-    #for data in errors["predicate_was_arg"]: print(data)
-    #for data in errors["missing_phrase_type"]: print(data)
-    #for data in errors["vn_missing"]: print(data)
-    #for data in errors["frame_without_slot"]: print(data)
-    #for data in errors["impossible_role_matching"]: print(data)
-    #for data in errors["ambiguous_role"]: print(data)
+    # for data in errors["vn_parsing"]: print(data)
+    # for data in errors["missing_predicate_data"]: print(data)
+    # for data in errors["unannotated_layer"]: print(data)
+    # for data in errors["predicate_was_arg"]: print(data)
+    # for data in errors["missing_phrase_type"]: print(data)
+    # for data in errors["vn_missing"]: print(data)
+    # for data in errors["frame_without_slot"]: print(data)
+    # for data in errors["impossible_role_matching"]: print(data)
+    # for data in errors["ambiguous_role"]: print(data)
     pass
 
 
@@ -132,4 +132,3 @@ def display_debug(n):
         print("Result : ")
         print(debug_data[i]["result"])
         print("\n\n")
-

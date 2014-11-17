@@ -12,8 +12,8 @@ def bootstrap_algorithm(frames, probability_model, verbnet_classes):
     log_ratio = 8
     log_ratio_step = 0.5
     min_evidence = [1, 1, 10]
-    #[1, 3, 10] -> [17, 65, 2076]
-    #[3, 5, 10] -> [17, 65, 2076]
+    # [1, 3, 10] -> [17, 65, 2076]
+    # [3, 5, 10] -> [17, 65, 2076]
 
     # Transform the frame list (with the slots in frame.roles) into
     # a list of (frame, role_set, slot_position)
@@ -41,7 +41,8 @@ def bootstrap_algorithm(frames, probability_model, verbnet_classes):
 
         # According to the article, there is no longer a min evidence threshold
         # when log_ratio reaches 1
-        if log_ratio == 1: min_evidence = [1, 1, 1]
+        if log_ratio == 1:
+            min_evidence = [1, 1, 1]
 
         for frame, role_set, slot_position in slots:
             headword = headwordextractor.headword(frame.args[slot_position], frame.tree)
@@ -60,15 +61,15 @@ def bootstrap_algorithm(frames, probability_model, verbnet_classes):
                     min_evidence[backoff_level]
                 )
 
-                if (role1 != None and
-                    ((role2 != None and log(ratio) > log_ratio) or
+                if (role1 is not None and
+                    ((role2 is not None and log(ratio) > log_ratio) or
                      log_ratio <= 1)):
 
                     role = role1
                     total[backoff_level] += 1
                     break
 
-            if role != None:
+            if role is not None:
                 role_set.intersection_update(set())
                 role_set.add(role)
                 # role_set = set([role]) does not work

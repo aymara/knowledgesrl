@@ -52,7 +52,7 @@ class CoreArgsFinder:
         :returns bool: True if the role was a core role, False otherwise.
 
         """
-        if not frame in self.core_args:
+        if frame not in self.core_args:
             raise NoSuchFrameError(frame)
 
         return role in self.core_args[frame]

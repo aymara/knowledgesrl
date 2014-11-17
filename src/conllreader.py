@@ -102,7 +102,7 @@ class SyntacticTreeNode:
         score = len(overlap_words) / mean_length
 
         children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
-        return max([(score, self)] + children_results, key = lambda x: x[0])
+        return max([(score, self)] + children_results, key=lambda x: x[0])
 
 
 class SyntacticTreeBuilder():
@@ -143,7 +143,8 @@ class SyntacticTreeBuilder():
 
             begin += 1 + len(form)
 
-        self.sentence = ' '.join([self.node_dict[word_id].word for word_id in sorted(self.node_dict.keys())])
+        self.sentence = ' '.join([self.node_dict[w_id].word
+                                  for w_id in sorted(self.node_dict.keys())])
 
         # Record father/child relationship
         for word_id, father_id in self.father_ids.items():
@@ -163,7 +164,6 @@ class SyntacticTreeBuilder():
         for node in self.node_dict.values():
             if node.father is None:
                 # Fill begin/end info
-                #import pudb; pu.db
                 self.fill_begin_end(node)
                 # Fill forest of tree
                 self.tree_list.append(node)

@@ -7,8 +7,10 @@ import framenetreader
 from conllreader import SyntacticTreeBuilder
 import headwordextractor
 
+
 class PredicateNotFound(Exception):
     pass
+
 
 class FNAllReader:
     """ Reads simultaneously the fulltext corpus and framenet_parsed
@@ -107,7 +109,11 @@ class FNAllReader:
     @staticmethod
     def is_passive(node):
         """Tell whether a frame's predicate is a passive"""
-        if node.pos != "VBN": return False
-        if node.father == None: return False
-        if node.father.pos not in FNAllReader.predicate_pos: return False
-        return node.father.word.lower() in FNAllReader.be_forms
+        if node.pos != "VBN":
+            return False
+        elif node.father is None:
+            return False
+        elif node.father.pos not in FNAllReader.predicate_pos:
+            return False
+        else:
+            return node.father.word.lower() in FNAllReader.be_forms
