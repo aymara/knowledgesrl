@@ -91,6 +91,7 @@ if __name__ == "__main__":
         all_matcher = []
         data_restr = NoHashDefaultDict(lambda: Counter())
         assert len(annotated_frames) == len(vn_frames)
+
         for gold_frame, frame_occurrence in zip(annotated_frames, vn_frames):
             stats.stats_data["args"] += len(gold_frame.args)
             stats.stats_data["args_instanciated"] += len(
