@@ -47,4 +47,3 @@ def get_all_text(elem, get_tail=False):
         all_text = deindent_text(all_text)
 
     return all_text
-

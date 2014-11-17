@@ -17,7 +17,7 @@ def get_trees(filename):
             else:
                 trees_for_sentence = SyntacticTreeBuilder(conll_tree).tree_list
                 if not len(trees_for_sentence) == 1:
-                    #print('{} trees in one sentence of {}'.format(len(trees_for_sentence), filename))
+                    # We could display those sentences here.
                     pass
 
                 tree_list.append(trees_for_sentence[0])

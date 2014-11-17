@@ -20,7 +20,6 @@ import verbnetreader
 import framematcher
 import rolematcher
 import probabilitymodel
-import headwordextractor
 import paths
 import dumper
 

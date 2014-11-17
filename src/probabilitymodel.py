@@ -30,35 +30,45 @@ NO_PREP = "no_prep_magic_value"
 models = ["default", "slot_class", "slot", "predicate_slot", "vnclass_slot"]
 
 
-def multi_get(d, l, default = None):
+def multi_get(d, l, default=None):
     """Traverses multiple levels of a dictionary to get a key or None"""
-    if not d: return default
+    if not d:
+        return default
+
     result = reduce(lambda d, k: d.get(k) if d else default, l, d)
     return result if result else default
 
 
 def multi_default_dict(dimension):
     """Returns an empty int defaultdict of a given dimension"""
-    if dimension <= 1: return defaultdict(int)
-    else: return defaultdict(lambda: multi_default_dict(dimension - 1))
+    if dimension <= 1:
+        return defaultdict(int)
+    else:
+        return defaultdict(lambda: multi_default_dict(dimension - 1))
 
 
 def multi_count(obj):
     """Returns the sum of all integers in a multidict"""
-    if isinstance(obj, int) or isinstance(obj, float): return obj
-    else: return sum([multi_count(x) for x in obj.values()])
+    if isinstance(obj, int) or isinstance(obj, float):
+        return obj
+    else:
+        return sum([multi_count(x) for x in obj.values()])
 
 
 def check_depth(data, depth):
     is_scalar = isinstance(data, int) or isinstance(data, float)
-    if depth == 0: return is_scalar
-    if is_scalar: return False
+    if depth == 0:
+        return is_scalar
+    elif is_scalar:
+        return False
     return all([check_depth(x, depth - 1) for x in data.values()])
 
 
 def root_vnclass(vnclass):
     position = vnclass.find("-")
-    if position == -1: return vnclass
+    if position == -1:
+        return vnclass
+
     return vnclass[0:position]
 
 
@@ -77,7 +87,7 @@ class ProbabilityModel:
     guess_unknown = 0
     guess_bad = -1
 
-    def __init__(self, vn_classes = None, vn_init_value = None):
+    def __init__(self, vn_classes=None, vn_init_value=None):
         self.data_default = {
             ComputeSlotTypeMixin.slot_types["subject"]: "Agent",
             ComputeSlotTypeMixin.slot_types["object"]: "Theme",
@@ -97,14 +107,14 @@ class ProbabilityModel:
         self.data_bootstrap_p3_sum = multi_default_dict(3)
         self.data_vnclass_slot = multi_default_dict(4)
 
-        if vn_classes != None and vn_init_value != None:
+        if vn_classes is not None and vn_init_value is not None:
             self.data_vnclass = defaultdict(lambda: {})
             for verb, verb_vnclass in vn_classes.items():
                 for vnclass in verb_vnclass:
                     vnclass = root_vnclass(vnclass)
                     self.data_vnclass[verb][vnclass] = vn_init_value
 
-    def add_data(self, slot_class, role, prep, predicate, vnclass = None):
+    def add_data(self, slot_class, role, prep, predicate, vnclass=None):
         """Use one known occurence of a role in a given context to update the data
         of every model
 
@@ -124,12 +134,12 @@ class ProbabilityModel:
         if slot_class == ComputeSlotTypeMixin.slot_types["prep_object"]:
             self.data_slot[slot_class][prep][role] += 1
             self.data_predicate_slot[predicate][slot_class][prep][role] += 1
-            if vnclass != None:
+            if vnclass is not None:
                 self.data_vnclass_slot[vnclass][slot_class][prep][role] += 1
         else:
             self.data_slot[slot_class][NO_PREP][role] += 1
             self.data_predicate_slot[predicate][slot_class][NO_PREP][role] += 1
-            if vnclass != None:
+            if vnclass is not None:
                 self.data_vnclass_slot[vnclass][slot_class][NO_PREP][role] += 1
 
     def add_data_bootstrap(self, role, predicate, predicate_classes,
@@ -182,11 +192,13 @@ class ProbabilityModel:
         num_encountered = 0
         for verb, vnclasses in self.data_vnclass.items():
             total = sum([x for x in vnclasses.values()])
-            if total == 0: continue
+            if total == 0:
+                continue
 
             num_encountered += 1
 
-            if len(vnclasses) < 2: continue
+            if len(vnclasses) < 2:
+                continue
 
             freq = [x / total for x in vnclasses.values()]
             v = sum([(x - (1 / len(vnclasses))) ** 2 for x in freq]) / len(vnclasses)
@@ -220,13 +232,13 @@ class ProbabilityModel:
 
         vnclass = None
         for frame, junk in matcher.best_data:
-            if vnclass == None:
+            if vnclass is None:
                 vnclass = root_vnclass(frame.vnclass)
             elif vnclass != root_vnclass(frame.vnclass):
                 vnclass = None
                 break
 
-        if vnclass != None:
+        if vnclass is not None:
             vnclass = root_vnclass(vnclass)
             self.data_vnclass[verb][vnclass] += 1
 
@@ -274,7 +286,8 @@ class ProbabilityModel:
         elif model == "vnclass_slot":
             data = defaultdict(int)
             total_vnclass = sum(self.data_vnclass[predicate].values())
-            if total_vnclass == 0: return None
+            if total_vnclass == 0:
+                return None
 
             for vnclass, n_vnclass in self.data_vnclass[predicate].items():
                 subdata = multi_get(self.data_vnclass_slot,
@@ -288,7 +301,7 @@ class ProbabilityModel:
         if data:
             possible_roles = sorted(list(set(data.keys()) & role_set))
             if possible_roles:
-                return max(possible_roles, key = lambda role: data[role])
+                return max(possible_roles, key=lambda role: data[role])
 
         return None
 
@@ -369,8 +382,8 @@ class ProbabilityModel:
 
         if len(data) == 0:
             return None, None, None
-        first = max(data, key = lambda r: data[r])
+        first = max(data, key=lambda r: data[r])
         if len(data) == 1:
             return first, None, 0
-        second = max(data, key = lambda r: 0 if r == first else data[r])
+        second = max(data, key=lambda r: 0 if r == first else data[r])
         return first, second, data[first] / data[second]

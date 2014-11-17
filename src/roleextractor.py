@@ -7,6 +7,7 @@ import re
 from framenetallreader import FNAllReader
 import options
 from stats import stats_data
+from rolematcher import RoleMatchingError
 
 
 """Fill the roles of some frames extracted from the syntactic parser output
@@ -47,7 +48,8 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
                     arg.role,
                     fn_frame=frame.frame_name,
                     vn_classes=verbnet_classes[frame.predicate.lemma])
-            except Exception: continue
+            except RoleMatchingError:
+                continue
             if len(possible_roles) == 1:
                 stats_data["args_annotated_mapping_ok"] += 1
 
@@ -77,7 +79,6 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
 
             stats_data["frame_not_extracted"] += 1
             stats_data["arg_not_extracted"] += num_args
-
 
     stats_data["frame_extracted_bad"] += len(list(frame_instances)) - good_frames
     stats_data["frame_extracted_good"] += good_frames
@@ -115,7 +116,8 @@ def correct_num_tags(extracted_frame, original_sentence):
 def frame_replace_one(frame, search, replace):
     """ Replace the first occurence of a word by another word in a frame """
     position = frame.sentence.find(search)
-    if position == -1: return False
+    if position == -1:
+        return False
 
     offset = len(replace) - len(search)
 
@@ -140,7 +142,8 @@ def frame_replace_all(frame, search, replace):
         raise Exception("frame_replace_all : cannot handle cases where :search"
             " is a substring of :replace")
 
-    while frame_replace_one(frame, search, replace): pass
+    while frame_replace_one(frame, search, replace):
+        pass
 
 
 def predicate_match(predicate1, predicate2):
@@ -159,7 +162,8 @@ def handle_frame(extracted_frame, annotated_frame):
 
     # Update the argument roles and statistics
     for annotated_arg in annotated_frame.args:
-        if not annotated_arg.instanciated: continue
+        if not annotated_arg.instanciated:
+            continue
 
         arg_found = False
         for extracted_arg in extracted_frame.args:

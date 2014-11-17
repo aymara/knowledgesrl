@@ -319,10 +319,11 @@ def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
     found_ambiguous_arg = False
     found_ambiguous_arg_2 = False
     for arg in frame.args:
-        if not arg.instanciated: continue
+        if not arg.instanciated:
+            continue
         try:
             if len(role_matcher.possible_vn_roles(
-                arg.role, vn_classes = verbnet_classes[frame.predicate.lemma]
+                arg.role, vn_classes=verbnet_classes[frame.predicate.lemma]
             )) > 1:
                 if not found_ambiguous_arg:
                     found_ambiguous_arg = True
@@ -335,8 +336,8 @@ def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
 
                 if len(role_matcher.possible_vn_roles(
                     arg.role,
-                    fn_frame = frame.frame_name,
-                    vn_classes = verbnet_classes[frame.predicate.lemma]
+                    fn_frame=frame.frame_name,
+                    vn_classes=verbnet_classes[frame.predicate.lemma]
                 )) > 1:
                     if not found_ambiguous_arg_2:
                         found_ambiguous_arg_2 = True
@@ -345,4 +346,3 @@ def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
                     ambiguous_mapping["args_with_frame"] += 1
         except RoleMatchingError:
             pass
-

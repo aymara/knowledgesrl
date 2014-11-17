@@ -15,8 +15,10 @@ display_verbnet = False
 options = getopt.getopt(sys.argv[1:], "", ["verbnet", "framenet"])
 
 for opt, v in options[0]:
-    if opt == "--verbnet": display_verbnet = True
-    elif opt == "--framenet": display_framenet = True
+    if opt == "--verbnet":
+        display_verbnet = True
+    elif opt == "--framenet":
+        display_framenet = True
 
 if not display_framenet and not display_verbnet:
     display_verbnet = True
@@ -45,7 +47,7 @@ class VerbnetRoleReader:
             parent_roles.add(role.attrib["type"])
 
         for vn_class in parent_classes:
-            if not vn_class in self.classes:
+            if vn_class not in self.classes:
                 self.classes_names[vn_class] = class_name
                 self.classes[vn_class] = set()
 
@@ -133,8 +135,8 @@ for mapping in root.getroot():
     fn_frame = mapping.attrib["fnframe"]
     encountered_fn_frames.add(fn_frame)
 
-    if not fn_frame in fn_roles:
-        if not fn_frame in bad_fn_frames:
+    if fn_frame not in fn_roles:
+        if fn_frame not in bad_fn_frames:
             bad_fn_frames[fn_frame] = []
         bad_fn_frames[fn_frame].append(vn_class)
 
@@ -142,25 +144,26 @@ for mapping in root.getroot():
         vn_role = role.attrib["vnrole"]
         fn_role = role.attrib["fnrole"]
 
-        if fn_frame in fn_roles and not fn_role in fn_roles[fn_frame]:
-            if not fn_frame in bad_fn_roles:
+        if fn_frame in fn_roles and fn_role not in fn_roles[fn_frame]:
+            if fn_frame not in bad_fn_roles:
                 bad_fn_roles[fn_frame] = []
             bad_fn_roles[fn_frame].append({
                 "fn_role": fn_role,
                 "vn_role": vn_role, "vn_class": vn_class
             })
 
-        if not vn_role in vn_classes[vn_class]:
-            if not vn_class in bad_vn_roles:
+        if vn_role not in vn_classes[vn_class]:
+            if vn_class not in bad_vn_roles:
                 bad_vn_roles[vn_class] = []
             bad_vn_roles[vn_class].append({
                 "fn_frame": fn_frame, "fn_role": fn_role,
                 "vn_role": vn_role
             })
 
-if display_verbnet: display_vn_issues()
-if display_framenet: display_fn_issues()
-
+if display_verbnet:
+    display_vn_issues()
+if display_framenet:
+    display_fn_issues()
 
 
 mapped = fn_verbal_frames & encountered_fn_frames

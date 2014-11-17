@@ -97,8 +97,6 @@ class FrameMatcher():
 
         :returns: VNRestriction Dict -- a mapping between head words and the restriction they match
         """
-        result = {}
-
         slots = self.possible_distribs()
         for i, slot in enumerate(slots):
             if slot is None or len(slot) != 1:

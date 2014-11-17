@@ -25,7 +25,6 @@ class InvalidRelationError(Exception):
         return "Invalid {} : \"{}\"".format(self.error_type, self.invalid_data)
 
 
-
 class Relation:
     """A syntactic relation between one node and its neighbour that is closer
     to the predicate. This can be an upward dependency if the node is the
@@ -48,9 +47,9 @@ class Relation:
     possible_directions = {"UP", "DOWN"}
 
     def __init__(self, name, direction):
-        if not direction in Relation.possible_directions:
+        if direction not in Relation.possible_directions:
             raise InvalidRelationError("direction", direction)
-        if not name in Relation.possible_names:
+        if name not in Relation.possible_names:
             raise InvalidRelationError("name", name)
 
         self.name = name
@@ -67,7 +66,6 @@ class Relation:
     @staticmethod
     def both(name):
         return [Relation(name, "UP"), Relation(name, "DOWN")]
-
 
 
 class RelationTreeNode:
@@ -113,11 +111,12 @@ class RelationTreeNode:
             self.node.word, self.relation, ", ".join([str(x) for x in self.children]))
 
     def keep(self):
-        if self.status == "UNKNOWN": self.status = "KEPT"
+        if self.status == "UNKNOWN":
+            self.status = "KEPT"
 
     def discard(self):
-        if self.status == "UNKNOWN": self.status = "DISCARDED"
-
+        if self.status == "UNKNOWN":
+            self.status = "DISCARDED"
 
 
 def build_relation_tree(node):
@@ -151,7 +150,7 @@ def build_relation_tree_rec(node, new_father, relation):
             for x in node.children if x is not new_father]
 
     # The add the father if it is not new_father
-    if not (new_father is node.father or node.father == None):
+    if not (new_father is node.father or node.father is None):
         new_children.append(build_relation_tree_rec(
             node.father, node, Relation(node.deprel, "UP")))
 
@@ -197,7 +196,7 @@ def find_args(predicate_node):
     rule4(tree)
     rule5(tree)
     rule6(tree)
-    #rule7(tree)
+    # rule7(tree)
     rule8(tree)
 
     # At this point, all nodes are marked as "KEPT" or "DISCARDED"
@@ -236,23 +235,26 @@ def rule3(tree):
                 elem.node.begin_word > best_position):
             candidate, best_position = elem, elem.node.begin
 
-    if candidate == None: return
+    if candidate is None:
+        return
 
     found = False
     node = tree.node
-    while node != None:
+    while node is not None:
         if node.begin_word == candidate.node.father.begin_word:
             found = True
             break
         node = node.father
 
-    if found: candidate.keep()
+    if found:
+        candidate.keep()
 
 
 def rule4(tree):
     for elem1 in tree.children:
         if elem1.relation in rule4_relations:
-            for elem2 in elem1: elem2.discard()
+            for elem2 in elem1:
+                elem2.discard()
         else:
             rule4(elem1)
 
@@ -271,7 +273,7 @@ def rule6(tree):
             elem.keep()
 
 
-def rule7(tree, root = True):
+def rule7(tree, root=True):
     for elem in tree.children:
         if elem.relation.name == "VC":
             rule7(elem, False)
@@ -280,4 +282,5 @@ def rule7(tree, root = True):
 
 
 def rule8(tree):
-    for elem in tree: elem.discard()
+    for elem in tree:
+        elem.discard()

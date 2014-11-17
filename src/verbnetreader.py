@@ -74,7 +74,7 @@ class VerbnetReader:
 
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
-            if not verb in self.frames_for_verb:
+            if verb not in self.frames_for_verb:
                 self.frames_for_verb[verb] = []
                 self.classes[verb] = []
 
@@ -112,7 +112,6 @@ class VerbnetReader:
         # Extract the structure
         base_structure = xml_frame.find("DESCRIPTION").attrib["primary"]
         # Transform it into a list
-        #base_structure = [x.split(".")[0] for x in base_structure.split(" ")]
         base_structure = base_structure.split(" ")
 
         # Lexeme at the beginning of a structure are capitalized.
@@ -194,7 +193,8 @@ class VerbnetReader:
                 structure.append(element)
 
             search = element
-            if search[0].islower(): search = "keyword"
+            if search[0].islower():
+                search = "keyword"
 
             # Look for a matching element in SYNTAX
             # and check whether we can find an unexpected keyword to add,
@@ -206,7 +206,8 @@ class VerbnetReader:
             if new_index != -1:
                 index_xml = new_index
 
-            if VerbnetOfficialFrame._is_a_slot(element): roles.append(None)
+            if VerbnetOfficialFrame._is_a_slot(element):
+                roles.append(None)
 
             if len(full_element) > 1:
                 potential_role = "-".join([x.title() for x in full_element[1].split('-')])
@@ -216,7 +217,7 @@ class VerbnetReader:
         # Fill the role list
         i = 0
         for element in syntax_data:
-            if ((not element.tag in ["VERB", "PREP", "LEX"]) and
+            if ((element.tag not in ["VERB", "PREP", "LEX"]) and
                     "value" in element.attrib):
 
                 if i >= len(roles):
@@ -227,7 +228,7 @@ class VerbnetReader:
                         "data": "Too many roles in the syntax"
                     })
                 else:
-                    if roles[i] != None and roles[i] != element.attrib["value"]:
+                    if roles[i] is not None and roles[i] != element.attrib["value"]:
                         self.unhandled.append({
                         "file": self.filename,
                         "elem": "\\",
@@ -237,7 +238,8 @@ class VerbnetReader:
                         roles[i] = element.attrib["value"]
                 i += 1
 
-        while len(roles) > 0 and roles[-1] == None: del roles[-1]
+        while len(roles) > 0 and roles[-1] is None:
+            del roles[-1]
 
         return roles, structure
 
@@ -260,9 +262,12 @@ class VerbnetReader:
         stop_tags = ["NP", "V"]
 
         expected_tags = ["NP"]
-        if len(elem) >= 3 and elem[0:3] == "ADV": expected_tags = ["ADV"]
-        if len(elem) >= 3 and elem[0:3] == "ADJ": expected_tags = ["ADJ", "NP"]
-        if elem in special_tags: expected_tags = special_tags[elem]
+        if len(elem) >= 3 and elem[0:3] == "ADV":
+            expected_tags = ["ADV"]
+        elif len(elem) >= 3 and elem[0:3] == "ADJ":
+            expected_tags = ["ADJ", "NP"]
+        elif elem in special_tags:
+            expected_tags = special_tags[elem]
 
         found = False
         keyword = ""
@@ -302,7 +307,6 @@ class VerbnetReader:
         if xml.attrib["value"] in base_structure:
             return ""
 
-        #for group in verbnetprepclasses.keywords:
         if xml.attrib["value"] in verbnetprepclasses.keywords:
             return xml.attrib["value"]
 

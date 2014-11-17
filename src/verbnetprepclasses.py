@@ -46,6 +46,7 @@ rel_pronouns = {
 sub_pronouns = rel_pronouns | {"if"}
 
 all_preps = set()
-for group in prep.values(): all_preps |= group
+for group in prep.values():
+    all_preps |= group
 all_preps |= other_preps
 keywords = all_preps | tag_lexemes | external_lexemes

@@ -71,7 +71,7 @@ class FulltextReader:
         :type trees: None | SyntacticTreeNode Dict
         """
 
-        if FulltextReader.core_arg_finder == None and not add_non_core_args:
+        if FulltextReader.core_arg_finder is None and not add_non_core_args:
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
             FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
 
@@ -83,7 +83,7 @@ class FulltextReader:
 
         self.pos_file = pos_file
         self.pos_data = None
-        if self.pos_file != None:
+        if self.pos_file is not None:
             pos_file_content = open(str(pos_file)).read()
             self.pos_data = pos_file_content.split("\n\n")
 
@@ -104,7 +104,7 @@ class FulltextReader:
     def _init_file_data(self, root):
         if root.getroot().tag == "corpus":
             self._init_semafor_data()
-        elif root.find(FulltextReader.framenet_xmlns+"valences") == None:
+        elif root.find(FulltextReader.framenet_xmlns+"valences") is None:
             self._init_fulltext_data()
         else:
             return self._init_lu_data(root)
@@ -187,7 +187,7 @@ class FulltextReader:
         words = []
         predicate_starts = []
         pos_data = []
-        if self.pos_data == None:
+        if self.pos_data is None:
             pos_annotation = "{0}annotationSet/{0}layer[@name='PENN']/" \
                              "{0}label".format(self._xmlns)
             for label in sentence.findall(pos_annotation):
@@ -200,7 +200,9 @@ class FulltextReader:
             # We can use the existing automatic SEMAFOR part-of-speech annotation
             start = 0
             for line in self.pos_data[sentence_number].split("\n"):
-                if line == "": continue
+                if line == "":
+                    continue
+
                 line = line.split("\t")
                 pos_data.append({
                     "start": start,
@@ -223,10 +225,12 @@ class FulltextReader:
                 potential_frame.attrib["status"] != "UNANN")
             annotated = annotated or self.all_annotated
 
-            if not (annotated or self.keep_unannotated): continue
+            if not (annotated or self.keep_unannotated):
+                continue
+
             frame = self._parse_frame(
                 text, words, potential_frame, annotated, predicate_starts)
-            if frame and not frame.predicate.begin in already_annotated:
+            if frame and frame.predicate.begin not in already_annotated:
                 already_annotated.append(frame.predicate.begin)
                 yield frame
 
@@ -242,16 +246,15 @@ class FulltextReader:
 
         predicate = self._build_predicate(sentence_text, frame)
 
-        if predicate == None:
+        if predicate is None:
             return
-        elif self.corpus in ["fulltext", "semafor"] and not predicate.begin in predicate_starts:
+        elif self.corpus in ["fulltext", "semafor"] and predicate.begin not in predicate_starts:
             return
 
         if self.constant_frame == "":
             frame_name = frame.attrib["frameName"]
         else:
             frame_name = self.constant_frame
-
 
         if frame_name == "Test35":
             self.non_existing_frame_name.append({
@@ -297,13 +300,15 @@ class FulltextReader:
                 phrase_data = frame.findall(phrase_search_str)
 
             # Stop if we have reached a non argument-annotated layer
-            if len(arg_data) == 0: break
+            if len(arg_data) == 0:
+                break
 
             for arg in arg_data:
                 stop, new_arg = self._build_arg(
                     sentence_text, frame, predicate, arg, phrase_data, rank)
 
-                if new_arg == None: continue
+                if new_arg is None:
+                    continue
 
                 if (not self.add_non_core_args and not
                     FulltextReader.core_arg_finder.is_core_role(
@@ -327,7 +332,8 @@ class FulltextReader:
 
             # We need to "bypass" the argument layer system for Semafor output
             # because there is always only one layer
-            if self.corpus == "semafor": stop = True
+            if self.corpus == "semafor":
+                stop = True
 
         return args
 

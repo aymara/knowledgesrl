@@ -12,7 +12,7 @@ from nltk.corpus import verbenet
 
 import paths
 from .rolemapping import RoleMapping
-from .dicoxml import deindent_text, get_all_text
+from .dicoxml import deindent_text
 from .kicktionary import kicktionary_frames
 
 
@@ -29,7 +29,7 @@ def xmlcontext_to_frame(lang, xmlns, lexie, contexte):
 
         # predicate (TODO auxiliaires)
         if (child.tag == '{{{0}}}lexie-att'.format(xmlns) and
-                not 'auxiliaire' in child.attrib):
+                'auxiliaire' not in child.attrib):
             predicate_lemma = child.get("lemme", deindent_text(child.text))
             predicate_lemma = predicate_lemma.lower().strip()
             ET.SubElement(subcategorization_frame, 'VERB')
@@ -48,7 +48,8 @@ def xmlcontext_to_frame(lang, xmlns, lexie, contexte):
                 "{{{0}}}fonction-syntaxique/{{{0}}}groupe-syntaxique".format(xmlns))
             phrase_type = groupe_syntaxique.get('nom')
 
-            role_filler = get_all_text(child)
+            # role_filler = dicoxml.get_all_text(child)
+            # TODO extract headword
 
             phrase_type_per_lang = {
                 'en': {'Pro': 'NP', 'AdvP': 'ADV', 'Clause': 'S', 'PP': 'PP', 'NP': 'NP'},
@@ -109,7 +110,7 @@ def remove_before_v(syntax):
 
 
 def map_gold_frame(vn_id, gold_syntax, role_mapping_lexie):
-    if not vn_id in role_mapping_lexie:
+    if vn_id not in role_mapping_lexie:
         return ET.Element('SYNTAX')
 
     mapped_gold_syntax = ET.Element('SYNTAX')
@@ -190,7 +191,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
         vn_syntax_matches = OrderedDict()
         for classid, vn_syntax in considered_syntax:
             if matches_verbnet_frame(gold_syntax, vn_syntax):
-                if not classid in vn_syntax_matches:
+                if classid not in vn_syntax_matches:
                     vn_syntax_matches[classid] = []
                 # check if vn_syntax is already in there?
                 vn_syntax_matches[classid].append(vn_syntax)
@@ -204,7 +205,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
             n_correct_frames += 1
             n_classes += 1
 
-        if not lexie in role_mapping:
+        if lexie not in role_mapping:
             raise Exception('Missing lexie {} ({}) in role mapping.'.format(lexie, lemma))
 
         debug(d, ['   ', Fore.GREEN, syntax_to_str(gold_syntax), '->', syntax_to_str(map_gold_frame(classid, gold_syntax, role_mapping[lexie])), Fore.RESET])
@@ -218,7 +219,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
         classid, vn_syntax_list = next(iter(vn_syntax_matches.items()))
         vn_syntax = vn_syntax_list[0]
 
-        if not classid in role_mapping[lexie]:
+        if classid not in role_mapping[lexie]:
             continue
 
         if test_context:
@@ -231,11 +232,10 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
                     # missing sense
                     # TODO handle this explicitly using XML annotations
                     pass
-                elif not classid in role_mapping[lexie]:
+                elif classid not in role_mapping[lexie]:
                     raise Exception('{} misses {} class'.format(lexie, classid))
                 elif correct_syntax.get('value') not in role_mapping[lexie][classid]:
                     raise Exception('{} misses {} mapping'.format(lexie, correct_syntax.get('value')))
-
 
                 if test_context:
                     n_roles += 1
@@ -286,4 +286,3 @@ if __name__ == '__main__':
         kicktionary_examples = kicktionary_frames(lang)
         role_mapping = RoleMapping(str(paths.KICKTIONARY_ROLES).format(lang))
         analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation, verbnet_modules[lang])
-

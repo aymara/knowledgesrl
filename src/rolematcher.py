@@ -11,7 +11,7 @@ from collections import defaultdict
 # VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [
     "Actor", "Agent", "Asset", "Attribute", "Beneficiary", "Cause",
-    "Co-Agent", "Co-Patient", "Co-Theme", # Not in the original list
+    "Co-Agent", "Co-Patient", "Co-Theme",  # Not in the original list
     "Location", "Destination", "Source", "Experiencer", "Extent",
     "Instrument", "Material", "Product", "Patient", "Predicate",
     "Recipient", "Stimulus", "Theme", "Time", "Topic"]
@@ -101,7 +101,7 @@ class VnFnRoleMatcher():
         return vn_role
 
     def _update_mapping_list(self, fn_frame, new_mapping):
-        if not fn_frame in self.mappings:
+        if fn_frame not in self.mappings:
             self.mappings[fn_frame] = []
 
         found = False
@@ -114,18 +114,18 @@ class VnFnRoleMatcher():
             self.mappings[fn_frame].append(new_mapping)
 
     def _add_relation(self, fn_role, vn_role, fn_frame, vn_class):
-        if not fn_role in self.fn_roles:
+        if fn_role not in self.fn_roles:
             self.fn_roles[fn_role] = {"all": set()}
-        if not fn_frame in self.fn_roles[fn_role]:
+        if fn_frame not in self.fn_roles[fn_role]:
             self.fn_roles[fn_role][fn_frame] = {"all": set()}
-        if not vn_class in self.fn_roles[fn_role][fn_frame]:
+        if vn_class not in self.fn_roles[fn_role][fn_frame]:
             self.fn_roles[fn_role][fn_frame][vn_class] = set()
 
         self.fn_roles[fn_role]["all"].add(vn_role)
         self.fn_roles[fn_role][fn_frame]["all"].add(vn_role)
         self.fn_roles[fn_role][fn_frame][vn_class].add(vn_role)
 
-    def possible_vn_roles(self, fn_role, fn_frame = None, vn_classes = None):
+    def possible_vn_roles(self, fn_role, fn_frame=None, vn_classes=None):
         """Returns the set of VN roles that can be mapped to a FN role in a given context
 
         :param fn_role: The FrameNet role.
@@ -139,21 +139,21 @@ class VnFnRoleMatcher():
         :returns: str List -- The list of VN roles
         """
 
-        if not fn_role in self.fn_roles:
+        if fn_role not in self.fn_roles:
             raise RoleMatchingError(
                 "{} role does not seem"
                 " to exist".format(fn_role))
-        if fn_frame == None and vn_classes == None:
+        if fn_frame is None and vn_classes is None:
             return self.fn_roles[fn_role]["all"]
 
-        if fn_frame != None and not fn_frame in self.fn_roles[fn_role]:
+        if fn_frame is not None and fn_frame not in self.fn_roles[fn_role]:
             raise RoleMatchingError(
                 "{} role does not seem"
                 " to belong to frame {}".format(fn_role, fn_frame))
-        if vn_classes == None:
+        if vn_classes is None:
             return self.fn_roles[fn_role][fn_frame]["all"]
 
-        if fn_frame == None:
+        if fn_frame is None:
             frames = list(self.fn_roles[fn_role].keys())
             frames.remove("all")
         else:
@@ -169,8 +169,11 @@ class VnFnRoleMatcher():
                     if vn_class in self.fn_roles[fn_role][frame]:
                         vn_roles = vn_roles.union(self.fn_roles[fn_role][frame][vn_class])
                         break
+
                     position = max(vn_class.rfind("-"), vn_class.rfind("."))
-                    if position == -1: break
+                    if position == -1:
+                        break
+
                     vn_class = vn_class[0:position]
 
         if vn_roles == set():
@@ -181,7 +184,7 @@ class VnFnRoleMatcher():
 
         return vn_roles
 
-    def match(self, fn_role, vn_role, fn_frame = None, vn_classes = None):
+    def match(self, fn_role, vn_role, fn_frame=None, vn_classes=None):
         """Tell wether fn_role can be mapped to vn_role in a given context
 
         :param fn_role: The FrameNet role.
@@ -197,14 +200,16 @@ class VnFnRoleMatcher():
 
         return vn_role in self.possible_vn_roles(fn_role, fn_frame, vn_classes)
 
-
     def build_frames_vnclasses_mapping(self):
         """ Builds a mapping between framenet frames and associated verbnet classes """
         self.fn_frames = defaultdict(lambda: set())
         for fn_role in self.fn_roles:
-            if fn_role == "all": continue
+            if fn_role == "all":
+                continue
             for fn_frame in self.fn_roles[fn_role]:
-                if fn_frame == "all": continue
+                if fn_frame == "all":
+                    continue
                 for vn_class in self.fn_roles[fn_role][fn_frame]:
-                    if vn_class == "all": continue
+                    if vn_class == "all":
+                        continue
                     self.fn_frames[fn_frame].add(vn_class)

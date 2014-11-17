@@ -94,7 +94,7 @@ for opt, value in options[0]:
     elif opt == "--add-non-core-args":
         add_non_core_args = True
     elif opt == "--model":
-        if not value in probabilitymodel.models:
+        if value not in probabilitymodel.models:
             raise Exception("Unknown model {}".format(value))
         probability_model = value
     elif opt == "--bootstrap":

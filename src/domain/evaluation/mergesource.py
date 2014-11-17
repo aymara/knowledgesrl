@@ -23,7 +23,7 @@ def get_xmlns(dico_file):
 
 
 def merged_source(dico, source):
-    if 'enviro' in dico: 
+    if 'enviro' in dico:
         if source.startswith('CHANG_') or source.startswith('CHANG '):
             source = source[6:]
 

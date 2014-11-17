@@ -14,52 +14,53 @@ import headwordextractor
 
 class ArgGuesser():
     """
-    :var frames_for_verb: lemma -> VerbnetOfficialFrame list - Used to know which predicates are in VerbNet.
+    :var frames_for_verb: lemma -> VerbnetOfficialFrame list - Used to know
+        which predicates are in VerbNet.
     :var filename: str -- The name of the current CoNLL file.
     """
 
     predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
 
     subject_deprels = [
-    "LGS", #Logical subject -> should we keep this (36 args) ?
-    "SBJ", "SUB"
+        "LGS",  # Logical subject -> should we keep this (36 args) ?
+        "SBJ", "SUB"
     ]
 
     non_core_deprels = [
-    "DIR", "EXT", "LOC",
-    "MNR", "PRP", "PUT", "TMP"
+        "DIR", "EXT", "LOC",
+        "MNR", "PRP", "PUT", "TMP"
     ]
 
     args_deprels = subject_deprels + [
-    "DIR",
-    "BNF", #the 'for' phrase for verbs that undergo dative shift
-    "DTV", #the 'to' phrase for verbs that undergo dative shift
-    "OBJ", #direct or indirect object or clause complement
-    "OPRD",#object complement
-    "PRD", #predicative complement
-    "VMOD"
+        "DIR",
+        "BNF",   # the 'for' phrase for verbs that undergo dative shift
+        "DTV",   # the 'to' phrase for verbs that undergo dative shift
+        "OBJ",   # direct or indirect object or clause complement
+        "OPRD",  # object complement
+        "PRD",   # predicative complement
+        "VMOD"
     ]
 
     # Source : http://www.comp.leeds.ac.uk/ccalas/tagsets/upenn.html
     pos_conversions = {
-    "$": "NP",
-    "CD": "NP", #Cardinal number ("The three of us")
-    "DT": "NP", #Determiner ("this" or "that")
-    "JJ": "ADJ",
-    "JJR": "NP", #Comparative
-    "JJS": "NP", #Superlative
-    "MD": "S", #Modal verb
-    "NN": "NP", "NNP": "NP", "NNPS": "NP", "NNS": "NP",
-    "NP": "NP", "NPS": "NP",
-    "PP": "PP",
-    "PRP": "NP",
-    "RB": "ADV",
-    "TO": "to S",
-    "VB": "S", #Base form of a verb
-    "VBD": "S", "VBG": "S_ING",
-    "VBN": "ADJ", #Participe, as "fed" in "He got so fed up that..."
-    "VBP": "S", "VBZ": "S",
-    "WDT": "NP" #Relative determiners ("that what whatever which whichever")
+        "$": "NP",
+        "CD": "NP",   # Cardinal number ("The three of us")
+        "DT": "NP",   # Determiner ("this" or "that")
+        "JJ": "ADJ",
+        "JJR": "NP",  # Comparative
+        "JJS": "NP",  # Superlative
+        "MD": "S",    # Modal verb
+        "NN": "NP", "NNP": "NP", "NNPS": "NP", "NNS": "NP",
+        "NP": "NP", "NPS": "NP",
+        "PP": "PP",
+        "PRP": "NP",
+        "RB": "ADV",
+        "TO": "to S",
+        "VB": "S",  # Base form of a verb
+        "VBD": "S", "VBG": "S_ING",
+        "VBN": "ADJ",  # Participe, as "fed" in "He got so fed up that..."
+        "VBP": "S", "VBZ": "S",
+        "WDT": "NP"  # Relative determiners ("that what whatever which whichever")
     }
 
     acceptable_pt = ["NP", "PP", "S_ING", "S"]
@@ -86,12 +87,12 @@ class ArgGuesser():
             else:
                 node.lemma = node.word.lower()
 
-            if not node.lemma in self.frames_for_verb:
+            if node.lemma not in self.frames_for_verb:
                 continue
 
             if self._is_predicate(node):
-                #Si deprel = VC, prendre le noeud du haut pour les args
-                #Si un child est VC -> ne rien faire avec ce node
+                # Si deprel = VC, prendre le noeud du haut pour les args
+                # Si un child est VC -> ne rien faire avec ce node
                 predicate = Predicate(
                     node.begin_word, node.begin_word + len(node.word) - 1,
                     node.word, node.lemma,
@@ -126,7 +127,8 @@ class ArgGuesser():
     def _is_good_pt(self, phrase_type):
         """ Tells whether a phrase type is acceptable for an argument """
         # If it contains a space, it has been assigned by _get_phrase_type
-        if " " in phrase_type: return True
+        if " " in phrase_type:
+            return True
 
         return phrase_type in self.acceptable_pt
 
@@ -167,13 +169,13 @@ class ArgGuesser():
         for child in node.children:
             if self._is_arg(child, predicate_node):
                 result.append(self._nodeToArg(child, predicate_node))
-            elif not child.pos in self.predicate_pos:
+            elif child.pos not in self.predicate_pos:
                 result += self._find_args_rec(predicate_node, child)
         return result
 
     def _overlap(self, node1, node2):
         return (node1.begin <= node2.begin_word + len(node2.word) - 1 and
-            node1.end >= node2.begin_word)
+                node1.end >= node2.begin_word)
 
     def _same_side(self, node, child, predicate):
         if node.begin_word < predicate.begin_word:
@@ -193,7 +195,8 @@ class ArgGuesser():
                 if self._same_side(node, child, predicate):
                     begin, end = min(begin, child.begin), max(end, child.end)
             root = node
-            while root.father != None: root = root.father
+            while root.father is not None:
+                root = root.father
             text = root.flat()[begin:end+1]
 
         return Arg(
@@ -209,9 +212,10 @@ class ArgGuesser():
             annotated=False)
 
     def _get_phrase_type(self, node):
-        #IN = Preposition or subordinating conjunction
+        # IN = Preposition or subordinating conjunction
         if node.pos == "IN":
-            if node.word.lower() in all_preps: return "PP"
+            if node.word.lower() in all_preps:
+                return "PP"
             return "S"
         # WP = Wh-pronoun
         if node.pos == "WP":
@@ -224,7 +228,7 @@ class ArgGuesser():
     def _is_predicate(self, node):
         """Tells whether a node can be used as a predicate for a frame"""
         # Check part-of-speech compatibility
-        if not node.pos in self.predicate_pos:
+        if node.pos not in self.predicate_pos:
             return False
 
         # Check that this node is not an auxiliary
