@@ -10,3 +10,4 @@ data/domain/contextes_olst
 
 # generated data
 src/dump/
+data/framenet_turpobarsed/
