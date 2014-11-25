@@ -153,7 +153,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
     annotated_sentences, lemma_in_vn = 0, 0
     n_correct_frames, n_frames = 0, 0
     n_correct_roles, n_roles = 0, 0
-    n_correct_classes, n_classes = 0, 0
+    n_correct_classes, n_classes_in_list, n_classes = 0, 0, 0
 
     for lexie, lemma, sentence_text, gold_syntax in examples:
         d = sentence_text in [sentence for source, sentence in evaluation_sets['train']]
@@ -215,6 +215,10 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
                 [syntax_to_str(vn_syntax) for vn_syntax in
                     vn_syntax_matches[classid]]])
 
+        if set(vn_syntax_matches.keys()) & set(role_mapping[lexie]):
+            if test_context:
+                n_classes_in_list += 1
+
         # TODO better choice strategy!
         classid, vn_syntax_list = next(iter(vn_syntax_matches.items()))
         vn_syntax = vn_syntax_list[0]
@@ -249,8 +253,9 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
 
     print(annotated_sentences, n_frames, n_classes, n_roles)
     print('                         {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
-    print('For these tokens,        {:.1%} of constructions are here'.format(n_correct_frames/n_frames))
-    print('For these constructions, {:.1%} of classes are here'.format(n_correct_classes/max(n_classes, 1)))
+    print('For these tokens,        {:.1%} of constructions are correct'.format(n_correct_frames/n_frames))
+    print('For these constructions, {:.1%} of classes are here'.format(n_classes_in_list/max(n_classes, 1)))
+    print('For these constructions, {:.1%} of classes are correct'.format(n_correct_classes/max(n_classes, 1)))
     print('For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/max(n_roles, 1)))
     print()
 
