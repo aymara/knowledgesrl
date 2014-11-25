@@ -1,6 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# List of possible thematic role restrictions
+possible_types = {
+        "abstract": 'abstraction.n.06',
+        "animal": 'animal.n.01',
+        "animate": 'animate_thing.n.01',
+        "body_part": 'body_part.n.01',
+        "comestible": 'comestible.n.01',
+        "communication", 'communication.n.02',
+        "concrete": 'physical_entity.n.01',
+        "currency": 'currency.n.01',
+        "garment": 'clothing.n.01'
+        "human": 'human.n.01',
+        "int_control": 'animate_thing.n.01',
+        "location": 'location.n.01',
+        "machine": 'device.n.01',
+        "organization": 'organization.n.01',
+
+        # Those really properties, eg. in pour-9.5 we can pour either a
+        # subtance or various concrete things, hence the +concrete & +plural
+        # restriction.
+        "force": None,
+        "plural": None,
+        "pointy": None,
+        "refl": None,  # reflexive object, eg. himself
+
+        "region": 'region.n.01',
+        "scalar": 'quantity.n.01'
+        "solid": 'matter.n.03',
+        "sound": 'sound.n.01',
+        "substance": 'substance.n.01',
+        "time": 'time_period.n.01',
+        "vehicle": 'transport.n.01',
+
+        # Only used in coil-9.6
+        "elongated": None,
+        "nonrigid": None,
+}
 
 class NoHashDefaultDict:
 
@@ -37,15 +74,6 @@ class VNRestriction:
 
     """
 
-    # List of possible values for :type
-    possible_types = {
-        "abstract", "animal", "animate", "body_part", "comestible",
-        "communication", "concrete", "currency", "elongated", "force",
-        "garment", "human", "int_control", "location", "machine", "nonrigid",
-        "organization", "plural", "pointy", "refl", "region", "scalar", "solid",
-        "sound", "substance", "time", "vehicle"
-    }
-
     def __init__(self, restr_type=None, children=[], logical_rel=None):
         """Private constructor. Use the build* static methods to instanciate
         VNRestricitons.
@@ -54,7 +82,7 @@ class VNRestriction:
 
         """
 
-        if restr_type is not None and restr_type not in VNRestriction.possible_types:
+        if restr_type is not None and restr_type not in possible_types.keys():
             raise Exception("VNRestriction : unhandled restriction "+restr_type)
 
         # See what children can be discarded (because they occur several times)
