@@ -74,9 +74,47 @@ options = getopt.getopt(sys.argv[1:], "d:", [
 
 display_usage = False
 
+# TODO ask argparse to generate this?
 usage_str = """Usage:
-    main.py options # annotates FrameNet
-    main.py --conll_input=parsed_file.txt --conll_output=annotated_file.txt"""
+======
+
+# Annotate a single file
+main.py --conll_input=parsed_file.txt --conll_output=annotated_file.txt [options]
+# Annotate FrameNet test set
+main.py [options]
+# Annotate FrameNet training set
+main.py --training-set [options]
+# Annotate FrameNet example corpus
+main.py --lu [options]
+
+Options:
+--------
+
+# Best configuration for gold and auto args
+--best-gold, --best-auto
+
+# Handle passive sentences
+--passivize
+# Restrict to phrases that obey VerbNet restrictions
+--semantic-restrictions
+
+# Select a frame matching algorithm
+--fmatching-algo=[baseline, sync_predicates, stop_on_fail]
+# Probability models
+--model=[predicate_slot, default, slot, slot_class, vnclass_slot]
+--bootstrap
+
+# Identify arguments automatically
+--argument-identification
+--heuristic-rules  # use Lang&Lapata heuristics to find args
+
+# Consider non-core-arg with gold arguments (why?)
+--add-non-core-args
+
+# Dump annotation for comparisong
+--dump
+# Display this usage message
+--help"""
 
 for opt, value in options[0]:
     if opt == "--best-gold":

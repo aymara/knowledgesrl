@@ -15,7 +15,18 @@ def headword(arg, tree):
     :returns: str -- The headword
 
     """
-    return tree.closest_match_as_node(arg).word
+    headword_node = tree.closest_match_as_node(arg)
+    return headword_node.word
+
+    # If another word points to headword with relation PMOD, then we want to
+    # choose that word instead: the child of the preposition that is the root
+    # of the PP.
+    for child in headword_node.children:
+        if child.deprel == 'PMOD':
+            pass
+            #return child.word
+
+    return headword_node.word
 
 
 def get_class(word):
