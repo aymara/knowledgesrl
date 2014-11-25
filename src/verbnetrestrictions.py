@@ -8,10 +8,10 @@ possible_types = {
         "animate": 'animate_thing.n.01',
         "body_part": 'body_part.n.01',
         "comestible": 'comestible.n.01',
-        "communication", 'communication.n.02',
+        "communication": 'communication.n.02',
         "concrete": 'physical_entity.n.01',
         "currency": 'currency.n.01',
-        "garment": 'clothing.n.01'
+        "garment": 'clothing.n.01',
         "human": 'human.n.01',
         "int_control": 'animate_thing.n.01',
         "location": 'location.n.01',
@@ -27,7 +27,7 @@ possible_types = {
         "refl": None,  # reflexive object, eg. himself
 
         "region": 'region.n.01',
-        "scalar": 'quantity.n.01'
+        "scalar": 'quantity.n.01',
         "solid": 'matter.n.03',
         "sound": 'sound.n.01',
         "substance": 'substance.n.01',
