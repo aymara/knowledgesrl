@@ -160,6 +160,12 @@ def display_stats(argument_identification):
         role_matching_precision, role_matching_recall,
         role_matching_f1))
     print("     when multiple possibilities, {:.1%} precision".format(s["several_roles_ok"] / max(several_roles_evaluated, 1)))
+
+    evaluated_roles = s['no_roles_evaluated'] + unique_role_evaluated + several_roles_evaluated
+    print("Among evaluated: no match {:.1%} one role {:.1%} multiple roles {:.1%}".format(
+        s['no_roles_evaluated'] / evaluated_roles,
+        unique_role_evaluated / evaluated_roles,
+        several_roles_evaluated / evaluated_roles))
     print()
 
     print("Mapped {:.1%} of {} frames, uniquely mapped {:.1%} of {} arguments".format(
