@@ -23,4 +23,136 @@
         <role name='Passer' vn='Agent' />
         <role name='Recipient' vn='N/A' />
     </lexie>
+    <lexie name='Beat' verb='mystifier' vn='amuse-31.1' sense='far fetched' alternatives='more' roles='more'>
+        <role name='Player_With_Ball' vn='Stimulus' />
+        <role name='Opponent_Player' vn='Experiencer' />
+    </lexie>
+    <lexie name='Connect' verb='reprendre' vn='obtain-13.5.2' sense='far fetched' alternatives='more missing' roles='more missing'>
+        <!-- Dans le kicktionary, "reprendre" est uniquement utilisé pour dire "[Agent] reprend [Theme de Source] ([de la tête]), eg. Max reprend le coup franc de Léa de la tête. Le "de la tête" n'est pas la Source : la source est "cachée" dans le Theme. -->
+        <role name='Recipient' vn='Agent' />
+        <role name='Pass' vn='Theme' />
+        <role name='Part_Of_Body' vn='N/A' />
+    </lexie>
+    <lexie name='Goal' verbe='marquer' sense='missing'>
+        <!-- De manière intéressante, il semble que LADL/LVF n'ont pas non plus le sens "marquer un but", uniquement "marquer un adversaire". -->
+    </lexie>
+    <lexie name='Score_Goal' verbe='marquer' sense='missing'>
+        <!-- De manière intéressante, il semble que LADL/LVF n'ont pas non plus le sens "marquer un but", uniquement "marquer un adversaire". -->
+    </lexie>
+    <lexie name='Save' verbe='arrêter' sense='ok' vn='stop-55.4' alternatives='more' roles='more'>
+        <role name='Goalkeeper' vn='Agent' />
+        <role name='Shot' vn='Theme' />
+    </lexie>
+    <lexie name='Win_Compensation' verbe='provoquer' vn='engender-27' sense='ok' alternations='more missing' roles='more missing' selrestr='stricter'>
+        <!-- Ici, la Cause n'est pas du tout abstraite ! -->
+        <role name='Offended_Team' vn='Cause' />
+        <role name='Compensation' vn='Theme' />
+        <role name='Offended_Player' vn='Cause' />
+        <role name='Offender' vn='N/A' />
+    </lexie>
+    <lexie name='Ball_Move' verb='passer' vn='run-51.3.2' sense='ok' alternations='ok' roles='ok'>
+        <!-- Il manque des prépositions qui sont très variées en foot -->
+        <role name='Ball' vn='Agent' />
+        <role name='Moving_Ball' vn='Agent' />
+        <role name='Target' vn='Location' />
+    </lexie>
+    <lexie name='Bring_Off' verb='sortir' sense='missing'>
+        <!-- Le plus proche, sortir dans fire-10.10, a été éliminé. -->
+    </lexie>
+    <lexie name='Start' verb='jouer' vn='performance-26.7'  sense='ok' alternations='more missing' roles='more missing'>
+        <!-- Il jouait à gauche : à gauche est un rôle core en foot, pas dans VerbNet, d'où les missing -->
+        <role name='Player' vn='Agent' />
+        <role name='Part_Of_Team' vn='N/A' />
+    </lexie>
+    <lexie name='Match' verbe='jouer' vn='performance-26.7' sense='ok' alternations='more missing' roles='more missing'>
+        <!-- 'jouer contre' manque, ce qui suggère que la classe est limite -->
+        <role name='Team1' vn='Agent' />
+        <role name='Team2' vn='Theme' />
+        <role name='Match_Location' vn='N/A' />
+    </lexie>
+    <lexie name='Foul' verb='retenir' vn='hold-15.1' sense='ok' alternations='missing' roles='missing'>
+        <role name='Offended_Player' vn='Patient' />
+        <role name='Offender' vn='Agent' />
+        <role name='Part_Of_Body' vn='Theme' />
+        <role name='Area' vn='N/A' />
+    </lexie>
+    <lexie name='Miss_Chance' verb='rater' vn='succeed-75' sense='ok' alternation='ok' roles='ok'>
+        <!-- Exemple intéressant où Player/Team est séparé dans Kicktionary mais pris en compte dans VerbNet avec les restrictions de sélection animate | organization -->
+        <role name='Player' vn='Agent' />
+        <role name='Team' vn='Agent' />
+        <role name='Opportunity' vn='Theme' />
+    </lexie>
+    <lexie name='Miss_Goal' verb='rater' vn='succeed-75' sense='ok' alternation='ok' roles='ok'>
+        <!-- Exemple intéressant où Player/Team est séparé dans Kicktionary mais pris en compte dans VerbNet avec les restrictions de sélection animate | organization -->
+        <role name='Shooter' vn='Agent' />
+        <role name='Target' vn='Theme' />
+        <role name='Distance' vn='N/A' />
+    </lexie>
+    <lexie name='Control' verb='rater' vn='succees-75' sense='ok' alternations='ok' roles='ok'>
+        <!-- Even if they can appear together, the distinction between Ball and Pass is not clear. Lumping. -->
+        <role name='Recipient' vn='Agent' />
+        <role name='Ball' vn='Theme' />
+        <role name='Pass' vn='Theme' />
+    </lexie>
+    <lexie name='Hit' verb='heurter' vn='reach-51.8' sense='ok' alternations='ok' roles='ok'>
+        <!-- Souvent, on dit que c'est le joueur qui heurte la barre, mais en fait c'est la balle tirée par le joueur dont il est question -->
+        <role name='Ball' vn='Agent' />
+        <role name='Part_Of_Body' vn='N/A' />
+        <role name='Shooter' vn='Agent' />
+        <role name='Shot' vn='Agent' />
+        <role name='Target' vn='Destination' />
+    </lexie>
+    <lexie name='Referee_Decision' verb='siffler' sense='missing'>
+        <!-- L'arbitre siffle une décision. La métaphore est tellement poussée que c'est vraiment très spécifique et pas dans VerbNet avec le verbe "siffler". C'est sûrement ailleurs -->
+    </lexie>
+    <lexie name='Ball_Land' verb='finir' vn='9.10-1' sense='missing' alternations='ok' roles='ok'>
+        <!-- 9.10-1 serait parfait, mais le verbe n'y est pas. -->
+        <role name='Moving_Ball' vn='Theme' />
+        <role name='Target' vn='Destination' />
+    </lexie>
+    <lexie name='Lose_Ball' verb='perdre' sense='missing'>
+        <!-- La classe 13 n'est pas encore traduite. -->
+    </lexie>
+    <lexie name='Victory' verb='gagner' sense='missing'>
+        <!-- Surprenant ! -->
+    </lexie>
+    <lexie name='Elimination' verb='quitter' sense='metaphor' vn='leave-51.2' alternations='ok' roles='ok'>
+        <role name='Loser' vn='Theme' />
+        <role name='Competition' vn='Initial_Location' />
+    </lexie>
+    <lexie name='Progression' verb='atteindre' sense='metaphor' vn='reach-51.8' alternations='ok' roles='ok'>
+        <role name='Winner' vn='Agent' />
+        <role name='Next_Round' vn='Destination' />
+    </lexie>
+    <lexie name='Flick_On' verb='prolonger' sense='metaphor' vn='sustain-55.6' alternations='missing' roles='missing'>
+        <role name='Recipient' vn='Agent' />
+        <role name='Pass' vn='Theme' />
+        <role name='Second_Recipient' vn='N/A' />
+        <role name='Part_Of_Body' vn='N/A' />
+        <role name='Direction' vn='N/A' />
+    </lexie>
+    <lexie name='Intervene' verb='dégager' sense='missing' vn='11.1' alternations='ok' roles='more missing'>
+        <!-- Il semble que send-11.1 serait bien mais dégager n'y est pas. -->
+        <role name='Ball' vn='Theme' />
+        <role name='Goalkeeper' vn='Agent' />
+        <role name='Intervening_Player' vn='Agent' />
+        <role name='Intervention_Location' vn='Initial_Location' />
+        <role name='Part_Of_Body' vn='N/A' />
+        <role name='Shot' vn='Theme' />
+    </lexie>
+    <lexie name='Goalkeeper_Advance' verb='sortir' vn='escape-51.1' alternations='more' roles='more'>
+        <role name='Goalkeeper' vn='Theme' />
+        <role name='Source' vn='Initial_Location' />
+        <role name='Target' vn='Destination' />
+    </lexie>
+    <lexie name='One_On_One' verb='convoiter' vn='want-32.1' sense='ok' alternations='ok' roles='ok'>
+        <!-- Considering Area as noncore -->
+        <role name='Area' vn='N/A' />
+        <role name='Ball' vn='Theme' />
+        <role name='Moving_Ball' vn='Theme' />
+        <role name='Player1' vn='Pivot' />
+        <role name='Players' vn='Pivot' />
+    </lexie>
+    <lexie name='Award_Goal' verb='refuser' sense='missing'>
+    </lexie>
 </kicktionary_verbnet_rolemapping>

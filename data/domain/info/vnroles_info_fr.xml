@@ -11,6 +11,11 @@
 <dico_verbnet_rolemapping ven='2014-11-05'>
     <lexie name='taper.1' sense='missinglemma' on='access.1' wn='access#1'>
     </lexie>
+    <lexie name='acheminer.1' vn='send-11.1' sense='ok' alternations='more' roles='more'>
+        <role name='Patient' vn='Theme' />
+        <role name='Destination' vn='Destination' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
     <lexie name='enregistrer.1' vn='transcribe-25.4' quality='good'>
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />

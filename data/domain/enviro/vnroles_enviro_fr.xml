@@ -14,7 +14,6 @@
         <role name='Patient' vn='Patient' />
         <role name='Résultat' vn='Result' />
     </lexie>
-
     <lexie name='extraire.1' vn='mine-10.9'>
         <role name='Patient' vn='Theme' />
         <role name='Source' vn='Initial_Location' />
@@ -59,6 +58,16 @@
     </lexie>
     <lexie name='libérer.1b' sense='missing'>
         <!-- free-80 doesn't fit, there's no "Cause V Theme" frame -->
+    </lexie>
+    <lexie name='limiter.1' verbenet='limit-76' sense='ok' alternations='more' roles='more'>
+        <role name='Patient' vn='Patient' />
+        <role name='Cause' vn='Cause' />
+        <role name='Agent' vn='Cause' />
+    </lexie>
+    <lexie name='polluer.1b' verbenet='fill-9.8' sense='ok' alternations='more' roles='more'>
+        <role name='Destination' vn='Destination' />
+        <role name='Cause' vn='Agent' />
+        <role name='Agent' vn='Agent' />
     </lexie>
     <lexie name='transformer.1' verbenet='turn-26.6.1' sense='ok' alternations='ok' roles='ok'>
         <role name='Agent' vn='Agent' />
