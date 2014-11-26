@@ -252,11 +252,11 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
                         n_correct_roles += 1 / len(candidate_roles)
 
     print(annotated_sentences, n_frames, n_classes, n_roles)
-    print('                         {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
-    print('For these tokens,        {:.1%} of constructions are correct'.format(n_correct_frames/n_frames))
-    print('For these constructions, {:.1%} of classes are here'.format(n_classes_in_list/max(n_classes, 1)))
-    print('For these constructions, {:.1%} of classes are correct'.format(n_correct_classes/max(n_classes, 1)))
-    print('For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/max(n_roles, 1)))
+    print('-                          {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
+    print('- For these tokens,        {:.1%} of constructions are correct'.format(n_correct_frames/n_frames))
+    print('- For these constructions, {:.1%} of classes are here'.format(n_classes_in_list/max(n_classes, 1)))
+    print('- For these constructions, {:.1%} of classes are correct'.format(n_correct_classes/max(n_classes, 1)))
+    print('- For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/max(n_roles, 1)))
     print()
 
 if __name__ == '__main__':
