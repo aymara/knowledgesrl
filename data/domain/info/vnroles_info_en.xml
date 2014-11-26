@@ -1,305 +1,348 @@
 <?xml version="1.0"?>
 <!DOCTYPE dico_verbnet_rolemapping [
   <!ELEMENT dico_verbnet_rolemapping (lexie+)>
-  <!ELEMENT lexie  (role+)>
-  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST dico_verbnet_rolemapping lang (en|fr) #REQUIRED>
+  <!ATTLIST dico_verbnet_rolemapping vn CDATA #REQUIRED>
+  <!ELEMENT lexie  (role*)>
   <!ATTLIST lexie name  CDATA #REQUIRED>
-  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST lexie lemma (ok|missing) 'ok'>
+  <!ATTLIST lexie sense (ok|missing|metaphor|far-fetched) #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #IMPLIED>
+  <!ATTLIST lexie alternations (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie roles (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie on CDATA #IMPLIED>
+  <!ATTLIST lexie wn CDATA #IMPLIED>
+  <!ELEMENT role   (#PCDATA)>
   <!ATTLIST role  name  CDATA #REQUIRED>
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
-<dico_verbnet_rolemapping vn='3.2'>
-    <lexie name='access.1' sense='missinglemma' on='access.1' wn='access#1'>
+<dico_verbnet_rolemapping lang='en' vn='3.2'>
+    <lexie name='access.1' lemma='missing' sense='missing' on='access.1' wn='access#1'>
     </lexie>
-    <lexie name='access.2' sense='missinglemma' on='access.1' wn='access#1'>
+    <lexie name='access.2' lemma='missing' sense='missing' on='access.1' wn='access#1'>
     </lexie>
-    <lexie name='activate.1b' vn='other_cos-45.4'>
-        other_cos-45.4 is a huge class, this is not too informative.
+    <lexie name='activate.1b' sense='ok' vn='other_cos-45.4'>
+        <!-- other_cos-45.4 is a huge class, this is not too informative. -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='allocate.1' vn='future_having-13.3' quality='good'>
+    <lexie name='allocate.1' vn='future_having-13.3' sense='ok'>
         <role name='Patient' vn='Theme' />
         <role name='Recipient' vn='Goal' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='attach.1' vn='shake-22.3' quality=''>
-        This is the correct OntoNote sense (#1), but is a bit far-fetched compared to other members
+    <lexie name='attach.1' vn='shake-22.3' sense='far-fetched'>
+        <!-- This is the correct OntoNote sense (#1), but is a bit far-fetched
+             compared to other members -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Destination' vn='Co-Patient' />
     </lexie>
     <lexie name='automate.1' sense='missing' on='automate#1'>
     </lexie>
-    <lexie name='boot.1a' quality='missing sense'>
-        The 'boot a computer' sense of boot comes from bootstrap and both are missing from VerbNet.
+    <lexie name='boot.1a' sense='missing'>
+        <!-- The 'boot a computer' sense of boot comes from bootstrap and both
+             are missing from VerbNet. -->
     </lexie>
-    <lexie name='boot.1b' quality='missing sense'>
-        The 'boot a computer' sense of boot comes from bootstrap and both are missing from VerbNet.
+    <lexie name='boot.1b' sense='missing'>
+        <!-- The 'boot a computer' sense of boot comes from bootstrap and both
+             are missing from VerbNet. -->
     </lexie>
     <lexie name='browse.1' sense='missing' on='browse.1' wn='browse#2'>
     </lexie>
     <lexie name='cancel.1' sense='missing' on='cancel.2 cancel.3' wn='cancel.1'>
-        OntoNotes differentiates 'cancel something that has already started' and 'cancel something that never started' (eg. cancel a vacation). I guess that DicoInfo is more about the first one but there's no way to be sure since we only have two contexts anyway.
+        <!-- OntoNotes differentiates 'cancel something that has already
+             started' and 'cancel something that never started' (eg. cancel a
+             vacation). I guess that DicoInfo is more about the first one but
+             there's no way to be sure since we only have two contexts anyway.
+             -->
     </lexie>
-    <lexie name='chat.1' vn='chit_chat-37.6' quality='good subsumes'>
+    <lexie name='chat.1' vn='chit_chat-37.6' sense='ok' alternations='more' roles='more'>
         <role name='Agent-a' vn='Agent' />
         <role name='Agent-b' vn='Co-Agent' />
     </lexie>
-    <lexie name='click.1'>
-        There is no corresponding sense in WordNet, and it is not in VerbNet either.
+    <lexie name='click.1' sense='missing'>
+        <!-- There is no corresponding sense in WordNet, and it is not in
+             VerbNet either. -->
     </lexie>
-    <lexie name='configure.1' vn='remedy-45.7' quailty='good'>
-        VerbNet's instrument matches loosely with Circonstant 'Means', and Circonstant 'Manner' is attested in VerbNet's NP V ADV-Middle frame. Still, it's a large VerbNet class that looks like it could be broken up.
+    <lexie name='configure.1' vn='remedy-45.7' sense='ok'>
+        <!-- VerbNet's instrument matches loosely with Circonstant 'Means', and
+             Circonstant 'Manner' is attested in VerbNet's NP V ADV-Middle
+             frame. Still, it's a large VerbNet class that looks like it could
+             be broken up. -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='connect.1' vn='mix-22.1-2-1' quality='good'>
+    <lexie name='connect.1' vn='mix-22.1-2-1' sense='ok'>
         <role name='Agent' vn='Patient' />
         <role name='Destination' vn='Co-Patient' />
     </lexie>
-    The difference between copy.1 and copy.2 is unclear. It doesn't appear to be Agent-Instrument alternation
-    <lexie name='copy.1' vn='transcribe-25.4' quality='good'>
-        The Initial_Location is missing from VerbNet, but it's a Circonstant (Source) in DicoInfo anyway
+    <!-- The difference between copy.1 and copy.2 is unclear. It doesn't appear
+         to be Agent-Instrument alternation -->
+    <lexie name='copy.1' vn='transcribe-25.4' sense='ok'>
+        <!-- The Initial_Location is missing from VerbNet, but it's a
+             Circonstant (Source) in DicoInfo anyway -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='copy.2' vn='transcribe-25.4' quality='good'>
-        The Initial_Location is missing from VerbNet, but it's a Circonstant (Source) in DicoInfo anyway
+    <lexie name='copy.2' vn='transcribe-25.4' sense='ok'>
+        <!-- The Initial_Location is missing from VerbNet, but it's a
+             Circonstant (Source) in DicoInfo anyway -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='crash.1a' vn='break-45.1' quality='partial'>
+    <lexie name='crash.1a' vn='break-45.1' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='create.1' vn='create-26.4' quality='subsumes'>
-        Many more roles in VN, which don't really map to the four circonstants.
+    <lexie name='create.1' vn='create-26.4' sense='ok' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Result' />
     </lexie>
-    <lexie name='debug.1' vn='debone-10.8'>
+    <lexie name='debug.1' vn='debone-10.8' sense='ok' alternations='ok' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Source' vn='Source' />
     </lexie>
-    <lexie name='delete.1' vn='remove-10.1' quality='good'>
+    <lexie name='delete.1' vn='remove-10.1' sense='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Source' vn='Source' />
     </lexie>
-    <lexie name='define.1' vn='characterize-29.2' quality='subsumes'>
+    <lexie name='define.1' vn='characterize-29.2' sense='ok' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='download.1' />
-    <lexie name='edit.1' />
-    <lexie name='enter.1' newvn='put-9.1'>
-        (put-9.1 should include this sense of 'enter')
+    <lexie name='download.1' lemma='missing' sense='missing' />
+    <lexie name='edit.1' lemma='missing' sense='missing' />
+    <lexie name='enter.1' sense='missing' vn='put-9.1'>
+        <!-- (put-9.1 should include this sense of 'enter') -->
     </lexie>
     <lexie name='encrypt.1' sense='missing' on='missing' wn='encrypt#1'>
     </lexie>
-    <lexie name='enter.2' newvn='put-9.1'>
-        (put-9.1 should include this sense of 'enter')
+    <lexie name='enter.2' sense='missing' vn='put-9.1'>
+        <!-- (put-9.1 should include this sense of 'enter') -->
     </lexie>
     <lexie name='execute.1a' sense='missing' on='execute.2' wn='execute#5'>
-        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
-        VerbNet only contains the first sense
+        <!-- Three senses of execute in OntoNotes: put to death, put in effect,
+             or sign a legal document. VerbNet only contains the first sense
+             -->
     </lexie>
     <lexie name='execute.1b' sense='missing' on='execute.2' wn='execute#5'>
-        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
-        VerbNet only contains the first sense
+        <!-- Three senses of execute in OntoNotes: put to death, put in effect,
+             or sign a legal document. VerbNet only contains the first sense
+             -->
     </lexie>
     <lexie name='execute.2a' sense='missing' on='execute.2' wn='execute#5'>
-        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
-        VerbNet only contains the first sense
+        <!-- Three senses of execute in OntoNotes: put to death, put in effect,
+             or sign a legal document. VerbNet only contains the first sense
+             -->
     </lexie>
     <lexie name='execute.2b' sense='missing' on='execute.2' wn='execute#5'>
-        Three senses of execute in OntoNotes: put to death, put in effect, or sign a legal document.
-        VerbNet only contains the first sense
+        <!-- Three senses of execute in OntoNotes: put to death, put in effect,
+             or sign a legal document. VerbNet only contains the first sense
+             -->
     </lexie>
-    <lexie name='fail.1' vn='succeed-74-2' quality='subsumed'>
+    <lexie name='fail.1' vn='succeed-74-2' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Agent' />
     </lexie>
-    <lexie name='fail.2' vn='succeed-74-2' quality='subsumed'>
+    <lexie name='fail.2' vn='succeed-74-2' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Agent' />
     </lexie>
-    <lexie name='forward.1' vn='send-11.1-1'>
+    <lexie name='forward.1' vn='send-11.1-1' sense='ok' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='generate.1' vn='grow-26.2' quality='subsumes metaphor'>
+    <lexie name='generate.1' vn='grow-26.2' sense='far-fetched' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Product' />
     </lexie>
-    <lexie name='highlight.1' vn='braid-41.2.2' quality='far_fetched'>
-        The semantics are of, the roles are of (Patient should be 'body part'), but it's really where it should be: NP V NP is really the only option (along with V NP, of course).
+    <lexie name='highlight.1' vn='braid-41.2.2' sense='far-fetched'>
+        <!-- The semantics are of, the roles are of (Patient should be 'body
+             part'), but it's really where it should be: NP V NP is really the
+             only option (along with V NP, of course). -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='infect.1' vn='fill-9.8' quality='subsumes'>
+    <lexie name='infect.1' vn='fill-9.8' sense='ok' alternations='more' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='insert.2' vn='put-9.1-1'>
+    <lexie name='insert.2' vn='put-9.1-1' sense='ok' alternations='ok' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
     <lexie name='interpret.1' sense='missing' on='interpet#1'>
-        The OntoNotes is a bit far from the DicoInfo one, but the frames would likely be the same?
+        <!-- The OntoNotes is a bit far from the DicoInfo one, but the frames
+             would likely be the same? -->
     </lexie>
-    <lexie name='install.1' vn='appoint-29.1' quality='subsumes verbnet_synonymy'>
+    <lexie name='install.1' vn='put-9.1' sense='ok' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='install.2' vn='appoint-29.1' quality='subsumes verbnet_synonymy'>
-        Location suddenly becomes an Actant
+    <lexie name='install.2' vn='put-9.1' sense='ok' alternations='more' roles='ok'>
+        <!-- install.2 is about software, and Location suddenly becomes an
+             Actant -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Result' />
     </lexie>
-    <lexie name='launch.1a' vn='establish-55.5'>
+    <lexie name='launch.1a' vn='establish-55.5' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='launch.1b' vn='establish-55.5'>
+    <lexie name='launch.1b' vn='establish-55.5' sense='ok' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='launch.2' vn='establish-55.5'>
+    <lexie name='launch.2' vn='establish-55.5' sense='ok' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='load.1a' vn='spray-9.7-2'>
+    <lexie name='load.1a' vn='spray-9.7-2' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='load.1b' vn='spray-9.7-2'>
+    <lexie name='load.1b' vn='spray-9.7-2' sense='ok' alternations='more' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
     <lexie name='log on.1' sense='missing' wn='log on#1'>
     </lexie>
-    <lexie name='open.1'>
-        No OntoNotes sense #7 in VerbNet
+    <lexie sense='missing' name='open.1'>
+        <!-- No OntoNotes sense #7 in VerbNet -->
     </lexie>
-    <lexie name='partition.2' vn='disassemble-23.2' quality='partial'>
-        The NP V NP PP.Co-Patient frame is not in partition.2, otherwise it fits nicely.
+    <lexie name='partition.2' vn='disassemble-23.2' sense='ok' alternations='more' roles='more'>
+        <!-- The NP V NP PP.Co-Patient frame is not in partition.2, otherwise
+             it fits nicely. -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='print.1a' vn='scribble-25.2' quality='partial'>
-        dicoinfo has no 'Destination', because we only print to paper anyway
+    <lexie name='print.1a' vn='scribble-25.2' sense='ok' alternations='more' roles='more'>
+        <!-- dicoinfo has no 'Destination', because we only print to paper anyway -->
         <role name='Instrument' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='print.1b' vn='scribble-25.2' quality='partial'>
+    <lexie name='print.1b' vn='scribble-25.2' sense='ok' alternations='missing' roles='missing'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Instrument' vn='N/A' />
     </lexie>
-    <lexie name='press.1' vn='push-12-1-1' quality='subsumes'>
+    <lexie name='press.1' vn='push-12-1-1' sense='ok' roles='more' alternations='more'>
+        <!-- This is a typical case where the additional alternations in
+             WordNet are all due to having more roles. So we'd like to say
+             roles=more, alternations=more to say that. However, to stay
+             consistent with the other files, this not done. But would be nice
+             to have -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
     <lexie name='process.1' sense='missing' on='process.3'>
-        The 'according to procedure' in ON part is import here.
+        <!-- The 'according to procedure' in ON part is import here. -->
     </lexie>
     <lexie name='program.3' sense='missing' on='program#2'>
     </lexie>
-    <lexie name='query.3'>
+    <lexie name='query.3' lemma='missing' sense='missing'>
     </lexie>
-    <lexie name='read.1' vn='transfer_msg-37.1'><!-- TODO fits? -->
+    <lexie name='read.1' vn='transcribe-25.4' sense='ok' roles='ok' alternations='ok'>
+        <!-- Signaler une erreur probable d'annotation "the section of a disk [that] is READ by the computer, that should be Patient -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Topic' />
         <role name='Destination' vn='Source' />
     </lexie>
-    <lexie name='read.2' vn='learn-14'><!-- TODO fits? -->
+    <lexie name='read.2' vn='transcribe-25.4' sense='ok' roles='ok' alternations='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Topic' />
     </lexie>
-    <lexie name='run.1a' quality='missing'>
-        Wanted sense: on#2
-        Not sure all WN senses apply
+    <lexie name='run.1a' sense='missing'>
+        <!-- Wanted sense: on#2 Not sure all WN senses apply -->
     </lexie>
-    <lexie name='run.1b' quality='missing'>
-        Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
-        Not sure all WN senses apply
+    <lexie name='run.1b' sense='missing'>
+        <!-- Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15. Not
+             sure all WN senses apply -->
     </lexie>
-    <lexie name='run.2a' quality='missing'>
-        Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
-        Not sure all WN senses apply
+    <lexie name='run.2a' sense='missing'>
+        <!-- Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15. Not
+             sure all WN senses apply -->
     </lexie>
-    <lexie name='run.2b' quality='missing'>
-        Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15
-        Not sure all WN senses apply
+    <lexie name='run.2b' sense='missing'>
+        <!-- Wanted sense: on#2, more specifically wn#19 wn#7 wn#13 wn#15. Not
+             sure all WN senses apply -->
     </lexie>
-    <lexie name='save.1' vn='get-13.5.1-1' quality='partial'>
-        Wanted sense: on#2, more specifically on#2. But VerbNet sense is not so close to on#2.
-        <role name='Agent' vn='Agent' />
-        <role name='Patient' vn='Theme' />
-        <role name='Destination' vn='N/A' />
-    </lexie>
-    <lexie name='search.1' vn='search-35.2' quality='good'>
-        <role name='Agent' vn='Agent' />
-        <role name='Goal' vn='Theme' />
-        <role name='Destination' vn='Location' />
-    </lexie>
-    <lexie name='send.1' vn='send-11.1-1' quality='subsumed'>
+    <lexie name='save.1' vn='transcribe-25.4' sense='missing' alternations='ok' roles='ok'>
+        <!-- save not in transcrible-25.4, but should be. save in get-13.5.1-1,
+             but should not. -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='send.2' vn='send-11.1-1' quality='subsumed missing_vn_role'>
+    <lexie name='search.1' vn='search-35.2' sense='ok'>
+        <role name='Agent' vn='Agent' />
+        <role name='Goal' vn='Theme' />
+        <role name='Destination' vn='Location' />
+    </lexie>
+    <lexie name='send.1' vn='send-11.1-1' sense='ok' roles='more' alternations='more'>
+        <!-- Again, alternations ok without considering extra roles -->
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+        <role name='Destination' vn='Destination' />
+    </lexie>
+    <lexie name='send.2' vn='send-11.1-1' sense='ok' roles='missing' alternations='missing'>
+        <!-- Again, alternations ok without considering MISSING roles -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
         <role name='Instrument' vn='N/A' />
     </lexie>
     <lexie name='subscribe.1' sense='missing' on='subscribe.1'>
-        The WordNet sense don't really map to the newsletter sense, ON is really better here.
+        <!-- The WordNet sense don't really map to the newsletter sense, ON is
+             really better here. -->
     </lexie>
-    <lexie name='translate.1' vn='turn-26.6.1' quality='good'>
+    <lexie name='translate.1' vn='turn-26.6.1' sense='ok' roles='more' alternations='more'>
+        <!-- translate should probably be in turn-26.6.1-1, not only turn-26.6.1 -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Result' vn='Result' />
     </lexie>
-    <lexie name='tweak.1' vn='touch-20' quality='subsumes'>
+    <lexie name='tweak.1' vn='touch-20' sense='ok' roles='more' alternations='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Experiencer' />
     </lexie>
-    <lexie name='type.1' vn='transcribe-25.4' quality='good missing'>
-        Levin's book allows us to distinguish between transcribe-25.4 and scribble-25.2. transcribe-25.4 verbs take as their objects a 'representation source' and often have (zero-)related nominals.
+    <lexie name='type.1' vn='transcribe-25.4' sense='ok' roles='more-missing'  alternations='more-missing'>
+        <!-- Levin's book allows us to distinguish between transcribe-25.4 and
+             scribble-25.2. transcribe-25.4 verbs take as their objects a
+             'representation source' and often have (zero-)related nominals.
+             -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Instrument' vn='N/A' />
     </lexie>
     <lexie name='uninstall.1' sense='missing' on='missing' wn='missing'>
     </lexie>
-    <lexie name='update.1' vn='tell-37.2' quality='far_fetched'>
+    <lexie name='update.1' vn='tell-37.2' sense='far-fetched'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Recipient' />
     </lexie>
-    <lexie name='upgrade.1' vn='appoint-29.1' quality='good'>
+    <lexie name='upgrade.1' vn='appoint-29.1' sense='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Substitute' vn='Result' />
     </lexie>
-    <lexie name='view.1' vn='sight-30.2' quality='partial'>
+    <lexie name='view.1' vn='sight-30.2' sense='ok' roles='missing' alternations='missing'>
         <role name='Agent' vn='Experiencer' />
         <role name='Patient' vn='Stimulus' />
         <role name='Destination' vn='N/A' />
     </lexie>
-    <lexie name='write.1' vn='scribble-25.2' quality='good'>
-        Is perfect if +loc|+dest_conf describes all required preposition (on, at, to)
+    <lexie name='write.1' vn='scribble-25.2' sense='ok'>
+        <!-- Is perfect if +loc|+dest_conf describes all required prepositions
+             (on, at, to) -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='write.2' vn='create-26.4' quality='partial'>
-        The VN class at least subsumes the dicoinfo class.
+    <lexie name='write.2' vn='create-26.4' sense='ok' roles='more' alternations='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Result' />
         <role name='Material' vn='Material' />

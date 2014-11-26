@@ -1,18 +1,30 @@
 <?xml version="1.0"?>
 <!DOCTYPE kicktionary_verbnet_rolemapping [
   <!ELEMENT kicktionary_verbnet_rolemapping (lexie+)>
-  <!ELEMENT lexie  (role+)>
-  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST kicktionary_verbnet_rolemapping lang (en|fr) #REQUIRED>
+  <!ATTLIST kicktionary_verbnet_rolemapping vn CDATA #REQUIRED>
+  <!ELEMENT lexie  (role*)>
   <!ATTLIST lexie name  CDATA #REQUIRED>
-  <!ATTLIST lexie vn    CDATA #REQUIRED>
-  <!ATTLIST role  frame  CDATA #REQUIRED>
+  <!ATTLIST lexie verb  CDATA #IMPLIED>
+  <!ATTLIST lexie lemma (ok|missing) 'ok'>
+  <!ATTLIST lexie sense (ok|missing|metaphor|far-fetched|multiple|split|missing-multiple|metaphor-multiple|split-missing|missing-metaphor) #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #IMPLIED>
+  <!ATTLIST lexie alternations (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie roles (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie selrestr CDATA #IMPLIED>
+  <!ATTLIST lexie on CDATA #IMPLIED>
+  <!ATTLIST lexie wn CDATA #IMPLIED>
+  <!ATTLIST lexie domain CDATA #IMPLIED>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST role  name  CDATA #REQUIRED>
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
-<kicktionary_verbnet_rolemapping>
-    <lexie name='Deny' vn='steal-10.5' sense='ok' alternations='more missing' roles='missing more'>
-        We don't steal the ball for ourselves so that doesn't appear in VerbNet.
-        Area can be considered as a non-core role.
-        Action and Challenge are domain-specific roles that don't appear in VerbNet.
+<kicktionary_verbnet_rolemapping lang='en' vn='3.2'>
+    <lexie name='Deny' vn='steal-10.5' sense='ok' alternations='more-missing' roles='more-missing'>
+        <!-- We don't steal the ball for ourselves so that doesn't appear in
+             VerbNet. Area can be considered as a non-core role. Action and
+             Challenge are domain-specific roles that don't appear in VerbNet.
+             -->
         <role name='Area' vn='N/A' />
         <role name='Opponent_Player' vn='Agent' />
         <role name='Player_With_Ball' vn='Source' />
@@ -20,25 +32,30 @@
         <role name='Challenge' vn='N/A' />
         <role name='Ball' vn='Theme' />
     </lexie>
-    <lexie name='Elimination' vn='withdraw-82' sense='ok' alternations='more missing' roles='missing'>
+    <lexie name='Elimination' vn='withdraw-82' sense='ok' alternations='more-missing' roles='missing'>
         <role name='Competition' vn='Source' />
         <role name='Loser' vn='Agent' />
         <role name='Winner' vn='N/A' />
     </lexie>
     <lexie name='Progression' sense='missing'>
-        It's an interesting frame where advance (to next round) and eliminate (from competition) are both here. How should they be separated? How does VerbNet does this with Commerce_buy? Two mapping? Sense is missing anyway.
+        <!-- It's an interesting frame where advance (to next round) and
+             eliminate (from competition) are both here. How should they be
+             separated? How does VerbNet does this with Commerce_buy? Two
+             mapping? Sense is missing anyway. -->
     </lexie>
     <lexie name='Trail' sense='missing'>
-        chase-51.6 is interestingly close but the alternations are different.
-        We only need "Trailer trailed Score to Leader" which is not in VerbNet at all and would not fit.
+        <!-- chase-51.6 is interestingly close but the alternations are
+             different. We only need "Trailer trailed Score to Leader" which is
+             not in VerbNet at all and would not fit. -->
     </lexie>
     <lexie name='Lead' sense='missing'>
     </lexie>
     <lexie name='Deploy' sense='missing'>
     </lexie>
-    <lexie name='Start' sense='missing multiple'>
-        'missing' means that some verb senses of the Start frame is missing, eg. deputize 
-        'multiple' is the real issue: multiple senses are covered in that frame
+    <lexie name='Start' sense='missing-multiple'>
+        <!-- 'missing' means that some verb senses of the Start frame is
+             missing, eg. deputize. 'multiple' is the real issue: multiple
+             senses are covered in that frame -->
     </lexie>
     <lexie name='Home_Game' sense='ok' roles='ok' alternations='ok'>
         <role name='Host' vn='Agent' />
@@ -46,9 +63,9 @@
         <role name='Match_Location' vn='Location' />
     </lexie> 
     <lexie name='Away_Game' sense='missing'>
-        It also appears to be missing from OntoNotes. Domain specific?
+        <!-- It also appears to be missing from OntoNotes. Domain specific? -->
     </lexie>
-    <lexie name='Match' vn='confront-98' sense='ok' roles='missing more' alternations='ok'>
+    <lexie name='Match' vn='confront-98' sense='ok' roles='more-missing' alternations='ok'>
         <role name='Team1' vn='Agent' />
         <role name='Team2' vn='Theme' />
         <role name='Time' vn='N/A' />
@@ -59,16 +76,16 @@
         <role name='Match' vn='N/A' />
     </lexie>
     <lexie name='Defeat' sense='missing'>
-        Good example of missing sense which is intuitively important to a given domain.
+        <!-- Good example of missing sense which is intuitively important to a given domain. -->
     </lexie>
     <lexie name='Draw' sense='missing'>
-        Good example of missing sense which is intuitively important to a given domain.
+        <!-- Good example of missing sense which is intuitively important to a given domain. -->
     </lexie>
     <lexie name='Victory' sense='missing'>
-        Good example of missing sense which is intuitively important to a given domain.
+        <!-- Good example of missing sense which is intuitively important to a given domain. -->
     </lexie>
-    <lexie name='Challenge' sense='ok' role='missing' alternations='ok'>
-        Interestingly, it's the same frame than for Match, but at a different level. 
+    <lexie name='Challenge' sense='ok' roles='missing' alternations='ok'>
+        <!-- Interestingly, it's the same frame than for Match, but at a different level. -->
         <role name='Player_With_Ball' vn='Theme' />
         <role name='Opponent_Player' vn='Agent' />
         <role name='Area' vn='N/A' />
@@ -81,20 +98,23 @@
     </lexie>
     <lexie name='One_on_One' sense='missing'>
     </lexie>
-    <lexie name='Beat' sense='multiple missing'>
+    <lexie name='Beat' sense='missing-multiple'>
     </lexie>
     <lexie name='Mark' sense='missing'>
     </lexie>
     <lexie name='Pass' sense='split'>
-        There are a lof of verbs out here, check throw-17.1-1 is not the only one that makes sense. Adopt FrameNet role mapping stance: multiple mappings.
+        <!-- There are a lof of verbs out here, check throw-17.1-1 is not the
+             only one that makes sense. Adopt FrameNet role mapping stance:
+             multiple mappings. -->
     </lexie> 
     <lexie name='Connect' sense='missing' domain='true'>
     </lexie>
     <lexie name='Control' sense='missing' domain='true'>
     </lexie>
     <lexie name='Intercept' sense='multiple'>
-    'intercept' is OK and well-defined.
-    but misjudge/mal juger make no sense. The 'Interceptor' does not intercept the pass/shot, it misses it completeley.
+        <!-- 'intercept' is OK and well-defined.
+    but misjudge/mal juger make no sense. The 'Interceptor' does not intercept
+    the pass/shot, it misses it completeley. -->
     </lexie>
     <lexie name='Pass_Combination' sense='metaphor' vn='mix-22.1-1' roles='ok'>
         <role name='Passer' vn='Patient' />
@@ -110,9 +130,9 @@
         <role name='Pass' vn='Theme' />
         <role name='Passer' vn='Agent' />
     </lexie>
-    <lexie name='Save' vn='metaphor multiple'>
+    <lexie name='Save' sense='metaphor-multiple'>
     </lexie>
-    <lexie name='Shot' vn='throw-17.1-1-1' sense='split' roles='more missing' alternations=''>
+    <lexie name='Shot' vn='throw-17.1-1-1' sense='split' roles='more-missing' alternations='more-missing'>
         <role name='Shooter' vn='Agent' />
         <role name='Ball' vn='Theme' />
         <role name='Source' vn='Initial_location' />
@@ -120,12 +140,12 @@
         <role name='Shot' vn='__OTHER_SENSE__' />
         <role name='Intervening_Player' vn='__OTHER_SENSE__' />
     </lexie>
-    <lexie name='Intervene' sense='multiple metaphor'>
+    <lexie name='Intervene' sense='metaphor-multiple'>
     </lexie>
-    <lexie name='Shot_Supports' sense='multiple metaphor'>
+    <lexie name='Shot_Supports' sense='metaphor-multiple'>
     </lexie>
     <lexie name='Miss_Goal' sense='missing'>
-    A simple well-defined sense, but it's missing.
+        <!-- A simple well-defined sense, but it's missing. -->
     </lexie>
     <lexie name='Finish' sense='ok' vn='stop-55.4-1' roles='more' alternations='more'>
         <role name='Shooter' vn='Agent' />
@@ -145,27 +165,27 @@
     </lexie>
     <lexie name='Goal' sense='split'>
     </lexie>
-    <lexie name='Concede_Goal' sense='ok metaphor' vn='future_having-13.3' roles='more' alternations='ok'>
+    <lexie name='Concede_Goal' sense='ok' vn='future_having-13.3' roles='more' alternations='ok'>
         <role name='Conceding_Team' vn='Agent' />
         <role name='Goalkeeper' vn='Agent' />
         <role name='Goal' vn='Theme' />
     </lexie>
-    <lexie name='Miss_Chance' sense='split missing'>
+    <lexie name='Miss_Chance' sense='split-missing'>
     </lexie>
-    <lexie name='Create_Chance' sense='ok metaphor' vn='create-26.4' roles='more' alternations='ok'>
+    <lexie name='Create_Chance' sense='ok' vn='create-26.4' roles='more' alternations='ok'>
         <role name='Player' vn='Agent' />
         <role name='Team' vn='Agent' />
         <role name='Opportunity' vn='Result' />
     </lexie>
-    <lexie name='Convert_Chance' sense='ok metaphor' vn='turn-26.6.1' roles='more' alternations='more'>
-        We only want Agent V Patient here.
+    <lexie name='Convert_Chance' sense='ok' vn='turn-26.6.1' roles='more' alternations='more'>
+        <!-- We only want Agent V Patient here. -->
         <role name='Scorer' vn='Agent' />
         <role name='Moving_Ball' vn='Patient' />
         <role name='Set_Piece' vn='Patient' />
         <role name='Source' vn='Non-Core' />
         <role name='Target' vn='Non-Core' />
     </lexie>
-    <lexie name='Ball_Bounce' sense='ok' vn='slide-11.2' roles='more' alternations='more missing'>
+    <lexie name='Ball_Bounce' sense='ok' vn='slide-11.2' roles='more' alternations='more-missing'>
         <role name='Ball' vn='Theme' />
         <role name='Moving_Ball' vn='Theme' />
         <role name='Target' vn='Destination' />
@@ -178,7 +198,7 @@
         <role name='Target' vn='Location' />
     </lexie>
     <lexie name='Ball_Move' sense='ok' vn='roll-51.3.1' roles='missing' alternations='missing'>
-    slide-11.2 has 'Initial_Location' role which doesn't appear in Kicktionary verbs
+        <!-- slide-11.2 has 'Initial_Location' role which doesn't appear in Kicktionary verbs -->
         <role name='Target' vn='Result' />
         <role name='Ball' vn='Theme' />
         <role name='Moving_Ball' vn='Theme' />
@@ -189,7 +209,7 @@
     </lexie>
     <lexie name='Foul' sense='multiple'>
     </lexie>
-    <lexie name='Bring_On' sense='ok metaphor' vn='establish-55.5' roles='more' alternations='more'>
+    <lexie name='Bring_On' sense='ok' vn='establish-55.5' roles='more' alternations='more'>
         <role name='Coach' vn='Agent' />
         <role name='Team' vn='Agent' />
         <role name='Substitute' vn='Theme' />
@@ -201,7 +221,7 @@
         <role name='Substitute' vn='Theme' />
         <role name='Substituted_Player' vn='Co-Theme' />
     </lexie>
-    <lexie name='Sanction' sense='ok' vn='fire-10.10' roles='more missing' alternations='missing'>
+    <lexie name='Sanction' sense='ok' vn='fire-10.10' roles='more-missing' alternations='missing'>
         <role name='Referee' vn='Agent' />
         <role name='Offender' vn='Theme' />
         <role name='Offense' vn='__MISSING__' />
@@ -219,27 +239,28 @@
         <role name='Goalkeeper' vn='Agent' />
     </lexie>
     <lexie name='Hit' sense='missing'>
-        Agent hits the bar, means that Agent kicked the ball that hit the bar. It's not in VerbNet
+        <!-- Agent hits the bar, means that Agent kicked the ball that hit the
+             bar. It's not in VerbNet -->
     </lexie>
     <lexie name='Referee_Decision' sense='split'>
-        Two different decisions, do they really belong to one frame?
+        <!-- Two different decisions, do they really belong to one frame? -->
     </lexie>
     <lexie name='Result' sense='ok' vn='stop-55.4-1' roles='missing' alternations='more'>
-        The stop-55.4-1 contains a perfect frame, but the role corresponding to ADJ is missing.
+        <!-- The stop-55.4-1 contains a perfect frame, but the role corresponding to ADJ is missing. -->
         <role name='Match' vn='Theme' />
         <role name='Final_Score' vn='__MISSING__' />
     </lexie>
     <lexie name='Feign' sense='ok' vn='establish-55.5.1' roles='ok' alternations='ok'>
-        It's still surprising to see feign/fake in establish-55.5-1 (with no mapping), but it appears to be perfect.
+        <!-- It's still surprising to see feign/fake in establish-55.5-1 (with no mapping), but it appears to be perfect. -->
         <role name='Shooter' vn='Agent' />
         <role name='Shot' vn='Theme' />
         <role name='Part_of_Body' vn='Instrument' />
     </lexie>
     <lexie name='Overcome_Goalkeeper' sense='missing'>
-        We're looking for the beat-v.1 OntoNotes sense here.
+        <!-- We're looking for the beat-v.1 OntoNotes sense here. -->
     </lexie>
     <lexie name='Award_Goal' sense='split'>
-        award / disallow-rule out
+        <!-- award / disallow-rule out -->
     </lexie>
     <lexie name='Concede_Compensation' sense='ok' vn='future_having-13.3' roles='ok' alternations='more'>
         <role name='Offender' vn='Agent' />
@@ -252,12 +273,12 @@
         <role name='Second_Recipient' vn='Destination' />
         <role name='Pass' vn='Theme' />
     </lexie>
-    <lexie name='Score_Goal' sense='missing metaphor'>
+    <lexie name='Score_Goal' sense='missing-metaphor'>
     </lexie>
     <lexie name='Celebrate_Goal' sense='missing'>
     </lexie>
     <lexie name='Dissent' sense='split'>
-        It's obvious when looking at roles
+        <!-- It's obvious when looking at roles -->
     </lexie>
     <lexie name='Ball_Escape' sense='ok' vn='avoid-52' roles='more' alternations='more'>
         <role name='Moving_Ball' vn='Agent' />
@@ -270,7 +291,7 @@
     <lexie name='Match_Quality' sense='missing'>
     </lexie>
     <lexie name='Being_Free' sense='ok' vn='exist-47.1-1'>
-        Only one verb, otherwise it would probably be "split"
+        <!-- Only one verb in French, otherwise it would probably be "split" -->
         <role name='Recipient' vn='Theme' />
         <role name='Target' vn='Location' />
     </lexie>

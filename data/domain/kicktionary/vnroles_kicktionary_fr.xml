@@ -1,15 +1,25 @@
 <?xml version="1.0"?>
 <!DOCTYPE kicktionary_verbnet_rolemapping [
   <!ELEMENT kicktionary_verbnet_rolemapping (lexie+)>
-  <!ELEMENT lexie  (role+)>
-  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST kicktionary_verbnet_rolemapping lang (en|fr) #REQUIRED>
+  <!ATTLIST kicktionary_verbnet_rolemapping vn CDATA #REQUIRED>
+  <!ELEMENT lexie  (role*)>
   <!ATTLIST lexie name  CDATA #REQUIRED>
-  <!ATTLIST lexie vn    CDATA #REQUIRED>
-  <!ATTLIST role  frame  CDATA #REQUIRED>
+  <!ATTLIST lexie verb  CDATA #REQUIRED>
+  <!ATTLIST lexie lemma (ok|missing) 'ok'>
+  <!ATTLIST lexie sense (ok|missing|metaphor|far-fetched) #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #IMPLIED>
+  <!ATTLIST lexie alternations (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie roles (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie selrestr CDATA #IMPLIED>
+  <!ATTLIST lexie on CDATA #IMPLIED>
+  <!ATTLIST lexie wn CDATA #IMPLIED>
+  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST role  name  CDATA #REQUIRED>
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
-<kicktionary_verbnet_rolemapping>
-    <lexie name='Shot' vn='hit-18.1'>
+<kicktionary_verbnet_rolemapping lang='fr' vn='2014-11-25'>
+    <lexie name='Shot' verb='frapper' vn='hit-18.1' sense='ok'>
         <role name='Ball' vn='Patient' />
         <role name='Part_Of_Body' vn='Instrument' />
         <role name='Shooter' vn='Agemt' />
@@ -17,33 +27,33 @@
         <role name='Target' vn='N/A' />
         <role name='Shot' vn='N/A' />
     </lexie>
-    <lexie name='Pass' vn='send-11.1'>
+    <lexie name='Pass' verb='passer' vn='send-11.1' sense='ok'>
         <role name='Ball' vn='Theme' />
         <role name='Direction' vn='Destination' />
         <role name='Passer' vn='Agent' />
         <role name='Recipient' vn='N/A' />
     </lexie>
-    <lexie name='Beat' verb='mystifier' vn='amuse-31.1' sense='far fetched' alternatives='more' roles='more'>
+    <lexie name='Beat' verb='mystifier' vn='amuse-31.1' sense='far-fetched' alternations='more' roles='more'>
         <role name='Player_With_Ball' vn='Stimulus' />
         <role name='Opponent_Player' vn='Experiencer' />
     </lexie>
-    <lexie name='Connect' verb='reprendre' vn='obtain-13.5.2' sense='far fetched' alternatives='more missing' roles='more missing'>
+    <lexie name='Connect' verb='reprendre' vn='obtain-13.5.2' sense='far-fetched' alternations='more-missing' roles='more-missing'>
         <!-- Dans le kicktionary, "reprendre" est uniquement utilisé pour dire "[Agent] reprend [Theme de Source] ([de la tête]), eg. Max reprend le coup franc de Léa de la tête. Le "de la tête" n'est pas la Source : la source est "cachée" dans le Theme. -->
         <role name='Recipient' vn='Agent' />
         <role name='Pass' vn='Theme' />
         <role name='Part_Of_Body' vn='N/A' />
     </lexie>
-    <lexie name='Goal' verbe='marquer' sense='missing'>
+    <lexie name='Goal' verb='marquer' sense='missing'>
         <!-- De manière intéressante, il semble que LADL/LVF n'ont pas non plus le sens "marquer un but", uniquement "marquer un adversaire". -->
     </lexie>
-    <lexie name='Score_Goal' verbe='marquer' sense='missing'>
+    <lexie name='Score_Goal' verb='marquer' sense='missing'>
         <!-- De manière intéressante, il semble que LADL/LVF n'ont pas non plus le sens "marquer un but", uniquement "marquer un adversaire". -->
     </lexie>
-    <lexie name='Save' verbe='arrêter' sense='ok' vn='stop-55.4' alternatives='more' roles='more'>
+    <lexie name='Save' verb='arrêter' sense='ok' vn='stop-55.4' alternations='more' roles='more'>
         <role name='Goalkeeper' vn='Agent' />
         <role name='Shot' vn='Theme' />
     </lexie>
-    <lexie name='Win_Compensation' verbe='provoquer' vn='engender-27' sense='ok' alternations='more missing' roles='more missing' selrestr='stricter'>
+    <lexie name='Win_Compensation' verb='provoquer' vn='engender-27' sense='ok' alternations='more-missing' roles='more-missing' selrestr='stricter'>
         <!-- Ici, la Cause n'est pas du tout abstraite ! -->
         <role name='Offended_Team' vn='Cause' />
         <role name='Compensation' vn='Theme' />
@@ -59,12 +69,12 @@
     <lexie name='Bring_Off' verb='sortir' sense='missing'>
         <!-- Le plus proche, sortir dans fire-10.10, a été éliminé. -->
     </lexie>
-    <lexie name='Start' verb='jouer' vn='performance-26.7'  sense='ok' alternations='more missing' roles='more missing'>
+    <lexie name='Start' verb='jouer' vn='performance-26.7'  sense='ok' alternations='more-missing' roles='more-missing'>
         <!-- Il jouait à gauche : à gauche est un rôle core en foot, pas dans VerbNet, d'où les missing -->
         <role name='Player' vn='Agent' />
         <role name='Part_Of_Team' vn='N/A' />
     </lexie>
-    <lexie name='Match' verbe='jouer' vn='performance-26.7' sense='ok' alternations='more missing' roles='more missing'>
+    <lexie name='Match' verb='jouer' vn='performance-26.7' sense='ok' alternations='more-missing' roles='more-missing'>
         <!-- 'jouer contre' manque, ce qui suggère que la classe est limite -->
         <role name='Team1' vn='Agent' />
         <role name='Team2' vn='Theme' />
@@ -76,13 +86,13 @@
         <role name='Part_Of_Body' vn='Theme' />
         <role name='Area' vn='N/A' />
     </lexie>
-    <lexie name='Miss_Chance' verb='rater' vn='succeed-75' sense='ok' alternation='ok' roles='ok'>
+    <lexie name='Miss_Chance' verb='rater' vn='succeed-75' sense='ok' alternations='ok' roles='ok'>
         <!-- Exemple intéressant où Player/Team est séparé dans Kicktionary mais pris en compte dans VerbNet avec les restrictions de sélection animate | organization -->
         <role name='Player' vn='Agent' />
         <role name='Team' vn='Agent' />
         <role name='Opportunity' vn='Theme' />
     </lexie>
-    <lexie name='Miss_Goal' verb='rater' vn='succeed-75' sense='ok' alternation='ok' roles='ok'>
+    <lexie name='Miss_Goal' verb='rater' vn='succeed-75' sense='ok' alternations='ok' roles='ok'>
         <!-- Exemple intéressant où Player/Team est séparé dans Kicktionary mais pris en compte dans VerbNet avec les restrictions de sélection animate | organization -->
         <role name='Shooter' vn='Agent' />
         <role name='Target' vn='Theme' />
@@ -131,7 +141,7 @@
         <role name='Part_Of_Body' vn='N/A' />
         <role name='Direction' vn='N/A' />
     </lexie>
-    <lexie name='Intervene' verb='dégager' sense='missing' vn='11.1' alternations='ok' roles='more missing'>
+    <lexie name='Intervene' verb='dégager' sense='missing' vn='11.1' alternations='ok' roles='more-missing'>
         <!-- Il semble que send-11.1 serait bien mais dégager n'y est pas. -->
         <role name='Ball' vn='Theme' />
         <role name='Goalkeeper' vn='Agent' />
@@ -140,7 +150,7 @@
         <role name='Part_Of_Body' vn='N/A' />
         <role name='Shot' vn='Theme' />
     </lexie>
-    <lexie name='Goalkeeper_Advance' verb='sortir' vn='escape-51.1' alternations='more' roles='more'>
+    <lexie name='Goalkeeper_Advance' verb='sortir' sense='ok' vn='escape-51.1' alternations='more' roles='more'>
         <role name='Goalkeeper' vn='Theme' />
         <role name='Source' vn='Initial_Location' />
         <role name='Target' vn='Destination' />

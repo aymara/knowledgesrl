@@ -1,81 +1,89 @@
 <?xml version="1.0"?>
 <!DOCTYPE dico_verbnet_rolemapping [
   <!ELEMENT dico_verbnet_rolemapping (lexie+)>
-  <!ELEMENT lexie  (role+)>
-  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST dico_verbnet_rolemapping lang (en|fr) #REQUIRED>
+  <!ATTLIST dico_verbnet_rolemapping vn CDATA #REQUIRED>
+  <!ELEMENT lexie  (role*)>
   <!ATTLIST lexie name  CDATA #REQUIRED>
-  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST lexie lemma (ok|missing) 'ok'>
+  <!ATTLIST lexie sense (ok|missing|metaphor|far-fetched) #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #IMPLIED>
+  <!ATTLIST lexie alternations (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie roles (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie on CDATA #IMPLIED>
+  <!ATTLIST lexie wn CDATA #IMPLIED>
+  <!ELEMENT role   (#PCDATA)>
   <!ATTLIST role  name  CDATA #REQUIRED>
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
-<dico_verbnet_rolemapping ven='2014-11-05'>
-    <lexie name='taper.1' sense='missinglemma' on='access.1' wn='access#1'>
+<dico_verbnet_rolemapping lang='fr' vn='2014-11-25'>
+    <lexie name='taper.1' sense='missing' on='access.1' wn='access#1'>
     </lexie>
     <lexie name='acheminer.1' vn='send-11.1' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='enregistrer.1' vn='transcribe-25.4' quality='good'>
+    <lexie name='enregistrer.1' vn='transcribe-25.4' sense='ok'>
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='installer.1' vn='put-9.2-1' quality='metaphor subsumes'>
+    <lexie name='installer.1' vn='put-9.2-1' sense='metaphor'>
         <role name='Patient' vn='Theme' />
         <role name='Agent' vn='Agent' />
         <role name='Lieu' vn='Destination' />
     </lexie>
-    <lexie name='naviguer.1' vn='run-51.3.2' quality='metaphor'>
+    <lexie name='naviguer.1' vn='run-51.3.2' sense='metaphor'>
         <role name='Agent' vn='Agent' />
         <role name='Lieu' vn='Location' />
         <role name='Instrument' vn='N/A' />
     </lexie>
-    <lexie name='valider.1' vn='conjecture-29.5' sense='far fetched' alternatives='more' roles='more'>
+    <lexie name='valider.1' vn='conjecture-29.5' sense='far-fetched' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='visualiser.1' verbenet='missing' wonef='missing' />
-    <lexie name='importer.1' verbenet='11.1' sense='metaphor' alternatives='more' roles='more'>
+    <lexie name='visualiser.1' sense='missing' wn='missing' />
+    <lexie name='importer.1' vn='send-11.1' sense='metaphor' alternations='more' roles='more'>
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='charger.1' verbenet='92' sense='metaphor' alternations='ok' roles='ok'>
+    <lexie name='charger.1' vn='confine-92' sense='metaphor' alternations='ok' roles='ok'>
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='créer.1' verbenet='preparing-26.3' sense='ok' alternations='more' roles='more'>
+    <lexie name='créer.1' vn='preparing-26.3' sense='ok' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Product' />
     </lexie>
-    <lexie name='imprimer.1a' verbenet='scribble-25.2' sense='ok' alternations='ok' roles='more'>
+    <lexie name='imprimer.1a' vn='scribble-25.2' sense='ok' alternations='ok' roles='more'>
         <!-- Ici, dicoinfo ne fait pas la distinction explicite entre Instrument et Agent : tout le monde est Instrument, peut-être parce qu'il n'y a pas d'humain explicite dans le corpus -->
         <role name='Patient' vn='Theme' />
         <role name='Instrument' vn='Agent' />
     </lexie>
-    <lexie name='installer.1' verbenet='put_spatial-9.2' sense='ok' alternations='more' roles='more'>
+    <lexie name='installer.1' vn='put_spatial-9.2' sense='ok' alternations='more' roles='more'>
         <!-- SIGNALER - Pourquoi est-ce que Lieu n'est pas dans les actants ? -->
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='installer.2' verbenet='put_spatial-9.2' sense='metaphor' alternations='ok' roles='ok'>
+    <lexie name='installer.2' vn='put_spatial-9.2' sense='metaphor' alternations='ok' roles='ok'>
         <!-- La différence par rapport à signaler_1 est qu'on traite de logiciel ici : installer un programme vs. installer une carte graphique. VerbNet ne fait pas cette distinction. -->
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='interpréter.1' verbenet='missing' wonef='missing' />
-    <lexie name='abandonner.1' verbenet='void-106' sense='ok; verb not here' alternations='ok' roles='ok'>
+    <lexie name='interpréter.1' sense='missing' wn='missing' />
+    <lexie name='abandonner.1' vn='void-106' lemma='missing' sense='ok' alternations='ok' roles='ok'>
         <role name='Patient' vn='Patient' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='écrire.1' verbenet='scribble-25.2' sense='ok; verb not here' alternations='ok' roles='ok'>
+    <lexie name='écrire.1' vn='scribble-25.2' lemma='missing' sense='ok' alternations='ok' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='éditer.1' verbenet='other_cos-45.4' sense='ok; verb not here' alternations='ok' roles='ok'>
+    <lexie name='éditer.1' vn='other_cos-45.4' lemma='missing' sense='ok' alternations='ok' roles='ok'>
         <role name='Patient' vn='Patient' />
         <role name='Agent' vn='Agent' />
         <role name='Instrument' vn='Instrument' />

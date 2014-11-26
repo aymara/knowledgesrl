@@ -1,14 +1,22 @@
 <?xml version="1.0"?>
 <!DOCTYPE dico_verbnet_rolemapping [
   <!ELEMENT dico_verbnet_rolemapping (lexie+)>
-  <!ELEMENT lexie  (role+)>
-  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST dico_verbnet_rolemapping lang (en|fr) #REQUIRED>
+  <!ATTLIST dico_verbnet_rolemapping vn CDATA #REQUIRED>
+  <!ELEMENT lexie  (role*)>
   <!ATTLIST lexie name  CDATA #REQUIRED>
-  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST lexie lemma (ok|missing) 'ok'>
+  <!ATTLIST lexie sense (ok|missing|metaphor|far-fetched) #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #IMPLIED>
+  <!ATTLIST lexie alternations (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie roles (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie on CDATA #IMPLIED>
+  <!ATTLIST lexie wn CDATA #IMPLIED>
+  <!ELEMENT role   (#PCDATA)>
   <!ATTLIST role  name  CDATA #REQUIRED>
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
-<dico_verbnet_rolemapping>
+<dico_verbnet_rolemapping lang='en' vn='3.2'>
     <lexie name='abate.1' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
         <role name='Patient' vn='Patient' />
     </lexie>
@@ -21,12 +29,13 @@
         <role name='Cause' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='accumulate.1' vn='herd-47.5.2' sense='ok' alternations='ok' roles='missing more'>
+    <lexie name='accumulate.1' vn='herd-47.5.2' sense='ok' alternations='ok' roles='more-missing'>
         <role name='Patient' vn='Theme' />
         <role name='Location' vn='N/A' />
     </lexie>
     <lexie name='adapt.1' vn='adjut-26.9' sense='ok' alternations='more' roles='more'>
-        VerbNet uses two roles for 'He.Agent adapted himself.Patient' while DicoEnviro would have used an indirect link.
+        <!-- VerbNet uses two roles for 'He.Agent adapted himself.Patient'
+             while DicoEnviro would have used an indirect link. -->
         <role name='Patient' vn='Agent' />
         <role name='Cause' vn='Goal' />
     </lexie>
@@ -64,18 +73,20 @@
         <role name='Cause' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='compensate.1'>
-        We're talking about the very specific 'make up for' sense, which is not in VerbNet even though VerbNet says it is in judgment-33. Am I being too strict here?
+    <lexie name='compensate.1' sense='missing'>
+        <!-- We're talking about the very specific 'make up for' sense, which
+             is not in VerbNet even though OntoNotes says it is in judgment-33.
+             Am I being too strict here? -->
     </lexie>
-    <lexie name='conserve.1'>
-        only sense wn4 in VN (but OntoNotes gruops them all!)
+    <lexie name='conserve.1' sense='missing'>
+        <!-- only sense wn4 in VN (but OntoNotes gruops them all!) -->
     </lexie>
     <lexie name='consume.1' vn='consume-66' sense='ok' alternations='ok' roles='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Asset' />
     </lexie>
     <lexie name='contaminate.1' sense='missing' on='contaminate.1'>
-        DicoEnviro only has one context.
+        <!-- DicoEnviro only has one context. -->
     </lexie>
     <lexie name='convert.1' vn='turn-26.6.1' sense='ok' alternations='ok' roles='more'>
         <role name='Agent' vn='Agent' />
@@ -85,7 +96,7 @@
     <lexie name='cool.1a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='cool.1b' vn='other_cos-45.4'>
+    <lexie name='cool.1b' vn='other_cos-45.4' sense='ok'>
         <role name='Cause' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Agent' vn='Agent' />
@@ -110,17 +121,19 @@
         <role name='Patient' vn='Patient' />
     </lexie>
     <lexie name='deplete.1' vn='cheat-10.6' sense='ok' alternations='more' roles='more'>
-        I'm not sure if 10.6 is the correct place for deplete.
+        <!-- I'm not sure if 10.6 is the correct place for deplete. -->
         <role name='Cause' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='deposit.2' vn='put-9.1'>
+    <lexie name='deposit.2' vn='put-9.1' sense='ok'>
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
     </lexie>
-    <lexie name='disappear.1' vn='disappearance-48.2' sense='ok' alernations='more' roles='more'>
-        In this case, we do have a 'Initial_Location' role which is why VerbNet has more alternations and more roles, but this probably does not warrant creating a new class.
+    <lexie name='disappear.1' vn='disappearance-48.2' sense='ok' alternations='more' roles='more'>
+        <!-- In this case, we do have a 'Initial_Location' role which is why
+             VerbNet has more alternations and more roles, but this probably
+             does not warrant creating a new class. -->
         <role name='Patient' vn='Patient' />
     </lexie>
     <lexie name='endanger.1' sense='missing' on='endanger.1'>
@@ -132,7 +145,7 @@
     <lexie name='erode.1a' vn='entity_specific_cos-45.4' sense='ok' alternations='ok' roles='ok'>
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='evaporate.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more missing'>
+    <lexie name='evaporate.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more-missing'>
         <role name='Patient' vn='Patient' />
         <role name='Source' vn='N/A' />
     </lexie>
@@ -146,7 +159,7 @@
     <lexie name='freeze.1' vn='other_cos-45.4-1' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='generate.1a' vn='engender-27'>
+    <lexie name='generate.1a' vn='engender-27' sense='ok'>
         <role name='Instrument' vn='Cause' />
         <role name='Patient' vn='Theem' />
     </lexie>
@@ -176,7 +189,8 @@
         <role name='Patient' vn='Patient' />
     </lexie>
     <lexie name='influence.2' vn='force-59-1' sense='ok' alternations='more' roles='more'>
-        As in release.1a, Cause and Agent are actually Agent. Why the distinction?
+        <!-- As in release.1a, Cause and Agent are actually Agent. Why the
+             distinction? -->
         <role name='Cause' vn='Agent' />
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
@@ -201,10 +215,12 @@
         <role name='Patient' vn='Patient' />
     </lexie>
     <lexie name='migrate.1' sense='missing' on='migrate.1'>
-        The OntoNotes sense #2 isn't clear. From the examples, it seems to apply to 'digital' senses.
+        <!-- The OntoNotes sense #2 isn't clear. From the examples, it seems to
+             apply to 'digital' senses. -->
     </lexie>
-    <lexie name='migrate.2'>
-        The OntoNotes sense #2 isn't clear. From the examples, it seems to apply to 'digital' senses.
+    <lexie name='migrate.2' sense='missing'>
+        <!-- The OntoNotes sense #2 isn't clear. From the examples, it seems to
+             apply to 'digital' senses. -->
     </lexie>
     <lexie name='mitigate.1' vn='other_cos-45.4' sense='ok' alternations='ok' roles='more'>
         <role name='Cause' vn='Agent' />
@@ -215,7 +231,7 @@
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Agent' />
     </lexie>
-    <lexie name='pollute.1b' vn='fill-9.8'>
+    <lexie name='pollute.1b' vn='fill-9.8' sense='ok'>
         <role name='Cause' vn='Agent' />
         <role name='Destination' vn='Destination' />
         <role name='Agent' vn='Agent' />
@@ -238,7 +254,7 @@
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='protect.1' vn='defend-85' sense='ok' alternations='missing more' roles='ok'>
+    <lexie name='protect.1' vn='defend-85' sense='ok' alternations='more-missing' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Theme' />
         <role name='Threat' vn='Co-Theme' />
@@ -246,27 +262,32 @@
     <lexie name='recycle.1' sense='missing' on='recycle.1'>
     </lexie>
     <lexie name='release.1a' sense='missing' on='release.3' wn='release#5'>
-        free-80 is close semantically, but none of the alternations we're interested in are here.
-        Also, there's an issue with Cause and Agent which 1/ would both be 'Agent' in VerbNet's case 2/ sometimes cause is more like a Circonstant.
+        <!-- free-80 is close semantically, but none of the alternations we're
+             interested in are here. Also, there's an issue with Cause and
+             Agent which 1/ would both be 'Agent' in VerbNet's case 2/
+             sometimes cause is more like a Circonstant. -->
     </lexie>
     <lexie name='release.1b' sense='missing' on='release.3' wn='release#5'>
-        free-80 is close semantically, but none of the alternations we're interested in are here.
-        Also, there's an issue with Cause and Agent which 1/ would both be 'Agent' in VerbNet's case 2/ sometimes cause is more like a Circonstant.
+        <!-- free-80 is close semantically, but none of the alternations we're
+             interested in are here. Also, there's an issue with Cause and
+             Agent which 1/ would both be 'Agent' in VerbNet's case 2/
+             sometimes cause is more like a Circonstant. -->
     </lexie>
-    <lexie name='reflect.1'>
-        only figurative sense in VerbNet
+    <lexie name='reflect.1' sense='missing'>
+        <!-- only figurative sense in VerbNet -->
     </lexie>
     <lexie name='retreat.1' vn='escape-51.1' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Theme' />
     </lexie>
-    In those two cases, the issue is simply that VerbNet roles are found in Circonstant, and 'Patient' is the only 'Actant'
+    <!-- In those two cases, the issue is simply that VerbNet roles are found
+         in Circonstant, and 'Patient' is the only 'Actant' -->
     <lexie name='rise.1' vn='calibratable_cos-45.6-1' sense='ok' alternations='ok' roles='more'>
         <role name='Patient' vn='Patient' />
     </lexie>
     <lexie name='rise.2' vn='calibratable_cos-45.6-1' sense='ok' alternations='ok' roles='more'>
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='sequester.1' vn='steal-10.5' sense='far_fetched' alternations='ok' roles='more'>
+    <lexie name='sequester.1' vn='steal-10.5' sense='far-fetched' alternations='ok' roles='more'>
         <role name='Cause' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
@@ -274,13 +295,15 @@
         <role name='Patient' vn='Patient' />
     </lexie>
     <lexie name='shift.2' sense='missing'>
-        Not clear what sense this is. TODO along with shift.1
+        <!-- Not clear what sense this is. TODO along with shift.1 -->
     </lexie>
-    <lexie name='simulate.1'>
-        I didn't find a fitting class yet.
+    <lexie name='simulate.1' sense='missing'>
+        <!-- I didn't find a fitting class yet. The fegning sense could fit. -->
     </lexie>
-    <lexie name='sink.1'>
-        Missing sense: this sense is about sinking to the ground (the real sense), while VerbNet only covers the metaphorical sense in class 45.
+    <lexie name='sink.1' sense='missing'>
+        <!-- Missing sense: this sense is about sinking to the ground (the real
+             sense), while VerbNet only covers the metaphorical sense in class
+             45. -->
     </lexie>
     <lexie name='stabilize.1a' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Patient' />
@@ -296,12 +319,20 @@
         <role name='Cause' vn='Agent' />
     </lexie>
     <lexie name='store.1b' vn='keep-15.2' sense='ok' alternations='ok' roles='more'>
-        This is an interesting case of subtle polysemy in VerbNet: keep-15.2 is about storing, while fit-54.3 is about the possibility to store, ie. fitting. Since the alternations show this difference, the two senses are in VerbNet while they're only one sense in WordNet and OntoNotes.
+        <!-- This is an interesting case of subtle polysemy in VerbNet:
+             keep-15.2 is about storing, while fit-54.3 is about the
+             possibility to store, ie. fitting. Since the alternations show
+             this difference, the two senses are in VerbNet while they're only
+             one sense in WordNet and OntoNotes. -->
         <role name='Destination' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
     <lexie name='store.1a' vn='keep-15.2' sense='ok' alternations='ok' roles='more'>
-        This is an interesting case of subtle polysemy in VerbNet: keep-15.2 is about storing, while fit-54.3 is about the possibility to store, ie. fitting. Since the alternations show this difference, the two senses are in VerbNet while they're only one sense in WordNet and OntoNotes.
+        <!-- This is an interesting case of subtle polysemy in VerbNet:
+             keep-15.2 is about storing, while fit-54.3 is about the
+             possibility to store, ie. fitting. Since the alternations show
+             this difference, the two senses are in VerbNet while they're only
+             one sense in WordNet and OntoNotes. -->
         <role name='Destination' vn='Agent' />
         <role name='Patient' vn='Theme' />
     </lexie>
@@ -324,7 +355,7 @@
     <lexie name='warm.1a' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='warm.1b'>
+    <lexie name='warm.1b' vn='other_cos-45.4' sense='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Cause' vn='Agent' />
         <role name='Patient' vn='Patient' />

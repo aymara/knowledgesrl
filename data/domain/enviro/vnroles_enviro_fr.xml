@@ -1,53 +1,61 @@
 <?xml version="1.0"?>
 <!DOCTYPE dico_verbnet_rolemapping [
   <!ELEMENT dico_verbnet_rolemapping (lexie+)>
-  <!ELEMENT lexie  (role+)>
-  <!ELEMENT role   (#PCDATA)>
+  <!ATTLIST dico_verbnet_rolemapping lang (en|fr) #REQUIRED>
+  <!ATTLIST dico_verbnet_rolemapping vn CDATA #REQUIRED>
+  <!ELEMENT lexie  (role*)>
   <!ATTLIST lexie name  CDATA #REQUIRED>
-  <!ATTLIST lexie vn    CDATA #REQUIRED>
+  <!ATTLIST lexie lemma (ok|missing) 'ok'>
+  <!ATTLIST lexie sense (ok|missing|metaphor|far-fetched) #REQUIRED>
+  <!ATTLIST lexie vn    CDATA #IMPLIED>
+  <!ATTLIST lexie alternations (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie roles (ok|more|missing|more-missing) #IMPLIED>
+  <!ATTLIST lexie on CDATA #IMPLIED>
+  <!ATTLIST lexie wn CDATA #IMPLIED>
+  <!ELEMENT role   (#PCDATA)>
   <!ATTLIST role  name  CDATA #REQUIRED>
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
-<dico_verbnet_rolemapping vn='2014-11-05'>
-    <lexie name='convertir.1' vn='turn-26.6.1'>
+<dico_verbnet_rolemapping lang='fr' vn='2014-11-25'>
+    <lexie name='convertir.1' vn='turn-26.6.1' sense='ok' roles='ok' alternations='more'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Résultat' vn='Result' />
     </lexie>
-    <lexie name='extraire.1' vn='mine-10.9'>
+    <lexie name='extraire.1' vn='mine-10.9' sense='ok' roles='ok' alternations='ok'>
         <role name='Patient' vn='Theme' />
         <role name='Source' vn='Initial_Location' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='chauffer.2a' verbenet='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+    <lexie name='chauffer.2a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
         <!-- La correspondance entre Moyen et Agent est limite. -->
         <role name='Moyen' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Instrument' vn='Instrument' />
     </lexie>
-    <lexie name='refroidir.1b' verbenet='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+    <lexie name='refroidir.1b' vn='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
         <role name='Cause' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='brûler.1a' verbenet='entity_specific_modes_being-47.2' sense='ok' alternations='more' roles='more'>
+    <lexie name='brûler.1a' vn='entity_specific_modes_being-47.2' sense='ok' alternations='more' roles='more'>
         <!-- Les exemples dans le corpus semblent plus traiter d'état (un gaz qui brûle) que de changement d'état (la forêt a brûlée et a donc disparu) -->
         <role name='Patient' vn='Theme' />
     </lexie>
-    <lexie name='brûler.1b' verbenet='destroy-44' sense='ok' alternations='more' roles='more'>
+    <lexie name='brûler.1b' vn='destroy-44' sense='ok' alternations='more' roles='more'>
         <!-- Le fait que deux lexies proches dans DiCoEnviro donnent deux choses très différentes dans VerbNet pourrait suggérer que la classe précédente ne correspond pas tout à fait ? -->
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='inonder.1' verbenet='fill-9.8' sense='ok' alternations='more' roles='ok'>
+    <lexie name='inonder.1' vn='fill-9.8' sense='ok' alternations='more' roles='ok'>
         <role name='Lieu' vn='Destination' />
         <role name='Cause' vn='Agent' />
         <role name='Item' vn='Theme' />
     </lexie>
-    <lexie name='exciter.1' verbenet='missing'>
+    <lexie name='exciter.1' sense='missing'>
         <!-- On parle ici du sens précis en physique -->
     </lexie>
-    <lexie name='transporter.1' verbenet='send-11.1' sense='ok' alternations='ok' roles='ok'>
+    <lexie name='transporter.1' vn='send-11.1' sense='ok' alternations='ok' roles='ok'>
         <role name='Patient' vn='Theme' />
         <role name='Cause' vn='Agent' />
         <role name='Source' vn='Initial_Location' />
@@ -59,17 +67,17 @@
     <lexie name='libérer.1b' sense='missing'>
         <!-- free-80 doesn't fit, there's no "Cause V Theme" frame -->
     </lexie>
-    <lexie name='limiter.1' verbenet='limit-76' sense='ok' alternations='more' roles='more'>
+    <lexie name='limiter.1' vn='limit-76' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Patient' />
         <role name='Cause' vn='Cause' />
         <role name='Agent' vn='Cause' />
     </lexie>
-    <lexie name='polluer.1b' verbenet='fill-9.8' sense='ok' alternations='more' roles='more'>
+    <lexie name='polluer.1b' vn='fill-9.8' sense='ok' alternations='more' roles='more'>
         <role name='Destination' vn='Destination' />
         <role name='Cause' vn='Agent' />
         <role name='Agent' vn='Agent' />
     </lexie>
-    <lexie name='transformer.1' verbenet='turn-26.6.1' sense='ok' alternations='ok' roles='ok'>
+    <lexie name='transformer.1' vn='turn-26.6.1' sense='ok' alternations='ok' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Résultat' vn='Result' />
