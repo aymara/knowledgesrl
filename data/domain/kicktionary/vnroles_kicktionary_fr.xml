@@ -43,6 +43,12 @@
         <role name='Pass' vn='Theme' />
         <role name='Part_Of_Body' vn='N/A' />
     </lexie>
+    <lexie name='Convert_Chance' verb='convertir' sense='ok' roles='ok' alternations='more'>
+        <role name='Goal' vn='Result' />
+        <role name='Moving_Ball' vn='Patient' />
+        <role name='Scorer' vn='Agent' />
+        <role name='Set_Piece' vn='Patient' />
+    </lexie>
     <lexie name='Goal' verb='marquer' sense='missing'>
         <!-- De manière intéressante, il semble que LADL/LVF n'ont pas non plus le sens "marquer un but", uniquement "marquer un adversaire". -->
     </lexie>
@@ -68,6 +74,44 @@
     </lexie>
     <lexie name='Bring_Off' verb='sortir' sense='missing'>
         <!-- Le plus proche, sortir dans fire-10.10, a été éliminé. -->
+    </lexie>
+    <lexie name='Bring_On' verb='lancer' sense='missing' domain='sports'>
+        <!-- C'est une métaphore "sportive" -->
+    </lexie>
+    <lexie name='Lead' verb='mener' sense='missing' domain='sports'>
+    </lexie>
+    <lexie name='Home_Game' verb='recevoir' vn='admit-65' sense='ok' roles='more' alternations='more'>
+        <role name='Host' vn='Agent' />
+        <role name='Visitor' vn='Location' />
+    </lexie>
+    <lexie name='Shot_Supports' sense='multiple'>
+        <!-- Many different things syntactically -->
+    </lexie>
+    <lexie name='Spectator_Activity' sense='multiple'>
+        <!-- Many different things syntactically -->
+    </lexie>
+    <lexie name='Tactics' sense='missing' domain='sports'>
+    </lexie>
+    <lexie name='Mark' verb='museler' sense='metaphor' vn='butter-9.10' roles='more' alternations='more'>
+        <!-- Très métaphorique : mettre une muselière sur un joueur dans le sens "l'empêcher de bouger/s'exprimer" -->
+        <role name='Marked_Player' vn='Destination' />
+        <role name='Marker' vn='Agent' />
+    </lexie>
+    <lexie name='Player_Move_With_Ball' verb='slalomer' sense='ok' vn='run-51.3.2' alternations='ok' roles='ok'>
+        <role name='Player' vn='Agent' />
+        <role name='Target' vn='Location' />
+    </lexie>
+    <lexie name='Overcome_Goalkeeper' verb='fusiller' sense='metaphor-specific'>
+        <!-- Mais ce n'est peut-être le cas pour d'autres verbes... -->
+    </lexie>
+    <lexie name='Receive_Card' verb='recevoir,écoper,récolter' vn='obtain-13.5.2' alternations='ok' roles='more'>
+        <role name='Card' vn='Theme' />
+        <role name='Offender' vn='Agent' />
+    </lexie>
+    <lexie name='Player_Move' verb='plonger' vn='escape-51.1' sense='ok' roles='more' alternations='more'>
+        <!-- Est-ce que selon les définitions sémantiques de Levin, 51.3 ne serait pas mieux ? -->
+        <role name='Player' vn='Theme' />
+        <role name='Target' vn='Destination' />
     </lexie>
     <lexie name='Start' verb='jouer' vn='performance-26.7'  sense='ok' alternations='more-missing' roles='more-missing'>
         <!-- Il jouait à gauche : à gauche est un rôle core en foot, pas dans VerbNet, d'où les missing -->
@@ -164,5 +208,10 @@
         <role name='Players' vn='Pivot' />
     </lexie>
     <lexie name='Award_Goal' verb='refuser' sense='missing'>
+    </lexie>
+    <lexie name='Sanction' verb='expulser' vn='banish-10.2' sense='ok' roles='more-missing' alternations='more-missing'>
+        <role name='Referree' vn='Agent' />
+        <role name='Offender' vn='Theme' />
+        <role name='Offense' vn='N/A' />
     </lexie>
 </kicktionary_verbnet_rolemapping>

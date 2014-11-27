@@ -17,12 +17,34 @@
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
 <dico_verbnet_rolemapping lang='fr' vn='2014-11-25'>
-    <lexie name='taper.1' sense='missing' on='access.1' wn='access#1'>
+    <lexie name='accepter.1' vn='admit-65' sense='ok' alternations='more' roles='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='accepter.2' vn='admit-65' sense='ok' alternations='more' roles='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
     </lexie>
     <lexie name='acheminer.1' vn='send-11.1' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Theme' />
         <role name='Destination' vn='Destination' />
         <role name='Agent' vn='Agent' />
+    </lexie>
+    <!-- TODO un clic sur "démarrer" dans begin-55.1 ! -->
+    <lexie name='démarrer.1a' vn='begin-55.1' lemma='missing' sense='ok' alternations='more' roles='more'>
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='démarrer.1b' vn='begin-55.1' lemma='missing' sense='ok' alternations='more' roles='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='cacher.1' sense='ok' vn='concealment-16.1' roles='more' alternations='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='écraser.1b' vn='destroy-44' sense='ok' roles='more' alternations='more'>
+        <!-- Could fit elsewhere. There's no good way to tell, apart from invalidating verbs. -->
+        <role name='Patient' vn='Patient' />
     </lexie>
     <lexie name='enregistrer.1' vn='transcribe-25.4' sense='ok'>
         <role name='Patient' vn='Theme' />
@@ -34,10 +56,20 @@
         <role name='Agent' vn='Agent' />
         <role name='Lieu' vn='Destination' />
     </lexie>
+    <lexie name='lancer.1' sense='ok' vn='establish-55.5' alternations='more' roles='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+    </lexie>
     <lexie name='naviguer.1' vn='run-51.3.2' sense='metaphor'>
         <role name='Agent' vn='Agent' />
         <role name='Lieu' vn='Location' />
         <role name='Instrument' vn='N/A' />
+    </lexie>
+    <lexie name='suspendre.1' vn='fire-10.10' sense='ok' alternations='more' roles='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='taper.1' sense='missing' on='access.1' wn='access#1'>
     </lexie>
     <lexie name='valider.1' vn='conjecture-29.5' sense='far-fetched' alternations='more' roles='more'>
         <role name='Agent' vn='Agent' />

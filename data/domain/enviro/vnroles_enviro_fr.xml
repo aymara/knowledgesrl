@@ -17,26 +17,8 @@
   <!ATTLIST role  vn    CDATA #REQUIRED>
 ]>
 <dico_verbnet_rolemapping lang='fr' vn='2014-11-25'>
-    <lexie name='convertir.1' vn='turn-26.6.1' sense='ok' roles='ok' alternations='more'>
-        <role name='Agent' vn='Agent' />
+    <lexie name='baisser.1' vn='other_cos-45.4' sense='ok' alternations='more' roles='more'>
         <role name='Patient' vn='Patient' />
-        <role name='Résultat' vn='Result' />
-    </lexie>
-    <lexie name='extraire.1' vn='mine-10.9' sense='ok' roles='ok' alternations='ok'>
-        <role name='Patient' vn='Theme' />
-        <role name='Source' vn='Initial_Location' />
-        <role name='Agent' vn='Agent' />
-    </lexie>
-    <lexie name='chauffer.2a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
-        <!-- La correspondance entre Moyen et Agent est limite. -->
-        <role name='Moyen' vn='Agent' />
-        <role name='Patient' vn='Patient' />
-        <role name='Instrument' vn='Instrument' />
-    </lexie>
-    <lexie name='refroidir.1b' vn='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
-        <role name='Cause' vn='Agent' />
-        <role name='Patient' vn='Patient' />
-        <role name='Agent' vn='Agent' />
     </lexie>
     <lexie name='brûler.1a' vn='entity_specific_modes_being-47.2' sense='ok' alternations='more' roles='more'>
         <!-- Les exemples dans le corpus semblent plus traiter d'état (un gaz qui brûle) que de changement d'état (la forêt a brûlée et a donc disparu) -->
@@ -47,19 +29,96 @@
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
     </lexie>
-    <lexie name='inonder.1' vn='fill-9.8' sense='ok' alternations='more' roles='ok'>
-        <role name='Lieu' vn='Destination' />
+    <lexie name='changer.1a' sense='missing'>
+        <!--Dans VerbeNet, on a bien Paul s'est transformé, mais pas Paul a changé -->
+    </lexie>
+    <lexie name='changer.1b' sense='ok' vn='turn-26.6.1' roles='more' alternations='more'>
         <role name='Cause' vn='Agent' />
-        <role name='Item' vn='Theme' />
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='chauffer.2a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+        <!-- La correspondance entre Moyen et Agent est limite. -->
+        <role name='Moyen' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+        <role name='Instrument' vn='Instrument' />
+    </lexie>
+    <lexie name='conserver.1' vn='keehp-15.2' sense='ok' roles='ok' alternations='ok'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+        <role name='Cause' vn='Agent' />
+        <role name='Résultat' vn='Location' /> <!-- douteux -->
+    </lexie>
+    <lexie name='contaminer.1' sense='ok' vn='poison-42.2' roles='more' alternations='more-missing'>
+        <!-- TODO On aurait pu tricher en mettant que Moyen = Agent. Mais non, c'est bien l'Instrument qui empoisonne dans Dico -->
+        <role name='Moyen' vn='Instrument' />
+        <role name='Destination' vn='Patient' />
+    </lexie>
+    <lexie name='convertir.1' vn='turn-26.6.1' sense='ok' roles='ok' alternations='more'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+        <role name='Résultat' vn='Result' />
+    </lexie>
+    <lexie name='dégrader.1a' lemma='missing' sense='ok' vn='other_cos-45.4' roles='more' alternations='more'>
+        <role name='Cause' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='dégrader.1b' lemma='missing' sense='ok' vn='other_cos-45.4' roles='more' alternations='more'>
+        <!-- plutôt difficile à placer, other_cos-45.4 finalement. -->
+        <role name='Cause' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='déplacer.1' lemma='missing' sense='ok' vn='roll-51.3.1' roles='ok' alternations='ok'>
+        <!-- TODO il manque "se déplacer" dans roll -->
+        <role name='Agent' vn='Theme' />
+        <role name='Destination' vn='Location' />
+    </lexie>
+    <lexie name='diminuer.1a' vn='calibratable_cos-45.6' sense='ok' lemma='missing' roles='more' alternations='more'>
+        <!-- TODO valider -->
+    </lexie>
+    <lexie name='disparaître.1' sense='ok' vn='disappearance-48.2' roles='more' alternations='more'>
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='élever.1' sense='ok' lemma='missing' vn='calibratable_cos-45.6' roles='ok' alternations='more'>
+        <!-- TODO valider, plus gestion des promoninaux -->
+        <!-- Des core dans VerbNet sont circonstants dans DiCo -->
+        <role name='Patient' vn='Attribute' />
+    </lexie>
+    <lexie name='élever.2' sense='ok' lemma='missing' vn='calibratable_cos-45.6' roles='ok' alternations='more'>
+        <!-- TODO valider, plus gestion des promoninaux -->
+        <!-- Des core dans VerbNet sont circonstants dans DiCo -->
+        <role name='Patient' vn='Attribute' />
+    </lexie>
+    <lexie name='éliminer.1' vn='remove-10.1' sense='ok' roles='more' alternations='ok'>
+        <role name='Agent' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='emmagasiner.1' vn='pocket-9.10' sense='ok' roles='more' alternations='more'>
+        <!-- Ici, c'est l'Agent VerbNet qui emmagasine dans lui-même. -->
+        <role name='Destination' vn='Agent' />
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='éteindre.1' sense='missing'>
+    </lexie>
+    <lexie name='extraire.1' vn='mine-10.9' sense='ok' roles='ok' alternations='ok'>
+        <role name='Patient' vn='Theme' />
+        <role name='Source' vn='Initial_Location' />
+        <role name='Agent' vn='Agent' />
     </lexie>
     <lexie name='exciter.1' sense='missing'>
         <!-- On parle ici du sens précis en physique -->
     </lexie>
-    <lexie name='transporter.1' vn='send-11.1' sense='ok' alternations='ok' roles='ok'>
-        <role name='Patient' vn='Theme' />
+    <lexie name='fondre.1' vn='other_cos-45.4' sense='ok' lemma='missing' roles='more' alternations='more'>
+        <!-- TODO add to 45.4. It could be 45.5 but change is external, and Levin/VerbNet put melt in 45.4 -->
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='geler.1' vn='other_cos-45.4' sense='ok' roles='more' alternations='more'>
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='inonder.1' vn='fill-9.8' sense='ok' alternations='more' roles='ok'>
+        <role name='Lieu' vn='Destination' />
         <role name='Cause' vn='Agent' />
-        <role name='Source' vn='Initial_Location' />
-        <role name='Destination' vn='Destination' />
+        <role name='Item' vn='Theme' />
     </lexie>
     <lexie name='libérer.1a' sense='missing'>
         <!-- free-80 doesn't fit, there's no "Cause V Theme" frame -->
@@ -72,18 +131,50 @@
         <role name='Cause' vn='Cause' />
         <role name='Agent' vn='Cause' />
     </lexie>
+    <lexie name='perturber.1' sense='missing'>
+        <!-- Sens assez précis en physique - ce n'est que du NP V NP, mais ce n'est pas une raison de le mettre en amuse-31, si ? -->
+    </lexie>
     <lexie name='polluer.1b' vn='fill-9.8' sense='ok' alternations='more' roles='more'>
         <role name='Destination' vn='Destination' />
         <role name='Cause' vn='Agent' />
         <role name='Agent' vn='Agent' />
     </lexie>
+    <lexie name='reculer.1' vn='escape-51.1' sense='ok' roles='more' alternations='more'>
+        <!-- TODO beaucoup de frames ne collent pas... sous-classe ? -->
+        <role name='Patient' vn='Theme' />
+    </lexie>
+    <lexie name='refroidir.1a' vn='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+        <role name='Patient' vn='Patient' />
+    </lexie>
+    <lexie name='refroidir.1b' vn='other_cos-45.4' sense='ok' alternations='ok' roles='ok'>
+        <role name='Cause' vn='Agent' />
+        <role name='Patient' vn='Patient' />
+        <role name='Agent' vn='Agent' />
+    </lexie>
+    <lexie name='stocker.1a' vn='keep-15.2' sense='ok' alternations='ok' roles='more'>
+        <role name='Patient' vn='Patient' />
+        <role name='Destination' vn='Agent' />
+    </lexie>
+    <lexie name='stocker.1b' vn='keep-15.2' sense='ok' alternations='ok' roles='more'>
+        <!-- SIGNALER Les distinctions par rapport à keep-15.2 semblent être
+             plus "positionnelles" que syntaxiques. En effet, la différence
+             majeure est que la voix passive est utilisée OU qu'un Agent non
+             annoté soit exprimé. Dans les deux cas, au lieu d'avoir
+             positionnellement Destination V Patient commme en 1.a on a Patient
+             V Destination. -->
+        <role name='Patient' vn='Patient' />
+        <role name='Destination' vn='Agent' />
+    </lexie>
+    <lexie name='transporter.1' vn='send-11.1' sense='ok' alternations='ok' roles='ok'>
+        <role name='Patient' vn='Theme' />
+        <role name='Cause' vn='Agent' />
+        <role name='Source' vn='Initial_Location' />
+        <role name='Destination' vn='Destination' />
+    </lexie>
     <lexie name='transformer.1' vn='turn-26.6.1' sense='ok' alternations='ok' roles='ok'>
         <role name='Agent' vn='Agent' />
         <role name='Patient' vn='Patient' />
         <role name='Résultat' vn='Result' />
-    </lexie>
-    <lexie name='perturber.1' sense='missing'>
-        <!-- Sens assez précis en physique - ce n'est que du NP V NP, mais ce n'est pas une raison de le mettre en amuse-31, si ? -->
     </lexie>
 </dico_verbnet_rolemapping>
 
