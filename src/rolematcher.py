@@ -51,6 +51,9 @@ class VnFnRoleMatcher():
         # and a verb in vn_class.
         self.fn_roles = {}
 
+        # FrameNet frame -> VerbNet class mapping
+        self.framenetframe_to_verbnetclasses = defaultdict(list)
+
         self._build_mapping(path)
 
     def _build_mapping(self, path):
@@ -59,6 +62,8 @@ class VnFnRoleMatcher():
         for mapping in root.getroot():
             vn_class = mapping.attrib["class"]
             fn_frame = mapping.attrib["fnframe"]
+
+            self.framenetframe_to_verbnetclasses[fn_frame].append(vn_class)
 
             mapping_as_dict = {}
 

@@ -75,7 +75,16 @@ stats_data = {
     # Number of non-extracted annotated arguments
     "arg_not_extracted": 0,
     # Number of non-extracted annotated args which do not have a predicate in VerbNet
-    "arg_not_extracted_not_verbnet": 0
+    "arg_not_extracted_not_verbnet": 0,
+
+
+    # Evaluated frames identification.
+    "frames_evaluated": 0,
+    "no_class": 0,
+    "one_class__correct": 0,  # only one class possible, the good one
+    "one_class": 0,
+    "multiple_classes__correct": 0,  # multiple class possible, good one inside
+    "multiple_classes": 0,
 }
 
 ambiguous_mapping = {
@@ -142,6 +151,18 @@ def display_stats(argument_identification):
             s["files"], s["frames"], s["args"],
             s["frames_with_predicate_in_verbnet"], s["args_kept"]
         ))
+    print()
+
+    total_classes = s['no_class'] + s['one_class'] + s['multiple_classes']
+    assert total_classes == s['frames_evaluated']
+    frame_identification_precision = s["one_class__correct"] / s["one_class"]
+    frame_identification_recall = s["one_class__correct"] / total_classes
+    frame_identification_f1 = hmean(frame_identification_precision, frame_identification_recall)
+
+    print("Frame identification              : {:.1%} precision, {:.1%} recall, {:1.1%} F1".format(frame_identification_precision, frame_identification_recall, frame_identification_f1))
+    print("       when multiple possibilities, {:.1%} precision".format(s["multiple_classes__correct"]/s["multiple_classes"]))
+    print("Among evaluated: no frame {:.1%}, one frame {:.1%}, multiple frames {:.1%}".format(s['no_class'] / total_classes, s['one_class'] / total_classes, s['multiple_classes'] / total_classes))
+    print()
 
     role_matching_precision = s["one_correct_role"] / unique_role_evaluated
     role_matching_recall = (s["one_correct_role"] / (unique_role_evaluated + several_roles_evaluated + s["no_roles_evaluated"]))
@@ -229,6 +250,51 @@ def display_stats_ambiguous_mapping():
         n2 = count_with_frame[v] if v in count_with_frame else 0
         print("{:>12}: {:>3} - {:<3}".format(v, n1, n2))
 
+def vnclass_to_normalized_name(vnclass):
+    """A VerbNet class can have various names, depending on its position in the
+    hierarchy, but not only. It's not easy to know weather a given identifier
+    (eg. 72-1) is a root VerbNet class or not."""
+    root_classes = ["77", "51.7", "95", "96", "26.9", "31.2", "65", "93",
+            "37.9", "64", "22.2", "31.1", "38", "31.4", "48.1.1", "29.1",
+            "34.1", "50", "52", "10.2", "97.1", "36.4", "109.1", "58.2",
+            "55.1", "41.3.3", "45.2", "13.7", "54.5", "49", "40.6", "41.2.2",
+            "45.1", "40.1.2", "11.3", "26.1", "47.5.3", "18.4", "9.9", "45.6",
+            "28", "29.8", "88.1", "11.4", "21.2", "40.8.4", "29.2", "51.6",
+            "10.6", "39.2", "37.6", "29.10", "10.3", "22.5", "9.6", "24",
+            "37.8", "55.2", "87.2", "16", "37.10", "92", "98", "29.5", "29.9",
+            "71", "66", "47.8", "55.3", "13.2", "26.6.2", "45.3", "73", "83",
+            "86.1", "36.1", "54.2", "40.3.2", "26.4", "40.3.3", "21.1", "10.8",
+            "29.4", "79", "97.2", "85", "44", "39.4", "23.4", "39.5", "48.2",
+            "23.3", "84", "41.1.1", "41.3.2", "11.5", "29.3", "39.1", "88.2",
+            "63", "27", "99", "45.5", "47.2", "13.4.2", "51.1", "55.5", "34.2",
+            "90", "13.6", "40.1.3", "47.1", "39.7", "35.6", "9.8", "10.10",
+            "54.3", "40.5", "41.2.1", "87.1", "67", "59", "80", "13.4.1",
+            "9.3", "13.3", "13.5.1", "13.1", "39.3", "39.6", "41.1.2", "26.2",
+            "72", "47.5.2", "40.1.1", "13.5.3", "18.1", "15.1", "35.1",
+            "40.8.3", "25.3", "25.1", "78", "37.1.2", "37.4", "37.1.3", "35.4",
+            "107", "33", "15.2", "26.5", "14", "51.2", "37.11", "43.1", "76",
+            "53.1", "46", "32.2", "37.3", "36.2", "31.3", "29.6", "91", "47.7",
+            "36.3", "10.9", "22.1", "47.3", "108", "42.1", "75", "51.4.2",
+            "40.2", "13.5.2", "48.3", "60", "29.7", "45.4", "37.12", "100",
+            "40.8.1", "101", "68", "30.3", "17.2", "26.7", "10.7", "9.10",
+            "42.2", "19", "9.5", "26.3", "54.4", "37.13", "102", "12", "9.1",
+            "9.4", "9.2", "51.8", "48.1.2", "69", "54.1", "26.8", "86.2", "70",
+            "45.7", "10.1", "103", "10.11", "94", "51.3.1", "35.5", "51.3.2",
+            "53.2", "37.7", "25.2", "35.2", "30.1", "109", "11.1", "23.1",
+            "89", "22.3", "30.2", "41.3.1", "11.2", "43.3", "40.4", "43.2",
+            "47.4", "18.3", "47.6", "104", "23.2", "9.7", "35.3", "10.5",
+            "30.4", "55.4", "42.3", "43.4", "74", "40.7", "81", "55.6",
+            "47.5.1", "18.2", "37.5", "22.4", "37.2", "17.1", "40.8.2", "20",
+            "25.4", "37.1.1", "61", "26.6.1", "58.1", "105", "51.4.1", "106",
+            "51.5", "32.1", "57", "56", "40.3.1", "10.4.2", "10.4.1", "62",
+            "82"]
+    vnclass_number = '-'.join(vnclass.split('-')[1:])
+    for possible_root in root_classes:
+        if vnclass_number.startswith(possible_root):
+            return possible_root
+
+    raise Exception('Impossible VerbNet class {}'.format(vnclass))
+
 
 def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, argument_identification):
     # This variable is not handled here for non-gold args, because
@@ -248,6 +314,18 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
         # in the fulltext corpus
         if gold_fn_frame.frame_name == "":
             continue
+
+        stats_data['frames_evaluated'] += 1
+        if not found_vn_frame.best_classes:
+            stats_data['no_class'] += 1
+        elif len(found_vn_frame.best_classes) == 1:
+            stats_data['one_class'] += 1
+            if vnclass_to_normalized_name(next(iter(found_vn_frame.best_classes))) in role_matcher.framenetframe_to_verbnetclasses[gold_fn_frame.frame_name]:
+                stats_data['one_class__correct'] += 1
+        else:
+            stats_data['multiple_classes'] += 1
+            if set(role_matcher.framenetframe_to_verbnetclasses[gold_fn_frame.frame_name]) & {vnclass_to_normalized_name(c) for c in found_vn_frame.best_classes}:
+                stats_data['multiple_classes__correct'] += 1
 
         for i, slot in enumerate(found_vn_frame.roles):
             # Add number of possibles role for this slot (eg. the subject slot)
