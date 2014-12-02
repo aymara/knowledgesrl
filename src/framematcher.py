@@ -170,7 +170,7 @@ class FrameMatcher():
                     slots_associations[slot_pos] = matching_slot
 
                 num_match += 1
-        return num_match
+        return num_match, slots_associations
 
     def _matching_sync_predicates(self, verbnet_frame, slots_associations):
         """ Stop the algorithm at the first mismatch encountered after the verb,
@@ -224,7 +224,8 @@ class FrameMatcher():
                 break
 
             i, j = i + 1, j + 1
-        return num_match
+
+        return num_match, slots_associations
 
     def _matching_stop_on_fail(self, verbnet_frame, slots_associations):
         """ Stop the algorithm at the first mismatch encountered """
@@ -239,7 +240,7 @@ class FrameMatcher():
             else:
                 break
 
-        return num_match
+        return num_match, slots_associations
 
     def new_match(self, verbnet_frame):
         """Compute the matching score and update the possible roles distribs
@@ -266,7 +267,7 @@ class FrameMatcher():
         else:
             raise Exception("Unknown matching algorithm : {}".format(self.algo))
 
-        num_match = matching_function(verbnet_frame, slots_associations)
+        num_match, slots_associations = matching_function(verbnet_frame, slots_associations)
 
         # Score computation
         ratio_1 = num_match / self.frame_occurrence.num_slots
