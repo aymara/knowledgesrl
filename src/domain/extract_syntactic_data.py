@@ -73,6 +73,9 @@ def xmlcontext_to_frame(lang, xmlns, lexie, contexte):
 def get_dico_examples(lang, dico, xmlns):
     xml_dico = ET.ElementTree(file=dico)
     for lexie in xml_dico.findall('lexie'):
+        if not lexie.get('no'):
+            continue
+
         frame_name = '{}.{}'.format(lexie.get('id'), lexie.get('no'))
         for contexte in lexie.findall('contextes/{{{0}}}contexte'.format(xmlns)):
             sentence_text, subcategorization_frame = xmlcontext_to_frame(lang, xmlns, lexie, contexte)
