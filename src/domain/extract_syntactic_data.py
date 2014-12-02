@@ -156,7 +156,7 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
     annotated_sentences, lemma_in_vn = 0, 0
     n_correct_frames, n_frames = 0, 0
     n_correct_roles, n_roles = 0, 0
-    n_correct_classes, n_classes_in_list, n_classes = 0, 0, 0
+    n_classes_in_list, n_classes = 0, 0
 
     for lexie, lemma, sentence_text, gold_syntax in examples:
         d = sentence_text in [sentence for source, sentence in evaluation_sets['train']]
@@ -218,19 +218,18 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
                 [syntax_to_str(vn_syntax) for vn_syntax in
                     vn_syntax_matches[classid]]])
 
-        if set(vn_syntax_matches.keys()) & set(role_mapping[lexie]):
-            if test_context:
-                n_classes_in_list += 1
-
-        # TODO better choice strategy!
-        classid, vn_syntax_list = next(iter(vn_syntax_matches.items()))
-        vn_syntax = vn_syntax_list[0]
-
-        if classid not in role_mapping[lexie]:
+        class_matches = set(vn_syntax_matches.keys()) & set(role_mapping[lexie])
+        if not class_matches:
             continue
 
         if test_context:
-                n_correct_classes += 1
+            n_classes_in_list += 1
+
+        classid  = next(iter(class_matches))
+        vn_syntax = vn_syntax_matches[classid][0]
+
+        if classid not in role_mapping[lexie]:
+            continue
 
         for i, correct_syntax in enumerate(gold_syntax):
             # if this is a 'frame element', not a V or anything else
@@ -258,7 +257,6 @@ def analyze_constructs(examples, role_mapping, evaluation_sets, verbnet):
     print('-                          {:.0%} of lemma tokens are here'.format(lemma_in_vn/annotated_sentences))
     print('- For these tokens,        {:.1%} of constructions are correct'.format(n_correct_frames/n_frames))
     print('- For these constructions, {:.1%} of classes are here'.format(n_classes_in_list/max(n_classes, 1)))
-    print('- For these constructions, {:.1%} of classes are correct'.format(n_correct_classes/max(n_classes, 1)))
     print('- For these classes,       {:.1%} of roles are correct'.format(n_correct_roles/max(n_roles, 1)))
     print()
 
