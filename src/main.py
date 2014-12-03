@@ -159,6 +159,7 @@ if __name__ == "__main__":
             for matcher in all_matcher:
                 matcher.handle_semantic_restrictions(data_restr)
                 matcher.frame_occurrence.roles = matcher.possible_distribs()
+                matcher.frame_occurrence.best_classes = matcher.best_classes
 
         all_vn_frames.extend(vn_frames)
         all_annotated_frames.extend(annotated_frames)
