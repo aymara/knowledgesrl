@@ -131,12 +131,15 @@ if __name__ == "__main__":
                 else:
                     matcher.new_match(verbnet_frame)
 
+            if options.wordnetrestr:
+                matcher.restrict_headwords_with_wordnet()
+
             frame_occurrence.roles = matcher.possible_distribs()
             frame_occurrence.best_classes = matcher.best_classes
 
             # Update semantic restrictions data (but take no decision)
             for i, restr in matcher.get_matched_restrictions():
-                word = frame_occurrence.headwords[i]
+                word = frame_occurrence.headwords[i]['top_headword']
                 if restr.logical_rel == "AND":
                     for subrestr in restr.children:
                         data_restr[subrestr].update([word])

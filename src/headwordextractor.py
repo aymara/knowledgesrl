@@ -16,17 +16,25 @@ def headword(arg, tree):
 
     """
     headword_node = tree.closest_match_as_node(arg)
-    return headword_node.word
+    prep_child_node = None
 
     # If another word points to headword with relation PMOD, then we want to
     # choose that word instead: the child of the preposition that is the root
     # of the PP.
     for child in headword_node.children:
         if child.deprel == 'PMOD':
-            pass
-            #return child.word
+            prep_child_node = child
+            break
 
-    return headword_node.word
+    # In some cases, for preps, we want the child, in other cases, we want the
+    # real 'content' headword, likely a noun
+    result = {}
+    result['top_headword'] = (headword_node.pos, headword_node.word)
+    if prep_child_node is None:
+        result['content_headword'] = result['top_headword']
+    else:
+        result['content_headword'] = (prep_child_node.pos, prep_child_node.word)
+    return result
 
 
 def get_class(word):

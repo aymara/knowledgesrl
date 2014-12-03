@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from nltk.corpus import wordnet as wn
+
 # List of possible thematic role restrictions
 possible_types = {
         "abstract": 'abstraction.n.06',
@@ -165,6 +167,45 @@ class VNRestriction:
             raise Exception("VNRestriction.match_score : invalid logical relation")
 
         return base_score + children_score
+
+    def matches_to_headword(self, headword):
+        if self._is_empty_restr():
+            return True
+
+        pos, word = headword
+        if pos not in ['NN', 'NNS', 'JJ', 'RB']:
+            return True
+        morphy_pos = {'NN': wn.NOUN, 'NNS': wn.NOUN, 'RB': wn.ADV, 'JJ': wn.ADJ}
+
+        if self.logical_rel is None:
+            if possible_types[self.type] is None:
+                return True
+
+            try:
+                lemma = wn.morphy(word, morphy_pos.get(pos, None))
+                lemma = lemma if lemma is not None else word
+                selrestr_wordnet = wn.synset(possible_types[self.type])
+                headword_wordnet = wn.synsets(lemma)[0]
+                #print(selrestr_wordnet, headword_wordnet.hypernym_paths(), end='')
+                return selrestr_wordnet in headword_wordnet.hypernym_paths()[0]
+            except IndexError:
+                # lemma not found
+                return True
+        elif self.logical_rel == "NOT":
+            return not self.children[0].matches_to_headword(headword)
+        elif self.logical_rel == "OR":
+            result = False
+            for c in self.children:
+                result = result or c.matches_to_headword(headword)
+            return result
+        elif self.logical_rel == "AND":
+            result = True
+            for c in self.children:
+                result = result and c.matches_to_headword(headword)
+            return result
+        else:
+            print('WTF!')
+            exit()
 
     @staticmethod
     def _build_keyword(r1, r2, kw):

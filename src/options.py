@@ -16,6 +16,7 @@ bootstrap = False
 probability_model = None
 passivize = False
 semrestr = False
+wordnetrestr = False
 # usually, a negative option is a bad idea, but 'non-core' is a thing in
 # FrameNet
 add_non_core_args = False
@@ -66,7 +67,7 @@ options = getopt.getopt(sys.argv[1:], "d:", [
     "best-gold", "best-auto",
     # tuning algorithms
     "fmatching-algo=", "add-non-core-args", "model=", "bootstrap",
-    "argument-identification", "heuristic-rules", "passivize", "semantic-restrictions",
+    "argument-identification", "heuristic-rules", "passivize", "semantic-restrictions", "wordnet-restrictions",
     # what do we annotate?
     "conll_input=", "conll_output=", "training-set", "lu",
     # meta
@@ -143,6 +144,8 @@ for opt, value in options[0]:
         heuristic_rules = True
     elif opt == "--semantic-restrictions":
         semrestr = True
+    elif opt == "--wordnet-restrictions":
+        wordnetrestr = True
     elif opt == "--passivize":
         passivize = True
 

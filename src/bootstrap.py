@@ -25,7 +25,7 @@ def bootstrap_algorithm(frames, probability_model, verbnet_classes):
         # Update probability model with resolved slots
         for frame, role_set, slot_position in slots:
             if len(role_set) == 1:
-                headword = headwordextractor.headword(frame.args[slot_position], frame.tree)
+                headword = headwordextractor.headword(frame.args[slot_position], frame.tree)['content_headword'][1]
                 probability_model.add_data_bootstrap(
                     next(iter(role_set)),
                     frame.predicate,
@@ -45,7 +45,7 @@ def bootstrap_algorithm(frames, probability_model, verbnet_classes):
             min_evidence = [1, 1, 1]
 
         for frame, role_set, slot_position in slots:
-            headword = headwordextractor.headword(frame.args[slot_position], frame.tree)
+            headword = headwordextractor.headword(frame.args[slot_position], frame.tree)['content_headword'][1]
             role = None
             for backoff_level in [0, 1, 2]:
                 role1, role2, ratio = probability_model.best_roles_bootstrap(

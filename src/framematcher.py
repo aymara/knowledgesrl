@@ -42,6 +42,25 @@ class FrameMatcher():
         self.best_data = []
         self.best_classes = set()
 
+    def restrict_headwords_with_wordnet(self):
+        """Keep only frames for which the selectional restrictions are matched according to WordNet"""
+        keeps = []
+        for i, data in enumerate(self.best_data):
+            verbnet_frame, slot_mapping = data
+            for slot1, slot2 in enumerate(slot_mapping):
+                if slot2 is None:
+                    continue
+
+                headword = self.frame_occurrence.headwords[slot1]['content_headword']
+                selrestr = verbnet_frame.role_restrictions[slot2]
+                #print('Is {} respecting {}? ... '.format(headword, selrestr), end='')
+                headword_matches_selrestr = selrestr.matches_to_headword(headword)
+                #print(headword_matches_selrestr)
+                if headword_matches_selrestr:
+                    keeps.append(i)
+
+        self.best_data = [data for i, data in enumerate(self.best_data) if i in keeps]
+
     def handle_semantic_restrictions(self, restr_data):
         """Keep only frames for which the syntactic restriction are
         the best matched
@@ -82,7 +101,7 @@ class FrameMatcher():
             if slot2 >= len(frame.role_restrictions):
                 continue
 
-            word = self.frame_occurrence.headwords[slot1]
+            word = self.frame_occurrence.headwords[slot1]['top_headword']
             restr = frame.role_restrictions[slot2]
             score += restr.match_score(word, semantic_data)
 
