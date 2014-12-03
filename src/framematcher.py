@@ -279,12 +279,12 @@ class FrameMatcher():
 
         if score > self.best_score:
             # This frame is better than any previous one: reset everything
+            self.best_score = score
             self.best_data = []
             self.best_classes = set()
 
         if score >= self.best_score:
             # This frame is at least as good as the others: add its data
-            self.best_score = score
             self.best_data.append((verbnet_frame, slots_associations))
             self.best_classes.add(verbnet_frame.vnclass)
 

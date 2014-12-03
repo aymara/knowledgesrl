@@ -134,7 +134,7 @@ if __name__ == "__main__":
             frame_occurrence.roles = matcher.possible_distribs()
             frame_occurrence.best_classes = matcher.best_classes
 
-            # Update semantic restrictions data
+            # Update semantic restrictions data (but take no decision)
             for i, restr in matcher.get_matched_restrictions():
                 word = frame_occurrence.headwords[i]
                 if restr.logical_rel == "AND":
@@ -143,7 +143,7 @@ if __name__ == "__main__":
                 else:
                     data_restr[restr].update([word])
 
-            # Update probability model
+            # Update probability model data (but take no decision)
             vnclass = model.add_data_vnclass(matcher)
             if not options.bootstrap:
                 for roles, slot_type, prep in zip(

@@ -166,22 +166,6 @@ class VNRestriction:
 
         return base_score + children_score
 
-    def get_atomic_restrictions(self):
-        """Return the list of basic (one keyword without logical relations)
-        restrictions needed to compute this restriction.
-        """
-        # TODO: This function is no longer used.
-
-        if self._is_empty_restr():
-            return set()
-        if len(self.children) == 0:
-            return {self.type}
-
-        result = set()
-        for child in self.children:
-            result |= child.get_atomic_restrictions()
-        return result
-
     @staticmethod
     def _build_keyword(r1, r2, kw):
         if r1._is_empty_restr():

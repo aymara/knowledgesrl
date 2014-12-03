@@ -231,7 +231,7 @@ class ProbabilityModel:
         verb = matcher.frame_occurrence.predicate
 
         vnclass = None
-        for frame, junk in matcher.best_data:
+        for frame, _ in matcher.best_data:
             if vnclass is None:
                 vnclass = root_vnclass(frame.vnclass)
             elif vnclass != root_vnclass(frame.vnclass):
