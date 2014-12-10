@@ -112,12 +112,14 @@ if __name__ == "__main__":
             # Check that FrameNet frame slots have been mapped to VerbNet-style slots
             if frame_occurrence.num_slots == 0:
                 errorslog.log_frame_without_slot(gold_frame, frame_occurrence)
+                frame_occurrence.matcher = None
                 continue
 
             errorslog.log_frame_with_slot(gold_frame, frame_occurrence)
             stats.stats_data["frames_mapped"] += 1
 
             matcher = framematcher.FrameMatcher(frame_occurrence, options.matching_algorithm)
+            frame_occurrence.matcher = matcher
             all_matcher.append(matcher)
 
             # Actual frame matching
@@ -134,9 +136,6 @@ if __name__ == "__main__":
             if options.wordnetrestr:
                 matcher.restrict_headwords_with_wordnet()
 
-            frame_occurrence.roles = matcher.possible_distribs()
-            frame_occurrence.best_classes = matcher.best_classes
-
             # Update semantic restrictions data (but take no decision)
             for i, restr in matcher.get_matched_restrictions():
                 word = frame_occurrence.headwords[i]['top_headword']
@@ -150,19 +149,17 @@ if __name__ == "__main__":
             vnclass = model.add_data_vnclass(matcher)
             if not options.bootstrap:
                 for roles, slot_type, prep in zip(
-                    frame_occurrence.roles, frame_occurrence.slot_types, frame_occurrence.slot_preps
+                    frame_occurrence.roles(), frame_occurrence.slot_types, frame_occurrence.slot_preps
                 ):
                     if len(roles) == 1:
                         model.add_data(slot_type, next(iter(roles)), prep, predicate, vnclass)
 
-            if options.debug and set() in frame_occurrence.roles:
-                log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles, verbnet_classes)
+            if options.debug and set() in frame_occurrence.roles():
+                log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles(), verbnet_classes)
 
         if options.semrestr:
             for matcher in all_matcher:
                 matcher.handle_semantic_restrictions(data_restr)
-                matcher.frame_occurrence.roles = matcher.possible_distribs()
-                matcher.frame_occurrence.best_classes = matcher.best_classes
 
         all_vn_frames.extend(vn_frames)
         all_annotated_frames.extend(annotated_frames)
@@ -177,14 +174,16 @@ if __name__ == "__main__":
         print("Applying probability model...")
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
             print(annotation_file.stem)
-            for frame in all_vn_frames:
-                for i, roles in enumerate(frame.roles):
-                    if len(frame.roles[i]) > 1:
+            for frame_occurrence in all_vn_frames:
+                for i in range(frame_occurrence.num_slots):
+                    roles_for_slot = frame_occurrence.roles()[i]
+                    if len(roles_for_slot) > 1:
                         new_role = model.best_role(
-                            frame.roles[i], frame.slot_types[i], frame.slot_preps[i],
-                            frame.predicate, options.probability_model)
+                            roles_for_slot,
+                            frame_occurrence.slot_types[i], frame_occurrence.slot_preps[i],
+                            frame_occurrence.predicate, options.probability_model)
                         if new_role is not None:
-                            frame.roles[i] = set([new_role])
+                            frame_occurrence.restrict_slot_to_role(i, new_role)
 
             if options.debug:
                 display_debug(options.n_debug)
@@ -193,7 +192,7 @@ if __name__ == "__main__":
         print("Dumping semantic CoNLL...")
         semantic_appender = ConllSemanticAppender(options.conll_input)
         for vn_frame in all_vn_frames:
-            if vn_frame.best_classes is not None:
+            if vn_frame.best_classes():
                 semantic_appender.add_frame_annotation(vn_frame)
         semantic_appender.dump_semantic_file(options.conll_output)
 

@@ -231,10 +231,10 @@ class ProbabilityModel:
         verb = matcher.frame_occurrence.predicate
 
         vnclass = None
-        for frame, _ in matcher.best_data:
+        for match in matcher.frame_occurrence.best_matches:
             if vnclass is None:
-                vnclass = root_vnclass(frame.vnclass)
-            elif vnclass != root_vnclass(frame.vnclass):
+                vnclass = root_vnclass(match['vnframe'].vnclass)
+            elif vnclass != root_vnclass(match['vnframe'].vnclass):
                 vnclass = None
                 break
 

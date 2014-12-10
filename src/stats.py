@@ -316,18 +316,18 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
             continue
 
         stats_data['frames_evaluated'] += 1
-        if not found_vn_frame.best_classes:
+        if not found_vn_frame.best_classes():
             stats_data['no_class'] += 1
-        elif len(found_vn_frame.best_classes) == 1:
+        elif len(found_vn_frame.best_classes()) == 1:
             stats_data['one_class'] += 1
-            if vnclass_to_normalized_name(next(iter(found_vn_frame.best_classes))) in role_matcher.framenetframe_to_verbnetclasses[gold_fn_frame.frame_name]:
+            if vnclass_to_normalized_name(next(iter(found_vn_frame.best_classes()))) in role_matcher.framenetframe_to_verbnetclasses[gold_fn_frame.frame_name]:
                 stats_data['one_class__correct'] += 1
         else:
             stats_data['multiple_classes'] += 1
-            if set(role_matcher.framenetframe_to_verbnetclasses[gold_fn_frame.frame_name]) & {vnclass_to_normalized_name(c) for c in found_vn_frame.best_classes}:
+            if set(role_matcher.framenetframe_to_verbnetclasses[gold_fn_frame.frame_name]) & {vnclass_to_normalized_name(c) for c in found_vn_frame.best_classes()}:
                 stats_data['multiple_classes__correct'] += 1
 
-        for i, slot in enumerate(found_vn_frame.roles):
+        for i, slot in enumerate(found_vn_frame.roles()):
             # Add number of possibles role for this slot (eg. the subject slot)
             stats_data["attributed_roles"] += len(slot)
             if len(slot) == 0:

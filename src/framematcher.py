@@ -26,10 +26,6 @@ class FrameMatcher():
     """Handle frame matching for a given frame that we want to annotate.
 
     :var frame_occurrence: VerbnetFrameOccurrence -- The frame to annotate
-    :var best_score: int -- The best score encountered among all the matches
-    :var best_data: (VerbnetOfficialFrame, int List) List -- The frames that
-        achieved this best score + the mapping between the slots of
-    :frame_occurrence and these verbnet frames
     :var algo: str -- The algorithm that we want to use
 
     """
@@ -38,28 +34,23 @@ class FrameMatcher():
         self.frame_occurrence = frame_occurrence
         self.algo = algo
 
-        self.best_score = 0
-        self.best_data = []
-        self.best_classes = set()
-
     def restrict_headwords_with_wordnet(self):
         """Keep only frames for which the selectional restrictions are matched according to WordNet"""
         keeps = []
-        for i, data in enumerate(self.best_data):
-            verbnet_frame, slot_mapping = data
-            for slot1, slot2 in enumerate(slot_mapping):
+        for i, match in enumerate(self.frame_occurrence.best_matches):
+            for slot1, slot2 in enumerate(match['slot_assocs']):
                 if slot2 is None:
                     continue
 
                 headword = self.frame_occurrence.headwords[slot1]['content_headword']
-                selrestr = verbnet_frame.role_restrictions[slot2]
+                selrestr = match['vnframe'].role_restrictions[slot2]
                 #print('Is {} respecting {}? ... '.format(headword, selrestr), end='')
                 headword_matches_selrestr = selrestr.matches_to_headword(headword)
                 #print(headword_matches_selrestr)
                 if headword_matches_selrestr:
                     keeps.append(i)
 
-        self.best_data = [data for i, data in enumerate(self.best_data) if i in keeps]
+        self.frame_occurrence.best_matches = [match for i, match in enumerate(self.frame_occurrence.best_matches) if i in keeps]
 
     def handle_semantic_restrictions(self, restr_data):
         """Keep only frames for which the syntactic restriction are
@@ -72,37 +63,37 @@ class FrameMatcher():
 
         # Nothing to do if no matching have been done yet.
         # Returns early to avoid taking the max of an empty list.
-        if len(self.best_data) == 0:
-            return
+        if not self.frame_occurrence.best_matches:
+            raise Exception("No matches yet.")
 
-        scores = [self.frame_semantic_score(x, restr_data) for x in self.best_data]
-        assert len(scores) == len(self.best_data)
+        scores = [self.frame_semantic_score(match, restr_data) for match in self.frame_occurrence.best_matches]
+        assert len(scores) == len(self.frame_occurrence.best_matches)
 
-        self.best_data = [data_part for data_part, score in zip(self.best_data, scores)
-                          if score == max(scores)]
+        self.frame_occurrence.best_matches = [
+            match for match, score in zip(self.frame_occurrence.best_matches, scores)
+            if score == max(scores)]
 
-    def frame_semantic_score(self, frame_data, semantic_data):
+    def frame_semantic_score(self, match, semantic_data):
         """For a given frame from VerbNet, compute a semantic score between
         this frame and the headwords of the real frame associated with
         FrameMatcher.
 
-        :param frame_data: The frame and the associated mapping
-        :type frame_data: (VerbnetOfficialFrame, int List)
+        :param match: The match: frame and the associated mapping
+        :type frame_data: ('vnframe', 'slot_assocs') dict
         :param semantic_data: The gathered relations between restrictions and words
         :type semantic_data: (VNRestriction -> (str Counter)) NoHashDefaultDict
 
         """
 
-        frame, mapping = frame_data
         score = 0
-        for slot1, slot2 in enumerate(mapping):
+        for slot1, slot2 in enumerate(match['slot_assocs']):
             if slot2 is None:
                 continue
-            if slot2 >= len(frame.role_restrictions):
+            if slot2 >= len(match['vnframe'].role_restrictions):
                 continue
 
             word = self.frame_occurrence.headwords[slot1]['top_headword']
-            restr = frame.role_restrictions[slot2]
+            restr = match['vnframe'].role_restrictions[slot2]
             score += restr.match_score(word, semantic_data)
 
         return score
@@ -116,21 +107,22 @@ class FrameMatcher():
 
         :returns: VNRestriction Dict -- a mapping between head words and the restriction they match
         """
-        slots = self.possible_distribs()
+        # TODO slots, or roles?
+        slots = self.frame_occurrence.roles()
         for i, slot in enumerate(slots):
             if slot is None or len(slot) != 1:
                 continue
 
             restr = VNRestriction.build_empty()
-            for frame, mapping in self.best_data:
-                if mapping[i] is None:
+            for match in self.frame_occurrence.best_matches:
+                if match['slot_assocs'][i] is None:
                     continue
-                elif mapping[i] >= len(frame.role_restrictions):
+                elif match['slot_assocs'][i] >= len(match['vnframe'].role_restrictions):
                     continue
 
                 restr = VNRestriction.build_or(
                     restr,
-                    frame.role_restrictions[mapping[i]])
+                    match['vnframe'].role_restrictions[match['slot_assocs'][i]])
 
             yield i, restr
 
@@ -296,34 +288,11 @@ class FrameMatcher():
             ratio_2 = num_match / verbnet_frame.num_slots
         score = int(100 * (ratio_1 + ratio_2))
 
-        if score > self.best_score:
+        if score > self.frame_occurrence.best_score:
             # This frame is better than any previous one: reset everything
-            self.best_score = score
-            self.best_data = []
-            self.best_classes = set()
+            self.frame_occurrence.best_score = score
+            self.frame_occurrence.best_matches = []
 
-        if score >= self.best_score:
+        if score >= self.frame_occurrence.best_score:
             # This frame is at least as good as the others: add its data
-            self.best_data.append((verbnet_frame, slots_associations))
-            self.best_classes.add(verbnet_frame.vnclass)
-
-    def possible_distribs(self):
-        """Compute the lists of possible roles for each slots
-
-        :returns: str set list -- The lists of possible roles for each slot
-        """
-
-        result = [set() for x in range(self.frame_occurrence.num_slots)]
-
-        for verbnet_frame, mapping in self.best_data:
-            for slot1, slot2 in enumerate(mapping):
-                if slot2 is None:
-                    continue
-
-                # We want this to fail when roles get stored in a dictionary or a class
-                assert all([type(s) == tuple for s in verbnet_frame.syntax])
-
-                role = [role for elem, role in verbnet_frame.syntax if role is not None][slot2]
-                result[slot1].add(role)
-
-        return result
+            self.frame_occurrence.best_matches.append({'vnframe': verbnet_frame, 'slot_assocs': slots_associations})

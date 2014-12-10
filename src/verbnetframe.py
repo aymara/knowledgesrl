@@ -66,10 +66,16 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
     representation for easy comparison.
 
     :var structure: (str | str set) list -- representation of the structure
-    :var roles: set list -- possible VerbNet roles for each structure's slot
-    :var num_slots: int -- number of argument slots in :structure
     :var predicate: str -- the predicate
+    :var num_slots: int -- number of argument slots in :structure
     :var headwords: str -- the head word of each argument
+
+    :var best_score: int -- The best score encountered among all the matches
+    :var best_matches: ({'vnframe': VerbnetOfficialFrame, 'slot_assocs': int
+    List} List -- The frames that achieved this best score + the mapping (in
+    each tuple, the first int is the occurrence id, and the second one is the
+    official id)
+    between our identified slots and these verbnet frames
     """
 
     phrase_replacements = {
@@ -78,29 +84,62 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         "VPbrst": "S", "VPing": "S_ING", "VPto": "to S"
     }
 
-    def __init__(self, structure, roles, predicate):
+    def __init__(self, structure, num_slots, predicate):
         self.structure = structure
         self.predicate = predicate
-
-        # Transform "a" in {"a"} and keep everything else unchanged
-        self.roles = [{x} if isinstance(x, str) else x for x in roles]
-        self.num_slots = len(self.roles)
+        self.num_slots = num_slots
 
         self.slot_types, self.slot_preps = self.compute_slot_types(structure)
         self.headwords = [None] * self.num_slots
 
-        self.best_classes = None
+        self.best_score = 0
+        self.best_matches = []
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
                 self.structure == other.structure and
-                self.roles == other.roles and
+                self.roles() == other.roles() and
                 self.num_slots == other.num_slots and
                 self.predicate == other.predicate)
 
     def __repr__(self):
         return "VerbnetFrameOccurrence({}, {}, {})".format(
-            self.predicate, self.structure, self.roles)
+            self.predicate, self.structure, self.roles())
+
+    def roles(self):
+        """Compute the lists of possible roles for each slot
+
+        :returns: str set list -- The lists of possible roles for each slot
+        """
+
+        result = [set() for x in range(self.num_slots)]
+
+        for match in self.best_matches:
+            for slot1, slot2 in enumerate(match['slot_assocs']):
+                if slot2 is None:
+                    continue
+
+                # We want this to fail when roles get stored in a dictionary or a class
+                assert all([type(s) == tuple for s in match['vnframe'].syntax])
+
+                role = [role for elem, role in match['vnframe'].syntax if role is not None][slot2]
+                result[slot1].add(role)
+
+        return result
+
+    def restrict_slot_to_role(self, i, new_role):
+        keeps = []
+        for index, match in enumerate(self.best_matches):
+            role_index_in_match = match['slot_assocs'][i]
+            role_in_match = match['vnframe'].syntax[role_index_in_match][1]
+            if role_in_match == new_role:
+                keeps.append(index)
+
+        self.best_matches = [match for index, match in enumerate(self.best_matches) if index in keeps]
+
+    def best_classes(self):
+        return {match['vnframe'].vnclass for match in self.best_matches}
+
 
     @staticmethod
     def build_from_frame(gold_framenet_instance, conll_frame_instance):
@@ -127,11 +166,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         chunk_list = VerbnetFrameOccurrence.annotated_chunks(gold_framenet_instance, sentence)
         structure = list(VerbnetFrameOccurrence.chunks_to_verbnet(chunk_list))
 
-        result = VerbnetFrameOccurrence(structure, [], predicate=gold_framenet_instance.predicate.lemma)
-        result.num_slots = len([arg for arg in gold_framenet_instance.args if arg.instanciated])
-
-        # Finally, fill the role list with None value
-        result.roles = [None] * result.num_slots
+        num_slots = len([arg for arg in gold_framenet_instance.args if arg.instanciated])
+        result = VerbnetFrameOccurrence(structure, num_slots, predicate=gold_framenet_instance.predicate.lemma)
 
         # If the FrameInstance only comes from a CoNLL file and is not part of
         # the corpus, we don't want to loose predicate/args position in the

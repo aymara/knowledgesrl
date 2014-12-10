@@ -6,7 +6,7 @@ from functools import reduce
 import headwordextractor
 
 
-def bootstrap_algorithm(frames, probability_model, verbnet_classes):
+def bootstrap_algorithm(vn_frames, probability_model, verbnet_classes):
     # See Swier and Stevenson, Unsupervised Semantic Role Labelling, 2004, 5.4
     # for information about the parameters' values
     log_ratio = 8
@@ -15,65 +15,65 @@ def bootstrap_algorithm(frames, probability_model, verbnet_classes):
     # [1, 3, 10] -> [17, 65, 2076]
     # [3, 5, 10] -> [17, 65, 2076]
 
-    # Transform the frame list (with the slots in frame.roles) into
-    # a list of (frame, role_set, slot_position)
-    grouped_roles = [[(x, y, slot_position) for slot_position, y in enumerate(x.roles)] for x in frames]
-    slots = reduce(lambda a, b: a+b, grouped_roles)
-
     total = [0, 0, 0]
     while log_ratio >= 1:
-        # Update probability model with resolved slots
-        for frame, role_set, slot_position in slots:
-            if len(role_set) == 1:
-                headword = headwordextractor.headword(frame.args[slot_position], frame.tree)['content_headword'][1]
+        # Update probability model with resolved slots (only one role)
+        for frame_occurrence in vn_frames:
+            for slot_position, role_set in enumerate(frame_occurrence.roles()):
+                if len(role_set) != 1:
+                    continue
+
+                headword = headwordextractor.headword(
+                    frame_occurrence.args[slot_position],
+                    frame_occurrence.tree)['content_headword'][1]
                 probability_model.add_data_bootstrap(
                     next(iter(role_set)),
-                    frame.predicate,
-                    verbnet_classes[frame.predicate],
-                    frame.slot_types[slot_position],
-                    frame.slot_preps[slot_position],
+                    frame_occurrence.predicate,
+                    verbnet_classes[frame_occurrence.predicate],
+                    frame_occurrence.slot_types[slot_position],
+                    frame_occurrence.slot_preps[slot_position],
                     headword,
                     headwordextractor.get_class(headword)
                 )
-
-        # Remove resolved and empty slots
-        slots = list(filter(lambda x: len(x[1]) > 1, slots))
 
         # According to the article, there is no longer a min evidence threshold
         # when log_ratio reaches 1
         if log_ratio == 1:
             min_evidence = [1, 1, 1]
 
-        for frame, role_set, slot_position in slots:
-            headword = headwordextractor.headword(frame.args[slot_position], frame.tree)['content_headword'][1]
-            role = None
-            for backoff_level in [0, 1, 2]:
-                role1, role2, ratio = probability_model.best_roles_bootstrap(
-                    role_set,
-                    frame.predicate,
-                    # Choosing the first class here is arbitrary
-                    verbnet_classes[frame.predicate],
-                    frame.slot_types[slot_position],
-                    frame.slot_preps[slot_position],
-                    headword,
-                    headwordextractor.get_class(headword),
-                    backoff_level,
-                    min_evidence[backoff_level]
-                )
+        for frame_occurrence in vn_frames:
+            for slot_position in range(frame_occurrence.num_slots):
+                role_set = frame_occurrence.roles()[slot_position]
+                if len(role_set) <= 1:
+                    continue
 
-                if (role1 is not None and
-                    ((role2 is not None and log(ratio) > log_ratio) or
-                     log_ratio <= 1)):
+                headword = headwordextractor.headword(
+                    frame_occurrence.args[slot_position],
+                    frame_occurrence.tree)['content_headword'][1]
+                role = None
+                for backoff_level in [0, 1, 2]:
+                    role1, role2, ratio = probability_model.best_roles_bootstrap(
+                        role_set,
+                        frame_occurrence.predicate,
+                        # Choosing the first class here is arbitrary
+                        verbnet_classes[frame_occurrence.predicate],
+                        frame_occurrence.slot_types[slot_position],
+                        frame_occurrence.slot_preps[slot_position],
+                        headword,
+                        headwordextractor.get_class(headword),
+                        backoff_level,
+                        min_evidence[backoff_level]
+                    )
 
-                    role = role1
-                    total[backoff_level] += 1
-                    break
+                    if (role1 is not None and
+                        ((role2 is not None and log(ratio) > log_ratio) or
+                        log_ratio <= 1)):
 
-            if role is not None:
-                role_set.intersection_update(set())
-                role_set.add(role)
-                # role_set = set([role]) does not work
-                # because we need the role set to be updated
-                # everywhere it is referenced
+                        role = role1
+                        total[backoff_level] += 1
+                        break
+
+                if role is not None:
+                    frame_occurrence.restrict_slot_to_role(slot_position, role)
 
         log_ratio -= log_ratio_step
