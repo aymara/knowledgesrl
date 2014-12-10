@@ -54,9 +54,6 @@ class VnFnRoleMatcher():
         # FrameNet frame -> VerbNet class mapping
         self.framenetframe_to_verbnetclasses = defaultdict(list)
 
-        self._build_mapping(path)
-
-    def _build_mapping(self, path):
         root = ET.ElementTree(file=str(path))
 
         for mapping in root.getroot():

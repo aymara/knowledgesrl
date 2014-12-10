@@ -36,11 +36,11 @@ class HeadWordExtractorTest(unittest.TestCase):
 
         frame = reader.frames[1]
         sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
-        self.assertEqual(headwordextractor.headword(frame.args[0], tree), "you")
+        self.assertEqual(headwordextractor.headword(frame.args[0], tree), {'top_headword': ('PRP', 'you'), 'content_headword': ('PRP', 'you')})
 
         frame = reader.frames[25]
         sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
-        self.assertEqual(headwordextractor.headword(frame.args[0], tree), "people")
+        self.assertEqual(headwordextractor.headword(frame.args[0], tree), {'top_headword': ('NNS', 'people'), 'content_headword': ('NNS', 'people')})
 
 
 def sample_args(self, num_sample = 10):

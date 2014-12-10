@@ -24,8 +24,6 @@ class VNRestrictionTest(unittest.TestCase):
         
         self.assertEqual(restr6, restr7)
         self.assertNotEqual(restr4, restr5)
-        subrestr = restr6.get_atomic_restrictions()
-        self.assertEqual(subrestr, set(["human", "animal", "solid"]))
         self.assertTrue(str(restr8) == str(restr7))
         self.assertTrue(str(restr4) == "(human) AND (animal)")
         self.assertTrue(str(restr7) == "(animal) AND (solid) AND (human)")
