@@ -136,6 +136,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 keeps.append(index)
 
         self.best_matches = [match for index, match in enumerate(self.best_matches) if index in keeps]
+        # After frame matching, a "best score" doesn't make sense anymore
+        self.best_score = None
 
     def best_classes(self):
         return {match['vnframe'].vnclass for match in self.best_matches}
