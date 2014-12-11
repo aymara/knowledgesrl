@@ -70,7 +70,6 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
     :var num_slots: int -- number of argument slots in :structure
     :var headwords: str -- the head word of each argument
 
-    :var best_score: int -- The best score encountered among all the matches
     :var best_matches: ({'vnframe': VerbnetOfficialFrame, 'slot_assocs': int
     List} List -- The frames that achieved this best score + the mapping (in
     each tuple, the first int is the occurrence id, and the second one is the
@@ -92,7 +91,6 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.slot_types, self.slot_preps = self.compute_slot_types(structure)
         self.headwords = [None] * self.num_slots
 
-        self.best_score = 0
         self.best_matches = []
 
     def __eq__(self, other):
@@ -127,6 +125,15 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 
         return result
 
+    def add_match(self, match, score):
+        self.best_matches.append(match)
+
+    def remove_all_matches(self):
+        self.best_matches = []
+
+    def remove_match(self, toremove_match):
+        self.best_matches = [match for match in self.best_matches if match != toremove_match]
+
     def restrict_slot_to_role(self, i, new_role):
         keeps = []
         for index, match in enumerate(self.best_matches):
@@ -136,8 +143,6 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 keeps.append(index)
 
         self.best_matches = [match for index, match in enumerate(self.best_matches) if index in keeps]
-        # After frame matching, a "best score" doesn't make sense anymore
-        self.best_score = None
 
     def best_classes(self):
         return {match['vnframe'].vnclass for match in self.best_matches}

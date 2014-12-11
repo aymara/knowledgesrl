@@ -122,16 +122,16 @@ if __name__ == "__main__":
             frame_occurrence.matcher = matcher
             all_matcher.append(matcher)
 
-            # Actual frame matching
+            frames_to_be_matched = []
             for verbnet_frame in sorted(frames_for_verb[predicate]):
                 if options.passivize and gold_frame.passive:
-                    try:
-                        for passivized_frame in verbnet_frame.passivize():
-                            matcher.new_match(passivized_frame)
-                    except:
-                        continue
+                    for passivized_frame in verbnet_frame.passivize():
+                        frames_to_be_matched.append(passivized_frame)
                 else:
-                    matcher.new_match(verbnet_frame)
+                    frames_to_be_matched.append(verbnet_frame)
+
+            # Actual frame matching
+            matcher.perform_frame_matching(frames_to_be_matched)
 
             if options.wordnetrestr:
                 matcher.restrict_headwords_with_wordnet()
@@ -175,8 +175,11 @@ if __name__ == "__main__":
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
             print(annotation_file.stem)
             for frame_occurrence in all_vn_frames:
-                for i in range(frame_occurrence.num_slots):
-                    roles_for_slot = frame_occurrence.roles()[i]
+                # Commented out a version that only allowed possible role
+                # combinations after each restriction
+                # for i in range(frame_occurrence.num_slots):
+                #     roles_for_slot = frame_occurrence.roles()[i]
+                for i, roles_for_slot in frame_occurrence.roles():
                     if len(roles_for_slot) > 1:
                         new_role = model.best_role(
                             roles_for_slot,

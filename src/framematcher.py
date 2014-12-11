@@ -36,7 +36,7 @@ class FrameMatcher():
 
     def restrict_headwords_with_wordnet(self):
         """Keep only frames for which the selectional restrictions are matched according to WordNet"""
-        keeps = []
+        one_role_compatible_match_list = []
         for i, match in enumerate(self.frame_occurrence.best_matches):
             for slot1, slot2 in enumerate(match['slot_assocs']):
                 if slot2 is None:
@@ -44,13 +44,13 @@ class FrameMatcher():
 
                 headword = self.frame_occurrence.headwords[slot1]['content_headword']
                 selrestr = match['vnframe'].role_restrictions[slot2]
-                #print('Is {} respecting {}? ... '.format(headword, selrestr), end='')
                 headword_matches_selrestr = selrestr.matches_to_headword(headword)
-                #print(headword_matches_selrestr)
                 if headword_matches_selrestr:
-                    keeps.append(i)
+                    one_role_compatible_match_list.append(i)
 
-        self.frame_occurrence.best_matches = [match for i, match in enumerate(self.frame_occurrence.best_matches) if i in keeps]
+        for i, match in enumerate(self.frame_occurrence.best_matches):
+            if i not in one_role_compatible_match_list:
+                self.frame_occurrence.remove_match(match)
 
     def handle_semantic_restrictions(self, restr_data):
         """Keep only frames for which the syntactic restriction are
@@ -60,18 +60,11 @@ class FrameMatcher():
         :type restr_data: (VNRestriction -> (str Counter)) NoHashDefaultDict
 
         """
-
-        # Nothing to do if no matching have been done yet.
-        # Returns early to avoid taking the max of an empty list.
-        if not self.frame_occurrence.best_matches:
-            raise Exception("No matches yet.")
-
         scores = [self.frame_semantic_score(match, restr_data) for match in self.frame_occurrence.best_matches]
-        assert len(scores) == len(self.frame_occurrence.best_matches)
 
-        self.frame_occurrence.best_matches = [
-            match for match, score in zip(self.frame_occurrence.best_matches, scores)
-            if score == max(scores)]
+        for match, score in zip(self.frame_occurrence.best_matches, scores):
+            if score < max(scores):
+                self.frame_occurrence.remove_match(match)
 
     def frame_semantic_score(self, match, semantic_data):
         """For a given frame from VerbNet, compute a semantic score between
@@ -253,46 +246,48 @@ class FrameMatcher():
 
         return num_match, slots_associations
 
-    def new_match(self, verbnet_frame):
+    def perform_frame_matching(self, official_frames_to_be_matched):
         """Compute the matching score and update the possible roles distribs
 
-        :param verbnet_frame: frame to test.
-        :type verbnet_frame: VerbnetOfficialFrame.
+        :param official_frames_to_be_matched: frames to test.
+        :type official_frames_to_be_matched: VerbnetOfficialFrame list.
 
         """
-        slots_associations = [None for x in range(self.frame_occurrence.num_slots)]
+        best_score = 0
+        for verbnet_frame in official_frames_to_be_matched:
+            slots_associations = [None for x in range(self.frame_occurrence.num_slots)]
 
-        # Consider 'that' as optional in english, eg.:
-        # Tell him that S --> Tell him S
-        import copy
-        if verbnet_frame.has('that') and 'that' not in self.frame_occurrence.structure:
-            verbnet_frame = copy.deepcopy(verbnet_frame)
-            verbnet_frame.remove('that')
+            # Consider 'that' as optional in english, eg.:
+            # Tell him that S --> Tell him S
+            import copy
+            if verbnet_frame.has('that') and 'that' not in self.frame_occurrence.structure:
+                verbnet_frame = copy.deepcopy(verbnet_frame)
+                verbnet_frame.remove('that')
 
-        if self.algo == "baseline":
-            matching_function = self._matching_baseline
-        elif self.algo == "sync_predicates":
-            matching_function = self._matching_sync_predicates
-        elif self.algo == "stop_on_fail":
-            matching_function = self._matching_stop_on_fail
-        else:
-            raise Exception("Unknown matching algorithm : {}".format(self.algo))
+            if self.algo == "baseline":
+                matching_function = self._matching_baseline
+            elif self.algo == "sync_predicates":
+                matching_function = self._matching_sync_predicates
+            elif self.algo == "stop_on_fail":
+                matching_function = self._matching_stop_on_fail
+            else:
+                raise Exception("Unknown matching algorithm : {}".format(self.algo))
 
-        num_match, slots_associations = matching_function(verbnet_frame, slots_associations)
+            num_match, slots_associations = matching_function(verbnet_frame, slots_associations)
 
-        # Score computation
-        ratio_1 = num_match / self.frame_occurrence.num_slots
-        if verbnet_frame.num_slots == 0:
-            ratio_2 = 1
-        else:
-            ratio_2 = num_match / verbnet_frame.num_slots
-        score = int(100 * (ratio_1 + ratio_2))
+            # Score computation
+            ratio_1 = num_match / self.frame_occurrence.num_slots
+            if verbnet_frame.num_slots == 0:
+                ratio_2 = 1
+            else:
+                ratio_2 = num_match / verbnet_frame.num_slots
+            score = int(100 * (ratio_1 + ratio_2))
 
-        if score > self.frame_occurrence.best_score:
             # This frame is better than any previous one: reset everything
-            self.frame_occurrence.best_score = score
-            self.frame_occurrence.best_matches = []
+            if score > best_score:
+                self.frame_occurrence.remove_all_matches()
+                best_score = score
 
-        if score >= self.frame_occurrence.best_score:
             # This frame is at least as good as the others: add its data
-            self.frame_occurrence.best_matches.append({'vnframe': verbnet_frame, 'slot_assocs': slots_associations})
+            if score >= best_score:
+                self.frame_occurrence.add_match({'vnframe': verbnet_frame, 'slot_assocs': slots_associations}, score)
