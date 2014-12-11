@@ -101,7 +101,7 @@ class FrameMatcher():
         :returns: VNRestriction Dict -- a mapping between head words and the restriction they match
         """
         # TODO slots, or roles?
-        slots = self.frame_occurrence.roles()
+        slots = self.frame_occurrence.roles
         for i, slot in enumerate(slots):
             if slot is None or len(slot) != 1:
                 continue

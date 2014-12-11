@@ -18,7 +18,7 @@ def bootstrap_algorithm(vn_frames, probability_model, verbnet_classes):
     while log_ratio >= 1:
         # Update probability model with resolved slots (only one role)
         for frame_occurrence in vn_frames:
-            for slot_position, role_set in enumerate(frame_occurrence.roles()):
+            for slot_position, role_set in enumerate(frame_occurrence.roles):
                 if len(role_set) != 1:
                     continue
 
@@ -42,7 +42,7 @@ def bootstrap_algorithm(vn_frames, probability_model, verbnet_classes):
 
         for frame_occurrence in vn_frames:
             for slot_position in range(frame_occurrence.num_slots):
-                role_set = frame_occurrence.roles()[slot_position]
+                role_set = frame_occurrence.roles[slot_position]
                 if len(role_set) <= 1:
                     continue
 

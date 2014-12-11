@@ -75,6 +75,9 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
     each tuple, the first int is the occurrence id, and the second one is the
     official id)
     between our identified slots and these verbnet frames
+
+    :var roles: this list of set should ALWAYS reflect current match situation,
+    except in probability models?
     """
 
     phrase_replacements = {
@@ -92,25 +95,28 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.headwords = [None] * self.num_slots
 
         self.best_matches = []
+        self.roles = self.possible_roles()
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
                 self.structure == other.structure and
-                self.roles() == other.roles() and
+                self.roles == other.roles and
                 self.num_slots == other.num_slots and
                 self.predicate == other.predicate)
 
     def __repr__(self):
         return "VerbnetFrameOccurrence({}, {}, {})".format(
-            self.predicate, self.structure, self.roles())
+            self.predicate, self.structure, self.roles)
 
-    def roles(self):
+    def possible_roles(self):
         """Compute the lists of possible roles for each slot
 
         :returns: str set list -- The lists of possible roles for each slot
         """
 
-        result = [set() for x in range(self.num_slots)]
+        # Note: Do not use [set()] * self.num_slots as the set() would be the
+        # same for each role.
+        result = [set() for i in range(self.num_slots)]
 
         for match in self.best_matches:
             for slot1, slot2 in enumerate(match['slot_assocs']):
@@ -127,12 +133,15 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 
     def add_match(self, match, score):
         self.best_matches.append(match)
+        self.roles = self.possible_roles()
 
     def remove_all_matches(self):
         self.best_matches = []
+        self.roles = self.possible_roles()
 
     def remove_match(self, toremove_match):
         self.best_matches = [match for match in self.best_matches if match != toremove_match]
+        self.roles = self.possible_roles()
 
     def restrict_slot_to_role(self, i, new_role):
         keeps = []
@@ -143,6 +152,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 keeps.append(index)
 
         self.best_matches = [match for index, match in enumerate(self.best_matches) if index in keeps]
+        self.roles = self.possible_roles()
 
     def best_classes(self):
         return {match['vnframe'].vnclass for match in self.best_matches}

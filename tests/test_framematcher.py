@@ -20,7 +20,8 @@ class FrameMatcherTest(unittest.TestCase):
         self.assertEqual(best_score, int(100 * 4 / 3))
         best_score = matcher.perform_frame_matching([frame3, frame4])
         self.assertEqual(best_score, 200)
-        self.assertEqual(frame_occurrence.roles(), [{'Agent'}, {'Patient'}, {'Role2', 'Role3'}])
+        self.assertEqual(frame_occurrence.possible_roles(), [{'Agent'}, {'Patient'}, {'Role2', 'Role3'}])
+        self.assertEqual(frame_occurrence.roles, [{'Agent'}, {'Patient'}, {'Role2', 'Role3'}])
         
     def test_2(self):
         frame_occurrence = VerbnetFrameOccurrence(['to', 'be'], 0, 'a predicate')
@@ -54,7 +55,7 @@ class FrameMatcherTest(unittest.TestCase):
         ]
         matcher.perform_frame_matching(verbnet_frames)
             
-        self.assertEqual(frame_occurrence.roles(), [{'Agent', 'Instrument'}, {'Theme'}])
+        self.assertEqual(frame_occurrence.roles, [{'Agent', 'Instrument'}, {'Theme'}])
      
                  
     def test_baseline_alg(self):
@@ -70,7 +71,7 @@ class FrameMatcherTest(unittest.TestCase):
         ]
         matcher = FrameMatcher(frame_occurrence, 'baseline')
         matcher.perform_frame_matching(verbnet_frames)
-        self.assertEqual(frame_occurrence.roles(), [{'R1'}, {'R4'}, set(), {'R5'}])
+        self.assertEqual(frame_occurrence.roles, [{'R1'}, {'R4'}, set(), {'R5'}])
 
     def test_removed_that(self):
         # They considered he was the professor
@@ -81,7 +82,7 @@ class FrameMatcherTest(unittest.TestCase):
             [('NP', 'Agent'), ('V', None), ('that', None), ('S', 'Patient')],
             'consider-29.9-1', [])])
         self.assertEqual(best_score, 200)
-        self.assertEqual(frame_occurrence.roles(), [{'Agent'}, {'Patient'}])
+        self.assertEqual(frame_occurrence.roles, [{'Agent'}, {'Patient'}])
 
     def test_present_that(self):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'that', 'S'], 2, 'consider')
@@ -91,4 +92,4 @@ class FrameMatcherTest(unittest.TestCase):
             [('NP', 'Agent'), ('V', None), ('that', None), ('S', 'Patient')],
             'consider-29.9-1', [])])
         self.assertEqual(best_score, 200)
-        self.assertEqual(frame_occurrence.roles(), [{'Agent'}, {'Patient'}])
+        self.assertEqual(frame_occurrence.roles, [{'Agent'}, {'Patient'}])

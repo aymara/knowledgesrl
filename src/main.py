@@ -149,13 +149,13 @@ if __name__ == "__main__":
             vnclass = model.add_data_vnclass(matcher)
             if not options.bootstrap:
                 for roles, slot_type, prep in zip(
-                    frame_occurrence.roles(), frame_occurrence.slot_types, frame_occurrence.slot_preps
+                    frame_occurrence.roles, frame_occurrence.slot_types, frame_occurrence.slot_preps
                 ):
                     if len(roles) == 1:
                         model.add_data(slot_type, next(iter(roles)), prep, predicate, vnclass)
 
-            if options.debug and set() in frame_occurrence.roles():
-                log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles(), verbnet_classes)
+            if options.debug and set() in frame_occurrence.roles:
+                log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles, verbnet_classes)
 
         if options.semrestr:
             for matcher in all_matcher:
@@ -178,8 +178,8 @@ if __name__ == "__main__":
                 # Commented out a version that only allowed possible role
                 # combinations after each restriction
                 # for i in range(frame_occurrence.num_slots):
-                #     roles_for_slot = frame_occurrence.roles()[i]
-                for i, roles_for_slot in enumerate(frame_occurrence.roles()):
+                #     roles_for_slot = frame_occurrence.roles[i]
+                for i, roles_for_slot in enumerate(frame_occurrence.roles):
                     if len(roles_for_slot) > 1:
                         new_role = model.best_role(
                             roles_for_slot,
