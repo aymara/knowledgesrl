@@ -144,15 +144,38 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.roles = self.possible_roles()
 
     def restrict_slot_to_role(self, i, new_role):
-        keeps = []
-        for index, match in enumerate(self.best_matches):
-            role_index_in_match = match['slot_assocs'][i]
-            role_in_match = match['vnframe'].syntax[role_index_in_match][1]
-            if role_in_match == new_role:
-                keeps.append(index)
+        """This functions only affects self.roles without touching
+        best_matches. The callers need to call select_likeliest_matches once
+        they've restricted all roles."""
+        self.roles[i] = set([new_role])
 
-        self.best_matches = [match for index, match in enumerate(self.best_matches) if index in keeps]
-        self.roles = self.possible_roles()
+    def select_likeliest_matches(self):
+        """Finds the matches that are the closest to the restricted roles. Only
+        makes sens when roles got restricted by restrict_slot_to_role"""
+        scores = []
+
+        for match in self.best_matches:
+            roles_that_match = 0
+            for i, role_set in enumerate(self.roles):
+                if match['slot_assocs'][i] is None:
+                    # not mapped?
+                    continue
+
+                role_in_match = match['vnframe'].roles()[match['slot_assocs'][i]]
+                if role_in_match in role_set:
+                    roles_that_match += 1
+
+            mean_num_slots = (self.num_slots + match['vnframe'].num_slots) / 2
+            scores.append(roles_that_match / max(mean_num_slots, 1))
+
+        if scores:
+            best_score = max(scores)
+
+            self.best_matches = [match for score, match in zip(scores, self.best_matches)
+                                 if score == best_score]
+
+            # Commenting out for now as it's the old behavior
+            # self.roles = self.possible_roles()
 
     def best_classes(self):
         return {match['vnframe'].vnclass for match in self.best_matches}
@@ -313,6 +336,9 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
 
     def has(self, word):
         return any([True for elem, role in self.syntax if 'that' in elem])
+
+    def roles(self):
+        return [role for elem, role in self.syntax if role is not None]
 
     def remove(self, word):
         self.syntax = [(elem, role) for elem, role in self.syntax if elem != word]

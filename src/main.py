@@ -187,6 +187,7 @@ if __name__ == "__main__":
                             frame_occurrence.predicate, options.probability_model)
                         if new_role is not None:
                             frame_occurrence.restrict_slot_to_role(i, new_role)
+                frame_occurrence.select_likeliest_matches()
 
             if options.debug:
                 display_debug(options.n_debug)
