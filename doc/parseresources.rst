@@ -4,9 +4,9 @@ Resources parsing
 VerbNet parsing
 ---------------
 
-The parsing of VerbNet is done by the ``verbnetreader`` module. It reads every
-XML file in data/verbnet3-2, each of which represents a VerbNet root class and
-all its subclasses.
+The parsing of VerbNet is done by the ``verbnetreader`` module. It
+reads every XML file in our modified VerbNet data/verbnet, each of
+which represents a VerbNet root class and all its subclasses.
 
 For each frame found in every class and subclasses of a file, a
 ``VerbnetOfficialFrame`` object is instanciated and associated with every
@@ -36,12 +36,13 @@ explicit in the primary structure, we look into the ``SYNTAX`` element of the
 frame. The information can take three different forms :
 
 * a ``LEX`` element, which ``value`` attribute is the only acceptable
-  preposition
+  preposition,
 * a ``PREP`` element with a ``value`` attribute, which is the only acceptable
-  preposition
+  preposition,
 * a ``PREP`` element whitout ``value`` attribute, but which contains
   selective restrictions data. In this case, the ``type`` attribute of the
-  SELRESTRS/SELREST element is the class of acceptable prepositions
+  SELRESTRS/SELRESTR element gives us the preposition classe, and
+  ``verbnetprepclasses`` lists the corresponding prepositions.
 
 Sometimes, keywords (prepositions or what/who/it/...) whom presence cannot be
 deduced from the primary structure appear in the ``SYNTAX`` element. That is
@@ -85,8 +86,8 @@ Fulltext corpus data
 The parsing of FrameNet mainly consists in instanciating ``FrameInstance``
 objects from FrameNet's XML corpus. After all steps described below, the frame
 occurrence is translated into a ``VerbnetFrameOccurrence``, an object close
-enough to ``VerbnetOfficialFrame`` to allow for frame matching. using the
-content of the XML in data/fndata-1.5/fulltext/.
+enough to ``VerbnetOfficialFrame`` to allow for frame matching: the data that
+needs to be inferred is not present in ``VerbnetFrameOccurrence``.
 
 The FrameNet fulltext corpus in stored in XML files which contain many
 ``sentence`` elements, each of which contains one or more frames. The text of

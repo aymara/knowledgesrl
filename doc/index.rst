@@ -8,11 +8,13 @@ Welcome to knowledgesrl's documentation!
 
 This repository contains:
 
- * A reproduction of (Swier & Stevenson, 2005) results for recent versions of
-   resources and NLP tools (MST Parser, latest VerbNet, FrameNet and VN-FN
-   mappings).
+ * A reproduction of (Swier & Stevenson, 2005) results for recent
+   versions (as of 2014) of resources and NLP tools (MST Parser,
+   VerbNet 3.2, FrameNet 1.2 and VerbNet-FrameNet role mappings from
+   SemLink 1.2.2c).
  * Some improvements of our own
- * Experiments on domain-specific knowledge-based semantic role labeling
+ * Experiments on domain-specific knowledge-based semantic role
+   labeling on French and English
 
 Documentation:
 
