@@ -35,7 +35,7 @@ class VerbnetReader:
         self.unhandled = []
 
         if not list(path.glob('*.xml')):
-            raise Exception('VerbNet not found!')
+            raise Exception('VerbNet not found! Did you clone with submodules?')
 
         for filename in path.glob('*.xml'):
             root = ET.ElementTree(file=str(filename.resolve()))

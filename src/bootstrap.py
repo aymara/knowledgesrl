@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from math import log
-from functools import reduce
 import headwordextractor
 
 

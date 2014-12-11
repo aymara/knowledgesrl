@@ -79,7 +79,7 @@ class ProbabilityModel:
     :var data_default: str. Dict The default assignements
     :var data_slot_class: str. 2D Dict The number of occurences of each role in every slot class
     :var data_slot: str. 3D Dict The number of occurences of each role in every slot
-    :var data_slot: str. 4D Dict The number of occurences of each role in every (slot, predicate)
+    :var data_predicate_slot: str. 4D Dict The number of occurences of each role in every (slot, predicate)
 
     """
 
