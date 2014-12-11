@@ -291,3 +291,6 @@ class FrameMatcher():
             # This frame is at least as good as the others: add its data
             if score >= best_score:
                 self.frame_occurrence.add_match({'vnframe': verbnet_frame, 'slot_assocs': slots_associations}, score)
+
+        # Used to test the function
+        return best_score

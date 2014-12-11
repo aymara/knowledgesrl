@@ -179,7 +179,7 @@ if __name__ == "__main__":
                 # combinations after each restriction
                 # for i in range(frame_occurrence.num_slots):
                 #     roles_for_slot = frame_occurrence.roles()[i]
-                for i, roles_for_slot in frame_occurrence.roles():
+                for i, roles_for_slot in enumerate(frame_occurrence.roles()):
                     if len(roles_for_slot) > 1:
                         new_role = model.best_role(
                             roles_for_slot,

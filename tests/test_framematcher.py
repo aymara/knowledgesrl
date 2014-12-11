@@ -16,11 +16,10 @@ class FrameMatcherTest(unittest.TestCase):
             [('NP', 'Agent'), ('V', None), ('NP', 'Patient'), ('with', None), ('NP', 'Role3')], 'c', [])
 
         matcher = FrameMatcher(frame_occurrence, 'sync_predicates')
-        matcher.new_match(frame2)
-        self.assertEqual(frame_occurrence.best_score, int(100 * 4 / 3))
-        matcher.new_match(frame3)
-        matcher.new_match(frame4)
-        self.assertEqual(frame_occurrence.best_score, 200)
+        best_score = matcher.perform_frame_matching([frame2])
+        self.assertEqual(best_score, int(100 * 4 / 3))
+        best_score = matcher.perform_frame_matching([frame3, frame4])
+        self.assertEqual(best_score, 200)
         self.assertEqual(frame_occurrence.roles(), [{'Agent'}, {'Patient'}, {'Role2', 'Role3'}])
         
     def test_2(self):
@@ -36,8 +35,8 @@ class FrameMatcherTest(unittest.TestCase):
             [('NP', 'Agent'), ('V', None), ('NP', 'Patient'), ('with', None), ('NP', 'Role3')], 'c', [])
 
         matcher = FrameMatcher(frame_occurrence, 'sync_predicates')
-        matcher.new_match(frame)
-        self.assertEqual(frame_occurrence.best_score, int(100 / 2 + 100 / 3))
+        best_score = matcher.perform_frame_matching([frame])
+        self.assertEqual(best_score, int(100 / 2 + 100 / 3))
         
     def test_4(self):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'NP'], 2, 'a predicate')
@@ -53,8 +52,7 @@ class FrameMatcherTest(unittest.TestCase):
                                  'XX', []),
             VerbnetOfficialFrame([('NP', 'Instrument'), ('V', None), ('NP', 'Theme')], 'XX', [])
         ]
-        for verbnet_frame in verbnet_frames:
-            matcher.new_match(verbnet_frame)
+        matcher.perform_frame_matching(verbnet_frames)
             
         self.assertEqual(frame_occurrence.roles(), [{'Agent', 'Instrument'}, {'Theme'}])
      
@@ -71,8 +69,7 @@ class FrameMatcherTest(unittest.TestCase):
                 'XX', [])
         ]
         matcher = FrameMatcher(frame_occurrence, 'baseline')
-        for verbnet_frame in verbnet_frames:
-            matcher.new_match(verbnet_frame)
+        matcher.perform_frame_matching(verbnet_frames)
         self.assertEqual(frame_occurrence.roles(), [{'R1'}, {'R4'}, set(), {'R5'}])
 
     def test_removed_that(self):
@@ -80,18 +77,18 @@ class FrameMatcherTest(unittest.TestCase):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'S'], 2, 'consider')
         matcher = FrameMatcher(frame_occurrence, 'sync_predicates')
 
-        matcher.new_match(VerbnetOfficialFrame(
+        best_score = matcher.perform_frame_matching([VerbnetOfficialFrame(
             [('NP', 'Agent'), ('V', None), ('that', None), ('S', 'Patient')],
-            'consider-29.9-1', []))
-        self.assertEqual(frame_occurrence.best_score, 200)
+            'consider-29.9-1', [])])
+        self.assertEqual(best_score, 200)
         self.assertEqual(frame_occurrence.roles(), [{'Agent'}, {'Patient'}])
 
     def test_present_that(self):
         frame_occurrence = VerbnetFrameOccurrence(['NP', 'V', 'that', 'S'], 2, 'consider')
         matcher = FrameMatcher(frame_occurrence, 'sync_predicates')
 
-        matcher.new_match(VerbnetOfficialFrame(
+        best_score = matcher.perform_frame_matching([VerbnetOfficialFrame(
             [('NP', 'Agent'), ('V', None), ('that', None), ('S', 'Patient')],
-            'consider-29.9-1', []))
-        self.assertEqual(frame_occurrence.best_score, 200)
+            'consider-29.9-1', [])])
+        self.assertEqual(best_score, 200)
         self.assertEqual(frame_occurrence.roles(), [{'Agent'}, {'Patient'}])
