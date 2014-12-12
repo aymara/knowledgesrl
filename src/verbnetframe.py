@@ -140,7 +140,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.roles = self.possible_roles()
 
     def remove_match(self, toremove_match):
-        self.best_matches = [match for match in self.best_matches if match != toremove_match]
+        self.best_matches = [match for match in self.best_matches if match is not toremove_match]
         self.roles = self.possible_roles()
 
     def restrict_slot_to_role(self, i, new_role):
