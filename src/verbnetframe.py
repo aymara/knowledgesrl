@@ -92,7 +92,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.num_slots = num_slots
 
         self.slot_types, self.slot_preps = self.compute_slot_types(structure)
-        self.headwords = [None] * self.num_slots
+        self.headwords = [None for i in range(self.num_slots)]
 
         self.best_matches = []
         self.roles = self.possible_roles()
@@ -331,8 +331,8 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         return self.__key__() < other.__key__()
 
     def __repr__(self):
-        return "VerbnetOfficialFrame({}, {})".format(
-            self.vnclass, self.syntax)
+        return "VerbnetOfficialFrame({}, {}, {})".format(
+            self.vnclass, self.syntax, self.role_restrictions)
 
     def has(self, word):
         return any([True for elem, role in self.syntax if 'that' in elem])
@@ -371,7 +371,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
             if new_sbj_end >= len(self.syntax):
                 return []
 
-            # TODO type(...) -= tuple is a hack!
+            # TODO type(...) == tuple is a hack!
             if type(self.syntax[new_sbj_end]) == tuple and VerbnetOfficialFrame._is_a_slot(self.syntax[new_sbj_end][1]):
                 break
             new_sbj_end += 1
