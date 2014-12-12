@@ -14,27 +14,28 @@ def bootstrap_algorithm(vn_frames, probability_model, verbnet_classes):
     # [1, 3, 10] -> [17, 65, 2076]
     # [3, 5, 10] -> [17, 65, 2076]
 
+    # Update probability model with resolved slots (only one role)
+    for frame_occurrence in vn_frames:
+        for slot_position, role_set in enumerate(frame_occurrence.roles):
+            if len(role_set) != 1:
+                continue
+
+            headword = headwordextractor.headword(
+                frame_occurrence.args[slot_position],
+                frame_occurrence.tree)['content_headword'][1]
+            probability_model.add_data_bootstrap(
+                next(iter(role_set)),
+                frame_occurrence.predicate,
+                verbnet_classes[frame_occurrence.predicate],
+                frame_occurrence.slot_types[slot_position],
+                frame_occurrence.slot_preps[slot_position],
+                headword,
+                headwordextractor.get_class(headword)
+            )
+
+
     total = [0, 0, 0]
     while log_ratio >= 1:
-        # Update probability model with resolved slots (only one role)
-        for frame_occurrence in vn_frames:
-            for slot_position, role_set in enumerate(frame_occurrence.roles):
-                if len(role_set) != 1:
-                    continue
-
-                headword = headwordextractor.headword(
-                    frame_occurrence.args[slot_position],
-                    frame_occurrence.tree)['content_headword'][1]
-                probability_model.add_data_bootstrap(
-                    next(iter(role_set)),
-                    frame_occurrence.predicate,
-                    verbnet_classes[frame_occurrence.predicate],
-                    frame_occurrence.slot_types[slot_position],
-                    frame_occurrence.slot_preps[slot_position],
-                    headword,
-                    headwordextractor.get_class(headword)
-                )
-
         # According to the article, there is no longer a min evidence threshold
         # when log_ratio reaches 1
         if log_ratio == 1:
