@@ -2,7 +2,7 @@
 
 import unittest
 
-from verbnetframe import VerbnetFrameOccurrence, VerbnetOfficialFrame, ComputeSlotTypeMixin
+from verbnetframe import VerbnetFrameOccurrence, ComputeSlotTypeMixin
 from framenetframe import FrameInstance, Predicate, Arg, Word
 
 

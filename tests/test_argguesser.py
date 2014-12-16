@@ -26,7 +26,7 @@ class ArgGuesserTest(unittest.TestCase):
         
         for frame in frames:
             for arg in frame.args:
-                self.assertTrue(arg.text != "")
+                self.assertNotEqual(arg.text, '')
                 #self.assertEqual(frame.sentence[arg.begin:arg.end + 1], arg.text)
             num_args += len(frame.args)
         self.assertEqual(len(frames), 4173)

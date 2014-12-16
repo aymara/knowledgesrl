@@ -84,13 +84,16 @@ class VerbnetReader:
         for subclass in xml_class.find("SUBCLASSES"):
             self._handle_class(subclass, frames, role_list, restrictions)
 
-    def merge_syntax(self, primary_structure, roles):
+    def merge_syntax(self, primary_structure, roles, role_restrictions):
         new_syntax = []
         role_index = 0
         for elem in primary_structure:
             if elem in ['NP', 'ADJP', 'ADVP', 'S', 'S_ING']:
                 try:
-                    new_syntax.append({'elem': elem, 'role': roles[role_index]})
+                    new_syntax.append({
+                        'elem': elem,
+                        'role': roles[role_index],
+                        'restr': role_restrictions[role_index]})
                     role_index += 1
                     continue
                 except:
@@ -124,11 +127,10 @@ class VerbnetReader:
 
         roles, structure = self._build_structure(
             base_structure, syntax_data, vnclass, role_list)
-
         role_restr = [restrictions[role_list.index(x)] for x in roles]
 
-        syntax = self.merge_syntax(structure, roles)
-        result = VerbnetOfficialFrame(syntax, vnclass, role_restrictions=role_restr)
+        syntax = self.merge_syntax(structure, roles, role_restr)
+        result = VerbnetOfficialFrame(vnclass, syntax)
 
         return result
 

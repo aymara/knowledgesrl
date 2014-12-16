@@ -43,7 +43,7 @@ class FrameMatcher():
                     continue
 
                 headword = self.frame_occurrence.headwords[slot1]['content_headword']
-                selrestr = match['vnframe'].role_restrictions[slot2]
+                selrestr = match['vnframe'].selrestrs()[slot2]
                 headword_matches_selrestr = selrestr.matches_to_headword(headword)
                 if headword_matches_selrestr:
                     one_role_compatible_match_list.append(i)
@@ -82,11 +82,11 @@ class FrameMatcher():
         for slot1, slot2 in enumerate(match['slot_assocs']):
             if slot2 is None:
                 continue
-            if slot2 >= len(match['vnframe'].role_restrictions):
+            if slot2 >= match['vnframe'].num_slots:
                 continue
 
             word = self.frame_occurrence.headwords[slot1]['top_headword']
-            restr = match['vnframe'].role_restrictions[slot2]
+            restr = match['vnframe'].selrestrs()[slot2]
             score += restr.match_score(word, semantic_data)
 
         return score
@@ -108,12 +108,12 @@ class FrameMatcher():
             for match in self.frame_occurrence.best_matches:
                 if match['slot_assocs'][i] is None:
                     continue
-                elif match['slot_assocs'][i] >= len(match['vnframe'].role_restrictions):
+                elif match['slot_assocs'][i] >= match['vnframe'].num_slots:
                     continue
 
                 restr = VNRestriction.build_or(
                     restr,
-                    match['vnframe'].role_restrictions[match['slot_assocs'][i]])
+                    match['vnframe'].selrestrs()[match['slot_assocs'][i]])
 
             yield i, restr
 

@@ -308,10 +308,9 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
     :var example: str -- An example sentence that illustrates the frame
     """
 
-    def __init__(self, syntax, vnclass, role_restrictions):
+    def __init__(self, vnclass, syntax):
         self.syntax = syntax
         self.num_slots = len([part for part in syntax if 'role' in part])
-        self.role_restrictions = role_restrictions
 
         self.slot_types, self.slot_preps = self.compute_slot_types(syntax)
         self.vnclass = vnclass
@@ -325,7 +324,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         for part in self.syntax:
             elem = part['elem']
             if 'role' in part:
-                yield '{}.{}'.format(part['elem'], part['role'])
+                yield '{}.{} [{}]'.format(part['elem'], part['role'], part['restr'])
             elif type(elem) == set:
                 yield '-'.join(elem)
             else:
@@ -338,14 +337,17 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         return self.__key__() < other.__key__()
 
     def __repr__(self):
-        return "VerbnetOfficialFrame({}, {}, {})".format(
-            self.vnclass, ' '.join(self.syntax_no_set()), self.role_restrictions)
+        return "VerbnetOfficialFrame({}, {})".format(
+            self.vnclass, ' '.join(self.syntax_no_set()))
 
     def has(self, word):
         return any([True for part in self.syntax if word in part['elem']])
 
     def roles(self):
         return [part['role'] for part in self.syntax if 'role' in part]
+
+    def selrestrs(self):
+        return [part['restr'] for part in self.syntax if 'role' in part]
 
     def remove(self, word):
         self.syntax = [part for part in self.syntax if part['elem'] != word]
@@ -385,12 +387,10 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
 
         # Build the passive frame without "by"
         frame_without_agent = VerbnetOfficialFrame(
+            self.vnclass,
             (self.syntax[new_sbj_begin:new_sbj_end+1] +
-                self.syntax[old_sbj_end+1:index_v] + [{'elem': "V"}] +
-                self.syntax[new_sbj_end+1:]),
-            vnclass=self.vnclass,
-            role_restrictions=self.role_restrictions
-        )
+             self.syntax[old_sbj_end+1:index_v] + [{'elem': "V"}] +
+             self.syntax[new_sbj_end+1:]))
 
         passivizedframes.append(frame_without_agent)
 
@@ -403,12 +403,10 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
             part = frame_without_agent.syntax[i]
             if self._is_a_slot(part) or part['elem'] == "V":
                 passivizedframes.append(VerbnetOfficialFrame(
+                    self.vnclass,
                     (frame_without_agent.syntax[0:i+1] +
-                        [{'elem': 'by'}] + self.syntax[0:old_sbj_end+1] +
-                        frame_without_agent.syntax[i+1:]),
-                    vnclass=self.vnclass,
-                    role_restrictions=self.role_restrictions
-                ))
+                     [{'elem': 'by'}] + self.syntax[0:old_sbj_end+1] +
+                     frame_without_agent.syntax[i+1:])))
                 slot += 1
             i += 1
 

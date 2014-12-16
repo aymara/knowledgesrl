@@ -24,6 +24,8 @@ for label, options, scores in configurations:
     wanted_f1, wanted_accuracy = scores
     if wanted_f1 == f1_score and wanted_accuracy == accuracy_score:
         print(' ok!'.format(label))
+    elif f1_score >= wanted_f1 and accuracy_score >= wanted_accuracy:
+        print(' improved! {:.1f}% F1 at {:.1f}%, {:.1f}% accuracy at {:.1f}%'.format(f1_score - wanted_f1, f1_score, accuracy_score - wanted_accuracy, accuracy_score))
     else:
-        print(' failed! {} f1, {} accuracy'.format(label, wanted_f1 - f1_score, wanted_accuracy - accuracy_score))
+        print(' failed! {:.1f} %F1 at {:.1f}%, {:.1f}% accuracy at {:.1f}%'.format(f1_score - wanted_f1, f1_score, accuracy_score - wanted_accuracy, accuracy_score))
 
