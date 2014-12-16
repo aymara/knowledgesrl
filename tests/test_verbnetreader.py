@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 from verbnetreader import VerbnetReader
 import paths
 from verbnetframe import VerbnetOfficialFrame
+from verbnetrestrictions import VNRestriction
 import verbnetprepclasses
 
 class VerbnetReaderTest(unittest.TestCase):
@@ -18,19 +19,19 @@ class VerbnetReaderTest(unittest.TestCase):
         test_verbs = ['sparkle', 'employ', 'break', 'suggest', 'snooze']
         test_frames = [
             VerbnetOfficialFrame(
-                [('there', None), ('V', None), ('NP', 'Theme'), (verbnetprepclasses.prep['loc'], None), ('NP', 'Location')],
+                [{'elem': 'there'}, {'elem': 'V'}, {'elem': 'NP', 'role': 'Theme'}, {'elem': verbnetprepclasses.prep['loc']}, {'elem': 'NP', 'role': 'Location'}],
                 'light_emission-43.1', []),
             VerbnetOfficialFrame(
-                [('NP', 'Agent'), ('V', None), ('NP', 'Theme')],
+                [{'elem': 'NP', 'role': 'Agent'}, {'elem': 'V'}, {'elem': 'NP', 'role': 'Theme'}],
                 'use-105', []),
             VerbnetOfficialFrame(
-                [('NP', 'Patient'), ('V', None)],
+                [{'elem': 'NP', 'role': 'Patient'}, {'elem': 'V'}],
                 'break-45.1', []),
             VerbnetOfficialFrame(
-                [('NP', 'Agent'), ('V', None), ('how', None), ('to', None), ('S', 'Topic')],
+                [{'elem': 'NP', 'role': 'Agent'}, {'elem': 'V'}, {'elem': 'how'}, {'elem': 'to'}, {'elem': 'S', 'role': 'Topic'}],
                 'say-37.7', []),
             VerbnetOfficialFrame(
-                [('NP', 'Agent'), ('V', None)],
+                [{'elem': 'NP', 'role': 'Agent'}, {'elem': 'V'}],
                 'snooze-40.4', [])
         ]
         restrictions_str = {
@@ -52,20 +53,23 @@ class VerbnetReaderTest(unittest.TestCase):
         root = ET.ElementTree(file=str(paths.VERBNET_PATH / 'separate-23.1.xml'))
         reader._handle_class(root.getroot(), [], [], [])
 
+        animate = VNRestriction.build('animate')
+        norestr = VNRestriction.build_empty()
+
         list1 = [
             VerbnetOfficialFrame(
-                [('NP', 'Agent'), ('V', None), ('NP', 'Patient'), ({'from'}, None), ('NP', 'Co-Patient')],
-                'separate-23.1', []),
-            VerbnetOfficialFrame([('NP', 'Agent'), ('V', None), ('NP', 'Patient')], 'separate-23.1', []),
-            VerbnetOfficialFrame([('NP', 'Patient'), ('V', None)], 'separate-23.1', []),
+                [{'elem': 'NP', 'role': 'Agent'}, {'elem': 'V'}, {'elem': 'NP', 'role': 'Patient'}, {'elem': {'from'}}, {'elem': 'NP', 'role': 'Co-Patient'}],
+                'separate-23.1', [animate, norestr, norestr]),
+            VerbnetOfficialFrame([{'elem': 'NP', 'role': 'Agent'}, {'elem': 'V'}, {'elem': 'NP', 'role': 'Patient'}], 'separate-23.1', [animate, norestr]),
+            VerbnetOfficialFrame([{'elem': 'NP', 'role': 'Patient'}, {'elem': 'V'}], 'separate-23.1', [norestr]),
             VerbnetOfficialFrame(
-                [('NP', 'Patient'), ('V', None), ({'from'}, None), ('NP', 'Co-Patient')],
-                'separate-23.1', []),
-            VerbnetOfficialFrame([('NP', 'Patient'), ('V', None)], 'separate-23.1', [])]
+                [{'elem': 'NP', 'role': 'Patient'}, {'elem': 'V'}, {'elem': {'from'}}, {'elem': 'NP', 'role': 'Co-Patient'}],
+                'separate-23.1', [norestr, norestr]),
+            VerbnetOfficialFrame([{'elem': 'NP', 'role': 'Patient'}, {'elem': 'V'}], 'separate-23.1', [norestr])]
         list2 = [VerbnetOfficialFrame(
-            [('NP', 'Patient'), ('V', None), ({'from'}, None), ('NP', 'Co-Patient')], 'separate-23.1-1', [])]
+            [{'elem': 'NP', 'role': 'Patient'}, {'elem': 'V'}, {'elem': {'from'}}, {'elem': 'NP', 'role': 'Co-Patient'}], 'separate-23.1-1', [norestr, norestr])]
         list3 = [VerbnetOfficialFrame(
-            [('NP', 'Patient'), ('V', None), ({'with'}, None), ('NP', 'Co-Patient')], 'separate-23.1-2', [])]
+            [{'elem': 'NP', 'role': 'Patient'}, {'elem': 'V'}, {'elem': {'with'}}, {'elem': 'NP', 'role': 'Co-Patient'}], 'separate-23.1-2', [])]
         expected_result = {
             'dissociate': list1+list3,
             'disconnect': list1+list3,
@@ -87,11 +91,8 @@ class VerbnetReaderTest(unittest.TestCase):
             if expected_result[verb] != reader.frames_for_verb[verb]:
                 print('Error with {}'.format(verb))
                 print('Expected')
-                for data in expected_result[verb]:
-                    print(data)
-                print('Got')
-                for data in reader.frames_for_verb[verb]:
-                    print(data)
-                print()
+                for expected, got in zip(expected_result[verb], reader.frames_for_verb[verb]):
+                    if expected != got:
+                        print('{} != {}'.format(expected, got))
 
         self.assertEqual(reader.frames_for_verb, expected_result)

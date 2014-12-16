@@ -27,14 +27,11 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
         # with the preposition and will "overwrite" :next_expected
         preposition = ""
 
-        for element in syntax:
-            # TODO type(...) == tuple is a hack!
-            if type(element) == tuple:
-                element, role = element
-
+        for part in syntax:
+            element = part['elem']
             if element == "V":
                 next_expected = ComputeSlotTypeMixin.slot_types["object"]
-            elif self._is_a_slot(element):
+            elif self._is_a_slot(part):
                 if preposition != "":
                     slot_types.append(ComputeSlotTypeMixin.slot_types["prep_object"])
                     slot_preps.append(preposition)
@@ -50,15 +47,19 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
         return slot_types, slot_preps
 
     @staticmethod
-    def _is_a_slot(elem):
+    def _is_a_slot(part):
         """Tell wether an element represent a slot
 
-        :param elem: The element.
+        :param dict: The element.
         :type elem: str.
         :returns: bool -- True if elem represents a slot, False otherwise
         """
-
-        return isinstance(elem, str) and elem[0].isupper() and elem != "V"
+        if 'role' in part:
+            return True
+        elif type(part['elem']) == set:
+            return False
+        else:
+            return part['elem'].isupper() and part['elem'] != "V"
 
 
 class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
@@ -124,9 +125,9 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                     continue
 
                 # We want this to fail when roles get stored in a dictionary or a class
-                assert all([type(s) == tuple for s in match['vnframe'].syntax])
+                assert all([type(s) == dict for s in match['vnframe'].syntax])
 
-                role = [role for elem, role in match['vnframe'].syntax if role is not None][slot2]
+                role = [part['role'] for part in match['vnframe'].syntax if 'role' in part][slot2]
                 result[slot1].add(role)
 
         return result
@@ -204,7 +205,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
             raise Exception('Either conll_frame_instance or gold_framenet_instance should exist.')
 
         chunk_list = VerbnetFrameOccurrence.annotated_chunks(gold_framenet_instance, sentence)
-        structure = list(VerbnetFrameOccurrence.chunks_to_verbnet(chunk_list))
+        structure = [{'elem': elem} for elem in VerbnetFrameOccurrence.chunks_to_verbnet(chunk_list)]
 
         num_slots = len([arg for arg in gold_framenet_instance.args if arg.instanciated])
         result = VerbnetFrameOccurrence(structure, num_slots, predicate=gold_framenet_instance.predicate.lemma)
@@ -309,7 +310,7 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
 
     def __init__(self, syntax, vnclass, role_restrictions):
         self.syntax = syntax
-        self.num_slots = len([role for elem, role in syntax if role is not None])
+        self.num_slots = len([part for part in syntax if 'role' in part])
         self.role_restrictions = role_restrictions
 
         self.slot_types, self.slot_preps = self.compute_slot_types(syntax)
@@ -320,28 +321,34 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
                 self.syntax == other.syntax and
                 self.vnclass == other.vnclass)
 
-    def __key__(self):
-        def syntax_no_set(syntax):
-            for elem, role in syntax:
-                yield '-'.join(elem) if type(elem) == set else '{}.{}'.format(elem, role)
+    def syntax_no_set(self):
+        for part in self.syntax:
+            elem = part['elem']
+            if 'role' in part:
+                yield '{}.{}'.format(part['elem'], part['role'])
+            elif type(elem) == set:
+                yield '-'.join(elem)
+            else:
+                yield elem
 
-        return (self.vnclass, len(self.syntax), tuple(syntax_no_set(self.syntax)))
+    def __key__(self):
+        return (self.vnclass, len(self.syntax), tuple(self.syntax_no_set()))
 
     def __lt__(self, other):
         return self.__key__() < other.__key__()
 
     def __repr__(self):
         return "VerbnetOfficialFrame({}, {}, {})".format(
-            self.vnclass, self.syntax, self.role_restrictions)
+            self.vnclass, ' '.join(self.syntax_no_set()), self.role_restrictions)
 
     def has(self, word):
-        return any([True for elem, role in self.syntax if 'that' in elem])
+        return any([True for part in self.syntax if word in part['elem']])
 
     def roles(self):
-        return [role for elem, role in self.syntax if role is not None]
+        return [part['role'] for part in self.syntax if 'role' in part]
 
     def remove(self, word):
-        self.syntax = [(elem, role) for elem, role in self.syntax if elem != word]
+        self.syntax = [part for part in self.syntax if part['elem'] != word]
 
     def passivize(self):
         """
@@ -354,32 +361,32 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         slot_position = 0
         old_sbj_end = 0
         first_slot = True
-        for i, element in enumerate(self.syntax):
-            element, role = element
-            if first_slot:
-                old_sbj_end = i
-            if VerbnetOfficialFrame._is_a_slot(element):
-                first_slot = False
-                slot_position += 1
-            if element == "V":
+        for i, part in enumerate(self.syntax):
+            if part['elem'] == "V":
                 break
 
+            if first_slot:
+                old_sbj_end = i
+
+            if VerbnetOfficialFrame._is_a_slot(part):
+                first_slot = False
+                slot_position += 1
+
         # Find the first and last element of the first slot following the verb
-        index_v = self.syntax.index(("V", None))
+        index_v = self.syntax.index({'elem': 'V'})
         new_sbj_begin, new_sbj_end = index_v + 1, index_v + 1
         while True:
             if new_sbj_end >= len(self.syntax):
                 return []
 
-            # TODO type(...) == tuple is a hack!
-            if type(self.syntax[new_sbj_end]) == tuple and VerbnetOfficialFrame._is_a_slot(self.syntax[new_sbj_end][1]):
+            if VerbnetOfficialFrame._is_a_slot(self.syntax[new_sbj_end]):
                 break
             new_sbj_end += 1
 
         # Build the passive frame without "by"
         frame_without_agent = VerbnetOfficialFrame(
             (self.syntax[new_sbj_begin:new_sbj_end+1] +
-                self.syntax[old_sbj_end+1:index_v] + [("V", None)] +
+                self.syntax[old_sbj_end+1:index_v] + [{'elem': "V"}] +
                 self.syntax[new_sbj_end+1:]),
             vnclass=self.vnclass,
             role_restrictions=self.role_restrictions
@@ -389,15 +396,15 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
 
         # Add the frames obtained by inserting "by + the old subject"
         # after the verb and every slot that follows it
-        new_index_v = frame_without_agent.syntax.index(("V", None))
+        new_index_v = frame_without_agent.syntax.index({'elem': 'V'})
         i = new_index_v
         slot = slot_position - 1
         while i < len(frame_without_agent.syntax):
-            elem, role = frame_without_agent.syntax[i]
-            if self._is_a_slot(elem) or elem == "V":
+            part = frame_without_agent.syntax[i]
+            if self._is_a_slot(part) or part['elem'] == "V":
                 passivizedframes.append(VerbnetOfficialFrame(
                     (frame_without_agent.syntax[0:i+1] +
-                        [("by", None)] + self.syntax[0:old_sbj_end+1] +
+                        [{'elem': 'by'}] + self.syntax[0:old_sbj_end+1] +
                         frame_without_agent.syntax[i+1:]),
                     vnclass=self.vnclass,
                     role_restrictions=self.role_restrictions

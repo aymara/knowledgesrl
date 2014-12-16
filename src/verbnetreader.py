@@ -90,13 +90,13 @@ class VerbnetReader:
         for elem in primary_structure:
             if elem in ['NP', 'ADJP', 'ADVP', 'S', 'S_ING']:
                 try:
-                    new_syntax.append((elem, roles[role_index]))
+                    new_syntax.append({'elem': elem, 'role': roles[role_index]})
                     role_index += 1
                     continue
                 except:
                     pass
 
-            new_syntax.append((elem, None))
+            new_syntax.append({'elem': elem})
 
         return new_syntax
 
@@ -206,7 +206,7 @@ class VerbnetReader:
             if new_index != -1:
                 index_xml = new_index
 
-            if VerbnetOfficialFrame._is_a_slot(element):
+            if VerbnetOfficialFrame._is_a_slot({'elem': element}):
                 roles.append(None)
 
             if len(full_element) > 1:

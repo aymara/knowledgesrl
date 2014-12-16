@@ -57,8 +57,8 @@ class VerbnetFrameOccurrenceTest(unittest.TestCase):
     def test_conversion(self):
         vn_frames = [
             VerbnetFrameOccurrence(
-                ["NP", "V", "NP", "to", "S"], 3, predicate="urge"),
-            VerbnetFrameOccurrence(["NP", "V", "NP"], 2, predicate="allow"),
+                [{'elem': 'NP'}, {'elem': 'V'}, {'elem': 'NP'}, {'elem': 'to'}, {'elem': 'S'}], 3, predicate="urge"),
+            VerbnetFrameOccurrence([{'elem': 'NP'}, {'elem': 'V'}, {'elem': 'NP'}], 2, predicate="allow"),
         ]
         slot_preps = [
             [None, None, "to"],

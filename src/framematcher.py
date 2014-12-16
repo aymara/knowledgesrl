@@ -118,17 +118,17 @@ class FrameMatcher():
             yield i, restr
 
     @staticmethod
-    def _is_a_match(frame_occurrence_elem, frame_elem):
+    def _is_a_match(frame_occurrence_part, official_frame_part):
         """Tell wether two elements can be considered as a match
 
-        frame_occurrence_elem is a seen element, while frame_elem can contain a
-        set of possible elements, such as prepositions
+        frame_occurrence_part is a seen element, while official_frame_elem can
+        contain a set of possible elements, such as prepositions
         """
 
-        if isinstance(frame_elem, set):
-            return frame_occurrence_elem in frame_elem
+        if isinstance(official_frame_part['elem'], set):
+            return frame_occurrence_part['elem'] in official_frame_part['elem']
         else:
-            return frame_occurrence_elem == frame_elem
+            return frame_occurrence_part['elem'] == official_frame_part['elem']
 
     def _matching_baseline(self, verbnet_frame, slots_associations):
         """ Matching algorithm that is the closest to the article's method """
@@ -158,8 +158,8 @@ class FrameMatcher():
 
                 if (slot_type == ComputeSlotTypeMixin.slot_types["prep_object"] and
                     not FrameMatcher._is_a_match(
-                        self.frame_occurrence.slot_preps[slot_pos],
-                        test_slot_data["prep"])):
+                        {'elem': self.frame_occurrence.slot_preps[slot_pos]},
+                        {'elem': test_slot_data["prep"]})):
                     continue
 
                 matching_slot = test_slot_data["pos"]
@@ -181,29 +181,30 @@ class FrameMatcher():
 
         num_match = 0
         i, j = 0, 0
-        index_v_in_frame_occurrence = self.frame_occurrence.structure.index("V")
-        index_v_in_official_frame = verbnet_frame.syntax.index(("V", None))
+        index_v_in_frame_occurrence = self.frame_occurrence.structure.index({'elem': 'V'})
+        index_v_in_official_frame = verbnet_frame.syntax.index({'elem': 'V'})
         slot_1, slot_2 = 0, 0
         num_slots_before_v_in_frame_occurrence = 0
         num_slots_before_v_in_official_frame = 0
 
-        for elem in self.frame_occurrence.structure:
-            if VerbnetFrameOccurrence._is_a_slot(elem):
+        for part in self.frame_occurrence.structure:
+            if VerbnetFrameOccurrence._is_a_slot(part):
                 num_slots_before_v_in_frame_occurrence += 1
-            elif elem == "V":
+            elif part['elem'] == "V":
                 break
-        for elem, role in verbnet_frame.syntax:
-            if role is not None:
+
+        for part in verbnet_frame.syntax:
+            if 'role' in part:
                 num_slots_before_v_in_official_frame += 1
-            elif elem == "V":
+            elif part['elem'] == "V":
                 break
 
         while i < len(self.frame_occurrence.structure) and j < len(verbnet_frame.syntax):
-            elem1 = self.frame_occurrence.structure[i]
-            elem2, role2 = verbnet_frame.syntax[j]
+            occured_part = self.frame_occurrence.structure[i]
+            official_part = verbnet_frame.syntax[j]
 
-            if FrameMatcher._is_a_match(elem1, elem2):
-                if VerbnetFrameOccurrence._is_a_slot(elem1):
+            if FrameMatcher._is_a_match(occured_part, official_part):
+                if VerbnetFrameOccurrence._is_a_slot(occured_part):
                     num_match += 1
                     # TODO this is probably fixed with the SYNTAX-based VN reader
                     # verbnet_frame can have more syntax than roles.This will
@@ -232,10 +233,9 @@ class FrameMatcher():
     def _matching_stop_on_fail(self, verbnet_frame, slots_associations):
         """ Stop the algorithm at the first mismatch encountered """
         num_match = 0
-        for elem1, elemrole2 in zip(self.frame_occurrence.structure, verbnet_frame.syntax):
-            elem2, role2 = elemrole2
-            if FrameMatcher._is_a_match(elem1, elem2):
-                if VerbnetFrameOccurrence._is_a_slot(elem1):
+        for occured_part, official_part in zip(self.frame_occurrence.structure, verbnet_frame.syntax):
+            if FrameMatcher._is_a_match(occured_part, official_part):
+                if VerbnetFrameOccurrence._is_a_slot(occured_part):
                     num_match += 1
                     if num_match - 1 < verbnet_frame.num_slots:
                         slots_associations[num_match - 1] = num_match - 1
@@ -258,7 +258,7 @@ class FrameMatcher():
             # Consider 'that' as optional in english, eg.:
             # Tell him that S --> Tell him S
             import copy
-            if verbnet_frame.has('that') and 'that' not in self.frame_occurrence.structure:
+            if verbnet_frame.has('that') and {'elem': 'that'} not in self.frame_occurrence.structure:
                 verbnet_frame = copy.deepcopy(verbnet_frame)
                 verbnet_frame.remove('that')
 
