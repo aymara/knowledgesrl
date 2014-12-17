@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print("Loading VerbNet...")
     frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
 
-    print("Loading FrameNet and VerbNet roles mappings...")
+    print("Loading FrameNet and VerbNet role mappings...")
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         annotation_list = options.fulltext_annotations
         parsed_conll_list = options.fulltext_parses
 
-    print("Loading FrameNet annotations and frame matching...")
+    print("Loading gold annotations and performing frame matching...")
     for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
         print(annotation_file.stem)
         annotated_frames = []
