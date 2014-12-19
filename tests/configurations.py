@@ -14,5 +14,5 @@ configurations = [
     ('argid + passive + semrestr', ['--argument-identification', '--passivize', '--semantic-restrictions'], (45.10, 36.88)),
     ('argid + proba', ['--argument-identification', '--model=predicate_slot'],                              (43.25, 31.52)),
     ('argid + bootstrap', ['--argument-identification', '--bootstrap'],                                     (44.63, 37.98)),
-    ('argid + bootstrap + passive + semrestr', ['--argument-identification', '--bootstrap', '--passivize', '--semantic-restrictions'], (45.84, 39.15)),
+    ('argid + bootstrap + passive + semrestr', ['--argument-identification', '--bootstrap', '--passivize', '--semantic-restrictions'], (45.92, 39.22)),
 ]
