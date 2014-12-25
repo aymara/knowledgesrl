@@ -3,8 +3,8 @@
 
 from collections import Counter
 
-from rolematcher import RoleMatchingError
-from errorslog import log_ambiguous_role_conversion
+import paths
+import rolematcher
 
 
 # TODO separate computed values from measured values
@@ -263,7 +263,8 @@ def vnclass_to_normalized_name(vnclass):
     raise Exception('Impossible VerbNet class {}'.format(vnclass))
 
 
-def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, argument_identification):
+def stats_quality(annotated_frames, vn_frames, frames_for_verb, verbnet_classes, argument_identification):
+    role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
     # This variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point and
     # args_annotated_mapping_ok is related to gold annotated frames
@@ -271,6 +272,9 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
         stats_data["args_annotated_mapping_ok"] = 0
 
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
+        if gold_fn_frame.predicate.lemma not in frames_for_verb:
+            continue
+
         annotated_frames_stats.append({'gold_fn_frame': gold_fn_frame, 'slots': []})
         # We don't know how to evaluate args that were extracted from a frame
         # that exist in the fulltext corpus but that lacks argument annotations
@@ -327,7 +331,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
                     # If the mapping is ambiguous, it could be our mistake here
                     vn_classes=verbnet_classes[gold_fn_frame.predicate.lemma]
                     )
-            except RoleMatchingError:
+            except rolematcher.RoleMatchingError:
                 stats_data["impossible_mapping"] += 1
                 continue
 
