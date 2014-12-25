@@ -35,7 +35,7 @@ class VerbnetReader:
         self.unhandled = []
 
         if not list(path.glob('*.xml')):
-            raise Exception('VerbNet not found!')
+            raise Exception('VerbNet not found! Did you clone with submodules?')
 
         for filename in path.glob('*.xml'):
             root = ET.ElementTree(file=str(filename.resolve()))
@@ -84,19 +84,22 @@ class VerbnetReader:
         for subclass in xml_class.find("SUBCLASSES"):
             self._handle_class(subclass, frames, role_list, restrictions)
 
-    def merge_syntax(self, primary_structure, roles):
+    def merge_syntax(self, primary_structure, roles, role_restrictions):
         new_syntax = []
         role_index = 0
         for elem in primary_structure:
             if elem in ['NP', 'ADJP', 'ADVP', 'S', 'S_ING']:
                 try:
-                    new_syntax.append((elem, roles[role_index]))
+                    new_syntax.append({
+                        'elem': elem,
+                        'role': roles[role_index],
+                        'restr': role_restrictions[role_index]})
                     role_index += 1
                     continue
                 except:
                     pass
 
-            new_syntax.append((elem, None))
+            new_syntax.append({'elem': elem})
 
         return new_syntax
 
@@ -124,11 +127,10 @@ class VerbnetReader:
 
         roles, structure = self._build_structure(
             base_structure, syntax_data, vnclass, role_list)
-
         role_restr = [restrictions[role_list.index(x)] for x in roles]
 
-        syntax = self.merge_syntax(structure, roles)
-        result = VerbnetOfficialFrame(syntax, vnclass, role_restrictions=role_restr)
+        syntax = self.merge_syntax(structure, roles, role_restr)
+        result = VerbnetOfficialFrame(vnclass, syntax)
 
         return result
 
@@ -206,7 +208,7 @@ class VerbnetReader:
             if new_index != -1:
                 index_xml = new_index
 
-            if VerbnetOfficialFrame._is_a_slot(element):
+            if VerbnetOfficialFrame._is_a_slot({'elem': element}):
                 roles.append(None)
 
             if len(full_element) > 1:

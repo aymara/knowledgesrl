@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print("Loading VerbNet...")
     frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
 
-    print("Loading FrameNet and VerbNet roles mappings...")
+    print("Loading FrameNet and VerbNet role mappings...")
     role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         annotation_list = options.fulltext_annotations
         parsed_conll_list = options.fulltext_parses
 
-    print("Loading FrameNet annotations and frame matching...")
+    print("Loading gold annotations and performing frame matching...")
     for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
         print(annotation_file.stem)
         annotated_frames = []
@@ -122,16 +122,16 @@ if __name__ == "__main__":
             frame_occurrence.matcher = matcher
             all_matcher.append(matcher)
 
-            # Actual frame matching
+            frames_to_be_matched = []
             for verbnet_frame in sorted(frames_for_verb[predicate]):
                 if options.passivize and gold_frame.passive:
-                    try:
-                        for passivized_frame in verbnet_frame.passivize():
-                            matcher.new_match(passivized_frame)
-                    except:
-                        continue
+                    for passivized_frame in verbnet_frame.passivize():
+                        frames_to_be_matched.append(passivized_frame)
                 else:
-                    matcher.new_match(verbnet_frame)
+                    frames_to_be_matched.append(verbnet_frame)
+
+            # Actual frame matching
+            matcher.perform_frame_matching(frames_to_be_matched)
 
             if options.wordnetrestr:
                 matcher.restrict_headwords_with_wordnet()
@@ -149,13 +149,13 @@ if __name__ == "__main__":
             vnclass = model.add_data_vnclass(matcher)
             if not options.bootstrap:
                 for roles, slot_type, prep in zip(
-                    frame_occurrence.roles(), frame_occurrence.slot_types, frame_occurrence.slot_preps
+                    frame_occurrence.roles, frame_occurrence.slot_types, frame_occurrence.slot_preps
                 ):
                     if len(roles) == 1:
                         model.add_data(slot_type, next(iter(roles)), prep, predicate, vnclass)
 
-            if options.debug and set() in frame_occurrence.roles():
-                log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles(), verbnet_classes)
+            if options.debug and set() in frame_occurrence.roles:
+                log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles, verbnet_classes)
 
         if options.semrestr:
             for matcher in all_matcher:
@@ -175,8 +175,11 @@ if __name__ == "__main__":
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
             print(annotation_file.stem)
             for frame_occurrence in all_vn_frames:
-                for i in range(frame_occurrence.num_slots):
-                    roles_for_slot = frame_occurrence.roles()[i]
+                # Commented out a version that only allowed possible role
+                # combinations after each restriction
+                # for i in range(frame_occurrence.num_slots):
+                #     roles_for_slot = frame_occurrence.roles[i]
+                for i, roles_for_slot in enumerate(frame_occurrence.roles):
                     if len(roles_for_slot) > 1:
                         new_role = model.best_role(
                             roles_for_slot,
@@ -184,6 +187,7 @@ if __name__ == "__main__":
                             frame_occurrence.predicate, options.probability_model)
                         if new_role is not None:
                             frame_occurrence.restrict_slot_to_role(i, new_role)
+                frame_occurrence.select_likeliest_matches()
 
             if options.debug:
                 display_debug(options.n_debug)
