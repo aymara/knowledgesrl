@@ -103,10 +103,6 @@ if __name__ == "__main__":
             if gold_frame.arg_annotated:
                 stats.stats_data["args_kept"] += num_instanciated
 
-            stats.stats_ambiguous_roles(
-                gold_frame, num_instanciated,
-                role_matcher, verbnet_classes)
-
             stats.stats_data["frames"] += 1
 
             # Check that FrameNet frame slots have been mapped to VerbNet-style slots
