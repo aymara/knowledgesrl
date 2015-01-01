@@ -1,0 +1,162 @@
+1	the	the	DT	DT	-	2	NMOD	-	-	-	-	-
+2	island	island	NN	NN	-	5	SUB	-	-	-	Theme	-
+3	of	of	IN	IN	-	2	NMOD	-	-	-	-	-
+4	jamaica	jamaica	NNP	NNP	-	3	PMOD	-	-	-	-	-
+5	will	will	MD	MD	-	0	ROOT	-	-	-	-	-
+6	be	be	VB	VB	-	5	VC	-	-	seem-109|seem-109-1|seem-109-1-1	-	-
+7	near	near	IN	IN	-	6	PRD	-	-	-	_EMPTYROLE_	-
+8	the	the	DT	DT	-	9	NMOD	-	-	-	-	-
+9	top	top	NN	NN	-	7	PMOD	-	-	-	-	-
+10	of	of	IN	IN	-	9	NMOD	-	-	-	-	-
+11	the	the	DT	DT	-	12	NMOD	-	-	-	-	-
+12	list	list	NN	NN	-	10	PMOD	-	-	-	-	-
+13	for	for	IN	IN	-	12	NMOD	-	-	-	-	-
+14	anyone	anyone	NN	NN	-	13	PMOD	-	-	-	-	-
+15	planning	planning	VBG	VBG	-	14	NMOD	-	-	wish-62	-	-
+16	an	an	DT	DT	-	19	NMOD	-	-	-	-	-
+17	idyllic	idyllic	JJ	JJ	-	19	NMOD	-	-	-	-	-
+18	holiday	holiday	NN	NN	-	19	NMOD	-	-	-	-	-
+19	getaway	getaway	NN	NN	-	15	OBJ	-	-	-	-	Theme
+20	.	.	.	.	-	5	P	-	-	-	-	-
+
+1	with	with	IN	IN	-	17	VMOD	-	-	-	_EMPTYROLE_	-
+2	warm	warm	JJ	JJ	-	3	NMOD	-	-	-	-	-
+3	sunshine	sunshine	NN	NN	-	14	NMOD	-	-	-	-	-
+4	,	,	,	,	-	14	P	-	-	-	-	-
+5	beautiful	beautiful	JJ	JJ	-	6	NMOD	-	-	-	-	-
+6	beaches	beaches	NNS	NNS	-	14	NMOD	-	-	-	-	-
+7	,	,	,	,	-	14	P	-	-	-	-	-
+8	lush	lush	VBP	VBP	-	14	NMOD	-	-	-	-	-
+9	tropical	tropical	JJ	JJ	-	10	NMOD	-	-	-	-	-
+10	scenery	scenery	NN	NN	-	8	OBJ	-	-	-	-	-
+11	,	,	,	,	-	14	P	-	-	-	-	-
+12	and	and	CC	CC	-	14	NMOD	-	-	-	-	-
+13	fine	fine	JJ	JJ	-	14	NMOD	-	-	-	-	-
+14	hotels	hotels	NNS	NNS	-	1	PMOD	-	-	-	-	-
+15	,	,	,	,	-	17	P	-	-	-	-	-
+16	it	it	PRP	PRP	-	17	SUB	-	-	-	_EMPTYROLE_	-
+17	is	is	VBZ	VBZ	-	0	ROOT	-	-	-	-	-
+18	guaranteed	guaranteed	VBN	VBN	-	17	VC	-	-	conjecture-29.5-2|ensure-99|promise-37.13	-	-
+19	to	to	TO	TO	-	20	VMOD	-	-	-	-	-
+20	provide	provide	VB	VB	-	18	VMOD	-	-	fulfilling-13.4.1	Theme|Topic	-
+21	a	a	DT	DT	-	25	NMOD	-	-	-	-	-
+22	little	little	JJ	JJ	-	25	NMOD	-	-	-	-	-
+23	rest	rest	NN	NN	-	25	NMOD	-	-	-	-	-
+24	and	and	CC	CC	-	25	NMOD	-	-	-	-	-
+25	relaxation	relaxation	NN	NN	-	20	OBJ	-	-	-	-	Theme
+26	.	.	.	.	-	17	P	-	-	-	-	-
+
+1	however	however	RB	RB	-	18	VMOD	-	-	-
+2	,	,	,	,	-	18	P	-	-	-
+3	with	with	IN	IN	-	18	VMOD	-	-	-
+4	a	a	DT	DT	-	7	NMOD	-	-	-
+5	vibrant	vibrant	JJ	JJ	-	7	NMOD	-	-	-
+6	grassroots	grassroots	JJ	JJ	-	7	NMOD	-	-	-
+7	culture	culture	NN	NN	-	11	NMOD	-	-	-
+8	and	and	CC	CC	-	11	NMOD	-	-	-
+9	the	the	DT	DT	-	11	NMOD	-	-	-
+10	growing	growing	VBG	VBG	-	11	NMOD	-	-	-
+11	confidence	confidence	NN	NN	-	3	PMOD	-	-	-
+12	of	of	IN	IN	-	11	NMOD	-	-	-
+13	an	an	DT	DT	-	15	NMOD	-	-	-
+14	independent	independent	JJ	JJ	-	15	NMOD	-	-	-
+15	nation	nation	NN	NN	-	12	PMOD	-	-	-
+16	,	,	,	,	-	18	P	-	-	-
+17	it	it	PRP	PRP	-	18	SUB	-	-	-
+18	defies	defies	VBZ	VBZ	-	0	ROOT	-	-	-
+19	the	the	DT	DT	-	21	NMOD	-	-	-
+20	advertising	advertising	NN	NN	-	21	NMOD	-	-	-
+21	stereotype	stereotype	NN	NN	-	18	OBJ	-	-	-
+22	of	of	IN	IN	-	21	NMOD	-	-	-
+23	the	the	DT	DT	-	25	NMOD	-	-	-
+24	deserted	deserted	JJ	JJ	-	25	NMOD	-	-	-
+25	island	island	NN	NN	-	22	PMOD	-	-	-
+26	.	.	.	.	-	18	P	-	-	-
+
+1	jamaica	jamaica	NNP	NNP	-	2	SUB	-	-	-	Theme	-
+2	is	is	VBZ	VBZ	-	0	ROOT	-	-	seem-109-1	-	-
+3	not	not	RB	RB	-	2	VMOD	-	-	-	-	-
+4	just	just	RB	RB	-	6	NMOD	-	-	-	-	-
+5	a	a	DT	DT	-	6	NMOD	-	-	-	-	-
+6	destination	destination	NN	NN	-	2	PRD	-	-	-	Attribute	-
+7	it	it	PRP	PRP	-	8	SUB	-	-	-	-	Theme
+8	is	is	VBZ	VBZ	-	6	NMOD	-	-	seem-109-1	-	-
+9	an	an	DT	DT	-	10	NMOD	-	-	-	-	-
+10	experience	experience	NN	NN	-	8	PRD	-	-	-	-	Attribute
+
+1	the	the	DT	DT	-	5	NMOD	-	-	-	-
+2	third	third	JJ	JJ	-	5	NMOD	-	-	-	-
+3	-	-	:	:	-	5	P	-	-	-	-
+4	largest	largest	JJS	JJS	-	5	NMOD	-	-	-	-
+5	island	island	NN	NN	-	16	VMOD	-	-	-	Theme
+6	in	in	IN	IN	-	5	NMOD	-	-	-	-
+7	the	the	DT	DT	-	8	NMOD	-	-	-	-
+8	caribbean	caribbean	NNP	NNP	-	6	PMOD	-	-	-	-
+9	,	,	,	,	-	5	P	-	-	-	-
+10	just	just	RB	RB	-	16	VMOD	-	-	-	-
+11	south	south	RB	RB	-	10	AMOD	-	-	-	-
+12	of	of	IN	IN	-	10	AMOD	-	-	-	-
+13	cuba	cuba	NNP	NNP	-	12	PMOD	-	-	-	-
+14	,	,	,	,	-	16	P	-	-	-	-
+15	jamaica	jamaica	NNP	NNP	-	16	SUB	-	-	-	_EMPTYROLE_
+16	is	is	VBZ	VBZ	-	0	ROOT	-	-	seem-109-1	-
+17	<num>	<num>	CD	CD	-	18	NMOD	-	-	-	-
+18	km	km	NN	NN	-	16	PRD	-	-	-	Attribute
+19	(	(	-LRB-	-LRB-	-	21	P	-	-	-	-
+20	<num>	<num>	CD	CD	-	21	NMOD	-	-	-	-
+21	miles	miles	NNS	NNS	-	18	NMOD	-	-	-	-
+22	)	)	-RRB-	-RRB-	-	21	P	-	-	-	-
+23	in	in	IN	IN	-	18	NMOD	-	-	-	-
+24	length	length	NN	NN	-	27	NMOD	-	-	-	-
+25	and	and	CC	CC	-	27	NMOD	-	-	-	-
+26	<num>	<num>	CD	CD	-	27	NMOD	-	-	-	-
+27	km	km	NNS	NNS	-	23	PMOD	-	-	-	-
+28	(	(	-LRB-	-LRB-	-	30	P	-	-	-	-
+29	<num>	<num>	CD	CD	-	30	NMOD	-	-	-	-
+30	miles	miles	NNS	NNS	-	27	NMOD	-	-	-	-
+31	)	)	-RRB-	-RRB-	-	30	P	-	-	-	-
+32	across	across	IN	IN	-	18	NMOD	-	-	-	-
+33	at	at	IN	IN	-	32	PMOD	-	-	-	-
+34	its	its	PRP$	PRP$	-	36	NMOD	-	-	-	-
+35	widest	widest	JJS	JJS	-	36	NMOD	-	-	-	-
+36	point	point	NN	NN	-	33	PMOD	-	-	-	-
+37	.	.	.	.	-	16	P	-	-	-	-
+
+1	the	the	DT	DT	-	2	NMOD	-	-	-	-	-	-	-
+2	island	island	NN	NN	-	3	SUB	-	-	-	-	-	-	-
+3	is	is	VBZ	VBZ	-	0	ROOT	-	-	-	-	-	-	-
+4	aligned	aligned	VBN	VBN	-	3	VC	-	-	-	-	-	-	-
+5	almost	almost	RB	RB	-	6	AMOD	-	-	-	-	-	-	-
+6	east	east	JJ	JJ	-	4	VMOD	-	-	-	-	-	-	-
+7	-	-	:	:	-	6	P	-	-	-	-	-	-	-
+8	to	to	TO	TO	-	4	VMOD	-	-	-	-	-	-	-
+9	-	-	:	:	-	10	P	-	-	-	-	-	-	-
+10	west	west	NN	NN	-	8	PMOD	-	-	-	-	-	-	-
+11	in	in	IN	IN	-	4	VMOD	-	-	-	-	-	-	-
+12	the	the	DT	DT	-	13	NMOD	-	-	-	-	-	-	-
+13	water	water	NN	NN	-	11	PMOD	-	-	-	-	-	-	-
+14	so	so	RB	RB	-	15	DEP	-	-	-	-	-	-	-
+15	that	that	IN	IN	-	13	NMOD	-	-	-	-	-	-	-
+16	sunrise	sunrise	NN	NN	-	17	SUB	-	-	-	Agent|Instrument	-	-	-
+17	wakes	wakes	VBZ	VBZ	-	15	SBAR	-	-	other_cos-45.4	-	-	-	-
+18	the	the	DT	DT	-	20	NMOD	-	-	-	-	-	-	-
+19	eastern	eastern	JJ	JJ	-	20	NMOD	-	-	-	-	-	-	-
+20	tip	tip	NN	NN	-	17	OBJ	-	-	-	Patient	-	-	-
+21	,	,	,	,	-	20	P	-	-	-	-	-	-	-
+22	proceeds	proceeds	VBZ	VBZ	-	20	NMOD	-	-	begin-55.1	-	-	-	-
+23	to	to	TO	TO	-	24	VMOD	-	-	-	-	-	-	-
+24	caress	caress	VB	VB	-	22	VMOD	-	-	touch-20|touch-20-1	-	_EMPTYROLE_	-	-
+25	the	the	DT	DT	-	26	NMOD	-	-	-	-	-	-	-
+26	length	length	NN	NN	-	24	OBJ	-	-	-	-	-	Experiencer	-
+27	of	of	IN	IN	-	26	NMOD	-	-	-	-	-	-	-
+28	the	the	DT	DT	-	29	NMOD	-	-	-	-	-	-	-
+29	island	island	NN	NN	-	27	PMOD	-	-	-	-	-	-	-
+30	,	,	,	,	-	17	P	-	-	-	-	-	-	-
+31	and	and	CC	CC	-	17	VMOD	-	-	-	-	-	-	-
+32	kisses	kisses	VBZ	VBZ	-	17	VMOD	-	-	marry-36.2|touch-20|touch-20-1	_EMPTYROLE_	-	-	-
+33	the	the	DT	DT	-	35	NMOD	-	-	-	-	-	-	-
+34	western	western	JJ	JJ	-	35	NMOD	-	-	-	-	-	-	-
+35	tip	tip	NN	NN	-	32	OBJ	-	-	-	-	-	-	Co-Agent|Experiencer
+36	good	good	JJ	JJ	-	37	NMOD	-	-	-	-	-	-	-
+37	night	night	NN	NN	-	32	OBJ	-	-	-	-	-	-	_EMPTYROLE_
+38	.	.	.	.	-	3	P	-	-	-	-	-	-	-
