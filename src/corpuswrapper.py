@@ -37,7 +37,8 @@ def get_frames(corpus, verbnet_classes, argid=False):
         role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
-            print(annotation_file.stem)
+            file_stem = annotation_file.stem if annotation_file else parsed_conll_file.stem
+            print(file_stem)
             annotated_frames = []
             vn_frames = []
             fnparsed_reader = FNParsedReader()
