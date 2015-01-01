@@ -17,18 +17,6 @@ errors = {
 debug_data = []
 
 
-def log_ambiguous_role_conversion(frame, arg, role_matcher, verbnet_classes):
-    errors["ambiguous_role"].append({
-        "file": frame.filename,
-        "argument": arg.text, "fn_role": arg.role, "fn_frame": frame.frame_name,
-        "predicate": frame.predicate.lemma,
-        "predicate_classes": verbnet_classes[frame.predicate.lemma],
-        "sentence": frame.sentence,
-        "vn_roles": role_matcher.possible_vn_roles(
-            arg.role, vn_classes=verbnet_classes[frame.predicate.lemma])
-    })
-
-
 def log_vn_missing(frame):
     errors["vn_missing"].append({
         "file": frame.filename, "sentence": frame.sentence,

@@ -17,12 +17,14 @@ probability_model = None
 passivize = False
 semrestr = False
 wordnetrestr = False
+corpus = 'FrameNet'
+
 # usually, a negative option is a bad idea, but 'non-core' is a thing in
 # FrameNet
 add_non_core_args = False
 
 conll_input = None
-conll_output = sys.stdout
+conll_output = None
 use_training_set = False
 corpus_lu = False
 
@@ -30,7 +32,7 @@ debug = False
 dump = False
 dump_file = ""
 
-test_set = [
+framenet_test_set = [
     'ANC__110CYL067',
     'ANC__110CYL068',
     'ANC__112C-L013',
@@ -59,8 +61,8 @@ test_set = [
 fulltext_corpus = paths.FRAMENET_FULLTEXT
 framenet_parsed = paths.FRAMENET_PARSED
 
-fulltext_annotations = sorted([f for f in fulltext_corpus.glob('*.xml') if f.stem in test_set])
-fulltext_parses = sorted([f for f in framenet_parsed.glob('*.conll') if f.stem in test_set])
+fulltext_annotations = sorted([f for f in fulltext_corpus.glob('*.xml') if f.stem in framenet_test_set])
+fulltext_parses = sorted([f for f in framenet_parsed.glob('*.conll') if f.stem in framenet_test_set])
 
 options = getopt.getopt(sys.argv[1:], "d:", [
     # "manual use"
@@ -69,7 +71,7 @@ options = getopt.getopt(sys.argv[1:], "d:", [
     "fmatching-algo=", "add-non-core-args", "model=", "bootstrap",
     "argument-identification", "heuristic-rules", "passivize", "semantic-restrictions", "wordnet-restrictions",
     # what do we annotate?
-    "conll_input=", "conll_output=", "training-set", "lu",
+    "conll_input=", "conll_output=", "corpus=", "training-set", "lu",
     # meta
     "dump", "help"])
 
@@ -149,26 +151,28 @@ for opt, value in options[0]:
     elif opt == "--passivize":
         passivize = True
 
+    elif opt == "--corpus":
+        corpus = value
     elif opt == "--conll_input":
         conll_input = value
         argument_identification = True
     elif opt == "--conll_output":
         conll_output = value
+    elif opt == "--training-set":
+        use_training_set = True
+        fulltext_annotations = sorted([f for f in fulltext_corpus.glob('*.xml') if f.stem not in framenet_test_set])
+        fulltext_parses = sorted([f for f in framenet_parsed.glob('*.conll') if f.stem not in framenet_test_set])
+    elif opt == "--lu":
+        corpus_lu = True
+        fulltext_corpus = paths.FRAMENET_LU
+        framenet_parsed = paths.FRAMENET_LU_PARSED
+
     elif opt == "--dump":
         if len(options[1]) > 0:
             dump = True
             dump_file = options[1][0]
         else:
             display_usage = True
-    elif opt == "--training-set":
-        use_training_set = True
-        fulltext_annotations = sorted([f for f in fulltext_corpus.glob('*.xml') if f.stem not in test_set])
-        fulltext_parses = sorted([f for f in framenet_parsed.glob('*.conll') if f.stem not in test_set])
-    elif opt == "--lu":
-        corpus_lu = True
-        fulltext_corpus = paths.FRAMENET_LU
-        framenet_parsed = paths.FRAMENET_LU_PARSED
-
     elif opt == "-d":
         debug = True
         value = 0 if value == "" else int(value)
@@ -177,8 +181,8 @@ for opt, value in options[0]:
     elif opt == "--help":
         display_usage = True
 
-if conll_output != sys.stdout and conll_input is not None:
-    print("--conll_output should be used with --conll_input. Aborting")
+if conll_input is not None and conll_output is None:
+    print("--conll_input requires --conll_output. Aborting")
     display_usage = True
 
 if display_usage:

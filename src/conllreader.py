@@ -208,12 +208,12 @@ class ConllSemanticAppender():
 
     def add_frame_annotation(self, frame_annotation):
         # We could have multiple classes, so join them with |
-        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position-1][10] = '|'.join(frame_annotation.best_classes)
+        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position-1][10] = '|'.join(sorted(frame_annotation.best_classes()))
         # Add new column to place the new roles
         self.add_new_column(frame_annotation.sentence_id)
 
         for roleset, arg in zip(frame_annotation.roles, frame_annotation.args):
-            roleset_str = '|'.join(roleset) if roleset else '_EMPTYROLE_'
+            roleset_str = '|'.join(sorted(roleset)) if roleset else '_EMPTYROLE_'
             self.conll_matrix[frame_annotation.sentence_id][arg.position-1][-1] = roleset_str
 
     def dump_semantic_file(self, filename):

@@ -3,8 +3,8 @@
 
 from collections import Counter
 
-from rolematcher import RoleMatchingError
-from errorslog import log_ambiguous_role_conversion
+import paths
+import rolematcher
 
 
 # TODO separate computed values from measured values
@@ -87,12 +87,6 @@ stats_data = {
     "multiple_classes": 0,
 }
 
-ambiguous_mapping = {
-    # Stats of ambiguous mapping when ignoring the FN frame given by the annotations
-    "verbs": [], "args_total": 0, "args": 0,
-    # Stats of ambiguous mapping remaining despite the FN frame given by the annotations
-    "verbs_with_frame": [], "args_total_with_frame": 0, "args_with_frame": 0
-}
 
 annotated_frames_stats = []
 
@@ -223,33 +217,6 @@ def display_stats(argument_identification):
     print("*: see comments in stats.py")
 
 
-def display_stats_ambiguous_mapping():
-    print(
-        "Ambiguous VerbNet roles:\n"
-        "With FrameNet frame indication:\n"
-        "\tArguments: {}\n"
-        "\tFrames: {}\n"
-        "\tTotal number of arguments in those frames: {}\n"
-        "Without FrameNet frame indication:\n"
-        "\tArguments: {}\n"
-        "\tFrames: {}\n"
-        "\tTotal number of arguments in those frames: {}\n".format(
-            ambiguous_mapping["args_with_frame"], len(ambiguous_mapping["verbs_with_frame"]),
-            ambiguous_mapping["args_total_with_frame"], ambiguous_mapping["args"],
-            len(ambiguous_mapping["verbs"]), ambiguous_mapping["args_total"]
-        )
-
-    )
-    count_with_frame = Counter(ambiguous_mapping["verbs_with_frame"])
-    print(
-        "Verbs list :\n"
-        "(verb) - (number of ambiguous args without frame indication)"
-        " - (number of ambiguous args with frame indications)"
-    )
-    for v, n1 in Counter(ambiguous_mapping["verbs"]).most_common():
-        n2 = count_with_frame[v] if v in count_with_frame else 0
-        print("{:>12}: {:>3} - {:<3}".format(v, n1, n2))
-
 def vnclass_to_normalized_name(vnclass):
     """A VerbNet class can have various names, depending on its position in the
     hierarchy, but not only. It's not easy to know weather a given identifier
@@ -296,7 +263,8 @@ def vnclass_to_normalized_name(vnclass):
     raise Exception('Impossible VerbNet class {}'.format(vnclass))
 
 
-def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, argument_identification):
+def stats_quality(annotated_frames, vn_frames, frames_for_verb, verbnet_classes, argument_identification):
+    role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
     # This variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point and
     # args_annotated_mapping_ok is related to gold annotated frames
@@ -304,6 +272,9 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
         stats_data["args_annotated_mapping_ok"] = 0
 
     for gold_fn_frame, found_vn_frame in zip(annotated_frames, vn_frames):
+        if gold_fn_frame.predicate.lemma not in frames_for_verb:
+            continue
+
         annotated_frames_stats.append({'gold_fn_frame': gold_fn_frame, 'slots': []})
         # We don't know how to evaluate args that were extracted from a frame
         # that exist in the fulltext corpus but that lacks argument annotations
@@ -360,7 +331,7 @@ def stats_quality(annotated_frames, vn_frames, role_matcher, verbnet_classes, ar
                     # If the mapping is ambiguous, it could be our mistake here
                     vn_classes=verbnet_classes[gold_fn_frame.predicate.lemma]
                     )
-            except RoleMatchingError:
+            except rolematcher.RoleMatchingError:
                 stats_data["impossible_mapping"] += 1
                 continue
 
@@ -406,36 +377,3 @@ def stats_precision_cover(good_fm, bad_fm, resolved_fm, identified, is_fm):
         cover = resolved_model / (identified - resolved_fm)
 
     return precision, cover, precision_all, cover_all
-
-
-def stats_ambiguous_roles(frame, num_args, role_matcher, verbnet_classes):
-    found_ambiguous_arg = False
-    found_ambiguous_arg_2 = False
-    for arg in frame.args:
-        if not arg.instanciated:
-            continue
-        try:
-            if len(role_matcher.possible_vn_roles(
-                arg.role, vn_classes=verbnet_classes[frame.predicate.lemma]
-            )) > 1:
-                if not found_ambiguous_arg:
-                    found_ambiguous_arg = True
-                    ambiguous_mapping["verbs"].append(frame.predicate.lemma)
-                    ambiguous_mapping["args_total"] += num_args
-                ambiguous_mapping["args"] += 1
-
-                log_ambiguous_role_conversion(frame, arg,
-                    role_matcher, verbnet_classes)
-
-                if len(role_matcher.possible_vn_roles(
-                    arg.role,
-                    fn_frame=frame.frame_name,
-                    vn_classes=verbnet_classes[frame.predicate.lemma]
-                )) > 1:
-                    if not found_ambiguous_arg_2:
-                        found_ambiguous_arg_2 = True
-                        ambiguous_mapping["verbs_with_frame"].append(frame.predicate.lemma)
-                        ambiguous_mapping["args_total_with_frame"] += num_args
-                    ambiguous_mapping["args_with_frame"] += 1
-        except RoleMatchingError:
-            pass
