@@ -24,7 +24,7 @@ corpus = 'FrameNet'
 add_non_core_args = False
 
 conll_input = None
-conll_output = sys.stdout
+conll_output = None
 use_training_set = False
 corpus_lu = False
 
@@ -181,8 +181,8 @@ for opt, value in options[0]:
     elif opt == "--help":
         display_usage = True
 
-if conll_output != sys.stdout and conll_input is not None:
-    print("--conll_output should be used with --conll_input. Aborting")
+if conll_input is not None and conll_output is None:
+    print("--conll_input requires --conll_output. Aborting")
     display_usage = True
 
 if display_usage:
