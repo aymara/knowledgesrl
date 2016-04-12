@@ -130,8 +130,8 @@ class SyntacticTreeBuilder():
             word_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
 
             word_id = int(word_id)
-            head = int(head) if head != '-' else None
-            deprel = deprel if deprel != '-' else 'ROOT'
+            head = int(head) if head != '_' else None
+            deprel = deprel if deprel != '_' else 'ROOT'
 
             self.father_ids[word_id] = head
 
@@ -199,16 +199,16 @@ class ConllSemanticAppender():
                     if len(line.split('\t')) == 1:
                         continue
                     # Put current line plus a line for potential frame annotations
-                    sentence_matrix.append(line.split('\t') + ['-'])
+                    sentence_matrix.append(line.split('\t') + ['_'])
                 self.conll_matrix.append(sentence_matrix)
 
     def add_new_column(self, sentence_id):
         for line in self.conll_matrix[sentence_id]:
-            line.append('-')
+            line.append('_')
 
     def add_frame_annotation(self, frame_annotation):
         # We could have multiple classes, so join them with |
-        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position-1][10] = '|'.join(sorted(frame_annotation.best_classes()))
+        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position][10] = '|'.join(sorted(frame_annotation.best_classes()))
         # Add new column to place the new roles
         self.add_new_column(frame_annotation.sentence_id)
 
