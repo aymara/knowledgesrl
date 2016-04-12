@@ -5,6 +5,11 @@
 
 from conllreader import SyntacticTreeBuilder
 
+import options
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(options.loglevel)
+
 
 class FNParsedReader:
     """Reads the syntactic parser output to  build the corresponding
@@ -19,6 +24,7 @@ class FNParsedReader:
         :param filename: The file to load.
         :type filename: str.
         """
+        logger.debug("FNParsedReader.sentence_trees(%s)"%filename)
 
         with open(str(filename), encoding='UTF-8') as content:
             sentences_data = content.read().split("\n\n")

@@ -11,6 +11,10 @@ from verbnetprepclasses import all_preps
 from argheuristic import find_args
 import headwordextractor
 
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(options.loglevel)
+
 
 class ArgGuesser():
     """
@@ -50,16 +54,22 @@ class ArgGuesser():
         "JJR": "NP",  # Comparative
         "JJS": "NP",  # Superlative
         "MD": "S",    # Modal verb
-        "NN": "NP", "NNP": "NP", "NNPS": "NP", "NNS": "NP",
-        "NP": "NP", "NPS": "NP",
+        "NN": "NP", 
+        "NNP": "NP", 
+        "NNPS": "NP", 
+        "NNS": "NP",
+        "NP": "NP", 
+        "NPS": "NP",
         "PP": "PP",
         "PRP": "NP",
         "RB": "ADV",
         "TO": "to S",
         "VB": "S",  # Base form of a verb
-        "VBD": "S", "VBG": "S_ING",
+        "VBD": "S", 
+        "VBG": "S_ING",
         "VBN": "ADJ",  # Participe, as "fed" in "He got so fed up that..."
-        "VBP": "S", "VBZ": "S",
+        "VBP": "S", 
+        "VBZ": "S",
         "WDT": "NP"  # Relative determiners ("that what whatever which whichever")
     }
 
@@ -72,25 +82,25 @@ class ArgGuesser():
 
     def frame_instances_from_file(self, sentence_trees, filename):
         """ Extracts frames from one file and iterate over them """
+        logger.debug("ArgGuesser.frame_instances_from_file %s"%filename)
         for sentence_id, sentence, tree in sentence_trees:
             for frame in self._handle_sentence(sentence_id, sentence, tree, filename):
                 yield frame
 
     def _handle_sentence(self, sentence_id, sentence, tree, filename):
         """ Extracts frames from one sentence and iterate over them """
+        logger.debug("ArgGuesser._handle_sentence %s"%sentence_id)
         for node in tree:
             # For every verb, looks for its infinitive form in VerbNet, and
             # builds a frame occurrence if it is found
-
-            if wn.morphy(node.word.lower(), 'v') is not None:
-                node.lemma = wn.morphy(node.word.lower(), 'v')
-            else:
-                node.lemma = node.word.lower()
-
+            logger.debug("ArgGuesser._handle_sentence on %s"%node.lemma)
+            
             if node.lemma not in self.frames_for_verb:
+                logger.debug("ArgGuesser._handle_sentence node.lemma {} not in frames_for_verb".format(node.lemma))
                 continue
 
             if self._is_predicate(node):
+                logger.debug("ArgGuesser._handle_sentence node.lemma {} is a predicate".format(node.lemma))
                 # Si deprel = VC, prendre le noeud du haut pour les args
                 # Si un child est VC -> ne rien faire avec ce node
                 predicate = Predicate(
@@ -229,6 +239,7 @@ class ArgGuesser():
         """Tells whether a node can be used as a predicate for a frame"""
         # Check part-of-speech compatibility
         if node.pos not in self.predicate_pos:
+            logger.debug("ArgGuesser._is_predicate {} is not a predicate pos which are {}".format(node.pos, self.predicate_pos))
             return False
 
         # Check that this node is not an auxiliary

@@ -16,10 +16,14 @@ import probabilitymodel
 import paths
 import dumper
 import corpuswrapper
+import logging
 
+logging.basicConfig(level=options.loglevel)
+logger = logging.getLogger(__name__)
+logger.setLevel(options.loglevel)
 
 if __name__ == "__main__":
-    print("Loading VerbNet...")
+    logger.info("Loading VerbNet...")
     frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
 
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
@@ -27,12 +31,12 @@ if __name__ == "__main__":
     all_annotated_frames = []
     all_vn_frames = []
 
-    print("Loading gold annotations and performing frame matching...")
+    logger.info("Loading gold annotations and performing frame matching...")
     for annotated_frames, vn_frames in corpuswrapper.get_frames(options.corpus, verbnet_classes, options.argument_identification):
+        all_matcher = []
         #
         # Frame matching
         #
-        all_matcher = []
         data_restr = NoHashDefaultDict(lambda: Counter())
         assert len(annotated_frames) == len(vn_frames)
 
@@ -113,11 +117,12 @@ if __name__ == "__main__":
     #
     # Probability models
     #
+    logger.info("Probability models...")
     if options.bootstrap:
-        print("Applying bootstrap...")
+        logger.info("Applying bootstrap...")
         bootstrap_algorithm(all_vn_frames, model, verbnet_classes)
     elif options.probability_model is not None:
-        print("Applying probability model...")
+        logger.info("Applying probability model...")
         for frame_occurrence in all_vn_frames:
             # Commented out a version that only allowed possible role
             # combinations after each restriction
@@ -137,7 +142,7 @@ if __name__ == "__main__":
             display_debug(options.n_debug)
 
     if options.conll_input is not None:
-        print("Dumping semantic CoNLL...")
+        logger.info("Dumping semantic CoNLL...")
         semantic_appender = ConllSemanticAppender(options.conll_input)
         for vn_frame in all_vn_frames:
             if vn_frame.best_classes():
@@ -145,7 +150,7 @@ if __name__ == "__main__":
         semantic_appender.dump_semantic_file(options.conll_output)
 
     else:
-        print("\n## Evaluation")
+        logger.info("\n## Evaluation")
         stats.stats_quality(
             all_annotated_frames, all_vn_frames,
             frames_for_verb, verbnet_classes,

@@ -7,6 +7,7 @@ import paths
 import getopt
 import sys
 
+import logging
 
 matching_algorithm = "sync_predicates"
 
@@ -18,6 +19,7 @@ passivize = False
 semrestr = False
 wordnetrestr = False
 corpus = 'FrameNet'
+loglevel = logging.WARNING
 
 # usually, a negative option is a bad idea, but 'non-core' is a thing in
 # FrameNet
@@ -31,6 +33,14 @@ corpus_lu = False
 debug = False
 dump = False
 dump_file = ""
+
+loglevels = {
+    'debug':logging.DEBUG, 
+    'info':logging.INFO, 
+    'warning':logging.WARNING, 
+    'error':logging.ERROR, 
+    'critical':logging.CRITICAL,
+}
 
 framenet_test_set = [
     'ANC__110CYL067',
@@ -73,7 +83,7 @@ options = getopt.getopt(sys.argv[1:], "d:", [
     # what do we annotate?
     "conll_input=", "conll_output=", "corpus=", "training-set", "lu",
     # meta
-    "dump", "help"])
+    "loglevel=", "dump", "help"])
 
 display_usage = False
 
@@ -116,6 +126,10 @@ Options:
 
 # Dump annotation for comparisong
 --dump
+
+# Log level
+--log=[debug, info, warning, error, critical]
+
 # Display this usage message
 --help"""
 
@@ -173,6 +187,10 @@ for opt, value in options[0]:
             dump_file = options[1][0]
         else:
             display_usage = True
+    elif opt == "--loglevel":
+        if value not in loglevels:
+            raise Exception("Unknown log level {}. loglevels are: {}".format(value,loglevels))
+        loglevel = loglevels[value]
     elif opt == "-d":
         debug = True
         value = 0 if value == "" else int(value)

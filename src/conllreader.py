@@ -28,6 +28,7 @@ class SyntacticTreeNode:
     :var word_id: int, the CoNLL word id (starts at 1)
 
     :var word: string, the word contained by the node
+    :var lemma: string, the lemma of the word contained by the node
     :var pos: part-of-speech of the node
 
     :var deprel: string, function attributed by the parser to this word
@@ -40,10 +41,11 @@ class SyntacticTreeNode:
 
     """
 
-    def __init__(self, word_id, word, pos, deprel, begin_word):
+    def __init__(self, word_id, word, lemma, pos, deprel, begin_word):
         self.word_id = word_id
 
         self.word = word
+        self.lemma = lemma
         self.pos = pos
 
         self.deprel = deprel
@@ -127,7 +129,8 @@ class SyntacticTreeBuilder():
 
         begin = 0
         for l in conll_tree.splitlines():
-            word_id, form, lemma, cpos, pos, feat, head, deprel, *junk = l.split("\t")
+            """Columns from https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
+            word_id, form, lemma, cpos, pos, namedEntityType, features, head, deprel, *junk = l.split("\t")
 
             word_id = int(word_id)
             head = int(head) if head != '_' else None
@@ -137,7 +140,9 @@ class SyntacticTreeBuilder():
 
             self.node_dict[word_id] = SyntacticTreeNode(
                 word_id=word_id,
-                word=form.lower(), pos=cpos,
+                word=form, 
+                lemma=lemma, 
+                pos=pos,
                 deprel=deprel,
                 begin_word=begin)
 

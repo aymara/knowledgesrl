@@ -1,8 +1,10 @@
 buildbot
 __pycache__
 _build
-.~*#
+*~
 .*.swp
+*.pyc
+*.kdev4
 
 # closed data
 data/domain/kicktionary/All_LUs.xml
