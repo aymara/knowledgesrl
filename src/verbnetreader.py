@@ -74,7 +74,7 @@ class VerbnetReader:
             # work around a bug in VerbNet 3.2
             if xml_frame.find('DESCRIPTION').get('primary') == 'Passive':
                 continue
-            logger.debug("VerbnetReader._handle_class {} {}".format(xml_frame, vnclass))
+            #logger.debug("VerbnetReader._handle_class {} {}".format(xml_frame, vnclass))
             frames.append(self._build_frame(xml_frame, vnclass, role_list, restrictions))
 
         for xml_verb in xml_class.find("MEMBERS"):

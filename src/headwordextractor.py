@@ -3,9 +3,6 @@
 
 """Extract headwords of arguments and determine their WordNet class"""
 
-from nltk.corpus import wordnet as wn
-
-
 def headword(arg, tree):
     """Returns the headword of an argument, assuming the proper sentence has
     already been selected.
@@ -49,7 +46,7 @@ def get_class(word):
     # highest hypernym
     entity_synset = "entity.n.01"
 
-    synsets = wn.synsets(word)
+    synsets = nltk.corpus.wordnet.synsets(word)
     if not synsets:
         return None
 

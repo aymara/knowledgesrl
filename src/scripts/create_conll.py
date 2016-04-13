@@ -10,8 +10,6 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 import os
 
-from nltk.corpus import wordnet
-
 from paths import FRAMENET_FULLTEXT
 
 xmlns = 'http://framenet.icsi.berkeley.edu'
@@ -31,7 +29,7 @@ for fulltext_filename in Path(FRAMENET_FULLTEXT).glob('*.xml'):
             end = int(word_label.get('end'))
             word = sentence_text[start:end+1]
 
-            morphy_lemma = wordnet.morphy(word.lower())
+            morphy_lemma = nltk.corpus.wordnet.morphy(word.lower())
             lemma = morphy_lemma if morphy_lemma is not None else word
 
             print('\t'.join([str(word_id), word, lemma] + ['_'] * 7), file=conll_file)

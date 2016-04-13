@@ -3,8 +3,6 @@
 
 """ Extract frames, predicates and arguments from a corpus, using only syntactic annotations """
 
-from nltk.corpus import wordnet as wn
-
 from framenetframe import FrameInstance, Predicate, Word, Arg
 import options
 from verbnetprepclasses import all_preps
@@ -89,14 +87,14 @@ class ArgGuesser():
 
     def _handle_sentence(self, sentence_id, sentence, tree, filename):
         """ Extracts frames from one sentence and iterate over them """
-        logger.debug("ArgGuesser._handle_sentence %s"%sentence_id)
+        #logger.debug("ArgGuesser._handle_sentence %s"%sentence_id)
         for node in tree:
             # For every verb, looks for its infinitive form in VerbNet, and
             # builds a frame occurrence if it is found
-            logger.debug("ArgGuesser._handle_sentence on %s"%node.lemma)
+            #logger.debug("ArgGuesser._handle_sentence on %s"%node.lemma)
             
             if node.lemma not in self.frames_for_verb:
-                logger.debug("ArgGuesser._handle_sentence node.lemma {} not in frames_for_verb".format(node.lemma))
+                #logger.debug("ArgGuesser._handle_sentence node.lemma {} not in frames_for_verb".format(node.lemma))
                 continue
 
             if self._is_predicate(node):
@@ -104,9 +102,11 @@ class ArgGuesser():
                 # Si deprel = VC, prendre le noeud du haut pour les args
                 # Si un child est VC -> ne rien faire avec ce node
                 predicate = Predicate(
-                    node.begin_word, node.begin_word + len(node.word) - 1,
-                    node.word, node.lemma,
-                    node.word_id)
+                    node.begin_word, 
+                    node.begin_word + len(node.word) - 1,
+                    node.word, 
+                    node.lemma,
+                    node.word_id-1)
 
                 if options.heuristic_rules:
                     args = [self._nodeToArg(x, node) for x in find_args(node)]
@@ -239,7 +239,7 @@ class ArgGuesser():
         """Tells whether a node can be used as a predicate for a frame"""
         # Check part-of-speech compatibility
         if node.pos not in self.predicate_pos:
-            logger.debug("ArgGuesser._is_predicate {} is not a predicate pos which are {}".format(node.pos, self.predicate_pos))
+            #logger.debug("ArgGuesser._is_predicate {} is not a predicate pos which are {}".format(node.pos, self.predicate_pos))
             return False
 
         # Check that this node is not an auxiliary

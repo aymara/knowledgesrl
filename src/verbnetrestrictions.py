@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from nltk.corpus import wordnet as wn
-
 # List of possible thematic role restrictions
 possible_types = {
         "abstract": 'abstraction.n.06',
@@ -169,6 +167,8 @@ class VNRestriction:
         return base_score + children_score
 
     def matches_to_headword(self, headword):
+        from nltk.corpus import wordnet as wn
+        
         if self._is_empty_restr():
             return True
 

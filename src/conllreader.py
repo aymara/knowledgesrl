@@ -41,19 +41,27 @@ class SyntacticTreeNode:
 
     """
 
-    def __init__(self, word_id, word, lemma, pos, deprel, begin_word):
+    def __init__(self, word_id, word, lemma, cpos, pos, namedEntityType, 
+                 features, head, deprel, phead, pdeprel, begin_word):
         self.word_id = word_id
 
         self.word = word
         self.lemma = lemma
+        self.cpos=cpos
         self.pos = pos
-
+        self.namedEntityType=namedEntityType
+        self.features=features
+        self.head=head
         self.deprel = deprel
+        self.phead=phead
+        self.pdeprel=pdeprel
+        self.begin_word = begin_word
+
         self.father = None
         self.children = []
 
-        self.begin_word = begin_word
         self.begin, self.end = None, None
+
 
     def __repr__(self):
         if self.children:
@@ -130,7 +138,7 @@ class SyntacticTreeBuilder():
         begin = 0
         for l in conll_tree.splitlines():
             """Columns from https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
-            word_id, form, lemma, cpos, pos, namedEntityType, features, head, deprel, *junk = l.split("\t")
+            word_id, form, lemma, cpos, pos, namedEntityType, features, head, deprel, phead, pdeprel = l.split("\t")
 
             word_id = int(word_id)
             head = int(head) if head != '_' else None
@@ -142,8 +150,14 @@ class SyntacticTreeBuilder():
                 word_id=word_id,
                 word=form, 
                 lemma=lemma, 
+                cpos=cpos,
                 pos=pos,
+                namedEntityType=namedEntityType,
+                features=features,
+                head=head,
                 deprel=deprel,
+                phead=phead,
+                pdeprel=pdeprel,
                 begin_word=begin)
 
             begin += 1 + len(form)
@@ -203,17 +217,17 @@ class ConllSemanticAppender():
                 for line in sentence.split('\n'):
                     if len(line.split('\t')) == 1:
                         continue
-                    # Put current line plus a line for potential frame annotations
+                    # Put current line with a new column appended for predicate
                     sentence_matrix.append(line.split('\t') + ['_'])
                 self.conll_matrix.append(sentence_matrix)
-
+                
     def add_new_column(self, sentence_id):
         for line in self.conll_matrix[sentence_id]:
             line.append('_')
 
     def add_frame_annotation(self, frame_annotation):
         # We could have multiple classes, so join them with |
-        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position][10] = '|'.join(sorted(frame_annotation.best_classes()))
+        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position][11] = '|'.join(sorted(frame_annotation.best_classes()))
         # Add new column to place the new roles
         self.add_new_column(frame_annotation.sentence_id)
 
