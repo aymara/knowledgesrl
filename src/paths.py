@@ -8,14 +8,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent / "data"
 
-FRAMENET = ROOT / "fndata-1.5/"
+#FRAMENET = ROOT / "fndata-1.5/"
+FRAMENET = ROOT / "fndata-asfalda/"
 FRAMENET_FULLTEXT = FRAMENET / "fulltext/"
 FRAMENET_LU = FRAMENET / "lu/"
 FRAMENET_FRAMES = FRAMENET / "frame/"
 FRAMENET_PARSED = ROOT / "framenet_parsed/"
 FRAMENET_LU_PARSED = ROOT / "lu_parsed/"
 
-VERBNET_PATH = ROOT / "verbnet/"
+#VERBNET_PATH = ROOT / "verbnet/"
+VERBNET_PATH = ROOT / "verbenet/verbenet/"
 
 VNFN_MATCHING = ROOT / "vn-fn-roles.xml"
 

@@ -2,3 +2,6 @@
 	path = data/verbnet
 	url = https://github.com/aymara/verbnet.git
 	branch = pradet-fixes
+[submodule "data/verbenet"]
+	path = data/verbenet
+	url = https://github.com/aymara/verbenet.git

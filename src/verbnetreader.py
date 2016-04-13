@@ -39,8 +39,8 @@ class VerbnetReader:
         self.filename = ""
         self.unhandled = []
 
-        if not list(path.glob('*.xml')):
-            raise Exception('VerbNet not found! Did you clone with submodules?')
+        if not list(path.glob('*-[0-9]*.xml')):
+            raise Exception('VerbNet not found in {}! Did you clone with submodules?'.format(path))
 
         for filename in path.glob('*.xml'):
             root = ET.ElementTree(file=str(filename.resolve()))
@@ -65,8 +65,9 @@ class VerbnetReader:
 
         for xml_role in xml_class.find("THEMROLES"):
             role_list.append(xml_role.attrib["type"])
-            restrictions.append(
-                VNRestriction.build_from_xml(xml_role.find("SELRESTRS")))
+            if xml_role.find("SELRESTRS"):
+                restrictions.append(
+                    VNRestriction.build_from_xml(xml_role.find("SELRESTRS")))
 
         self.roles[vnclass] = role_list
 
@@ -86,8 +87,9 @@ class VerbnetReader:
             self.frames_for_verb[verb] += frames
             self.classes[verb].append(vnclass)
 
-        for subclass in xml_class.find("SUBCLASSES"):
-            self._handle_class(subclass, frames, role_list, restrictions)
+        if xml_class.find("SUBCLASSES"):
+            for subclass in xml_class.find("SUBCLASSES"):
+                self._handle_class(subclass, frames, role_list, restrictions)
 
     def merge_syntax(self, primary_structure, roles, role_restrictions):
         new_syntax = []
@@ -117,6 +119,7 @@ class VerbnetReader:
         :type vnclass: str.
 
         """
+        logger.debug('_build_frame {}'.format(vnclass))
         # Extract the structure
         base_structure = xml_frame.find("DESCRIPTION").attrib["primary"]
         # Transform it into a list
@@ -132,7 +135,10 @@ class VerbnetReader:
 
         roles, structure = self._build_structure(
             base_structure, syntax_data, vnclass, role_list)
-        role_restr = [restrictions[role_list.index(x)] for x in roles]
+        role_restr = []
+        for x in roles:
+            if x in role_list and len(restrictions) > role_list.index(x):
+                role_restr.append(restrictions[role_list.index(x)])
 
         syntax = self.merge_syntax(structure, roles, role_restr)
         result = VerbnetOfficialFrame(vnclass, syntax)
@@ -166,8 +172,8 @@ class VerbnetReader:
                 if element.endswith(end):
                     element = element[:-len(end)]
 
-            if '-' in element:
-                raise Exception('Unexpected {} in {}'.format(element, vnclass))
+            #if '-' in element:
+                #raise Exception('Unexpected {} in {}'.format(element, vnclass))
 
             # TODO handle adverbial phrases and adverbs?
             if element in ['ADV', 'ADVP']:
@@ -200,7 +206,7 @@ class VerbnetReader:
                 structure.append(element)
 
             search = element
-            if search[0].islower():
+            if len(search) > 0 and search[0].islower():
                 search = "keyword"
 
             # Look for a matching element in SYNTAX
@@ -333,9 +339,11 @@ class VerbnetReader:
         :returns: String List - the list of acceptable prepositions
 
         """
+        logger.debug('_handle_prep {}'.format(xml))
         for restr_group in xml:
             if restr_group.tag == "SELRESTRS":
                 for restr in restr_group:
+                    logger.debug('restriction {}'.format(restr))
                     if (restr.attrib["Value"] == "+"
                             and restr.attrib["type"] in verbnetprepclasses.prep):
                         return verbnetprepclasses.prep[restr.attrib["type"]]
@@ -344,7 +352,7 @@ class VerbnetReader:
                             "file": self.filename,
                             "elem": "PREP",
                             "data": "SELRESTR {}={}".format(
-                                restr.attrib["type"], restr.attrib["Value"])
+                                restr.attrib.get("type"), restr.attrib["Value"])
                         })
             else:
                 self.unhandled.append({
