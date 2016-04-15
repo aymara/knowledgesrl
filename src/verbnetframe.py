@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import options
+import logging
+logger = logging.getLogger(__name__)
+#logger.setLevel(options.loglevel)
+
 from abc import ABCMeta
 from operator import attrgetter
+
 
 from framenetframe import Predicate, Arg
 import verbnetprepclasses
@@ -133,10 +139,12 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         return result
 
     def add_match(self, match, score):
+        logger.debug('add_match {} {}'.format(match, score))
         self.best_matches.append(match)
         self.roles = self.possible_roles()
 
     def remove_all_matches(self):
+        logger.debug('remove_all_matches')
         self.best_matches = []
         self.roles = self.possible_roles()
 
@@ -152,7 +160,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 
     def select_likeliest_matches(self):
         """Finds the matches that are the closest to the restricted roles. Only
-        makes sens when roles got restricted by restrict_slot_to_role"""
+        makes sense when roles got restricted by restrict_slot_to_role"""
         scores = []
 
         for match in self.best_matches:
@@ -215,7 +223,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         # file so that we can add classes and roles later
         # TODO remove this condition and reorganize caller code instead
         if conll_frame_instance is not None:
-            result.predicate_position = conll_frame_instance.predicate.position
+            result.tokenid = conll_frame_instance.predicate.tokenid
             result.sentence_id = conll_frame_instance.sentence_id
 
             result.args = conll_frame_instance.args

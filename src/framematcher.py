@@ -18,6 +18,11 @@ NP with NP", what do you do? We decided, for now, to only match the syntactic
 subject.
 """
 
+import options
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(options.loglevel)
+
 from verbnetframe import ComputeSlotTypeMixin, VerbnetFrameOccurrence
 from verbnetrestrictions import VNRestriction
 
@@ -251,6 +256,7 @@ class FrameMatcher():
         :type official_frames_to_be_matched: VerbnetOfficialFrame list.
 
         """
+        logger.debug('perform_frame_matching with algo {}'.format(self.algo))
         best_score = 0
         for verbnet_frame in official_frames_to_be_matched:
             slots_associations = [None for x in range(self.frame_occurrence.num_slots)]
@@ -272,15 +278,20 @@ class FrameMatcher():
                 raise Exception("Unknown matching algorithm : {}".format(self.algo))
 
             num_match, slots_associations = matching_function(verbnet_frame, slots_associations)
-
+            logger.debug('Match result with {} : num_match={} slots_associations={}'.format(verbnet_frame, num_match, slots_associations))
+                
             # Score computation
             ratio_1 = num_match / self.frame_occurrence.num_slots
             if verbnet_frame.num_slots == 0:
                 ratio_2 = 1
             else:
                 ratio_2 = num_match / verbnet_frame.num_slots
+                
             score = int(100 * (ratio_1 + ratio_2))
-
+            logger.debug('Score computation current best={} ; {} {} {} ; {}'
+                .format(best_score, num_match, self.frame_occurrence.num_slots, verbnet_frame.num_slots, score))
+            
+            
             # This frame is better than any previous one: reset everything
             if score > best_score:
                 self.frame_occurrence.remove_all_matches()

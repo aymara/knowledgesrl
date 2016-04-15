@@ -9,14 +9,14 @@ import errorslog
 from errorslog import log_debug_data, display_debug
 from bootstrap import bootstrap_algorithm
 from verbnetrestrictions import NoHashDefaultDict
+import logging
+import paths
 import options
 import verbnetreader
 import framematcher
 import probabilitymodel
-import paths
 import dumper
 import corpuswrapper
-import logging
 
 logging.basicConfig(level=options.loglevel)
 logger = logging.getLogger(__name__)
@@ -137,9 +137,11 @@ if __name__ == "__main__":
                     if new_role is not None:
                         frame_occurrence.restrict_slot_to_role(i, new_role)
             frame_occurrence.select_likeliest_matches()
-
+    
         if options.debug:
             display_debug(options.n_debug)
+    else:
+        logger.info("No probability model")
 
     if options.conll_input is not None:
         logger.info("Dumping semantic CoNLL...")

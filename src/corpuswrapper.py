@@ -26,7 +26,10 @@ logger.setLevel(options.loglevel)
 
 
 def get_frames(corpus, verbnet_classes, argid=False):
-    logger.debug("corpus_wrapper.get_frames %s %s"%(corpus,options.conll_input))
+    logger.debug("get_frames corpus={} input={}".format(corpus,options.conll_input))
+
+    # Fills two list of the same size (annotation_list and parsed_conll_list) 
+    # with content dependent of the kind of input
     if options.conll_input is not None:
         annotation_list = [None]
         parsed_conll_list = [Path(options.conll_input)]
@@ -43,7 +46,7 @@ def get_frames(corpus, verbnet_classes, argid=False):
         role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
 
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
-            logger.debug("Handling %s %s" %(annotation_file, parsed_conll_file))
+            logger.debug("Handling {} {}" .format(annotation_file, parsed_conll_file))
             file_stem = annotation_file.stem if annotation_file else parsed_conll_file.stem
             annotated_frames = []
             vn_frames = []

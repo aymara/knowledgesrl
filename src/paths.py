@@ -4,20 +4,30 @@
 """Contains all shared paths in one module for easy maintenance"""
 
 from pathlib import Path
-
+import optionsparsing
 
 ROOT = Path(__file__).parent.parent / "data"
 
-#FRAMENET = ROOT / "fndata-1.5/"
-FRAMENET = ROOT / "fndata-asfalda/"
+VERBNET_PATH = ROOT / "verbnet/"
+FRAMENET = ROOT / "fndata-1.5/"
+
+for opt, value in optionsparsing.options[0]:
+    if opt == "--language" and value == 'fre':
+        FRAMENET = ROOT / "fndata-asfalda/"
+        VERBNET_PATH = ROOT / "verbenet/verbenet/"
+    elif opt == "--language" and value == 'eng':
+        None
+    elif opt == "--language":
+        print("Unhandled language {}".format(value))
+        exit(1)
+        
 FRAMENET_FULLTEXT = FRAMENET / "fulltext/"
 FRAMENET_LU = FRAMENET / "lu/"
 FRAMENET_FRAMES = FRAMENET / "frame/"
 FRAMENET_PARSED = ROOT / "framenet_parsed/"
 FRAMENET_LU_PARSED = ROOT / "lu_parsed/"
 
-#VERBNET_PATH = ROOT / "verbnet/"
-VERBNET_PATH = ROOT / "verbenet/verbenet/"
+
 
 VNFN_MATCHING = ROOT / "vn-fn-roles.xml"
 

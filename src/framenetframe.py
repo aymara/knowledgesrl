@@ -125,15 +125,15 @@ class Predicate:
     :var end: integer, position of the predicate's last character in the sentence
     :var text: string containing the predicate's text
     :var lemma: string containing the predicate's lemma
-
+    :var tokenid: integer the id of this predicate token in the CONLL input
     """
 
-    def __init__(self, begin, end, text, lemma, position=None):
+    def __init__(self, begin, end, text, lemma, tokenid=None):
         self.begin = begin
         self.end = end
         self.text = text
         self.lemma = lemma
-        self.position = position
+        self.tokenid = tokenid
 
     def __repr__(self):
         return "Predicate({}, {})".format(self.text, self.lemma)

@@ -3,6 +3,11 @@
 
 """Build syntactic trees from CoNLL parser output"""
 
+import options
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(options.loglevel)
+
 
 class ConllInvalidPositionError(Exception):
     """Trying to build a subtree from a node that does not exist
@@ -43,6 +48,7 @@ class SyntacticTreeNode:
 
     def __init__(self, word_id, word, lemma, cpos, pos, namedEntityType, 
                  features, head, deprel, phead, pdeprel, begin_word):
+        #logger.debug('SyntacticTreeNode({})'.format(deprel))
         self.word_id = word_id
 
         self.word = word
@@ -227,7 +233,7 @@ class ConllSemanticAppender():
 
     def add_frame_annotation(self, frame_annotation):
         # We could have multiple classes, so join them with |
-        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.predicate_position][11] = '|'.join(sorted(frame_annotation.best_classes()))
+        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.tokenid-1][11] = '|'.join(sorted(frame_annotation.best_classes()))
         # Add new column to place the new roles
         self.add_new_column(frame_annotation.sentence_id)
 

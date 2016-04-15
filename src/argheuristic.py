@@ -8,6 +8,12 @@ Lang & Lapata, 2011 "Unsupervised Semantic Role Induction via Split-Merge Cluste
 
 from functools import reduce
 
+import options
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(options.loglevel)
+
+
 
 class InvalidRelationError(Exception):
     """Exception raised when trying to build a relation with invalid keywords
@@ -40,13 +46,14 @@ class Relation:
         "EXT", "EXTR", "GAP-LGS", "GAP-LOC", "IM", "LGS", "LOC", "LOC-PRD",
         "MNR", "NAME", "NMOD", "OBJ", "OPRD", "P", "PMOD", "POSTHON", "PRD",
         "PRN", "PRP", "PRT", "PUT", "ROOT", "SBAR", "SBJ", "SUB", "SUFFIX",
-        "TITLE", "TMP", "VC", "VMOD", "VOC",
+        "TITLE", "TMP", "VC", "VMOD", "VMOD/NMOD", "VOC",
         # Last two were never encoutered in the corpus :
         "HMOD", "IOBJ"}
 
     possible_directions = {"UP", "DOWN"}
 
     def __init__(self, name, direction):
+        #logger.debug( "Relation '{}'".format(name))
         if direction not in Relation.possible_directions:
             raise InvalidRelationError("direction", direction)
         if name not in Relation.possible_names:
@@ -166,15 +173,15 @@ rule1_pos = ["CC", "DT", "``", "$", ")", "(", ",", ".", "''", ":"]
 
 # Next two variables were set according to the appendix of the article
 rule2_relations = (
-    Relation.both("IM") + Relation.both("COORD") + Relation.both("P") +
+    Relation.both("IM") + Relation.both("COORD") + Relation.both("P") + Relation.both("DEP") +
     Relation.both("SUB") + [Relation("PRT", "DOWN"), Relation("OBJ", "UP"),
     Relation("PMOD", "UP"), Relation("ADV", "UP"), Relation("ROOT", "UP"),
-    Relation("TMP", "UP"), Relation("SBJ", "UP"), Relation("OPRD", "UP")])
+    Relation("TMP", "UP"), Relation("SBJ", "UP"), Relation("OPRD", "UP") ])
 
 rule4_relations = reduce(lambda x, y: x + Relation.both(y), [
     "ADV", "AMOD", "APPO", "BNF", "CONJ", "COORD", "DIR", "DTV", "EXT", "EXTR",
     "HMOD", "IOBJ", "LGS", "LOC", "MNR", "NMOD", "OBJ", "OPRD", "POSTHON",
-    "PRD", "PRN", "PRP", "PRT", "PUT", "SBJ", "SUB", "SUFFIX"
+    "PRD", "PRN", "PRP", "PRT", "PUT", "SBJ", "SUB", "SUFFIX", "DEP"
     ], [])
 
 

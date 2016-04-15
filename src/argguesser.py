@@ -21,7 +21,9 @@ class ArgGuesser():
     :var filename: str -- The name of the current CoNLL file.
     """
 
-    predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+    predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
+                     # French tags:
+                     "V", "VIMP", "VINF", "VPP", "VPR", "VS"]
 
     subject_deprels = [
         "LGS",  # Logical subject -> should we keep this (36 args) ?
@@ -68,10 +70,14 @@ class ArgGuesser():
         "VBN": "ADJ",  # Participe, as "fed" in "He got so fed up that..."
         "VBP": "S", 
         "VBZ": "S",
-        "WDT": "NP"  # Relative determiners ("that what whatever which whichever")
+        "WDT": "NP",  # Relative determiners ("that what whatever which whichever")
+        # French conversions
+        "NC": "NP",
+        "PRO": "NP",
+        "V": "S",
     }
 
-    acceptable_pt = ["NP", "PP", "S_ING", "S"]
+    acceptable_phrase_type = ["NP", "PP", "S_ING", "S"]
 
     complex_pos = ["IN", "WP"]
 
@@ -80,40 +86,38 @@ class ArgGuesser():
 
     def frame_instances_from_file(self, sentence_trees, filename):
         """ Extracts frames from one file and iterate over them """
-        logger.debug("ArgGuesser.frame_instances_from_file %s"%filename)
+        logger.debug("frame_instances_from_file %s"%filename)
         for sentence_id, sentence, tree in sentence_trees:
-            for frame in self._handle_sentence(sentence_id, sentence, tree, filename):
+            for frame in self._sentence_predicates_iterator(sentence_id, sentence, tree, filename):
                 yield frame
 
-    def _handle_sentence(self, sentence_id, sentence, tree, filename):
+    def _sentence_predicates_iterator(self, sentence_id, sentence, tree, filename):
         """ Extracts frames from one sentence and iterate over them """
-        #logger.debug("ArgGuesser._handle_sentence %s"%sentence_id)
+        logger.debug("_sentence_predicates_iterator %s"%sentence_id)
         for node in tree:
             # For every verb, looks for its infinitive form in VerbNet, and
             # builds a frame occurrence if it is found
-            #logger.debug("ArgGuesser._handle_sentence on %s"%node.lemma)
+            logger.debug("_sentence_predicates_iterator on %s"%node.lemma)
             
             if node.lemma not in self.frames_for_verb:
-                #logger.debug("ArgGuesser._handle_sentence node.lemma {} not in frames_for_verb".format(node.lemma))
+                #logger.debug("_sentence_predicates_iterator node.lemma {} not in frames_for_verb".format(node.lemma))
                 continue
 
             if self._is_predicate(node):
-                logger.debug("ArgGuesser._handle_sentence node.lemma {} is a predicate".format(node.lemma))
-                # Si deprel = VC, prendre le noeud du haut pour les args
-                # Si un child est VC -> ne rien faire avec ce node
+                logger.debug("_sentence_predicates_iterator node.lemma {} is a predicate".format(node.lemma))
                 predicate = Predicate(
                     node.begin_word, 
                     node.begin_word + len(node.word) - 1,
                     node.word, 
                     node.lemma,
-                    node.word_id-1)
+                    node.word_id)
 
                 if options.heuristic_rules:
                     args = [self._nodeToArg(x, node) for x in find_args(node)]
                 else:
                     args = self._find_args(node)
 
-                args = [x for x in args if self._is_good_pt(x.phrase_type)]
+                args = [x for x in args if self._is_good_phrase_type(x.phrase_type)]
 
                 # Read headwords
                 headwords = [None] * len(args)
@@ -122,6 +126,7 @@ class ArgGuesser():
                         continue
                     headwords[i] = headwordextractor.headword(arg, tree)
 
+                logger.debug('_sentence_predicates_iterator yielding {} {}…'.format(predicate, args))
                 yield FrameInstance(
                     sentence=sentence,
                     predicate=predicate,
@@ -134,13 +139,13 @@ class ArgGuesser():
                     headwords=headwords
                 )
 
-    def _is_good_pt(self, phrase_type):
+    def _is_good_phrase_type(self, phrase_type):
         """ Tells whether a phrase type is acceptable for an argument """
         # If it contains a space, it has been assigned by _get_phrase_type
         if " " in phrase_type:
             return True
 
-        return phrase_type in self.acceptable_pt
+        return phrase_type in self.acceptable_phrase_type
 
     def _find_args(self, node):
         """Returns every arguments of a given node.
@@ -150,7 +155,7 @@ class ArgGuesser():
         :returns: Arg List -- The resulting list of arguments.
 
         """
-
+        logger.debug("_find_args")
         base_node = node
         while base_node.deprel in ["VC", "CONJ", "COORD"]:
             base_node = base_node.father
@@ -239,7 +244,7 @@ class ArgGuesser():
         """Tells whether a node can be used as a predicate for a frame"""
         # Check part-of-speech compatibility
         if node.pos not in self.predicate_pos:
-            #logger.debug("ArgGuesser._is_predicate {} is not a predicate pos which are {}".format(node.pos, self.predicate_pos))
+            logger.debug("_is_predicate {} is a possible predicate but not its PoS {}".format(node.lemma,node.pos))
             return False
 
         # Check that this node is not an auxiliary
@@ -260,5 +265,7 @@ class ArgGuesser():
         """Tells whether node is an argument of predicate_node. This is only called
         when node is a descendant of predicate_node.
         """
+        logger.debug("_is_arg {}: {}".format(node.deprel, (node is not predicate_node) and
+                                             node.deprel in self.args_deprels))
         return ((node is not predicate_node) and
                 node.deprel in self.args_deprels)

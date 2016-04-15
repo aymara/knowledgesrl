@@ -81,6 +81,7 @@ class VerbnetReader:
         for xml_verb in xml_class.find("MEMBERS"):
             verb = xml_verb.attrib["name"]
             if verb not in self.frames_for_verb:
+                #logger.debug("_handle_class add member {}".format(verb))
                 self.frames_for_verb[verb] = []
                 self.classes[verb] = []
 
@@ -91,23 +92,33 @@ class VerbnetReader:
             for subclass in xml_class.find("SUBCLASSES"):
                 self._handle_class(subclass, frames, role_list, restrictions)
 
-    def merge_syntax(self, primary_structure, roles, role_restrictions):
+    def _merge_syntax(self, primary_structure, roles, role_restrictions):
+        #logger.debug('_merge_syntax {}, {}, {}'.format(primary_structure,roles,role_restrictions))
         new_syntax = []
         role_index = 0
         for elem in primary_structure:
-            if elem in ['NP', 'ADJP', 'ADVP', 'S', 'S_ING']:
+            if role_index >= len(roles):
+                new_syntax.append({'elem': elem})
+            elif elem in ['NP', 'ADJP', 'ADVP', 'S', 'S_ING']:
                 try:
-                    new_syntax.append({
-                        'elem': elem,
-                        'role': roles[role_index],
-                        'restr': role_restrictions[role_index]})
+                    if role_index < len(role_restrictions):
+                        new_syntax.append({
+                            'elem': elem,
+                            'role': roles[role_index],
+                            'restr': role_restrictions[role_index]})
+                    else:
+                        new_syntax.append({
+                            'elem': elem,
+                            'role': roles[role_index],
+                            'restr': None})
                     role_index += 1
                     continue
                 except:
-                    pass
+                    logger.error("Exception on role_index {}".format(role_index))
+            else:
+                new_syntax.append({'elem': elem})
 
-            new_syntax.append({'elem': elem})
-
+        #logger.debug('_merge_syntax result: {}'.format(new_syntax))
         return new_syntax
 
     def _build_frame(self, xml_frame, vnclass, role_list, restrictions):
@@ -119,7 +130,6 @@ class VerbnetReader:
         :type vnclass: str.
 
         """
-        logger.debug('_build_frame {}'.format(vnclass))
         # Extract the structure
         base_structure = xml_frame.find("DESCRIPTION").attrib["primary"]
         # Transform it into a list
@@ -136,11 +146,12 @@ class VerbnetReader:
         roles, structure = self._build_structure(
             base_structure, syntax_data, vnclass, role_list)
         role_restr = []
+        #logger.debug('_build_frame {}, {}, {}, {}'.format(vnclass,roles,role_list,restrictions))
         for x in roles:
             if x in role_list and len(restrictions) > role_list.index(x):
                 role_restr.append(restrictions[role_list.index(x)])
 
-        syntax = self.merge_syntax(structure, roles, role_restr)
+        syntax = self._merge_syntax(structure, roles, role_restr)
         result = VerbnetOfficialFrame(vnclass, syntax)
 
         return result
@@ -339,11 +350,11 @@ class VerbnetReader:
         :returns: String List - the list of acceptable prepositions
 
         """
-        logger.debug('_handle_prep {}'.format(xml))
+        #logger.debug('_handle_prep {}'.format(xml))
         for restr_group in xml:
             if restr_group.tag == "SELRESTRS":
                 for restr in restr_group:
-                    logger.debug('restriction {}'.format(restr))
+                    #logger.debug('restriction {}'.format(restr))
                     if (restr.attrib["Value"] == "+"
                             and restr.attrib["type"] in verbnetprepclasses.prep):
                         return verbnetprepclasses.prep[restr.attrib["type"]]
@@ -403,7 +414,7 @@ class VerbnetReader:
 
 
 def init_verbnet(path):
-    logger.info("Loading VerbNet data...")
+    logger.info("Loading VerbNet data from {}...".format(path))
     reader = VerbnetReader(path)
     errors["vn_parsing"] = reader.unhandled
     return reader.frames_for_verb, reader.classes

@@ -41,7 +41,9 @@ class FulltextReader:
         "md", "MD",
         "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
         "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
-        "VH", "VHD", "VHG", "VHN", "VHP", "VHZ"]
+        "VH", "VHD", "VHG", "VHN", "VHP", "VHZ",
+        # French tags:
+        "V", "VIMP", "VINF", "VPP", "VPR", "VS"]
 
     pos_mapping = {
         # Nouns

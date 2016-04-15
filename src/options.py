@@ -3,13 +3,15 @@
 
 import probabilitymodel
 import paths
-
+import optionsparsing
 import getopt
 import sys
 
 import logging
 
 matching_algorithm = "sync_predicates"
+
+language = 'eng'
 
 argument_identification = False
 heuristic_rules = False
@@ -74,16 +76,6 @@ framenet_parsed = paths.FRAMENET_PARSED
 fulltext_annotations = sorted([f for f in fulltext_corpus.glob('*.xml') if f.stem in framenet_test_set])
 fulltext_parses = sorted([f for f in framenet_parsed.glob('*.conll') if f.stem in framenet_test_set])
 
-options = getopt.getopt(sys.argv[1:], "d:", [
-    # "manual use"
-    "best-gold", "best-auto",
-    # tuning algorithms
-    "fmatching-algo=", "add-non-core-args", "model=", "bootstrap",
-    "argument-identification", "heuristic-rules", "passivize", "semantic-restrictions", "wordnet-restrictions",
-    # what do we annotate?
-    "conll_input=", "conll_output=", "corpus=", "training-set", "lu",
-    # meta
-    "loglevel=", "dump", "help"])
 
 display_usage = False
 
@@ -103,6 +95,9 @@ main.py --lu [options]
 Options:
 --------
 
+# language
+--language=[eng,fre]
+
 # Best configuration for gold and auto args
 --best-gold, --best-auto
 
@@ -113,6 +108,7 @@ Options:
 
 # Select a frame matching algorithm
 --fmatching-algo=[baseline, sync_predicates, stop_on_fail]
+
 # Probability models
 --model=[predicate_slot, default, slot, slot_class, vnclass_slot]
 --bootstrap
@@ -133,8 +129,10 @@ Options:
 # Display this usage message
 --help"""
 
-for opt, value in options[0]:
-    if opt == "--best-gold":
+for opt, value in optionsparsing.options[0]:
+    if opt == "--language":
+        language = value
+    elif opt == "--best-gold":
         argument_identification = False
         passivize = True
         semrestr = True
@@ -182,9 +180,9 @@ for opt, value in options[0]:
         framenet_parsed = paths.FRAMENET_LU_PARSED
 
     elif opt == "--dump":
-        if len(options[1]) > 0:
+        if len(optionsparsing.options[1]) > 0:
             dump = True
-            dump_file = options[1][0]
+            dump_file = optionsparsing.options[1][0]
         else:
             display_usage = True
     elif opt == "--loglevel":
