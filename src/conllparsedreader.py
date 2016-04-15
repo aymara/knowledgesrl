@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Reads the files containing the syntactic parser output"""
+"""Reads the files containing the syntactic parser output in CONLL format"""
 
 from conllreader import SyntacticTreeBuilder
 
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(options.loglevel)
 
 
-class FNParsedReader:
+class ConllParsedReader:
     """Reads the syntactic parser output to  build the corresponding
     syntactic trees.
     """
@@ -24,7 +24,7 @@ class FNParsedReader:
         :param filename: The file to load.
         :type filename: str.
         """
-        logger.debug("FNParsedReader.sentence_trees(%s)"%filename)
+        logger.debug("ConllParsedReader.sentence_trees(%s)"%filename)
 
         with open(str(filename), encoding='UTF-8') as content:
             sentences_data = content.read().split("\n\n")

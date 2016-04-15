@@ -9,7 +9,7 @@ efforts to get more decoupling."""
 from pathlib import Path
 
 from framenetallreader import FNAllReader
-from framenetparsedreader import FNParsedReader
+from conllparsedreader import ConllParsedReader
 from verbnetframe import VerbnetFrameOccurrence
 import errorslog
 import roleextractor
@@ -50,7 +50,7 @@ def get_frames(corpus, verbnet_classes, argid=False):
             file_stem = annotation_file.stem if annotation_file else parsed_conll_file.stem
             annotated_frames = []
             vn_frames = []
-            fnparsed_reader = FNParsedReader()
+            conllparsed_reader = ConllParsedReader()
 
             if argid:
                 logger.debug("Argument identification")
@@ -61,7 +61,7 @@ def get_frames(corpus, verbnet_classes, argid=False):
 
                 # Many instances are not actually FrameNet frames
                 new_frame_instances = list(arg_guesser.frame_instances_from_file(
-                    fnparsed_reader.sentence_trees(parsed_conll_file), parsed_conll_file))
+                    conllparsed_reader.sentence_trees(parsed_conll_file), parsed_conll_file))
                 new_annotated_frames = roleextractor.fill_gold_roles(
                     new_frame_instances, annotation_file, parsed_conll_file,
                     verbnet_classes, role_matcher)
