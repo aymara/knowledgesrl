@@ -115,7 +115,8 @@ class FrameMatcher():
                     continue
                 elif match['slot_assocs'][i] >= match['vnframe'].num_slots:
                     continue
-
+                elif match['vnframe'].selrestrs()[match['slot_assocs'][i]] is None:
+                    continue
                 restr = VNRestriction.build_or(
                     restr,
                     match['vnframe'].selrestrs()[match['slot_assocs'][i]])
