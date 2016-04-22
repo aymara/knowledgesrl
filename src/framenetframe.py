@@ -11,7 +11,16 @@ class FrameInstance:
     :var sentence: Sentence in which the frame appears
     :var predicate: Predicate object representing the frame's predicate
     :var args: Arg list containing the predicate's arguments
-
+    :var words: 
+    :var frame_name: 
+    :var headwords: 
+    :var sentence_id: id of thesentencewhere is this frame instance in the CONLL file
+    :var filename:
+    :var slot_type:
+    :var arg_annotated:
+    :var passive:
+    :var tree:
+    
     """
 
     def __init__(self, sentence, predicate, args, words, frame_name,
@@ -19,15 +28,15 @@ class FrameInstance:
                  slot_type="", arg_annotated=False, tree=None,
                  headwords=None):
 
-        self.frame_name = frame_name
         self.sentence = sentence
         self.predicate = predicate
         self.args = sorted(args)
+        self.words = words
+        self.frame_name = frame_name
         if headwords is None:
             self.headwords = [None] * len(self.args)
         else:
             self.headwords = headwords
-        self.words = words
         self.sentence_id = sentence_id
         self.filename = filename
         self.slot_type = slot_type
@@ -51,15 +60,17 @@ class FrameInstance:
 
 
 class Arg:
-
     """An argument of a frame
 
-    :var begin: integer, position of the argument's first character in the sentence
-    :var end: integer, position of the argument's last character in the sentence
-    :var text: string containing the argument's text
-    :var role: string containing the argument's role
-    :var instanciated: boolean that marks wether the argument is instanciated
-
+    :var begin: integer -- position of the argument's first character in the sentence
+    :var end: integer -- position of the argument's last character in the sentence
+    :var text: string -- the argument's chunk text
+    :var role: string -- the argument's role
+    :var instanciated: boolean -- marks wether the argument is instanciated
+    :var phrase_type: string -- syntactic type of the argument chunk
+    :var position: int -- position of the argument chunk head token in its sentence CONLL file 
+    :var annotated: boolean -- 
+    
     """
 
     def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated=True, position=None):
@@ -76,7 +87,9 @@ class Arg:
         self.annotated = annotated
 
     def __repr__(self):
-        return "Arg({}, {}, {})".format(self.text, self.phrase_type, self.role)
+        return "Arg({}, {}, {}, {}, {}, {}, {}, {})".format(self.begin, self.end, self.text, 
+                                        self.role, self.instanciated, self.phrase_type, 
+                                        self.position, self.annotated)
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
@@ -118,7 +131,6 @@ class Arg:
 
 
 class Predicate:
-
     """A frame's predicate
 
     :var begin: integer, position of the predicate's first character in the sentence
@@ -150,7 +162,6 @@ class Word:
 
     :var begin: integer, position of the predicate's first character in the sentence
     :var end: integer, position of the predicate's last character in the sentence
-    :var text: string containing the predicate's text
     :var pos: string containing the predicate's part-of-speech
 
     """

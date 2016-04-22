@@ -1,30 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Build syntactic trees from CoNLL parser output"""
+"""Build syntactic trees from CoNLL parser output
 
+    Define the following  classes:
+    * SyntacticTreeNode
+    * SyntacticTreeBuilder
+    * ConllSemanticAppender
+"""
+
+from collections import defaultdict
+import framenetframe
 import options
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(options.loglevel)
-
-
-class ConllInvalidPositionError(Exception):
-    """Trying to build a subtree from a node that does not exist
-
-    :var bad_root: integer, the position from which we attempted to build a subtree
-    :var max_root: integer, the last valid position
-
-    """
-
-    def __init__(self, bad_root, max_root):
-        self.bad_root = bad_root
-        self.max_root = max_root
-
-    def __str__(self):
-        return "Error : tried to build a subtree from position {} while"\
-               " parsing CoNLL output (last valid position was {})".format(
-               self.bad_root, self.max_root)
 
 
 class SyntacticTreeNode:
@@ -241,6 +231,34 @@ class ConllSemanticAppender():
             roleset_str = '|'.join(sorted(roleset)) if roleset else '_EMPTYROLE_'
             self.conll_matrix[frame_annotation.sentence_id][arg.position-1][-1] = roleset_str
 
+    def add_framenet_frame_annotation(self, frame_annotations):
+        """ Add columns corresponding to the given frame instances.
+
+        :var frame_annotations: FrameInstance list
+        
+        All frame instances are supposed to be from the same sentence.
+        """
+        logger.info("add_framenet_frame_annotation frame instance list: {}".format(frame_annotations))
+        if len(frame_annotations) is 0:
+            return
+        
+        # compute the predicates string, concatenation of the possible frames names
+        self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid-1][11] = '|'.join([ frame_instance.frame_name for frame_instance in frame_annotations ])
+        
+        # Add new column to place the new roles
+        self.add_new_column(frame_annotations[0].sentence_id)
+
+        # join all frame instance argument that are at the same position
+        arguments_for_ids = defaultdict(list)
+        for frame_instance in frame_annotations:
+            for arg in frame_instance.args:
+                arguments_for_ids[arg.position].append(arg.role)
+
+        # place the arguments at the correct place in the matrix
+        for position in arguments_for_ids:
+            roleset_str = '|'.join(arguments_for_ids[position])
+            self.conll_matrix[frame_annotations[0].sentence_id][position-1][-1] = roleset_str
+            
     def dump_semantic_file(self, filename):
         with open(filename, 'w') as semantic_file:
             for i, sentence in enumerate(self.conll_matrix):

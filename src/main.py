@@ -12,11 +12,13 @@ from verbnetrestrictions import NoHashDefaultDict
 import logging
 import paths
 import options
+from options import FrameLexicon
 import verbnetreader
 import framematcher
 import probabilitymodel
 import dumper
 import corpuswrapper
+import rolematcher
 
 logging.basicConfig(level=options.loglevel)
 logger = logging.getLogger(__name__)
@@ -25,13 +27,16 @@ logger.setLevel(options.loglevel)
 if __name__ == "__main__":
     logger.info("Loading VerbNet...")
     frames_for_verb, verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
-
+    role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
+    
     model = probabilitymodel.ProbabilityModel(verbnet_classes, 0)
 
     all_annotated_frames = []
     all_vn_frames = []
 
     logger.info("Loading gold annotations and performing frame matching...")
+    # annotated_frames: list of FrameInstance
+    # vn_frames: list of VerbnetFrameOccurrence
     for annotated_frames, vn_frames in corpuswrapper.get_frames(options.corpus, verbnet_classes, options.argument_identification):
         all_matcher = []
         #
@@ -40,6 +45,8 @@ if __name__ == "__main__":
         data_restr = NoHashDefaultDict(lambda: Counter())
         assert len(annotated_frames) == len(vn_frames)
 
+        # gold_frame: FrameInstance
+        # frame_occurrence: VerbnetFrameOccurrence
         for gold_frame, frame_occurrence in zip(annotated_frames, vn_frames):
             if gold_frame.predicate.lemma not in frames_for_verb:
                 errorslog.log_vn_missing(gold_frame)
@@ -146,9 +153,15 @@ if __name__ == "__main__":
     if options.conll_input is not None:
         logger.info("Dumping semantic CoNLL...")
         semantic_appender = ConllSemanticAppender(options.conll_input)
+        # vn_frame: VerbnetFrameOccurrence
         for vn_frame in all_vn_frames:
             if vn_frame.best_classes():
-                semantic_appender.add_frame_annotation(vn_frame)
+                if options.framelexicon == FrameLexicon.VerbNet:
+                    semantic_appender.add_frame_annotation(vn_frame)
+                elif options.framelexicon == FrameLexicon.FrameNet:
+                    semantic_appender.add_framenet_frame_annotation(role_matcher.possible_framenet_mappings(vn_frame))
+                else:
+                    logger.error("Error: unknown frame lexicon for output {}".format(options.framelexicon))
         semantic_appender.dump_semantic_file(options.conll_output)
 
     else:

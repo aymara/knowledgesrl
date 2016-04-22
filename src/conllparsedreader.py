@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Reads the files containing the syntactic parser output in CONLL format"""
+"""Reads the files containing the syntactic parser output in CONLL format
+
+    Defines the class ConllParsedReader
+
++"""
 
 from conllreader import SyntacticTreeBuilder
 
@@ -12,9 +16,7 @@ logger.setLevel(options.loglevel)
 
 
 class ConllParsedReader:
-    """Reads the syntactic parser output to  build the corresponding
-    syntactic trees.
-    """
+    """ Reads the syntactic parser output to  build the corresponding syntactic trees. """
 
     def sentence_trees(self, filename):
         """Yield all sentence trees from filename in order.

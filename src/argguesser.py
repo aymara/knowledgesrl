@@ -1,24 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" Extract frames, predicates and arguments from a corpus, using only syntactic annotations """
+""" Extract frames, predicates and arguments from a corpus, using only syntactic annotations 
+
+    Defines the class ArgGuesser
+
+"""
 
 from framenetframe import FrameInstance, Predicate, Word, Arg
-import options
 from verbnetprepclasses import all_preps
 from argheuristic import find_args
 import headwordextractor
 
+import options
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(options.loglevel)
 
 
 class ArgGuesser():
-    """
+    """ 
     :var frames_for_verb: lemma -> VerbnetOfficialFrame list - Used to know
         which predicates are in VerbNet.
     :var filename: str -- The name of the current CoNLL file.
+
     """
 
     predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",

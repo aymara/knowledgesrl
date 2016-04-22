@@ -4103,6 +4103,12 @@
         <role fnrole='Agent' vnrole='Agent'/>
     </roles>
   </vncls>
+  <vncls class='55.5' fnframe='Intentionally_create'>
+    <roles>
+        <role fnrole='Created_entity' vnrole='Theme'/>
+        <role fnrole='Creator' vnrole='Agent'/>
+    </roles>
+  </vncls>
   <vncls class='55.5-1' fnframe='Intentionally_create'>
     <roles>
         <role fnrole='Created_entity' vnrole='Theme'/>

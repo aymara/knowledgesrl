@@ -4,7 +4,11 @@
 
 The goal is to make easier the transition to other corpora than FrameNet. As of
 2014-12-17, the code was indeed very FrameNet-oriented, and this is part of the
-efforts to get more decoupling."""
+efforts to get more decoupling.
+
+Defines a unique function: get_frames
+
+"""
 
 from pathlib import Path
 
@@ -26,10 +30,12 @@ logger.setLevel(options.loglevel)
 
 
 def get_frames(corpus, verbnet_classes, argid=False):
+    """ Fills two list of the same size with content dependent of the kind of input
+    
+    The two lists are annotation_list and parsed_conll_list
+    """
     logger.debug("get_frames corpus={} input={}".format(corpus,options.conll_input))
 
-    # Fills two list of the same size (annotation_list and parsed_conll_list) 
-    # with content dependent of the kind of input
     if options.conll_input is not None:
         annotation_list = [None]
         parsed_conll_list = [Path(options.conll_input)]

@@ -6,6 +6,7 @@ import paths
 import optionsparsing
 import getopt
 import sys
+from enum import Enum
 
 import logging
 
@@ -22,6 +23,16 @@ semrestr = False
 wordnetrestr = False
 corpus = 'FrameNet'
 loglevel = logging.WARNING
+
+class FrameLexicon(Enum):
+    VerbNet = 1
+    FrameNet = 2
+
+framelexicon = FrameLexicon.VerbNet
+framelexicons = {
+    'framenet': FrameLexicon.FrameNet,
+    'verbnet' : FrameLexicon.VerbNet
+    }
 
 # usually, a negative option is a bad idea, but 'non-core' is a thing in
 # FrameNet
@@ -123,6 +134,9 @@ Options:
 # Dump annotation for comparisong
 --dump
 
+# Chose frame lexicon to use for output, defaults to verbnet
+--frame-lexicon=[verbnet,framenet]
+
 # Log level
 --log=[debug, info, warning, error, critical]
 
@@ -189,6 +203,10 @@ for opt, value in optionsparsing.options[0]:
         if value not in loglevels:
             raise Exception("Unknown log level {}. loglevels are: {}".format(value,loglevels))
         loglevel = loglevels[value]
+    elif opt == "--frame-lexicon":
+        if value not in framelexicons:
+            raise Exception("Unknown frame lexicon {}. known values are: {}".format(value,framelexicons))
+        framelexicon = framelexicons[value]
     elif opt == "-d":
         debug = True
         value = 0 if value == "" else int(value)

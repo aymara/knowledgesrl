@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""Fill the roles of some frames extracted from the syntactic parser output.
+
+    Use the annotated FrameNet data for filling the roles.
+
+    Defines the following public functions:
+    * fill_gold_roles
+    * match_score
+
+"""
+
 from collections import defaultdict
 import re
 
@@ -10,13 +20,9 @@ from stats import stats_data
 from rolematcher import RoleMatchingError
 
 
-"""Fill the roles of some frames extracted from the syntactic parser output
-using the annotated FrameNet data.
-"""
-
-
 def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet_classes, role_matcher):
-    """Fills the roles of some frame instance arguments, when possible.
+    """Fill the roles of some frame instance arguments, when possible.
+    
     Note: frame_instances must be sorted by sentence order.
     Note: frame_instances is altered, even if the final result is returned.
 
@@ -61,15 +67,15 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
             # /path/to/stuff.xml -> stuff
             sentence_frames = frames[frame.filename.stem][frame.sentence_id]
             for extracted_frame in sentence_frames:
-                correct_num_tags(extracted_frame, frame.sentence)
+                _correct_num_tags(extracted_frame, frame.sentence)
             previous_id = frame.sentence_id
 
         frame_found = False
         for extracted_frame in sentence_frames:
             # See if we have the two "same" frames
-            if predicate_match(extracted_frame.predicate, frame.predicate):
+            if _predicate_match(extracted_frame.predicate, frame.predicate):
                 good_frames += 1
-                handle_frame(extracted_frame, frame)
+                _handle_frame(extracted_frame, frame)
                 frame_found = True
                 break
 
@@ -92,7 +98,15 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     return frame_instances
 
 
-def correct_num_tags(extracted_frame, original_sentence):
+def match_score(arg1, arg2):
+    """ Compute the score of a match. """
+    
+    intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
+    sum_length = (1 + arg1.end - arg1.begin) + (1 + arg2.end - arg2.begin)
+    return 2 * max(0, intersect) / sum_length
+
+
+def _correct_num_tags(extracted_frame, original_sentence):
     """ Replace <num> tags by their real equivalents
     and update begin/end attributes where necessary.
 
@@ -108,14 +122,14 @@ def correct_num_tags(extracted_frame, original_sentence):
     p = re.compile('[0-9]+')
     numbers = p.findall(original_sentence)
 
-    frame_replace_all(extracted_frame, "<num> , <num>", "<num>,<num>")
-    frame_replace_all(extracted_frame, "<num> : <num>", "<num>:<num>")
+    _frame_replace_all(extracted_frame, "<num> , <num>", "<num>,<num>")
+    _frame_replace_all(extracted_frame, "<num> : <num>", "<num>:<num>")
 
     for number in numbers:
-        frame_replace_one(extracted_frame, "<num>", number)
+        _frame_replace_one(extracted_frame, "<num>", number)
 
 
-def frame_replace_one(frame, search, replace):
+def _frame_replace_one(frame, search, replace):
     """ Replace the first occurence of a word by another word in a frame """
     position = frame.sentence.find(search)
     if position == -1:
@@ -138,23 +152,23 @@ def frame_replace_one(frame, search, replace):
     return True
 
 
-def frame_replace_all(frame, search, replace):
+def _frame_replace_all(frame, search, replace):
     """ Replace every occurence of a word by another word in a frame"""
     if search in replace:
-        raise Exception("frame_replace_all : cannot handle cases where :search"
+        raise Exception("_frame_replace_all : cannot handle cases where :search"
             " is a substring of :replace")
 
-    while frame_replace_one(frame, search, replace):
+    while _frame_replace_one(frame, search, replace):
         pass
 
 
-def predicate_match(predicate1, predicate2):
+def _predicate_match(predicate1, predicate2):
     """ Tells whether two predicates in the same sentence belongs to the same frame"""
     return predicate1.begin == predicate2.begin
 
 
-def handle_frame(extracted_frame, annotated_frame):
-    # Update the frame data
+def _handle_frame(extracted_frame, annotated_frame):
+    """ Update the frame data """
     extracted_frame.passive = annotated_frame.passive
     extracted_frame.frame_name = annotated_frame.frame_name
     extracted_frame.arg_annotated = annotated_frame.arg_annotated
@@ -182,9 +196,3 @@ def handle_frame(extracted_frame, annotated_frame):
     if extracted_frame.arg_annotated:
         stats_data["arg_extracted_good"] += good_args
         stats_data["arg_extracted_bad"] += (len(extracted_frame.args) - good_args)
-
-
-def match_score(arg1, arg2):
-    intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
-    sum_length = (1 + arg1.end - arg1.begin) + (1 + arg2.end - arg2.begin)
-    return 2 * max(0, intersect) / sum_length

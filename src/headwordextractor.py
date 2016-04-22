@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Extract headwords of arguments and determine their WordNet class"""
+"""Extract headwords of arguments and determine their WordNet class
+
+    Define the functions:
+    * headword
+    * get_class
+
+"""
 
 def headword(arg, tree):
     """Returns the headword of an argument, assuming the proper sentence has
