@@ -143,7 +143,7 @@ Options:
 # Display this usage message
 --help"""
 
-for opt, value in optionsparsing.options[0]:
+for opt, value in optionsparsing.Options.options[0]:
     if opt == "--language":
         language = value
     elif opt == "--best-gold":
@@ -214,10 +214,6 @@ for opt, value in optionsparsing.options[0]:
             n_debug = value
     elif opt == "--help":
         display_usage = True
-
-if conll_input is not None and conll_output is None:
-    print("--conll_input requires --conll_output. Aborting")
-    display_usage = True
 
 if display_usage:
     print(usage_str)

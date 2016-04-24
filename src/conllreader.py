@@ -216,7 +216,17 @@ class ConllSemanticAppender():
                     # Put current line with a new column appended for predicate
                     sentence_matrix.append(line.split('\t') + ['_'])
                 self.conll_matrix.append(sentence_matrix)
-                
+
+
+    def __str__(self):
+        result = ""
+        for i, sentence in enumerate(self.conll_matrix):
+            for line in sentence:
+                result += '\t'.join(line) + '\n'
+            if i < len(self.conll_matrix) - 1:
+                result += '\n'
+        return result
+
     def add_new_column(self, sentence_id):
         for line in self.conll_matrix[sentence_id]:
             line.append('_')

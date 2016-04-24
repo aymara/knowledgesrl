@@ -11,7 +11,7 @@ ROOT = Path(__file__).parent.parent / "data"
 VERBNET_PATH = ROOT / "verbnet/"
 FRAMENET = ROOT / "fndata-1.5/"
 
-for opt, value in optionsparsing.options[0]:
+for opt, value in optionsparsing.Options.options[0]:
     if opt == "--language" and value == 'fre':
         FRAMENET = ROOT / "fndata-asfalda/"
         VERBNET_PATH = ROOT / "verbenet/verbenet/"
