@@ -23,7 +23,7 @@ import rolematcher
 import stats
 from options import FrameLexicon
 
-class SemanticRoleLabeller:
+class SemanticRoleLabeler:
     def  __init__(self, argv):
         optionsparsing.Options(argv)
         paths.Paths()
