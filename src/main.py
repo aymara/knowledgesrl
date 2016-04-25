@@ -3,9 +3,9 @@
 
 import sys
 import options
-import semanticrolelabeller
+import semanticrolelabeler
 
 if __name__ == "__main__":
-    result = semanticrolelabeller.SemanticRoleLabeller(sys.argv[1:]).annotate()
+    result = semanticrolelabeler.SemanticRoleLabeller(sys.argv[1:]).annotate()
     if options.Options.conll_output is None:
         print(result)
