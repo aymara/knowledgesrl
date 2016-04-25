@@ -274,21 +274,21 @@ if __name__ == '__main__':
             dico = {'domain': domain, 'lang': lang}
             print('--- dico{domain}_{lang}'.format(**dico))
             evaluation_sets = {
-                'train': json.load(open(str(paths.ROOT / paths.DICO_TRAIN.format(**dico)))),
-                'test': json.load(open(str(paths.ROOT / paths.DICO_TEST.format(**dico))))
+                'train': json.load(open(str(paths.Paths.ROOT / paths.Paths.DICO_TRAIN.format(**dico)))),
+                'test': json.load(open(str(paths.Paths.ROOT / paths.Paths.DICO_TEST.format(**dico))))
             }
 
-            dico_examples = get_dico_examples(lang, str(paths.ROOT / paths.DICO_XML.format(**dico)), paths.DICO_XMLNS[domain])
-            role_mapping = RoleMapping(str(paths.ROOT / paths.DICO_MAPPING.format(**dico)))
+            dico_examples = get_dico_examples(lang, str(paths.Paths.ROOT / paths.Paths.DICO_XML.format(**dico)), paths.Paths.DICO_XMLNS[domain])
+            role_mapping = RoleMapping(str(paths.Paths.ROOT / paths.Paths.DICO_MAPPING.format(**dico)))
 
             analyze_constructs(dico_examples, role_mapping, evaluation_sets, verbnet_modules[lang])
 
         print('--- kicktionary_{}'.format(lang))
         # Kicktionary
         kicktionary_evaluation = {
-            'train': json.load(open(str(paths.ROOT / paths.KICKTIONARY_SETS.format('train', lang)))),
-            'test': json.load(open(str(paths.ROOT / paths.KICKTIONARY_SETS.format('test', lang)))),
+            'train': json.load(open(str(paths.Paths.ROOT / paths.Paths.KICKTIONARY_SETS.format('train', lang)))),
+            'test': json.load(open(str(paths.Paths.ROOT / paths.Paths.KICKTIONARY_SETS.format('test', lang)))),
         }
         kicktionary_examples = kicktionary_frames(lang)
-        role_mapping = RoleMapping(str(paths.KICKTIONARY_ROLES).format(lang))
+        role_mapping = RoleMapping(str(paths.Paths.KICKTIONARY_ROLES).format(lang))
         analyze_constructs(kicktionary_examples, role_mapping, kicktionary_evaluation, verbnet_modules[lang])

@@ -21,7 +21,7 @@ subject.
 import options
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel(options.loglevel)
+logger.setLevel(options.Options.loglevel)
 
 from verbnetframe import ComputeSlotTypeMixin, VerbnetFrameOccurrence
 from verbnetrestrictions import VNRestriction

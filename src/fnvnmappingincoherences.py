@@ -7,6 +7,7 @@ import getopt
 from distutils.version import LooseVersion
 
 import paths
+import options
 
 
 display_framenet = False
@@ -61,7 +62,7 @@ def load_fn_data():
     fn_roles = {}
     fn_verbal_frames = set()
     xmlns = "{http://framenet.icsi.berkeley.edu}"
-    for filename in paths.FRAMENET_FRAMES.glob('*.xml'):
+    for filename in paths.Paths.framenet_frames(options.Options.language).glob('*.xml'):
         root = ET.ElementTree(file=str(filename.resolve())).getroot()
 
         fn_roles[root.attrib["name"]] = []
@@ -108,7 +109,7 @@ def display_fn_issues():
                 bad_role["vn_class"]+"-"+classes_names[bad_role["vn_class"]]
             ))
 
-role_reader = VerbnetRoleReader(paths.VERBNET_PATH)
+role_reader = VerbnetRoleReader(paths.Paths.verbnet_path(options.Options.language))
 vn_classes = role_reader.classes
 classes_names = role_reader.classes_names
 
@@ -123,7 +124,7 @@ classes_names["58"] = classes_names["58.1"]
 
 fn_roles, fn_verbal_frames = load_fn_data()
 
-root = ET.ElementTree(file=str(paths.VNFN_MATCHING))
+root = ET.ElementTree(file=str(paths.Paths.VNFN_MATCHING))
 
 bad_vn_roles = {}
 bad_fn_frames = {}

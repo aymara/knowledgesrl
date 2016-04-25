@@ -25,7 +25,7 @@ import rolematcher
 
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel(options.loglevel)
+logger.setLevel(options.Options.loglevel)
 
 
 
@@ -34,22 +34,22 @@ def get_frames(corpus, verbnet_classes, argid=False):
     
     The two lists are annotation_list and parsed_conll_list
     """
-    logger.debug("get_frames corpus={} input={}".format(corpus,options.conll_input))
+    logger.debug("get_frames corpus={} input={}".format(corpus,options.Options.conll_input))
 
-    if options.conll_input is not None:
+    if options.Options.conll_input is not None:
         annotation_list = [None]
-        parsed_conll_list = [Path(options.conll_input)]
-    elif options.corpus == 'FrameNet':
-        annotation_list = options.fulltext_annotations
-        parsed_conll_list = options.fulltext_parses
-    elif options.corpus == 'dicoinfo_fr':
+        parsed_conll_list = [Path(options.Options.conll_input)]
+    elif options.Options.corpus == 'FrameNet':
+        annotation_list = options.Options.fulltext_annotations
+        parsed_conll_list = options.Options.fulltext_parses
+    elif options.Options.corpus == 'dicoinfo_fr':
         pass
     else:
         raise Exception('Unknown corpus {}'.format(corpus))
 
-    if options.corpus == 'FrameNet':
-        logger.info("Loading FrameNet and VerbNet role mappings %s ..."%paths.VNFN_MATCHING)
-        role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
+    if options.Options.corpus == 'FrameNet':
+        logger.info("Loading FrameNet and VerbNet role mappings %s ..."%paths.Paths.VNFN_MATCHING)
+        role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING)
 
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
             logger.debug("Handling {} {}" .format(annotation_file, parsed_conll_file))
@@ -81,7 +81,7 @@ def get_frames(corpus, verbnet_classes, argid=False):
                 # Load gold arguments
                 #
                 fn_reader = FNAllReader(
-                    add_non_core_args=options.add_non_core_args)
+                    add_non_core_args=options.Options.add_non_core_args)
 
                 for framenet_instance in fn_reader.iter_frames(annotation_file, parsed_conll_file):
                     annotated_frames.append(framenet_instance)

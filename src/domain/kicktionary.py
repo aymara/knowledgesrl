@@ -49,7 +49,7 @@ def lang_examples(all_lus, lang):
 
 
 def kicktionary_frames(lang):
-    all_lus = ET.ElementTree(file=str(paths.ALL_LUS))
+    all_lus = ET.ElementTree(file=str(paths.Paths.ALL_LUS))
 
     for frame, lemma, example, sentence_text in lang_examples(all_lus, lang=lang):
         subcategorization_frame = ET.Element('SYNTAX')

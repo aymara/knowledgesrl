@@ -14,7 +14,7 @@ import framenetframe
 import options
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel(options.loglevel)
+logger.setLevel(options.Options.loglevel)
 
 
 class SyntacticTreeNode:
@@ -93,6 +93,7 @@ class SyntacticTreeNode:
         return self._closest_match_as_node_lcs(arg)[1]
 
     def _closest_match_as_node_lcs(self, arg):
+        import distance
         from distance import lcsubstrings as word_overlap
 
         current_word_list = self.flat().split()

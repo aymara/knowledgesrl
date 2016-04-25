@@ -10,14 +10,15 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 import os
 
-from paths import FRAMENET_FULLTEXT
+import paths
+import options
 
 xmlns = 'http://framenet.icsi.berkeley.edu'
-conll_dir = Path(FRAMENET_FULLTEXT).parents[1] / 'framenet_turpobarsed'
+conll_dir = Path(paths.Paths.framenet_fulltext(options.Options.language)).parents[1] / 'framenet_turpobarsed'
 
 os.makedirs(str(conll_dir), exist_ok=True)
 
-for fulltext_filename in Path(FRAMENET_FULLTEXT).glob('*.xml'):
+for fulltext_filename in Path(paths.Paths.framenet_fulltext(options.Options.language)).glob('*.xml'):
     fulltext_xml = ET.ElementTree(file=str(fulltext_filename))
     conll_file = open(str(conll_dir / (fulltext_filename.stem + '.conll')), 'w')
 

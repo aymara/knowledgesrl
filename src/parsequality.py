@@ -30,7 +30,7 @@ def get_quality_scores():
     correct, partial, total = 0, 0, 0
 
     # get data from FrameNet arguments
-    for annotation_file, parsed_conll_file in zip(options.fulltext_annotations, options.fulltext_parses):
+    for annotation_file, parsed_conll_file in zip(options.Options.fulltext_annotations, options.Options.fulltext_parses):
         reader = FulltextReader(annotation_file)
         tree_list = get_trees(parsed_conll_file)
 

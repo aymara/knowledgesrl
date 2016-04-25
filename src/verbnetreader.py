@@ -13,7 +13,7 @@ import verbnetprepclasses
 import options
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel(options.loglevel)
+logger.setLevel(options.Options.loglevel)
 
 
 class VerbnetReader:

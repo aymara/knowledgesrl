@@ -6,41 +6,58 @@
 from pathlib import Path
 import optionsparsing
 
-ROOT = Path(__file__).parent.parent / "data"
+class Paths:
+    
+    ROOT = Path(__file__).parent.parent / "data"
 
-VERBNET_PATH = ROOT / "verbnet/"
-FRAMENET = ROOT / "fndata-1.5/"
+    FRAMENET_PARSED = ROOT / "framenet_parsed/"
+    FRAMENET_LU_PARSED = ROOT / "lu_parsed/"
 
-for opt, value in optionsparsing.Options.options[0]:
-    if opt == "--language" and value == 'fre':
-        FRAMENET = ROOT / "fndata-asfalda/"
-        VERBNET_PATH = ROOT / "verbenet/verbenet/"
-    elif opt == "--language" and value == 'eng':
-        None
-    elif opt == "--language":
-        print("Unhandled language {}".format(value))
-        exit(1)
-        
-FRAMENET_FULLTEXT = FRAMENET / "fulltext/"
-FRAMENET_LU = FRAMENET / "lu/"
-FRAMENET_FRAMES = FRAMENET / "frame/"
-FRAMENET_PARSED = ROOT / "framenet_parsed/"
-FRAMENET_LU_PARSED = ROOT / "lu_parsed/"
+    VNFN_MATCHING = ROOT / "vn-fn-roles.xml"
 
+    # Domain
+    DICO_XML = 'domain/contextes_olst/dico{domain}_{lang}.xml'
+    DICO_XMLNS = {
+        'enviro': 'http://olst.ling.umontreal.ca/dicoenviro/',
+        'info': 'http://olst.ling.umontreal.ca/dicoinfo/'
+    }
+    DICO_MAPPING = 'domain/{domain}/vnroles_{domain}_{lang}.xml'
+    DICO_TRAIN = 'domain/{domain}/train_{domain}_{lang}.json'
+    DICO_TEST = 'domain/{domain}/test_{domain}_{lang}.json'
 
+    ALL_LUS = ROOT / 'domain/kicktionary/All_LUs.xml'
+    KICKTIONARY_SETS = 'domain/kicktionary/{}_kicktionary_{}.json'
+    KICKTIONARY_ROLES = ROOT / 'domain/kicktionary/vnroles_kicktionary_{}.xml'
 
-VNFN_MATCHING = ROOT / "vn-fn-roles.xml"
+    @staticmethod
+    def framenet_path(language):
+        if language == 'fre':
+            return Paths.ROOT / "fndata-asfalda/"
+        elif language == 'eng':
+            return Paths.ROOT / "fndata-1.5/"
+        else:
+            print("Unhandled language {}".format(value))
+            exit(1)
 
-# Domain
-DICO_XML = 'domain/contextes_olst/dico{domain}_{lang}.xml'
-DICO_XMLNS = {
-    'enviro': 'http://olst.ling.umontreal.ca/dicoenviro/',
-    'info': 'http://olst.ling.umontreal.ca/dicoinfo/'
-}
-DICO_MAPPING = 'domain/{domain}/vnroles_{domain}_{lang}.xml'
-DICO_TRAIN = 'domain/{domain}/train_{domain}_{lang}.json'
-DICO_TEST = 'domain/{domain}/test_{domain}_{lang}.json'
+    @staticmethod
+    def verbnet_path(language):
+        if language == 'fre':
+            return Paths.ROOT / "verbenet/verbenet/"
+        elif language == 'eng':
+            return Paths.ROOT / "verbnet/"
+        else:
+            print("Unhandled language {}".format(language))
+            exit(1)
 
-ALL_LUS = ROOT / 'domain/kicktionary/All_LUs.xml'
-KICKTIONARY_SETS = 'domain/kicktionary/{}_kicktionary_{}.json'
-KICKTIONARY_ROLES = ROOT / 'domain/kicktionary/vnroles_kicktionary_{}.xml'
+    @staticmethod
+    def framenet_fulltext(language):
+        return Paths.framenet_path(language) / "fulltext/"
+    
+    @staticmethod
+    def framenet_lu(language):
+        return Paths.framenet_path(language) / "lu/"
+    
+    @staticmethod
+    def framenet_frames(language):
+        return Paths.framenet_path(language) / "frame/"
+    

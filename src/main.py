@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import optionsparsing
-myoptions = optionsparsing.Options(sys.argv[1:])
-import semanticrolelabeller
 import options
+import semanticrolelabeller
 
 if __name__ == "__main__":
-    result = semanticrolelabeller.SemanticRoleLabeller(sys.argv).annotate()
-    if options.conll_output is None:
+    result = semanticrolelabeller.SemanticRoleLabeller(sys.argv[1:]).annotate()
+    if options.Options.conll_output is None:
         print(result)

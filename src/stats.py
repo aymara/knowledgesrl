@@ -264,7 +264,7 @@ def vnclass_to_normalized_name(vnclass):
 
 
 def stats_quality(annotated_frames, vn_frames, frames_for_verb, verbnet_classes, argument_identification):
-    role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
+    role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING)
     # This variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point and
     # args_annotated_mapping_ok is related to gold annotated frames

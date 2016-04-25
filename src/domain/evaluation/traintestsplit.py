@@ -35,7 +35,7 @@ def split_sources(sentences):
 
 
 def dico_split():
-    for dico in paths.DICOS:
+    for dico in paths.Paths.DICOS:
         xmlns = dico['xmlns']
         dicoxml = ET.ElementTree(file=str(dico['xml']))
 
@@ -61,7 +61,7 @@ def dico_split():
 
 
 def kicktionary_split():
-    all_lus = ET.ElementTree(file=str(paths.ALL_LUS))
+    all_lus = ET.ElementTree(file=str(paths.Paths.ALL_LUS))
 
     sentences_sources = {
         "Sychev's back-heel released the speedy winger, who skipped past a defender before feeding Izmailov, whose shot deflected off Urmas Rooba and in.": '75239',

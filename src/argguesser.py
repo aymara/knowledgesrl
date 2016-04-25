@@ -15,7 +15,7 @@ import headwordextractor
 import options
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel(options.loglevel)
+logger.setLevel(options.Options.loglevel)
 
 
 class ArgGuesser():
@@ -117,7 +117,7 @@ class ArgGuesser():
                     node.lemma,
                     node.word_id)
 
-                if options.heuristic_rules:
+                if options.Options.heuristic_rules:
                     args = [self._nodeToArg(x, node) for x in find_args(node)]
                 else:
                     args = self._find_args(node)

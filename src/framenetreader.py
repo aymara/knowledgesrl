@@ -26,6 +26,7 @@ from framenetframe import FrameInstance, Predicate, Word, Arg
 from verbnetprepclasses import rel_pronouns
 import framenetcoreargs
 import paths
+import options
 
 
 class FulltextReader:
@@ -75,7 +76,7 @@ class FulltextReader:
 
         if FulltextReader.core_arg_finder is None and not add_non_core_args:
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
-            FulltextReader.core_arg_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
+            FulltextReader.core_arg_finder.load_data_from_xml(paths.Paths.framenet_frames(options.Options.language))
 
         self.frames = []
 

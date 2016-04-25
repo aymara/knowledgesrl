@@ -11,6 +11,7 @@ from errorslog import log_debug_data, display_debug
 from bootstrap import bootstrap_algorithm
 from verbnetrestrictions import NoHashDefaultDict
 import logging
+import paths
 import options
 from conllreader import ConllSemanticAppender
 import verbnetreader
@@ -19,22 +20,23 @@ import probabilitymodel
 import dumper
 import corpuswrapper
 import rolematcher
-import paths
 import stats
 from options import FrameLexicon
 
 class SemanticRoleLabeller:
     def  __init__(self, argv):
+        optionsparsing.Options(argv)
+        paths.Paths()
+        options.Options() 
         """ Load resources """
-        myoptions = optionsparsing.Options(argv)
-        logging.basicConfig(level=options.loglevel)
+        logging.basicConfig(level=options.Options.loglevel)
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(options.loglevel)
-        self.logger.info("Creating Semantic Role Labeller")
+        self.logger.setLevel(options.Options.loglevel)
+        self.logger.info("Creating Semantic Role Labeller with argv: {}".format(argv))
         
         self.logger.info("Loading VerbNet...")
-        self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(paths.VERBNET_PATH)
-        self.role_matcher = rolematcher.VnFnRoleMatcher(paths.VNFN_MATCHING)
+        self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(paths.Paths.verbnet_path(options.Options.language))
+        self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING)
         self.model = probabilitymodel.ProbabilityModel(self.verbnet_classes, 0)
         
     def annotate(self, conllinput = None, language = None):
@@ -47,15 +49,15 @@ class SemanticRoleLabeller:
         to the frames and roles found
         """
         if language is not None:
-            options.language = language
+            options.Options.language = language
 
         tmpfile = None
         if conllinput is not None:
             tmpfile = tempfile.NamedTemporaryFile(delete=False)
             tmpfile.write(bytes(conllinput, 'UTF-8'))
             tmpfile.seek(0)
-            options.conll_input = tmpfile.name
-            options.argument_identification = True
+            options.Options.conll_input = tmpfile.name
+            options.Options.argument_identification = True
         self.logger.info("Annotating {}...".format(conllinput))
         all_annotated_frames = []
         all_vn_frames = []
@@ -63,7 +65,7 @@ class SemanticRoleLabeller:
         self.logger.info("Loading gold annotations and performing frame matching...")
         # annotated_frames: list of FrameInstance
         # vn_frames: list of VerbnetFrameOccurrence
-        for annotated_frames, vn_frames in corpuswrapper.get_frames(options.corpus, self.verbnet_classes, options.argument_identification):
+        for annotated_frames, vn_frames in corpuswrapper.get_frames(options.Options.corpus, self.verbnet_classes, options.Options.argument_identification):
             all_matcher = []
             #
             # Frame matching
@@ -101,13 +103,13 @@ class SemanticRoleLabeller:
                 errorslog.log_frame_with_slot(gold_frame, frame_occurrence)
                 stats.stats_data["frames_mapped"] += 1
 
-                matcher = framematcher.FrameMatcher(frame_occurrence, options.matching_algorithm)
+                matcher = framematcher.FrameMatcher(frame_occurrence, options.Options.matching_algorithm)
                 frame_occurrence.matcher = matcher
                 all_matcher.append(matcher)
 
                 frames_to_be_matched = []
                 for verbnet_frame in sorted(self.frames_for_verb[predicate]):
-                    if options.passivize and gold_frame.passive:
+                    if options.Options.passivize and gold_frame.passive:
                         for passivized_frame in verbnet_frame.passivize():
                             frames_to_be_matched.append(passivized_frame)
                     else:
@@ -116,7 +118,7 @@ class SemanticRoleLabeller:
                 # Actual frame matching
                 matcher.perform_frame_matching(frames_to_be_matched)
 
-                if options.wordnetrestr:
+                if options.Options.wordnetrestr:
                     matcher.restrict_headwords_with_wordnet()
 
                 # Update semantic restrictions data (but take no decision)
@@ -130,17 +132,17 @@ class SemanticRoleLabeller:
 
                 # Update probability model data (but take no decision)
                 vnclass = self.model.add_data_vnclass(matcher)
-                if not options.bootstrap:
+                if not options.Options.bootstrap:
                     for roles, slot_type, prep in zip(
                         frame_occurrence.roles, frame_occurrence.slot_types, frame_occurrence.slot_preps
                     ):
                         if len(roles) == 1:
                             self.model.add_data(slot_type, next(iter(roles)), prep, predicate, vnclass)
 
-                if options.debug and set() in frame_occurrence.roles:
+                if options.Options.debug and set() in frame_occurrence.roles:
                     log_debug_data(gold_frame, frame_occurrence, matcher, frame_occurrence.roles, self.verbnet_classes)
 
-            if options.semrestr:
+            if options.Options.semrestr:
                 for matcher in all_matcher:
                     matcher.handle_semantic_restrictions(data_restr)
 
@@ -151,10 +153,10 @@ class SemanticRoleLabeller:
         # Probability models
         #
         self.logger.info("Probability models...")
-        if options.bootstrap:
+        if options.Options.bootstrap:
             self.logger.info("Applying bootstrap...")
             bootstrap_algorithm(all_vn_frames, self.model, self.verbnet_classes)
-        elif options.probability_model is not None:
+        elif options.Options.probability_model is not None:
             self.logger.info("Applying probability model...")
             for frame_occurrence in all_vn_frames:
                 # Commented out a version that only allowed possible role
@@ -166,42 +168,42 @@ class SemanticRoleLabeller:
                         new_role = self.model.best_role(
                             roles_for_slot,
                             frame_occurrence.slot_types[i], frame_occurrence.slot_preps[i],
-                            frame_occurrence.predicate, options.probability_model)
+                            frame_occurrence.predicate, options.Options.probability_model)
                         if new_role is not None:
                             frame_occurrence.restrict_slot_to_role(i, new_role)
                 frame_occurrence.select_likeliest_matches()
         
-            if options.debug:
-                display_debug(options.n_debug)
+            if options.Options.debug:
+                display_debug(options.Options.n_debug)
         else:
             self.logger.info("No probability model")
 
-        if options.conll_input is not None:
+        if options.Options.conll_input is not None:
             self.logger.info("\n## Dumping semantic CoNLL...")
-            semantic_appender = ConllSemanticAppender(options.conll_input)
+            semantic_appender = ConllSemanticAppender(options.Options.conll_input)
             # vn_frame: VerbnetFrameOccurrence
             for vn_frame in all_vn_frames:
                 if vn_frame.best_classes():
-                    if options.framelexicon == FrameLexicon.VerbNet:
+                    if options.Options.framelexicon == FrameLexicon.VerbNet:
                         semantic_appender.add_frame_annotation(vn_frame)
-                    elif options.framelexicon == FrameLexicon.FrameNet:
+                    elif options.Options.framelexicon == FrameLexicon.FrameNet:
                         semantic_appender.add_framenet_frame_annotation(self.role_matcher.possible_framenet_mappings(vn_frame))
                     else:
-                        self.logger.error("Error: unknown frame lexicon for output {}".format(options.framelexicon))
-            if options.conll_output is None:
+                        self.logger.error("Error: unknown frame lexicon for output {}".format(options.Options.framelexicon))
+            if options.Options.conll_output is None:
                 return str(semantic_appender)
             else:
-                semantic_appender.dump_semantic_file(options.conll_output)
+                semantic_appender.dump_semantic_file(options.Options.conll_output)
 
         else:
             self.logger.info("\n## Evaluation")
             stats.stats_quality(
                 all_annotated_frames, all_vn_frames,
                 self.frames_for_verb, self.verbnet_classes,
-                options.argument_identification)
-            stats.display_stats(options.argument_identification)
+                options.Options.argument_identification)
+            stats.display_stats(options.Options.argument_identification)
 
-            if options.dump:
-                dumper.dump(options.dump_file, stats.annotated_frames_stats)
+            if options.Options.dump:
+                dumper.dump(options.Options.dump_file, stats.annotated_frames_stats)
 
         return ""

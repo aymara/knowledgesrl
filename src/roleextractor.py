@@ -92,7 +92,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     stats_data["frame_extracted_good"] += good_frames
 
     # For LUCorpus, discard every frame for which there was no match
-    if options.corpus_lu:
+    if options.Options.corpus_lu:
         frame_instances = [x for x in frame_instances if x.frame_name != ""]
 
     return frame_instances
