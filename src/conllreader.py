@@ -13,9 +13,6 @@ from collections import defaultdict
 import framenetframe
 import options
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(options.Options.loglevel)
-
 
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
@@ -38,7 +35,10 @@ class SyntacticTreeNode:
 
     def __init__(self, word_id, word, lemma, cpos, pos, namedEntityType, 
                  features, head, deprel, phead, pdeprel, begin_word):
-        #logger.debug('SyntacticTreeNode({})'.format(deprel))
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(options.Options.loglevel)
+        
+        #self.logger.debug('SyntacticTreeNode({})'.format(deprel))
         self.word_id = word_id
 
         self.word = word
@@ -129,6 +129,9 @@ class SyntacticTreeBuilder():
         :type conll_tree: str
 
         """
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(options.Options.loglevel)
+
         self.node_dict, self.father_ids = {}, {}
         self.tree_list = []
 
@@ -204,6 +207,9 @@ class ConllSemanticAppender():
     """
 
     def __init__(self, syntactic_conll_file):
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(options.Options.loglevel)
+
         self.conll_matrix = []
 
         with open(syntactic_conll_file) as content:
@@ -232,7 +238,7 @@ class ConllSemanticAppender():
         for line in self.conll_matrix[sentence_id]:
             line.append('_')
 
-    def add_frame_annotation(self, frame_annotation):
+    def add_verbnet_frame_annotation(self, frame_annotation):
         # We could have multiple classes, so join them with |
         self.conll_matrix[frame_annotation.sentence_id][frame_annotation.tokenid-1][11] = '|'.join(sorted(frame_annotation.best_classes()))
         # Add new column to place the new roles
@@ -240,6 +246,7 @@ class ConllSemanticAppender():
 
         for roleset, arg in zip(frame_annotation.roles, frame_annotation.args):
             roleset_str = '|'.join(sorted(roleset)) if roleset else '_EMPTYROLE_'
+            self.logger.debug('add_verbnet_frame_annotation roleset: {}'.format(roleset_str))
             self.conll_matrix[frame_annotation.sentence_id][arg.position-1][-1] = roleset_str
 
     def add_framenet_frame_annotation(self, frame_annotations):
@@ -249,7 +256,7 @@ class ConllSemanticAppender():
         
         All frame instances are supposed to be from the same sentence.
         """
-        logger.info("add_framenet_frame_annotation frame instance list: {}".format(frame_annotations))
+        self.logger.info("add_framenet_frame_annotation frame instance list: [{}]".format(','.join(str(x) for x in frame_annotations)))
         if len(frame_annotations) is 0:
             return
         
@@ -268,12 +275,15 @@ class ConllSemanticAppender():
         # place the arguments at the correct place in the matrix
         for position in arguments_for_ids:
             roleset_str = '|'.join(arguments_for_ids[position])
+            self.logger.debug('add_framenet_frame_annotation roleset: {}'.format(roleset_str))
             self.conll_matrix[frame_annotations[0].sentence_id][position-1][-1] = roleset_str
             
     def dump_semantic_file(self, filename):
         with open(filename, 'w') as semantic_file:
             for i, sentence in enumerate(self.conll_matrix):
                 for line in sentence:
+                    self.logger.debug('\t'.join(line))
                     print('\t'.join(line), file=semantic_file)
                 if i < len(self.conll_matrix) - 1:
+                    self.logger.debug('\n')
                     print(end='\n', file=semantic_file)

@@ -28,12 +28,12 @@ class SemanticRoleLabeler:
         optionsparsing.Options(argv)
         paths.Paths()
         options.Options() 
-        """ Load resources """
         logging.basicConfig(level=options.Options.loglevel)
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(options.Options.loglevel)
         self.logger.info("Creating Semantic Role Labeller with argv: {}".format(argv))
         
+        """ Load resources """
         self.logger.info("Loading VerbNet...")
         self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(paths.Paths.verbnet_path(options.Options.language))
         self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING)
@@ -58,7 +58,7 @@ class SemanticRoleLabeler:
             tmpfile.seek(0)
             options.Options.conll_input = tmpfile.name
             options.Options.argument_identification = True
-        self.logger.info("Annotating {}...".format(conllinput))
+        self.logger.debug("Annotating {}...".format(conllinput[0:50]))
         all_annotated_frames = []
         all_vn_frames = []
 
@@ -185,12 +185,13 @@ class SemanticRoleLabeler:
             for vn_frame in all_vn_frames:
                 if vn_frame.best_classes():
                     if options.Options.framelexicon == FrameLexicon.VerbNet:
-                        semantic_appender.add_frame_annotation(vn_frame)
+                        semantic_appender.add_verbnet_frame_annotation(vn_frame)
                     elif options.Options.framelexicon == FrameLexicon.FrameNet:
                         semantic_appender.add_framenet_frame_annotation(self.role_matcher.possible_framenet_mappings(vn_frame))
                     else:
                         self.logger.error("Error: unknown frame lexicon for output {}".format(options.Options.framelexicon))
             if options.Options.conll_output is None:
+                self.logger.debug('\n{}'.format(str(semantic_appender)))
                 return str(semantic_appender)
             else:
                 semantic_appender.dump_semantic_file(options.Options.conll_output)

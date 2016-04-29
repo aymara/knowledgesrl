@@ -29,8 +29,8 @@ class Options:
 
     framelexicon = FrameLexicon.VerbNet
     framelexicons = {
-        'framenet': FrameLexicon.FrameNet,
-        'verbnet' : FrameLexicon.VerbNet
+        'FrameNet': FrameLexicon.FrameNet,
+        'VerbNet' : FrameLexicon.VerbNet
         }
 
     # usually, a negative option is a bad idea, but 'non-core' is a thing in

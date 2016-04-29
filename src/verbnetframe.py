@@ -165,9 +165,10 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 self.predicate == other.predicate)
 
     def __repr__(self):
-        return "VerbnetFrameOccurrence({}, {}, {}, {}, {}, {}, {}, {}, {})".format(
+        return "VerbnetFrameOccurrence(structure={}, num_slots={}, predicate={}, headwords={}, best_matches={}, roles={}, tokenid={}, sentence_id={}, args={}, tree={})".format(
             repr(self.structure), repr(self.num_slots), repr(self.predicate), repr(self.headwords), 
-            repr(self.best_matches), self.tokenid, self.sentence_id, repr(self.args), repr(self.tree))
+            repr(self.best_matches), repr(self.roles), self.tokenid, self.sentence_id, 
+            repr(self.args), repr(self.tree))
 
     def possible_roles(self):
         """Compute the lists of possible roles for each slot

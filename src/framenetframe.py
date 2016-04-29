@@ -54,11 +54,15 @@ class FrameInstance:
             self.args == other.args and
             self.words == other.words)
 
-    def __repr__(self):
+    def __str__(self):
         return "FrameInstance({}, {}, {})".format(
-            self.predicate, self.args, self.frame_name)
+            self.frame_name, self.predicate, self.args)
 
-
+    def __repr__(self):
+        return "FrameInstance(frame_name={}, predicate={}, args={}, sentence={}, words={})".format(
+            self.frame_name, self.predicate, self.args, self.sentence, self.words)
+    
+    
 class Arg:
     """An argument of a frame
 
