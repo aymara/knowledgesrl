@@ -136,10 +136,15 @@ class SyntacticTreeBuilder():
         self.tree_list = []
 
         begin = 0
+        linenum = 0
         for l in conll_tree.splitlines():
-            """Columns from https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
-            word_id, form, lemma, cpos, pos, namedEntityType, features, head, deprel, phead, pdeprel = l.split("\t")
-
+            try:
+                linenum += 1
+                """Columns from https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
+                word_id, form, lemma, cpos, pos, namedEntityType, features, head, deprel, phead, pdeprel = l.split("\t")
+            except ValueError:
+                print('Wrong number of columns (expected 11) in line {}: "{}"\n'.format(linenum,l))
+                break
             word_id = int(word_id)
             head = int(head) if head != '_' else None
             deprel = deprel if deprel != '_' else 'ROOT'
@@ -168,8 +173,11 @@ class SyntacticTreeBuilder():
         # Record father/child relationship
         for word_id, father_id in self.father_ids.items():
             if father_id is not None and father_id != 0:
-                self.node_dict[word_id].father = self.node_dict[father_id]
-                self.node_dict[father_id].children.append(self.node_dict[word_id])
+                try:
+                    self.node_dict[word_id].father = self.node_dict[father_id]
+                    self.node_dict[father_id].children.append(self.node_dict[word_id])
+                except KeyError:
+                    self.logger.error('father id {} not found in CoNLL tree {}'.format(father_id,conll_tree))
 
         # Record position: where is father among child? Important to flatten tree
         for father in self.node_dict.values():
