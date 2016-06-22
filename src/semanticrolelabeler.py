@@ -23,6 +23,22 @@ import rolematcher
 import stats
 from options import FrameLexicon
 
+def info(type, value, tb):
+    #if hasattr(sys, 'ps1') or not sys.stderr.isatty() or type != AssertionError:
+        ## we are in interactive mode or we don't have a tty-like
+        ## device, so we call the default hook
+        #sys.__excepthook__(type, value, tb)
+    #else:
+        import traceback, ipdb
+        # we are NOT in interactive mode, print the exception...
+        traceback.print_exception(type, value, tb)
+        print
+        # ...then start the debugger in post-mortem mode.
+        ipdb.pm()
+            
+sys.excepthook = info
+            
+            
 class SemanticRoleLabeler:
     def  __init__(self, argv):
         optionsparsing.Options(argv)
@@ -48,6 +64,7 @@ class SemanticRoleLabeler:
         Return the same string than conllinput but with new colums corresponding 
         to the frames and roles found
         """
+        self.logger.info("annotate: {} {}".format(language, conllinput))
         if language is not None:
             options.Options.language = language
 
@@ -58,7 +75,7 @@ class SemanticRoleLabeler:
             tmpfile.seek(0)
             options.Options.conll_input = tmpfile.name
             options.Options.argument_identification = True
-        self.logger.debug("Annotating {}...".format(conllinput[0:50]))
+        #self.logger.debug("Annotating {}...".format(conllinput[0:50]))
         all_annotated_frames = []
         all_vn_frames = []
 

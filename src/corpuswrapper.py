@@ -24,16 +24,14 @@ import paths
 import rolematcher
 
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(options.Options.loglevel)
-
-
 
 def get_frames(corpus, verbnet_classes, argid=False):
     """ Fills two list of the same size with content dependent of the kind of input
     
     The two lists are annotation_list and parsed_conll_list
     """
+    logger = logging.getLogger(__name__)
+    logger.setLevel(options.Options.loglevel)
     logger.debug("get_frames corpus={} input={}".format(corpus,options.Options.conll_input))
 
     if options.Options.conll_input is not None:

@@ -57,7 +57,7 @@ class VnFnRoleMatcher():
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(options.Options.loglevel)
         
-        self.logger.debug("VnFnRoleMatcher()")
+        self.logger.debug('VnFnRoleMatcher({})'.format(path))
 
         # 4-dimensions matrix :
         # self.fn_roles[fn_role][fn_frame][vn_class][i] is the

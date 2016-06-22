@@ -326,7 +326,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 if not argument.instanciated:
                     continue
 
-                assert i == argument.begin
+                #assert i == argument.begin
                 phrase_type = VerbnetFrameOccurrence.phrase_replacements.get(
                     argument.phrase_type, argument.phrase_type)
                 yield {
