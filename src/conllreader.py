@@ -268,8 +268,14 @@ class ConllSemanticAppender():
         if len(frame_annotations) is 0:
             return
         
+        # Must shift annotations one line up on first sentence because 
+        # there is no previous sentence punctuation.
+        notFirstSentenceShift = 0
+        if frame_annotations[0].sentence_id is 0:
+            notFirstSentenceShift = -1
+
         # compute the predicates string, concatenation of the possible frames names
-        self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid-1][11] = '|'.join([ frame_instance.frame_name for frame_instance in frame_annotations ])
+        self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][11] = '|'.join([ frame_instance.frame_name for frame_instance in frame_annotations ])
         
         # Add new column to place the new roles
         self.add_new_column(frame_annotations[0].sentence_id)
@@ -284,8 +290,8 @@ class ConllSemanticAppender():
         for position in arguments_for_ids:
             roleset_str = '|'.join(arguments_for_ids[position])
             self.logger.debug('add_framenet_frame_annotation roleset: {}'.format(roleset_str))
-            self.conll_matrix[frame_annotations[0].sentence_id][position-1][-1] = roleset_str
-            
+            self.conll_matrix[frame_annotations[0].sentence_id][position+notFirstSentenceShift][-1] = roleset_str
+                
     def dump_semantic_file(self, filename):
         with open(filename, 'w') as semantic_file:
             for i, sentence in enumerate(self.conll_matrix):
