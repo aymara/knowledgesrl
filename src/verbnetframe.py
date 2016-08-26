@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""  Module defining classes related to VerbNet frames 
-    
+"""  Module defining classes related to VerbNet frames
+
     Define classes:
     * ComputeSlotTypeMixin
     * VerbnetFrameOccurrence
@@ -12,7 +12,7 @@
 import options
 import logging
 logger = logging.getLogger(__name__)
-#logger.setLevel(options.Options.loglevel)
+# logger.setLevel(options.Options.loglevel)
 
 from abc import ABCMeta
 from operator import attrgetter
@@ -47,15 +47,16 @@ class ComputeSlotTypeMixin(metaclass=ABCMeta):
                 next_expected = ComputeSlotTypeMixin.slot_types["object"]
             elif self._is_a_slot(part):
                 if preposition != "":
-                    slot_types.append(ComputeSlotTypeMixin.slot_types["prep_object"])
+                    slot_types.append(ComputeSlotTypeMixin.slot_types["prep_object"])  # noqa
                     slot_preps.append(preposition)
                     preposition = ""
                 else:
                     slot_types.append(next_expected)
                     slot_preps.append(None)
-                    if next_expected == ComputeSlotTypeMixin.slot_types["object"]:
-                        next_expected = ComputeSlotTypeMixin.slot_types["indirect_object"]
-            elif isinstance(element, set) or element in verbnetprepclasses.all_preps:
+                    if next_expected == ComputeSlotTypeMixin.slot_types["object"]:  # noqa
+                        next_expected = ComputeSlotTypeMixin.slot_types["indirect_object"]  # noqa
+            elif (isinstance(element, set)
+                  or element in verbnetprepclasses.all_preps):
                 preposition = element
 
         return slot_types, slot_preps
@@ -87,35 +88,50 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
     :var slot_preps: string list -- preposition introducing each role.
     :var headwords: hash list -- the head word of each argument.
     :var best_matches: {'vnframe': VerbnetOfficialFrame, 'slot_assocs': int
-        list } list -- The frames that achieved the best score + the mapping (in
-        each tuple, the first int is the occurrence id, and the second one is the
-        official id) between our identified slots and these verbnet frames
-    :var roles: string set list -- for each role the list of possible role names
-        Should ALWAYS reflect current match situation, except in probability models?
-    :var tokenid: int -- id of the predicate token in the sentence of the CoNLL file
+        list } list -- The frames that achieved the best score + the mapping
+        (in each tuple, the first int is the occurrence id, and the second one
+        is the official id) between our identified slots and these verbnet
+        frames
+    :var roles: string set list -- for each role the list of possible role
+        names
+        Should ALWAYS reflect current match situation, except in
+        probability models ?
+    :var tokenid: int -- id of the predicate token in the sentence of the
+        CoNLL file
     :var sentence_id: int -- id of the sentence in the CoNLL file
     :var args: Arg list -- the syntactic chunks corresponding to the role
     :var tree: -- the syntactic tree of under this frame occurrence
-    
+
     An example:
-        { 
+        {
         'structure':    [{'elem': 'NP'}, {'elem': 'V'}, {'elem': 'NP'}],
         'predicate':    'establish',
         'num_slots':    2,
         'slot_types':   ['SBJ', 'OBJ'],
         'slot_preps':   [None, None],
-        'headwords':    [{'content_headword': ('NNP', 'Convention'), 'top_headword': ('NNP', 'Convention')}, {'content_headword': ('NNS', 'Groups'), 'top_headword': ('NNS', 'Groups')}],
+        'headwords':    [{'content_headword': ('NNP', 'Convention'),
+                        'top_headword': ('NNP', 'Convention')},
+                         {'content_headword': ('NNS', 'Groups'),
+                          'top_headword': ('NNS', 'Groups')}],
         'best_matches': [
-            {'slot_assocs': [0, 1], 'vnframe': VerbnetOfficialFrame(establish-55.5, NP.Agent [(animate) OR (organization)] V NP.Theme [None])}, 
-            {'slot_assocs': [0, 1], 'vnframe': VerbnetOfficialFrame(indicate-78, NP.Cause [None] V NP.Topic [None])}, 
-            {'slot_assocs': [0, 1], 'vnframe': VerbnetOfficialFrame(indicate-78-1-1, NP.Cause [None] V NP.Topic [None] to be NP)}
+            {'slot_assocs': [0, 1],
+             'vnframe': VerbnetOfficialFrame(establish-55.5,
+                NP.Agent [(animate) OR (organization)] V NP.Theme [None])},
+            {'slot_assocs': [0, 1],
+             'vnframe': VerbnetOfficialFrame(indicate-78,
+                NP.Cause [None] V NP.Topic [None])},
+            {'slot_assocs': [0, 1],
+             'vnframe': VerbnetOfficialFrame(indicate-78-1-1,
+                NP.Cause [None] V NP.Topic [None] to be NP)}
             ],
         'roles':        [{'Cause', 'Agent'}, {'Theme', 'Topic'}],
         'tokenid':      4,
         'sentence_id':  0,
         'args':         [Arg(The Convention, NP, ), Arg(Working Groups, NP, )],
-        'tree':         (VBD/ROOT/2/0/52 established (NNP/SUB/1/0/13 Convention (DT/NMOD/0/0/2 The)) (RB/VMOD/0/15/18 also) (NNS/OBJ/1/39/52 Groups (JJ/NMOD/0/39/45 Working))),
-        
+        'tree':         (VBD/ROOT/2/0/52 established
+            (NNP/SUB/1/0/13 Convention (DT/NMOD/0/0/2 The))
+            (RB/VMOD/0/15/18 also)
+            (NNS/OBJ/1/39/52 Groups (JJ/NMOD/0/39/45 Working))),
         }
     """
 
@@ -125,8 +141,9 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         "VPbrst": "S", "VPing": "S_ING", "VPto": "to S"
     }
 
-    def __init__(self, structure, num_slots, predicate, headwords=None, best_matches=None, 
-                 tokenid=-1, sentence_id=-1, args=None, tree=None):
+    def __init__(self, structure, num_slots, predicate, headwords=None,
+                 best_matches=None, tokenid=-1, sentence_id=-1, args=None,
+                 tree=None):
         self.structure = structure
         self.num_slots = num_slots
         self.predicate = predicate
@@ -141,22 +158,22 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
             self.best_matches = best_matches
         else:
             self.best_matches = []
-            
+
         self.roles = self.possible_roles()
 
         self.tokenid = tokenid
         self.sentence_id = sentence_id
-            
+
         if args:
             self.args = args
         else:
             self.args = []
-        
+
         if tree:
             self.tree = tree
         else:
             self.tree = None
-            
+
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
                 self.structure == other.structure and
@@ -165,10 +182,14 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 self.predicate == other.predicate)
 
     def __repr__(self):
-        return "VerbnetFrameOccurrence(structure={}, num_slots={}, predicate={}, headwords={}, best_matches={}, roles={}, tokenid={}, sentence_id={}, args={}, tree={})".format(
-            repr(self.structure), repr(self.num_slots), repr(self.predicate), repr(self.headwords), 
-            repr(self.best_matches), repr(self.roles), self.tokenid, self.sentence_id, 
-            repr(self.args), repr(self.tree))
+        return ("VerbnetFrameOccurrence(structure={}, num_slots={}, "
+                "predicate={}, headwords={}, best_matches={}, roles={}, "
+                "tokenid={}, sentence_id={}, args={}, tree={})".format(
+                    repr(self.structure), repr(self.num_slots),
+                    repr(self.predicate), repr(self.headwords),
+                    repr(self.best_matches), repr(self.roles),
+                    self.tokenid, self.sentence_id,
+                    repr(self.args), repr(self.tree)))
 
     def possible_roles(self):
         """Compute the lists of possible roles for each slot
@@ -185,10 +206,11 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 if slot2 is None:
                     continue
 
-                # We want this to fail when roles get stored in a dictionary or a class
+                # We want this to fail when roles get stored in a dictionary
+                # or a class
                 assert all([type(s) == dict for s in match['vnframe'].syntax])
 
-                role = [part['role'] for part in match['vnframe'].syntax if 'role' in part][slot2]
+                role = [part['role'] for part in match['vnframe'].syntax if 'role' in part][slot2]  # noqa
                 result[slot1].add(role)
 
         return result
@@ -204,12 +226,12 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.roles = self.possible_roles()
 
     def remove_match(self, toremove_match):
-        self.best_matches = [match for match in self.best_matches if match is not toremove_match]
+        self.best_matches = [match for match in self.best_matches if match is not toremove_match]  # noqa
         self.roles = self.possible_roles()
 
     def restrict_slot_to_role(self, i, new_role):
         """ Restrict the ith slot to the given role
-        
+
         This functions only affects self.roles without touching
         best_matches. The callers need to call select_likeliest_matches once
         they've restricted all roles.
@@ -217,8 +239,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         self.roles[i] = set([new_role])
 
     def select_likeliest_matches(self):
-        """Finds the matches that are the closest to the restricted roles. 
-        
+        """Finds the matches that are the closest to the restricted roles.
+
         Only makes sense when roles got restricted by restrict_slot_to_role
         """
         scores = []
@@ -230,7 +252,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                     # not mapped?
                     continue
 
-                role_in_match = match['vnframe'].roles()[match['slot_assocs'][i]]
+                role_in_match = match['vnframe'].roles()[match['slot_assocs'][i]]  # noqa
                 if role_in_match in role_set:
                     roles_that_match += 1
 
@@ -240,7 +262,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         if scores:
             best_score = max(scores)
 
-            self.best_matches = [match for score, match in zip(scores, self.best_matches)
+            self.best_matches = [match for score, match
+                                 in zip(scores, self.best_matches)
                                  if score == best_score]
 
             # Commenting out for now as it's the old behavior
@@ -248,7 +271,6 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 
     def best_classes(self):
         return {match['vnframe'].vnclass for match in self.best_matches}
-
 
     @staticmethod
     def build_from_frame(gold_framenet_instance, conll_frame_instance):
@@ -262,7 +284,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         converted to VerbNet-style representation
         """
 
-        # The goal here is to translate a FrameInstance into a VerbnetFrameOccurrence.
+        # The goal here is to translate a FrameInstance into a
+        # VerbnetFrameOccurrence.
 
         # TODO split the method for two usages
         if conll_frame_instance is not None:
@@ -270,13 +293,16 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
         elif gold_framenet_instance is not None:
             sentence = gold_framenet_instance.sentence
         else:
-            raise Exception('Either conll_frame_instance or gold_framenet_instance should exist.')
+            raise Exception('Either conll_frame_instance or '
+                            'gold_framenet_instance should exist.')
 
-        chunk_list = VerbnetFrameOccurrence.annotated_chunks(gold_framenet_instance, sentence)
-        structure = [{'elem': elem} for elem in VerbnetFrameOccurrence.chunks_to_verbnet(chunk_list)]
+        chunk_list = VerbnetFrameOccurrence.annotated_chunks(gold_framenet_instance, sentence)  # noqa
+        structure = [{'elem': elem} for elem in VerbnetFrameOccurrence.chunks_to_verbnet(chunk_list)]  # noqa
 
-        num_slots = len([arg for arg in gold_framenet_instance.args if arg.instanciated])
-        result = VerbnetFrameOccurrence(structure, num_slots, predicate=gold_framenet_instance.predicate.lemma)
+        num_slots = len([arg for arg in gold_framenet_instance.args
+                         if arg.instanciated])
+        result = VerbnetFrameOccurrence(structure, num_slots,
+                                        predicate=gold_framenet_instance.predicate.lemma)  # noqa
 
         # If the FrameInstance only comes from a CoNLL file and is not part of
         # the corpus, we don't want to loose predicate/args position in the
@@ -326,7 +352,7 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 if not argument.instanciated:
                     continue
 
-                #assert i == argument.begin
+                # assert i == argument.begin
                 phrase_type = VerbnetFrameOccurrence.phrase_replacements.get(
                     argument.phrase_type, argument.phrase_type)
                 yield {
@@ -342,7 +368,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
                 pass
             elif chunk['type'] == 'arg':
                 arg_first_word = chunk['text'].split()[0]
-                if chunk['phrase_type'] == 'PP' and arg_first_word in verbnetprepclasses.sub_pronouns:
+                if (chunk['phrase_type'] == 'PP'
+                        and arg_first_word in verbnetprepclasses.sub_pronouns):
                     yield arg_first_word
                     yield 'S'
                 elif chunk['phrase_type'] == 'PP':
@@ -371,7 +398,8 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
 class VerbnetOfficialFrame(ComputeSlotTypeMixin):
     """A representation of a frame syntactic syntax
 
-    :var syntax : (str + role tuple | str + None tuple | str set + None tuple) list -- structure + roles
+    :var syntax : (str + role tuple | str + None tuple
+                    | str set + None tuple) list -- structure + roles
     :var num_slots: int -- number of argument slots in :structure
     :var slot_types:
     :var slot_preps:
@@ -395,7 +423,8 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         for part in self.syntax:
             elem = part['elem']
             if 'role' in part:
-                yield '{}.{} [{}]'.format(part['elem'], part['role'], part['restr'])
+                yield '{}.{} [{}]'.format(part['elem'], part['role'],
+                                          part['restr'])
             elif type(elem) == set:
                 yield '-'.join(elem)
             else:

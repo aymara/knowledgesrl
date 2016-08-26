@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Parse FrameNet fulltext annotation into FrameInstance, Arg and Predicate objects.
+""" Parse FrameNet fulltext annotation into FrameInstance, Arg and Predicate
+    objects.
 
 Notes:
 
@@ -60,7 +61,8 @@ class FulltextReader:
     # etree will add the xmlns string before every tag name
     framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
 
-    def __init__(self, filename, add_non_core_args=True, keep_unannotated=False,
+    def __init__(self, filename, add_non_core_args=True, 
+                 keep_unannotated=False,
                  tree_dict=None, keep_nonverbal=False, pos_file=None):
         """Read a file and update the collected frames list.
 
@@ -68,15 +70,17 @@ class FulltextReader:
         :type filename: str.
         :param add_non_core_args: Whether we should include non core args.
         :type add_non_core_args: boolean.
-        :param keep_unannotated: Whether we should keep frames without annotated args.
+        :param keep_unannotated: Whether we should keep frames without
+                                annotated args.
         :type keep_unannotated: boolean.
-        :param tree_dict: Syntactic trees for the frames (grouped by sentence in dict)
+        :param tree_dict: Syntactic trees for the frames (grouped by
+                            sentence in dict)
         :type trees: None | SyntacticTreeNode Dict
         """
 
         if FulltextReader.core_arg_finder is None and not add_non_core_args:
             FulltextReader.core_arg_finder = framenetcoreargs.CoreArgsFinder()
-            FulltextReader.core_arg_finder.load_data_from_xml(paths.Paths.framenet_frames(options.Options.language))
+            FulltextReader.core_arg_finder.load_data_from_xml(paths.Paths.framenet_frames(options.Options.language))  # noqa
 
         self.frames = []
 
@@ -142,8 +146,8 @@ class FulltextReader:
         self.constant_frame = root.getroot().attrib["frame"]
 
         self.patterns = {
-            "sentence": (self._xmlns + "subCorpus/" +
-            self._xmlns + "sentence"),
+            "sentence": (self._xmlns + "subCorpus/"
+                         + self._xmlns + "sentence"),
             "frame": self._xmlns + "annotationSet",
             "predicate": self._xmlns+"layer[@name='Target']",
             "arg": "{}layer[@name='FE'][@rank='{}']/*",
@@ -161,7 +165,7 @@ class FulltextReader:
 
         self.patterns = {
             "sentence": ("documents/document/paragraphs/paragraph"
-                "/sentences/sentence"),
+                         "/sentences/sentence"),
             "frame": "annotationSets/annotationSet",
             "predicate": "layers/layer[@name='Target']/labels",
             "arg": "layers/layer[@name='FE']/labels/*"
@@ -200,7 +204,8 @@ class FulltextReader:
                     "pos": label.attrib["name"]
                 })
         else:
-            # We can use the existing automatic SEMAFOR part-of-speech annotation
+            # We can use the existing automatic SEMAFOR part-of-speech
+            # annotation
             start = 0
             for line in self.pos_data[sentence_number].split("\n"):
                 if line == "":
@@ -215,17 +220,19 @@ class FulltextReader:
                 start += len(line[1]) + 1
 
         for word in pos_data:
-            if word["pos"] in FulltextReader.predicate_pos or self.keep_nonverbal:
+            if (word["pos"] in FulltextReader.predicate_pos
+                    or self.keep_nonverbal):
                 predicate_starts.append(int(word["start"]))
 
-            words.append(Word(int(word["start"]), int(word["end"]), word["pos"]))
+            words.append(Word(int(word["start"]),
+                              int(word["end"]), word["pos"]))
 
         already_annotated = []
         for potential_frame in sentence.findall(self.patterns["frame"]):
             # We keep only annotated verbal frames
 
-            annotated = ("status" in potential_frame.attrib and
-                potential_frame.attrib["status"] != "UNANN")
+            annotated = ("status" in potential_frame.attrib 
+                         and potential_frame.attrib["status"] != "UNANN")
             annotated = annotated or self.all_annotated
 
             if not (annotated or self.keep_unannotated):
@@ -237,7 +244,8 @@ class FulltextReader:
                 already_annotated.append(frame.predicate.begin)
                 yield frame
 
-    def _parse_frame(self, sentence_text, words, frame, annotated, predicate_starts):
+    def _parse_frame(self, sentence_text, words, frame, annotated, 
+                     predicate_starts):
         """Handle the parsing of one frame.
 
         :param sentence_text: Sentence in which the frame occurs.
@@ -251,7 +259,8 @@ class FulltextReader:
 
         if predicate is None:
             return
-        elif self.corpus in ["fulltext", "semafor"] and predicate.begin not in predicate_starts:
+        elif (self.corpus in ["fulltext", "semafor"] 
+                and predicate.begin not in predicate_starts):
             return
 
         if self.constant_frame == "":
@@ -273,8 +282,9 @@ class FulltextReader:
         else:
             args = []
 
-        return FrameInstance(sentence_text, predicate, args, words, frame_name,
-            filename=self.filename, arg_annotated=annotated)
+        return FrameInstance(sentence_text, predicate, args, 
+                             words, frame_name, filename=self.filename,
+                             arg_annotated=annotated)
 
     def _build_args_list(self, sentence_text, frame, frame_name, predicate):
         """Handle the collection of argument list.
@@ -299,7 +309,8 @@ class FulltextReader:
             arg_data = frame.findall(arg_search_str)
 
             if not self.corpus == "semafor":
-                phrase_search_str = self.patterns["pt"].format(self._xmlns, rank)
+                phrase_search_str = self.patterns["pt"].format(self._xmlns,
+                                                               rank)
                 phrase_data = frame.findall(phrase_search_str)
 
             # Stop if we have reached a non argument-annotated layer
@@ -340,7 +351,8 @@ class FulltextReader:
 
         return args
 
-    def _build_arg(self, sentence_text, frame, predicate, arg, phrase_data, rank):
+    def _build_arg(self, sentence_text, frame,
+                   predicate, arg, phrase_data, rank):
         # Checks wether the argument is instanciated
         if "itype" in arg.attrib:
             return False, Arg(0, -1, "", arg.attrib["name"], False, "")
@@ -371,7 +383,8 @@ class FulltextReader:
                         phrase_type = phrase.attrib["name"]
                         break
 
-            # If the argument and the predicate overlap, mark the argument as NI
+            # If the argument and the predicate overlap, 
+            # mark the argument as NI
             if arg_start <= predicate.end and arg_end >= predicate.begin:
                 self.predicate_is_arg.append({
                     "file": self.filename,
@@ -412,7 +425,8 @@ class FulltextReader:
 
         predicate_data = frame.findall(self.patterns["predicate"])[0]
 
-        # This test handles the only self-closed layer tag that exists in the corpus
+        # This test handles the only self-closed layer tag that exists 
+        # in the corpus
         if len(predicate_data) == 0:
             self.missing_predicate_data.append({
                 "file": self.filename,
@@ -445,8 +459,9 @@ class FulltextReader:
                 i = 0
                 for w in frame.words:
                     i += 1
-                    frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\t \t\n".format(
-                        i, frame.get_word(w), self.pos_mapping.get(w.pos, w.pos))
+                    frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\t \t\n".format(  # noqa
+                        i, frame.get_word(w), 
+                        self.pos_mapping.get(w.pos, w.pos))
 
                 yield frame_conll + "\n"
 

@@ -1,7 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Frames instances, its arguments and predicates."""
+"""Frames definitions, frames instances, its arguments and predicates."""
+
+
+class FrameDefinition:
+    """A frame structure as defined by FrameNet
+
+    :var name: the name of the frame, e.g.: Ingestion
+    :var id: int. The frame id
+    :var definition: the text difining the frame semantics
+    :var elements: a map associating frame element names to their
+            definition
+    :var relations: a map associating relation type names to a set of
+            frame names
+    :var lex_units: a map associating "lemma.pos_tag" to the details of this 
+            lexical unit
+    :var headwords:
+    :var sentence_id: id of thesentencewhere is this frame instance in the
+            CONLL file
+
+    """
+
+    def __init__(self, name):
+        # nothing
+        self.name = name
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                self.id == other.id)
+
+    def __str__(self):
+        return "FrameInstance({}, {})".format(
+            self.name, self.id)
+
+    def __repr__(self):
+        return ("FrameInstance(name={}, id={})".format(self.name, self.id))
 
 
 class FrameInstance:
@@ -11,16 +45,17 @@ class FrameInstance:
     :var sentence: Sentence in which the frame appears
     :var predicate: Predicate object representing the frame's predicate
     :var args: Arg list containing the predicate's arguments
-    :var words: 
-    :var frame_name: 
-    :var headwords: 
-    :var sentence_id: id of thesentencewhere is this frame instance in the CONLL file
+    :var words:
+    :var frame_name:
+    :var headwords:
+    :var sentence_id: id of thesentencewhere is this frame instance in the
+            CONLL file
     :var filename:
     :var slot_type:
     :var arg_annotated:
     :var passive:
     :var tree:
-    
+
     """
 
     def __init__(self, sentence, predicate, args, words, frame_name,
@@ -49,35 +84,41 @@ class FrameInstance:
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
-            self.sentence == other.sentence and
-            self.predicate == other.predicate and
-            self.args == other.args and
-            self.words == other.words)
+                self.sentence == other.sentence and
+                self.predicate == other.predicate and
+                self.args == other.args and
+                self.words == other.words)
 
     def __str__(self):
         return "FrameInstance({}, {}, {})".format(
             self.frame_name, self.predicate, self.args)
 
     def __repr__(self):
-        return "FrameInstance(frame_name={}, predicate={}, args={}, sentence={}, words={})".format(
-            self.frame_name, self.predicate, self.args, self.sentence, self.words)
-    
-    
+        return ("FrameInstance(frame_name={}, predicate={}, "
+                "args={}, sentence={}, words={})".format(
+                    self.frame_name, self.predicate, self.args,
+                    self.sentence, self.words))
+
+
 class Arg:
     """An argument of a frame
 
-    :var begin: integer -- position of the argument's first character in the sentence
-    :var end: integer -- position of the argument's last character in the sentence
+    :var begin: integer -- position of the argument's first character in the
+            sentence
+    :var end: integer -- position of the argument's last character in the
+            sentence
     :var text: string -- the argument's chunk text
     :var role: string -- the argument's role
     :var instanciated: boolean -- marks wether the argument is instanciated
     :var phrase_type: string -- syntactic type of the argument chunk
-    :var position: int -- position of the argument chunk head token in its sentence CONLL file 
-    :var annotated: boolean -- 
-    
+    :var position: int -- position of the argument chunk head token in its
+            sentence CONLL file
+    :var annotated: boolean --
+
     """
 
-    def __init__(self, begin, end, text, role, instanciated, phrase_type, annotated=True, position=None):
+    def __init__(self, begin, end, text, role, instanciated, phrase_type,
+                 annotated=True, position=None):
         self.begin = begin
         self.end = end
         self.text = text
@@ -91,16 +132,23 @@ class Arg:
         self.annotated = annotated
 
     def __repr__(self):
-        return "Arg({}, {}, {}, {}, {}, {}, {}, {})".format(self.begin, self.end, self.text, 
-                                        self.role, self.instanciated, self.phrase_type, 
-                                        self.position, self.annotated)
+        return "Arg({}, {}, {}, {}, {}, {}, {}, {})".format(self.begin,
+                                                            self.end,
+                                                            self.text,
+                                                            self.role,
+                                                            self.instanciated,
+                                                            self.phrase_type,
+                                                            self.position,
+                                                            self.annotated)
 
     def __eq__(self, other):
-        return (isinstance(other, self.__class__) and
-            ((self.begin == other.begin and self.end == other.end) or
-                (self.instanciated is False and other.instanciated is False)) and
-            self.role == other.role and
-            self.phrase_type == other.phrase_type)
+        return (isinstance(other, self.__class__)
+                and ((self.begin == other.begin
+                      and self.end == other.end)
+                     or (self.instanciated is False
+                         and other.instanciated is False))
+                and self.role == other.role
+                and self.phrase_type == other.phrase_type)
 
     def __cmp__(self, other):
         if not self.instanciated:
@@ -137,8 +185,10 @@ class Arg:
 class Predicate:
     """A frame's predicate
 
-    :var begin: integer, position of the predicate's first character in the sentence
-    :var end: integer, position of the predicate's last character in the sentence
+    :var begin: integer, position of the predicate's first character in the
+            sentence
+    :var end: integer, position of the predicate's last character in the
+            sentence
     :var text: string containing the predicate's text
     :var lemma: string containing the predicate's lemma
     :var tokenid: integer the id of this predicate token in the CONLL input
@@ -156,16 +206,18 @@ class Predicate:
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
-            self.begin == other.begin and
-            self.end == other.end and
-            self.lemma == other.lemma)
+                self.begin == other.begin and
+                self.end == other.end and
+                self.lemma == other.lemma)
 
 
 class Word:
     """A frame's word
 
-    :var begin: integer, position of the predicate's first character in the sentence
-    :var end: integer, position of the predicate's last character in the sentence
+    :var begin: integer, position of the predicate's first character in the
+            sentence
+    :var end: integer, position of the predicate's last character in the
+            sentence
     :var pos: string containing the predicate's part-of-speech
 
     """
@@ -179,9 +231,9 @@ class Word:
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
-            self.begin == other.begin and
-            self.end == other.end and
-            self.pos == other.pos)
+                self.begin == other.begin and
+                self.end == other.end and
+                self.pos == other.pos)
 
     def __repr__(self):
         return "Word({}, {}, \"{}\")".format(self.begin, self.end, self.pos)

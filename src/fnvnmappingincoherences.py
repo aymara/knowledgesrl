@@ -59,20 +59,24 @@ class VerbnetRoleReader:
 
 
 def load_fn_data():
+    fn_lex_units = {}
     fn_roles = {}
     fn_verbal_frames = set()
     xmlns = "{http://framenet.icsi.berkeley.edu}"
     for filename in paths.Paths.framenet_frames(options.Options.language).glob('*.xml'):
         root = ET.ElementTree(file=str(filename.resolve())).getroot()
-
-        fn_roles[root.attrib["name"]] = []
+        frame_name = root.attrib["name"]
+        fn_lex_units[frame_name] = set()
+        fn_roles[frame_name] = []
         for arg_data in root.findall(xmlns+"FE"):
-            fn_roles[root.attrib["name"]].append(arg_data.attrib["name"])
+            fn_roles[frame_name].append(arg_data.attrib["name"])
         for lu in root.findall(xmlns+"lexUnit"):
-            if lu.attrib["name"].split(".")[1] == "v":
-                fn_verbal_frames.add(root.attrib["name"])
+            lu_name = lu.attrib["name"]
+            if lu_name.split(".")[1] == "v":
+                fn_lex_units[frame_name].append(lu_name.split(".")[0])
+                fn_verbal_frames.add(frame_name)
                 break
-    return fn_roles, fn_verbal_frames
+    return fn_lex_units, fn_roles, fn_verbal_frames
 
 
 def display_vn_issues():
@@ -122,7 +126,7 @@ classes_names["37.1"] = classes_names["37.1.1"]
 vn_classes["58"] = vn_classes["58.1"]
 classes_names["58"] = classes_names["58.1"]
 
-fn_roles, fn_verbal_frames = load_fn_data()
+fn_lex_units, fn_roles, fn_verbal_frames = load_fn_data()
 
 root = ET.ElementTree(file=str(paths.Paths.VNFN_MATCHING))
 

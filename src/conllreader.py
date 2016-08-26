@@ -14,6 +14,7 @@ import framenetframe
 import options
 import logging
 
+
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
 
@@ -27,30 +28,32 @@ class SyntacticTreeNode:
     :var father: SyntacticTreeBuilder, the father of this node
     :var children: SyntacticTreeNode list, the children of this node
 
-    :var begin: int, the character position this phrase starts at (root would be 0)
-    :var end: int, the position this phrase ends at (root would be last character)
+    :var begin: int, the character position this phrase starts at (root would
+                be 0)
+    :var end: int, the position this phrase ends at (root would be last
+              character)
     :var begin_word: int, the position this *word* begins at
 
     """
 
-    def __init__(self, word_id, word, lemma, cpos, pos, namedEntityType, 
+    def __init__(self, word_id, word, lemma, cpos, pos, namedEntityType,
                  features, head, deprel, phead, pdeprel, begin_word):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(options.Options.loglevel)
-        
-        #self.logger.debug('SyntacticTreeNode({})'.format(deprel))
+
+        # self.logger.debug('SyntacticTreeNode({})'.format(deprel))
         self.word_id = word_id
 
         self.word = word
         self.lemma = lemma
-        self.cpos=cpos
+        self.cpos = cpos
         self.pos = pos
-        self.namedEntityType=namedEntityType
-        self.features=features
-        self.head=head
+        self.namedEntityType = namedEntityType
+        self.features = features
+        self.head = head
         self.deprel = deprel
-        self.phead=phead
-        self.pdeprel=pdeprel
+        self.phead = phead
+        self.pdeprel = pdeprel
         self.begin_word = begin_word
 
         self.father = None
@@ -58,14 +61,15 @@ class SyntacticTreeNode:
 
         self.begin, self.end = None, None
 
-
     def __repr__(self):
         if self.children:
             children = " " + " ".join([str(t) for t in self.children])
         else:
             children = ""
 
-        return "({}/{}/{}/{}/{} {}{})".format(self.pos, self.deprel, self.position, self.begin, self.end, self.word, children)
+        return "({}/{}/{}/{}/{} {}{})".format(self.pos, self.deprel,
+                                              self.position, self.begin,
+                                              self.end, self.word, children)
 
     def __iter__(self):
         for position, child in enumerate(self.children):
@@ -83,7 +87,7 @@ class SyntacticTreeNode:
     def contains(self, arg):
         """Search an exact argument in all subtrees"""
         return (self.flat() == arg or
-            any((c.contains(arg) for c in self.children)))
+                any((c.contains(arg) for c in self.children)))
 
     def closest_match(self, arg):
         """Search the closest match to arg"""
@@ -99,7 +103,8 @@ class SyntacticTreeNode:
         current_word_list = self.flat().split()
         wanted_word_list = arg.text.split()
 
-        overlap = word_overlap(tuple(current_word_list), tuple(wanted_word_list))
+        overlap = word_overlap(tuple(current_word_list),
+                               tuple(wanted_word_list))
         if not overlap:
             overlap_words = []
         else:
@@ -108,7 +113,8 @@ class SyntacticTreeNode:
         mean_length = (len(current_word_list) + len(wanted_word_list)) / 2
         score = len(overlap_words) / mean_length
 
-        children_results = [c._closest_match_as_node_lcs(arg) for c in self.children]
+        children_results = [c._closest_match_as_node_lcs(arg)
+                            for c in self.children]
         return max([(score, self)] + children_results, key=lambda x: x[0])
 
 
@@ -140,11 +146,14 @@ class SyntacticTreeBuilder():
         for l in conll_tree.splitlines():
             try:
                 linenum += 1
-                """Columns from https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
-                word_id, form, lemma, cpos, pos, namedEntityType, features, head, deprel, phead, pdeprel = l.split("\t")
+                """Columns from
+                https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
+                word_id, form, lemma, cpos, pos, namedEntityType, features,\
+                    head, deprel, phead, pdeprel = l.split("\t")
             except ValueError:
-                print('Wrong number of columns (expected 11) in line {}: "{}"\n'.format(linenum,l))
-                break
+                self.logger.warn('Wrong number of columns (expected 11) in '
+                                 'line {}: "{}"\n'.format(linenum, l))
+                continue
             word_id = int(word_id)
             head = int(head) if head != '_' else None
             deprel = deprel if deprel != '_' else 'ROOT'
@@ -153,8 +162,8 @@ class SyntacticTreeBuilder():
 
             self.node_dict[word_id] = SyntacticTreeNode(
                 word_id=word_id,
-                word=form, 
-                lemma=lemma, 
+                word=form,
+                lemma=lemma,
                 cpos=cpos,
                 pos=pos,
                 namedEntityType=namedEntityType,
@@ -175,11 +184,16 @@ class SyntacticTreeBuilder():
             if father_id is not None and father_id != 0:
                 try:
                     self.node_dict[word_id].father = self.node_dict[father_id]
-                    self.node_dict[father_id].children.append(self.node_dict[word_id])
+                    self.node_dict[father_id].children.append(self.node_dict[word_id])  # noqa
                 except KeyError:
-                    self.logger.error('father id {} not found in CoNLL tree {}'.format(father_id,conll_tree))
+                    self.logger.error('father id {} and/or word_id {} not '
+                                      'found in CoNLL tree {}'.format(
+                                          father_id,
+                                          word_id,
+                                          conll_tree))
 
-        # Record position: where is father among child? Important to flatten tree
+        # Record position: where is father among child?
+        # Important to flatten tree
         for father in self.node_dict.values():
             father.position = 0
             for child_id, child in enumerate(father.children):
@@ -232,7 +246,6 @@ class ConllSemanticAppender():
                     sentence_matrix.append(line.split('\t') + ['_'])
                 self.conll_matrix.append(sentence_matrix)
 
-
     def __str__(self):
         result = ""
         for i, sentence in enumerate(self.conll_matrix):
@@ -248,35 +261,37 @@ class ConllSemanticAppender():
 
     def add_verbnet_frame_annotation(self, frame_annotation):
         # We could have multiple classes, so join them with |
-        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.tokenid-1][11] = '|'.join(sorted(frame_annotation.best_classes()))
+        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.tokenid-1][11] = '|'.join(sorted(frame_annotation.best_classes()))  # noqa
         # Add new column to place the new roles
         self.add_new_column(frame_annotation.sentence_id)
 
         for roleset, arg in zip(frame_annotation.roles, frame_annotation.args):
-            roleset_str = '|'.join(sorted(roleset)) if roleset else '_EMPTYROLE_'
-            self.logger.debug('add_verbnet_frame_annotation roleset: {}'.format(roleset_str))
-            self.conll_matrix[frame_annotation.sentence_id][arg.position-1][-1] = roleset_str
+            roleset_str = '|'.join(sorted(roleset)) if roleset else '_EMPTYROLE_'  # noqa
+            self.logger.debug('add_verbnet_frame_annotation roleset: {}'
+                              .format(roleset_str))
+            self.conll_matrix[frame_annotation.sentence_id][arg.position-1][-1] = roleset_str  # noqa
 
     def add_framenet_frame_annotation(self, frame_annotations):
         """ Add columns corresponding to the given frame instances.
 
         :var frame_annotations: FrameInstance list
-        
+
         All frame instances are supposed to be from the same sentence.
         """
-        self.logger.info("add_framenet_frame_annotation frame instance list: [{}]".format(','.join(str(x) for x in frame_annotations)))
+        self.logger.info("add_framenet_frame_annotation frame instance list: [{}]".format(','.join(str(x) for x in frame_annotations)))  # noqa
         if len(frame_annotations) is 0:
             return
-        
-        # Must shift annotations one line up on first sentence because 
+
+        # Must shift annotations one line up on first sentence because
         # there is no previous sentence punctuation.
         notFirstSentenceShift = 0
         if frame_annotations[0].sentence_id is 0:
             notFirstSentenceShift = -1
 
-        # compute the predicates string, concatenation of the possible frames names
-        self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][11] = '|'.join([ frame_instance.frame_name for frame_instance in frame_annotations ])
-        
+        # compute the predicates string, concatenation of the possible
+        # frames names
+        self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][11] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
+
         # Add new column to place the new roles
         self.add_new_column(frame_annotations[0].sentence_id)
 
@@ -289,9 +304,11 @@ class ConllSemanticAppender():
         # place the arguments at the correct place in the matrix
         for position in arguments_for_ids:
             roleset_str = '|'.join(arguments_for_ids[position])
-            self.logger.debug('add_framenet_frame_annotation roleset: {}'.format(roleset_str))
-            self.conll_matrix[frame_annotations[0].sentence_id][position+notFirstSentenceShift][-1] = roleset_str
-                
+            self.logger.debug(
+                'add_framenet_frame_annotation roleset: {}'.format(
+                    roleset_str))
+            self.conll_matrix[frame_annotations[0].sentence_id][position+notFirstSentenceShift][-1] = roleset_str  # noqa
+
     def dump_semantic_file(self, filename):
         with open(filename, 'w') as semantic_file:
             for i, sentence in enumerate(self.conll_matrix):

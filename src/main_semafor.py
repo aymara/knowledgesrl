@@ -28,7 +28,8 @@ for filename in sorted(semafor_corpus.glob('*.xml')):
     annotated_frames += reader.frames
 
 num_annotated_frames = len(annotated_frames)
-num_annotated_args = sum([len([y for y in x.args if y.instanciated]) for x in annotated_frames])
+num_annotated_args = sum([len([y for y in x.args if y.instanciated])
+                          for x in annotated_frames])
 
 num_good, num_bad = 0, 0
 num_correct, num_incorrect = 0, 0
@@ -67,7 +68,8 @@ for frame in semafor_frames:
     for arg in frame.args:
         arg_found = False
         for annotated_arg in annotated_frames[i].args:
-            if annotated_arg.begin == arg.begin and annotated_arg.end == arg.end:
+            if (annotated_arg.begin == arg.begin
+                    and annotated_arg.end == arg.end):
                 arg_found = True
                 num_good += 1
                 if arg.role == annotated_arg.role:
@@ -85,7 +87,7 @@ print(
     "Good roles : {} \n"
     "Bad roles : {}"
     "\n".format(num_annotated_args, num_good, num_bad,
-        num_correct, num_incorrect)
+                num_correct, num_incorrect)
 )
 
 precision = num_correct / (num_good + num_bad)
@@ -95,6 +97,5 @@ f1 = 2 * (precision * recall) / (precision + recall)
 print(
     "Precision : {:.2%} \n"
     "Recall : {:.2%} \n"
-    "F1 : {:.2%} \n".format(
-    precision, recall, f1)
+    "F1 : {:.2%} \n".format(precision, recall, f1)
 )

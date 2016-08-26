@@ -14,7 +14,8 @@ from collections import defaultdict
 import itertools
 import copy
 
-# VN roles given by table 2 of http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
+# VN roles given by table 2 of
+# http://verbs.colorado.edu/~mpalmer/projects/verbnet.html
 vn_roles_list = [
     "Actor", "Agent", "Asset", "Attribute", "Beneficiary", "Cause",
     "Co-Agent", "Co-Patient", "Co-Theme",  # Not in the original list
@@ -24,7 +25,7 @@ vn_roles_list = [
 
 # Added roles
 vn_roles_additionnal = ["Goal", "Initial_Location", "Pivot", "Result",
-    "Trajectory", "Value"]
+                        "Trajectory", "Value"]
 
 # List of VN roles that won't trigger an error in unit tests
 authorised_roles = vn_roles_list + vn_roles_additionnal
@@ -44,19 +45,22 @@ class RoleMatchingError(Exception):
 
 
 class VnFnRoleMatcher():
-    """Reads the mapping between VN and FN roles, and can then be used to compare them
+    """Reads the mapping between VN and FN roles, and can then be used to
+        compare them
 
-    :var fn_roles: data structure used to store the mapping between FrameNet and VerbNet roles
+    :var fn_roles: data structure used to store the mapping between FrameNet
+                    and VerbNet roles
     :var fn_frames: maps FrameNet frame names to VerbNet class names
-    :var framenetframe_to_verbnetclasses: FrameNet frame -> VerbNet class mapping
-    :var verbnetclass_to_framenetframes: VerbNet class -> FrameNet frame mapping
+    :var framenetframe_to_verbnetclasses: FrameNet frame -> VerbNet class
+                                            mapping
+    :var verbnetclass_to_framenetframes: VerbNet class -> FrameNet frame
+                                            mapping
     :var issues: used to store statistics about the problem encoutered
     """
 
     def __init__(self, path):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(options.Options.loglevel)
-        
         self.logger.debug('VnFnRoleMatcher({})'.format(path))
 
         # 4-dimensions matrix :
@@ -70,13 +74,13 @@ class VnFnRoleMatcher():
         # i-th possible FN role associated to vn_role for the class vn_class
         # and a verb in fn_frame.
         self.vn_roles = {}
-        
+
         # FrameNet frame -> VerbNet class mapping
         self.framenetframe_to_verbnetclasses = defaultdict(list)
-        
+
         # VerbNet class -> FrameNet frame mapping
         self.verbnetclass_to_framenetframes = defaultdict(list)
-        
+
         root = ET.ElementTree(file=str(path))
 
         for mapping in root.getroot():
@@ -85,7 +89,7 @@ class VnFnRoleMatcher():
 
             self.framenetframe_to_verbnetclasses[fn_frame].append(vn_class)
             self.verbnetclass_to_framenetframes[vn_class].append(fn_frame)
-            
+
             for role in mapping.findall("roles/role"):
                 vn_role = role.attrib["vnrole"]
                 fn_role = role.attrib["fnrole"]
@@ -128,7 +132,8 @@ class VnFnRoleMatcher():
         self.vn_roles[vn_role][vn_class][fn_frame].add(fn_role)
 
     def _build_frames_vnclasses_mapping(self):
-        """ Builds a mapping between framenet frames and associated verbnet classes """
+        """ Builds a mapping between framenet frames and associated verbnet
+            classes """
         self.logger.debug("_build_frames_vnclasses_mapping")
         self.fn_frames = defaultdict(lambda: set())
         for fn_role in self.fn_roles:
@@ -143,15 +148,18 @@ class VnFnRoleMatcher():
                     self.fn_frames[fn_frame].add(vn_class)
 
     def possible_vn_roles(self, fn_role, fn_frame=None, vn_classes=None):
-        """Returns the set of VN roles that can be mapped to a FN role in a given context
+        """Returns the set of VN roles that can be mapped to a FN role in a
+            given context
 
         :param fn_role: The FrameNet role.
         :type fn_role: str.
         :parma vn_role: The VerbNet role.
         :type vn_role: str.
-        :param fn_frame: The FrameNet frame in which the roles have to be mapped.
+        :param fn_frame: The FrameNet frame in which the roles have to be
+                            mapped.
         :type fn_frame: str.
-        :param vn_classes: A list of VerbNet classes for which the roles have to be mapped.
+        :param vn_classes: A list of VerbNet classes for which the roles have
+                            to be mapped.
         :type vn_classes: str List.
         :returns: str List -- The list of VN roles
         """
@@ -184,7 +192,10 @@ class VnFnRoleMatcher():
             for frame in frames:
                 while True:
                     if vn_class in self.fn_roles[fn_role][frame]:
-                        vnroles = vnroles.union(self.fn_roles[fn_role][frame][vn_class])
+                        vnroles = vnroles.union(self.fn_roles
+                                                [fn_role]
+                                                [frame]
+                                                [vn_class])
                         break
 
                     position = max(vn_class.rfind("-"), vn_class.rfind("."))
@@ -194,7 +205,8 @@ class VnFnRoleMatcher():
                     vn_class = vn_class[0:position]
 
         if vnroles == set():
-            # We don't have the mapping for any of the VN class provided in vn_classes
+            # We don't have the mapping for any of the VN class provided in
+            # vn_classes
             raise RoleMatchingError(
                 "None of the given VerbNet classes ({}) were corresponding to"
                 " {} role and frame {}".format(vn_class, fn_role, fn_frame))
@@ -202,47 +214,74 @@ class VnFnRoleMatcher():
         return vnroles
 
     def possible_framenet_mappings(self, verbnet_frame_occurrence):
-        """ Computes the possible FrameNet frame instances given a given VerbNet frame occurrence
-        
+        """ Computes the possible FrameNet frame instances given
+            a given VerbNet frame occurrence
+
         :var verbnet_frame_occurrence: VerbnetFrameOccurrence
         return a FrameInstance list
         """
         result = []
         allframenames = set()
-        self.logger.debug('possible_framenet_mappings {}'.format(verbnet_frame_occurrence))
+        self.logger.debug('possible_framenet_mappings {}'
+                          .format(verbnet_frame_occurrence))
         for match in verbnet_frame_occurrence.best_matches:
             verbnetclassname = match['vnframe'].vnclass
-            verbnetclassid = verbnetclassname.split('-',1)[1] 
-            framenames = self.verbnetclass_to_framenetframes[match['vnframe'].vnclass.split('-',1)[1]]
+            verbnetclassid = verbnetclassname.split('-', 1)[1]
+            framenames = self.verbnetclass_to_framenetframes[
+                match['vnframe'].vnclass.split('-', 1)[1]]
             for framename in framenames:
                 if framename not in allframenames:
                     allframenames.add(framename)
-                    self.logger.debug('FrameNet frames: {} {}'.format(match['vnframe'].vnclass, framename))
+                    self.logger.debug('FrameNet frames: {} {}'
+                                      .format(match['vnframe'].vnclass,
+                                              framename))
                     rolesarrays = []
                     for possibleroles in verbnet_frame_occurrence.roles:
                         rolesarrays.append([])
                         for possiblerole in possibleroles:
-                            if (possiblerole in self.vn_roles 
-                                    and verbnetclassid in self.vn_roles[possiblerole]
-                                    and framename in self.vn_roles[possiblerole][verbnetclassid]):
-                                self.logger.debug('self.vn_roles[{}][{}][{}] = {}'
-                                    .format(possiblerole, verbnetclassid, framename, 
-                                            self.vn_roles[possiblerole][verbnetclassid][framename]))
-                                rolesarrays[-1].extend(self.vn_roles[possiblerole][verbnetclassid][framename])
+                            if (possiblerole in self.vn_roles
+                                    and (verbnetclassid
+                                         in self.vn_roles[possiblerole])
+                                    and (framename
+                                         in self.vn_roles[possiblerole][verbnetclassid])):  # noqa
+                                self.logger.debug('self.vn_roles[{}][{}][{}] = {}'  # noqa
+                                                  .format(possiblerole,
+                                                          verbnetclassid,
+                                                          framename,
+                                                          self.vn_roles[possiblerole]  # noqa
+                                                                       [verbnetclassid]  # noqa
+                                                                       [framename]))  # noqa
+                                rolesarrays[-1].extend(self.vn_roles
+                                                       [possiblerole]
+                                                       [verbnetclassid]
+                                                       [framename])
                             else:
-                                self.logger.debug(' self.vn_roles[{}][{}][{}] is empty'.format(possiblerole,verbnetclassid,framename))
+                                self.logger.debug('self.vn_roles[{}][{}][{}] '
+                                                  'is empty'
+                                                  .format(possiblerole,
+                                                          verbnetclassid,
+                                                          framename))
                     for rolearray in rolesarrays:
-                        if not rolearray: rolearray.append('')
-                    predicate = framenetframe.Predicate(0, 0, verbnet_frame_occurrence.predicate, verbnet_frame_occurrence.predicate, verbnet_frame_occurrence.tokenid)
+                        if not rolearray:
+                            rolearray.append('')
+                    predicate = framenetframe.Predicate(
+                        0, 0, verbnet_frame_occurrence.predicate,
+                        verbnet_frame_occurrence.predicate,
+                        verbnet_frame_occurrence.tokenid)
                     rolestuples = list(itertools.product(*rolesarrays))
                     self.logger.debug('rolesarrays: {}'.format(rolesarrays))
                     self.logger.debug('rolestuples: {}'.format(rolestuples))
                     for rolestuple in rolestuples:
                         # copy the VerbNet class args
-                        framenetframeargs = copy.deepcopy( verbnet_frame_occurrence.args )
+                        framenetframeargs = copy.deepcopy(verbnet_frame_occurrence.args)  # noqa
                         for role, arg in zip(rolestuple, framenetframeargs):
                             arg.role = role
-                        frameinstance = framenetframe.FrameInstance("", predicate, framenetframeargs, [], framename,verbnet_frame_occurrence.sentence_id)
+                        frameinstance = framenetframe.FrameInstance(
+                            "",
+                            predicate,
+                            framenetframeargs,
+                            [],
+                            framename,
+                            verbnet_frame_occurrence.sentence_id)
                         result.append(frameinstance)
         return result
-        

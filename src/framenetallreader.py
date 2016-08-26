@@ -19,14 +19,16 @@ class FNAllReader:
     This class will one day replace framenetparsedreader.
 
     :var annotations_path: str -- Path to framenet_parsed
-    :var add_non_core_args: boolean -- Indicates whether we also want non-core args
-    :var keep_unannotated: boolean -- Indicates whether we want to keep frames without arg annotations
+    :var add_non_core_args: boolean -- Indicates whether we also want non-core
+        args
+    :var keep_unannotated: boolean -- Indicates whether we want to keep frames
+        without arg annotations
     :var frames: FrameInstance List -- The collected frames
     """
 
     predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
     be_forms = ["am", "are", "be", "been", "being", "is", "was", "were",
-        "'m", "'re", "'s"]
+                "'m", "'re", "'s"]
 
     def __init__(self, add_non_core_args=True, keep_unannotated=False):
         self.add_non_core_args = add_non_core_args
@@ -51,7 +53,8 @@ class FNAllReader:
         for frame_instance in reader.frames:
             try:
                 sentence_tree_list = tree_dict[frame_instance.sentence_id]
-                self.add_syntactic_information(frame_instance, sentence_tree_list[0])
+                self.add_syntactic_information(frame_instance,
+                                               sentence_tree_list[0])
                 yield frame_instance
             except PredicateNotFound:
                 pass
@@ -60,7 +63,8 @@ class FNAllReader:
         """Load the syntactic annotations files.
         Not affected by newlines at the end of the file.
 
-        :param parse_filename: The FrameNet filepath, eg. path/to/ANC__110CYL072.conll
+        :param parse_filename: The FrameNet filepath,
+            eg. path/to/ANC__110CYL072.conll
         :type filename: str.
         :returns: list of trees
         """
@@ -71,14 +75,15 @@ class FNAllReader:
 
         tree_dict = {}
         for sentence_id, one_sentence_data in enumerate(sentences_data):
-            tree_dict[sentence_id] = SyntacticTreeBuilder(one_sentence_data).tree_list
+            tree_dict[sentence_id] = SyntacticTreeBuilder(one_sentence_data).tree_list  # noqa
 
         return tree_dict
 
     def add_syntactic_information(self, frame, sentence_tree):
         """
-        Add information to a frame using the syntactic annotation: whether it is
-        passive or not, and whether the predicate has been found in the tree.
+        Add information to a frame using the syntactic annotation: whether
+        it is passive or not, and whether the predicate has been found in the
+        tree.
 
         In some cases (five for the training set), our parser produces
         multiple roots, which mean the resulting tree could only cover one
@@ -94,11 +99,13 @@ class FNAllReader:
         # Search verb + passive status
         try:
             search = frame.predicate.text.split()[0].lower()
-            predicate_node = [node for node in frame.tree if node.word == search][0]
+            predicate_node = [node for node in frame.tree
+                              if node.word == search][0]
             frame.passive = FNAllReader.is_passive(predicate_node)
         except IndexError:
-            raise PredicateNotFound("\nframenetparsedreader : predicate \"{}\" not found in "
-                "sentence {}".format(search, frame.tree.flat()))
+            raise PredicateNotFound("\nframenetparsedreader : predicate"
+                                    " \"{}\" not found in sentence {}".format(
+                                        search, frame.tree.flat()))
 
         # Read headwords
         for i, arg in enumerate(frame.args):
