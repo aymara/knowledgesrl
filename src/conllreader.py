@@ -62,23 +62,56 @@ class SyntacticTreeNode:
         self.begin, self.end = None, None
 
     def __repr__(self):
-        if self.children:
-            children = " " + " ".join([str(t) for t in self.children])
-        else:
-            children = ""
+        children = " ".join([str(t.word_id) for t in self.children])
 
-        return "({}/{}/{}/{}/{} {}{})".format(self.pos, self.deprel,
-                                              self.position, self.begin,
-                                              self.end, self.word, children)
+        if self.father:
+            father = self.father.word_id
+        else:
+            father = ""
+
+        return "({}/{}/{}/{}/{}/{}/{}/{}/{} {})".format(
+            self.word_id,
+            father,
+            children,
+            self.pos,
+            self.deprel,
+            self.begin_word,
+            self.position,
+            self.begin,
+            self.end,
+            self.word) #, children)
+
+    def __eq__(self, other):
+        if isinstance(other, SyntacticTreeNode):
+            return ((self.word_id == other.word_id))
+        else:
+            return False
+
+    def __ne__(self, other):
+        return (not self.__eq__(other))
+
+    def __hash__(self):
+        return self.word_id
 
     def __iter__(self):
         for position, child in enumerate(self.children):
-            if position == self.position:
+            if child.word_id == self.word_id:
                 yield(self)
             for node in child:
-                yield node
+                if node in self.fathers():
+                    yield self
+                else:
+                    yield node
         if self.position == len(self.children):
             yield self
+
+    def fathers(self, previous=set()):
+        if self.father is not None and self.father not in previous:
+            result = previous
+            #import ipdb; ipdb.set_trace()
+            result.add(self.father)
+            return self.father.fathers(result)
+        return previous
 
     def flat(self):
         """Return the tokenized sentence from the parse tree."""
@@ -186,8 +219,8 @@ class SyntacticTreeBuilder():
                     self.node_dict[word_id].father = self.node_dict[father_id]
                     self.node_dict[father_id].children.append(self.node_dict[word_id])  # noqa
                 except KeyError:
-                    self.logger.error('father id {} and/or word_id {} not '
-                                      'found in CoNLL tree {}'.format(
+                    self.logger.error('father id {} and/or word_id {} not found in CoNLL tree {}'
+                                      ''.format(
                                           father_id,
                                           word_id,
                                           conll_tree))
@@ -290,7 +323,12 @@ class ConllSemanticAppender():
 
         # compute the predicates string, concatenation of the possible
         # frames names
-        self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][11] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
+        if frame_annotations[0].predicate.tokenid+notFirstSentenceShift < len(self.conll_matrix[frame_annotations[0].sentence_id]):
+            self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][11] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
+        else:
+            self.logger.error("add_framenet_frame_annotation got token number "
+                              "larger than conll_matrix for current sentence")
+            return
 
         # Add new column to place the new roles
         self.add_new_column(frame_annotations[0].sentence_id)
@@ -307,7 +345,8 @@ class ConllSemanticAppender():
             self.logger.debug(
                 'add_framenet_frame_annotation roleset: {}'.format(
                     roleset_str))
-            self.conll_matrix[frame_annotations[0].sentence_id][position+notFirstSentenceShift][-1] = roleset_str  # noqa
+            if position+notFirstSentenceShift < len(self.conll_matrix[frame_annotations[0].sentence_id]):
+                self.conll_matrix[frame_annotations[0].sentence_id][position+notFirstSentenceShift][-1] = roleset_str  # noqa
 
     def dump_semantic_file(self, filename):
         with open(filename, 'w') as semantic_file:

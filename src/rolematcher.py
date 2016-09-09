@@ -58,10 +58,12 @@ class VnFnRoleMatcher():
     :var issues: used to store statistics about the problem encoutered
     """
 
-    def __init__(self, path):
+    def __init__(self, path, frameNet):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(options.Options.loglevel)
         self.logger.debug('VnFnRoleMatcher({})'.format(path))
+
+        self.frameNet = frameNet
 
         # 4-dimensions matrix :
         # self.fn_roles[fn_role][fn_frame][vn_class][i] is the
@@ -229,6 +231,7 @@ class VnFnRoleMatcher():
             verbnetclassid = verbnetclassname.split('-', 1)[1]
             framenames = self.verbnetclass_to_framenetframes[
                 match['vnframe'].vnclass.split('-', 1)[1]]
+            framenames = self.filter_frame_names(framenames, verbnet_frame_occurrence.predicate)
             for framename in framenames:
                 if framename not in allframenames:
                     allframenames.add(framename)
@@ -285,3 +288,19 @@ class VnFnRoleMatcher():
                             verbnet_frame_occurrence.sentence_id)
                         result.append(frameinstance)
         return result
+
+    def filter_frame_names(self, framenames, predicate):
+        self.logger.debug("filter_frame_names filtering predicate {} from frames {}".format(predicate, framenames))
+        result = set()
+        #print("frameNet frames: {}".format(self.frameNet.frames))
+        for framename in framenames:
+            self.logger.debug("filter_frame_names frame {} lexical units: {}".format(framename, self.frameNet.frames[framename].lexicalUnits))
+            if "{}.v".format(predicate) in self.frameNet.frames[framename].lexicalUnits:
+                result.add(framename)
+            else:
+                self.logger.debug("filter_frame_names filtering out {} for predicate {}".format(framename, predicate))
+        if (result):
+            return result
+        else:
+            self.logger.debug("filter_frame_names everything is filtered out. returning all frame names: {}".format(framenames))
+            return framenames

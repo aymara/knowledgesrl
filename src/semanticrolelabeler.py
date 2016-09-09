@@ -21,6 +21,7 @@ import dumper
 import corpuswrapper
 import rolematcher
 import stats
+import framenet
 from options import FrameLexicon
 
 
@@ -54,13 +55,17 @@ class SemanticRoleLabeler:
                          "Labeller with argv: {}".format(argv))
 
         """ Load resources """
+        self.frameNet = framenet.FrameNet()
+        self.logger.info("Loading FrameNet...")
+        framenet.FrameNetReader(paths.Paths.framenet_path(options.Options.language), self.frameNet)
+        #print("SemanticRoleLabeler framenet frames: {}".format(self.frameNet.frames))
         self.logger.info("Loading VerbNet...")
         self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(
             paths.Paths.verbnet_path(options.Options.language))
         self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.
-                                                        VNFN_MATCHING)
-        self.model = probabilitymodel.ProbabilityModel(self.verbnet_classes, 0)
-
+                                                        VNFN_MATCHING,
+                                                        self.frameNet)
+        
     def annotate(self, conllinput=None, language=None):
         """ Run the semantic role labelling
 
@@ -71,12 +76,17 @@ class SemanticRoleLabeler:
         corresponding to the frames and roles found
         """
         self.logger.info("annotate: {} {}".format(language, conllinput))
+        model = probabilitymodel.ProbabilityModel(self.verbnet_classes, 0)
         if language is not None:
             options.Options.language = language
 
         tmpfile = None
         if conllinput is not None:
-            tmpfile = tempfile.NamedTemporaryFile(delete=False)
+            if options.Options.debug:
+                tmpfile = tempfile.NamedTemporaryFile(delete=False)
+                self.logger.error('Debug mode: will not delete temporary file {}'.format(tmpfile.name))
+            else:
+                tmpfile = tempfile.NamedTemporaryFile(delete=True)
             tmpfile.write(bytes(conllinput, 'UTF-8'))
             tmpfile.seek(0)
             options.Options.conll_input = tmpfile.name
@@ -92,6 +102,7 @@ class SemanticRoleLabeler:
         for annotated_frames, vn_frames in corpuswrapper.get_frames(
                 options.Options.corpus,
                 self.verbnet_classes,
+                self.frameNet,
                 options.Options.argument_identification):
             all_matcher = []
             #
@@ -164,14 +175,14 @@ class SemanticRoleLabeler:
                         data_restr[restr].update([word])
 
                 # Update probability model data (but take no decision)
-                vnclass = self.model.add_data_vnclass(matcher)
+                vnclass = model.add_data_vnclass(matcher)
                 if not options.Options.bootstrap:
                     for roles, slot_type, prep in zip(
                         frame_occurrence.roles, frame_occurrence.slot_types,
                         frame_occurrence.slot_preps
                     ):
                         if len(roles) == 1:
-                            self.model.add_data(slot_type, next(iter(roles)),
+                            model.add_data(slot_type, next(iter(roles)),
                                                 prep, predicate, vnclass)
 
                 if options.Options.debug and set() in frame_occurrence.roles:
@@ -192,7 +203,7 @@ class SemanticRoleLabeler:
         self.logger.info("Probability models...")
         if options.Options.bootstrap:
             self.logger.info("Applying bootstrap...")
-            bootstrap_algorithm(all_vn_frames, self.model,
+            bootstrap_algorithm(all_vn_frames, model,
                                 self.verbnet_classes)
         elif options.Options.probability_model is not None:
             self.logger.info("Applying probability model...")
@@ -203,7 +214,7 @@ class SemanticRoleLabeler:
                 #     roles_for_slot = frame_occurrence.roles[i]
                 for i, roles_for_slot in enumerate(frame_occurrence.roles):
                     if len(roles_for_slot) > 1:
-                        new_role = self.model.best_role(
+                        new_role = model.best_role(
                             roles_for_slot,
                             frame_occurrence.slot_types[i],
                             frame_occurrence.slot_preps[i],

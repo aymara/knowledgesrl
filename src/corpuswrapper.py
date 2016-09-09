@@ -25,7 +25,7 @@ import rolematcher
 
 import logging
 
-def get_frames(corpus, verbnet_classes, argid=False):
+def get_frames(corpus, verbnet_classes, frameNet, argid=False):
     """ Fills two list of the same size with content dependent of the kind of input
     
     The two lists are annotation_list and parsed_conll_list
@@ -47,7 +47,7 @@ def get_frames(corpus, verbnet_classes, argid=False):
 
     if options.Options.corpus == 'FrameNet':
         logger.info("Loading FrameNet and VerbNet role mappings %s ..."%paths.Paths.VNFN_MATCHING)
-        role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING)
+        role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING, frameNet)
 
         for annotation_file, parsed_conll_file in zip(annotation_list, parsed_conll_list):
             logger.debug("Handling {} {}" .format(annotation_file, parsed_conll_file))

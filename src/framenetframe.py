@@ -3,6 +3,47 @@
 
 """Frames definitions, frames instances, its arguments and predicates."""
 
+class SemantiType:
+    """ A semantic type as defined by FrameNet"""
+
+    def __init__(self, name, id):
+        # nothing
+        self.name = name
+        self.id = id
+
+class FrameElement:
+    """ A FrameNet frame element
+
+    :var name: the name of the frame element, e.g.: Activity
+    :var id: int. The frame element id
+    :var abbreviation: the abbreviated frame element name
+    :var coreType: express wether the frame element is a core element or not, etc.
+    :var definition: the text difining the frame element semantics
+    :var creator: (xml attribute cBy) creator id
+    :var creationDate: (xml attribute cDate) creation date
+    :var semanticType: name of the SemantiType of this frame. Can be None
+    """
+
+    def __init__(self, name, id):
+        # nothing
+        self.name = name
+        self.id = id
+
+class LexicalUnit:
+    """
+        <lexUnit nbocc="108" inhib_in_lexicon="false" lemma_is_annotated="true">
+        <sentenceCount annotated="0"/>
+        <otherlexUnit framename="FR_Purpose" ID="2224" annotatedsent="33"/>
+        <otherlexUnit framename="Other_sense" ID="100809" annotatedsent="54"/>
+        </lexUnit>
+    """
+    
+    def __init__(self, pos, name, id):
+        # nothing
+        self.pos = pos
+        self.name = name
+        self.id = id
+
 
 class FrameDefinition:
     """A frame structure as defined by FrameNet
@@ -10,32 +51,34 @@ class FrameDefinition:
     :var name: the name of the frame, e.g.: Ingestion
     :var id: int. The frame id
     :var definition: the text difining the frame semantics
+    :var creator: (xml attribute cBy) creator id
+    :var creationDate: (xml attribute cDate) creation date
+    :var semanticType: name of the SemantiType of this frame. Can be None
     :var elements: a map associating frame element names to their
             definition
     :var relations: a map associating relation type names to a set of
-            frame names
+    frame names (e.g. {"Has Subframe(s)" : [Activity_finish, Activity_ongoing, … ], … })
     :var lex_units: a map associating "lemma.pos_tag" to the details of this 
-            lexical unit
-    :var headwords:
-    :var sentence_id: id of thesentencewhere is this frame instance in the
-            CONLL file
+            lexical unit (LexicalUnit)
 
-    """
 
-    def __init__(self, name):
+"""
+
+    def __init__(self, name, id):
         # nothing
         self.name = name
+        self.id = id
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
                 self.id == other.id)
 
     def __str__(self):
-        return "FrameInstance({}, {})".format(
+        return "FrameDefinition({}, {})".format(
             self.name, self.id)
 
     def __repr__(self):
-        return ("FrameInstance(name={}, id={})".format(self.name, self.id))
+        return ("FrameDefinition(name={}, id={})".format(self.name, self.id))
 
 
 class FrameInstance:
@@ -202,7 +245,8 @@ class Predicate:
         self.tokenid = tokenid
 
     def __repr__(self):
-        return "Predicate({}, {})".format(self.text, self.lemma)
+        return "Predicate({}, {}, {}, {}, {})".format(
+            self.text, self.lemma, self.tokenid, self.begin, self.end)
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
