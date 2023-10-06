@@ -102,6 +102,8 @@ class VnFnRoleMatcher():
                     fn_role, vn_role,
                     fn_frame, vn_class)
         self._build_frames_vnclasses_mapping()
+        self.logger.debug('VnFnRoleMatcher verbnetclass_to_framenetframes: '
+            '{}'.format(self.verbnetclass_to_framenetframes))
 
     def _handle_co_roles(self, vn_role):
         if vn_role[-1] == "1":
@@ -166,6 +168,9 @@ class VnFnRoleMatcher():
         :returns: str List -- The list of VN roles
         """
 
+        logger = logging.getLogger(__name__)
+        logger.setLevel(options.Options.loglevel)
+        logger.debug('possible_vn_roles {}, {}, {}'.format(fn_role, fn_frame, vn_classes))
         if fn_role not in self.fn_roles:
             raise RoleMatchingError(
                 "{} role does not seem"
@@ -222,16 +227,24 @@ class VnFnRoleMatcher():
         :var verbnet_frame_occurrence: VerbnetFrameOccurrence
         return a FrameInstance list
         """
+        
         result = []
         allframenames = set()
         self.logger.debug('possible_framenet_mappings {}'
                           .format(verbnet_frame_occurrence))
         for match in verbnet_frame_occurrence.best_matches:
             verbnetclassname = match['vnframe'].vnclass
-            verbnetclassid = verbnetclassname.split('-', 1)[1]
-            framenames = self.verbnetclass_to_framenetframes[
-                match['vnframe'].vnclass.split('-', 1)[1]]
+            self.logger.debug('possible_framenet_mappings verbnetclassname: {}'
+                              .format(verbnetclassname))
+            verbnetclassid = verbnetclassname.split('-')[1]
+            self.logger.debug('possible_framenet_mappings verbnetclassid: {}'
+                              .format(verbnetclassid))
+            framenames = self.verbnetclass_to_framenetframes[verbnetclassid]
+            self.logger.debug('possible_framenet_mappings framenames: {}'
+                              .format(framenames))
             framenames = self.filter_frame_names(framenames, verbnet_frame_occurrence.predicate)
+            self.logger.debug('possible_framenet_mappings framenames after filtering: {}'
+                              .format(framenames))
             for framename in framenames:
                 if framename not in allframenames:
                     allframenames.add(framename)

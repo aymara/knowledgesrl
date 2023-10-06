@@ -13,7 +13,6 @@ Defines a unique function: get_frames
 from pathlib import Path
 
 from framenetallreader import FNAllReader
-from conllparsedreader import ConllParsedReader
 from verbnetframe import VerbnetFrameOccurrence
 import errorslog
 import roleextractor
@@ -32,7 +31,8 @@ def get_frames(corpus, verbnet_classes, frameNet, argid=False):
     """
     logger = logging.getLogger(__name__)
     logger.setLevel(options.Options.loglevel)
-    logger.debug("get_frames corpus={} input={}".format(corpus,options.Options.conll_input))
+    logger.debug("get_frames corpus={} input={}".format(
+        corpus,options.Options.conll_input))
 
     if options.Options.conll_input is not None:
         annotation_list = [None]
@@ -54,7 +54,6 @@ def get_frames(corpus, verbnet_classes, frameNet, argid=False):
             file_stem = annotation_file.stem if annotation_file else parsed_conll_file.stem
             annotated_frames = []
             vn_frames = []
-            conllparsed_reader = ConllParsedReader()
 
             if argid:
                 logger.debug("Argument identification")
@@ -64,12 +63,16 @@ def get_frames(corpus, verbnet_classes, frameNet, argid=False):
                 arg_guesser = argguesser.ArgGuesser(verbnet_classes)
 
                 # Many instances are not actually FrameNet frames
-                new_frame_instances = list(arg_guesser.frame_instances_from_file(
-                    conllparsed_reader.sentence_trees(parsed_conll_file), parsed_conll_file))
+                new_frame_instances = list(
+                    arg_guesser.frame_instances_from_file(
+                        parsed_conll_file
+                        )
+                    )
                 new_annotated_frames = roleextractor.fill_gold_roles(
                     new_frame_instances, annotation_file, parsed_conll_file,
                     verbnet_classes, role_matcher)
-
+                logger.debug('got nb new_annotated_frames: {}'.format(len(new_annotated_frames)))
+                
                 for gold_frame, frame_instance in zip(new_annotated_frames, new_frame_instances):
                     annotated_frames.append(gold_frame)
                     vn_frames.append(VerbnetFrameOccurrence.build_from_frame(gold_frame, conll_frame_instance=frame_instance))

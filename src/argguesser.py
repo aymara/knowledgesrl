@@ -7,6 +7,7 @@
 
 """
 
+from conllparsedreader import ConllParsedReader
 from framenetframe import FrameInstance, Predicate, Word, Arg
 from verbnetprepclasses import all_preps
 from argheuristic import find_args
@@ -26,7 +27,7 @@ class ArgGuesser():
 
     """
 
-    predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
+    predicate_pos = ["VERB", "MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
                      # French tags:
                      "V", "VIMP", "VINF", "VPP", "VPR", "VS"]
 
@@ -59,6 +60,7 @@ class ArgGuesser():
         "JJR": "NP",  # Comparative
         "JJS": "NP",  # Superlative
         "MD": "S",    # Modal verb
+        "NOUN": "NP", 
         "NN": "NP", 
         "NNP": "NP", 
         "NNPS": "NP", 
@@ -69,6 +71,7 @@ class ArgGuesser():
         "PRP": "NP",
         "RB": "ADV",
         "TO": "to S",
+        "VERB": "S",  # Base form of a verb
         "VB": "S",  # Base form of a verb
         "VBD": "S", 
         "VBG": "S_ING",
@@ -89,23 +92,29 @@ class ArgGuesser():
     def __init__(self, frames_for_verb):
         self.frames_for_verb = frames_for_verb
 
-    def frame_instances_from_file(self, sentence_trees, filename):
+    def frame_instances_from_file(self, filename):
         """ Extracts frames from one file and iterate over them """
-        logger.debug("frame_instances_from_file %s"%filename)
-        for sentence_id, sentence, tree in sentence_trees:
-            for frame in self._sentence_predicates_iterator(sentence_id, sentence, tree, filename):
+        logger = logging.getLogger(__name__)
+        logger.setLevel(options.Options.loglevel)
+        logger.debug('frame_instances_from_file {}'.format(filename))
+        conllparsed_reader = ConllParsedReader()
+        for sentence_id, sentence, tree in conllparsed_reader.sentence_trees(filename):
+            for frame in self._sentence_predicates_iterator(sentence_id, 
+                                                            sentence, 
+                                                            tree, 
+                                                            filename):
                 yield frame
 
     def _sentence_predicates_iterator(self, sentence_id, sentence, tree, filename):
         """ Extracts frames from one sentence and iterate over them """
-        logger.debug("_sentence_predicates_iterator %s"%sentence_id)
+        logger.debug('_sentence_predicates_iterator {} {} {}'.format(sentence_id, sentence, tree))
         for node in tree:
             # For every verb, looks for its infinitive form in VerbNet, and
             # builds a frame occurrence if it is found
             logger.debug("_sentence_predicates_iterator on %s"%node.lemma)
             
             if node.lemma not in self.frames_for_verb:
-                #logger.debug("_sentence_predicates_iterator node.lemma {} not in frames_for_verb".format(node.lemma))
+                logger.debug("_sentence_predicates_iterator node.lemma {} not in frames_for_verb".format(node.lemma))
                 continue
 
             if self._is_predicate(node):

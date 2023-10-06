@@ -414,6 +414,8 @@ class VerbnetReader:
 
 
 def init_verbnet(path):
+    logger = logging.getLogger(__name__)
+    logger.setLevel(options.Options.loglevel)
     logger.info("Loading VerbNet data from {}...".format(path))
     reader = VerbnetReader(path)
     errors["vn_parsing"] = reader.unhandled

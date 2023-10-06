@@ -11,7 +11,11 @@ errors = {
     "frame_without_slot": [],
     "frame_with_slot": [],
     "impossible_role_matching": [],
-    "ambiguous_role": []
+    "ambiguous_role": [],
+    'missing_predicate_data' : [],
+    'unannotated_layer' : [],
+    'predicate_was_arg' : [],
+    'missing_phrase_type' : []
 }
 
 debug_data = []
@@ -73,10 +77,14 @@ def display_errors_num():
         "Ignored {} FrameNet frames which predicate was not in VerbNet\n"
         "Ignored {} empty FrameNet frames\n"
         "Was not able to compare {} roles\n\n".format(
-            len(errors["vn_parsing"]), len(errors["missing_predicate_data"]),
-            len(errors["unannotated_layer"]), len(errors["predicate_was_arg"]),
-            len(errors["missing_phrase_type"]), len(errors["vn_missing"]),
-            len(errors["frame_without_slot"]), len(errors["impossible_role_matching"]))
+            len(errors["vn_parsing"]), 
+            len(errors["missing_predicate_data"]),
+            len(errors["unannotated_layer"]), 
+            len(errors["predicate_was_arg"]),
+            len(errors["missing_phrase_type"]), 
+            len(errors["vn_missing"]),
+            len(errors["frame_without_slot"]), 
+            len(errors["impossible_role_matching"]))
     )
 
 
@@ -86,7 +94,9 @@ def display_mapping_errors():
         print(data)
         predicate_errors[data['predicate']] += 1
     print(predicate_errors.most_common(10))
-    print("Mapping errors for {} of {} predicates.".format(len(errors['frame_without_slot']), len(errors['frame_without_slot']) + len(errors['frame_with_slot'])))
+    print("Mapping errors for {} of {} predicates.".format(
+        len(errors['frame_without_slot']), 
+        len(errors['frame_without_slot']) + len(errors['frame_with_slot'])))
 
 
 def display_error_details():
@@ -102,9 +112,9 @@ def display_error_details():
     pass
 
 
-def display_debug(n):
-    random.shuffle(debug_data)
-    for i in range(0, n):
+def display_debug():
+#    random.shuffle(debug_data)
+    for i in range(0, len(debug_data)):
         print(debug_data[i]["sentence"])
         print("Predicate : "+debug_data[i]["predicate"])
         print("Structure : "+" ".join(debug_data[i]["structure"]))

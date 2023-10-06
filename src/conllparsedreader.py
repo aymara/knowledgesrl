@@ -13,7 +13,10 @@ import options
 import logging
 
 class ConllParsedReader:
-    """ Reads the syntactic parser output to  build the corresponding syntactic trees. """
+    """
+    Reads the syntactic parser output to  build the corresponding syntactic
+    trees.
+    """
 
     def sentence_trees(self, filename):
         """Yield all sentence trees from filename in order.
@@ -33,6 +36,8 @@ class ConllParsedReader:
                 del sentences_data[len(sentences_data) - 1]
 
         for sentence_id, sentence in enumerate(sentences_data):
+            logger.debug('ConllParsedReader.sentence_trees sentence_id: {}; sentence:\n{}'.format(sentence_id, sentence))
             tree_builder = SyntacticTreeBuilder(sentence)
             for tree in tree_builder.tree_list:
+                logger.debug('ConllParsedReader.sentence_trees yielding tree_builder: {}; tree: {}'.format(tree_builder, tree))
                 yield sentence_id, tree_builder.sentence, tree

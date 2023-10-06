@@ -7,7 +7,7 @@ import optionsparsing
 from collections import Counter
 import tempfile
 import errorslog
-from errorslog import log_debug_data, display_debug
+from errorslog import *
 from bootstrap import bootstrap_algorithm
 from verbnetrestrictions import NoHashDefaultDict
 import logging
@@ -46,13 +46,14 @@ sys.excepthook = info
 class SemanticRoleLabeler:
     def __init__(self, argv):
         optionsparsing.Options(argv)
-        paths.Paths()
         options.Options()
+        paths.Paths()
         logging.basicConfig(level=options.Options.loglevel)
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(options.Options.loglevel)
         self.logger.info("Creating Semantic Role "
                          "Labeller with argv: {}".format(argv))
+        self.logger.info('Options: {}'.format(options.Options.framelexicon))
 
         """ Load resources """
         self.frameNet = framenet.FrameNet()
@@ -95,7 +96,7 @@ class SemanticRoleLabeler:
         all_annotated_frames = []
         all_vn_frames = []
 
-        self.logger.info("Loading gold annotations "
+        self.logger.info("annotate: loading gold annotations "
                          "and performing frame matching...")
         # annotated_frames: list of FrameInstance
         # vn_frames: list of VerbnetFrameOccurrence
@@ -104,6 +105,8 @@ class SemanticRoleLabeler:
                 self.verbnet_classes,
                 self.frameNet,
                 options.Options.argument_identification):
+            self.logger.debug('annotate: handling a pair annotated_frames, '
+                              'vn_frames of size {}'.format(len(vn_frames)))
             all_matcher = []
             #
             # Frame matching
@@ -117,6 +120,9 @@ class SemanticRoleLabeler:
                                                     vn_frames):
                 if gold_frame.predicate.lemma not in self.frames_for_verb:
                     errorslog.log_vn_missing(gold_frame)
+                    self.logger.debug('gold_frame predicate lemma "{}" not in '
+                                      '{}'.format(gold_frame.predicate.lemma,
+                                                  self.frames_for_verb))
                     continue
 
                 stats.stats_data["frames_with_predicate_in_verbnet"] += 1
@@ -139,6 +145,7 @@ class SemanticRoleLabeler:
                 if frame_occurrence.num_slots == 0:
                     errorslog.log_frame_without_slot(gold_frame,
                                                      frame_occurrence)
+                    self.logger.debug('frame occurrence has no slot set {} {}'.format(gold_frame, frame_occurrence))
                     frame_occurrence.matcher = None
                     continue
 
@@ -159,6 +166,7 @@ class SemanticRoleLabeler:
                     else:
                         frames_to_be_matched.append(verbnet_frame)
 
+                self.logger.debug('there is {} frames to be matched'.format(len(frames_to_be_matched)))
                 # Actual frame matching
                 matcher.perform_frame_matching(frames_to_be_matched)
 
@@ -246,7 +254,12 @@ class SemanticRoleLabeler:
                                           "output {}".format(options.Options.
                                                              framelexicon))
             if options.Options.conll_output is None:
-                self.logger.debug('\n{}'.format(str(semantic_appender)))
+                self.logger.debug('\nannotate: result {}'.format(str(semantic_appender)))
+                if options.Options.debug:
+                    display_debug()
+                    display_errors_num()
+                    display_error_details()
+                    display_mapping_errors()
                 return str(semantic_appender)
             else:
                 semantic_appender.dump_semantic_file(options.Options.

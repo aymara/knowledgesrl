@@ -144,6 +144,9 @@ class VerbnetFrameOccurrence(ComputeSlotTypeMixin):
     def __init__(self, structure, num_slots, predicate, headwords=None,
                  best_matches=None, tokenid=-1, sentence_id=-1, args=None,
                  tree=None):
+        logger = logging.getLogger(__name__)
+        logger.setLevel(options.Options.loglevel)
+        logger.debug('VerbnetFrameOccurrence {}, {}, {}'.format(structure, num_slots, predicate))
         self.structure = structure
         self.num_slots = num_slots
         self.predicate = predicate

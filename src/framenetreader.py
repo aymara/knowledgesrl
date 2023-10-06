@@ -44,6 +44,7 @@ class FulltextReader:
         "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
         "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
         "VH", "VHD", "VHG", "VHN", "VHP", "VHZ",
+        "VERB"
         # French tags:
         "V", "VIMP", "VINF", "VPP", "VPR", "VS"]
 

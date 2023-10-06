@@ -198,6 +198,8 @@ class Options:
                 if value not in Options.loglevels:
                     raise Exception("Unknown log level {}. loglevels are: {}".format(value,loglevels))
                 Options.loglevel = Options.loglevels[value]
+                if Options.loglevel == logging.DEBUG:
+                    Options.debug = True
             elif opt == "--frame-lexicon":
                 if value not in Options.framelexicons:
                     raise Exception("Unknown frame lexicon {}. known values are: {}".format(value,Options.framelexicons))

@@ -16,7 +16,8 @@ class Options:
             "best-gold", "best-auto",
             # tuning algorithms
             "fmatching-algo=", "add-non-core-args", "model=", "bootstrap",
-            "argument-identification", "heuristic-rules", "passivize", "semantic-restrictions", "wordnet-restrictions",
+            "argument-identification", "heuristic-rules", "passivize", 
+            "semantic-restrictions", "wordnet-restrictions",
             # what do we annotate?
             "conll_input=", "conll_output=", "corpus=", "training-set", "lu",
             # what kind of output do we want

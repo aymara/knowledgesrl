@@ -69,7 +69,7 @@ class SyntacticTreeNode:
         else:
             father = ""
 
-        return "({}/{}/{}/{}/{}/{}/{}/{}/{} {})".format(
+        return "node(id: {}; father: {}; children: {}; pos: {}; deprel: {}; begin_word: {}; position: {}; begin: {}; end: {}; word: {})".format(
             self.word_id,
             father,
             children,
@@ -102,8 +102,10 @@ class SyntacticTreeNode:
                     yield self
                 else:
                     yield node
-        if self.position == len(self.children):
-            yield self
+# GC20171122: commented out below because the root predicate was not yielded. 
+# Is it an error in building the position attribute ?
+        #if self.position == len(self.children):
+        yield self
 
     def fathers(self, previous=set()):
         if self.father is not None and self.father not in previous:
@@ -192,7 +194,7 @@ class SyntacticTreeBuilder():
             deprel = deprel if deprel != '_' else 'ROOT'
 
             self.father_ids[word_id] = head
-
+            self.logger.debug('Add node: {}, {}, {}'.format(word_id, form,  deprel))
             self.node_dict[word_id] = SyntacticTreeNode(
                 word_id=word_id,
                 word=form,
@@ -211,6 +213,7 @@ class SyntacticTreeBuilder():
 
         self.sentence = ' '.join([self.node_dict[w_id].word
                                   for w_id in sorted(self.node_dict.keys())])
+        self.logger.debug('rebuilt sentence: {}'.format(self.sentence))
 
         # Record father/child relationship
         for word_id, father_id in self.father_ids.items():
@@ -240,10 +243,13 @@ class SyntacticTreeBuilder():
                 # Fill begin/end info
                 self.fill_begin_end(node)
                 # Fill forest of tree
+                self.logger.debug('add to tree_list: {}'.format(node))
+                
                 self.tree_list.append(node)
 
     def fill_begin_end(self, node):
         """Fill begin/end values of very subtree"""
+
         begin_words = [node.begin_word]
         end_words = [node.begin_word + len(node.word) - 1]
         for child in node.children:

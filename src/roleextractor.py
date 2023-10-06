@@ -13,6 +13,7 @@
 
 from collections import defaultdict
 import re
+import logging
 
 from framenetallreader import FNAllReader
 import options
@@ -20,7 +21,11 @@ from stats import stats_data
 from rolematcher import RoleMatchingError
 
 
-def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet_classes, role_matcher):
+def fill_gold_roles(frame_instances, 
+                    annotation_file, 
+                    parsed_conll_file, 
+                    verbnet_classes, 
+                    role_matcher):
     """Fill the roles of some frame instance arguments, when possible.
     
     Note: frame_instances must be sorted by sentence order.
@@ -33,6 +38,9 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     :type verbnet_classes: Str Dict.
     """
 
+    logger = logging.getLogger(__name__)
+    logger.setLevel(options.Options.loglevel)
+    logger.debug('fill_gold_roles {}, {}, {}'.format(frame_instances, annotation_file, parsed_conll_file))
     frames = defaultdict(lambda: defaultdict(list))
     for frame in frame_instances:
         # /path/to/stuff.conll -> stuff
@@ -45,6 +53,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     sentence_frames = []
     good_frames = 0
     for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
+        logger.debug('fill_gold_roles on frame {} with args {}'.format(frame, frame.args))
         for arg in frame.args:
             if not arg.instanciated:
                 continue
@@ -54,6 +63,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
                     arg.role,
                     fn_frame=frame.frame_name,
                     vn_classes=verbnet_classes[frame.predicate.lemma])
+                logger.debug('fill_gold_roles possible_roles={}'.format(possible_roles))
             except KeyError:
                 continue
             except RoleMatchingError:
@@ -95,6 +105,7 @@ def fill_gold_roles(frame_instances, annotation_file, parsed_conll_file, verbnet
     if options.Options.corpus_lu:
         frame_instances = [x for x in frame_instances if x.frame_name != ""]
 
+    logger.debug('fill_gold_roles return {} frame instances'.format(len(frame_instances)))
     return frame_instances
 
 
