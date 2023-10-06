@@ -1,4 +1,4 @@
-setuptools==9.1
+setuptools==65.5.1
 colorama==0.2.7
 Distance==0.1.3
 
