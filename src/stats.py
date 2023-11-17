@@ -149,17 +149,21 @@ def display_stats(argument_identification):
 
     total_classes = s['no_class'] + s['one_class'] + s['multiple_classes']
     assert total_classes == s['frames_evaluated']
-    frame_identification_precision = s["one_class__correct"] / s["one_class"]
-    frame_identification_recall = s["one_class__correct"] / total_classes
+    frame_identification_precision = 0 if s["one_class__correct"] == 0 else s["one_class__correct"] / s["one_class"]
+    frame_identification_recall = 0 if s["one_class__correct"] == 0 else s["one_class__correct"] / total_classes
     frame_identification_f1 = hmean(frame_identification_precision, frame_identification_recall)
+    multiple_precision = 0 if s["multiple_classes__correct"] == 0 else s["multiple_classes__correct"] / s["multiple_classes"]
+    no_frame = 0 if total_classes == 0 else s['no_class'] / total_classes
+    one_frame = 0 if total_classes == 0 else s['one_class'] / total_classes
+    multiple_frames = 0 if total_classes == 0 else s['multiple_classes'] / total_classes
 
     print("Frame identification              : {:.1%} precision, {:.1%} recall, {:1.1%} F1".format(frame_identification_precision, frame_identification_recall, frame_identification_f1))
-    print("       when multiple possibilities, {:.1%} precision".format(s["multiple_classes__correct"]/s["multiple_classes"]))
-    print("Among evaluated: no frame {:.1%}, one frame {:.1%}, multiple frames {:.1%}".format(s['no_class'] / total_classes, s['one_class'] / total_classes, s['multiple_classes'] / total_classes))
+    print("       when multiple possibilities, {:.1%} precision".format(multiple_precision))
+    print("Among evaluated: no frame {:.1%}, one frame {:.1%}, multiple frames {:.1%}".format(no_frame, one_frame, multiple_frames))
     print()
 
-    role_matching_precision = s["one_correct_role"] / unique_role_evaluated
-    role_matching_recall = (s["one_correct_role"] / (unique_role_evaluated + several_roles_evaluated + s["no_roles_evaluated"]))
+    role_matching_precision = 0 if unique_role_evaluated == 0 else s["one_correct_role"] / unique_role_evaluated
+    role_matching_recall = 0 if unique_role_evaluated == 0 else (s["one_correct_role"] / (unique_role_evaluated + several_roles_evaluated + s["no_roles_evaluated"]))
     role_matching_f1 = hmean(role_matching_precision, role_matching_recall)
 
     # * the reason this is low in argument identification compared to frameid 
@@ -169,7 +173,7 @@ def display_stats(argument_identification):
     # role. Another reason is that whenever multiple roles are possibles, that
     # doesn't count towards productivity. Even if productivity would stay under
     # 0.1, counting thoses cases would currently make productivity go from 0.12 to 0.25.
-    role_matching_productivity = s['one_role'] / s['args_instanciated']
+    role_matching_productivity = 0 if s['args_instanciated'] == 0 else s['one_role'] / s['args_instanciated']
     print("Role matching           (*{:.2f}x): {:.1%} precision, {:.1%} recall, {:.1%} F1".format(
         role_matching_productivity,
         role_matching_precision, role_matching_recall,
@@ -177,15 +181,20 @@ def display_stats(argument_identification):
     print("     when multiple possibilities, {:.1%} precision".format(s["several_roles_ok"] / max(several_roles_evaluated, 1)))
 
     evaluated_roles = s['no_roles_evaluated'] + unique_role_evaluated + several_roles_evaluated
+    no_match = 0 if evaluated_roles == 0 else s['no_roles_evaluated'] / evaluated_roles
+    one_role = 0 if evaluated_roles == 0 else unique_role_evaluated / evaluated_roles
+    several_roles = 0 if evaluated_roles == 0 else several_roles_evaluated / evaluated_roles
     print("Among evaluated: no match {:.1%} one role {:.1%} multiple roles {:.1%}".format(
-        s['no_roles_evaluated'] / evaluated_roles,
-        unique_role_evaluated / evaluated_roles,
-        several_roles_evaluated / evaluated_roles))
+        no_match,
+        one_role,
+        several_roles))
     print()
 
+    mapped_frames_over_all = 0 if s["frames"] == 0 else s["frames_mapped"] / s["frames"]
+    uniquely_mapped = 0 if s["args_instanciated"] == 0 else s["args_annotated_mapping_ok"] / s["args_instanciated"]
     print("Mapped {:.1%} of {} frames, uniquely mapped {:.1%} of {} arguments".format(
-        s["frames_mapped"]/s["frames"], s["frames"],
-        s["args_annotated_mapping_ok"]/s["args_instanciated"], s["args_instanciated"]))
+        mapped_frames_over_all, s["frames"],
+        uniquely_mapped, s["args_instanciated"]))
 
     good_slots = s["one_correct_role"] + s["several_roles_ok"]
     precision = good_slots / max(s["attributed_roles_mapping_ok"], 1)
@@ -263,8 +272,8 @@ def vnclass_to_normalized_name(vnclass):
     raise Exception('Impossible VerbNet class {}'.format(vnclass))
 
 
-def stats_quality(annotated_frames, vn_frames, frames_for_verb, verbnet_classes, argument_identification):
-    role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING)
+def stats_quality(annotated_frames, vn_frames, frames_for_verb, verbnet_classes, argument_identification, frame_net):
+    role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING, frame_net)
     # This variable is not handled here for non-gold args, because
     # annotated_frame contains only extracted frames at this point and
     # args_annotated_mapping_ok is related to gold annotated frames

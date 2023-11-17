@@ -36,7 +36,7 @@ class Paths:
         elif language == 'eng':
             return Paths.ROOT / "fndata-1.5/"
         else:
-            print("Unhandled language {}".format(value))
+            print(f"Unhandled language {language}")
             exit(1)
 
     @staticmethod

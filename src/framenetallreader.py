@@ -47,6 +47,7 @@ class FNAllReader:
         logger.setLevel(options.Options.loglevel)
         logger.debug('iter_frames {}, {}'.format(annotation_file, parse_file))
         self.stats["files"] += 1
+
         tree_dict = self.read_syntactic_parses(parse_file)
 
         reader = framenetreader.FulltextReader(

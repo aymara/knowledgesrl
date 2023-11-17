@@ -179,14 +179,20 @@ class SyntacticTreeBuilder():
         begin = 0
         linenum = 0
         for l in conll_tree.splitlines():
-            try:
-                linenum += 1
-                """Columns from
-                https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
+            linenum += 1
+            """Columns from
+            https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
+            split_line = l.split("\t")
+            if len(split_line) == 11:
                 word_id, form, lemma, cpos, pos, namedEntityType, features,\
-                    head, deprel, phead, pdeprel = l.split("\t")
-            except ValueError:
-                self.logger.warn('Wrong number of columns (expected 11) in '
+                head, deprel, phead, pdeprel = l.split("\t")
+            elif len(split_line) == 10:
+                word_id, form, lemma, cpos, pos, features,\
+                head, deprel, phead, pdeprel = l.split("\t")
+                namedEntityType = '_'
+            else:
+                self.logger.warn('Wrong number of columns ('
+                                 'expected 10 or 11) in '
                                  'line {}: "{}"\n'.format(linenum, l))
                 continue
             word_id = int(word_id)
@@ -318,13 +324,13 @@ class ConllSemanticAppender():
         All frame instances are supposed to be from the same sentence.
         """
         self.logger.info("add_framenet_frame_annotation frame instance list: [{}]".format(','.join(str(x) for x in frame_annotations)))  # noqa
-        if len(frame_annotations) is 0:
+        if len(frame_annotations) == 0:
             return
 
         # Must shift annotations one line up on first sentence because
         # there is no previous sentence punctuation.
         notFirstSentenceShift = 0
-        if frame_annotations[0].sentence_id is 0:
+        if frame_annotations[0].sentence_id == 0:
             notFirstSentenceShift = -1
 
         # compute the predicates string, concatenation of the possible

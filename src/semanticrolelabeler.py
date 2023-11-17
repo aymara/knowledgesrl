@@ -57,15 +57,17 @@ class SemanticRoleLabeler:
 
         """ Load resources """
         self.frameNet = framenet.FrameNet()
-        self.logger.info("Loading FrameNet...")
-        framenet.FrameNetReader(paths.Paths.framenet_path(options.Options.language), self.frameNet)
-        #print("SemanticRoleLabeler framenet frames: {}".format(self.frameNet.frames))
-        self.logger.info("Loading VerbNet...")
-        self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(
-            paths.Paths.verbnet_path(options.Options.language))
-        self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.
-                                                        VNFN_MATCHING,
-                                                        self.frameNet)
+        if options.Options.framelexicon == FrameLexicon.FrameNet:
+            self.logger.info("Loading FrameNet...")
+            framenet.FrameNetReader(paths.Paths.framenet_path(options.Options.language), self.frameNet)
+            #print("SemanticRoleLabeler framenet frames: {}".format(self.frameNet.frames))
+        elif options.Options.framelexicon == FrameLexicon.VerbNet:
+            self.logger.info("Loading VerbNet...")
+            self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(
+                paths.Paths.verbnet_path(options.Options.language))
+            self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.
+                                                            VNFN_MATCHING,
+                                                            self.frameNet)
         
     def annotate(self, conllinput=None, language=None):
         """ Run the semantic role labelling
@@ -270,7 +272,7 @@ class SemanticRoleLabeler:
             stats.stats_quality(
                 all_annotated_frames, all_vn_frames,
                 self.frames_for_verb, self.verbnet_classes,
-                options.Options.argument_identification)
+                options.Options.argument_identification, self.frameNet)
             stats.display_stats(options.Options.argument_identification)
 
             if options.Options.dump:

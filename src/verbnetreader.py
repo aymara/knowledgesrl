@@ -65,6 +65,10 @@ class VerbnetReader:
 
         for xml_role in xml_class.find("THEMROLES"):
             role_list.append(xml_role.attrib["type"])
+            # find if role is indeed restricted or if it is a dummy role
+            # (e.g. "Agent" in "to be born")
+            # Else: add None
+            # Further processing is done in _build_frame
             if xml_role.find("SELRESTRS"):
                 restrictions.append(
                     VNRestriction.build_from_xml(xml_role.find("SELRESTRS")))
