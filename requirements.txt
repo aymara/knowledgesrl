@@ -1,6 +1,7 @@
-setuptools==65.5.1
-colorama==0.2.7
-Distance==0.1.3
+setuptools
+colorama
+Distance
+ipdb
 
--e git://github.com/pquentin/nltk.git@verbnet#egg=nltk
+# -e git://github.com/pquentin/nltk.git@verbnet#egg=nltk
 
