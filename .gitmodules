@@ -12,3 +12,6 @@
 	path = data/fndata-asfalda
 	url = ssh://git@is154588.intra.cea.fr:10122/multimedia/asfalda/french-framenet.git
 	branch = main
+[submodule "data/french-framenet-corpus"]
+	path = data/french-framenet-corpus
+	url = ssh://git@is154588.intra.cea.fr:10122/multimedia/asfalda/french-framenet-corpus.git
