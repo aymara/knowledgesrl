@@ -63,11 +63,11 @@ class SemanticRoleLabeler:
             #print("SemanticRoleLabeler framenet frames: {}".format(self.frameNet.frames))
         elif options.Options.framelexicon == FrameLexicon.VerbNet:
             self.logger.info("Loading VerbNet...")
-            self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(
-                paths.Paths.verbnet_path(options.Options.language))
             self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.
                                                             VNFN_MATCHING,
                                                             self.frameNet)
+        self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(
+            paths.Paths.verbnet_path(options.Options.language))
         
     def annotate(self, conllinput=None, language=None):
         """ Run the semantic role labelling
