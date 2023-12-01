@@ -61,9 +61,9 @@ def log_debug_data(frame, converted_frame, matcher, distrib, verbnet):
         "args": [x.text for x in frame.args],
         "vbclass": verbnet[frame.predicate.lemma],
         "structure": converted_frame.structure,
-        "chosen_frames": matcher.best_frames,
         "result": distrib
     })
+        # "chosen_frames": matcher.best_frames,
 
 
 def display_errors_num():

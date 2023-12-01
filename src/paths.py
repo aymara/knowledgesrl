@@ -4,7 +4,6 @@
 """Contains all shared paths in one module for easy maintenance"""
 
 from pathlib import Path
-import optionsparsing
 
 class Paths:
     

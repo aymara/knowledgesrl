@@ -32,7 +32,7 @@ def get_frames(corpus, verbnet_classes, frameNet, argid=False):
     logger = logging.getLogger(__name__)
     logger.setLevel(options.Options.loglevel)
     logger.debug("get_frames corpus={} input={}".format(
-        corpus,options.Options.conll_input))
+        corpus, options.Options.conll_input))
 
     if options.Options.conll_input is not None:
         annotation_list = [None]
@@ -40,6 +40,7 @@ def get_frames(corpus, verbnet_classes, frameNet, argid=False):
     elif options.Options.corpus == 'FrameNet':
         annotation_list = options.Options.fulltext_annotations
         parsed_conll_list = options.Options.fulltext_parses
+        assert(len(annotation_list) == len(parsed_conll_list))
     elif options.Options.corpus == 'dicoinfo_fr':
         pass
     else:

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import optionsparsing
 
 from collections import Counter
 import tempfile
@@ -44,15 +43,12 @@ sys.excepthook = info
 
 
 class SemanticRoleLabeler:
-    def __init__(self, argv):
-        optionsparsing.Options(argv)
-        options.Options()
+    def __init__(self):
         paths.Paths()
         logging.basicConfig(level=options.Options.loglevel)
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(options.Options.loglevel)
-        self.logger.info("Creating Semantic Role "
-                         "Labeller with argv: {}".format(argv))
+        self.logger.info("Creating Semantic Role Labeller")
         self.logger.info('Options: {}'.format(options.Options.framelexicon))
 
         """ Load resources """
@@ -235,7 +231,7 @@ class SemanticRoleLabeler:
                 frame_occurrence.select_likeliest_matches()
 
             if options.Options.debug:
-                display_debug(options.Options.n_debug)
+                display_debug()
         else:
             self.logger.info("No probability model")
 

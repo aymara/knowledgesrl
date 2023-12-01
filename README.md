@@ -4,7 +4,29 @@ Thank you for checking out knowledgrsrl, our knowledge-based semantic role
 labeling implementation! Feel free to report GitHub issues for any question or
 remarks you might have.
 
-## [Read the docs!](http://knowledgesrl.readthedocs.org/en/latest/)
+Main entry point is `knowledgesrl.py`.
+
+To use it, install dependencies
+
+```bash
+$ pip install -r ./requirements.txt
+```
+
+Then get instructions with:
+
+```bash
+$ python src/knowledgesrl.py --help
+```
+
+For example, to annotate with FrameNet a French text, use a parser to generate a ConLL file and then run:
+
+```bash
+$ python src/knowledgesrl.py --language=fre --frame-lexicon=FrameNet --conll-input=in.conll
+```
+
+This will output the result to the terminal. Use the `--conll-output` flag to write to a file.
+
+## [Read the docs!](https://knowledgesrl.readthedocs.org/en/latest/)
 
 ## License : AGPLv3
 
