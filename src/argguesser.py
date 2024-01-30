@@ -33,7 +33,7 @@ class ArgGuesser():
 
     subject_deprels = [
         "LGS",  # Logical subject -> should we keep this (36 args) ?
-        "SBJ", "SUB"
+        "SBJ", "SUB", "suj",
         # UD below
         "nsubj",
         "csubj",
@@ -100,8 +100,9 @@ class ArgGuesser():
         "JJR": "NP",  # Comparative
         "JJS": "NP",  # Superlative
         "MD": "S",    # Modal verb
-        "NOUN": "NP", 
-        "NN": "NP", 
+        "N": "NP",
+        "NOUN": "NP",
+        "NN": "NP",
         "NNP": "NP", 
         "NNPS": "NP", 
         "NNS": "NP",
@@ -155,8 +156,12 @@ class ArgGuesser():
                                       filename):
         """ Extracts frames from one sentence and iterate over them """
         self.logger.debug(f'_sentence_predicates_iterator {sentence_id} '
-                          f'sentence: {sentence}; tree: {tree}')
+                          f'sentence: {sentence}; tree: {tree} ({type(tree)})')
+        visited = []
         for node in tree:
+            if node in visited:
+                continue
+            visited.append(node)
             # For every verb, looks for its infinitive form in VerbNet, and
             # builds a frame occurrence if it is found
             self.logger.debug(f"_sentence_predicates_iterator on {node.lemma}")
@@ -327,10 +332,12 @@ class ArgGuesser():
                 node.deprel in self.subject_deprels)
 
     def _is_arg(self, node, predicate_node):
-        """Tells whether node is an argument of predicate_node. This is only called
-        when node is a descendant of predicate_node.
         """
-        self.logger.debug("_is_arg {}: {}".format(node.deprel, (node is not predicate_node) and
-                                             node.deprel in self.args_deprels))
-        return ((node is not predicate_node) and
-                node.deprel in self.args_deprels)
+        Tells whether node is an argument of predicate_node. This is only
+        called when node is a descendant of predicate_node.
+        """
+        if node is predicate_node:
+            return False
+        self.logger.debug(f"_is_arg {node.deprel}: "
+                          f"{node.deprel in self.args_deprels}")
+        return node.deprel in self.args_deprels

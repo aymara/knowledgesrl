@@ -22,7 +22,8 @@ class SyntacticTreeNode:
 
     :var word: string, the word contained by the node
     :var lemma: string, the lemma of the word contained by the node
-    :var pos: part-of-speech of the node
+    :var cpos: string, part-of-speech of the node
+    :var pos: string, part-of-speech of the node
 
     :var deprel: string, function attributed by the parser to this word
     :var father: SyntacticTreeBuilder, the father of this node
@@ -139,7 +140,7 @@ class SyntacticTreeNode:
             overlap_words = list(next(iter(overlap)))
 
         mean_length = (len(current_word_list) + len(wanted_word_list)) / 2
-        score = len(overlap_words) / mean_length
+        score = -1 if mean_length == 0 else len(overlap_words) / mean_length
 
         children_results = [c._closest_match_as_node_lcs(arg)
                             for c in self.children]
@@ -188,8 +189,12 @@ class SyntacticTreeBuilder():
                                  f'11) in line {linenum}: "{l}"\n')
                 continue
             word_id = int(word_id)
-            head = int(head) if head != '_' else None
             deprel = deprel if deprel != '_' else 'ROOT'
+            if deprel == 'root':
+                deprel = 'ROOT'
+            head = int(head) if head != '_' else None
+            if head is None and deprel == 'ROOT':
+                head = 0
 
             self.father_ids[word_id] = head
             self.logger.debug(f'Add node: {word_id}, {form}, {cpos}, {deprel}')
