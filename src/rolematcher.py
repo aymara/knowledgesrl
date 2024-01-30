@@ -102,8 +102,8 @@ class VnFnRoleMatcher():
                     fn_role, vn_role,
                     fn_frame, vn_class)
         self._build_frames_vnclasses_mapping()
-        self.logger.debug('VnFnRoleMatcher verbnetclass_to_framenetframes: '
-            '{}'.format(self.verbnetclass_to_framenetframes))
+        # self.logger.debug(f'VnFnRoleMatcher verbnetclass_to_framenetframes: '
+        #                   f'{self.verbnetclass_to_framenetframes}')
 
     def _handle_co_roles(self, vn_role):
         if vn_role[-1] == "1":
@@ -307,11 +307,18 @@ class VnFnRoleMatcher():
         result = set()
         #print("frameNet frames: {}".format(self.frameNet.frames))
         for framename in framenames:
-            self.logger.debug("filter_frame_names frame {} lexical units: {}".format(framename, self.frameNet.frames[framename].lexicalUnits))
-            if "{}.v".format(predicate) in self.frameNet.frames[framename].lexicalUnits:
-                result.add(framename)
+            if framename in self.frameNet.frames:
+                self.logger.debug(
+                    f"filter_frame_names frame {framename} lexical units: "
+                    f"{self.frameNet.frames[framename].lexicalUnits}")
+                if (f"{predicate}.v"
+                        in self.frameNet.frames[framename].lexicalUnits):
+                    result.add(framename)
+                else:
+                    self.logger.debug(f"filter_frame_names filtering out "
+                                    f"{framename} for predicate {predicate}")
             else:
-                self.logger.debug("filter_frame_names filtering out {} for predicate {}".format(framename, predicate))
+                self.logger.warn(f"Frame {framename} not present in FrameNet")
         if (result):
             return result
         else:

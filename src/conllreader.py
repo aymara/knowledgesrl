@@ -47,7 +47,7 @@ class SyntacticTreeNode:
         self.word = word
         self.lemma = lemma
         self.cpos = cpos
-        self.pos = pos
+        self.pos = pos if pos != "_" else cpos
         self.namedEntityType = namedEntityType
         self.features = features
         self.head = head
@@ -69,17 +69,11 @@ class SyntacticTreeNode:
         else:
             father = ""
 
-        return "node(id: {}; father: {}; children: {}; pos: {}; deprel: {}; begin_word: {}; position: {}; begin: {}; end: {}; word: {})".format(
-            self.word_id,
-            father,
-            children,
-            self.pos,
-            self.deprel,
-            self.begin_word,
-            self.position,
-            self.begin,
-            self.end,
-            self.word) #, children)
+        return (f"node(id: {self.word_id}; father: {father}; "
+                f"children: {children}; cpos: {self.cpos}; pos: {self.pos}; "
+                f"deprel: {self.deprel}; begin_word: {self.begin_word}; "
+                f"position: {self.position}; begin: {self.begin}; "
+                f"end: {self.end}; word: {self.word})")  # children
 
     def __eq__(self, other):
         if isinstance(other, SyntacticTreeNode):
@@ -102,15 +96,14 @@ class SyntacticTreeNode:
                     yield self
                 else:
                     yield node
-# GC20171122: commented out below because the root predicate was not yielded. 
-# Is it an error in building the position attribute ?
-        #if self.position == len(self.children):
+        # GC20171122: commented out below because the root predicate was not
+        # yielded. Is it an error in building the position attribute ?
+        # if self.position == len(self.children):
         yield self
 
     def fathers(self, previous=set()):
         if self.father is not None and self.father not in previous:
             result = previous
-            #import ipdb; ipdb.set_trace()
             result.add(self.father)
             return self.father.fathers(result)
         return previous
@@ -184,23 +177,22 @@ class SyntacticTreeBuilder():
             https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
             split_line = l.split("\t")
             if len(split_line) == 11:
-                word_id, form, lemma, cpos, pos, namedEntityType, features,\
-                head, deprel, phead, pdeprel = l.split("\t")
+                (word_id, form, lemma, cpos, pos, namedEntityType, features,
+                 head, deprel, phead, pdeprel) = l.split("\t")
             elif len(split_line) == 10:
-                word_id, form, lemma, cpos, pos, features,\
-                head, deprel, phead, pdeprel = l.split("\t")
+                (word_id, form, lemma, cpos, pos, features,
+                 head, deprel, phead, pdeprel) = l.split("\t")
                 namedEntityType = '_'
             else:
-                self.logger.warn('Wrong number of columns ('
-                                 'expected 10 or 11) in '
-                                 'line {}: "{}"\n'.format(linenum, l))
+                self.logger.warn(f'Wrong number of columns (expected 10 or '
+                                 f'11) in line {linenum}: "{l}"\n')
                 continue
             word_id = int(word_id)
             head = int(head) if head != '_' else None
             deprel = deprel if deprel != '_' else 'ROOT'
 
             self.father_ids[word_id] = head
-            self.logger.debug('Add node: {}, {}, {}'.format(word_id, form,  deprel))
+            self.logger.debug(f'Add node: {word_id}, {form}, {cpos}, {deprel}')
             self.node_dict[word_id] = SyntacticTreeNode(
                 word_id=word_id,
                 word=form,
@@ -228,11 +220,9 @@ class SyntacticTreeBuilder():
                     self.node_dict[word_id].father = self.node_dict[father_id]
                     self.node_dict[father_id].children.append(self.node_dict[word_id])  # noqa
                 except KeyError:
-                    self.logger.error('father id {} and/or word_id {} not found in CoNLL tree {}'
-                                      ''.format(
-                                          father_id,
-                                          word_id,
-                                          conll_tree))
+                    self.logger.error(
+                        f'father id {father_id} and/or word_id {word_id} not '
+                        f'found in CoNLL tree {conll_tree}')
 
         # Record position: where is father among child?
         # Important to flatten tree
@@ -306,7 +296,7 @@ class ConllSemanticAppender():
 
     def add_verbnet_frame_annotation(self, frame_annotation):
         # We could have multiple classes, so join them with |
-        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.tokenid-1][11] = '|'.join(sorted(frame_annotation.best_classes()))  # noqa
+        self.conll_matrix[frame_annotation.sentence_id][frame_annotation.tokenid-1][-1] = '|'.join(sorted(frame_annotation.best_classes()))  # noqa
         # Add new column to place the new roles
         self.add_new_column(frame_annotation.sentence_id)
 
@@ -336,7 +326,8 @@ class ConllSemanticAppender():
         # compute the predicates string, concatenation of the possible
         # frames names
         if frame_annotations[0].predicate.tokenid+notFirstSentenceShift < len(self.conll_matrix[frame_annotations[0].sentence_id]):
-            self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][11] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
+            # print(len(self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift]))
+            self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
         else:
             self.logger.error("add_framenet_frame_annotation got token number "
                               "larger than conll_matrix for current sentence")
@@ -357,8 +348,10 @@ class ConllSemanticAppender():
             self.logger.debug(
                 'add_framenet_frame_annotation roleset: {}'.format(
                     roleset_str))
-            if position+notFirstSentenceShift < len(self.conll_matrix[frame_annotations[0].sentence_id]):
-                self.conll_matrix[frame_annotations[0].sentence_id][position+notFirstSentenceShift][-1] = roleset_str  # noqa
+            if (position+notFirstSentenceShift <
+                    len(self.conll_matrix[frame_annotations[0].sentence_id])):
+                self.conll_matrix[frame_annotations[0].sentence_id][
+                    position+notFirstSentenceShift][-1] = roleset_str  # noqa
 
     def dump_semantic_file(self, filename):
         with open(filename, 'w') as semantic_file:

@@ -181,13 +181,13 @@ class FrameNetReader:
         :param filename: the name of the file defining the frame
         :type filename: string
         """
-        self.logger.debug("loadFrame {}".format(filename))
+        # self.logger.debug(f"FrameNetReader::loadFrame {filename}")
         root = ET.ElementTree(file=str(filename.resolve()))
         frameNode = root.getroot()
         if frameNode.tag.split('}')[1] != 'frame':
             raise Exception('File {} is not a frame xml representation. '
                             'Root tag is "{}" instead of "frame".'.format(
-                                filename, 
+                                filename,
                                 frameNode.tag.split('}')[1]))
         semanticTypeNode = frameNode.find('fn:semType',namespaces)
         semanticType = None

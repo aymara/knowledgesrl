@@ -29,6 +29,9 @@ class VerbnetReader:
         :param path: Path to VerbNet.
         :type path: pathlib.Path.
         """
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(options.Options.loglevel)
+        self.logger.debug(f'VerbnetReader({path})')
 
         self.frames_for_verb = {}
         self.classes = {}
@@ -46,6 +49,8 @@ class VerbnetReader:
             root = ET.ElementTree(file=str(filename.resolve()))
             self.filename = str(filename)
             self._handle_class(root.getroot(), [], [], [])
+        self.logger.debug(f'VerbnetReader({path}): {len(self.frames_for_verb)}'
+                          f', {len(self.classes)}')
 
     def _handle_class(self, xml_class, parent_frames, role_list, restrictions):
         """Parse one class of verbs and all its subclasses.
@@ -420,7 +425,7 @@ class VerbnetReader:
 def init_verbnet(path):
     logger = logging.getLogger(__name__)
     logger.setLevel(options.Options.loglevel)
-    logger.info("Loading VerbNet data from {}...".format(path))
+    logger.info(f"init_verbnet Loading VerbNet data from {path} ...")
     reader = VerbnetReader(path)
     errors["vn_parsing"] = reader.unhandled
     return reader.frames_for_verb, reader.classes

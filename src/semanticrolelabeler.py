@@ -1,95 +1,187 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
-
-from collections import Counter
-import tempfile
-import errorslog
-from errorslog import *
-from bootstrap import bootstrap_algorithm
-from verbnetrestrictions import NoHashDefaultDict
-import logging
-import paths
-import options
-from conllreader import ConllSemanticAppender
-import verbnetreader
-import framematcher
-import probabilitymodel
+import argguesser
 import dumper
-import corpuswrapper
+import errorslog
+import framenet
+import framematcher
+import logging
+import options
+import paths
+import probabilitymodel
+import roleextractor
 import rolematcher
 import stats
-import framenet
+import sys
+import tempfile
+import verbnetreader
+
+from bootstrap import bootstrap_algorithm
+from collections import Counter
+from conllreader import ConllSemanticAppender
+from errorslog import *
+from framenetallreader import FNAllReader
 from options import FrameLexicon
-
-
-def info(type, value, tb):
-    # if hasattr(sys, 'ps1') or not sys.stderr.isatty()
-    # or type != AssertionError:
-        # # we are in interactive mode or we don't have a tty-like
-        # # device, so we call the default hook
-        # sys.__excepthook__(type, value, tb)
-    # else:
-        import traceback
-        import ipdb
-        # we are NOT in interactive mode, print the exception...
-        traceback.print_exception(type, value, tb)
-        print
-        # ...then start the debugger in post-mortem mode.
-        ipdb.pm()
-
-sys.excepthook = info
+from paths import Path
+from verbnetframe import VerbnetFrameOccurrence
+from verbnetrestrictions import NoHashDefaultDict
 
 
 class SemanticRoleLabeler:
-    def __init__(self):
-        paths.Paths()
-        logging.basicConfig(level=options.Options.loglevel)
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(options.Options.loglevel)
-        self.logger.info("Creating Semantic Role Labeller")
-        self.logger.info('Options: {}'.format(options.Options.framelexicon))
+    def __init__(self, language: str):
+        """ Initialize the semantic role labeller
 
-        """ Load resources """
-        self.frameNet = framenet.FrameNet()
-        if options.Options.framelexicon == FrameLexicon.FrameNet:
-            self.logger.info("Loading FrameNet...")
-            framenet.FrameNetReader(paths.Paths.framenet_path(options.Options.language), self.frameNet)
-            #print("SemanticRoleLabeler framenet frames: {}".format(self.frameNet.frames))
-        elif options.Options.framelexicon == FrameLexicon.VerbNet:
-            self.logger.info("Loading VerbNet...")
-            self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.
-                                                            VNFN_MATCHING,
-                                                            self.frameNet)
-        self.frames_for_verb, self.verbnet_classes = verbnetreader.init_verbnet(
-            paths.Paths.verbnet_path(options.Options.language))
-        
-    def annotate(self, conllinput=None, language=None):
-        """ Run the semantic role labelling
-
-        :var conllinput: string -- text to annotate formated in the CoNLL
-                                   format. If None, annotate
+        :var language: string -- the language of input text
 
         Return the same string than conllinput but with new colums
         corresponding to the frames and roles found
         """
-        self.logger.info("annotate: {} {}".format(language, conllinput))
-        model = probabilitymodel.ProbabilityModel(self.verbnet_classes, 0)
-        if language is not None:
+        logging.basicConfig(level=options.Options.loglevel)
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(options.Options.loglevel)
+        # Ensure paths are initialized
+        paths.Paths()
+        self.logger.debug("SemanticRoleLabeler::init")
+        self.logger.info('Options: {}'.format(options.Options.framelexicon))
+
+        if language:
             options.Options.language = language
 
-        tmpfile = None
-        if conllinput is not None:
-            if options.Options.debug:
-                tmpfile = tempfile.NamedTemporaryFile(delete=False)
-                self.logger.error('Debug mode: will not delete temporary file {}'.format(tmpfile.name))
+        """ Load resources """
+        self.frameNet = framenet.FrameNet()
+        self.role_matcher = None
+        if options.Options.framelexicon == FrameLexicon.FrameNet:
+            self.logger.info("Loading FrameNet...")
+            framenet.FrameNetReader(
+                paths.Paths.framenet_path(language),
+                self.frameNet)
+            # self.logger.info(f"SemanticRoleLabeler framenet frames: "
+            #                  f"{self.frameNet.frames}")
+        # elif options.Options.framelexicon == FrameLexicon.VerbNet:
+        self.logger.info("Loading VN-FN role matcher...")
+        self.role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.
+                                                        VNFN_MATCHING,
+                                                        self.frameNet)
+        # Load VerbNet
+        self.logger.info("Loading VerbNet...")
+        (self.frames_for_verb,
+         self.verbnet_classes) = verbnetreader.init_verbnet(
+            paths.Paths.verbnet_path(language))
+        self.logger.debug("SemanticRoleLabeler::init DONE")
+
+    def get_frames(self, corpus, verbnet_classes, frameNet,
+                   conll_input: str, argid=False):
+        """
+        Fills two list of the same size with content dependent of the kind of
+        input
+
+        The two lists are annotation_list and parsed_conll_list
+        """
+        logger = logging.getLogger(__name__)
+        logger.setLevel(options.Options.loglevel)
+        logger.debug(f"SemanticRoleLabeler.get_frames corpus={corpus} "
+                     f"input={conll_input}")
+
+        # Selection of the text to annotate
+        if conll_input:
+            # We will annotate the given CoNLL input text
+            annotation_list = [None]
+            parsed_conll_list = [Path(conll_input)]
+        elif corpus == 'FrameNet':
+            # We will annotate the FrameNet corpus
+            annotation_list = options.Options.fulltext_annotations
+            parsed_conll_list = options.Options.fulltext_parses
+            assert(len(annotation_list) == len(parsed_conll_list))
+        elif corpus == 'dicoinfo_fr':
+            # We should annotate the dicoinfo_fr corpus
+            pass
+        else:
+            raise Exception('Unknown corpus {}'.format(corpus))
+
+        # if corpus == 'FrameNet':
+        logger.info(f"Loading FrameNet and VerbNet role mappings "
+                    f"{paths.Paths.VNFN_MATCHING} ...")
+        role_matcher = rolematcher.VnFnRoleMatcher(paths.Paths.VNFN_MATCHING,
+                                                   frameNet)
+
+        for annotation_file, parsed_conll_file in zip(annotation_list,
+                                                      parsed_conll_list):
+            logger.debug(f"Handling {annotation_file} {parsed_conll_file}")
+            file_stem = (annotation_file.stem
+                         if annotation_file else parsed_conll_file.stem)
+            annotated_frames = []
+            vn_frames = []
+
+            if argid:
+                logger.debug("Argument identification")
+                #
+                # Argument identification
+                #
+                arg_guesser = argguesser.ArgGuesser(verbnet_classes)
+
+                # Many instances are not actually FrameNet frames
+                new_frame_instances = list(
+                    arg_guesser.frame_instances_from_file(
+                        parsed_conll_file
+                        )
+                    )
+                new_annotated_frames = roleextractor.fill_gold_roles(
+                    new_frame_instances, annotation_file, parsed_conll_file,
+                    verbnet_classes, role_matcher)
+                logger.debug(f'got nb new_annotated_frames: '
+                             f'{len(new_annotated_frames)}')
+
+                for gold_frame, frame_instance in zip(new_annotated_frames,
+                                                      new_frame_instances):
+                    annotated_frames.append(gold_frame)
+                    vn_frames.append(VerbnetFrameOccurrence.build_from_frame(
+                        gold_frame, conll_frame_instance=frame_instance))
             else:
-                tmpfile = tempfile.NamedTemporaryFile(delete=True)
-            tmpfile.write(bytes(conllinput, 'UTF-8'))
-            tmpfile.seek(0)
-            options.Options.conll_input = tmpfile.name
-            options.Options.argument_identification = True
+                logger.info("Load gold arguments")
+                #
+                # Load gold arguments
+                #
+                fn_reader = FNAllReader(
+                    add_non_core_args=options.Options.add_non_core_args)
+
+                for framenet_instance in fn_reader.iter_frames(
+                        annotation_file, parsed_conll_file):
+                    annotated_frames.append(framenet_instance)
+                    vn_frames.append(VerbnetFrameOccurrence.build_from_frame(
+                        framenet_instance, conll_frame_instance=None))
+
+                stats.stats_data["files"] += fn_reader.stats["files"]
+
+            yield annotated_frames, vn_frames
+        # else:
+        #     logger.info(f"get_frames: nothing to do for corpus "
+        #                 f"{corpus}")
+
+    def annotate(self, conllinput: str) -> None:
+        """ Run the semantic role labelling
+
+        :var conllinput: string -- text to annotate formated in the CoNLL
+                                   format. If empty, annotate the corpus
+
+        Return the same string than conllinput but with new colums
+        corresponding to the frames and roles found
+        """
+        self.logger.info(f"SemanticRoleLabeler.annotate: {conllinput}")
+        model = probabilitymodel.ProbabilityModel(self.verbnet_classes, 0)
+
+        # tmpfile = None
+        # if conllinput is not None:
+            # options.Options.argument_identification = True
+            # if options.Options.loglevel == logging.DEBUG:
+            #     tmpfile = tempfile.NamedTemporaryFile(delete=False)
+            #     self.logger.error(f'Debug mode: will not delete temporary '
+            #                       f'file {tmpfile.name}')
+            # else:
+            #     tmpfile = tempfile.NamedTemporaryFile(delete=True)
+            # tmpfile.write(bytes(conllinput, 'UTF-8'))
+            # tmpfile.seek(0)
+            # options.Options.conll_input = tmpfile.name
         # self.logger.debug("Annotating {}...".format(conllinput[0:50]))
         all_annotated_frames = []
         all_vn_frames = []
@@ -98,10 +190,11 @@ class SemanticRoleLabeler:
                          "and performing frame matching...")
         # annotated_frames: list of FrameInstance
         # vn_frames: list of VerbnetFrameOccurrence
-        for annotated_frames, vn_frames in corpuswrapper.get_frames(
+        for annotated_frames, vn_frames in self.get_frames(
                 options.Options.corpus,
                 self.verbnet_classes,
                 self.frameNet,
+                conllinput,
                 options.Options.argument_identification):
             self.logger.debug('annotate: handling a pair annotated_frames, '
                               'vn_frames of size {}'.format(len(vn_frames)))
@@ -143,7 +236,8 @@ class SemanticRoleLabeler:
                 if frame_occurrence.num_slots == 0:
                     errorslog.log_frame_without_slot(gold_frame,
                                                      frame_occurrence)
-                    self.logger.debug('frame occurrence has no slot set {} {}'.format(gold_frame, frame_occurrence))
+                    self.logger.debug(f'frame occurrence has no slot set '
+                                      f'{gold_frame} {frame_occurrence}')
                     frame_occurrence.matcher = None
                     continue
 
@@ -164,7 +258,8 @@ class SemanticRoleLabeler:
                     else:
                         frames_to_be_matched.append(verbnet_frame)
 
-                self.logger.debug('there is {} frames to be matched'.format(len(frames_to_be_matched)))
+                self.logger.debug(f'there is {len(frames_to_be_matched)} '
+                                  f'frames to be matched')
                 # Actual frame matching
                 matcher.perform_frame_matching(frames_to_be_matched)
 
@@ -188,10 +283,11 @@ class SemanticRoleLabeler:
                         frame_occurrence.slot_preps
                     ):
                         if len(roles) == 1:
-                            model.add_data(slot_type, next(iter(roles)),
-                                                prep, predicate, vnclass)
+                            model.add_data(slot_type, next(iter(roles)), prep,
+                                           predicate, vnclass)
 
-                if options.Options.debug and set() in frame_occurrence.roles:
+                if (options.Options.loglevel == logging.DEBUG
+                        and set() in frame_occurrence.roles):
                     log_debug_data(gold_frame, frame_occurrence, matcher,
                                    frame_occurrence.roles,
                                    self.verbnet_classes)
@@ -230,15 +326,14 @@ class SemanticRoleLabeler:
                             frame_occurrence.restrict_slot_to_role(i, new_role)
                 frame_occurrence.select_likeliest_matches()
 
-            if options.Options.debug:
+            if options.Options.loglevel == logging.DEBUG:
                 display_debug()
         else:
             self.logger.info("No probability model")
 
-        if options.Options.conll_input is not None:
+        if conllinput is not None:
             self.logger.info("\n## Dumping semantic CoNLL...")
-            semantic_appender = ConllSemanticAppender(options.Options.
-                                                      conll_input)
+            semantic_appender = ConllSemanticAppender(conllinput)
             # vn_frame: VerbnetFrameOccurrence
             for vn_frame in all_vn_frames:
                 if vn_frame.best_classes():
@@ -248,17 +343,18 @@ class SemanticRoleLabeler:
                         semantic_appender.add_framenet_frame_annotation(
                             self.role_matcher.possible_framenet_mappings(vn_frame))  # noqa
                     else:
-                        self.logger.error("Error: unknown frame lexicon for "
-                                          "output {}".format(options.Options.
-                                                             framelexicon))
+                        self.logger.error(
+                            f"Error: unknown frame lexicon for output "
+                            f"{options.Options.framelexicon}")
             if options.Options.conll_output is None:
-                self.logger.debug('\nannotate: result {}'.format(str(semantic_appender)))
-                if options.Options.debug:
+                self.logger.debug(f'\nannotate: result '
+                                  f'{str(semantic_appender)}')
+                if options.Options.loglevel == logging.DEBUG:
                     display_debug()
                     display_errors_num()
                     display_error_details()
                     display_mapping_errors()
-                return str(semantic_appender)
+                print(str(semantic_appender))
             else:
                 semantic_appender.dump_semantic_file(options.Options.
                                                      conll_output)
@@ -274,5 +370,3 @@ class SemanticRoleLabeler:
             if options.Options.dump:
                 dumper.dump(options.Options.dump_file,
                             stats.annotated_frames_stats)
-
-        return ""

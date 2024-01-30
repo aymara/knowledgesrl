@@ -7,12 +7,13 @@ import options
 from framenetparsedreader import FNParsedReader
 import headwordextractor
 import framenetreader
+import paths
 
 class HeadWordExtractorTest(unittest.TestCase):
     def test_classes(self):
         filename = "ANC__110CYL067"
         fnparsed_reader = FNParsedReader()
-        parsed_conll_file = options.framenet_parsed / (filename + ".conll")
+        parsed_conll_file = paths.Paths.FRAMENET_PARSED / (filename + ".conll")
 
         reader = framenetreader.FulltextReader(options.fulltext_annotations[0], False)
 
@@ -30,9 +31,11 @@ class HeadWordExtractorTest(unittest.TestCase):
     def test_1(self):
         filename = "ANC__110CYL067"
         fnparsed_reader = FNParsedReader()
-        parsed_conll_file = options.framenet_parsed / (filename + ".conll")
+        parsed_conll_file = paths.Paths.FRAMENET_PARSED / (filename + ".conll")
 
-        reader = framenetreader.FulltextReader(options.fulltext_corpus / (filename + ".xml"), False)
+        reader = framenetreader.FulltextReader(
+            paths.Paths.framenet_fulltext(Options.language)
+            / (filename + ".xml"), False)
 
         frame = reader.frames[1]
         sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]

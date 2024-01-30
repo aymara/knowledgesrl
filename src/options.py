@@ -16,7 +16,7 @@ class Options:
 
     matching_algorithm = "sync_predicates"
 
-    language = 'eng'
+    language = None  # Init from args
 
     argument_identification = False
     heuristic_rules = False
@@ -25,10 +25,10 @@ class Options:
     passivize = False
     semrestr = False
     wordnetrestr = False
-    corpus = 'FrameNet'
+    corpus = None  # Init from args
     loglevel = logging.WARNING
 
-    framelexicon = FrameLexicon.VerbNet
+    framelexicon = None  # Init from args
     framelexicons = {
         'FrameNet': FrameLexicon.FrameNet,
         'VerbNet': FrameLexicon.VerbNet
@@ -81,8 +81,6 @@ class Options:
         'PropBank__AetnaLifeAndCasualty',
     ]
 
-    fulltext_corpus = None
-    framenet_parsed = None
 
     fulltext_annotations = None
     fulltext_parses = None
@@ -91,6 +89,7 @@ class Options:
     def init(self, args):
         display_usage = False
         Options.language = args.language
+        Options.argument_identification = not args.no_argument_identification
         if args.best_gold:
             Options.argument_identification = False
             Options.passivize = True
@@ -105,15 +104,11 @@ class Options:
         Options.add_non_core_args = args.add_non_core_args
         probability_model = args.model
         Options.bootstrap = args.bootstrap
-        Options.argument_identification = args.argument_identification
         Options.heuristic_rules = args.heuristic_rules
         Options.semrestr = args.semantic_restrictions
         Options.wordnetrestr = args.wordnet_restrictions
         Options.passivize = args.passivize
         Options.corpus = args.corpus
-        if args.conll_input is not None:
-            Options.conll_input = args.conll_input
-            Options.argument_identification = True
         Options.conll_output = args.conll_output
         Options.use_training_set = args.training_set
         Options.corpus_lu = args.lu
@@ -122,29 +117,27 @@ class Options:
             Options.dump_file = args.dump
 
         Options.loglevel = Options.loglevels[args.loglevel]
-        if Options.loglevel == logging.DEBUG:
-            Options.debug = True
         Options.framelexicon = Options.framelexicons[args.frame_lexicon]
 
-        Options.fulltext_corpus = paths.Paths.framenet_fulltext(
-            Options.language)
-        Options.framenet_parsed = paths.Paths.FRAMENET_PARSED
+        framenet_parsed = paths.Paths.FRAMENET_PARSED
+        fulltext_corpus = paths.Paths.framenet_fulltext(args.language)
+
         if Options.corpus_lu:
-            Options.fulltext_corpus = paths.Paths.framenet_lu(Options.language)
-            Options.framenet_parsed = paths.Paths.FRAMENET_LU_PARSED
+            fulltext_corpus = paths.Paths.framenet_lu(args.language)
+            framenet_parsed = paths.Paths.FRAMENET_LU_PARSED
 
         if Options.use_training_set:
             Options.fulltext_annotations = sorted(
-                [f for f in Options.fulltext_corpus.glob('*.xml')
+                [f for f in fulltext_corpus.glob('*.xml')
                  if f.stem not in Options.framenet_test_set])
             Options.fulltext_parses = sorted(
-                [f for f in Options.framenet_parsed.glob('*.conll')
+                [f for f in framenet_parsed.glob('*.conll')
                  if f.stem not in Options.framenet_test_set])
-
-        Options.fulltext_annotations = sorted(
-            [f for f in Options.fulltext_corpus.glob('*.xml')
-             if f.stem in Options.framenet_test_set])
-        Options.fulltext_parses = sorted(
-            [f for f in Options.framenet_parsed.glob('*.conll')
-             if f.stem in Options.framenet_test_set])
+        else:
+            Options.fulltext_annotations = sorted(
+                [f for f in fulltext_corpus.glob('*.xml')
+                if f.stem in Options.framenet_test_set])
+            Options.fulltext_parses = sorted(
+                [f for f in framenet_parsed.glob('*.conll')
+                if f.stem in Options.framenet_test_set])
             

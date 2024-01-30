@@ -117,7 +117,7 @@ def display_debug():
     for i in range(0, len(debug_data)):
         print(debug_data[i]["sentence"])
         print("Predicate : "+debug_data[i]["predicate"])
-        print("Structure : "+" ".join(debug_data[i]["structure"]))
+        print("Structure : "+repr(debug_data[i]["structure"]))
         print("Arguments :")
         for arg in debug_data[i]["args"]:
             print(arg)
@@ -125,8 +125,11 @@ def display_debug():
         for vbframe in debug_data[i]["vbclass"]:
             print(vbframe)
         print("Chosen frames : ")
-        for vbframe in debug_data[i]["chosen_frames"]:
-            print(vbframe)
+        if "chosen_frames" in debug_data[i]:
+            for vbframe in debug_data[i]["chosen_frames"]:
+                print(vbframe)
+        else:
+            print("No chosen frames")
         print("Result : ")
         print(debug_data[i]["result"])
         print("\n\n")

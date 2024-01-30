@@ -15,12 +15,11 @@ class PredicateNotFound(Exception):
 
 
 class FNAllReader:
-    """ Reads simultaneously the fulltext corpus and framenet_parsed
+    """ Reads simultaneously the fulltext corpus and framenet parsed
     in order to add information such as passive voice detection to the
     annotated frames.
     This class will one day replace framenetparsedreader.
 
-    :var annotations_path: str -- Path to framenet_parsed
     :var add_non_core_args: boolean -- Indicates whether we also want non-core
         args
     :var keep_unannotated: boolean -- Indicates whether we want to keep frames
@@ -28,7 +27,8 @@ class FNAllReader:
     :var frames: FrameInstance List -- The collected frames
     """
 
-    predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+    # TODO add UD data in predicate_pos and get rid of be_forms
+    predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "VERB"]
     be_forms = ["am", "are", "be", "been", "being", "is", "was", "were",
                 "'m", "'re", "'s"]
 

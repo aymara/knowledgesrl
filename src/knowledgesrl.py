@@ -45,7 +45,7 @@ if __name__ == "__main__":
                         help="Probability models.")
     parser.add_argument("--bootstrap", action="store_true",
                         help="")
-    parser.add_argument("--argument-identification", action="store_true",
+    parser.add_argument("--no-argument-identification", action="store_true",
                         help="Identify arguments automatically")
     parser.add_argument("--heuristic-rules", action="store_true",
                         help="Use Lang and Lapata heuristics to find args.")
@@ -56,11 +56,9 @@ if __name__ == "__main__":
     parser.add_argument("--wordnet-restrictions", action="store_true",
                         help="Restrict to phrases that obey WordNet restrictions")
     # what do we annotate?
-    parser.add_argument("--conll-input", "-i", type=str,
-                        default=None,
+    parser.add_argument("--conll-input", "-i", type=str, default="",
                         help="File to annotate.")
-    parser.add_argument("--conll-output", "-o", type=str,
-                        default=None,
+    parser.add_argument("--conll-output", "-o", type=str, default=None,
                         help="File to write result on. Default to stdout.")
     parser.add_argument("--corpus", type=str,
                         choices=["FrameNet", "dicoinfo_fr"],
@@ -91,7 +89,6 @@ if __name__ == "__main__":
     # initialize the Options class with command line arguments
     options.Options.init(args)
 
-    srl = semanticrolelabeler.SemanticRoleLabeler()
-    result = srl.annotate()
-    if options.Options.conll_output is None:
-        print(result)
+    srl = semanticrolelabeler.SemanticRoleLabeler(language=args.language)
+    # What to annotate is set through the Options class
+    result = srl.annotate(args.conll_input)

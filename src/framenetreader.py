@@ -56,7 +56,7 @@ class FulltextReader:
         # Verbs
         "VH": "VB", "VHD": "VBD", "VHG": "VBG", "VHP": "VBP", "VHN": "VBN",
         "VHZ": "VBZ", "VV": "VB", "VVD": "VBD", "VVG": "VBG", "VVN": "VBN",
-        "VVP": "VBP", "VVZ": "VBZ"
+        "VVP": "VBP", "VVZ": "VBZ", "VERB": "VB"
     }
 
     # etree will add the xmlns string before every tag name
