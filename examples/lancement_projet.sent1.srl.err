@@ -1,0 +1,214 @@
+DEBUG:semanticrolelabeler:SemanticRoleLabeler::init
+INFO:semanticrolelabeler:Options: FrameLexicon.VerbNet
+INFO:semanticrolelabeler:Loading VN-FN role matcher...
+DEBUG:rolematcher:VnFnRoleMatcher(/home/gael/Projets/knowledgesrl/data/vn-fn-roles.xml)
+DEBUG:rolematcher:_build_frames_vnclasses_mapping
+INFO:semanticrolelabeler:Loading VerbNet...
+INFO:verbnetreader:init_verbnet Loading VerbNet data from /home/gael/Projets/knowledgesrl/data/verbenet/verbenet ...
+DEBUG:verbnetreader:VerbnetReader(/home/gael/Projets/knowledgesrl/data/verbenet/verbenet)
+DEBUG:verbnetreader:VerbnetReader(/home/gael/Projets/knowledgesrl/data/verbenet/verbenet): 2828, 2828
+DEBUG:semanticrolelabeler:SemanticRoleLabeler::init DONE
+INFO:semanticrolelabeler:SemanticRoleLabeler.annotate: examples/lancement_projet.sent1.conll
+INFO:semanticrolelabeler:annotate: loading gold annotations and performing frame matching...
+DEBUG:semanticrolelabeler:SemanticRoleLabeler.get_frames corpus=FrameNet input=examples/lancement_projet.sent1.conll
+INFO:semanticrolelabeler:Loading FrameNet and VerbNet role mappings /home/gael/Projets/knowledgesrl/data/vn-fn-roles.xml ...
+DEBUG:rolematcher:VnFnRoleMatcher(/home/gael/Projets/knowledgesrl/data/vn-fn-roles.xml)
+DEBUG:rolematcher:_build_frames_vnclasses_mapping
+DEBUG:semanticrolelabeler:Handling None examples/lancement_projet.sent1.conll
+DEBUG:semanticrolelabeler:Argument identification
+DEBUG:argguesser:ArgGuesser({'aborder': ['reach-51.8'], 'approcher': ['reach-51.8'], 'atteindre': ['reach-51.8', 'amuse-31.1'], ...)
+DEBUG:argguesser:frame_instances_from_file examples/lancement_projet.sent1.conll
+DEBUG:conllparsedreader:ConllParsedReader.sentence_trees(examples/lancement_projet.sent1.conll)
+DEBUG:conllparsedreader:ConllParsedReader.sentence_trees sentence_id: 0; sentence:
+1	Le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	2	det	_	Pos=1|Len=2
+2	responsable	responsable	NOUN	_	Gender:Masc|Number:Sing	12	nsubj	_	Pos=4|Len=11
+3	d’équipe	d'équipe	NOUN	_	Gender:Fem|Number:Sing	2	nmod	_	Pos=16|Len=8
+4	(	(	PUNCT	_	_	2	punct	_	Pos=25|Len=1
+5	ou	ou	CCONJ	_	_	7	cc	_	Pos=26|Len=2
+6	la	le	DET	_	Definite:Def|Gender:Fem|Number:Sing|PronType:Art	7	det	_	Pos=29|Len=2
+7	direction	direction	NOUN	_	Gender:Fem|Number:Sing	2	conj	_	Pos=32|Len=9
+8	en	en	ADP	_	_	10	case	_	Pos=42|Len=2
+9	son	son	DET	_	Number:Sing	10	det	_	Pos=45|Len=3
+10	absence	absence	NOUN	_	Gender:Fem|Number:Sing	7	nmod	_	Pos=49|Len=7
+11	)	)	PUNCT	_	_	2	punct	_	Pos=56|Len=1
+12	nomme	nommer	VERB	_	Mood:Ind|Number:Sing|Person:3|Tense:Pres|VerbForm:Fin	0	root	_	Pos=58|Len=5
+13	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	14	det	_	Pos=64|Len=3
+14	membres	membre	NOUN	_	Gender:Masc|Number:Plur	12	obj	_	Pos=68|Len=7
+15	de	de	ADP	_	_	16	case	_	Pos=76|Len=2
+16	l’équipe	l'équipe	NOUN	_	Gender:Fem|Number:Sing	14	nmod	_	Pos=79|Len=8
+17	de	de	ADP	_	_	19	case	_	Pos=88|Len=2
+18	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	19	det	_	Pos=88|Len=2
+19	projet	projet	NOUN	_	Gender:Masc|Number:Sing	16	nmod	_	Pos=91|Len=6
+20	,	,	PUNCT	_	_	23	punct	_	Pos=97|Len=1
+21	notamment	notamment	ADV	_	_	23	advmod	_	Pos=99|Len=9
+22	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	23	det	_	Pos=109|Len=2
+23	CP	CP	PROPN	_	Gender:Masc|Number:Sing	19	conj	_	Pos=112|Len=2
+24	et	et	CCONJ	_	_	23	cc	_	Pos=115|Len=2
+25	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	23	det	_	Pos=118|Len=2
+26	(	(	PUNCT	_	_	23	punct	_	Pos=121|Len=1
+27	ou	ou	CCONJ	_	_	28	cc	_	Pos=122|Len=2
+28	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	26	det	_	Pos=125|Len=3
+29	)	)	PUNCT	_	_	2	punct	_	Pos=128|Len=1
+
+DEBUG:conllreader:Add node: 1, Le, DET, det
+DEBUG:conllreader:Add node: 2, responsable, NOUN, nsubj
+DEBUG:conllreader:Add node: 3, d’équipe, NOUN, nmod
+DEBUG:conllreader:Add node: 4, (, PUNCT, punct
+DEBUG:conllreader:Add node: 5, ou, CCONJ, cc
+DEBUG:conllreader:Add node: 6, la, DET, det
+DEBUG:conllreader:Add node: 7, direction, NOUN, conj
+DEBUG:conllreader:Add node: 8, en, ADP, case
+DEBUG:conllreader:Add node: 9, son, DET, det
+DEBUG:conllreader:Add node: 10, absence, NOUN, nmod
+DEBUG:conllreader:Add node: 11, ), PUNCT, punct
+DEBUG:conllreader:Add node: 12, nomme, VERB, ROOT
+DEBUG:conllreader:Add node: 13, les, DET, det
+DEBUG:conllreader:Add node: 14, membres, NOUN, obj
+DEBUG:conllreader:Add node: 15, de, ADP, case
+DEBUG:conllreader:Add node: 16, l’équipe, NOUN, nmod
+DEBUG:conllreader:Add node: 17, de, ADP, case
+DEBUG:conllreader:Add node: 18, le, DET, det
+DEBUG:conllreader:Add node: 19, projet, NOUN, nmod
+DEBUG:conllreader:Add node: 20, ,, PUNCT, punct
+DEBUG:conllreader:Add node: 21, notamment, ADV, advmod
+DEBUG:conllreader:Add node: 22, le, DET, det
+DEBUG:conllreader:Add node: 23, CP, PROPN, conj
+DEBUG:conllreader:Add node: 24, et, CCONJ, cc
+DEBUG:conllreader:Add node: 25, le, DET, det
+DEBUG:conllreader:Add node: 26, (, PUNCT, punct
+DEBUG:conllreader:Add node: 27, ou, CCONJ, cc
+DEBUG:conllreader:Add node: 28, les, DET, det
+DEBUG:conllreader:Add node: 29, ), PUNCT, punct
+DEBUG:conllreader:rebuilt sentence: Le responsable d’équipe ( ou la direction en son absence ) nomme les membres de l’équipe de le projet , notamment le CP et le ( ou les )
+DEBUG:conllreader:add to tree_list: node(id: 12; father: ; children: 2 14; cpos: VERB; pos: VERB; deprel: ROOT; begin_word: 59; position: 1; begin: 0; end: 135; word: nomme)
+DEBUG:conllparsedreader:ConllParsedReader.sentence_trees yielding tree_builder: <conllreader.SyntacticTreeBuilder object at 0x711dc7375930>; tree: node(id: 12; father: ; children: 2 14; cpos: VERB; pos: VERB; deprel: ROOT; begin_word: 59; position: 1; begin: 0; end: 135; word: nomme)
+DEBUG:argguesser:frame_instances_from_file sentence 0: Le responsable d’équipe ( ou la direction en son absence ) nomme les membres de l’équipe de le projet , notamment le CP et le ( ou les )
+DEBUG:argguesser:_sentence_predicates_iterator 0 sentence: Le responsable d’équipe ( ou la direction en son absence ) nomme les membres de l’équipe de le projet , notamment le CP et le ( ou les ); tree: node(id: 12; father: ; children: 2 14; cpos: VERB; pos: VERB; deprel: ROOT; begin_word: 59; position: 1; begin: 0; end: 135; word: nomme) (<class 'conllreader.SyntacticTreeNode'>)
+DEBUG:argguesser:_sentence_predicates_iterator on le
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma le not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on d'équipe
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma d'équipe not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on (
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma ( not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on ou
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma ou not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on le
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma le not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on en
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma en not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on son
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma son not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on absence
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma absence not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on nommer
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma nommer is a predicate
+DEBUG:argguesser:_find_args
+DEBUG:argguesser:_is_arg nsubj: True
+DEBUG:argguesser:_is_arg obj: True
+DEBUG:argguesser:_sentence_predicates_iterator yielding Predicate(nomme, nommer, 12, 59, 63) [Arg(0, 57, Le d’équipe ( ou la en son absence nomme ) ) nomme les de , , True, NP, 2, False), Arg(65, 133, les de de le , notamment le et le ou les membres membres membres membres membres, , True, NP, 14, False)]…
+DEBUG:argguesser:_sentence_predicates_iterator on )
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma ) not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on )
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma ) not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on le
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma le not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on de
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma de not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on de
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma de not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on le
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma le not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on ,
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma , not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on notamment
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma notamment not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on le
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma le not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on et
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma et not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on le
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma le not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on ou
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma ou not in frames_for_verb
+DEBUG:argguesser:_sentence_predicates_iterator on le
+DEBUG:argguesser:_sentence_predicates_iterator node.lemma le not in frames_for_verb
+DEBUG:roleextractor:fill_gold_roles [FrameInstance(frame_name=, predicate=Predicate(nomme, nommer, 12, 59, 63), args=[Arg(0, 57, Le d’équipe ( ou la en son absence nomme ) ) nomme les de , , True, NP, 2, False), Arg(65, 133, les de de le , notamment le et le ou les membres membres membres membres membres, , True, NP, 14, False)], sentence=Le responsable d’équipe ( ou la direction en son absence ) nomme les membres de l’équipe de le projet , notamment le CP et le ( ou les ), words=[Word(0, 1, "DET"), Word(15, 22, "NOUN"), Word(24, 24, "PUNCT"), Word(26, 27, "CCONJ"), Word(29, 30, "DET"), Word(42, 43, "ADP"), Word(45, 47, "DET"), Word(42, 55, "NOUN"), Word(0, 135, "VERB"), Word(57, 57, "PUNCT"), Word(135, 135, "PUNCT"), Word(0, 135, "VERB"), Word(65, 67, "DET"), Word(77, 78, "ADP"), Word(89, 90, "ADP"), Word(92, 93, "DET"), Word(102, 102, "PUNCT"), Word(104, 112, "ADV"), Word(114, 115, "DET"), Word(120, 121, "CCONJ"), Word(123, 124, "DET"), Word(128, 129, "CCONJ"), Word(128, 133, "DET"), Word(0, 135, "VERB"), Word(0, 135, "VERB"), Word(0, 135, "VERB"), Word(0, 135, "VERB"), Word(0, 135, "VERB"), Word(0, 135, "VERB")])], None, examples/lancement_projet.sent1.conll
+DEBUG:framenetallreader:iter_frames None, examples/lancement_projet.sent1.conll
+DEBUG:conllreader:Add node: 1, Le, DET, det
+DEBUG:conllreader:Add node: 2, responsable, NOUN, nsubj
+DEBUG:conllreader:Add node: 3, d’équipe, NOUN, nmod
+DEBUG:conllreader:Add node: 4, (, PUNCT, punct
+DEBUG:conllreader:Add node: 5, ou, CCONJ, cc
+DEBUG:conllreader:Add node: 6, la, DET, det
+DEBUG:conllreader:Add node: 7, direction, NOUN, conj
+DEBUG:conllreader:Add node: 8, en, ADP, case
+DEBUG:conllreader:Add node: 9, son, DET, det
+DEBUG:conllreader:Add node: 10, absence, NOUN, nmod
+DEBUG:conllreader:Add node: 11, ), PUNCT, punct
+DEBUG:conllreader:Add node: 12, nomme, VERB, ROOT
+DEBUG:conllreader:Add node: 13, les, DET, det
+DEBUG:conllreader:Add node: 14, membres, NOUN, obj
+DEBUG:conllreader:Add node: 15, de, ADP, case
+DEBUG:conllreader:Add node: 16, l’équipe, NOUN, nmod
+DEBUG:conllreader:Add node: 17, de, ADP, case
+DEBUG:conllreader:Add node: 18, le, DET, det
+DEBUG:conllreader:Add node: 19, projet, NOUN, nmod
+DEBUG:conllreader:Add node: 20, ,, PUNCT, punct
+DEBUG:conllreader:Add node: 21, notamment, ADV, advmod
+DEBUG:conllreader:Add node: 22, le, DET, det
+DEBUG:conllreader:Add node: 23, CP, PROPN, conj
+DEBUG:conllreader:Add node: 24, et, CCONJ, cc
+DEBUG:conllreader:Add node: 25, le, DET, det
+DEBUG:conllreader:Add node: 26, (, PUNCT, punct
+DEBUG:conllreader:Add node: 27, ou, CCONJ, cc
+DEBUG:conllreader:Add node: 28, les, DET, det
+DEBUG:conllreader:Add node: 29, ), PUNCT, punct
+DEBUG:conllreader:rebuilt sentence: Le responsable d’équipe ( ou la direction en son absence ) nomme les membres de l’équipe de le projet , notamment le CP et le ( ou les )
+DEBUG:conllreader:add to tree_list: node(id: 12; father: ; children: 2 14; cpos: VERB; pos: VERB; deprel: ROOT; begin_word: 59; position: 1; begin: 0; end: 135; word: nomme)
+DEBUG:framenetallreader:iter_frames reader.frames: 
+DEBUG:framenetallreader:iter_frames DONE
+DEBUG:roleextractor:fill_gold_roles return 1 frame instances
+DEBUG:semanticrolelabeler:got nb new_annotated_frames: 1
+DEBUG:verbnetframe:VerbnetFrameOccurrence [{'elem': 'NP'}, {'elem': 'V'}, {'elem': 'NP'}], 2, nommer
+DEBUG:semanticrolelabeler:annotate: handling a pair annotated_frames, vn_frames of size 1
+DEBUG:semanticrolelabeler:there is 2 frames to be matched
+DEBUG:verbnetframe:remove_all_matches
+DEBUG:verbnetframe:add_match {'vnframe': VerbnetOfficialFrame(appoint-29.1, NP.Agent [(organization) OR (animate)] V NP.Theme [None] NP.Attribute [None]), 'slot_assocs': [0, 1]} 166
+DEBUG:verbnetframe:add_match {'vnframe': VerbnetOfficialFrame(appoint-29.1, NP.Agent [(organization) OR (animate)] V NP.Theme [None]  NP.Attribute [None]), 'slot_assocs': [0, 1]} 166
+INFO:semanticrolelabeler:Probability models...
+INFO:semanticrolelabeler:No probability model
+INFO:semanticrolelabeler:
+## Dumping semantic CoNLL...
+DEBUG:conllreader:add_verbnet_frame_annotation roleset: Agent
+DEBUG:conllreader:add_verbnet_frame_annotation roleset: Theme
+DEBUG:semanticrolelabeler:
+annotate: result 1	Le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	2	det	_	Pos=1|Len=2	_	_
+2	responsable	responsable	NOUN	_	Gender:Masc|Number:Sing	12	nsubj	_	Pos=4|Len=11	_	Agent
+3	d’équipe	d'équipe	NOUN	_	Gender:Fem|Number:Sing	2	nmod	_	Pos=16|Len=8	_	_
+4	(	(	PUNCT	_	_	2	punct	_	Pos=25|Len=1	_	_
+5	ou	ou	CCONJ	_	_	7	cc	_	Pos=26|Len=2	_	_
+6	la	le	DET	_	Definite:Def|Gender:Fem|Number:Sing|PronType:Art	7	det	_	Pos=29|Len=2	_	_
+7	direction	direction	NOUN	_	Gender:Fem|Number:Sing	2	conj	_	Pos=32|Len=9	_	_
+8	en	en	ADP	_	_	10	case	_	Pos=42|Len=2	_	_
+9	son	son	DET	_	Number:Sing	10	det	_	Pos=45|Len=3	_	_
+10	absence	absence	NOUN	_	Gender:Fem|Number:Sing	7	nmod	_	Pos=49|Len=7	_	_
+11	)	)	PUNCT	_	_	2	punct	_	Pos=56|Len=1	_	_
+12	nomme	nommer	VERB	_	Mood:Ind|Number:Sing|Person:3|Tense:Pres|VerbForm:Fin	0	root	_	Pos=58|Len=5	appoint-29.1	_
+13	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	14	det	_	Pos=64|Len=3	_	_
+14	membres	membre	NOUN	_	Gender:Masc|Number:Plur	12	obj	_	Pos=68|Len=7	_	Theme
+15	de	de	ADP	_	_	16	case	_	Pos=76|Len=2	_	_
+16	l’équipe	l'équipe	NOUN	_	Gender:Fem|Number:Sing	14	nmod	_	Pos=79|Len=8	_	_
+17	de	de	ADP	_	_	19	case	_	Pos=88|Len=2	_	_
+18	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	19	det	_	Pos=88|Len=2	_	_
+19	projet	projet	NOUN	_	Gender:Masc|Number:Sing	16	nmod	_	Pos=91|Len=6	_	_
+20	,	,	PUNCT	_	_	23	punct	_	Pos=97|Len=1	_	_
+21	notamment	notamment	ADV	_	_	23	advmod	_	Pos=99|Len=9	_	_
+22	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	23	det	_	Pos=109|Len=2	_	_
+23	CP	CP	PROPN	_	Gender:Masc|Number:Sing	19	conj	_	Pos=112|Len=2	_	_
+24	et	et	CCONJ	_	_	23	cc	_	Pos=115|Len=2	_	_
+25	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	23	det	_	Pos=118|Len=2	_	_
+26	(	(	PUNCT	_	_	23	punct	_	Pos=121|Len=1	_	_
+27	ou	ou	CCONJ	_	_	28	cc	_	Pos=122|Len=2	_	_
+28	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	26	det	_	Pos=125|Len=3	_	_
+29	)	)	PUNCT	_	_	2	punct	_	Pos=128|Len=1	_	_
+

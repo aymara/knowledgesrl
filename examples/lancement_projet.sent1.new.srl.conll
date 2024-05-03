@@ -1,0 +1,48 @@
+
+
+Problems :
+441 unhandled case were encoutered while parsing VerbNet
+Ignored 0 frame for which predicate data was missing
+Ignored 0 non-annotated layers in FrameNet
+Marked 0 arguments which were also predicate as NI
+Could not retrieve phrase type of 0 arguments in FrameNet
+Ignored 0 FrameNet frames which predicate was not in VerbNet
+Ignored 1 empty FrameNet frames
+Was not able to compare 0 roles
+
+
+{'file': PosixPath('examples/lancement_projet.sent1.new.conll'), 'sentence': "Le responsable d' équipe ( ou la direction en son absence ) nomme les membres de l' équipe de le projet , notamment le CP et le ( ou les )", 'predicate': 'nommer', 'structure': [{'elem': 'V'}]}
+[('nommer', 1)]
+Mapping errors for 1 of 1 predicates.
+1	Le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	1	det	_	Pos=0|Len=2	_
+2	responsable	responsable	NOUN	_	Gender:Masc|Number:Sing	12	nsubj	_	Pos=3|Len=11	_
+3	d'	de	ADP	_	_	3	case	_	Pos=15|Len=2	_
+4	équipe	équipe	NOUN	_	Gender:Fem|Number:Sing	1	nmod	_	Pos=17|Len=6	_
+5	(	(	PUNCT	_	_	1	punct	_	Pos=24|Len=1	_
+6	ou	ou	CCONJ	_	_	7	cc	_	Pos=25|Len=2	_
+7	la	le	DET	_	Definite:Def|Gender:Fem|Number:Sing|PronType:Art	7	det	_	Pos=28|Len=2	_
+8	direction	direction	NOUN	_	Gender:Fem|Number:Sing	1	conj	_	Pos=31|Len=9	_
+9	en	en	ADP	_	_	10	case	_	Pos=41|Len=2	_
+10	son	son	DET	_	Number:Sing	10	det	_	Pos=44|Len=3	_
+11	absence	absence	NOUN	_	Gender:Fem|Number:Sing	7	nmod	_	Pos=48|Len=7	_
+12	)	)	PUNCT	_	_	1	punct	_	Pos=55|Len=1	_
+13	nomme	nommer	VERB	_	Mood:Ind|Number:Sing|Person:3|Tense:Pres|VerbForm:Fin	_	root	_	Pos=57|Len=5	_
+14	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	14	det	_	Pos=63|Len=3	_
+15	membres	membre	NOUN	_	Gender:Masc|Number:Plur	12	obj	_	Pos=67|Len=7	_
+16	de	de	ADP	_	_	17	case	_	Pos=75|Len=2	_
+17	l'	le	DET	_	Definite:Def|Number:Sing|PronType:Art	17	det	_	Pos=78|Len=2	_
+18	équipe	équipe	NOUN	_	Gender:Fem|Number:Sing	14	nmod	_	Pos=80|Len=6	_
+19	de	de	ADP	_	_	20	case	_	Pos=87|Len=2	_
+20	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	20	det	_	Pos=87|Len=2	_
+21	projet	projet	NOUN	_	Gender:Masc|Number:Sing	17	nmod	_	Pos=90|Len=6	_
+22	,	,	PUNCT	_	_	24	punct	_	Pos=96|Len=1	_
+23	notamment	notamment	ADV	_	_	24	advmod	_	Pos=98|Len=9	_
+24	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	24	det	_	Pos=108|Len=2	_
+25	CP	CP	PROPN	_	Gender:Masc|Number:Sing	17	conj	_	Pos=111|Len=2	_
+26	et	et	CCONJ	_	_	24	cc	_	Pos=114|Len=2	_
+27	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	24	conj	_	Pos=117|Len=2	_
+28	(	(	PUNCT	_	_	24	punct	_	Pos=120|Len=1	_
+29	ou	ou	CCONJ	_	_	29	cc	_	Pos=121|Len=2	_
+30	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	27	det	_	Pos=124|Len=3	_
+31	)	)	PUNCT	_	_	1	punct	_	Pos=127|Len=1	_
+

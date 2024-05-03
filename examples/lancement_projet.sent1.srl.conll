@@ -1,0 +1,45 @@
+
+
+Problems :
+441 unhandled case were encoutered while parsing VerbNet
+Ignored 0 frame for which predicate data was missing
+Ignored 0 non-annotated layers in FrameNet
+Marked 0 arguments which were also predicate as NI
+Could not retrieve phrase type of 0 arguments in FrameNet
+Ignored 0 FrameNet frames which predicate was not in VerbNet
+Ignored 0 empty FrameNet frames
+Was not able to compare 0 roles
+
+
+[]
+Mapping errors for 0 of 1 predicates.
+1	Le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	2	det	_	Pos=1|Len=2	_	_
+2	responsable	responsable	NOUN	_	Gender:Masc|Number:Sing	12	nsubj	_	Pos=4|Len=11	_	Agent
+3	d’équipe	d'équipe	NOUN	_	Gender:Fem|Number:Sing	2	nmod	_	Pos=16|Len=8	_	_
+4	(	(	PUNCT	_	_	2	punct	_	Pos=25|Len=1	_	_
+5	ou	ou	CCONJ	_	_	7	cc	_	Pos=26|Len=2	_	_
+6	la	le	DET	_	Definite:Def|Gender:Fem|Number:Sing|PronType:Art	7	det	_	Pos=29|Len=2	_	_
+7	direction	direction	NOUN	_	Gender:Fem|Number:Sing	2	conj	_	Pos=32|Len=9	_	_
+8	en	en	ADP	_	_	10	case	_	Pos=42|Len=2	_	_
+9	son	son	DET	_	Number:Sing	10	det	_	Pos=45|Len=3	_	_
+10	absence	absence	NOUN	_	Gender:Fem|Number:Sing	7	nmod	_	Pos=49|Len=7	_	_
+11	)	)	PUNCT	_	_	2	punct	_	Pos=56|Len=1	_	_
+12	nomme	nommer	VERB	_	Mood:Ind|Number:Sing|Person:3|Tense:Pres|VerbForm:Fin	0	root	_	Pos=58|Len=5	appoint-29.1	_
+13	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	14	det	_	Pos=64|Len=3	_	_
+14	membres	membre	NOUN	_	Gender:Masc|Number:Plur	12	obj	_	Pos=68|Len=7	_	Theme
+15	de	de	ADP	_	_	16	case	_	Pos=76|Len=2	_	_
+16	l’équipe	l'équipe	NOUN	_	Gender:Fem|Number:Sing	14	nmod	_	Pos=79|Len=8	_	_
+17	de	de	ADP	_	_	19	case	_	Pos=88|Len=2	_	_
+18	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	19	det	_	Pos=88|Len=2	_	_
+19	projet	projet	NOUN	_	Gender:Masc|Number:Sing	16	nmod	_	Pos=91|Len=6	_	_
+20	,	,	PUNCT	_	_	23	punct	_	Pos=97|Len=1	_	_
+21	notamment	notamment	ADV	_	_	23	advmod	_	Pos=99|Len=9	_	_
+22	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	23	det	_	Pos=109|Len=2	_	_
+23	CP	CP	PROPN	_	Gender:Masc|Number:Sing	19	conj	_	Pos=112|Len=2	_	_
+24	et	et	CCONJ	_	_	23	cc	_	Pos=115|Len=2	_	_
+25	le	le	DET	_	Definite:Def|Gender:Masc|Number:Sing|PronType:Art	23	det	_	Pos=118|Len=2	_	_
+26	(	(	PUNCT	_	_	23	punct	_	Pos=121|Len=1	_	_
+27	ou	ou	CCONJ	_	_	28	cc	_	Pos=122|Len=2	_	_
+28	les	le	DET	_	Definite:Def|Number:Plur|PronType:Art	26	det	_	Pos=125|Len=3	_	_
+29	)	)	PUNCT	_	_	2	punct	_	Pos=128|Len=1	_	_
+
