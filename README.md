@@ -12,7 +12,12 @@ To use it, install dependencies
 $ pip install -r ./requirements.txt
 ```
 
-Then get instructions with:
+To do SRL, you need a CoNLL representation of a text. Let's suppose it is in the file `in.txt`. To do that, you can use either LIMA:
+```bash
+$ lima in.conll > out.conll
+```
+
+Then get SRL instructions with:
 
 ```bash
 $ python src/knowledgesrl.py --help
