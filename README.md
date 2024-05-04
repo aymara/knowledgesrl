@@ -12,9 +12,20 @@ To use it, install dependencies
 $ pip install -r ./requirements.txt
 ```
 
+Install also LIMA and/or SpaCy models:
+```bash
+$ lima_models -i eng
+$ spacy download fr_core_news_md
+```
+
 To do SRL, you need a CoNLL representation of a text. Let's suppose it is in the file `in.txt`. To do that, you can use either LIMA:
 ```bash
 $ lima in.conll > out.conll
+```
+
+Or SpaCy:
+```bash
+$ python run_spacy.py --input_file in.txt --model fr_core_news_md > in.conll
 ```
 
 Then get SRL instructions with:

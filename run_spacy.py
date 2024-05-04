@@ -1,48 +1,94 @@
-import spacy
+"""
+__author__ = "Raquel G. Alhama"
+__email__ = "rgalhama@gmail.com"
+
+Parse text with spaCy and print the output in CoNLL-U format.
+
+References:
+https://spacy.io/
+http://universaldependencies.org/format.html
+
+"""
+import sys
 import argparse
+from pathlib import Path
+import spacy
 
-def analyze_text(text):
-    # Load the French language model
-    nlp = spacy.load("fr_core_news_sm")
 
-    # Process the text
-    doc = nlp(text)
+def sentences_to_conllu(doc, sent_id, prefix = ""):
+    """ Prints parsed sentences in CONLL-U format (as used in Universal Dependencies).
+        The format is specified at http://universaldependencies.org/docs/format.html
+    """
+    for sent in doc.sents:
+        print("# sent_id = %s"%(prefix+str(sent_id)))
+        print("# text = %s"%sent.sent)
 
-    # Initialize the CoNLL-U format string
-    conllu_format = "# sent_id = 1\n# text = {}\n".format(text)
+        for i, word in enumerate(sent):
+            #Find head
+            if word.dep_.lower().strip() == 'root':
+                head_idx = 0
+            else:
+                head_idx = word.head.i + 1 - sent[0].i
 
-    # Iterate over tokens in the processed document
-    for i, token in enumerate(doc):
-        # Format each token in CoNLL-U format and append to the result string
-        conllu_format += "{}\t{}\t{}\t{}\t{}\t_\t{}\t{}\t_\t_\n".format(
-            i + 1,  # ID
-            token.text,  # Form
-            token.lemma_,  # Lemma
-            token.pos_,  # POS
-            token.tag_,  # Morphological features
-            token.dep_,  # Dependency label
-            token.head.i + 1 if token.head != token else "0"  # Head
-        )
+            #Find feature tag (if available)
+            ftidx = word.tag_.find("__") + 2
+            feature_tag=word.tag_[ftidx:]
 
-    return conllu_format
+            linetuple = (
+                i+1,                                        #ID: Word index.
+                word,                                       #FORM: Word form or punctuation symbol.
+                word.lemma_.lower(),                        #LEMMA: Lemma or stem of word form.
+                word.pos_,                                  #UPOSTAG: Universal part-of-speech tag drawn
+                                                            # from revised version of the Google universal
+                                                            # POS tags.
+                '_',                                        #XPOSTAG: Language-specific part-of-speech tag;                                            # underscore if not available.
+                '_' if feature_tag == "" else feature_tag,  #FEATS: List of morphological features from the
+                                                            # universal feature inventory or from a defined
+                                                            # language-specific extension; underscore if not
+                                                            # available.
+                head_idx,                                   #HEAD: Head of the current token, which is
+                                                            # either a value of ID or zero (0).
+                word.dep_.lower(),                          #DEPREL: Universal Stanford dependency relation
+                                                            # to the HEAD (root iff HEAD = 0) or a defined
+                                                            # language-specific subtype of one.
+                '_',                                        #DEPS: List of secondary dependencies.
+                '_'                                         #MISC: Any other annotation.
+            )
+            print("%i\t%s\t%s\t%s\t%s\t%s\t%i\t%s\t%s\t%s"%linetuple)
 
-def main():
-    # Set up argument parser
-    parser = argparse.ArgumentParser(description="Analyze a French text with SpaCy and write the result in CoNLL-U format")
-    parser.add_argument("filename", type=str, help="Path to the file containing the French text")
+        sent_id+=1
+        print("\n")
+    return sent_id
 
-    # Parse the command line arguments
-    args = parser.parse_args()
 
-    # Read text from file
-    with open(args.filename, "r", encoding="utf-8") as file:
-        text = file.read()
+def main(input_file, output_file, prefix = ""):
 
-    # Analyze the text
-    result = analyze_text(text)
+    nlp = spacy.load(args.model)
 
-    # Print the result
-    print(result)
+    if output_file:
+        sys.stdout=open(output_file, "w")
+
+    with open(input_file, "r", encoding='utf-8') as fh:
+        sent_id = 1
+        for nl,line in enumerate(fh):
+            doc = nlp(line.strip())
+            sent_id = sentences_to_conllu(doc, sent_id, prefix=prefix)
+
+    sys.stdout = sys.__stdout__
 
 if __name__ == "__main__":
-    main()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_file", required=True, type=Path, help="Path to file with sentences to parse.")
+    parser.add_argument("--output_file", default=None, type=Path, help="Path to output file. If not specified, the output will be printed on standard output.")
+    parser.add_argument("--model", required=True, type=str, help="Spacy model to use (e.g. 'es_core_news_md').")
+    args = parser.parse_args()
+
+    in_file = Path.expanduser(args.input_file)
+    out_file = args.output_file if args.output_file is None else Path.expanduser(args.output_file)
+
+    if not Path.exists(in_file):
+        raise Exception(in_file, " does not exist!")
+
+    main(in_file, out_file, args.model)
+

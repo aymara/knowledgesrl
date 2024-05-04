@@ -3,6 +3,7 @@ colorama
 Distance
 ipdb
 https://github.com/aymara/lima-python/releases/download/continuous/aymara-0.5.0b6-cp37-abi3-manylinux_2_28_x86_64.whl
+spacy
 
 # -e git://github.com/pquentin/nltk.git@verbnet#egg=nltk
 
