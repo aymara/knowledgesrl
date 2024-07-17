@@ -16,7 +16,7 @@ class FNAllReaderTest(unittest.TestCase):
         extractor = FNAllReader()
 
         frames = []
-        for annotation_file, parse_file in zip(options.fulltext_annotations, options.fulltext_parses):
+        for annotation_file, parse_file in zip(options.Options.fulltext_annotations, options.Options.fulltext_parses):
             frames.extend(extractor.iter_frames(annotation_file, parse_file))
         frame = frames[28]
         self.assertTrue(frame.sentence == ("a few months ago "

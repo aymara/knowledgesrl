@@ -127,7 +127,7 @@ class FulltextReaderTest(unittest.TestCase):
         """
 
         for filename in sorted(self.expected_values):
-            reader = FulltextReader(paths.FRAMENET_FULLTEXT / filename)
+            reader = FulltextReader(paths.Paths.framenet_fulltext("eng") / filename)
 
             # Nothing is empty and begins/ends are coherents
             arg_num = 0
@@ -165,13 +165,13 @@ class FulltextReaderTest(unittest.TestCase):
             self.assertEqual(arg_num, good_arg_num)
     def test_specific_frames(self):
         """Checks that some particular frames are correctly parsed"""
-        path = paths.FRAMENET_FULLTEXT / "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = paths.Paths.framenet_fulltext("eng") / "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         self.assertEqual(reader.frames[0], self.tested_frames[0])
         self.assertEqual(reader.frames[1], self.tested_frames[1])
 
     def test_conll_output(self):
-        path = paths.FRAMENET_FULLTEXT / "LUCorpus-v0.3__20000424_nyt-NEW.xml"
+        path = paths.Paths.framenet_fulltext("eng") / "LUCorpus-v0.3__20000424_nyt-NEW.xml"
         reader = FulltextReader(path)
         conll_sentence = next(reader.to_conll_format()).splitlines()
         self.assertEqual(conll_sentence[2], "3\ttony\ttony\tNNP\tNNP\t_\t0\t \t")

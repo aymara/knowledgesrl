@@ -4,7 +4,7 @@ import unittest
 import options
 
 import framenetreader
-from framenetparsedreader import FNParsedReader
+from conllparsedreader import ConllParsedReader
         
 class FNParsedReaderTest(unittest.TestCase):
     def comp(self, original, parsed):
@@ -30,9 +30,9 @@ class FNParsedReaderTest(unittest.TestCase):
                 ("SemAnno__Text1.xml", 3)]
 
 
-        parsed_reader = FNParsedReader()
+        parsed_reader = ConllParsedReader()
 
-        for annotation, parse in zip(options.fulltext_annotations, options.fulltext_parses):
+        for annotation, parse in zip(options.Options.fulltext_annotations, options.Options.fulltext_parses):
             # Skip unwanted files
             if any([annotation.match('*{}*'.format(bad_file)) for bad_file in bad_files]):
                 continue

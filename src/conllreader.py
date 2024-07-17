@@ -189,10 +189,10 @@ class SyntacticTreeBuilder():
                                  f'11) in line {linenum}: "{l}"\n')
                 continue
             word_id = int(word_id)
-            deprel = deprel if deprel != '_' else 'ROOT'
+            deprel = deprel if deprel not in ['-', '_'] else 'ROOT'
             if deprel == 'root':
                 deprel = 'ROOT'
-            head = int(head) if head != '_' else None
+            head = int(head) if head not in ['-', '_'] else None
             if head is None and deprel == 'ROOT':
                 head = 0
 

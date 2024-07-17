@@ -4,7 +4,7 @@ import unittest
 
 import random
 import options
-from framenetparsedreader import FNParsedReader
+from conllparsedreader import ConllParsedReader
 import headwordextractor
 import framenetreader
 import paths
@@ -12,10 +12,10 @@ import paths
 class HeadWordExtractorTest(unittest.TestCase):
     def test_classes(self):
         filename = "ANC__110CYL067"
-        fnparsed_reader = FNParsedReader()
+        fnparsed_reader = ConllParsedReader()
         parsed_conll_file = paths.Paths.FRAMENET_PARSED / (filename + ".conll")
 
-        reader = framenetreader.FulltextReader(options.fulltext_annotations[0], False)
+        reader = framenetreader.FulltextReader(options.Options.fulltext_annotations[0], False)
 
         for frame in reader.frames:
             sentence_id, sentence_text, tree = list(fnparsed_reader.sentence_trees(parsed_conll_file))[frame.sentence_id]
@@ -30,11 +30,11 @@ class HeadWordExtractorTest(unittest.TestCase):
 
     def test_1(self):
         filename = "ANC__110CYL067"
-        fnparsed_reader = FNParsedReader()
+        fnparsed_reader = ConllParsedReader()
         parsed_conll_file = paths.Paths.FRAMENET_PARSED / (filename + ".conll")
 
         reader = framenetreader.FulltextReader(
-            paths.Paths.framenet_fulltext(Options.language)
+            paths.Paths.framenet_fulltext(options.Options.language)
             / (filename + ".xml"), False)
 
         frame = reader.frames[1]
@@ -53,7 +53,7 @@ def sample_args(self, num_sample = 10):
     :type num_sample: int
     :returns: (str, str, str) List -- Some examples of (arg, best_node_text, headword)
     """
-    fnparsed_reader = FNParsedReader()
+    fnparsed_reader = ConllParsedReader()
 
 
     bad_files = [
@@ -74,7 +74,7 @@ def sample_args(self, num_sample = 10):
             
 
     sample = []
-    for annotation_file, parsed_conll_file in zip(options.fulltext_annotations, options.fulltext_parses):
+    for annotation_file, parsed_conll_file in zip(options.Options.fulltext_annotations, options.Options.fulltext_parses):
         if annotation_file.stem in bad_files: continue
 
         reader = framenetreader.FulltextReader(annotation_file)

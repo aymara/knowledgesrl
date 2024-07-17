@@ -13,7 +13,7 @@ class VerbnetReaderTest(unittest.TestCase):
     '''Unit test class'''
 
     def test_global(self):
-        reader = VerbnetReader(paths.VERBNET_PATH)
+        reader = VerbnetReader(paths.Paths.verbnet_path("eng"))
         self.assertEqual(len(reader.frames_for_verb), 4402)
         empty_restr = VNRestriction.build_empty()
 
@@ -44,7 +44,8 @@ class VerbnetReaderTest(unittest.TestCase):
             self.assertIn(frame, reader.frames_for_verb[verb])
 
         reader.frames_for_verb = {}
-        root = ET.ElementTree(file=str(paths.VERBNET_PATH / 'separate-23.1.xml'))
+        root = ET.ElementTree(file=str(paths.Paths.verbnet_path("eng")
+                                       / 'separate-23.1.xml'))
         reader._handle_class(root.getroot(), [], [], [])
 
         animate = VNRestriction.build('animate')

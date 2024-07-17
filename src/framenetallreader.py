@@ -18,7 +18,7 @@ class FNAllReader:
     """ Reads simultaneously the fulltext corpus and framenet parsed
     in order to add information such as passive voice detection to the
     annotated frames.
-    This class will one day replace framenetparsedreader.
+    This class will one day replace conllparsedreader.
 
     :var add_non_core_args: boolean -- Indicates whether we also want non-core
         args

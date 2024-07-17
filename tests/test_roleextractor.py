@@ -2,8 +2,9 @@
 
 import unittest
 
+import framenet
 from framenetframe import FrameInstance, Predicate, Arg
-from roleextractor import correct_num_tags
+from roleextractor import _correct_num_tags
 
 class RoleExtractorTest(unittest.TestCase):
     def test_num_replacements(self):
@@ -34,7 +35,7 @@ class RoleExtractorTest(unittest.TestCase):
         frame = FrameInstance(initial_sentence, initial_predicate, initial_args,
             words, "fn_frame_name")
         
-        correct_num_tags(frame, final_sentence)
+        _correct_num_tags(frame, final_sentence)
         self.assertEqual(frame.sentence, final_sentence)
         self.assertEqual(frame.predicate, final_predicate)
         self.assertEqual(frame.args, final_args)
@@ -45,8 +46,9 @@ if __name__ == "__main__":
     from rolematcher import VnFnRoleMatcher
     from stats import stats_data
 
-    role_matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
-    verbnet_classes = verbnetreader.VerbnetReader(paths.VERBNET_PATH).classes
+    role_matcher = VnFnRoleMatcher(paths.Paths.VNFN_MATCHING,
+                                   framenet.FrameNet())
+    verbnet_classes = verbnetreader.VerbnetReader(paths.Paths.verbnet_path("eng")).classes
     arg_guesser = ArgGuesser(verbnet_classes)
 
     frames = []

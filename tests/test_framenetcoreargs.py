@@ -8,7 +8,7 @@ import paths
 class CoreArgsFinderTest(unittest.TestCase):
     def test_specific(self):
         core_args_finder = CoreArgsFinder()
-        core_args_finder.load_data_from_xml(paths.FRAMENET_FRAMES)
+        core_args_finder.load_data_from_xml(paths.Paths.framenet_frames("eng"))
         
         self.assertEqual(len(core_args_finder.core_args), 1019)
         

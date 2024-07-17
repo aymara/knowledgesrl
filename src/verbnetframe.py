@@ -426,8 +426,8 @@ class VerbnetOfficialFrame(ComputeSlotTypeMixin):
         for part in self.syntax:
             elem = part['elem']
             if 'role' in part:
-                yield '{}.{} [{}]'.format(part['elem'], part['role'],
-                                          part['restr'])
+                yield (f"{part['elem']}.{part['role']} "
+                       f"[{part['restr'] if 'restr' in part else ''}]")
             elif type(elem) == set:
                 yield '-'.join(elem)
             else:

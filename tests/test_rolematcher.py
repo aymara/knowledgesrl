@@ -4,6 +4,7 @@ import unittest
 from xml.etree import ElementTree as ET
 from collections import defaultdict
 
+import framenet
 from rolematcher import VnFnRoleMatcher, vn_roles_list, authorised_roles, RoleMatchingError
 import paths
 
@@ -25,9 +26,10 @@ class VnFnRoleMatcherTest(unittest.TestCase):
             "ambiguities2": 0
         }
 
-        self.matcher = VnFnRoleMatcher(paths.VNFN_MATCHING)
+        self.matcher = VnFnRoleMatcher(paths.Paths.VNFN_MATCHING,
+                                       framenet.FrameNet())
 
-        for mapping in ET.ElementTree(file=str(paths.VNFN_MATCHING)).findall("vncls"):
+        for mapping in ET.ElementTree(file=str(paths.Paths.VNFN_MATCHING)).findall("vncls"):
             fnframe, vnclass = mapping.get("fnframe"), mapping.get("class")
             for role in mapping.findall("roles/role"):
                 fnrole, vnrole = role.get("fnrole"), role.get("vnrole")
