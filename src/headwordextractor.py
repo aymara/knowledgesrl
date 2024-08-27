@@ -9,7 +9,7 @@
 
 """
 
-from nltk.corpus import wordnet as wn
+from nltk.corpus import wordnet as wn # type: ignore
 
 def headword(arg, tree):
     """Returns the headword of an argument, assuming the proper sentence has
