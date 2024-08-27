@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import argparse
 import enum
 import logging
 import paths
@@ -14,19 +15,19 @@ class FrameLexicon(enum.Enum):
 
 class Options:
 
-    matching_algorithm = "sync_predicates"
+    matching_algorithm: str = "sync_predicates"
 
-    language = None  # Init from args
+    language: str = None  # Init from args
 
-    argument_identification = False
-    heuristic_rules = False
-    bootstrap = False
+    argument_identification: bool = False
+    heuristic_rules: bool = False
+    bootstrap: bool = False
     probability_model = None
-    passivize = False
-    semrestr = False
-    wordnetrestr = False
+    passivize: bool = False
+    semrestr: bool = False
+    wordnetrestr: bool = False
     corpus = None  # Init from args
-    loglevel = logging.WARNING
+    loglevel: int = logging.WARNING
 
     framelexicon = None  # Init from args
     framelexicons = {
@@ -81,12 +82,11 @@ class Options:
         'PropBank__AetnaLifeAndCasualty',
     ]
 
-
     fulltext_annotations = None
     fulltext_parses = None
 
     @classmethod
-    def init(self, args):
+    def init(self, args: argparse.Namespace) -> None:
         display_usage = False
         Options.language = args.language
         Options.argument_identification = not args.no_argument_identification
