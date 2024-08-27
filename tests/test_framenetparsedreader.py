@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
 import unittest
 import options
 
@@ -56,3 +59,6 @@ class FNParsedReaderTest(unittest.TestCase):
 
                 # test the sentence
                 self.assertTrue(self.comp(frame.sentence, sentence))
+        
+if __name__ == '__main__':
+    unittest.main()

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
 
 import argparse
 import paths
@@ -223,3 +226,6 @@ class ArgGuesserTest(unittest.TestCase):
 
         treeBuilder = SyntacticTreeBuilder(conll_tree)
         self.assertEqual(len(treeBuilder.tree_list), 6)
+
+if __name__ == '__main__':
+    unittest.main()

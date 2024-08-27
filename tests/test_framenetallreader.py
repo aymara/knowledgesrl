@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
 import unittest
 
 from framenetallreader import FNAllReader
@@ -29,3 +32,6 @@ class FNAllReaderTest(unittest.TestCase):
         frame = frames[42]
         self.assertTrue(frame.predicate.lemma == "use")
         self.assertTrue(frame.passive == True)
+        
+if __name__ == '__main__':
+    unittest.main()

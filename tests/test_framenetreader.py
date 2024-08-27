@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
 import unittest
 
 from framenetreader import FulltextReader
@@ -184,3 +187,4 @@ if __name__ == "__main__":
             with open('framenet_conll/{}.conll'.format(name), 'w') as conll_file:
                 for conll_sentence in FulltextReader(p).to_conll_format():
                     conll_file.write(conll_sentence)
+    unittest.main()

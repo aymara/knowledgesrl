@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
+
 import unittest
 
 from verbnetframe import VerbnetFrameOccurrence, ComputeSlotTypeMixin
@@ -115,3 +119,6 @@ class VerbnetFrameOccurrenceTest(unittest.TestCase):
             {'phrase_type': 'to S', 'type': 'arg', 'text': 'to allow a freer flow of food and medicine into Iraq'}]
 
         self.assertEqual(list(VerbnetFrameOccurrence.annotated_chunks(without_subject, without_subject.sentence)), without_subject_chunks)
+        
+if __name__ == '__main__':
+    unittest.main()

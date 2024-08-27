@@ -4,8 +4,8 @@
 import argguesser
 import dumper
 import errorslog
-import framenet
 import framematcher
+import framenet
 import logging
 import options
 import paths

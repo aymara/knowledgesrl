@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 
-import unittest
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
 
+
+import unittest
+from parser_test import parse_arguments # type: ignore
 import random
-import options
-from conllparsedreader import ConllParsedReader
-import headwordextractor
-import framenetreader
-import paths
+import options # type: ignore
+from conllparsedreader import ConllParsedReader # type: ignore
+import headwordextractor # type: ignore
+import framenetreader # type: ignore
+import paths # type: ignore
+
+import nltk
+nltk.download('wordnet')
+
 
 class HeadWordExtractorTest(unittest.TestCase):
     def test_classes(self):
@@ -46,7 +54,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         self.assertEqual(headwordextractor.headword(frame.args[0], tree), {'top_headword': ('NNS', 'people'), 'content_headword': ('NNS', 'people')})
 
 
-def sample_args(self, num_sample = 10):
+def sample_args(argus, num_sample = 10):
     """Not a unit test. Returns a random sample of argument/node/headword to help.
 
     :param num_sample: The requested number of results
@@ -74,6 +82,10 @@ def sample_args(self, num_sample = 10):
             
 
     sample = []
+    print(options.Options.fulltext_annotations)
+    print(f"language selected: {argus.language}")
+    options.Options.init(argus)
+    print(options.Options.fulltext_annotations)
     for annotation_file, parsed_conll_file in zip(options.Options.fulltext_annotations, options.Options.fulltext_parses):
         if annotation_file.stem in bad_files: continue
 
@@ -100,8 +112,10 @@ def sample_args(self, num_sample = 10):
 
 if __name__ == "__main__":
     num_sample = 50
-
+    argus = parse_arguments()
+    print(f"language selected: {argus.language}")
     if num_sample > 0:
-        result = sample_args(num_sample)
+        result = sample_args(argus, num_sample)
         for exemple in result:
             print("{}\n{}\n{}\n".format(exemple[0], exemple[1], exemple[2]))
+    unittest.main()

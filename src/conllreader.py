@@ -14,7 +14,6 @@ import framenetframe
 import options
 import logging
 
-
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
 
@@ -196,7 +195,7 @@ class SyntacticTreeBuilder():
             if head is None and deprel == 'ROOT':
                 head = 0
 
-            self.father_ids[word_id] = head
+            self.father_ids[word_id] = head ## on remplit fathers_ids en y mettant la valuer head pour chaque word_id
             self.logger.debug(f'Add node: {word_id}, {form}, {cpos}, {deprel}')
             self.node_dict[word_id] = SyntacticTreeNode(
                 word_id=word_id,
@@ -217,14 +216,20 @@ class SyntacticTreeBuilder():
         self.sentence = ' '.join([self.node_dict[w_id].word
                                   for w_id in sorted(self.node_dict.keys())])
         self.logger.debug('rebuilt sentence: {}'.format(self.sentence))
+        print(self.sentence)
 
         # Record father/child relationship
         for word_id, father_id in self.father_ids.items():
+            print(f"Processing word_id: {word_id}, father_id: {father_id}")
+
             if father_id is not None and father_id != 0:
                 try:
+                    print(f"Assigning father: {father_id} to word: {word_id}")
                     self.node_dict[word_id].father = self.node_dict[father_id]
+                    print(f"Adding word_id: {word_id} to the children of father_id: {father_id}")
                     self.node_dict[father_id].children.append(self.node_dict[word_id])  # noqa
                 except KeyError:
+                    print(f"Error: father id {father_id} and/or word_id {word_id} not found in CoNLL tree {conll_tree}")
                     self.logger.error(
                         f'father id {father_id} and/or word_id {word_id} not '
                         f'found in CoNLL tree {conll_tree}')
@@ -232,12 +237,26 @@ class SyntacticTreeBuilder():
         # Record position: where is father among child?
         # Important to flatten tree
         for father in self.node_dict.values():
+            print(f"\nProcessing father node with begin_word: {father.begin_word}")
             father.position = 0
+
             for child_id, child in enumerate(father.children):
+                print(f"Checking child {child_id} with begin_word: {child.begin_word}")
                 if child.begin_word > father.begin_word:
                     father.position = child_id
+                    print(f"Condition met: child {child_id} has a greater begin_word. Updating father's position to {father.position}")
                     break
+                #print(f"B, {father.position}")
+                print(f"Condition not met for child {child_id}. Continuing search.")
+
                 father.position = len(father.children)
+                print(f"No child met the condition. Setting father's position to {father.position}")
+                print(f"C, {father.position}")
+            print(f"D, {father.position}")
+            print(f"Final position for father: {father.position}")
+
+        for father in self.node_dict.values():
+            print(f"Final position for father: {father.position}")
 
         for node in self.node_dict.values():
             if node.father is None:
@@ -247,6 +266,9 @@ class SyntacticTreeBuilder():
                 self.logger.debug('add to tree_list: {}'.format(node))
                 
                 self.tree_list.append(node)
+        
+        print(self.tree_list)
+
 
     def fill_begin_end(self, node):
         """Fill begin/end values of very subtree"""

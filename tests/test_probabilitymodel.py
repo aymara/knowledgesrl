@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
+
 import unittest
 
 from probabilitymodel import ProbabilityModel
@@ -59,3 +63,6 @@ class ProbabilityModelTest(unittest.TestCase):
             
         self.assertEqual(model.best_role(
             set(["Agent", "Theme"]), "SUBJ", "for", "eat", "predicate_slot"), "Theme")
+        
+if __name__ == '__main__':
+    unittest.main()

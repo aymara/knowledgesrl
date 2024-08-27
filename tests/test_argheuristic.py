@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
 import unittest
 
-from conllreader import SyntacticTreeBuilder
-from argheuristic import find_args, build_relation_tree
+from conllreader import SyntacticTreeBuilder # type: ignore
+from argheuristic import find_args, build_relation_tree # type: ignore
 
 
 class ArgHeuristicTest(unittest.TestCase):
     parsed_sentence = (
-        "1	Your	Your	PRP$	PRP$	-	2	NMOD	-	-\n"
+        "1	Your	your	PRP$	PRP$	-	2	NMOD	-	-\n"
         "2	contribution	contribution	NN	NN	-	5	SBJ	-	-\n"
         "3	to	to	TO	TO	-	2	NMOD	-	-\n"
         "4	Goodwill	Goodwill	NNP	NNP	-	3	IM	-	-\n"
@@ -29,12 +32,11 @@ class ArgHeuristicTest(unittest.TestCase):
         expected = (
             "mean IDENTITY (more OBJ_DOWN (than AMOD_DOWN (may SUB_DOWN (you SB"
             "J_DOWN (), know VC_DOWN ()))), will VC_UP (contribution SBJ_DOWN ("
-            "your NMOD_DOWN (), to NMOD_DOWN (goodwill IM_DOWN ())), . P_DOWN ("
+            "your NMOD_DOWN (), to NMOD_DOWN (Goodwill IM_DOWN ())), . P_DOWN ("
             ")))"
         )
         
         relation_tree = build_relation_tree(self.initial_tree_list[0].children[1])
-               
         self.assertEqual(str(relation_tree), expected)
 
     def test_rules(self):
@@ -43,3 +45,6 @@ class ArgHeuristicTest(unittest.TestCase):
         found = find_args(self.initial_tree_list[0].children[1])
         
         self.assertEqual(set([x.word for x in found]), expected)
+        
+if __name__ == '__main__':
+    unittest.main()

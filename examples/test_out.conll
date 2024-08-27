@@ -1,0 +1,53 @@
+1	1\x09Le\x09le\x09DET\x09_\x09Definite:Def|Gender:Masc|Number:Sing|PronType:Art\x092\x09det\x09_\x09Pos=1|Len=2	Vdantdenanananananananananananana	X	_	_	0	root	_	Pos=0|Len=83
+
+1	2\x09responsable\x09responsable\x09NOUN\x09_\x09Gender:Masc|Number:Sing\x0912\x09nsubj\x09_\x09Pos=4|Len=11	Vbonon-	X	_	_	-1	root	_	Pos=84|Len=80
+
+1	3\x09d\xffffffe2\xffffff80\xffffff99\xffffffc3\xffffffa9quipe\x09d'\xffffffc3\xffffffa9quipe\x09NOUN\x09_\x09Gender:Fem|Number:Sing\x092\x09nmod\x09_\x09Pos=16|Len=8	V--don	X	_	_	-2	root	_	Pos=165|Len=71
+
+1	4\x09(\x09(\x09PUNCT\x09_\x09_\x092\x09punct\x09_\x09Pos=25|Len=1	V__aVsaV	X	_	_	-3	root	_	Pos=237|Len=38
+
+1	5\x09ou\x09ou\x09CCONJ\x09_\x09_\x097\x09cc\x09_\x09Pos=26|Len=2	V__od_og_og_og	X	_	_	-4	root	_	Pos=276|Len=37
+
+1	6\x09la\x09le\x09DET\x09_\x09Definite:Def|Gender:Fem|Number:Sing|PronType:Art\x097\x09det\x09_\x09Pos=29|Len=2	Vd	X	_	_	-5	root	_	Pos=314|Len=83
+
+1	7\x09direction\x09direction\x09NOUN\x09_\x09Gender:Fem|Number:Sing\x092\x09conj\x09_\x09Pos=32|Len=9	Vnnn-nggnon-_gngngngngnggnngngngg	X	_	_	-6	root	_	Pos=398|Len=73
+
+1	8\x09en\x09en\x09ADP\x09_\x09_\x0910\x09case\x09_\x09Pos=42|Len=2	V__an__an_on_an_on_an_on_an_on_an	X	_	_	-7	root	_	Pos=472|Len=38
+
+1	9\x09son\x09son\x09DET\x09_\x09Number:Sing\x0910\x09det\x09_\x09Pos=45|Len=3	Vssd--ssson_dgd	X	_	_	-8	root	_	Pos=511|Len=49
+
+1	10\x09absence\x09absence\x09NOUN\x09_\x09Gender:Fem|Number:Sing\x097\x09nmod\x09_\x09Pos=49|Len=7	Vn-ensnd	X	_	_	-9	root	_	Pos=561|Len=70
+
+1	11\x09)\x09)\x09PUNCT\x09_\x09_\x092\x09punct\x09_\x09Pos=56|Len=1	Vs*.	X	_	_	-10	root	_	Pos=632|Len=39
+
+1	12\x09nomme\x09nommer\x09VERB\x09_\x09Mood:Ind|Number:Sing|Person:3|Tense:Pres|VerbForm:Fin\x090\x09root\x09_\x09Pos=58|Len=5	Vvon	X	_	_	-11	root	_	Pos=672|Len=98
+
+1	13\x09les\x09le\x09DET\x09_\x09Definite:Def|Number:Plur|PronType:Art\x0914\x09det\x09_\x09Pos=64|Len=3	V	X	_	_	-12	root	_	Pos=771|Len=75
+
+1	14\x09membres\x09membre\x09NOUN\x09_\x09Gender:Masc|Number:Plur\x0912\x09obj\x09_\x09Pos=68|Len=7	V	X	_	_	-13	root	_	Pos=847|Len=70
+
+1	15\x09de\x09de\x09ADP\x09_\x09_\x0916\x09case\x09_\x09Pos=76|Len=2	V__oV__---	X	_	_	-14	root	_	Pos=918|Len=39
+2	16\x09l\xffffffe2\xffffff80\xffffff99\xffffffc3\xffffffa9quipe\x09l'\xffffffc3\xffffffa9quipe\x09NOUN\x09_\x09Gender:Fem|Number:Sing\x0914\x09nmod\x09_\x09Pos=79|Len=8	n----nn---------------nnnnn--lnln	X	_	_	1	goeswith	_	Pos=958|Len=73
+3	17\x09de\x09de\x09ADP\x09_\x09_\x0919\x09case\x09_\x09Pos=88|Len=2	n*_consonsonson_onson	X	_	_	1	goeswith	_	Pos=1032|Len=39
+
+1	18\x09le\x09le\x09DET\x09_\x09Definite:Def|Gender:Masc|Number:Sing|PronType:Art\x0919\x09det\x09_\x09Pos=88|Len=2	V8dsdaVsddddddddddddsdddddddddend	X	_	_	-17	root	_	Pos=1072|Len=86
+
+1	19\x09projet\x09projet\x09NOUN\x09_\x09Gender:Masc|Number:Sing\x0916\x09nmod\x09_\x09Pos=91|Len=6	Vt---on-----sonsons----m-	X	_	_	-18	root	_	Pos=1159|Len=70
+2	20\x09,\x09,\x09PUNCT\x09_\x09_\x0923\x09punct\x09_\x09Pos=97|Len=1	n_*n_n*n*n*n*n_non_non_on_on_on_o	X	_	_	1	goeswith	_	Pos=1230|Len=40
+
+1	21\x09notamment\x09notamment\x09ADV\x09_\x09_\x0923\x09advmod\x09_\x09Pos=99|Len=9	Vn	X	_	_	-20	root	_	Pos=1271|Len=55
+
+1	22\x09le\x09le\x09DET\x09_\x09Definite:Def|Gender:Masc|Number:Sing|PronType:Art\x0923\x09det\x09_\x09Pos=109|Len=2	Vd	X	_	_	-21	root	_	Pos=1327|Len=87
+
+1	23\x09CP\x09CP\x09PROPN\x09_\x09Gender:Masc|Number:Sing\x0919\x09conj\x09_\x09Pos=112|Len=2	VssoV_nun_sun_sun_upunun_un_sun_u	X	_	_	-22	root	_	Pos=1415|Len=64
+
+1	24\x09et\x09et\x09CCONJ\x09_\x09_\x0923\x09cc\x09_\x09Pos=115|Len=2	V__oV__ss	X	_	_	-23	root	_	Pos=1480|Len=40
+
+1	25\x09le\x09le\x09DET\x09_\x09Definite:Def|Gender:Masc|Number:Sing|PronType:Art\x0923\x09det\x09_\x09Pos=118|Len=2	Vdddddddddddddlddlddddanddddddddd	X	_	_	-24	root	_	Pos=1521|Len=87
+
+1	26\x09(\x09(\x09PUNCT\x09_\x09_\x0923\x09punct\x09_\x09Pos=121|Len=1	V___	X	_	_	-25	root	_	Pos=1609|Len=41
+2	27\x09ou\x09ou\x09CCONJ\x09_\x09_\x0928\x09cc\x09_\x09Pos=122|Len=2	n__n_n_on_on_on_on_on_on_on_on_on	X	_	_	1	goeswith	_	Pos=1651|Len=40
+
+1	28\x09les\x09le\x09DET\x09_\x09Definite:Def|Number:Plur|PronType:Art\x0926\x09det\x09_\x09Pos=125|Len=3	Vssdedsdddensddansddddddddddddddd	X	_	_	-27	root	_	Pos=1692|Len=76
+
+1	29\x09)\x09)\x09PUNCT\x09_\x09_\x092\x09punct\x09_\x09Pos=128|Len=1	Vs_.	X	_	_	-28	root	_	Pos=1769|Len=40

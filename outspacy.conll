@@ -1,0 +1,52 @@
+1	Here	here	ADV	_	B	2	advmod	_	_	_
+2	is	be	AUX	_	BZ	0	root	_	_	_
+3	a	a	DET	_	T	5	det	_	_	_
+4	test	test	NOUN	_	N	5	compound	_	_	_
+5	file	file	NOUN	_	N	2	nsubj	_	_	_
+6	.	.	PUNCT	_	_	2	punct	_	_	_
+
+1	I	i	PRON	_	RP	5	nsubj	_	_	_
+2	do	do	AUX	_	BP	5	aux	_	_	_
+3	n't	not	PART	_	B	5	neg	_	_	_
+4	really	really	ADV	_	B	5	advmod	_	_	_
+5	know	know	VERB	_	B	11	ccomp	_	_	_
+6	what	what	PRON	_	P	8	dobj	_	_	_
+7	to	to	PART	_	O	8	aux	_	_	_
+8	write	write	VERB	_	B	5	xcomp	_	_	_
+9	,	,	PUNCT	_	_	11	punct	_	_	_
+10	this	this	PRON	_	T	11	nsubj	_	_	_
+11	is	be	AUX	_	BZ	0	root	_	_	_
+12	a	a	DET	_	T	13	det	_	_	_
+13	sort	sort	NOUN	_	N	11	attr	_	_	_
+14	of	of	ADP	_	N	13	prep	_	_	_
+15	"	"	PUNCT	_	`	19	punct	_	_	_
+16	Hello	hello	INTJ	_	H	17	nmod	_	_	_
+17	world	world	NOUN	_	N	19	nmod	_	_	_
+18	"	"	PUNCT	_	'	19	punct	_	_	_
+19	file	file	NOUN	_	N	14	pobj	_	_	_
+20	.	.	PUNCT	_	_	11	punct	_	_	_
+
+1	Marie	marie	PROPN	_	NP	3	nsubj	_	_	_
+2	is	be	AUX	_	BZ	3	aux	_	_	_
+3	eating	eat	VERB	_	BG	0	root	_	_	_
+4	an	an	DET	_	T	5	det	_	_	_
+5	apple	apple	NOUN	_	N	3	dobj	_	_	_
+6	.	.	PUNCT	_	_	3	punct	_	_	_
+
+1	Who	who	PRON	_	P	2	attr	_	_	_
+2	is	be	AUX	_	BZ	0	root	_	_	_
+3	Marie	marie	PROPN	_	NP	2	nsubj	_	_	_
+4	?	?	PUNCT	_	_	2	punct	_	_	_
+
+1	She	she	PRON	_	RP	2	nsubj	_	_	_
+2	is	be	AUX	_	BZ	0	root	_	_	_
+3	my	my	PRON	_	RP$	4	poss	_	_	_
+4	cousin	cousin	NOUN	_	N	2	attr	_	_	_
+5	.	.	PUNCT	_	_	2	punct	_	_	_
+
+1	Let	let	VERB	_	B	0	root	_	_	_
+2	's	us	PRON	_	RP	3	nsubj	_	_	_
+3	try	try	VERB	_	B	1	ccomp	_	_	_
+4	this	this	PRON	_	T	3	dobj	_	_	_
+5	.	.	PUNCT	_	_	1	punct	_	_	_
+

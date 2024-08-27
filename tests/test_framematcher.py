@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
 import unittest
 
 from verbnetframe import VerbnetFrameOccurrence, VerbnetOfficialFrame
@@ -135,3 +138,6 @@ class FrameMatcherTest(unittest.TestCase):
 
         self.assertEqual(best_score, 200)
         self.assertEqual(frame_occurrence.roles, [{'Agent'}, {'Patient'}])
+        
+if __name__ == '__main__':
+    unittest.main()

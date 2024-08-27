@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
+
 import unittest
 
 from verbnetframe import VerbnetOfficialFrame
@@ -66,3 +70,6 @@ class VerbnetOfficialFrameTest(unittest.TestCase):
                 {'elem': 'NP', 'role': 'Theme', 'restr': 'b'},
                 {'elem': 'V'}, {'elem': 'by'},
                 {'elem': 'NP', 'role': 'Agent', 'restr': 'a'}])])
+        
+if __name__ == '__main__':
+    unittest.main()

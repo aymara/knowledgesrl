@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
+
 import unittest
 from xml.etree import ElementTree as ET
 from collections import defaultdict
@@ -130,3 +134,6 @@ class VnFnRoleMatcherTest(unittest.TestCase):
             match("Purpose", "Agent", "Non_existing_fn_frame", ["66"])
         with self.assertRaises(RoleMatchingError):
             match("Non_existing_fn_role", "Patient", "Grant_permission", ["order-60"])
+        
+if __name__ == '__main__':
+    unittest.main()

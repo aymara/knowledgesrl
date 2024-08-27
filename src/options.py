@@ -127,6 +127,7 @@ class Options:
             framenet_parsed = paths.Paths.FRAMENET_LU_PARSED
 
         if Options.use_training_set:
+            print('option1')
             Options.fulltext_annotations = sorted(
                 [f for f in fulltext_corpus.glob('*.xml')
                  if f.stem not in Options.framenet_test_set])
@@ -134,6 +135,7 @@ class Options:
                 [f for f in framenet_parsed.glob('*.conll')
                  if f.stem not in Options.framenet_test_set])
         else:
+            print('pilulebleue')
             Options.fulltext_annotations = sorted(
                 [f for f in fulltext_corpus.glob('*.xml')
                 if f.stem in Options.framenet_test_set])
@@ -141,3 +143,4 @@ class Options:
                 [f for f in framenet_parsed.glob('*.conll')
                 if f.stem in Options.framenet_test_set])
             
+

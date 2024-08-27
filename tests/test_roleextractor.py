@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 
+import sys
+sys.path.append('/home/cjaffre/knowledgesrl/src')
+
+
 import unittest
 
 import framenet
+import paths
 from framenetframe import FrameInstance, Predicate, Arg
 from roleextractor import _correct_num_tags
+from framenetallreader import FNAllReader
 
 class RoleExtractorTest(unittest.TestCase):
     def test_num_replacements(self):
@@ -68,3 +74,4 @@ if __name__ == "__main__":
           stats_data["arg_extracted_bad"],
           stats_data["arg_not_extracted"], stats_data["arg_not_extracted_not_verbnet"]
     ))
+    unittest.main()
