@@ -142,5 +142,5 @@ class Options:
             Options.fulltext_parses = sorted(
                 [f for f in framenet_parsed.glob('*.conll')
                 if f.stem in Options.framenet_test_set])
-            
+
 

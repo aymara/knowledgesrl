@@ -15,6 +15,9 @@ import options
 import logging
 import re
 
+logging.basicConfig(level=logging.DEBUG)
+logging.root.setLevel(logging.DEBUG)
+
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
 
@@ -74,7 +77,7 @@ class SyntacticTreeNode:
                 f"deprel: {self.deprel}; begin_word: {self.begin_word}; "
                 f"position: {self.position}; begin: {self.begin}; "
                 f"end: {self.end}; word: {self.word})")  # children'''
-    
+
     def __str__(self):
         result = f"({self.pos}/{self.deprel}/{self.position}/{self.begin}/{self.end} {self.lemma}"
         # If the node has childre we add them recursively
@@ -128,26 +131,31 @@ class SyntacticTreeNode:
         # result += ")"  # To end the representation
         # return result
     def str2(self):
-        result = f"({self.pos}/{self.deprel}/{self.position}/{self.begin}/{self.end} {self.word}"
+
+        result = f"({self.pos}/{self.deprel}/{self.position}/{self.begin}/{self.end}/{self.begin_word} {self.word}"
         # If the node has childre we add them recursively
         for child_node in self.children:
 
-            result += " " + str(child_node)
+            result += " " + child_node.str2()
         result += ")"  # To end the representation
         return result
+
     # Fonction pour extraire les mots et les informations à partir de l'arbre de dépendances
-    def parse_dependency_tree(tree):
+    def parse_dependency_tree(self):
         # Regex pour extraire les mots et leurs informations
-        pattern = re.compile(r'(\w+/\w+/\d+/\d+/\d+ \w+)')
+        # pattern = re.compile(r'(\w+/\w+/\d+/\d+/\d+/\d+ [\w\.]+)')
+        pattern = re.compile(r'([^\s\(\)/]+/\w+/\d+/\d+/\d+/\d+ [^\s\(\)]+)')
         #matches = pattern.findall(str(tree))
-        matches = pattern.findall(tree.str2())
+        tree_str2 = self.str2()
+        matches = pattern.findall(tree_str2)
+        # breakpoint()
 
         # Liste pour stocker les informations extraites
         words_info = []
 
         for match in matches:
             # Extraire les informations de chaque mot
-            print(f"match: {match}")
+            self.logger.debug(f"match: {match}")
             parts = match.split()
             tag_info = parts[0].split('/')
             word = parts[1]
@@ -156,13 +164,13 @@ class SyntacticTreeNode:
             word_info = {
                 'pos_tag': tag_info[0],  # Étiquette grammaticale (par exemple, VBD, NN)
                 'dep_rel': tag_info[1],  # Relation de dépendance (par exemple, ROOT, SUB)
-                'word_order': int(tag_info[4]),  # Position du mot dans la phrase
+                'word_order': int(tag_info[5]),  # Position du mot dans la phrase
                 'word': word  # Le mot lui-même
             }
             words_info.append(word_info)
-        
+
         return words_info
-    
+
 
     # Fonction pour reconstruire la phrase
     def flat(self):
@@ -170,7 +178,7 @@ class SyntacticTreeNode:
         # tree = str(self)
         # Parse l'arbre de dépendances
         words_info = self.parse_dependency_tree()
-
+        # breakpoint()
         # Trier les mots en fonction de leur ordre dans la phrase
         sorted_words = sorted(words_info, key=lambda x: x['word_order'])
 
@@ -178,7 +186,7 @@ class SyntacticTreeNode:
         sentence = ' '.join([word['word'] for word in sorted_words])
 
         return sentence
-    
+
 
 
 
@@ -287,7 +295,7 @@ class SyntacticTreeBuilder():
         self.sentence = ' '.join([self.node_dict[w_id].word
                                   for w_id in sorted(self.node_dict.keys())])
         self.logger.debug('rebuilt sentence: {}'.format(self.sentence))
-        print(self.sentence)
+        self.logger.debug(self.sentence)
 
         # Record father/child relationship
         for word_id, father_id in self.father_ids.items():
@@ -316,63 +324,61 @@ class SyntacticTreeBuilder():
 
 
         #for father in self.node_dict.values():
-            #print(f"Final position for father: {father.position}", file=sys.stderr)
+            #self.logger.debug(f"Final position for father: {father.position}", file=sys.stderr)
 
         # Dictionnaire de nœuds par ID
         self.nodes = [node for node in self.node_dict.values()]
-        #print(self.nodes)
+        #self.logger.debug(self.nodes)
 
         for node in self.node_dict.values():
             if node.father is None:
                 # Fill begin/end info
-                #print(f"node: {node}", file=sys.stderr)
-                #print(self.node_dict)
+                # self.logger.debug(f"node: {node}", file=sys.stderr)
+                # self.logger.debug(self.node_dict)
                 self.fill_begin_end(node)
-                #print(f"node: {node}", file=sys.stderr)
+                # self.logger.debug(f"node: {node}", file=sys.stderr)
                 # Fill forest of tree
                 self.logger.debug('add to tree_list: {}'.format(node))
 
                 self.tree_list.append(node)
 
-                ##### NEW ######
+                # #### NEW ######
                 # Generate the whole tree
-                #self.tree_list = self.build_tree_representation(node)
-                #print(f"tree_representation: {tree_representation}")
-        #self.tree_list = self.extract_words(tree_representation)
-        print(f"tree_list: {self.tree_list[0]}")
-        if self.sentence == "Jamaica is not just a destination it is an experience":
-            print(f"tree_list: {self.tree_list[1]}")
+                # self.tree_list = self.build_tree_representation(node)
+                # self.logger.debug(f"tree_representation: {tree_representation}")
+        # self.tree_list = self.extract_words(tree_representation)
+        self.logger.debug(f"tree_list: {self.tree_list[0]}")
 
     # Fills the begin and end for every child
     def fill_begin_end(self, node):
         """Fill begin/end values of every subtree"""
 
         begin_words = [node.begin_word]
-        #print(f"begin_words: {begin_words}", file=sys.stderr)
+        #self.logger.debug(f"begin_words: {begin_words}", file=sys.stderr)
         end_words = [node.begin_word + len(node.word) - 1]
-        #print(f"end_words: {end_words}", file=sys.stderr)
-        
+        #self.logger.debug(f"end_words: {end_words}", file=sys.stderr)
+
         for child in node.children:
             self.fill_begin_end(child)
-            #print(f"child: {child}", file=sys.stderr)
-            
+            #self.logger.debug(f"child: {child}", file=sys.stderr)
+
             begin_words.append(child.begin)
             end_words.append(child.end)
         node.begin = min(begin_words)
         node.end = max(end_words)
 
-    
-    
+
+
     # Generates the tree representation
     def build_tree_representation(self, node):
         # ROOT node
         result = f"({node.pos}/{node.deprel}/{node.position}/{node.begin}/{node.end} {node.lemma}"
-        print(result)
+        self.logger.debug(result)
         # If the node has childre we add them recursively
         for child_node in node.children:
 
             result += " " + self.build_tree_representation(child_node)
-        
+
         result += ")"  # To end the representation
         return result
 
@@ -453,7 +459,7 @@ class ConllSemanticAppender():
         # compute the predicates string, concatenation of the possible
         # frames names
         if frame_annotations[0].predicate.tokenid+notFirstSentenceShift < len(self.conll_matrix[frame_annotations[0].sentence_id]):
-            # print(len(self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift]))
+            # self.logger.debug(len(self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift]))
             self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
         else:
             self.logger.error("add_framenet_frame_annotation got token number "
@@ -485,7 +491,7 @@ class ConllSemanticAppender():
             for i, sentence in enumerate(self.conll_matrix):
                 for line in sentence:
                     self.logger.debug('\t'.join(line))
-                    print('\t'.join(line), file=semantic_file)
+                    self.logger.debug('\t'.join(line), file=semantic_file)
                 if i < len(self.conll_matrix) - 1:
                     self.logger.debug('\n')
-                    print(end='\n', file=semantic_file)
+                    self.logger.debug(end='\n', file=semantic_file)
