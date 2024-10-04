@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append('/home/cjaffre/knowledgesrl/src')
-
+import trace
 import unittest
 
 from conllreader import SyntacticTreeBuilder
@@ -13,7 +13,7 @@ class TreeBuilderTest(unittest.TestCase):
     def setUp(self):
         print('setUp')
         conll_tree = \
-"""1	The	The	DT	DT	-	2	NMOD	-	-
+"""1	The	the	DT	DT	-	2	NMOD	-	-
 2	others	others	NNS	NNS	-	5	SBJ	-	-
 3	here	here	RB	RB	-	2	LOC	-	-
 4	today	today	RB	RB	-	3	TMP	-	-
@@ -73,5 +73,27 @@ class TreeBuilderTest(unittest.TestCase):
 7	a	a	DT	DT	-	8	NMOD	-	-
 8	letter	letter	NN	NN	-	6	OBJ	-	-"""
         self.assertEqual(SyntacticTreeBuilder(conll_tree).tree_list[0].flat(), 'a few months ago you received a letter')
+    
+    def test_another_other_flat(self):
+        print('test_another_other_flat')
+        conll_tree = \
+"""1	Jamaica	Jamaica	NNP	NNP	-	2	SUB	-	-
+2	is	be	VBZ	VBZ	-	-	-	-	-
+3	not	not	NOT	NOT	-	2	VMOD	-	-
+4	just	just	RB	RB	-	-	-	-	-
+5	a	a	DT	DT	-	6	NMOD	-	-
+6	destination	destination	NN	NN	-	2	OBJ 	-	-
+7	it	it	PRP	PRP	-	8	SUB	-	-
+8	is	be	VBZ	VBZ	-	6	NMOD	-	-
+9	an	a	DT	DT	-	10	NMOD	-	-
+10	experience	experience	NN	NN	-	8	OBJ 	-	-"""
+        print(f"lala : {SyntacticTreeBuilder(conll_tree).tree_list[0]}")
+        self.assertEqual(SyntacticTreeBuilder(conll_tree).tree_list[0].flat(), 'Jamaica is not just a destination it is an experience')
+        
 if __name__ == '__main__':
+    ### NEW Pour comprendre ce qu'il se passe ###
+    #tracer = trace.Trace(trace=True, count = False)
+    #tracer.run('unittest.main()')
+    ### END NEW
+
     unittest.main()

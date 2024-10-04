@@ -8,11 +8,12 @@
     * SyntacticTreeBuilder
     * ConllSemanticAppender
 """
-
+import sys
 from collections import defaultdict
 import framenetframe
 import options
 import logging
+import re
 
 class SyntacticTreeNode:
     """A node (internal or terminal) of a syntactic tree
@@ -68,12 +69,20 @@ class SyntacticTreeNode:
             father = self.father.word_id
         else:
             father = ""
-
         return (f"node(id: {self.word_id}; father: {father}; "
                 f"children: {children}; cpos: {self.cpos}; pos: {self.pos}; "
                 f"deprel: {self.deprel}; begin_word: {self.begin_word}; "
                 f"position: {self.position}; begin: {self.begin}; "
-                f"end: {self.end}; word: {self.word})")  # children
+                f"end: {self.end}; word: {self.word})")  # children'''
+    
+    def __str__(self):
+        result = f"({self.pos}/{self.deprel}/{self.position}/{self.begin}/{self.end} {self.lemma}"
+        # If the node has childre we add them recursively
+        for child_node in self.children:
+
+            result += " " + str(child_node)
+        result += ")"  # To end the representation
+        return result
 
     def __eq__(self, other):
         if isinstance(other, SyntacticTreeNode):
@@ -108,14 +117,76 @@ class SyntacticTreeNode:
             return self.father.fathers(result)
         return previous
 
+    #def flat(self):
+        #"""Return the tokenized sentence from the parse tree."""
+        #return " ".join([x.word for x in self])
+        # result = f"({self.pos}/{self.deprel}/{self.position}/{self.begin}/{self.end} {self.lemma}"
+        # If the node has childre we add them recursively
+        # for child_node in self.children:
+
+            # result += " " + str(child_node)
+        # result += ")"  # To end the representation
+        # return result
+    def str2(self):
+        result = f"({self.pos}/{self.deprel}/{self.position}/{self.begin}/{self.end} {self.word}"
+        # If the node has childre we add them recursively
+        for child_node in self.children:
+
+            result += " " + str(child_node)
+        result += ")"  # To end the representation
+        return result
+    # Fonction pour extraire les mots et les informations à partir de l'arbre de dépendances
+    def parse_dependency_tree(tree):
+        # Regex pour extraire les mots et leurs informations
+        pattern = re.compile(r'(\w+/\w+/\d+/\d+/\d+ \w+)')
+        #matches = pattern.findall(str(tree))
+        matches = pattern.findall(tree.str2())
+
+        # Liste pour stocker les informations extraites
+        words_info = []
+
+        for match in matches:
+            # Extraire les informations de chaque mot
+            print(f"match: {match}")
+            parts = match.split()
+            tag_info = parts[0].split('/')
+            word = parts[1]
+
+            # Structure des informations pour chaque mot
+            word_info = {
+                'pos_tag': tag_info[0],  # Étiquette grammaticale (par exemple, VBD, NN)
+                'dep_rel': tag_info[1],  # Relation de dépendance (par exemple, ROOT, SUB)
+                'word_order': int(tag_info[4]),  # Position du mot dans la phrase
+                'word': word  # Le mot lui-même
+            }
+            words_info.append(word_info)
+        
+        return words_info
+    
+
+    # Fonction pour reconstruire la phrase
     def flat(self):
-        """Return the tokenized sentence from the parse tree."""
-        return " ".join([x.word for x in self])
+
+        # tree = str(self)
+        # Parse l'arbre de dépendances
+        words_info = self.parse_dependency_tree()
+
+        # Trier les mots en fonction de leur ordre dans la phrase
+        sorted_words = sorted(words_info, key=lambda x: x['word_order'])
+
+        # Récupérer les mots dans l'ordre
+        sentence = ' '.join([word['word'] for word in sorted_words])
+
+        return sentence
+    
+
+
 
     def contains(self, arg):
         """Search an exact argument in all subtrees"""
         return (self.flat() == arg or
                 any((c.contains(arg) for c in self.children)))
+        #return (self.reconstruct_sentence() == arg or any((c.contains(arg) for c in self.children)))
 
     def closest_match(self, arg):
         """Search the closest match to arg"""
@@ -220,16 +291,12 @@ class SyntacticTreeBuilder():
 
         # Record father/child relationship
         for word_id, father_id in self.father_ids.items():
-            print(f"Processing word_id: {word_id}, father_id: {father_id}")
 
             if father_id is not None and father_id != 0:
                 try:
-                    print(f"Assigning father: {father_id} to word: {word_id}")
                     self.node_dict[word_id].father = self.node_dict[father_id]
-                    print(f"Adding word_id: {word_id} to the children of father_id: {father_id}")
                     self.node_dict[father_id].children.append(self.node_dict[word_id])  # noqa
                 except KeyError:
-                    print(f"Error: father id {father_id} and/or word_id {word_id} not found in CoNLL tree {conll_tree}")
                     self.logger.error(
                         f'father id {father_id} and/or word_id {word_id} not '
                         f'found in CoNLL tree {conll_tree}')
@@ -237,50 +304,83 @@ class SyntacticTreeBuilder():
         # Record position: where is father among child?
         # Important to flatten tree
         for father in self.node_dict.values():
-            print(f"\nProcessing father node with begin_word: {father.begin_word}")
             father.position = 0
 
             for child_id, child in enumerate(father.children):
-                print(f"Checking child {child_id} with begin_word: {child.begin_word}")
                 if child.begin_word > father.begin_word:
                     father.position = child_id
-                    print(f"Condition met: child {child_id} has a greater begin_word. Updating father's position to {father.position}")
                     break
-                #print(f"B, {father.position}")
-                print(f"Condition not met for child {child_id}. Continuing search.")
+
 
                 father.position = len(father.children)
-                print(f"No child met the condition. Setting father's position to {father.position}")
-                print(f"C, {father.position}")
-            print(f"D, {father.position}")
-            print(f"Final position for father: {father.position}")
 
-        for father in self.node_dict.values():
-            print(f"Final position for father: {father.position}")
+
+        #for father in self.node_dict.values():
+            #print(f"Final position for father: {father.position}", file=sys.stderr)
+
+        # Dictionnaire de nœuds par ID
+        self.nodes = [node for node in self.node_dict.values()]
+        #print(self.nodes)
 
         for node in self.node_dict.values():
             if node.father is None:
                 # Fill begin/end info
+                #print(f"node: {node}", file=sys.stderr)
+                #print(self.node_dict)
                 self.fill_begin_end(node)
+                #print(f"node: {node}", file=sys.stderr)
                 # Fill forest of tree
                 self.logger.debug('add to tree_list: {}'.format(node))
-                
+
                 self.tree_list.append(node)
-        
-        print(self.tree_list)
 
+                ##### NEW ######
+                # Generate the whole tree
+                #self.tree_list = self.build_tree_representation(node)
+                #print(f"tree_representation: {tree_representation}")
+        #self.tree_list = self.extract_words(tree_representation)
+        print(f"tree_list: {self.tree_list[0]}")
+        if self.sentence == "Jamaica is not just a destination it is an experience":
+            print(f"tree_list: {self.tree_list[1]}")
 
+    # Fills the begin and end for every child
     def fill_begin_end(self, node):
-        """Fill begin/end values of very subtree"""
+        """Fill begin/end values of every subtree"""
 
         begin_words = [node.begin_word]
+        #print(f"begin_words: {begin_words}", file=sys.stderr)
         end_words = [node.begin_word + len(node.word) - 1]
+        #print(f"end_words: {end_words}", file=sys.stderr)
+        
         for child in node.children:
             self.fill_begin_end(child)
+            #print(f"child: {child}", file=sys.stderr)
+            
             begin_words.append(child.begin)
             end_words.append(child.end)
         node.begin = min(begin_words)
         node.end = max(end_words)
+
+    
+    
+    # Generates the tree representation
+    def build_tree_representation(self, node):
+        # ROOT node
+        result = f"({node.pos}/{node.deprel}/{node.position}/{node.begin}/{node.end} {node.lemma}"
+        print(result)
+        # If the node has childre we add them recursively
+        for child_node in node.children:
+
+            result += " " + self.build_tree_representation(child_node)
+        
+        result += ")"  # To end the representation
+        return result
+
+    # Retrieve a list of words from the treee representation
+    def extract_words(self, tree_representation):
+        # Extracts every word followed by a parentheses
+        words = re.findall(r'\b\w+\b(?=\))|(?<=\()', tree_representation)
+        return words
 
 
 class ConllSemanticAppender():
