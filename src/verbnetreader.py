@@ -119,7 +119,7 @@ class VerbnetReader:
                         new_syntax.append({
                             'elem': elem,
                             'role': roles[role_index],
-                            'restr': None})
+                            'restr': VNRestriction.build_empty()})
                     role_index += 1
                     continue
                 except:
