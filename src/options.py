@@ -85,8 +85,8 @@ class Options:
     fulltext_annotations = None
     fulltext_parses = None
 
-    @classmethod
-    def init(self, args: argparse.Namespace) -> None:
+    #@classmethod
+    def __init__(self, args: argparse.Namespace) -> None:
         display_usage = False
         Options.language = args.language
         Options.argument_identification = not args.no_argument_identification
