@@ -48,55 +48,55 @@ def fill_gold_roles(frame_instances,
 
     fn_reader = FNAllReader(
         add_non_core_args=False, keep_unannotated=True)
-
     previous_id = -1
     sentence_frames = []
     good_frames = 0
-    for frame in fn_reader.iter_frames(annotation_file, parsed_conll_file):
-        logger.debug('fill_gold_roles on frame {} with args {}'.format(frame, frame.args))
-        for arg in frame.args:
-            if not arg.instanciated:
-                continue
+    for k in range(len(annotation_file)): #we are looping through all the files
+        for frame in fn_reader.iter_frames(annotation_file[k], parsed_conll_file[k]):
+            logger.debug('fill_gold_roles on frame {} with args {}'.format(frame, frame.args))
+            for arg in frame.args:
+                if not arg.instanciated:
+                    continue
 
-            try:
-                possible_roles = role_matcher.possible_vn_roles(
-                    arg.role,
-                    fn_frame=frame.frame_name,
-                    vn_classes=verbnet_classes[frame.predicate.lemma])
-                logger.debug('fill_gold_roles possible_roles={}'.format(possible_roles))
-            except KeyError:
-                continue
-            except RoleMatchingError:
-                continue
-            if len(possible_roles) == 1:
-                stats_data["args_annotated_mapping_ok"] += 1
+                try:
+                    possible_roles = role_matcher.possible_vn_roles(
+                        arg.role,
+                        fn_frame=frame.frame_name,
+                        vn_classes=verbnet_classes[frame.predicate.lemma])
+                    logger.debug('fill_gold_roles possible_roles={}'.format(possible_roles))
+                except KeyError:
+                    continue
+                except RoleMatchingError:
+                    continue
+                if len(possible_roles) == 1:
+                    stats_data["args_annotated_mapping_ok"] += 1
 
-        # If this frame appears in a new sentence, update id and ensure <num>
-        # words are consistent
-        if frame.sentence_id != previous_id:
-            # /path/to/stuff.xml -> stuff
-            sentence_frames = frames[frame.filename.stem][frame.sentence_id]
+            # If this frame appears in a new sentence, update id and ensure <num>
+            # words are consistent
+            if frame.sentence_id != previous_id:
+                # /path/to/stuff.xml -> stuff
+                sentence_frames = frames[frame.filename.stem][frame.sentence_id]
+                for extracted_frame in sentence_frames:
+                    _correct_num_tags(extracted_frame, frame.sentence)
+                previous_id = frame.sentence_id
+
+            frame_found = False
             for extracted_frame in sentence_frames:
-                _correct_num_tags(extracted_frame, frame.sentence)
-            previous_id = frame.sentence_id
+                # See if we have the two "same" frames
+                if _predicate_match(extracted_frame.predicate, frame.predicate):
+                    good_frames += 1
+                    _handle_frame(extracted_frame, frame)
+                    frame_found = True
+                    break
 
-        frame_found = False
-        for extracted_frame in sentence_frames:
-            # See if we have the two "same" frames
-            if _predicate_match(extracted_frame.predicate, frame.predicate):
-                good_frames += 1
-                _handle_frame(extracted_frame, frame)
-                frame_found = True
-                break
+            if not frame_found:
+                num_args = len([x for x in frame.args if x.instanciated])
+                if frame.predicate.lemma not in verbnet_classes:
+                    stats_data["frame_not_extracted_not_verbnet"] += 1
+                    stats_data["arg_not_extracted_not_verbnet"] += num_args
 
-        if not frame_found:
-            num_args = len([x for x in frame.args if x.instanciated])
-            if frame.predicate.lemma not in verbnet_classes:
-                stats_data["frame_not_extracted_not_verbnet"] += 1
-                stats_data["arg_not_extracted_not_verbnet"] += num_args
-
-            stats_data["frame_not_extracted"] += 1
-            stats_data["arg_not_extracted"] += num_args
+                stats_data["frame_not_extracted"] += 1
+                stats_data["arg_not_extracted"] += num_args
 
     stats_data["frame_extracted_bad"] += len(list(frame_instances)) - good_frames
     stats_data["frame_extracted_good"] += good_frames
