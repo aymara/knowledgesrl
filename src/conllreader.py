@@ -10,6 +10,7 @@
 """
 import sys
 from collections import defaultdict
+from distance import lcsubstrings as word_overlap # type: ignore
 import framenetframe
 import options
 import logging
@@ -82,7 +83,6 @@ class SyntacticTreeNode:
         result = f"({self.pos}/{self.deprel}/{self.position}/{self.begin}/{self.end} {self.lemma}"
         # If the node has childre we add them recursively
         for child_node in self.children:
-
             result += " " + str(child_node)
         result += ")"  # To end the representation
         return result
@@ -137,14 +137,13 @@ class SyntacticTreeNode:
         for child_node in self.children:
 
             result += " " + child_node.str2()
-        result += ")"  # To end the representation
+        result += " )"  # To end the representation a space was added to ease the retrieval of the words in parse_dependency_tree
         return result
 
     # Fonction pour extraire les mots et les informations à partir de l'arbre de dépendances
     def parse_dependency_tree(self):
         # Regex pour extraire les mots et leurs informations
-        # pattern = re.compile(r'(\w+/\w+/\d+/\d+/\d+/\d+ [\w\.]+)')
-        pattern = re.compile(r'([^\s\(\)/]+/\w+/\d+/\d+/\d+/\d+ [^\s\(\)]+)')
+        pattern = re.compile(r'\(([^()\s]+(?:/\w+/\d+/\d+/\d+)\s+[^\(\)]+\s(?=\(|\)))') ## now includes the parenthesis
         #matches = pattern.findall(str(tree))
         tree_str2 = self.str2()
         matches = pattern.findall(tree_str2)
@@ -204,9 +203,7 @@ class SyntacticTreeNode:
         return self._closest_match_as_node_lcs(arg)[1]
 
     def _closest_match_as_node_lcs(self, arg):
-        import distance
-        from distance import lcsubstrings as word_overlap
-
+        
         current_word_list = self.flat().split()
         wanted_word_list = arg.text.split()
 
