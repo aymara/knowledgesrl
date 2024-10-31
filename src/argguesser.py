@@ -16,6 +16,11 @@ import headwordextractor
 import options
 import logging
 
+from nltk.stem import WordNetLemmatizer # type: ignore
+from nltk.corpus import wordnet # type: ignore
+
+# Initialiser lemmatizer
+lemmatizer = WordNetLemmatizer()
 
 class ArgGuesser():
     """ 
@@ -164,9 +169,9 @@ class ArgGuesser():
             visited.append(node)
             # For every verb, looks for its infinitive form in VerbNet, and
             # builds a frame occurrence if it is found
+            ### TODO why does it have to be verbs ?
             self.logger.debug(f"_sentence_predicates_iterator on {node.lemma}")
-            
-            if node.lemma not in self.frames_for_verb:
+            if lemmatizer.lemmatize(node.lemma, wordnet.VERB) not in self.frames_for_verb: ###A lot of lemmas of verbs are not in the infinitive form in the conll files
                 self.logger.debug(f"_sentence_predicates_iterator node.lemma "
                                   f"{node.lemma} not in frames_for_verb")
                 continue
@@ -317,11 +322,11 @@ class ArgGuesser():
                               f"predicate but not its PoS {node.pos}")
             return False
 
-        # Check that this node is not an auxiliary
-        if node.lemma in ["be", "do", "have", "will", "would"]:
-            for child in node.children:
-                if child.pos in self.predicate_pos and child.deprel == "VC":
-                    return False
+        # Check that this node is not an auxiliary NOT RELEVANT Some auxiliaries can also be active verbs
+        #if node.lemma in ["be", "do", "have", "will", "would"]:
+            #for child in node.children:
+                #if child.pos in self.predicate_pos and child.deprel == "VC":
+                    #return False
         return True
 
     def _is_subject(self, node, predicate_node):

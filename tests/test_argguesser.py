@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append('/home/cjaffre/knowledgesrl/src')
-
+import os
 
 import argparse
 import paths
@@ -11,7 +11,6 @@ import unittest
 from options import Options
 import verbnetreader
 from argguesser import ArgGuesser
-from conllparsedreader import ConllParsedReader
 from conllreader import SyntacticTreeBuilder
 from framenetframe import Arg
 import probabilitymodel
@@ -74,7 +73,7 @@ class ArgGuesserTest(unittest.TestCase):
                             choices=["FrameNet", "dicoinfo_fr"],
                             default=None,
                             help="")
-        parser.add_argument("--training-set", action="store_true",
+        parser.add_argument("--training-set", action="store_true", default=True,
                             help="To annotate FrameNet training set.")
         parser.add_argument("--lu", action="store_true",
                             help="To annotate FrameNet example corpus.")
@@ -97,7 +96,7 @@ class ArgGuesserTest(unittest.TestCase):
         args = parser.parse_args()
 
         # initialize the Options class with command line arguments
-        Options.init(args)
+        Options(args)
 
     def setUp(self):
         verbnet = verbnetreader.VerbnetReader(paths.Paths.verbnet_path("eng")).frames_for_verb
@@ -106,8 +105,6 @@ class ArgGuesserTest(unittest.TestCase):
     def test_global(self):
         frames = []
         for filename in Options.fulltext_parses:
-            fnparsed_reader = ConllParsedReader()
-            sentence_trees = fnparsed_reader.sentence_trees(filename)
             frames.extend(
                 [x for x
                  in self.arg_guesser.frame_instances_from_file(filename)])
@@ -117,9 +114,25 @@ class ArgGuesserTest(unittest.TestCase):
         for frame in frames:
             for arg in frame.args:
                 self.assertNotEqual(arg.text, '')
-                # self.assertEqual(
-                #     frame.sentence[arg.begin:arg.end + 1], arg.text)
+                self.assertEqual(frame.sentence[arg.begin:arg.end + 1], arg.text)
             num_args += len(frame.args)
+        # TODO delete this part when the final version is validated
+        #Checking the number of groups of words
+        #conll_rep = '/home/cjaffre/knowledgesrl/data/framenet_parsed'
+        #count_words_groups = 0
+        #for file_name in os.listdir(conll_rep):
+            #count_file=0
+            #file_path = os.path.join(conll_rep, file_name)
+            #if os.path.isfile(file_path)and file_name.endswith('.conll'):
+                #with open(file_path, 'r', encoding='utf-8') as file:
+                    #for line in file:
+                        # Check if the line starts with "1"
+                        #if line.startswith("1\t"):
+                            #count_words_groups += 1
+                            #count_file +=1
+            #print(file_name,count_file)
+        #print(f"count_words_groups : {count_words_groups}")
+
         self.assertEqual(len(frames), 4173)
         self.assertEqual(num_args, 7936)
 
