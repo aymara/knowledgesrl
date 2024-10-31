@@ -143,7 +143,7 @@ class SyntacticTreeNode:
     # Fonction pour extraire les mots et les informations à partir de l'arbre de dépendances
     def parse_dependency_tree(self):
         # Regex pour extraire les mots et leurs informations
-        pattern = re.compile(r'\(([^()\s]+(?:/\w+/\d+/\d+/\d+)\s+[^\(\)]+\s(?=\(|\)))') ## now includes the parenthesis
+        pattern = re.compile(r'\(([^()\s]+(?:/\w+/\d+/\d+/\d+)\s+.*?\s(?=\(|\)))') ## now includes the parentheses
         #matches = pattern.findall(str(tree))
         tree_str2 = self.str2()
         matches = pattern.findall(tree_str2)
