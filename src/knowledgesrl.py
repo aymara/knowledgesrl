@@ -87,7 +87,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # initialize the Options class with command line arguments
-    options.Options.init(args)
+    options.Options(args)
 
     srl = semanticrolelabeler.SemanticRoleLabeler(language=args.language)
     # What to annotate is set through the Options class
