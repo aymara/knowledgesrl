@@ -238,5 +238,5 @@ class ArgGuesserTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest_args = Options.setUpClass()
+    unittest_args = ArgGuesserTest.setUpClass()
     unittest.main(argv=[sys.argv[0]] + unittest_args)
