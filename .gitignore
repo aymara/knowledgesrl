@@ -13,3 +13,15 @@ data/domain/contextes_olst
 # generated data
 src/dump/
 data/framenet_turpobarsed/
+
+# examples
+examples/in.conll
+examples/in.txt
+examples/in2.conll
+examples/inEng.conll
+examples/inEng.txt
+examples/inEng2.conll
+examples/inEngLIMA.conll
+examples/out.conll
+examples/outEng.conll
+
