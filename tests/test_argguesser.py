@@ -43,22 +43,6 @@ class ArgGuesserTest(unittest.TestCase):
                 self.assertNotEqual(arg.text, '')
                 self.assertEqual(frame.sentence[arg.begin:arg.end + 1], arg.text)
             num_args += len(frame.args)
-        # TODO delete this part when the final version is validated
-        #Checking the number of groups of words
-        #conll_rep = '/home/cjaffre/knowledgesrl/data/framenet_parsed'
-        #count_words_groups = 0
-        #for file_name in os.listdir(conll_rep):
-            #count_file=0
-            #file_path = os.path.join(conll_rep, file_name)
-            #if os.path.isfile(file_path)and file_name.endswith('.conll'):
-                #with open(file_path, 'r', encoding='utf-8') as file:
-                    #for line in file:
-                        # Check if the line starts with "1"
-                        #if line.startswith("1\t"):
-                            #count_words_groups += 1
-                            #count_file +=1
-            #print(file_name,count_file)
-        #print(f"count_words_groups : {count_words_groups}")
 
         self.assertEqual(len(frames), 4173)
         self.assertEqual(num_args, 7936)
