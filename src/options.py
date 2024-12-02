@@ -136,9 +136,9 @@ class Options:
         else:
             Options.fulltext_annotations = sorted(
                 [f for f in fulltext_corpus.glob('*.xml')
-                if f.stem in Options.framenet_test_set])
+                 if f.stem in Options.framenet_test_set])
             Options.fulltext_parses = sorted(
                 [f for f in framenet_parsed.glob('*.conll')
-                if f.stem in Options.framenet_test_set])
+                 if f.stem in Options.framenet_test_set])
 
 

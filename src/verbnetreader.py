@@ -97,7 +97,7 @@ class VerbnetReader:
             self.frames_for_verb[verb] += frames
             self.classes[verb].append(vnclass)
 
-        if xml_class.find("SUBCLASSES"):
+        if xml_class.find("SUBCLASSES") is not None:
             for subclass in xml_class.find("SUBCLASSES"):
                 self._handle_class(subclass, frames, role_list, restrictions)
 
