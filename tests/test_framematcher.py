@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
 import unittest
 
 from verbnetframe import VerbnetFrameOccurrence, VerbnetOfficialFrame
@@ -34,7 +32,7 @@ class FrameMatcherTest(unittest.TestCase):
         self.assertEqual(best_score, 200)
         self.assertEqual(frame_occurrence.possible_roles(), [{'Agent'}, {'Patient'}, {'Role2', 'Role3'}])
         self.assertEqual(frame_occurrence.roles, [{'Agent'}, {'Patient'}, {'Role2', 'Role3'}])
-        
+
     def test_2(self):
         frame_occurrence = VerbnetFrameOccurrence([{'elem': 'to'}, {'elem': 'be'}], 0, 'a predicate')
         frame = VerbnetOfficialFrame('c', [
@@ -44,7 +42,7 @@ class FrameMatcherTest(unittest.TestCase):
             {'elem': 'with'}, {'elem': 'NP', 'role': 'Role3'}])
 
         self.assertEqual(frame_occurrence.num_slots, 0)
-            
+
     def test_3(self):
         frame_occurrence = VerbnetFrameOccurrence([{'elem': 'NP'}, {'elem': 'V'}, {'elem': 'with'}, {'elem': 'NP'}], 2, 'a predicate')
         frame = VerbnetOfficialFrame('c', [
@@ -56,7 +54,7 @@ class FrameMatcherTest(unittest.TestCase):
         matcher = FrameMatcher(frame_occurrence, 'sync_predicates')
         best_score = matcher.perform_frame_matching([frame])
         self.assertEqual(best_score, int(100 / 2 + 100 / 3))
-        
+
     def test_4(self):
         frame_occurrence = VerbnetFrameOccurrence([{'elem': 'NP'}, {'elem': 'V'}, {'elem': 'NP'}], 2, 'a predicate')
         matcher = FrameMatcher(frame_occurrence, 'sync_predicates')
@@ -91,13 +89,13 @@ class FrameMatcherTest(unittest.TestCase):
                 {'elem': 'NP', 'role': 'Theme'}])
         ]
         matcher.perform_frame_matching(verbnet_frames)
-            
+
         self.assertEqual(frame_occurrence.roles, [{'Agent', 'Instrument'}, {'Theme'}])
-     
-                 
+
+
     def test_baseline_alg(self):
         frame_occurrence = VerbnetFrameOccurrence([{'elem': 'NP'}, {'elem': 'V'}, {'elem': 'NP'}, {'elem': 'NP'}, {'elem': 'for'}, {'elem': 'NP'}], 4, 'a predicate')
-        
+
         verbnet_frames = [
             VerbnetOfficialFrame('XX', [
                 {'elem': 'NP', 'role': 'R1'},
@@ -138,6 +136,6 @@ class FrameMatcherTest(unittest.TestCase):
 
         self.assertEqual(best_score, 200)
         self.assertEqual(frame_occurrence.roles, [{'Agent'}, {'Patient'}])
-        
+
 if __name__ == '__main__':
     unittest.main()

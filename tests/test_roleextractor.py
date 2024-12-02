@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
-###NEW ###
-import options
 import argparse
+import options
 import probabilitymodel
 ###OLD ###
 
@@ -24,10 +21,10 @@ class RoleExtractorTest(unittest.TestCase):
         final_sentence = ("She tells me that the 3,666 people we helped find"
                           " jobs in 1998 earned approximately $ 49"
                           " million dollars .")
-                          
+
         initial_predicate = Predicate(64, 69, "earned", "earn")
         final_predicate = Predicate(56, 61, "earned", "earn")
-        
+
         initial_args = [
             Arg(18, 62, "the <num> people we helped find jobs in <num>",
                 "role1", True, "phrase_type"),
@@ -41,10 +38,10 @@ class RoleExtractorTest(unittest.TestCase):
                 "role2", True, "phrase_type")
         ]
         words = []
-        
+
         frame = FrameInstance(initial_sentence, initial_predicate, initial_args,
             words, "fn_frame_name")
-        
+
         _correct_num_tags(frame, final_sentence)
         self.assertEqual(frame.sentence, final_sentence)
         self.assertEqual(frame.predicate, final_predicate)
@@ -147,7 +144,7 @@ if __name__ == "__main__":
     List_L = [frame.args for frame in frames]
     annotations = [List_L[i][0] if len(List_L[i]) > 1 else None for i in range(len(List_L))]
     parsed_files = [List_L[i][1] if len(List_L[i]) > 1 else None for i in range(len(List_L))]
-    frames = fill_gold_roles(frame_instances=frames, annotation_file=opt.fulltext_annotations, 
+    frames = fill_gold_roles(frame_instances=frames, annotation_file=opt.fulltext_annotations,
                     parsed_conll_file=opt.fulltext_parses, verbnet_classes=verbnet_classes, role_matcher=role_matcher)
 
     print("\nExtracted {} correct and {} incorrect (non-annotated) frames.\n"

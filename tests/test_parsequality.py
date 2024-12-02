@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
-
 import unittest
 
 from parsequality import get_quality_scores
@@ -19,6 +16,6 @@ class ParseQualityTest(unittest.TestCase):
         # Subtrees from the dependency parse should match more than 90% of the
         # frame arguments
         self.assertTrue(partial/total > 0.90)
-        
+
 if __name__ == '__main__':
     unittest.main()

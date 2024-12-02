@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
-
 import unittest
 from xml.etree import ElementTree as ET
 from collections import defaultdict
@@ -54,14 +51,14 @@ class VnFnRoleMatcherTest(unittest.TestCase):
                         continue
                     if len(class_data) > 1:
                         self.issues["ambiguities2"] += 1
-                        
+
                     for vnrole in class_data:
                         if not vnrole in vn_roles_list:
                             if not vnrole in self.issues["new_vn_roles"]:
                                 self.issues["new_vn_roles"][vnrole] = 0
                             self.issues["new_vn_roles"][vnrole] += 1
                             self.assertIn(vnrole, authorised_roles)
-                
+
         for fnframe in self.mappings:
             frame_is_vnclass_dependent = False
             frame_is_vnclass_contradictory = False
@@ -99,7 +96,7 @@ class VnFnRoleMatcherTest(unittest.TestCase):
 
         for role, n in self.issues["new_vn_roles"].items():
             self.assertEqual(role_encounters[role], n)
-            
+
     def test_matching(self):
         def match(fn_role, vn_role, fn_frame=None, vn_classes=None):
             """Tell wether fn_role can be mapped to vn_role in a given context
@@ -116,14 +113,14 @@ class VnFnRoleMatcherTest(unittest.TestCase):
             """
 
             return vn_role in self.matcher.possible_vn_roles(fn_role, fn_frame, vn_classes)
-        
+
         self.assertTrue(match("Fixed_location", "Location"))
         self.assertFalse(match("Fixed_location", "Agent"))
         self.assertTrue(match("Connector", "Patient", "Inchoative_attaching"))
         self.assertFalse(match("Speaker", "Patient", "Talking_into"))
         self.assertTrue(match("Grantee", "Recipient", "Grant_permission", ["order-60"]))
         self.assertFalse(match("Message", "Agent", "Communication_manner", ["nonverbal_expression-40.2"]))
-        
+
         with self.assertRaises(RoleMatchingError):
             match("Non_existing_fn_role", "Agent")
         with self.assertRaises(RoleMatchingError):
@@ -134,6 +131,6 @@ class VnFnRoleMatcherTest(unittest.TestCase):
             match("Purpose", "Agent", "Non_existing_fn_frame", ["66"])
         with self.assertRaises(RoleMatchingError):
             match("Non_existing_fn_role", "Patient", "Grant_permission", ["order-60"])
-        
+
 if __name__ == '__main__':
     unittest.main()

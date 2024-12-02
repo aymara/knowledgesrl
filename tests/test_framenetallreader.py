@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
 import probabilitymodel
 import argparse
 
@@ -33,11 +32,11 @@ class FNAllReaderTest(unittest.TestCase):
         self.assertTrue(frame.predicate.lemma == "receive")
         self.assertTrue(frame.passive == False)
         self.assertTrue(frame.tree.flat() == frame.sentence)
-        
+
         frame = frames[24] #used to be 42
         self.assertTrue(frame.predicate.lemma == "use")
         #self.assertTrue(frame.passive == True)
-        
+
 if __name__ == '__main__':
     # parse command line arguments
     parser = argparse.ArgumentParser(

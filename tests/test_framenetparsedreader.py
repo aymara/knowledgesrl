@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
 import unittest
 import options
 
 import framenetreader
 from conllparsedreader import ConllParsedReader
-        
+
 class FNParsedReaderTest(unittest.TestCase):
     def comp(self, original, parsed):
         return all(
@@ -59,6 +57,6 @@ class FNParsedReaderTest(unittest.TestCase):
 
                 # test the sentence
                 self.assertTrue(self.comp(frame.sentence, sentence))
-        
+
 if __name__ == '__main__':
     unittest.main()

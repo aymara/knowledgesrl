@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
 import unittest
 
 from conllreader import SyntacticTreeBuilder # type: ignore
@@ -23,11 +21,11 @@ class ArgHeuristicTest(unittest.TestCase):
         "10	may	may	MD	MD	-	8	SUB	-	-\n"
         "11	know	know	VB	VB	-	10	VC	-	-\n"
         "12	.	.	.	.	-	5	P	-	-")
-    
+
     def setUp(self):
         treeBuilder = SyntacticTreeBuilder(ArgHeuristicTest.parsed_sentence)
         self.initial_tree_list = treeBuilder.tree_list
-        
+
     def test_relation_tree(self):
         expected = (
             "mean IDENTITY (more OBJ_DOWN (than AMOD_DOWN (may SUB_DOWN (you SB"
@@ -35,16 +33,16 @@ class ArgHeuristicTest(unittest.TestCase):
             "your NMOD_DOWN (), to NMOD_DOWN (Goodwill IM_DOWN ())), . P_DOWN ("
             ")))"
         )
-        
+
         relation_tree = build_relation_tree(self.initial_tree_list[0].children[1])
         self.assertEqual(str(relation_tree), expected)
 
     def test_rules(self):
         expected = set(["contribution", "more"])
-        
+
         found = find_args(self.initial_tree_list[0].children[1])
-        
+
         self.assertEqual(set([x.word for x in found]), expected)
-        
+
 if __name__ == '__main__':
     unittest.main()

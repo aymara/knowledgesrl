@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import logging
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
 import trace
 import unittest
 import options

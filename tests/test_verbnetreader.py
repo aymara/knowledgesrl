@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
-
 import unittest
 import xml.etree.ElementTree as ET
 
@@ -111,6 +108,6 @@ class VerbnetReaderTest(unittest.TestCase):
                         print('{} != {}'.format(expected, got))
 
         self.assertEqual(reader.frames_for_verb, expected_result)
-        
+
 if __name__ == '__main__':
     unittest.main()

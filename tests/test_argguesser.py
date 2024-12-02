@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
 import os
 
 import argparse
@@ -148,7 +147,7 @@ class ArgGuesserTest(unittest.TestCase):
         args = [
             Arg(0, 20, "The others here today", "", True, "NP")
         ]
-        
+
         self.assertEqual(self.arg_guesser._find_args(treeBuilder.tree_list[0]), args)
 
     def test_multiroot_sentence(self):

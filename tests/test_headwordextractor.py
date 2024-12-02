@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
-
-import unittest
-from parser_test import parse_arguments # type: ignore
 import random
+import unittest
+
 import options # type: ignore
-from conllparsedreader import ConllParsedReader # type: ignore
 import headwordextractor # type: ignore
 import framenetreader # type: ignore
 import paths # type: ignore
+from parser_test import parse_arguments # type: ignore
+from conllparsedreader import ConllParsedReader # type: ignore
 
 import nltk
 nltk.download('wordnet')
@@ -32,7 +30,7 @@ class HeadWordExtractorTest(unittest.TestCase):
 
         self.assertEqual(headwordextractor.get_class("soda"), "physical_entity.n.01")
         #self.assertEqual(headwordextractor.get_class("i"), "pronoun")
-        
+
         # get_class should return None for words out of WordNet
         self.assertEqual(headwordextractor.get_class("abcde"), None)
 
@@ -79,7 +77,7 @@ def sample_args(argus, num_sample = 10):
             ("PropBank__ElectionVictory", 5),
             ("PropBank__ElectionVictory", 9),
             ("PropBank__LomaPrieta", 18)]
-            
+
 
     sample = []
     print(options.Options.fulltext_annotations)

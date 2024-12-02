@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('/home/cjaffre/knowledgesrl/src')
-
 import unittest
 
 from framenetreader import FulltextReader
 from framenetframe import FrameInstance, Predicate, Word, Arg
 import options
 import paths
-            
+
 class FulltextReaderTest(unittest.TestCase):
 
     """Unit test class"""
-    
+
     def setUp(self):
 
         self.expected_values = {
@@ -73,7 +71,7 @@ class FulltextReaderTest(unittest.TestCase):
             "QA__IranRelatedQuestions.xml":(460,1172),
             "SemAnno__Text1.xml":(12,43),
         }
-        
+
         self.tested_frames = [
             FrameInstance(
                 ("Rep . Tony Hall , D- Ohio , urges the United Nations to allow"
@@ -121,12 +119,12 @@ class FulltextReaderTest(unittest.TestCase):
                     Word(101, 104, "NP"), Word(106, 106, ".")
                  ],
                 "Grant_permission" ) ]
-            
+
 
     def test_global(self):
         """Checks that no exception is raised and that
         no obvious errors occurs while parsing the whole corpus
-        
+
         """
 
         for filename in sorted(self.expected_values):
@@ -139,7 +137,7 @@ class FulltextReaderTest(unittest.TestCase):
                 self.assertEqual(
                     frame.predicate.text,
                     frame.sentence[frame.predicate.begin:(frame.predicate.end + 1)])
-                    
+
                 arg_num += len(frame.args)
                 last_arg = None
                 for arg in frame.args:
@@ -160,10 +158,10 @@ class FulltextReaderTest(unittest.TestCase):
                         )
                     )
                     last_arg = arg
-                            
+
             # The total number of frames and args is correct
             good_frame_num, good_arg_num = self.expected_values[filename]
-            
+
             self.assertEqual(len(reader.frames), good_frame_num)
             self.assertEqual(arg_num, good_arg_num)
     def test_specific_frames(self):
