@@ -5,13 +5,13 @@
 [submodule "data/verbenet"]
 	path = data/verbenet
 	url = https://github.com/aymara/verbenet.git
-[submodule "src/nltk"]
-	path = src/nltk
-	url = https://github.com/pquentin/nltk.git
+; [submodule "src/nltk"]
+; 	path = src/nltk
+; 	url = https://github.com/pquentin/nltk.git
 [submodule "data/fndata-asfalda"]
 	path = data/fndata-asfalda
-	url = ssh://git@is154588.intra.cea.fr:10122/multimedia/asfalda/french-framenet.git
+	url = https://github.com/kleag/french-framenet.git
 	branch = main
-[submodule "data/french-framenet-corpus"]
-	path = data/french-framenet-corpus
-	url = ssh://git@is154588.intra.cea.fr:10122/multimedia/asfalda/french-framenet-corpus.git
+; [submodule "data/french-framenet-corpus"]
+; 	path = data/french-framenet-corpus
+; 	url = ssh://git@is154588.intra.cea.fr:10122/multimedia/asfalda/french-framenet-corpus.git
