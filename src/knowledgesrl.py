@@ -45,7 +45,7 @@ if __name__ == "__main__":
                         help="Probability models.")
     parser.add_argument("--bootstrap", action="store_true",
                         help="")
-    parser.add_argument("--no-argument-identification", action="store_true",
+    parser.add_argument("--no-argument-identification", action="store_true", default=True,
                         help="Identify arguments automatically")
     parser.add_argument("--heuristic-rules", action="store_true",
                         help="Use Lang and Lapata heuristics to find args.")
