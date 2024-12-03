@@ -21,13 +21,13 @@ from stats import stats_data
 from rolematcher import RoleMatchingError
 
 
-def fill_gold_roles(frame_instances, 
-                    annotation_file, 
-                    parsed_conll_file, 
-                    verbnet_classes, 
+def fill_gold_roles(frame_instances,
+                    annotation_file,
+                    parsed_conll_file,
+                    verbnet_classes,
                     role_matcher):
     """Fill the roles of some frame instance arguments, when possible.
-    
+
     Note: frame_instances must be sorted by sentence order.
     Note: frame_instances is altered, even if the final result is returned.
 
@@ -51,7 +51,7 @@ def fill_gold_roles(frame_instances,
     previous_id = -1
     sentence_frames = []
     good_frames = 0
-    for k in range(len(annotation_file)): #we are looping through all the files
+    for k in range(len(annotation_file)):  # we are looping through all the files
         for frame in fn_reader.iter_frames(annotation_file[k], parsed_conll_file[k]):
             logger.debug('fill_gold_roles on frame {} with args {}'.format(frame, frame.args))
             for arg in frame.args:
@@ -111,7 +111,7 @@ def fill_gold_roles(frame_instances,
 
 def match_score(arg1, arg2):
     """ Compute the score of a match. """
-    
+
     intersect = 1 + min(arg1.end, arg2.end) - max(arg1.begin, arg2.begin)
     sum_length = (1 + arg1.end - arg1.begin) + (1 + arg2.end - arg2.begin)
     return 2 * max(0, intersect) / sum_length
