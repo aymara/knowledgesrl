@@ -37,7 +37,7 @@ class LexicalUnit:
         <otherlexUnit framename="Other_sense" ID="100809" annotatedsent="54"/>
         </lexUnit>
     """
-    
+
     def __init__(self, pos, name, id):
         # nothing
         self.pos = pos
@@ -58,7 +58,7 @@ class FrameDefinition:
             definition
     :var relations: a map associating relation type names to a set of
     frame names (e.g. {"Has Subframe(s)" : [Activity_finish, Activity_ongoing, … ], … })
-    :var lex_units: a map associating "lemma.pos_tag" to the details of this 
+    :var lex_units: a map associating "lemma.pos_tag" to the details of this
             lexical unit (LexicalUnit)
 
 
@@ -131,6 +131,14 @@ class FrameInstance:
                 self.predicate == other.predicate and
                 self.args == other.args and
                 self.words == other.words)
+
+    def __lt__(self, other):
+        if isinstance(other, FrameInstance):
+            return (self.sentence < other.sentence or
+                    self.predicate < other.predicate or
+                    self.args < other.args or
+                    self.words < other.words)
+        return NotImplemented
 
     def __str__(self):
         return "FrameInstance({}, {}, {})".format(
@@ -254,6 +262,12 @@ class Predicate:
                 self.end == other.end and
                 self.lemma == other.lemma)
 
+    def __lt__(self, other):
+        return (isinstance(other, self.__class__) and
+                (self.begin < other.begin or
+                 self.end < other.end or
+                 self.lemma < other.lemma))
+
 
 class Word:
     """A frame's word
@@ -278,6 +292,12 @@ class Word:
                 self.begin == other.begin and
                 self.end == other.end and
                 self.pos == other.pos)
+
+    def __lt__(self, other):
+        return (isinstance(other, self.__class__) and
+                (self.begin < other.begin or
+                 self.end < other.end or
+                 self.pos < other.pos))
 
     def __repr__(self):
         return "Word({}, {}, \"{}\")".format(self.begin, self.end, self.pos)
