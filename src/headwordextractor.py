@@ -9,7 +9,11 @@
 
 """
 
-from nltk.corpus import wordnet as wn # type: ignore
+from nltk.corpus import wordnet as wn  # type: ignore
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def headword(arg, tree):
     """Returns the headword of an argument, assuming the proper sentence has
@@ -57,12 +61,18 @@ def get_class(word):
     synsets = wn.synsets(word)
     if not synsets:
         return None
-
     # Since WSD is complicated, we choose the first synset.
     synset = synsets[0]
     # We also choose the first hypernymy path: even when there are two
     # paths, the top synset is very likely to be the same anyway
-    hypernyms = synset.hypernym_paths()[0]
+    # Correction 20241203: the hypernym_paths method is not stable,
+    # givinga random order, thus changing the result because even if "the top
+    # synset is very likely to be the same anyway", it is not always true.
+    # Adding a sort step solves the problem.
+    paths = synset.hypernym_paths()
+    paths.sort()
+    logger.debug(paths)
+    hypernyms = paths[0]
 
     # TODO For PoS not in WN, return PoS instead of synset
     # (see commented out test)

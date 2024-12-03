@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import logging
 import sys
 import random
 import unittest
@@ -13,89 +14,29 @@ import probabilitymodel
 from conllparsedreader import ConllParsedReader  # type: ignore
 from options import Options
 
+logging.basicConfig(level=logging.INFO)
+logging.root.setLevel(logging.INFO)
+
+logger = logging.getLogger(__name__)
+
+
 class HeadWordExtractorTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # parse command line arguments
-        parser = argparse.ArgumentParser(
-            description="""
-            Depending on the options used, can
-            # Annotate a single file
-            knowledgesrl.py --conll_input=parsed_file.conll
-                    --conll_output=annotated_file.conll [options]
-
-            # Annotate FrameNet test set
-            knowledgesrl.py [options]
-
-            # Annotate FrameNet training set
-            knowledgesrl.py --training-set [options]
-
-            # Annotate FrameNet example corpus
-            knowledgesrl.py --lu [options]
-            """)
-        parser.add_argument("--language", "-l", type=str, choices=["eng", "fre"],
-                            default="eng",
-                            help="Name of the CoNLL-U file with the gold data.")
-        parser.add_argument("--best-gold", action="store_true",
-                            help=" Best configuration for gold.")
-        parser.add_argument("--best-auto", action="store_true",
-                            help="Best configuration for auto.")
-        parser.add_argument("--matching-algorithm", type=str,
-                            choices=["baseline", "sync_predicates",
-                                    "stop_on_fail"],
-                            default="sync_predicates",
-                            help="Select a frame matching algorithm.")
-        parser.add_argument("--add-non-core-args", action="store_true",
-                            help="Consider non-core-arg with gold arguments (why?)")
-        parser.add_argument("--model", type=str,
-                            choices=probabilitymodel.models,
-                            help="Probability models.")
-        parser.add_argument("--bootstrap", action="store_true",
-                            help="")
-        parser.add_argument("--no-argument-identification", action="store_true",
-                            help="Identify arguments automatically")
-        parser.add_argument("--heuristic-rules", action="store_true",
-                            help="Use Lang and Lapata heuristics to find args.")
-        parser.add_argument("--passivize", action="store_true",
-                            help="Handle passive sentences")
-        parser.add_argument("--semantic-restrictions", action="store_true",
-                            help="Restrict to phrases that obey VerbNet restrictions")
-        parser.add_argument("--wordnet-restrictions", action="store_true",
-                            help="Restrict to phrases that obey WordNet restrictions")
-        # what do we annotate?
-        parser.add_argument("--conll-input", "-i", type=str, default="",
-                            help="File to annotate.")
-        parser.add_argument("--conll-output", "-o", type=str, default=None,
-                            help="File to write result on. Default to stdout.")
-        parser.add_argument("--corpus", type=str,
-                            choices=["FrameNet", "dicoinfo_fr"],
-                            default=None,
-                            help="")
-        parser.add_argument("--training-set", action="store_true", default=True,
-                            help="To annotate FrameNet training set.")
-        parser.add_argument("--lu", action="store_true",
-                            help="To annotate FrameNet example corpus.")
-        # what kind of output do we want
-        parser.add_argument("--frame-lexicon", type=str,
-                            choices=["VerbNet", "FrameNet"],
-                            default="VerbNet",
-                            help="Chose frame lexicon to use for output.")
-        # meta
+        parser = argparse.ArgumentParser()
         parser.add_argument("--loglevel", type=str,
                             choices=['debug', 'info', 'warning', 'error',
                                     'critical'],
                             default='warning',
                             help="Log level.")
-        parser.add_argument("--dump", type=str, default=None,
-                            help="File where to dump annotations for comparisons.")
 
-        # parse command line arguments
-        # args = parser.parse_args()
         # Separate unittest arguments and custom arguments
         args, unittest_args = parser.parse_known_args()
 
         # initialize the Options class with command line arguments
         Options(args)
+        logger.setLevel(Options.loglevel)
         return unittest_args
 
 
@@ -111,7 +52,10 @@ class HeadWordExtractorTest(unittest.TestCase):
             for arg in frame.args:
                 headwordextractor.headword(arg, tree)
 
-        self.assertEqual(headwordextractor.get_class("soda"), "physical_entity.n.01")
+        # after stabilizing the hypernyms order,the class of soda has changed
+        # from physical_entity to abstraction
+        self.assertEqual(headwordextractor.get_class("soda"), "abstraction.n.06")
+        # self.assertEqual(headwordextractor.get_class("soda"), "physical_entity.n.01")
         #self.assertEqual(headwordextractor.get_class("i"), "pronoun")
 
         # get_class should return None for words out of WordNet
@@ -135,7 +79,7 @@ class HeadWordExtractorTest(unittest.TestCase):
         self.assertEqual(headwordextractor.headword(frame.args[0], tree), {'top_headword': ('NNS', 'people'), 'content_headword': ('NNS', 'people')})
 
 
-def sample_args(argus, num_sample = 10):
+def sample_args(num_sample = 10):
     """Not a unit test. Returns a random sample of argument/node/headword to help.
 
     :param num_sample: The requested number of results
@@ -163,9 +107,9 @@ def sample_args(argus, num_sample = 10):
 
 
     sample = []
-    print(Options.fulltext_annotations)
-    print(f"language selected: {argus.language}")
-    print(Options.fulltext_annotations)
+    logger.debug(Options.fulltext_annotations)
+    logger.debug(f"language selected: {Options.language}")
+
     for annotation_file, parsed_conll_file in zip(Options.fulltext_annotations, Options.fulltext_parses):
         if annotation_file.stem in bad_files: continue
 
@@ -193,10 +137,11 @@ def sample_args(argus, num_sample = 10):
 if __name__ == "__main__":
     unittest_args = HeadWordExtractorTest.setUpClass()
     num_sample = 50
-    argus = parse_arguments()
-    print(f"language selected: {Options.language}")
+    logger.debug(f"language selected: {Options.language}")
     if num_sample > 0:
-        result = sample_args(Options, num_sample)
+        result = sample_args(num_sample)
         for exemple in result:
-            print("{}\n{}\n{}\n".format(exemple[0], exemple[1], exemple[2]))
+            logger.debug("{}\n{}\n{}\n".format(exemple[0], exemple[1], exemple[2]))
     unittest.main(argv=[sys.argv[0]] + unittest_args)
+
+
