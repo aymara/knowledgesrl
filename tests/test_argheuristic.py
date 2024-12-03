@@ -5,7 +5,6 @@ import logging
 import sys
 import unittest
 
-import probabilitymodel
 from argheuristic import find_args, build_relation_tree # type: ignore
 from conllreader import SyntacticTreeBuilder # type: ignore
 from options import Options
@@ -36,55 +35,12 @@ class ArgHeuristicTest(unittest.TestCase):
         logger.debug(f"ArgHeuristicTest.setUpClass")
         # parse command line arguments
         parser = argparse.ArgumentParser()
-        parser.add_argument("--matching-algorithm", type=str,
-                            choices=["baseline", "sync_predicates",
-                                    "stop_on_fail"],
-                            default="sync_predicates",
-                            help="Select a frame matching algorithm.")
-        parser.add_argument("--add-non-core-args", action="store_true",
-                            help="Consider non-core-arg with gold arguments (why?)")
-        parser.add_argument("--model", type=str,
-                            choices=probabilitymodel.models,
-                            help="Probability models.")
-        parser.add_argument("--bootstrap", action="store_true",
-                            help="")
-        parser.add_argument("--no-argument-identification", action="store_true",
-                            help="Identify arguments automatically")
-        parser.add_argument("--heuristic-rules", action="store_true",
-                            help="Use Lang and Lapata heuristics to find args.")
-        parser.add_argument("--passivize", action="store_true",
-                            help="Handle passive sentences")
-        parser.add_argument("--semantic-restrictions", action="store_true",
-                            help="Restrict to phrases that obey VerbNet restrictions")
-        parser.add_argument("--wordnet-restrictions", action="store_true",
-                            help="Restrict to phrases that obey WordNet restrictions")
-        # what do we annotate?
-        parser.add_argument("--conll-input", "-i", type=str, default="",
-                            help="File to annotate.")
-        parser.add_argument("--conll-output", "-o", type=str, default=None,
-                            help="File to write result on. Default to stdout.")
-        parser.add_argument("--corpus", type=str,
-                            choices=["FrameNet", "dicoinfo_fr"],
-                            default=None,
-                            help="")
-        parser.add_argument("--training-set", action="store_true", default=True,
-                            help="To annotate FrameNet training set.")
-        parser.add_argument("--lu", action="store_true",
-                            help="To annotate FrameNet example corpus.")
-        # what kind of output do we want
-        parser.add_argument("--frame-lexicon", type=str,
-                            choices=["VerbNet", "FrameNet"],
-                            default="VerbNet",
-                            help="Chose frame lexicon to use for output.")
-        # meta
         parser.add_argument("--loglevel", type=str,
                             choices=['debug', 'info', 'warning', 'error',
                                     'critical'],
                             default='warning',
                             help="Log level.")
 
-        # parse command line arguments
-        # args = parser.parse_args()
         # Separate unittest arguments and custom arguments
         args, unittest_args = parser.parse_known_args()
 

@@ -7,6 +7,8 @@ import logging
 import paths
 import sys
 
+import probabilitymodel
+
 
 class FrameLexicon(enum.Enum):
     VerbNet = 1
@@ -16,9 +18,9 @@ class FrameLexicon(enum.Enum):
 class Options:
 
     matching_algorithm: str = "sync_predicates"
-
     language: str = None  # Init from args
 
+    model: str = probabilitymodel.models[0]
     argument_identification: bool = False
     heuristic_rules: bool = False
     bootstrap: bool = False
@@ -29,7 +31,7 @@ class Options:
     corpus = None  # Init from args
     loglevel: int = logging.WARNING
 
-    framelexicon = None  # Init from args
+    framelexicon = "VerbNet"
     framelexicons = {
         'FrameNet': FrameLexicon.FrameNet,
         'VerbNet': FrameLexicon.VerbNet
@@ -102,25 +104,38 @@ class Options:
             Options.passivize = True
             Options.semrestr = True
             Options.bootstrap = True
-        Options.matching_algorithm = args.matching_algorithm
-        Options.add_non_core_args = args.add_non_core_args
-        probability_model = args.model
-        Options.bootstrap = args.bootstrap
-        Options.heuristic_rules = args.heuristic_rules
-        Options.semrestr = args.semantic_restrictions
-        Options.wordnetrestr = args.wordnet_restrictions
-        Options.passivize = args.passivize
-        Options.corpus = args.corpus
-        Options.conll_output = args.conll_output
-        Options.use_training_set = args.training_set
-        Options.corpus_lu = args.lu
+        if hasattr(args, "matching_algorithm"):
+            Options.matching_algorithm = args.matching_algorithm
+        if hasattr(args, "add_non_core_args"):
+            Options.add_non_core_args = args.add_non_core_args
+        if hasattr(args, "model"):
+            probability_model = args.model
+        if hasattr(args, "bootstrap"):
+            Options.bootstrap = args.bootstrap
+        if hasattr(args, "heuristic_rules"):
+            Options.heuristic_rules = args.heuristic_rules
+        if hasattr(args, "semantic_restrictions"):
+            Options.semrestr = args.semantic_restrictions
+        if hasattr(args, "wordnet_restrictions"):
+            Options.wordnetrestr = args.wordnet_restrictions
+        if hasattr(args, "passivize"):
+            Options.passivize = args.passivize
+        if hasattr(args, "corpus"):
+            Options.corpus = args.corpus
+        if hasattr(args, "conll_output"):
+            Options.conll_output = args.conll_output
+        if hasattr(args, "training_set"):
+            Options.use_training_set = args.training_set
+        if hasattr(args, "lu"):
+            Options.corpus_lu = args.lu
         if hasattr(args, "dump") and args.dump is not None:
             Options.dump = True
             Options.dump_file = args.dump
 
         Options.loglevel = Options.loglevels[
             args.loglevel if hasattr(args, "loglevel") else "info"]
-        Options.framelexicon = Options.framelexicons[args.frame_lexicon]
+        if hasattr(args, "frame_lexicon") and args.frame_lexicon is not None:
+            Options.framelexicon = Options.framelexicons[args.frame_lexicon]
 
         framenet_parsed = paths.Paths.FRAMENET_PARSED
         fulltext_corpus = paths.Paths.framenet_fulltext(Options.language)
