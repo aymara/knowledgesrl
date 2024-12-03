@@ -87,15 +87,17 @@ class Options:
 
     #@classmethod
     def __init__(self, args: argparse.Namespace) -> None:
+        # TODO Complete the conditional initialization with a possibly empty
+        # args
         display_usage = False
-        Options.language = args.language
-        Options.argument_identification = not args.no_argument_identification
-        if args.best_gold:
+        Options.language = args.language if hasattr(args, "language") else "eng"
+        Options.argument_identification = hasattr(args, "argument_identification") and not args.no_argument_identification
+        if hasattr(args, "best_gold") and args.best_gold:
             Options.argument_identification = False
             Options.passivize = True
             Options.semrestr = True
             Options.bootstrap = True
-        if args.best_auto:
+        if hasattr(args, "best_auto") and args.best_auto:
             Options.argument_identification = True
             Options.passivize = True
             Options.semrestr = True
@@ -112,18 +114,19 @@ class Options:
         Options.conll_output = args.conll_output
         Options.use_training_set = args.training_set
         Options.corpus_lu = args.lu
-        if args.dump is not None:
+        if hasattr(args, "dump") and args.dump is not None:
             Options.dump = True
             Options.dump_file = args.dump
 
-        Options.loglevel = Options.loglevels[args.loglevel]
+        Options.loglevel = Options.loglevels[
+            args.loglevel if hasattr(args, "loglevel") else "info"]
         Options.framelexicon = Options.framelexicons[args.frame_lexicon]
 
         framenet_parsed = paths.Paths.FRAMENET_PARSED
-        fulltext_corpus = paths.Paths.framenet_fulltext(args.language)
+        fulltext_corpus = paths.Paths.framenet_fulltext(Options.language)
 
         if Options.corpus_lu:
-            fulltext_corpus = paths.Paths.framenet_lu(args.language)
+            fulltext_corpus = paths.Paths.framenet_lu(Options.language)
             framenet_parsed = paths.Paths.FRAMENET_LU_PARSED
 
         if Options.use_training_set:

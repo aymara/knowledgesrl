@@ -108,7 +108,6 @@ class ArgGuesserTest(unittest.TestCase):
         logger.setLevel(Options.loglevel)
         return unittest_args
 
-
     def setUp(self):
         logger.debug(f"ArgGuesserTest.setUp")
         verbnet = verbnetreader.VerbnetReader(
