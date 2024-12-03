@@ -12,7 +12,7 @@ http://universaldependencies.org/format.html
 import sys
 import argparse
 from pathlib import Path
-import spacy
+import spacy # type: ignore
 
 
 def sentences_to_conllu(doc, sent_id, prefix = ""):
@@ -32,7 +32,10 @@ def sentences_to_conllu(doc, sent_id, prefix = ""):
 
             #Find feature tag (if available)
             ftidx = word.tag_.find("__") + 2
-            feature_tag=word.tag_[ftidx:]
+            if ftidx > 1:
+                feature_tag = word.tag_[ftidx:]
+            else:
+                feature_tag = ""
 
             linetuple = (
                 i+1,                                        #ID: Word index.
