@@ -37,10 +37,17 @@ class FNAllReaderTest(unittest.TestCase):
 
         frames = []
 
-        for annotation_file, parse_file in zip(Options.fulltext_annotations,
-                                               Options.fulltext_parses):
-            frames.extend(extractor.iter_frames(annotation_file, parse_file))
+        # annotation_files = ["/home/gael/Projets/knowledgesrl/data/fndata-1.5/fulltext/ANC__110CYL067.xml"]
+        # parse_files = ["/home/gael/Projets/knowledgesrl/data/framenet_parsed/ANC__110CYL067.conll"]
+
+        annotation_files = Options.fulltext_annotations
+        parse_files = Options.fulltext_parses
+        for annotation_file, parse_file in zip(annotation_files, parse_files):
+            new_frames = [f for f in extractor.iter_frames(annotation_file, parse_file)]
+            # print(len(new_frames), annotation_file, parse_file)
+            frames.extend(new_frames)
         frames.sort()
+        # print(", ".join([f"{attr}: {getattr(Options, attr)}" for attr in dir(Options)]))
         # for k in range(len(frames)):
         #     print(f"This is frame {k} sentence: {frames[k].sentence}")
         # used to be 28 and 6. stabilized with the sort above

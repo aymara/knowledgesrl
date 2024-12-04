@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-""" Extract frames, predicates and arguments from a corpus, using only syntactic annotations 
+""" Extract frames, predicates and arguments from a corpus, using only syntactic annotations
 
     Defines the class ArgGuesser
 
@@ -23,18 +23,12 @@ from nltk.corpus import wordnet # type: ignore
 lemmatizer = WordNetLemmatizer()
 
 class ArgGuesser():
-    """ 
+    """
     :var frames_for_verb: lemma -> VerbnetOfficialFrame list - Used to know
         which predicates are in VerbNet.
     :var filename: str -- The name of the current CoNLL file.
 
     """
-
-    predicate_pos = [
-        "VERB",  # UD
-        "MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
-        # French tags:
-        "V", "VIMP", "VINF", "VPP", "VPR", "VS"]
 
     subject_deprels = [
         "LGS",  # Logical subject -> should we keep this (36 args) ?
@@ -104,32 +98,28 @@ class ArgGuesser():
         "JJ": "ADJ",
         "JJR": "NP",  # Comparative
         "JJS": "NP",  # Superlative
-        "MD": "S",    # Modal verb
         "N": "NP",
         "NOUN": "NP",
         "NN": "NP",
-        "NNP": "NP", 
-        "NNPS": "NP", 
+        "NNP": "NP",
+        "NNPS": "NP",
         "NNS": "NP",
-        "NP": "NP", 
+        "NP": "NP",
         "NPS": "NP",
         "PP": "PP",
         "PRP": "NP",
         "RB": "ADV",
         "TO": "to S",
-        "VERB": "S",  # Base form of a verb
-        "VB": "S",  # Base form of a verb
-        "VBD": "S", 
-        "VBG": "S_ING",
-        "VBN": "ADJ",  # Participe, as "fed" in "He got so fed up that..."
-        "VBP": "S", 
-        "VBZ": "S",
         "WDT": "NP",  # Relative determiners ("that what whatever which whichever")
         # French conversions
         "NC": "NP",
         "PRO": "NP",
         "V": "S",
     }
+    for pos in options.Options.predicate_pos:
+        pos_conversions[pos] = "S"
+    pos_conversions["VBG"] = "ING"
+    pos_conversions["VBN"] = "ADJ"  # Participe, as "fed" in "He got so fed up that..."
 
     acceptable_phrase_type = ["NP", "PP", "S_ING", "S"]
 
@@ -151,9 +141,9 @@ class ArgGuesser():
             self.logger.debug(
                 f"frame_instances_from_file sentence {sentence_id}: "
                 f"{sentence}")
-            for frame in self._sentence_predicates_iterator(sentence_id, 
-                                                            sentence, 
-                                                            tree, 
+            for frame in self._sentence_predicates_iterator(sentence_id,
+                                                            sentence,
+                                                            tree,
                                                             filename):
                 yield frame
 
@@ -180,9 +170,9 @@ class ArgGuesser():
                 self.logger.debug(f"_sentence_predicates_iterator node.lemma "
                                   f"{node.lemma} is a predicate")
                 predicate = Predicate(
-                    node.begin_word, 
+                    node.begin_word,
                     node.begin_word + len(node.word) - 1,
-                    node.word, 
+                    node.word,
                     node.lemma,
                     node.word_id)
 
@@ -235,7 +225,7 @@ class ArgGuesser():
             base_node = base_node.father
 
         result = self._find_args_rec(node, node)
-        if base_node is not node and base_node.pos in self.predicate_pos:
+        if base_node is not node and base_node.pos in options.Options.predicate_pos:
             result += self._find_args_rec(base_node, base_node)
 
         result = [x for x in result if x.text != "to"]
@@ -258,7 +248,7 @@ class ArgGuesser():
         for child in node.children:
             if self._is_arg(child, predicate_node):
                 result.append(self._nodeToArg(child, predicate_node))
-            elif child.pos not in self.predicate_pos:
+            elif child.pos not in options.Options.predicate_pos:
                 result += self._find_args_rec(predicate_node, child)
         return result
 
@@ -317,7 +307,7 @@ class ArgGuesser():
     def _is_predicate(self, node):
         """Tells whether a node can be used as a predicate for a frame"""
         # Check part-of-speech compatibility
-        if node.pos not in self.predicate_pos:
+        if node.pos not in options.Options.predicate_pos:
             self.logger.debug(f"_is_predicate {node.lemma} is a possible "
                               f"predicate but not its PoS {node.pos}")
             return False
@@ -325,7 +315,7 @@ class ArgGuesser():
         # Check that this node is not an auxiliary NOT RELEVANT Some auxiliaries can also be active verbs
         #if node.lemma in ["be", "do", "have", "will", "would"]:
             #for child in node.children:
-                #if child.pos in self.predicate_pos and child.deprel == "VC":
+                #if child.pos in options.Options.predicate_pos and child.deprel == "VC":
                     #return False
         return True
 

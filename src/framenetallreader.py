@@ -27,8 +27,7 @@ class FNAllReader:
     :var frames: FrameInstance List -- The collected frames
     """
 
-    # TODO add UD data in predicate_pos and get rid of be_forms
-    predicate_pos = ["MD", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "VERB"]
+    # TODO get rid of be_forms
     be_forms = ["am", "are", "be", "been", "being", "is", "was", "were",
                 "'m", "'re", "'s"]
 
@@ -45,10 +44,11 @@ class FNAllReader:
 
         logger = logging.getLogger(__name__)
         logger.setLevel(options.Options.loglevel)
-        logger.debug('iter_frames {}, {}'.format(annotation_file, parse_file))
+        logger.debug(f'iter_frames {annotation_file}, {parse_file}')
         self.stats["files"] += 1
 
         tree_dict = self.read_syntactic_parses(parse_file)
+        logger.debug(f'iter_frames tree_dict: {tree_dict}')
 
         reader = framenetreader.FulltextReader(
             annotation_file,
@@ -56,15 +56,19 @@ class FNAllReader:
             keep_unannotated=self.keep_unannotated,
             tree_dict=tree_dict)
 
-        logger.debug('iter_frames reader.frames: '.format(reader.frames))
+        # logger.debug(f'iter_frames reader.frames: {reader.frames}')
         for frame_instance in reader.frames:
             try:
+                logger.debug(f'iter_frames frame_instance: {frame_instance}')
+                logger.debug(f'iter_frames searching {frame_instance.sentence_id}')
                 sentence_tree_list = tree_dict[frame_instance.sentence_id]
+                logger.debug(f'iter_frames sentence_tree_list: {sentence_tree_list}')
                 self.add_syntactic_information(frame_instance,
                                                sentence_tree_list[0])
-                logger.debug('iter_frames yielding {}'.format(frame_instance))
+                logger.debug(f'iter_frames yielding {frame_instance}')
                 yield frame_instance
-            except PredicateNotFound:
+            except PredicateNotFound as e:
+                logger.debug(f'iter_frames PredicateNotFound: {e}')
                 pass
         logger.debug('iter_frames DONE')
 
@@ -108,13 +112,15 @@ class FNAllReader:
         # Search verb + passive status
         try:
             search = frame.predicate.text.split()[0].lower()
+            # print([node for node in frame.tree])
             predicate_node = [node for node in frame.tree
                               if node.word == search][0]
             frame.passive = FNAllReader.is_passive(predicate_node)
         except IndexError:
-            raise PredicateNotFound("\nframenetparsedreader : predicate"
-                                    " \"{}\" not found in sentence {}".format(
-                                        search, frame.tree.flat()))
+            # breakpoint()
+            raise PredicateNotFound(f"\nframenetparsedreader : predicate"
+                                    f" \"{search}\" not found in sentence "
+                                    f"{frame.tree.flat()}")
 
         # Read headwords
         for i, arg in enumerate(frame.args):
@@ -131,7 +137,7 @@ class FNAllReader:
             return False
         elif node.father is None:
             return False
-        elif node.father.pos not in FNAllReader.predicate_pos:
+        elif node.father.pos not in options.Options.predicate_pos:
             return False
         else:
             return node.father.word.lower() in FNAllReader.be_forms

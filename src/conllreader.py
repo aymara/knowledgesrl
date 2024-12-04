@@ -203,7 +203,7 @@ class SyntacticTreeNode:
         return self._closest_match_as_node_lcs(arg)[1]
 
     def _closest_match_as_node_lcs(self, arg):
-        
+
         current_word_list = self.flat().split()
         wanted_word_list = arg.text.split()
 

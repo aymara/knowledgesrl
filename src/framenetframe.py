@@ -91,7 +91,7 @@ class FrameInstance:
     :var words:
     :var frame_name:
     :var headwords:
-    :var sentence_id: id of thesentencewhere is this frame instance in the
+    :var sentence_id: id of thesentence where is this frame instance in the
             CONLL file
     :var filename:
     :var slot_type:

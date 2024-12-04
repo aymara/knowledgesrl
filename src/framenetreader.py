@@ -39,30 +39,34 @@ class FulltextReader:
     """
 
     core_arg_finder = None
-    predicate_pos = [
-        "md", "MD",
-        "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
-        "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
-        "VH", "VHD", "VHG", "VHN", "VHP", "VHZ",
-        "VERB"
-        # French tags:
-        "V", "VIMP", "VINF", "VPP", "VPR", "VS"]
 
     pos_mapping = {
         # Nouns
-        "NP": "NNP", "NPS": "NNPS",
+        "NP": "NNP",
+        "NPS": "NNPS",
         # Preposition
-        "PP": "PRP", "PP$": "PRP$",
+        "PP": "PRP",
+        "PP$": "PRP$",
         # Verbs
-        "VH": "VB", "VHD": "VBD", "VHG": "VBG", "VHP": "VBP", "VHN": "VBN",
-        "VHZ": "VBZ", "VV": "VB", "VVD": "VBD", "VVG": "VBG", "VVN": "VBN",
-        "VVP": "VBP", "VVZ": "VBZ", "VERB": "VB"
+        "VH": "VB",
+        "VV": "VB",
+        "VERB": "VB",
+        "VHD": "VBD",
+        "VVD": "VBD",
+        "VHG": "VBG",
+        "VVG": "VBG",
+        "VHP": "VBP",
+        "VVP": "VBP",
+        "VHN": "VBN",
+        "VVN": "VBN",
+        "VHZ": "VBZ",
+        "VVZ": "VBZ",
     }
 
     # etree will add the xmlns string before every tag name
     framenet_xmlns = "{http://framenet.icsi.berkeley.edu}"
 
-    def __init__(self, filename, add_non_core_args=True, 
+    def __init__(self, filename, add_non_core_args=True,
                  keep_unannotated=False,
                  tree_dict=None, keep_nonverbal=False, pos_file=None):
         """Read a file and update the collected frames list.
@@ -221,7 +225,7 @@ class FulltextReader:
                 start += len(line[1]) + 1
 
         for word in pos_data:
-            if (word["pos"] in FulltextReader.predicate_pos
+            if (word["pos"] in options.Options.predicate_pos
                     or self.keep_nonverbal):
                 predicate_starts.append(int(word["start"]))
 
@@ -232,7 +236,7 @@ class FulltextReader:
         for potential_frame in sentence.findall(self.patterns["frame"]):
             # We keep only annotated verbal frames
 
-            annotated = ("status" in potential_frame.attrib 
+            annotated = ("status" in potential_frame.attrib
                          and potential_frame.attrib["status"] != "UNANN")
             annotated = annotated or self.all_annotated
 
@@ -245,7 +249,7 @@ class FulltextReader:
                 already_annotated.append(frame.predicate.begin)
                 yield frame
 
-    def _parse_frame(self, sentence_text, words, frame, annotated, 
+    def _parse_frame(self, sentence_text, words, frame, annotated,
                      predicate_starts):
         """Handle the parsing of one frame.
 
@@ -260,7 +264,7 @@ class FulltextReader:
 
         if predicate is None:
             return
-        elif (self.corpus in ["fulltext", "semafor"] 
+        elif (self.corpus in ["fulltext", "semafor"]
                 and predicate.begin not in predicate_starts):
             return
 
@@ -283,7 +287,7 @@ class FulltextReader:
         else:
             args = []
 
-        return FrameInstance(sentence_text, predicate, args, 
+        return FrameInstance(sentence_text, predicate, args,
                              words, frame_name, filename=self.filename,
                              arg_annotated=annotated)
 
@@ -384,7 +388,7 @@ class FulltextReader:
                         phrase_type = phrase.attrib["name"]
                         break
 
-            # If the argument and the predicate overlap, 
+            # If the argument and the predicate overlap,
             # mark the argument as NI
             if arg_start <= predicate.end and arg_end >= predicate.begin:
                 self.predicate_is_arg.append({
@@ -426,7 +430,7 @@ class FulltextReader:
 
         predicate_data = frame.findall(self.patterns["predicate"])[0]
 
-        # This test handles the only self-closed layer tag that exists 
+        # This test handles the only self-closed layer tag that exists
         # in the corpus
         if len(predicate_data) == 0:
             self.missing_predicate_data.append({
@@ -461,7 +465,7 @@ class FulltextReader:
                 for w in frame.words:
                     i += 1
                     frame_conll += "{0}\t{1}\t{1}\t{2}\t{2}\t_\t0\t \t\n".format(  # noqa
-                        i, frame.get_word(w), 
+                        i, frame.get_word(w),
                         self.pos_mapping.get(w.pos, w.pos))
 
                 yield frame_conll + "\n"

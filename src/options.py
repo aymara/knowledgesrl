@@ -17,6 +17,15 @@ class FrameLexicon(enum.Enum):
 
 class Options:
 
+    predicate_pos = [
+        "VERB",  # UD
+        "md", "MD",
+        "VB", "VBD", "VBG", "VBN", "VBP", "VBZ",
+        "VV", "VVD", "VVG", "VVN", "VVP", "VVZ",
+        "VH", "VHD", "VHG", "VHN", "VHP", "VHZ",
+        # French tags:
+        "V", "VIMP", "VINF", "VPP", "VPR", "VS"]
+
     matching_algorithm: str = "sync_predicates"
     language: str = None  # Init from args
 
