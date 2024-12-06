@@ -490,10 +490,9 @@ class ConllSemanticAppender():
                     semantic_file.write('\t'.join(line))
                     semantic_file.write('\n')
                     self.logger.debug('\t'.join(line))
-                    self.logger.debug('\t'.join(line), file=semantic_file)
                 if i < len(self.conll_matrix) - 1:
                     semantic_file.write('\n')
+                    semantic_file.write('\n')
                     self.logger.debug('\n')
-                    self.logger.debug('', extra={'end': '\n', 'file': semantic_file})
-                    #self.logger.debug(end='\n', file=semantic_file)
+                    self.logger.debug('\n')
 
