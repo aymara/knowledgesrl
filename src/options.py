@@ -118,7 +118,7 @@ class Options:
         if hasattr(args, "add_non_core_args"):
             Options.add_non_core_args = args.add_non_core_args
         if hasattr(args, "model"):
-            probability_model = args.model
+            Options.probability_model = args.model
         if hasattr(args, "bootstrap"):
             Options.bootstrap = args.bootstrap
         if hasattr(args, "heuristic_rules"):
