@@ -127,8 +127,8 @@ class SemanticRoleLabeler:
                         )
                     )
                 new_annotated_frames = roleextractor.fill_gold_roles(
-                    new_frame_instances, annotation_file, parsed_conll_file,
-                    verbnet_classes, role_matcher)
+                    frame_instances=new_frame_instances, annotation_file=[annotation_file], parsed_conll_file=[parsed_conll_file],
+                    verbnet_classes=verbnet_classes, role_matcher=role_matcher)
                 logger.debug(f'got nb new_annotated_frames: '
                              f'{len(new_annotated_frames)}')
 
