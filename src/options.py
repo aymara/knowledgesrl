@@ -30,7 +30,7 @@ class Options:
     language: str = None  # Init from args
 
     model: str = probabilitymodel.models[0]
-    argument_identification: bool = False
+    argument_identification: bool = True
     heuristic_rules: bool = False
     bootstrap: bool = False
     probability_model = None
@@ -102,7 +102,7 @@ class Options:
         # args
         display_usage = False
         Options.language = args.language if hasattr(args, "language") else "eng"
-        Options.argument_identification = hasattr(args, "argument_identification") and not args.no_argument_identification
+        Options.argument_identification = hasattr(args, "argument_identification") or not args.no_argument_identification
         if hasattr(args, "best_gold") and args.best_gold:
             Options.argument_identification = False
             Options.passivize = True

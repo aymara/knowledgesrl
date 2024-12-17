@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser.add_argument("--language", "-l", type=str, choices=["eng", "fre"],
                         default="eng",
                         help="Name of the CoNLL-U file with the gold data.")
-    parser.add_argument("--best-gold", action="store_true",
+    parser.add_argument("--best-gold", action="store_true", default=False,
                         help=" Best configuration for gold.")
     parser.add_argument("--best-auto", action="store_true",
                         help="Best configuration for auto.")
@@ -40,12 +40,12 @@ if __name__ == "__main__":
                         help="Select a frame matching algorithm.")
     parser.add_argument("--add-non-core-args", action="store_true",
                         help="Consider non-core-arg with gold arguments (why?)")
-    parser.add_argument("--model", type=str,
+    parser.add_argument("--model", type=str, default="predicate_slot",
                         choices=probabilitymodel.models,
                         help="Probability models.")
     parser.add_argument("--bootstrap", action="store_true",
                         help="")
-    parser.add_argument("--no-argument-identification", action="store_true", default=True,
+    parser.add_argument("--no-argument-identification", action="store_true", default=False,
                         help="Identify arguments automatically")
     parser.add_argument("--heuristic-rules", action="store_true",
                         help="Use Lang and Lapata heuristics to find args.")
@@ -62,7 +62,7 @@ if __name__ == "__main__":
                         help="File to write result on. Default to stdout.")
     parser.add_argument("--corpus", type=str,
                         choices=["FrameNet", "dicoinfo_fr"],
-                        default=None,
+                        default="FrameNet", #None,
                         help="")
     parser.add_argument("--training-set", action="store_true",
                         help="To annotate FrameNet training set.")
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--loglevel", type=str,
                         choices=['debug', 'info', 'warning', 'error',
                                     'critical'],
-                        default='warning',
+                        default='debug',
                         help="Log level.")
     parser.add_argument("--dump", type=str, default=None,
                         help="File where to dump annotations for "
