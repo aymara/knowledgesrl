@@ -102,7 +102,7 @@ class Options:
         # args
         display_usage = False
         Options.language = args.language if hasattr(args, "language") else "eng"
-        Options.argument_identification = hasattr(args, "argument_identification") or not args.no_argument_identification
+        Options.argument_identification = hasattr(args, "no_argument_identification") and not args.no_argument_identification
         if hasattr(args, "best_gold") and args.best_gold:
             Options.argument_identification = False
             Options.passivize = True
