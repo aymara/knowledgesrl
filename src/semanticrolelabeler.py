@@ -209,6 +209,7 @@ class SemanticRoleLabeler:
             # frame_occurrence: VerbnetFrameOccurrence
             for gold_frame, frame_occurrence in zip(annotated_frames,
                                                     vn_frames):
+                self.logger.debug("GOLD_FRAME:{gold_frame}")
                 if gold_frame.predicate.lemma not in self.frames_for_verb:
                     errorslog.log_vn_missing(gold_frame)
                     self.logger.debug('gold_frame predicate lemma "{}" not in '
@@ -330,18 +331,21 @@ class SemanticRoleLabeler:
                 display_debug()
         else:
             self.logger.info("No probability model")
-
+        count_annotations=0
         if conllinput is not None:
             self.logger.info("\n## Dumping semantic CoNLL...")
             semantic_appender = ConllSemanticAppender(conllinput)
             # vn_frame: VerbnetFrameOccurrence
+            self.logger.debug("VERBNETFRAME_LETSCHECK : {all_vn_frames}")
             for vn_frame in all_vn_frames:
                 if vn_frame.best_classes():
                     if options.Options.framelexicon == FrameLexicon.VerbNet:
                         semantic_appender.add_verbnet_frame_annotation(vn_frame)  # noqa
+                        count_annotations+=1
                     elif options.Options.framelexicon == FrameLexicon.FrameNet:
                         semantic_appender.add_framenet_frame_annotation(
                             self.role_matcher.possible_framenet_mappings(vn_frame))  # noqa
+                        count_annotations+=1
                     else:
                         self.logger.error(
                             f"Error: unknown frame lexicon for output "
@@ -354,7 +358,7 @@ class SemanticRoleLabeler:
                     display_errors_num()
                     display_error_details()
                     display_mapping_errors()
-                print(str(semantic_appender))
+                self.logger.debug(str(semantic_appender))
             else:
                 semantic_appender.dump_semantic_file(options.Options.
                                                      conll_output)
@@ -370,3 +374,4 @@ class SemanticRoleLabeler:
             if options.Options.dump:
                 dumper.dump(options.Options.dump_file,
                             stats.annotated_frames_stats)
+        print(count_annotations)
