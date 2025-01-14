@@ -20,7 +20,7 @@ $ spacy download fr_core_news_md
 
 To do SRL, you need a CoNLL representation of a text. Let's suppose it is in the file `in.txt`. To do that, you can use either LIMA:
 ```bash
-$ lima in.conll > out.conll
+$ lima in.txt > in.conll
 ```
 
 Or SpaCy:
@@ -41,6 +41,22 @@ $ python src/knowledgesrl.py --language=fre --frame-lexicon=FrameNet --conll-inp
 ```
 
 This will output the result to the terminal. Use the `--conll-output` flag to write to a file.
+
+To go faster you can use the following line entering the directory where the files that you want to process are located and the spacy model you want to use:
+```bash
+$ python src/runspacyknowledgesrl.py Your/Txt/Directory en_core_web_trf
+```
+
+In case you need to convert a pdf to txt:
+```bash
+$ python extract_pdf_text.py Your/Pdf/Directory
+```
+
+In case you need to translate a text in english:
+By default it is translating from French to English
+```bash
+$ python translate_txt.py Your/Txt/Directory/To/Translate
+```
 
 ## [Read the docs!](https://knowledgesrl.readthedocs.org/en/latest/)
 
