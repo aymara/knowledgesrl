@@ -449,14 +449,20 @@ class ConllSemanticAppender():
 
         # Must shift annotations one line up on first sentence because
         # there is no previous sentence punctuation.
-        notFirstSentenceShift = 0
+        notFirstSentenceShift = -1
         if frame_annotations[0].sentence_id == 0:
-            notFirstSentenceShift = -1
+            notFirstSentenceShift = -2
 
         # compute the predicates string, concatenation of the possible
         # frames names
         if frame_annotations[0].predicate.tokenid+notFirstSentenceShift < len(self.conll_matrix[frame_annotations[0].sentence_id]):
             # self.logger.debug(len(self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift]))
+            self.logger.debug("[frame_annotations[0].sentence_id {frame_annotations[0].sentence_id}")
+            self.logger.debug("frame_annotations[0].predicate.tokenid+notFirstSentenceShift {frame_annotations[0].predicate.tokenid+notFirstSentenceShift}")
+            self.logger.debug("frame_annotations[0].predicate.tokenid {frame_annotations[0].predicate.tokenid}")
+            self.logger.debug("notFirstSentenceShift {notFirstSentenceShift}")
+            self.logger.debug("self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1] {self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1]}")
+            self.logger.debug("[frame_instance.frame_name for frame_instance in frame_annotations] {[frame_instance.frame_name for frame_instance in frame_annotations]}")
             self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
         else:
             self.logger.error("add_framenet_frame_annotation got token number "
@@ -480,6 +486,7 @@ class ConllSemanticAppender():
                     roleset_str))
             if (position+notFirstSentenceShift <
                     len(self.conll_matrix[frame_annotations[0].sentence_id])):
+                self.logger.debug("frame_annotations[0].sentence_id {frame_annotations[0].sentence_id}, position {position}, notFirstSentenceShift {notFirstSentenceShift}")
                 self.conll_matrix[frame_annotations[0].sentence_id][
                     position+notFirstSentenceShift][-1] = roleset_str  # noqa
 

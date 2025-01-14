@@ -77,7 +77,7 @@ if __name__ == "__main__":
     parser.add_argument("--loglevel", type=str,
                         choices=['debug', 'info', 'warning', 'error',
                                     'critical'],
-                        default='debug',
+                        default='warning',
                         help="Log level.")
     parser.add_argument("--dump", type=str, default=None,
                         help="File where to dump annotations for "
