@@ -6,6 +6,7 @@ remarks you might have.
 
 Main entry point is `knowledgesrl.py`.
 
+## Requirements
 To use it, install dependencies
 
 ```bash
@@ -17,6 +18,7 @@ Install also LIMA and/or SpaCy models:
 $ lima_models -i eng
 $ spacy download fr_core_news_md
 ```
+## Semantic Role Labeling
 
 To do SRL, you need a CoNLL representation of a text. Let's suppose it is in the file `in.txt`. To do that, you can use either LIMA:
 ```bash
@@ -41,21 +43,25 @@ $ python src/knowledgesrl.py --language=fre --frame-lexicon=FrameNet --conll-inp
 ```
 
 This will output the result to the terminal. Use the `--conll-output` flag to write to a file.
-
+## Useful scripts
 To go faster you can use the following line entering the directory where the files that you want to process are located and the spacy model you want to use:
 ```bash
-$ python src/runspacyknowledgesrl.py Your/Txt/Directory en_core_web_trf
+$ python src/runspacyknowledgesrl.py /Your/Txt/Directory en_core_web_trf
 ```
 
 In case you need to convert a pdf to txt:
 ```bash
-$ python extract_pdf_text.py Your/Pdf/Directory
+$ python extract_pdf_text.py /Your/Pdf/Directory
 ```
 
 In case you need to translate a text in english:
 By default it is translating from French to English
 ```bash
-$ python translate_txt.py Your/Txt/Directory/To/Translate
+$ python translate_txt.py /Your/Txt/Directory/To/Translate
+```
+And a little script to see how many annotations have been added on your documents :
+```bash
+$ python count_annotations.py /Your/Path/To/Conll_folder
 ```
 
 ## [Read the docs!](https://knowledgesrl.readthedocs.org/en/latest/)
