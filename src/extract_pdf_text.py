@@ -38,6 +38,9 @@ def clean_text(text):
     # Removes Unnecessary line breaks if the next line begins with a lowercase letter
     text = re.sub(r"\n([a-z])", r" \1", text)
 
+    # Removes phrases of type "Page X of Y" for any numbers X and Y
+    text = re.sub(r"Page\s+\d+\s+sur\s+\d+", "", text, flags=re.IGNORECASE)
+
     return text
 
 def extract_text_from_pdf(input_pdf, output_txt=None):

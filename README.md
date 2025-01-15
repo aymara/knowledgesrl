@@ -51,17 +51,17 @@ $ python src/runspacyknowledgesrl.py /Your/Txt/Directory en_core_web_trf
 
 In case you need to convert a pdf to txt:
 ```bash
-$ python extract_pdf_text.py /Your/Pdf/Directory
+$ python src/extract_pdf_text.py /Your/Pdf/Directory
 ```
 
 In case you need to translate a text in english:
 By default it is translating from French to English
 ```bash
-$ python translate_txt.py /Your/Txt/Directory/To/Translate
+$ python src/translate_txt.py /Your/Txt/Directory/To/Translate
 ```
 And a little script to see how many annotations have been added on your documents :
 ```bash
-$ python count_annotations.py /Your/Path/To/Conll_folder
+$ python src/count_annotations.py /Your/Path/To/Conll_folder
 ```
 
 ## [Read the docs!](https://knowledgesrl.readthedocs.org/en/latest/)
