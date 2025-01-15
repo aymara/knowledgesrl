@@ -489,7 +489,6 @@ class ConllSemanticAppender():
                     current_char += len(word) + 1
                 start_word = char_to_word[arg.begin] +1
                 positions = list(range(start_word, start_word + arg.position))
-                print(sentence, positions)
                 for position in positions:
                     arguments_for_ids[position].append(arg.role)
 
