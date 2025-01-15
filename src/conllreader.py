@@ -464,6 +464,7 @@ class ConllSemanticAppender():
             self.logger.debug("self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1] {self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1]}")
             self.logger.debug("[frame_instance.frame_name for frame_instance in frame_annotations] {[frame_instance.frame_name for frame_instance in frame_annotations]}")
             self.conll_matrix[frame_annotations[0].sentence_id][frame_annotations[0].predicate.tokenid+notFirstSentenceShift][-1] = '|'.join([frame_instance.frame_name for frame_instance in frame_annotations])  # noqa
+            self.logger.debug(self.conll_matrix[frame_annotations[0].sentence_id])
         else:
             self.logger.error("add_framenet_frame_annotation got token number "
                               "larger than conll_matrix for current sentence")
@@ -476,7 +477,21 @@ class ConllSemanticAppender():
         arguments_for_ids = defaultdict(list)
         for frame_instance in frame_annotations:
             for arg in frame_instance.args:
-                arguments_for_ids[arg.position].append(arg.role)
+                conll_lines = self.conll_matrix[frame_instance.sentence_id]
+                words = [line[1] for line in conll_lines if line]
+                sentence = " ".join(words)
+                char_to_word = []
+                current_char = 0
+                for i, word in enumerate(words):
+                    for _ in word:
+                        char_to_word.append(i)
+                    char_to_word.append(i)
+                    current_char += len(word) + 1
+                start_word = char_to_word[arg.begin] +1
+                positions = list(range(start_word, start_word + arg.position))
+                print(sentence, positions)
+                for position in positions:
+                    arguments_for_ids[position].append(arg.role)
 
         # place the arguments at the correct place in the matrix
         for position in arguments_for_ids:
