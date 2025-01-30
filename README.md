@@ -17,6 +17,7 @@ Install also LIMA and/or SpaCy models:
 ```bash
 $ lima_models -i eng
 $ spacy download fr_core_news_md
+$ spacy download en_core_web_md
 ```
 ## Semantic Role Labeling
 
@@ -46,7 +47,7 @@ This will output the result to the terminal. Use the `--conll-output` flag to wr
 ## Useful scripts
 To go faster you can use the following line entering the directory where the files that you want to process are located and the spacy model you want to use:
 ```bash
-$ python src/runspacyknowledgesrl.py /Your/Txt/Directory en_core_web_trf
+$ python src/runspacyknowledgesrl.py /Your/Txt/Directory en_core_web_md
 ```
 
 In case you need to convert a pdf to txt:

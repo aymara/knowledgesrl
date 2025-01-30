@@ -18,7 +18,7 @@ def process_files(input_folder, model_used):
     for file_name in os.listdir(engtxt_input_folder):
         if file_name.endswith(".txt"):  # Check if the file is a .txt file
             input_file = os.path.join(engtxt_input_folder, file_name)
-            
+
             # Construct output file names
             base_name = os.path.splitext(file_name)[0]
             spacy_output_file = os.path.join(spacy_output_folder, f"{base_name}.conll")
@@ -59,6 +59,7 @@ def process_files(input_folder, model_used):
             except subprocess.CalledProcessError as e:
                 print(f"Error processing {file_name}: {e}")
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Usage: python script.py <input_directory>")
@@ -66,7 +67,7 @@ if __name__ == "__main__":
 
     input_directory = sys.argv[1]
     model_used = sys.argv[2]
-    
+
     if not os.path.isdir(input_directory):
         print(f"The provided directory does not exist: {input_directory}")
         sys.exit(1)
