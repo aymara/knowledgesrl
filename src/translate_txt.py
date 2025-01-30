@@ -1,8 +1,9 @@
 from googletrans import Translator # type: ignore
 import sys
 import os
+import asyncio
 
-def translate_file(input_txt, output_txt=None, src_lang="fr", dest_lang="en"):
+async def translate_file(input_txt, output_txt=None, src_lang="fr", dest_lang="en"):
     """
     Translates a text file line by line from a source language to a target language.
 
@@ -18,29 +19,35 @@ def translate_file(input_txt, output_txt=None, src_lang="fr", dest_lang="en"):
         translator = Translator()
 
         # Reads and translates the file
-        with open(input_txt, "r", encoding="utf-8") as infile, open(output_txt, "w", encoding="utf-8") as outfile:
+        with (open(input_txt, "r", encoding="utf-8") as infile,
+              open(output_txt, "w", encoding="utf-8") as outfile):
             for line_num, line in enumerate(infile, start=1):
                 # Removes the unnecessary spaces
                 line = line.strip()
 
                 if line:  # Translates only if the line isn't empty
                     try:
-                        translated = translator.translate(line, src=src_lang, dest=dest_lang).text
+                        result = await translator.translate(line,
+                                                            src=src_lang,
+                                                            dest=dest_lang)
+                        translated = result.text
                         outfile.write(translated + "\n")
                     except Exception as e:
                         print(f"Error translating the line {line_num}: {e}")
-                        outfile.write(f"--- Line not translated (Error) : {line}\n")
+                        outfile.write(
+                            f"--- Line not translated (Error) : {line}\n")
                 else:
-                    # If the line is empty, add an empty line to the output file
+                    # If the line is empty, add an empty line to the output
+                    # file
                     outfile.write("\n")
-        
+
         print(f"File successfully translated : {output_txt}")
     except FileNotFoundError:
         print(f"Error: The file '{input_txt}' was not found.")
     except Exception as e:
         print(f"An error has occurred : {e}")
 
-def process_folder(input_folder, output_folder):
+async def process_folder(input_folder, output_folder):
     """
     Translates all files in one folder and saves them as TXT files in another folder.
     """
@@ -52,9 +59,10 @@ def process_folder(input_folder, output_folder):
             input_pdf = os.path.join(input_folder, filename)
             output_txt = os.path.join(output_folder, os.path.splitext(filename)[0] + "_translated.txt")
             print(f"Processing of the file : {input_pdf}")
-            translate_file(input_pdf, output_txt)
+            await translate_file(input_pdf, output_txt)
 
-if __name__ == "__main__":
+
+async def main():
     # Vérifier les arguments passés
     if len(sys.argv) < 2:
         print("Using : python translate_txt.py <dossier_pdf>")
@@ -66,7 +74,10 @@ if __name__ == "__main__":
         print(f"Original folder containing the TXT files : {input_folder}")
         print(f"Translated files in the following folder : {output_folder}")
 
-        process_folder(input_folder, output_folder)
+        await process_folder(input_folder, output_folder)
 
         print(f"All files have been processed successfully. Translated files can be found in : {output_folder}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
 

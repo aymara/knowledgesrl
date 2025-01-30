@@ -9,5 +9,5 @@ spacy==3.8.2
 # -e git://github.com/pquentin/nltk.git@verbnet#egg=nltk
 
 pdfplumber
-googletrans
+googletrans>=4.0.2
 
