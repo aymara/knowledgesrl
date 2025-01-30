@@ -251,6 +251,8 @@ class SyntacticTreeBuilder():
             linenum += 1
             """Columns from
             https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
+            if l and l.strip()[0] == "#":
+                continue
             split_line = l.split("\t")
             if len(split_line) == 11:
                 (word_id, form, lemma, cpos, pos, namedEntityType, features,
@@ -271,7 +273,9 @@ class SyntacticTreeBuilder():
             if head is None and deprel == 'ROOT':
                 head = 0
 
-            self.father_ids[word_id] = head ## on remplit fathers_ids en y mettant la valuer head pour chaque word_id
+            # on remplit fathers_ids en y mettant la valuer head pour chaque
+            # word_id
+            self.father_ids[word_id] = head
             self.logger.debug(f'Add node: {word_id}, {form}, {cpos}, {deprel}')
             self.node_dict[word_id] = SyntacticTreeNode(
                 word_id=word_id,
