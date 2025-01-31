@@ -374,4 +374,4 @@ class SemanticRoleLabeler:
             if options.Options.dump:
                 dumper.dump(options.Options.dump_file,
                             stats.annotated_frames_stats)
-        print(count_annotations)
+        self.logger.info(f"Nb annotations: {count_annotations}")

@@ -247,10 +247,25 @@ class SyntacticTreeBuilder():
 
         begin = 0
         linenum = 0
-        for l in conll_tree.splitlines():
+        filtered_lines = [line for line in conll_tree.splitlines()
+                          if not line.strip().startswith("#")]
+
+        # Join filtered lines with line breaks
+        filtered_text = "\n".join(filtered_lines)
+
+        # Replace double (or multiple) empty lines with a single line
+        cleaned_text = re.sub(r"\n\s+\n", "\n\n", filtered_text)
+        cleaned_text2 = re.sub(r"\n\n\n", "\n\n", cleaned_text)
+        while cleaned_text2 != cleaned_text:
+            cleaned_text = cleaned_text2
+            cleaned_text2 = re.sub(r"\n\n\n", "\n\n", cleaned_text)
+
+        for l in cleaned_text2.splitlines():
             linenum += 1
             """Columns from
             https://github.com/aymara/lima/wiki/LIMA-User-Manual"""
+            if not l:
+                continue
             if l and l.strip()[0] == "#":
                 continue
             split_line = l.split("\t")
@@ -262,8 +277,10 @@ class SyntacticTreeBuilder():
                  head, deprel, phead, pdeprel) = l.split("\t")
                 namedEntityType = '_'
             else:
-                self.logger.warn(f'Wrong number of columns (expected 10 or '
-                                 f'11) in line {linenum}: "{l}"\n')
+                self.logger.warn(
+                    f'Wrong number of columns (expected 10 or 11) '
+                    f'in line {linenum}, got {len(split_line)}: "{l}"\n')
+                self.logger.warn(f'text:\n{cleaned_text2}')
                 continue
             word_id = int(word_id)
             deprel = deprel if deprel not in ['-', '_'] else 'ROOT'
@@ -348,7 +365,7 @@ class SyntacticTreeBuilder():
                 # self.tree_list = self.build_tree_representation(node)
                 # self.logger.debug(f"tree_representation: {tree_representation}")
         # self.tree_list = self.extract_words(tree_representation)
-        self.logger.debug(f"tree_list: {self.tree_list[0]}")
+        self.logger.debug(f"tree_list: {self.tree_list[0] if self.tree_list else ''}")
 
     # Fills the begin and end for every child
     def fill_begin_end(self, node):

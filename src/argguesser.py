@@ -22,6 +22,7 @@ from nltk.corpus import wordnet # type: ignore
 # Initialiser lemmatizer
 lemmatizer = WordNetLemmatizer()
 
+
 class ArgGuesser():
     """
     :var frames_for_verb: lemma -> VerbnetOfficialFrame list - Used to know
@@ -57,22 +58,24 @@ class ArgGuesser():
         "nummod",
         "acl",
         "amod",
+        "dep"
         "det",
         "clf",
         "case",
+        "compound",
         "conj",
         "cc",
         "fixed",
         "flat",
-        "list",
-        "parataxis",
-        "compound",
-        "orphan",
         "goeswith",
-        "reparandum",
+        "list",
+        "orphan",
+        "parataxis",
+        "pobj",
+        "prep",
         "punct",
+        "reparandum",
         "root",
-        "dep"
     ]
 
     args_deprels = subject_deprels + [
@@ -85,6 +88,7 @@ class ArgGuesser():
         "VMOD",
         # UD below
         "obj",
+        "dobj",
         "iobj",
         "ccomp",
         "xcomp",
@@ -110,7 +114,8 @@ class ArgGuesser():
         "PRP": "NP",
         "RB": "ADV",
         "TO": "to S",
-        "WDT": "NP",  # Relative determiners ("that what whatever which whichever")
+        # Relative determiners ("that what whatever which whichever")
+        "WDT": "NP",
         # French conversions
         "NC": "NP",
         "PRO": "NP",
@@ -119,7 +124,8 @@ class ArgGuesser():
     for pos in options.Options.predicate_pos:
         pos_conversions[pos] = "S"
     pos_conversions["VBG"] = "ING"
-    pos_conversions["VBN"] = "ADJ"  # Participe, as "fed" in "He got so fed up that..."
+    # Participe, as "fed" in "He got so fed up that..."
+    pos_conversions["VBN"] = "ADJ"
 
     acceptable_phrase_type = ["NP", "PP", "S_ING", "S"]
 
@@ -159,9 +165,12 @@ class ArgGuesser():
             visited.append(node)
             # For every verb, looks for its infinitive form in VerbNet, and
             # builds a frame occurrence if it is found
-            ### TODO why does it have to be verbs ?
+            # ## TODO why does it have to be verbs ?
             self.logger.debug(f"_sentence_predicates_iterator on {node.lemma}")
-            if lemmatizer.lemmatize(node.lemma, wordnet.VERB) not in self.frames_for_verb: ###A lot of lemmas of verbs are not in the infinitive form in the conll files
+            # ##A lot of lemmas of verbs are not in the infinitive form in
+            # the conll files
+            if lemmatizer.lemmatize(
+                    node.lemma, wordnet.VERB) not in self.frames_for_verb:
                 self.logger.debug(f"_sentence_predicates_iterator node.lemma "
                                   f"{node.lemma} not in frames_for_verb")
                 continue
@@ -181,7 +190,8 @@ class ArgGuesser():
                 else:
                     args = self._find_args(node)
 
-                args = [x for x in args if self._is_good_phrase_type(x.phrase_type)]
+                args = [x for x in args
+                        if self._is_good_phrase_type(x.phrase_type)]
 
                 # Read headwords
                 headwords = [None] * len(args)
@@ -190,7 +200,8 @@ class ArgGuesser():
                         continue
                     headwords[i] = headwordextractor.headword(arg, tree)
 
-                self.logger.debug('_sentence_predicates_iterator yielding {} {}…'.format(predicate, args))
+                self.logger.debug(f'_sentence_predicates_iterator '
+                                  f'yielding {predicate} {args}…')
                 yield FrameInstance(
                     sentence=sentence,
                     predicate=predicate,
@@ -214,18 +225,20 @@ class ArgGuesser():
     def _find_args(self, node):
         """Returns every arguments of a given node.
 
-        :param node: The node for which descendants are susceptible to be returned.
+        :param node: The node for which descendants are susceptible to be
+                     returned.
         :type node: SyntacticTreeNode.
         :returns: Arg List -- The resulting list of arguments.
 
         """
-        self.logger.debug("_find_args")
+        self.logger.debug(f"_find_args {node}")
         base_node = node
         while base_node.deprel in ["VC", "CONJ", "COORD"]:
             base_node = base_node.father
 
         result = self._find_args_rec(node, node)
-        if base_node is not node and base_node.pos in options.Options.predicate_pos:
+        if (base_node is not node
+                and base_node.pos in options.Options.predicate_pos):
             result += self._find_args_rec(base_node, base_node)
 
         result = [x for x in result if x.text != "to"]
@@ -233,13 +246,15 @@ class ArgGuesser():
         return result
 
     def _find_args_rec(self, predicate_node, node):
-        """Returns every arguments of a given node that is a descendant of another node.
+        """Returns every arguments of a given node that is a descendant of
+        another node.
         It is possible that one of the returned arguments corresponds
         to the second node itself.
 
         :param predicate_node: The node of which we want to obtain arguments.
         :type predicate_node: SyntacticTreeNode.
-        :param node: The node for which descendants are susceptible to be returned.
+        :param node: The node for which descendants are susceptible to be
+                     returned.
         :type node: SyntacticTreeNode.
         :returns: Arg List -- The resulting list of arguments.
 
@@ -312,16 +327,19 @@ class ArgGuesser():
                               f"predicate but not its PoS {node.pos}")
             return False
 
-        # Check that this node is not an auxiliary NOT RELEVANT Some auxiliaries can also be active verbs
-        #if node.lemma in ["be", "do", "have", "will", "would"]:
-            #for child in node.children:
-                #if child.pos in options.Options.predicate_pos and child.deprel == "VC":
-                    #return False
+        # Check that this node is not an auxiliary NOT RELEVANT
+        # Some auxiliaries can also be active verbs
+        # if node.lemma in ["be", "do", "have", "will", "would"]:
+        # for child in node.children:
+        # if child.pos in options.Options.predicate_pos and child.deprel
+        # == "VC":
+        # return False
         return True
 
     def _is_subject(self, node, predicate_node):
-        """Tells whether node is the subject of predicate_node. This is only called
-        when node is a brother of predicate_node.
+        """
+        Tells whether node is the subject of predicate_node. This is only
+        called when node is a brother of predicate_node.
         """
         return ((node is not predicate_node) and
                 node.deprel in self.subject_deprels)
